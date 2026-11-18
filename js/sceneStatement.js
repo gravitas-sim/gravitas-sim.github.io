@@ -42,9 +42,7 @@ import { announce } from './notify.js';
 import { EN_SCENE } from './i18n/en.scene.js';
 import { ES_SCENE } from './i18n/es.scene.js';
 
-// Quiet: these words arrive at idle, 3 s after the splash, and announcing them
-// would repaint a lesson step a reader is typing in. translateControl, below,
-// and the canvas description, which rebuilds itself, are the readers.
+// Quiet: they arrive at idle and must not repaint a lesson step being typed in.
 registerMessages('en', EN_SCENE, true);
 registerMessages('es', ES_SCENE, true);
 
@@ -174,8 +172,6 @@ export const markerState = () => ({ ...marker, members: [...marker.members] });
 export function setMarkerMode(mode) {
   marker.mode = MARKER_MODES.includes(mode) ? mode : 'off';
   marker.members = [];
-  // The rail note is shown only while a marker is on: a permanent three-line
-  // explainer is more than the Scenario group wants.
   const note = document.getElementById('barycenterMarkerNote');
   if (note) note.hidden = marker.mode === 'off';
 }

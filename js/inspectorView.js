@@ -84,9 +84,7 @@ import { ES_ORBITGEOMETRYROW } from './i18n/es.orbitGeometryRow.js';
 import { formatSpeed, formatDistance } from './units.js';
 import { state, SETTINGS, current_scenario_name, command } from './appState.js';
 
-// The orbit geometry row's words, installed so it is named offline. Quiet: this
-// module arrives on the first selection, and announcing would repaint a lesson
-// step the reader is typing in.
+// The orbit geometry row's words, so it is named offline; quiet, so a lesson step is not repainted.
 registerMessages('en', EN_ORBITGEOMETRYROW, true);
 registerMessages('es', ES_ORBITGEOMETRYROW, true);
 

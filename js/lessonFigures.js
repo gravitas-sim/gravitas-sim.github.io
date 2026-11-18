@@ -40,8 +40,7 @@ const { Math } = globalThis;
 const W = 320;
 const H = 240;
 const full = v => String(roundSig(v, 15));
-// Coordinates and angles are machine text for SVG attributes, not numbers a
-// student reads, so they are rounded to a fixed grid here and never localised.
+// SVG coordinates are machine text, not numbers a student reads: never localised.
 const rnd = (v, d = 1) => Math.round(v * 10 ** d) / 10 ** d;
 
 const WORDS = {

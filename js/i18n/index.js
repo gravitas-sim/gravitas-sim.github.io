@@ -200,8 +200,7 @@ export const isLocaleLoaded = id => baseLoaded.has(id);
  *
  * @param {string} locale - Which catalog to extend
  * @param {object} messages - Ids to strings
- * @param {boolean} [quiet] - Do not announce the change: for words only their
- *   own module reads, which can arrive while a panel is being used
+ * @param {boolean} [quiet] - Do not notify listeners
  * @returns {void}
  */
 export function registerMessages(locale, messages, quiet) {
