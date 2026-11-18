@@ -509,7 +509,12 @@ export function createChart(host, opts = {}) {
         nd.tag = el('text', { 'font-size': TITLE, fill: TEXT });
         nd.g.append(nd.tag);
       }
-      under = Math.max(frame.top + TITLE, nd.end[1] - 8, under + TITLE + 3);
+      // Above its line's end, or below it where the line runs along the top.
+      const above = nd.end[1] - 8;
+      under = Math.max(
+        above >= frame.top + TITLE ? above : nd.end[1] + TITLE + 2,
+        under + TITLE + 3
+      );
       put(nd.tag, 'x', nd.end[0] - 6);
       put(nd.tag, 'y', Math.min(under, frame.top + fh - 3));
       put(nd.tag, 'text-anchor', 'end');
