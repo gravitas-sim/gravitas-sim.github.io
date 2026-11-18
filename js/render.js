@@ -1877,7 +1877,7 @@ const drawScene = () => {
       instrumentationSettings(),
       state.zoom,
       bottomChromeInset(),
-      vectorLegendRows(drawnVectors)
+      vectorLegendRows(drawnVectors, SETTINGS)
     );
   } catch {
     /* instrumentation is never worth losing a frame over */
@@ -2004,7 +2004,7 @@ function readoutHtml(drawn) {
     );
   }
 
-  const legend = vectorLegendRows(drawn);
+  const legend = vectorLegendRows(drawn, SETTINGS);
   if (legend.length) {
     sections.push(
       `<ul class="readout-legend">${legend

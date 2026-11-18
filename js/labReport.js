@@ -5,6 +5,7 @@
 
 import { createDocument } from './pdf.js';
 import { fnvBase36 } from './hash.js';
+import { predictionState } from './lesson/held.js';
 import { registerMessages } from './i18n/index.js';
 // Depths, shallowest first (as in investigations/progressSchema.js).
 const LEVELS = ['core', 'quantitative', 'advanced'];
@@ -255,6 +256,25 @@ export function buildLabReport({
           v || '-'
         );
         canonical.push(`${id}:${f.id}=${v}`);
+      }
+      // How many tries, and the slips named: facts beside the readings, never a mark. A held
+      // prediction's steps keep them back until its reveal.
+      if (
+        !/^(un)?committed$/.test(
+          predictionState(inv.steps, step, visited, responses)
+        )
+      ) {
+        const tries = attempts[id] || 0;
+        if (tries > 1) doc.row(t('rp.try'), t('rp.tryV', { n: tries }));
+        const named = String(responses[`${id}:slip`] ?? '')
+          .split(',')
+          .flatMap(sid =>
+            step.fields
+              .flatMap(f => f.misconceptions || [])
+              .filter(m => m.id === sid)
+              .map(m => lessonPlain(m.say))
+          );
+        if (named.length) doc.row(t('rp.slip'), named.join(' '));
       }
       return;
     }

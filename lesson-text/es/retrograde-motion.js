@@ -147,7 +147,7 @@ export default {
     'what-the-trails-are-doing': {
       title: 'Qué están haciendo las estelas',
       body: 'Un detalle importa para fiarte de lo que estás a punto de ver.\n\nCuando cambias el marco, las estelas no se deslizan lateralmente por la pantalla. Cada punto de una estela se registró en un momento concreto, y cada uno se reexpresa respecto a dónde estaba el cuerpo de origen <em>en ese momento</em>. Deslizar el dibujo entero lo movería sin cambiar su forma; esto cambia la forma, porque eso es lo que habría dibujado un observador distinto.\n\nLa diferencia es exactamente por lo que el Modo Seguimiento, que sí desliza la cámara, nunca te mostró un bucle retrógrado.\n\nUn punto más antiguo que el propio historial registrado del cuerpo de origen no puede reexpresarse en absoluto, y no se dibuja. Así que un sistema recién reconstruido no tiene bucle todavía: la estela tiene que crecer primero.',
-      tip: 'La estela guarda aquí unos 110 días de historia, algo más que un episodio retrógrado completo. Es deliberado: bastante más corta y el bucle no se cierra nunca.',
+      tip: 'La estela guarda aquí cerca de un año de historia, varias veces más que un episodio retrógrado completo, de unos 72 días. Es deliberado: bastante más corta y el bucle no se cierra nunca.',
     },
     'put-yourself-on-earth': {
       title: 'Ponte en la Tierra',

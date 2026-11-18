@@ -27,6 +27,19 @@ export function durationText(d, t) {
     : t('lib.card.range', { min: d.min, max: d.max });
 }
 
+/** The facts a reader chooses by: time, steps, depths, level, arithmetic. */
+export function factsOf(entry, t) {
+  return [
+    durationText(entry.duration, t),
+    entry.steps && entry.kind !== 'course'
+      ? t('lib.card.steps', { n: entry.steps })
+      : '',
+    entry.depths ? t('lib.card.depths', { n: entry.depths }) : '',
+    entry.level ? t(`lib.level.${entry.level}`) : '',
+    entry.calculation ? t(`lib.calculation.${entry.calculation}`) : '',
+  ].filter(Boolean);
+}
+
 /**
  * The card.
  * @param {object} entry - A library.json entry
@@ -37,38 +50,28 @@ export function durationText(d, t) {
  * @param {object} [o.shown] - Each internal kind to the kind a student sees
  * @param {string} [o.why] - The fields a search matched, in words
  * @param {boolean} [o.details] - Add the link to the item's own page
- * @param {boolean} [o.compact] - No picture or summary
  * @param {string} [o.path] - The pathway it is listed in ('seq:<id>')
  * @param {object} [o.before] - A prerequisite not yet finished: advice, a link
  * @returns {string} One <li>
  */
 export function libraryCardHtml(
   entry,
-  { t, pick, progress, shown, why, details, compact, path, before }
+  { t, pick, progress, shown, why, details, path, before }
 ) {
-  const facts = [
-    durationText(entry.duration, t),
-    entry.steps && entry.kind !== 'course'
-      ? t('lib.card.steps', { n: entry.steps })
-      : '',
-    entry.depths ? t('lib.card.depths', { n: entry.depths }) : '',
-    entry.level ? t(`lib.level.${entry.level}`) : '',
-    entry.calculation ? t(`lib.calculation.${entry.calculation}`) : '',
-  ].filter(Boolean);
+  const facts = factsOf(entry, t);
   const badge =
     progress && progress !== 'new'
       ? `<span class="ui-badge is-accent lib-progress" data-progress="${progress}">${escape(t(`lib.progress.${progress}`))}</span>`
       : '';
-  const shot =
-    entry.thumbnail && !compact
-      ? `<img class="lib-shot" src="/${escape(entry.thumbnail)}" alt="" loading="lazy" decoding="async" width="640" height="360" />`
-      : '';
+  const shot = entry.thumbnail
+    ? `<img class="lib-shot" src="/${escape(entry.thumbnail)}" alt="" loading="lazy" decoding="async" width="640" height="360" />`
+    : '';
   const kind = shown?.[entry.kind] ?? entry.kind;
-  return `<li class="lib-card${shot ? '' : ' is-plain'}${compact ? ' is-compact' : ''}" data-entry="${escape(entry.id)}" data-kind="${escape(entry.kind)}">
+  return `<li class="lib-card${shot ? '' : ' is-plain'}" data-entry="${escape(entry.id)}" data-kind="${escape(entry.kind)}">
 <a class="lib-link" href="${escape(entry.route)}">${shot}<span class="lib-body">
 <span class="lib-badges"><span class="ui-badge">${escape(t(`lib.badge.${kind}`))}</span><span class="ui-badge">${escape(t(`lib.format.${entry.format}`))}</span>${badge}</span>
 <span class="lib-title">${escape(pick(entry.title))}</span>
-${entry.summary && !compact ? `<span class="lib-summary">${escape(pick(entry.summary))}</span>` : ''}
+${entry.summary ? `<span class="lib-summary">${escape(pick(entry.summary))}</span>` : ''}
 ${why ? `<span class="lib-why">${escape(why)}</span>` : ''}
 ${facts.length ? `<span class="lib-facts">${facts.map(f => `<span>${escape(f)}</span>`).join('')}</span>` : ''}
 </span></a>${before ? `<span class="lib-before">${escape(t('lib.card.before'))} <a href="${escape(before.route)}">${escape(pick(before.title))}</a></span>` : ''}${details ? `<a class="lib-details" href="?item=${escape(entry.id)}${path ? `&amp;path=${escape(path)}` : ''}">${escape(t('lib.card.details'))}</a>` : ''}</li>`;

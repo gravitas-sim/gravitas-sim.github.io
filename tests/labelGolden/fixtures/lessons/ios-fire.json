@@ -37,13 +37,13 @@
  "steps": {
   "en": {
    "heating-at-the-maximum": {
-    "validate": {"calls":232,"distinct":2,"digest":"60a79fd7d25de4a6","samples":[null,{"level":"error","message":"Set k2 = 1.5, Q = 100, e = 0.0041, then read “Heating” and “Energy in one orbit”."}]}
+    "validate": {"calls":232,"distinct":2,"digest":"543b5e3f50e3295c","samples":[null,{"level":"error","message":"Set k2 = 1.5, <em>Q</em> = 100, <em>e</em> = 0.0041, then read “Heating” and “Energy in one orbit”."}]}
    },
    "double-the-eccentricity": {
-    "validate": {"calls":97,"distinct":2,"digest":"ffcc959312909030","samples":[null,{"level":"error","message":"Keep k2 = 1.5 and Q = 100, set e = 0.0082, and read “Heating”."}]}
+    "validate": {"calls":97,"distinct":2,"digest":"c9985a84c97fd163","samples":[null,{"level":"error","message":"Keep k2 = 1.5 and <em>Q</em> = 100, set <em>e</em> = 0.0082, and read “Heating”."}]}
    },
    "the-bound": {
-    "validate": {"calls":97,"distinct":2,"digest":"e749d4d2d376a9ae","samples":[null,{"level":"error","message":"Set e = 0.0041 and read “k2/Q the observed middle value needs”."}]}
+    "validate": {"calls":97,"distinct":2,"digest":"d52744a57448474e","samples":[null,{"level":"error","message":"Set <em>e</em> = 0.0041 and read “k2/Q the observed middle value needs”."}]}
    }
   },
   "es": "same"

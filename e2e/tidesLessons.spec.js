@@ -57,7 +57,7 @@ const CASES = [
   {
     id: 'why-rings',
     sid: 'where-the-gap-falls',
-    row: /Radius of the 2:1 resonance/i,
+    row: /Radius\sof\sthe\s2:1\sresonance/i,
     rowEs: /Radio de la resonancia 2:1/i,
     title: /^Where does a moon’s resonance/i,
     titleEs: /^¿Dónde cae la resonancia/i,

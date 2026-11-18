@@ -34,6 +34,8 @@ import {
   wireMore,
 } from './settingsSchema.js';
 import { SETTINGS, DEFAULT_SETTINGS } from './appState.js';
+import { formatTime } from './units.js';
+import { trailSpanTime } from './trailSpan.js';
 
 /** The staged copy of SETTINGS the panel edits; Apply copies it back. */
 let localSettings = {};
@@ -487,10 +489,9 @@ const pressInfo = (e, item) => {
   const hadFocus = document.activeElement === infoIcon;
   const pressed = new WeakRef(infoIcon);
   getSettingTooltip(item.key, t(item.labelId)).then(text => {
-    // The first press registers the deferred catalog, which translates
-    // the page again and so rebuilds this panel: the button pressed has
-    // been replaced by its twin by the time the words arrive. The help
-    // goes to the twin, and so does the focus a keyboard reader had.
+    // The first press registers the deferred catalog, which translates the page
+    // again and so rebuilds this panel: the button pressed has been replaced by
+    // its twin by the time the words arrive.
     const self = pressed.deref();
     const icon = self?.isConnected
       ? self
@@ -645,10 +646,7 @@ const buildSettingsMenu = ({ keep = false } = {}) => {
     const sectionGrid = document.createElement('div');
     sectionGrid.className = 'settings-grid';
     // The two-column label/control split and the gap are set in CSS rather than
-    // here, so a narrow screen can stack them. Inline styles cannot be beaten by
-    // a media query, and on a 375px phone a fixed 1fr 1fr grid put the sliders
-    // and the value readouts off the right edge of the panel - in English, and
-    // further off in Spanish, where the labels are about a fifth longer.
+    // here, so a narrow screen can stack them.
     sectionGrid.style.alignItems = 'center';
 
     // Add items to this section
@@ -682,11 +680,8 @@ const buildSettingsMenu = ({ keep = false } = {}) => {
       const value = localSettings[item.key];
 
       // A row is two siblings in the grid rather than one wrapper - the label
-      // and the control are separate children so the grid can align every
-      // label against every control. The filter therefore has to hide them in
-      // pairs, so both carry the same key and the same haystack. Searching the
-      // setting's own key as well as its label means `bh_mass` finds the black
-      // hole mass whichever language the interface is in.
+      // and the control are separate children so the grid can align every label
+      // against every control.
       const haystack =
         `${t(item.labelId)} ${item.key} ${(item.options || []).join(' ')}`
           .toLowerCase()
@@ -726,30 +721,28 @@ const buildSettingsMenu = ({ keep = false } = {}) => {
         // A scenario may set a value above the range the slider was designed
         // for, and three of them do: the resonance scenarios run between 150
         // and 7,500 times the default speed, because a single libration of
-        // Pluto's resonant angle takes twenty thousand years. With a fixed
-        // maximum of 5 the slider would show as pinned, and the first touch
-        // would drop the scenario to a speed at which nothing it is trying to
-        // show can be seen - with no way back except reloading. Widening the
-        // track to whatever is actually in force costs the ordinary case
-        // nothing and keeps the control honest.
+        // Pluto's resonant angle takes twenty thousand years.
         slider.max = Math.max(Number(item.max), Number(value) || 0);
         slider.step = item.step;
         slider.value = value;
 
+        // Trail length reads out as a time (js/trailSpan.js).
+        const shown = v =>
+          item.key === 'trail_length'
+            ? formatTime(
+                trailSpanTime(v, SETTINGS.max_timestep, SETTINGS.sim_speed)
+              )
+            : v.toFixed(item.precision || (item.type === 'float' ? 1 : 0));
         const valueDisplay = document.createElement('span');
         valueDisplay.className = 'value-display';
-        valueDisplay.textContent = Number(value).toFixed(
-          item.precision || (item.type === 'float' ? 1 : 0)
-        );
+        valueDisplay.textContent = shown(Number(value));
         slider.oninput = () => {
           const val =
             item.type === 'int'
               ? Math.trunc(slider.valueAsNumber)
               : slider.valueAsNumber;
           localSettings[item.key] = val;
-          valueDisplay.textContent = val.toFixed(
-            item.precision || (item.type === 'float' ? 1 : 0)
-          );
+          valueDisplay.textContent = shown(val);
           if (
             item.key === 'num_black_holes' ||
             item.key === 'use_individual_bh_masses'
@@ -782,10 +775,8 @@ const buildSettingsMenu = ({ keep = false } = {}) => {
         item.options.forEach(opt => {
           const option = document.createElement('option');
           // The value stored is always the English token - it is the key the
-          // physics engine, the scenario presets and every saved share link
-          // use - and only the label a reader sees is translated. A locale that
-          // changed the stored value would produce links that only open in that
-          // language.
+          // physics engine, the scenario presets and every saved share link use
+          // - and only the label a reader sees is translated.
           option.value = opt;
           option.textContent = settingOptionLabel(item.key, opt);
           if (opt === value) option.selected = true;
@@ -1022,10 +1013,8 @@ const showIndivBHMassMenu = async () => {
     itemDiv.append(label, controlDiv);
     content.appendChild(itemDiv);
   }
-  // A dialog over Settings, through js/dialog.js like Settings itself, which
-  // is loaded by definition: the button is inside the Settings panel. Settings
-  // is inert behind it, and every close but Done - the close chip, Escape -
-  // puts the masses back as they were, which is what the chip says it does.
+  // A dialog over Settings, through js/dialog.js like Settings itself, which is
+  // loaded by definition: the button is inside the Settings panel.
   const masses = [...localSettings.bh_masses];
   const { openDialog } = await dialog();
   openDialog(document.getElementById('bhMassesModal'), {

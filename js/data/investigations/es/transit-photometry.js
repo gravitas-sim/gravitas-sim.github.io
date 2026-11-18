@@ -33,7 +33,7 @@ export default {
     },
     {
       title: 'Cinco maneras de encontrar un planeta que no puedes ver',
-      body: '<strong>Velocidad radial.</strong> Un planeta y su estrella orbitan ambos su centro de masas común, así que la estrella se bambolea, y el bamboleo desplaza sus líneas espectrales al azul y luego al rojo. Júpiter mueve al Sol a 12,5 m/s; la Tierra logra 9 cm/s. Así se encontró el primer planeta alrededor de una estrella normal: Michel Mayor y Didier Queloz anunciaron 51 Pegasi b en 1995, un mundo de masa joviana en una órbita de cuatro días que ninguna teoría de formación planetaria había permitido. Les valió parte del Premio Nobel de 2019. La velocidad radial mide una masa mínima, porque una órbita vista de frente no produce desplazamiento alguno.\n\n<strong>Tránsitos.</strong> Si la órbita resulta estar de canto respecto a nosotros, el planeta cruza el disco estelar y la estrella se atenúa en una fracción fija, una vez por órbita, para siempre. Esto mide un radio. Es con diferencia el método más productivo, y es el que estás a punto de aplicar.\n\n<strong>Microlente.</strong> Cuando una estrella pasa por delante de otra, su gravedad enfoca la luz de la estrella de fondo. Un planeta añade un breve pico extra. Esto encuentra planetas a miles de años luz, incluidos los fríos más allá de la línea de nieve, pero cada suceso ocurre una vez y no se repite jamás.\n\n<strong>Astrometría.</strong> El mismo bamboleo que la velocidad radial, medido como una posición en el cielo en lugar de como un desplazamiento Doppler. Gaia tiene la precisión para hacerlo a gran escala y empieza a dar resultados.\n\n<strong>Imagen directa.</strong> Bloquear la luz estelar con un coronógrafo y fotografiar el planeta mismo. Rara, difícil, y el único método que te consigue un fotón que de verdad vino del planeta.\n\nFíjate en lo que falta en todos ellos salvo el último: nadie ha visto el planeta. Todo se infiere de un efecto sobre otra cosa, y toda inferencia lleva supuestos que pueden ser falsos. Llevar la cuenta de qué es qué es la mayor parte del oficio.',
+      body: '<strong>[[radial-velocity|Velocidad radial]].</strong> Un planeta y su estrella orbitan ambos su centro de masas común, así que la estrella se bambolea, y el bamboleo desplaza sus líneas espectrales al azul y luego al rojo. Júpiter mueve al Sol a 12,5 m/s; la Tierra logra 9 cm/s. Así se encontró el primer planeta alrededor de una estrella normal: Michel Mayor y Didier Queloz anunciaron 51 Pegasi b en 1995, un mundo de masa joviana en una órbita de cuatro días que ninguna teoría de formación planetaria había permitido. Les valió parte del Premio Nobel de 2019. La velocidad radial mide una masa mínima, porque una órbita vista de frente no produce desplazamiento alguno.\n\n<strong>[[transit|Tránsitos]].</strong> Si la órbita resulta estar de canto respecto a nosotros, el planeta cruza el disco estelar y la estrella se atenúa en una fracción fija, una vez por órbita, para siempre. Esto mide un radio. Es con diferencia el método más productivo, y es el que estás a punto de aplicar.\n\n<strong>Microlente.</strong> Cuando una estrella pasa por delante de otra, su gravedad enfoca la luz de la estrella de fondo. Un planeta añade un breve pico extra. Esto encuentra planetas a miles de años luz, incluidos los fríos más allá de la línea de nieve, pero cada suceso ocurre una vez y no se repite jamás.\n\n<strong>Astrometría.</strong> El mismo bamboleo que la velocidad radial, medido como una posición en el cielo en lugar de como un desplazamiento Doppler. Gaia tiene la precisión para hacerlo a gran escala y empieza a dar resultados.\n\n<strong>Imagen directa.</strong> Bloquear la luz estelar con un coronógrafo y fotografiar el planeta mismo. Rara, difícil, y el único método que te consigue un fotón que de verdad vino del planeta.\n\nFíjate en lo que falta en todos ellos salvo el último: nadie ha visto el planeta. Todo se infiere de un efecto sobre otra cosa, y toda inferencia lleva supuestos que pueden ser falsos. Llevar la cuenta de qué es qué es la mayor parte del oficio.',
       tip: 'La velocidad radial da una masa, los tránsitos dan un radio. Ninguno da ambas cosas, y por eso las dos juntas valen mucho más que cualquiera por separado.',
     },
     {
@@ -63,7 +63,7 @@ export default {
     },
     {
       title: 'De dónde sale la profundidad',
-      body: 'Una estrella es, para un fotómetro, un disco uniformemente brillante de radio R<sub>★</sub> y área πR<sub>★</sub><sup>2</sup>. Un planeta delante de ella es un disco opaco de radio R<sub>p</sub> y área πR<sub>p</sub><sup>2</sup>, y bloquea exactamente su propia área.\n\nLa caída fraccionaria de brillo, la <strong>profundidad del tránsito</strong>, es por tanto el cociente de las dos áreas:\n\n<strong>δ = πR<sub>p</sub><sup>2</sup> / πR<sub>★</sub><sup>2</sup> = (R<sub>p</sub> / R<sub>★</sub>)<sup>2</sup></strong>\n\nEl π se cancela, la distancia a la estrella se cancela, la luminosidad de la estrella se cancela, y el brillo propio del planeta es despreciable. Lo que sobrevive es un cociente puro de tamaños. Dale la vuelta y la medida que quieres sale directamente:\n\n<strong>R<sub>p</sub> / R<sub>★</sub> = √δ</strong>\n\nEse es todo el método en una línea. También te dice lo que el método no puede hacer: un tránsito te da el tamaño del planeta <em>relativo a la estrella</em>. Para obtener un radio planetario en kilómetros necesitas conocer la estrella, y por eso buena parte del trabajo sobre exoplanetas es en realidad astrofísica estelar.',
+      body: 'Una estrella es, para un fotómetro, un disco uniformemente brillante de radio <em>R</em><sub>★</sub> y área π<em>R</em><sub>★</sub><sup>2</sup>. Un planeta delante de ella es un disco opaco de radio <em>R</em><sub>p</sub> y área π<em>R</em><sub>p</sub><sup>2</sup>, y bloquea exactamente su propia área.\n\nLa caída fraccionaria de brillo, la <strong>profundidad del tránsito</strong>, es por tanto el cociente de las dos áreas:\n\n<strong><em>δ</em> = π<em>R</em><sub>p</sub><sup>2</sup> / π<em>R</em><sub>★</sub><sup>2</sup> = (<em>R</em><sub>p</sub> / <em>R</em><sub>★</sub>)<sup>2</sup></strong>\n\nEl π se cancela, la distancia a la estrella se cancela, la [[luminosity|luminosidad]] de la estrella se cancela, y el brillo propio del planeta es despreciable. Lo que sobrevive es un cociente puro de tamaños. Dale la vuelta y la medida que quieres sale directamente:\n\n<strong><em>R</em><sub>p</sub> / <em>R</em><sub>★</sub> = √<em>δ</em></strong>\n\nEse es todo el método en una línea. También te dice lo que el método no puede hacer: un tránsito te da el tamaño del planeta <em>relativo a la estrella</em>. Para obtener un radio planetario en kilómetros necesitas conocer la estrella, y por eso buena parte del trabajo sobre exoplanetas es en realidad astrofísica estelar.',
       tip: 'El cociente se escribe normalmente k, y es el número más importante de un ajuste de tránsito.',
     },
     {
@@ -80,7 +80,7 @@ export default {
     },
     {
       title: 'De una profundidad a un tamaño',
-      body: 'Supón que un sondeo informa de una caída limpia y repetitiva del 1 %: δ = 0,0100.',
+      body: 'Supón que un sondeo informa de una caída limpia y repetitiva del 1 %: <em>δ</em> = 0,0100.',
       prompt:
         '¿Cuánto vale R<sub>p</sub> / R<sub>★</sub> para una caída del 1 %?',
       unit: '',
@@ -103,7 +103,7 @@ export default {
     },
     {
       title: 'Mide la caída',
-      body: 'Ahora hazlo de verdad, con la curva que has estado observando.\n\nNecesitas dos números: el brillo en el tramo plano entre tránsitos, y el brillo en el fondo de una caída.\n\nEl panel ya los está encontrando. Toma como línea de base el nivel en el que la estrella se sitúa durante casi toda su órbita, y mide el fondo de todas las caídas completas que han pasado. Espera hasta que la lectura de abajo muestre al menos un tránsito, y después pulsa el botón para copiar ambos números. Si prefieres leerlos tú, pasa el puntero por la curva de luz y te dará el valor que hay debajo con seis decimales.\n\nLa profundidad y el cociente de radios se calculan a partir de lo que introduzcas, así que una coma decimal descolocada en tu aritmética no puede confundirse con un malentendido de la física.',
+      body: 'Ahora hazlo de verdad, con la curva que has estado observando.\n\nNecesitas dos números: el brillo en el tramo plano entre tránsitos, y el brillo en el fondo de una caída.\n\nEl panel ya los está encontrando. Toma como línea de base el nivel en el que la estrella se sitúa durante casi toda su órbita, y mide el fondo de todas las caídas completas que han pasado. Espera hasta que la lectura de abajo muestre al menos un tránsito, y después pulsa el botón para copiar ambos números. Si prefieres leerlos tú, pasa el puntero por la [[light-curve|curva de luz]] y te dará el valor que hay debajo con seis decimales.\n\nLa profundidad y el cociente de radios se calculan a partir de lo que introduzcas, así que una coma decimal descolocada en tu aritmética no puede confundirse con un malentendido de la física.',
       importLabel: 'Copiar el último tránsito',
       fields: [
         {
@@ -112,9 +112,13 @@ export default {
           want: 'p. ej. 1,000065',
         },
         { label: 'Brillo en el fondo de la caída', unit: '' },
-        { label: 'Profundidad del tránsito δ = base − fondo', unit: '' },
         {
-          label: 'Cociente de radios R<sub>p</sub> / R<sub>★</sub> = √(δ)',
+          label: 'Profundidad del tránsito <em>δ</em> = base − fondo',
+          unit: '',
+        },
+        {
+          label:
+            'Cociente de radios <em>R</em><sub>p</sub> / <em>R</em><sub>★</sub> = √(δ)',
           unit: '',
         },
       ],
@@ -122,7 +126,7 @@ export default {
     },
     {
       title: 'Por qué ese radio salió demasiado grande',
-      body: 'Una estrella no es un disco uniformemente brillante. Estás mirando hacia abajo a través de una atmósfera parcialmente transparente, y en el centro del disco ves directamente hacia dentro, hasta capas calientes y brillantes, mientras que cerca del borde tu línea de visión se inclina y se detiene en capas más frías y tenues. El disco es más brillante en el medio y se apaga hacia el borde. Esto es el <strong>oscurecimiento del limbo</strong>, y es visible en cualquier fotografía decente del Sol.\n\nAsí que un planeta que cruza el centro del disco cubre luz más brillante que la media, y la caída a mitad del tránsito es más profunda de lo que predice el simple cociente de áreas. Para los coeficientes usados aquí, el centro del disco es <strong>1,215</strong> veces más brillante que la media del disco, así que:\n\n<strong>δ<sub>medida</sub> = 1,215 × (R<sub>p</sub> / R<sub>★</sub>)<sup>2</sup></strong>\n\nTomar la raíz cuadrada de tu profundidad medida sobreestima por tanto el cociente de radios en √1,215 = 1,102, alrededor del 10 %. En un planeta cerca de una frontera de clasificación, un 10 % es la diferencia entre dos respuestas distintas sobre de qué está hecho el mundo.\n\nEsto no es una peculiaridad de la simulación. Es la razón de que nadie en el campo dé √δ como cociente de radios: un ajuste de tránsito real resuelve a la vez el cociente de radios, los coeficientes de oscurecimiento del limbo, el parámetro de impacto y la órbita, porque están todos enredados en la misma curva.',
+      body: 'Una estrella no es un disco uniformemente brillante. Estás mirando hacia abajo a través de una atmósfera parcialmente transparente, y en el centro del disco ves directamente hacia dentro, hasta capas calientes y brillantes, mientras que cerca del borde tu línea de visión se inclina y se detiene en capas más frías y tenues. El disco es más brillante en el medio y se apaga hacia el borde. Esto es el <strong>oscurecimiento del limbo</strong>, y es visible en cualquier fotografía decente del Sol.\n\nAsí que un planeta que cruza el centro del disco cubre luz más brillante que la media, y la caída a mitad del tránsito es más profunda de lo que predice el simple cociente de áreas. Para los coeficientes usados aquí, el centro del disco es <strong>1,215</strong> veces más brillante que la media del disco, así que:\n\n<strong><em>δ</em><sub>medida</sub> = 1,215 × (<em>R</em><sub>p</sub> / <em>R</em><sub>★</sub>)<sup>2</sup></strong>\n\nTomar la raíz cuadrada de tu profundidad medida sobreestima por tanto el cociente de radios en √1,215 = 1,102, alrededor del 10 %. En un planeta cerca de una frontera de clasificación, un 10 % es la diferencia entre dos respuestas distintas sobre de qué está hecho el mundo.\n\nEsto no es una peculiaridad de la simulación. Es la razón de que nadie en el campo dé √<em>δ</em> como cociente de radios: un ajuste de tránsito real resuelve a la vez el cociente de radios, los coeficientes de oscurecimiento del limbo, el [[impact-parameter|parámetro de impacto]] y la órbita, porque están todos enredados en la misma curva.',
       figure: {
         alt: 'El Sol fotografiado en luz blanca. Su disco es claramente más brillante en el medio y se apaga hacia el borde. El pequeño disco negro de bordes nítidos de Venus está cerca del borde superior derecho, y varias manchas solares se reparten por el centro.',
         caption:
@@ -145,7 +149,7 @@ export default {
           unit: 'R☉',
           want: '1,155',
         },
-        { label: 'Cociente corregido √(δ / 1,215)', unit: '' },
+        { label: 'Cociente corregido √(<em>δ</em> / 1,215)', unit: '' },
         { label: 'Radio del planeta', unit: 'R_Júpiter' },
         { label: 'El mismo radio', unit: 'R⊕' },
       ],
@@ -153,7 +157,7 @@ export default {
     },
     {
       title: 'La forma de la caída',
-      body: 'Un tránsito no es una función escalón. Tiene cuatro puntos de contacto, y la forma entre ellos lleva información.\n\nLa <strong>entrada</strong> empieza cuando el borde delantero del planeta toca por primera vez el disco estelar y termina cuando su borde trasero ha cruzado del todo. En ese intervalo el área bloqueada sube de nada a su valor completo. En un tránsito central la entrada dura k/(1 + k) de todo el suceso, con k = R<sub>p</sub>/R<sub>★</sub>, así que la pendiente de los hombros es en sí misma una medida del cociente de radios, independiente de la profundidad.\n\nEl <strong>fondo</strong> entre el segundo y el tercer contacto es donde el planeta está enteramente sobre el disco. No es plano: el oscurecimiento del limbo lo curva, y es más profundo a mitad del tránsito, donde el planeta cubre la parte más brillante de la estrella.\n\nLa <strong>salida</strong> es el espejo de la entrada.\n\nLa <strong>duración total</strong> depende de con qué rapidez se mueve el planeta y de lo larga que sea la cuerda que corta a través del disco. Combina la duración con el periodo y puedes extraer la densidad de la estrella, sin resolverla nunca.',
+      body: 'Un tránsito no es una función escalón. Tiene cuatro puntos de contacto, y la forma entre ellos lleva información.\n\nLa <strong>entrada</strong> empieza cuando el borde delantero del planeta toca por primera vez el disco estelar y termina cuando su borde trasero ha cruzado del todo. En ese intervalo el área bloqueada sube de nada a su valor completo. En un tránsito central la entrada dura <em>k</em>/(1 + <em>k</em>) de todo el suceso, con <em>k</em> = <em>R</em><sub>p</sub>/<em>R</em><sub>★</sub>, así que la pendiente de los hombros es en sí misma una medida del cociente de radios, independiente de la profundidad.\n\nEl <strong>fondo</strong> entre el segundo y el tercer contacto es donde el planeta está enteramente sobre el disco. No es plano: el oscurecimiento del limbo lo curva, y es más profundo a mitad del tránsito, donde el planeta cubre la parte más brillante de la estrella.\n\nLa <strong>salida</strong> es el espejo de la entrada.\n\nLa <strong>duración total</strong> depende de con qué rapidez se mueve el planeta y de lo larga que sea la cuerda que corta a través del disco. Combina la duración con el [[period|periodo]] y puedes extraer la densidad de la estrella, sin resolverla nunca.',
     },
     {
       title: 'Leer el fondo',
@@ -170,15 +174,15 @@ export default {
     },
     {
       title: 'El ángulo en el que resulta que estás',
-      body: 'Todo lo anterior suponía que el planeta cruza el centro de la estrella. Las órbitas reales están inclinadas, y la inclinación la fija cómo resulta estar orientado el sistema respecto a la Tierra: nada del planeta, todo de nosotros.\n\nEl <strong>parámetro de impacto</strong> b es lo lejos del centro del disco que pasa la trayectoria del planeta, en unidades del radio estelar. b = 0 es justo el centro. b = 1 roza el limbo. Por encima de b = 1 + k aproximadamente, el planeta falla la estrella por completo y no hay ningún tránsito, por mucha paciencia con la que observes.\n\nDeslízalo y observa cómo cambian tres cosas a la vez: el tránsito se acorta, el fondo pierde su tramo plano y se convierte en una V, y la profundidad baja porque el planeta cubre ahora el limbo tenue y no el centro brillante. Las tres cosas son la razón de que un ajuste que ignora el parámetro de impacto se equivoque con el radio.',
+      body: 'Todo lo anterior suponía que el planeta cruza el centro de la estrella. Las órbitas reales están inclinadas, y la inclinación la fija cómo resulta estar orientado el sistema respecto a la Tierra: nada del planeta, todo de nosotros.\n\nEl <strong>parámetro de impacto</strong> <em>b</em> es lo lejos del centro del disco que pasa la trayectoria del planeta, en unidades del radio estelar. <em>b</em> = 0 es justo el centro. <em>b</em> = 1 roza el limbo. Por encima de <em>b</em> = 1 + <em>k</em> aproximadamente, el planeta falla la estrella por completo y no hay ningún tránsito, por mucha paciencia con la que observes.\n\nDeslízalo y observa cómo cambian tres cosas a la vez: el tránsito se acorta, el fondo pierde su tramo plano y se convierte en una V, y la profundidad baja porque el planeta cubre ahora el limbo tenue y no el centro brillante. Las tres cosas son la razón de que un ajuste que ignora el parámetro de impacto se equivoque con el radio.',
       checklist: [
-        'Empieza en b = 0 y anota la duración y la profundidad',
+        'Empieza en <em>b</em> = 0 y anota la duración y la profundidad',
         'Sube b a 0,9 y observa cómo el fondo plano se convierte en una V',
         'Encuentra el valor de b en el que el tránsito desaparece por completo',
         'Carga el ajuste de la Tierra alrededor del Sol y lee la probabilidad de tránsito',
         'Reduce a / R★ y observa cómo sube la probabilidad',
       ],
-      tip: 'La simulación corre en un plano, así que todas las órbitas de ella tienen b = 0 y transitan. Eso es una limitación de un laboratorio bidimensional, no una afirmación sobre el cielo. Este instrumento es donde vive la tercera dimensión.',
+      tip: 'La simulación corre en un plano, así que todas las órbitas de ella tienen <em>b</em> = 0 y transitan. Eso es una limitación de un laboratorio bidimensional, no una afirmación sobre el cielo. Este instrumento es donde vive la tercera dimensión.',
     },
     {
       title: '¿Cuánta suerte hay que tener?',
@@ -187,7 +191,7 @@ export default {
         'Un astrónomo alienígena elige una dirección al azar desde la que mirar el Sol. ¿Aproximadamente una probabilidad entre cuántas de que vea transitar la Tierra?',
       unit: 'a una',
       because:
-        'R★/a = 0,00465, o alrededor de 1 entre 215. Ese es el hecho más duro del método del tránsito: incluso un sondeo con fotometría perfecta observando todas las estrellas del cielo para siempre encontraría menos de uno entre doscientos de los planetas tipo Tierra que hay. Todo lo que el método informa sobre lo comunes que son los planetas tiene que dividirse por este factor geométrico antes de significar algo.',
+        'R★/<em>a</em> = 0,00465, o alrededor de 1 entre 215. Ese es el hecho más duro del método del tránsito: incluso un sondeo con fotometría perfecta observando todas las estrellas del cielo para siempre encontraría menos de uno entre doscientos de los planetas tipo Tierra que hay. Todo lo que el método informa sobre lo comunes que son los planetas tiene que dividirse por este factor geométrico antes de significar algo.',
       hints: [
         'La probabilidad es una razón entre dos longitudes que da el paso.',
         'Divide el radio de la estrella entre el tamaño de la órbita, en la misma unidad.',
@@ -236,13 +240,17 @@ export default {
           unit: '',
           hint: 'la diferencia de los dos números de tránsito',
         },
-        { label: 'Periodo orbital P = (t₂ − t₁) / n', unit: 'días' },
+        {
+          label:
+            'Periodo orbital <em>P</em> = (<em>t</em>₂ − <em>t</em>₁) / <em>n</em>',
+          unit: 'días',
+        },
       ],
       tip: 'Los números de tránsito de la lectura cuentan todas las caídas completas desde que empezó el registro, así que las órbitas entre el tránsito 3 y el tránsito 7 son simplemente 4.',
     },
     {
       title: 'De un periodo a una órbita',
-      body: 'Un periodo y una masa estelar bastan para situar el planeta, mediante la misma tercera ley que usarías en el Sistema Solar:\n\n<strong>a<sup>3</sup> = P<sup>2</sup> M<sub>★</sub></strong>, con a en UA, P en años y M<sub>★</sub> en masas solares.\n\nHD 209458 pesa <strong>1,148 M<sub>☉</sub></strong>, por su espectro y su posición en la secuencia principal. Introduce tu periodo y esa masa.\n\nLas dos últimas filas son lo que significa la órbita. a / R<sub>★</sub> es a cuántos radios estelares está el planeta, que es lo que fija la probabilidad de tránsito y la duración. La temperatura de equilibrio es lo que sale de igualar la luz estelar que absorbe con el calor que radia.',
+      body: 'Un periodo y una masa estelar bastan para situar el planeta, mediante la misma [[keplers-third-law|tercera ley]] que usarías en el Sistema Solar:\n\n<strong><em>a</em>³ = <em>P</em>² M<sub>★</sub></strong>, con <em>a</em> en UA, <em>P</em> en años y M<sub>★</sub> en masas solares.\n\nHD 209458 pesa <strong>1,148 M<sub>☉</sub></strong>, por su [[spectrum|espectro]] y su posición en la [[main-sequence|secuencia principal]]. Introduce tu periodo y esa masa.\n\nLas dos últimas filas son lo que significa la órbita. a / R<sub>★</sub> es a cuántos radios estelares está el planeta, que es lo que fija la probabilidad de tránsito y la duración. La [[equilibrium-temperature|temperatura de equilibrio]] es lo que sale de igualar la luz estelar que absorbe con el calor que radia.',
       fields: [
         { label: 'Periodo P', unit: 'días', hint: 'del paso anterior' },
         {
@@ -251,19 +259,23 @@ export default {
           want: '1,148',
         },
         { label: 'Periodo en años', unit: 'a' },
-        { label: 'Semieje mayor a = (P² M)^⅓', unit: 'UA' },
+        {
+          label:
+            'Semieje mayor <em>a</em> = (<em>P</em>² <em>M</em>)<sup>⅓</sup>',
+          unit: 'UA',
+        },
         { label: 'Órbita en radios estelares, a / R<sub>★</sub>', unit: '' },
         { label: 'Temperatura de equilibrio', unit: 'K' },
       ],
     },
     {
       title: 'Lo que un tránsito no puede decirte',
-      body: 'Tienes un radio, un periodo y una órbita. No tienes una masa, y ninguna fotometría mejor te la dará. Un planeta gaseoso esponjoso y uno rocoso denso del mismo tamaño producen caídas idénticas.\n\nLa masa tiene que venir de otro sitio, y casi siempre viene de las velocidades radiales: las líneas espectrales de la estrella se desplazan a medida que el planeta tira de ella, y el tamaño de ese desplazamiento da la masa del planeta. Para HD 209458 b son 0,69 masas de Júpiter. Junta las dos medidas y obtienes una densidad: 0,69 masas de Júpiter dentro de 1,38 radios de Júpiter son unos 0,34 gramos por centímetro cúbico, un tercio de la densidad del agua. El planeta flotaría, si tuvieras un océano lo bastante grande.\n\nPor eso la gráfica estándar del campo es el <strong>diagrama masa-radio</strong>, y por eso un planeta con solo una de las dos cosas es un candidato y no un resultado. Es también de donde salió el resultado reciente más interesante: representa el radio frente al periodo para los planetas pequeños de Kepler y hay un hueco visible cerca de 1,8 R<sub>⊕</sub>, el <em>valle de radios</em>, que separa las supertierras rocosas de los mundos pequeños que retienen una envoltura fina de hidrógeno. Se cree que el hueco lo esculpe el escape atmosférico, y es un rasgo que nadie predijo antes de que los datos lo mostraran. Encontrarlo exigió que miles de radios planetarios fueran exactos, que es a donde va la última sección de esta investigación.',
+      body: 'Tienes un radio, un periodo y una órbita. No tienes una masa, y ninguna [[photometry|fotometría]] mejor te la dará. Un planeta gaseoso esponjoso y uno rocoso denso del mismo tamaño producen caídas idénticas.\n\nLa masa tiene que venir de otro sitio, y casi siempre viene de las velocidades radiales: las líneas espectrales de la estrella se desplazan a medida que el planeta tira de ella, y el tamaño de ese desplazamiento da la masa del planeta. Para HD 209458 b son 0,69 masas de Júpiter. Junta las dos medidas y obtienes una densidad: 0,69 masas de Júpiter dentro de 1,38 radios de Júpiter son unos 0,34 gramos por centímetro cúbico, un tercio de la densidad del agua. El planeta flotaría, si tuvieras un océano lo bastante grande.\n\nPor eso la gráfica estándar del campo es el <strong>diagrama masa-radio</strong>, y por eso un planeta con solo una de las dos cosas es un candidato y no un resultado. Es también de donde salió el resultado reciente más interesante: representa el radio frente al periodo para los planetas pequeños de Kepler y hay un hueco visible cerca de 1,8 R<sub>⊕</sub>, el <em>valle de radios</em>, que separa las supertierras rocosas de los mundos pequeños que retienen una envoltura fina de hidrógeno. Se cree que el hueco lo esculpe el escape atmosférico, y es un rasgo que nadie predijo antes de que los datos lo mostraran. Encontrarlo exigió que miles de radios planetarios fueran exactos, que es a donde va la última sección de esta investigación.',
       tip: 'Los planetas de TRAPPIST-1 obtuvieron sus masas por una tercera vía: se perturban unos a otros lo suficiente para desplazar sus tránsitos en minutos, y esas variaciones en el instante del tránsito son una medida de masa.',
     },
     {
       title: 'El planeta cambia de tamaño con el color',
-      body: 'Aquí hay algo que la imagen sencilla no predice. Mide la profundidad del tránsito en luz roja y otra vez en luz azul y puedes obtener respuestas distintas.\n\nLa razón es que el borde del planeta no es un borde nítido. Un planeta gaseoso tiene atmósfera, y cuánto puedes ver dentro de ella depende de qué absorbe en la longitud de onda a la que estés mirando. En una longitud de onda donde el sodio absorbe con fuerza, la atmósfera se vuelve opaca muy arriba y el planeta presenta un disco algo mayor. En una longitud de onda donde nada absorbe, ves más abajo y el disco es algo menor. La profundidad del tránsito traza la opacidad del planeta frente a la longitud de onda: un <strong>espectro de transmisión</strong>.\n\nEl tamaño del efecto lo fija la <strong>altura de escala</strong> atmosférica, la distancia vertical en la que la presión cae en un factor e: H = kT / μg. Las atmósferas calientes, de baja gravedad y ricas en hidrógeno son esponjosas y tienen alturas de escala grandes, y por eso los júpiteres calientes son las atmósferas más fáciles de estudiar. Para este planeta H es de unos 550 km frente a un radio de 99 000 km, así que una banda intensa eleva el radio unas décimas de por ciento y la profundidad unos cientos de partes por millón sobre 18 000.\n\nEso suena imposible de medir. Se hizo por primera vez en este mismísimo sistema: en 2002 David Charbonneau y sus colegas usaron el Telescopio Espacial Hubble para descubrir que el tránsito de HD 209458 b era ligerísimamente más profundo en las líneas D del sodio que a su lado. Fue la primera detección de una atmósfera en un planeta de otra estrella.',
+      body: 'Aquí hay algo que la imagen sencilla no predice. Mide la profundidad del tránsito en luz roja y otra vez en luz azul y puedes obtener respuestas distintas.\n\nLa razón es que el borde del planeta no es un borde nítido. Un planeta gaseoso tiene atmósfera, y cuánto puedes ver dentro de ella depende de qué absorbe en la longitud de onda a la que estés mirando. En una longitud de onda donde el sodio absorbe con fuerza, la atmósfera se vuelve opaca muy arriba y el planeta presenta un disco algo mayor. En una longitud de onda donde nada absorbe, ves más abajo y el disco es algo menor. La profundidad del tránsito traza la opacidad del planeta frente a la longitud de onda: un <strong>espectro de transmisión</strong>.\n\nEl tamaño del efecto lo fija la <strong>[[scale-height|altura de escala]]</strong> atmosférica, la distancia vertical en la que la presión cae en un factor e: <em>H</em> = kT / μg. Las atmósferas calientes, de baja gravedad y ricas en hidrógeno son esponjosas y tienen alturas de escala grandes, y por eso los júpiteres calientes son las atmósferas más fáciles de estudiar. Para este planeta <em>H</em> es de unos 550 km frente a un radio de 99 000 km, así que una banda intensa eleva el radio unas décimas de por ciento y la profundidad unos cientos de partes por millón sobre 18 000.\n\nEso suena imposible de medir. Se hizo por primera vez en este mismísimo sistema: en 2002 David Charbonneau y sus colegas usaron el Telescopio Espacial Hubble para descubrir que el tránsito de HD 209458 b era ligerísimamente más profundo en las líneas D del sodio que a su lado. Fue la primera detección de una atmósfera en un planeta de otra estrella.',
       tip: 'La misma idea al revés te da espectros de emisión: observa el planeta pasar por detrás de la estrella, resta, y lo que desaparece es la luz propia del planeta.',
     },
     {
@@ -293,11 +305,11 @@ export default {
     },
     {
       title: 'Cosas que no son planetas',
-      body: 'Una caída en una curva de luz es una caída en una curva de luz. Varias cosas que no son planetas producen una.\n\nUna <strong>binaria eclipsante</strong> de dos estrellas produce caídas de decenas de por ciento, lo cual es obvio, hasta que el par es rasante y solo roza un pequeño porcentaje. Una <strong>binaria eclipsante de fondo</strong> detrás de tu objetivo, con sus eclipses profundos diluidos por toda la luz de la estrella del primer plano, produce una caída superficial de profundidad exactamente planetaria. Las manchas estelares que entran y salen de la vista al rotar producen caídas que casi se repiten. Kepler y TESS marcan más candidatos de los que confirman, y separarlos es el grueso del esfuerzo de seguimiento.\n\nEl problema más sutil no es un falso positivo en absoluto. Es un planeta real cuya medida está calladamente equivocada.\n\nLos telescopios de sondeo tienen píxeles gruesos. Los de Kepler medían unos cuatro segundos de arco; los de TESS miden <strong>21 segundos de arco</strong>, aproximadamente el tamaño aparente de un cráter pequeño de la Luna. Cada estrella que cae en la apertura contribuye luz al mismo único número. Las compañeras estelares son comunes: aproximadamente la mitad de las estrellas parecidas al Sol tienen una. Si tu objetivo tiene una vecina a una fracción de segundo de arco, el sondeo no tiene manera de saberlo, y la luz de la vecina está en todas las medidas que hagas.\n\nAñadir luz constante a una curva de luz no oculta el tránsito. Lo <em>diluye</em>.',
+      body: 'Una caída en una curva de luz es una caída en una curva de luz. Varias cosas que no son planetas producen una.\n\nUna <strong>[[eclipsing-binary|binaria eclipsante]]</strong> de dos estrellas produce caídas de decenas de por ciento, lo cual es obvio, hasta que el par es rasante y solo roza un pequeño porcentaje. Una <strong>binaria eclipsante de fondo</strong> detrás de tu objetivo, con sus eclipses profundos diluidos por toda la luz de la estrella del primer plano, produce una caída superficial de profundidad exactamente planetaria. Las manchas estelares que entran y salen de la vista al rotar producen caídas que casi se repiten. Kepler y TESS marcan más candidatos de los que confirman, y separarlos es el grueso del esfuerzo de seguimiento.\n\nEl problema más sutil no es un [[false-positive|falso positivo]] en absoluto. Es un planeta real cuya medida está calladamente equivocada.\n\nLos telescopios de sondeo tienen [[pixel|píxeles]] gruesos. Los de Kepler medían unos cuatro segundos de arco; los de TESS miden <strong>21 segundos de arco</strong>, aproximadamente el tamaño aparente de un cráter pequeño de la Luna. Cada estrella que cae en la apertura contribuye luz al mismo único número. Las compañeras estelares son comunes: aproximadamente la mitad de las estrellas parecidas al Sol tienen una. Si tu objetivo tiene una vecina a una fracción de segundo de arco, el sondeo no tiene manera de saberlo, y la luz de la vecina está en todas las medidas que hagas.\n\nAñadir luz constante a una curva de luz no oculta el tránsito. Lo <em>diluye</em>.',
     },
     {
       title: 'Una estrella que no sabías que estaba ahí',
-      body: 'Supón que una fracción de la luz de la apertura viene de una compañera, con cociente de flujos F<sub>2</sub>/F<sub>1</sub>. El planeta sigue bloqueando la misma fracción de su propia estrella, pero esa luz bloqueada es ahora una parte menor del total:\n\n<strong>δ<sub>observada</sub> = δ<sub>real</sub> / (1 + F<sub>2</sub>/F<sub>1</sub>)</strong>\n\nComo el radio va como √δ, el radio que informas es demasiado pequeño exactamente en\n\n<strong>R<sub>real</sub> / R<sub>medido</sub> = √(1 + F<sub>2</sub>/F<sub>1</sub>)</strong>\n\nEl contraste se cita normalmente como una diferencia de magnitudes, y F<sub>2</sub>/F<sub>1</sub> = 10<sup>−0,4Δm</sup>. Una gemela idéntica hace que todos los radios sean demasiado pequeños en √2. Una compañera cuatro magnitudes más tenue lo cambia en un 1,2 %.\n\nPara esto sirve la imagen de alta resolución de estrellas anfitrionas de planetas. El <strong>Robo-AO Kepler Survey</strong> puso un sistema robótico de óptica adaptativa con láser en el telescopio de 1,5 m de Palomar y fotografió <strong>3857</strong> anfitrionas de candidatos a planeta de Kepler entre 2012 y 2016, alcanzando unos 0,15 segundos de arco. Encontró una estrella cercana dentro de 4 segundos de arco alrededor del <strong>14,5 ± 0,5 %</strong> de ellas: aproximadamente una anfitriona de cada siete. El <strong>SOAR TESS Survey</strong> hace el mismo trabajo para TESS con imagen de moteado en el telescopio SOAR de 4,1 m en Chile, resolviendo hasta unos 0,04 segundos de arco, y ha observado casi 3000 objetivos.',
+      body: 'Supón que una fracción de la luz de la apertura viene de una compañera, con cociente de [[flux|flujos]] <em>F</em>₂/F<sub>1</sub>. El planeta sigue bloqueando la misma fracción de su propia estrella, pero esa luz bloqueada es ahora una parte menor del total:\n\n<strong><em>δ</em><sub>observada</sub> = <em>δ</em><sub>real</sub> / (1 + <em>F</em>₂/<em>F</em>₁)</strong>\n\nComo el radio va como √<em>δ</em>, el radio que informas es demasiado pequeño exactamente en\n\n<strong><em>R</em><sub>real</sub> / <em>R</em><sub>medido</sub> = √(1 + <em>F</em>₂/<em>F</em>₁)</strong>\n\nEl contraste se cita normalmente como una diferencia de [[magnitude|magnitudes]], y <em>F</em>₂/<em>F</em>₁ = 10<sup>−0,4Δm</sup>. Una gemela idéntica hace que todos los radios sean demasiado pequeños en √2. Una compañera cuatro magnitudes más tenue lo cambia en un 1,2 %.\n\nPara esto sirve la imagen de alta resolución de estrellas anfitrionas de planetas. El <strong>Robo-AO Kepler Survey</strong> puso un sistema robótico de óptica adaptativa con láser en el telescopio de 1,5 m de Palomar y fotografió <strong>3857</strong> anfitrionas de candidatos a planeta de Kepler entre 2012 y 2016, alcanzando unos 0,15 segundos de arco. Encontró una estrella cercana dentro de 4 segundos de arco alrededor del <strong>14,5 ± 0,5 %</strong> de ellas: aproximadamente una anfitriona de cada siete. El <strong>SOAR TESS Survey</strong> hace el mismo trabajo para TESS con imagen de moteado en el telescopio SOAR de 4,1 m en Chile, resolviendo hasta unos 0,04 segundos de arco, y ha observado casi 3000 objetivos.',
       checklist: [
         'Pon Δm = 0 y confirma que la corrección es exactamente √2',
         'Pon Δm = 0,5, el contraste del escenario que estás a punto de cargar',
@@ -331,7 +343,7 @@ export default {
     },
     {
       title: 'Recupera el planeta real',
-      body: 'Has medido el mismo planeta dos veces, una limpia y otra mezclada. El cociente de las dos profundidades es 1 + F<sub>2</sub>/F<sub>1</sub> directamente, lo que significa que este par de medidas contiene el brillo de la compañera aunque nunca la vieras.\n\nEn la práctica nunca obtienes la medida limpia: esa es toda la dificultad, y es la razón de que alguien tenga que ir y tomar una imagen de alta resolución. Aquí tienes las dos, así que puedes comprobar que la corrección hace lo que dice.',
+      body: 'Has medido el mismo planeta dos veces, una limpia y otra mezclada. El cociente de las dos profundidades es 1 + <em>F</em>₂/<em>F</em>₁ directamente, lo que significa que este par de medidas contiene el brillo de la compañera aunque nunca la vieras.\n\nEn la práctica nunca obtienes la medida limpia: esa es toda la dificultad, y es la razón de que alguien tenga que ir y tomar una imagen de alta resolución. Aquí tienes las dos, así que puedes comprobar que la corrección hace lo que dice.',
       importLabel: 'Copiar la profundidad mezclada',
       fields: [
         { label: 'Profundidad que acabas de medir, mezclada', unit: '' },
@@ -341,9 +353,15 @@ export default {
           want: 'del paso 8',
         },
         { label: 'Radio que implica la curva mezclada', unit: 'R⊕' },
-        { label: 'Cociente de profundidades = 1 + F₂/F₁', unit: '' },
+        {
+          label: 'Cociente de profundidades = 1 + <em>F</em>₂/<em>F</em>₁',
+          unit: '',
+        },
         { label: 'Contraste implicado de la compañera Δm', unit: 'mag' },
-        { label: 'Corrección del radio √(1 + F₂/F₁)', unit: '' },
+        {
+          label: 'Corrección del radio √(1 + <em>F</em>₂/<em>F</em>₁)',
+          unit: '',
+        },
         { label: 'Radio corregido del planeta', unit: 'R⊕' },
       ],
       tip: 'Fíjate en lo que la corrección no necesita: la distancia de la compañera, su masa, o si está siquiera ligada a la estrella. Solo cuánta luz añade.',

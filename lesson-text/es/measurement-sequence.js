@@ -456,7 +456,7 @@ export const MEASURING_THE_MOON = {
   steps: {
     'a-picture-of-the-moon': {
       title: 'Una imagen real de la Luna',
-      body: 'Esta es una imagen <strong>real</strong>: la Luna, fotografiada por la sonda Galileo de la NASA el 7 de diciembre de 1992 al pasar junto a la Tierra camino de Júpiter. Es un compuesto en color realzado, mostrado aquí en gris. <em>Realzado</em> significa que se estiró el contraste para mostrar diferencias en el terreno, así que sus niveles de gris son para el ojo y no miden la luz que refleja la Luna. El Observatorio llama a una imagen así <strong>solo para mostrar</strong>: puedes marcarla y medirla en píxeles, y nada más.\n\nUna imagen no tiene escala propia. Esta mide 496 píxeles de ancho, y un píxel no es un kilómetro. Los píxeles se numeran desde abajo a la izquierda, x hacia la derecha e y hacia arriba, y el disco está recortado muy justo: su borde derecho toca la última columna. En esta investigación das a la imagen una escala y tomas una medida de ella.',
+      body: 'Esta es una imagen <strong>real</strong>: la Luna, fotografiada por la sonda Galileo de la NASA el 7 de diciembre de 1992 al pasar junto a la Tierra camino de Júpiter. Es un compuesto en color realzado, mostrado aquí en gris. <em>Realzado</em> significa que se estiró el contraste para mostrar diferencias en el terreno, así que sus niveles de gris son para el ojo y no miden la luz que refleja la Luna. El Observatorio llama a una imagen así <strong>solo para mostrar</strong>: puedes marcarla y medirla en [[pixel|píxeles]], y nada más.\n\nUna imagen no tiene escala propia. Esta mide 496 píxeles de ancho, y un píxel no es un kilómetro. Los píxeles se numeran desde abajo a la izquierda, x hacia la derecha e y hacia arriba, y el disco está recortado muy justo: su borde derecho toca la última columna. En esta investigación das a la imagen una escala y tomas una medida de ella.',
     },
     'predict-the-scale': {
       title: '¿Qué da escala a una imagen?',
@@ -476,7 +476,7 @@ export const MEASURING_THE_MOON = {
     },
     'scale-from-the-disc': {
       title: 'Un par de referencia a través del disco',
-      body: 'Marca el ancho completo del disco con un <strong>par de referencia</strong>: una línea a lo largo de la horizontal por el centro del disco (fila 245), de su borde izquierdo a su borde derecho. Pon el extremo izquierdo en <strong>3</strong> y el derecho en <strong>496</strong>. Se toma que el par abarca 3474,8 km, el diámetro medio de la Luna. Lee su longitud en píxeles y la escala que da.\n\nEl extremo derecho está sobre la última columna del cuadro, así que el disco puede ser uno o dos píxeles más ancho que la imagen. Tenlo presente: no está en la incertidumbre que indica la herramienta.',
+      body: 'Marca el ancho completo del disco con un <strong>par de referencia</strong>: una línea a lo largo de la horizontal por el centro del disco (fila 245), de su borde izquierdo a su borde derecho. Pon el extremo izquierdo en <strong>3</strong> y el derecho en <strong>496</strong>. Se toma que el par abarca 3474,8 km, el diámetro medio de la Luna. Lee su longitud en píxeles y la escala que da.\n\nEl extremo derecho está sobre la última columna del cuadro, así que el disco puede ser uno o dos píxeles más ancho que la imagen. Tenlo presente: no está en la [[uncertainty|incertidumbre]] que indica la herramienta.',
       fields: [
         { label: 'Longitud del par' },
         { label: 'Escala a partir del par, en km por píxel' },
@@ -506,7 +506,7 @@ export const MEASURING_THE_MOON = {
     },
     'predict-the-plain': {
       title: '¿Cuán ancha es la llanura oscura?',
-      body: 'Cerca del centro del disco hay una gran llanura oscura, casi redonda, con su centro cerca de x = 289, y = 306. Las llanuras oscuras de la Luna son antiguas coladas de lava. Antes de medirla, mírala junto al disco entero.',
+      body: 'Cerca del centro del disco hay una gran llanura oscura, casi redonda, con su centro cerca de <em>x</em> = 289, <em>y</em> = 306. Las llanuras oscuras de la Luna son antiguas coladas de lava. Antes de medirla, mírala junto al disco entero.',
       prompt: 'De lado a lado, la llanura mide unos&hellip;',
       options: ['6 km', '60 km', '600 km', '6000 km'],
       hints: [
@@ -517,7 +517,7 @@ export const MEASURING_THE_MOON = {
     },
     'measure-the-plain': {
       title: 'Un círculo sobre la llanura',
-      body: 'El par se queda a través del disco. El círculo empieza en x = 289, y = 306. Cambia el <strong>radio</strong> hasta que el círculo siga el borde de la llanura oscura, y mueve el centro si el círculo se va hacia un lado. Lee el diámetro del círculo en kilómetros.',
+      body: 'El par se queda a través del disco. El círculo empieza en <em>x</em> = 289, <em>y</em> = 306. Cambia el <strong>radio</strong> hasta que el círculo siga el borde de la llanura oscura, y mueve el centro si el círculo se va hacia un lado. Lee el diámetro del círculo en kilómetros.',
       fields: [{ label: 'Diámetro del círculo' }],
     },
     'what-would-change-it': {

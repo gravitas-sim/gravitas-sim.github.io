@@ -157,11 +157,11 @@ const KEPLER = {
              ellipse, with the star at one focus.
              \n\nAn ellipse has two foci. Their defining property is that for
              any point on the curve, the distances to the two foci always add to
-             the same total. The <em>semi-major axis</em> <strong>a</strong> is
+             the same total. The <em>[[semi-major-axis|semi-major axis]]</em> <strong>a</strong> is
              half the long diameter, and it is the orbit's size. The
-             <em>eccentricity</em> <strong>e</strong> is its shape: the foci sit
-             a distance a x e either side of the center, so e = 0 puts both foci
-             at the center and gives a circle, while e approaching 1 stretches
+             <em>[[eccentricity|eccentricity]]</em> <strong>e</strong> is its shape: the foci sit
+             a distance <em>a</em> × <em>e</em> either side of the center, so <em>e</em> = 0 puts both foci
+             at the center and gives a circle, while <em>e</em> approaching 1 stretches
              the ellipse into a sliver.
              \n\nThe second focus is the strange part. There is nothing there.
              No mass, no object, nothing to mark it. It is a purely geometric
@@ -180,13 +180,13 @@ const KEPLER = {
              diameter and sets the orbit's <em>size</em>. It is held fixed on
              screen here so that only the shape changes.
              <strong>b</strong> is the semi-minor axis, half the short diameter.
-             <strong>c = a x e</strong> is how far each focus sits from the
+             <strong><em>c</em> = <em>a</em> × <em>e</em></strong> is how far each focus sits from the
              center, so the eccentricity is just the fraction of a by which the
              star is off-center.
-             \n\nThe two are tied together by b = a x sqrt(1 - e squared),
+             \n\nThe two are tied together by <em>b</em> = <em>a</em> × √(1 − <em>e</em>²),
              which is why the ellipse gets shorter as it gets more eccentric
              while its length stays the same.
-             \n\nNotice how little e has to grow before the star is visibly
+             \n\nNotice how little <em>e</em> has to grow before the star is visibly
              off-center, and how hard it is to see any difference at all below
              about 0.1. That is why the Solar System's near-circular orbits hid
              the ellipse for two thousand years, and why it was Mars, one of the
@@ -206,7 +206,7 @@ const KEPLER = {
         {
           label: 'Mars',
           e: 0.093,
-          note: 'Mars, and the reason Kepler got there. At e = 0.093 the departure from a circle is just large enough to show up in naked-eye measurements accurate to an arcminute.',
+          note: 'Mars, and the reason Kepler got there. At <em>e</em> = 0.093 the departure from a circle is just large enough to show up in naked-eye measurements accurate to an arcminute.',
         },
         {
           label: 'Mercury',
@@ -408,10 +408,10 @@ const KEPLER = {
              reflexes rather than the orbit.
              \n\nThe <strong>Pause at Event</strong> tool has opened below
              with the <strong>Eccentric Orbiter</strong> and its star already
-             chosen. Set the event to <strong>periapsis</strong> and press
+             chosen. Set the event to <strong>[[periapsis|periapsis]]</strong> and press
              <strong>Arm</strong>. The simulation runs until the planet reaches
              its closest point and stops there. Select the planet and record
-             the speed. Then arm it again for <strong>apoapsis</strong> and do
+             the speed. Then arm it again for <strong>[[apoapsis|apoapsis]]</strong> and do
              the same at the far end.
              \n\nBoth numbers are measured <strong>relative to the star</strong>
              — the readout subtracts the star's own motion, so the distance and
@@ -498,18 +498,18 @@ const KEPLER = {
         if (err <= 0.15) {
           return {
             level: 'ok',
-            message: `Your ratio of ${ratio.toFixed(2)} matches (1+e)/(1−e) = ${expected.toFixed(2)} for this orbit's eccentricity of ${el.e.toFixed(3)}. That relation falls straight out of angular momentum being conserved.`,
+            message: `Your ratio of ${ratio.toFixed(2)} matches (1+<em>e</em>)/(1−<em>e</em>) = ${expected.toFixed(2)} for this orbit's eccentricity of ${el.e.toFixed(3)}. That relation falls straight out of angular momentum being conserved.`,
           };
         }
         if (ratio < 1.2) {
           return {
             level: 'warn',
-            message: `A ratio of ${ratio.toFixed(2)} is close to 1, which would mean the planet barely changes speed, but this orbit has e = ${el.e.toFixed(3)}, so the ratio should be near ${expected.toFixed(2)}. You have probably caught it twice at similar distances. Pause when "Distance from star" is at its smallest, then again at its largest.`,
+            message: `A ratio of ${ratio.toFixed(2)} is close to 1, which would mean the planet barely changes speed, but this orbit has <em>e</em> = ${el.e.toFixed(3)}, so the ratio should be near ${expected.toFixed(2)}. You have probably caught it twice at similar distances. Pause when "Distance from star" is at its smallest, then again at its largest.`,
           };
         }
         return {
           level: 'warn',
-          message: `Your ratio is ${ratio.toFixed(2)}, but for e = ${el.e.toFixed(3)} it should be about (1+e)/(1−e) = ${expected.toFixed(2)}. Double-check both readings: pausing a little before or after the true extreme is the usual cause.`,
+          message: `Your ratio is ${ratio.toFixed(2)}, but for <em>e</em> = ${el.e.toFixed(3)} it should be about (1+<em>e</em>)/(1−<em>e</em>) = ${expected.toFixed(2)}. Double-check both readings: pausing a little before or after the true extreme is the usual cause.`,
         };
       },
       tip: 'If the tool refuses to arm and says the orbit is circular, that is not a fault. On a perfectly round orbit there is no closest point: the radial rate is zero everywhere and its sign is decided by rounding error, so a watch would fire on the first step and every step after it. The tool declines and says so. The Eccentric Orbiter is eccentric enough; the Circular Orbiter is not, and it is worth arming it once to see the refusal.',
@@ -561,11 +561,11 @@ const KEPLER = {
       title: "Kepler's third law",
       body: `The first two laws describe a single orbit. The third relates
              <em>different</em> orbits to each other, and it took Kepler another
-             decade to find: the square of the orbital period is proportional to
+             decade to find: the square of the orbital [[period|period]] is proportional to
              the cube of the semi-major axis.
              \n\nWritten for a one-solar-mass star with <em>P</em> in years and
              <em>a</em> in AU, the constant is exactly 1, so the law reads
-             simply P² = a³. Earth checks out trivially: 1² = 1³.
+             simply <em>P</em>² = <em>a</em>³. Earth checks out trivially: 1² = 1³.
              \n\nYou are about to test it against the real Solar System. These
              are the true semi-major axes and the true masses, so your
              measurements should match a textbook table to within your reading
@@ -677,7 +677,7 @@ const KEPLER = {
                <strong>Square P, cube a</strong> and they should fall on a
                straight line through the origin. Straightening a curve by
                choosing the right axes is how you identify a power law, and the
-               slope of that line is the constant in P² = k·a³.`,
+               slope of that line is the constant in <em>P</em>² = <em>k</em>·<em>a</em>³.`,
       },
       validate: v => {
         const rows = [1, 2, 3, 4, 5, 6, 7, 8]
@@ -697,13 +697,13 @@ const KEPLER = {
         if (rows.length >= 3 && spread > 0.5) {
           return {
             level: 'warn',
-            message: `Your P²/a³ values range from ${Math.min(...ks).toFixed(2)} to ${Math.max(...ks).toFixed(2)}. For planets around the same star they should all be close to each other. Check whether a period was read in days rather than years, or a distance mixed up between two planets.`,
+            message: `Your <em>P</em>²/<em>a</em>³ values range from ${Math.min(...ks).toFixed(2)} to ${Math.max(...ks).toFixed(2)}. For planets around the same star they should all be close to each other. Check whether a period was read in days rather than years, or a distance mixed up between two planets.`,
           };
         }
         if (rows.length >= 3) {
           return {
             level: 'ok',
-            message: `All ${rows.length} of your P²/a³ values agree to within ${(spread * 100).toFixed(0)}%. That constancy across planets of wildly different sizes is Kepler's third law. Add more planets and watch the fitted line tighten.`,
+            message: `All ${rows.length} of your <em>P</em>²/<em>a</em>³ values agree to within ${(spread * 100).toFixed(0)}%. That constancy across planets of wildly different sizes is Kepler's third law. Add more planets and watch the fitted line tighten.`,
           };
         }
         return null;
@@ -742,21 +742,21 @@ const KEPLER = {
         { id: 'k_P', label: 'Period P', unit: 'yr' },
         {
           id: 'k_a3',
-          label: 'Step 1: a³',
+          label: 'Step 1: <em>a</em>³',
           unit: 'AU³',
           compute: v => v.k_a ** 3,
           decimals: 3,
         },
         {
           id: 'k_P2',
-          label: 'Step 2: P²',
+          label: 'Step 2: <em>P</em>²',
           unit: 'yr²',
           compute: v => v.k_P ** 2,
           decimals: 3,
         },
         {
           id: 'k_ratio',
-          label: 'Step 3: P² ÷ a³',
+          label: 'Step 3: <em>P</em>² ÷ <em>a</em>³',
           unit: '',
           compute: v => v.k_P ** 2 / v.k_a ** 3,
           decimals: 3,
@@ -774,18 +774,18 @@ const KEPLER = {
         if (Math.abs(k - 1) <= 0.25) {
           return {
             level: 'ok',
-            message: `P² ÷ a³ = ${k.toFixed(3)}, which is 1 within your reading error. The star here is exactly one solar mass, and in years and AU that makes the constant exactly 1, so this is the check working, not a coincidence.`,
+            message: `<em>P</em>² ÷ <em>a</em>³ = ${k.toFixed(3)}, which is 1 within your reading error. The star here is exactly one solar mass, and in years and AU that makes the constant exactly 1, so this is the check working, not a coincidence.`,
           };
         }
         if (k > 100 || k < 0.01) {
           return {
             level: 'warn',
-            message: `P² ÷ a³ comes out as ${k.toExponential(2)}, which is far from 1. That size of error almost always means a unit slip: a period entered in days instead of years, or a distance in simulation units rather than AU. Check the readout labels.`,
+            message: `<em>P</em>² ÷ <em>a</em>³ comes out as ${k.toExponential(2)}, which is far from 1. That size of error almost always means a unit slip: a period entered in days instead of years, or a distance in simulation units rather than AU. Check the readout labels.`,
           };
         }
         return {
           level: 'warn',
-          message: `P² ÷ a³ = ${k.toFixed(3)}, where it should be close to 1 for a one-solar-mass star. Re-read a and P for the same planet and check you have not mixed rows.`,
+          message: `<em>P</em>² ÷ <em>a</em>³ = ${k.toFixed(3)}, where it should be close to 1 for a one-solar-mass star. Re-read a and P for the same planet and check you have not mixed rows.`,
         };
       },
       probe: ctx => {
@@ -811,14 +811,14 @@ const KEPLER = {
              \n\nSuppose a ninth planet orbited this same star at a semi-major
              axis of exactly 4 AU, out between Mars and Jupiter. Nobody has
              measured its period, because it does not exist. Work it out anyway.
-             \n\n<strong>Step 1.</strong> You know P² = a³, and you know
-             a = 4 AU.
+             \n\n<strong>Step 1.</strong> You know <em>P</em>² = <em>a</em>³, and you know
+             <em>a</em> = 4 AU.
              \n\n<strong>Step 2.</strong> Cube the distance:
-             a³ = 4 × 4 × 4 = 64. So P² = 64.
-             \n\n<strong>Step 3.</strong> You have P squared, but the question
-             asks for P. Undo the square by taking the square root: P = √64.
+             <em>a</em>³ = 4 × 4 × 4 = 64. So <em>P</em>² = 64.
+             \n\n<strong>Step 3.</strong> You have <em>P</em> squared, but the question
+             asks for <em>P</em>. Undo the square by taking the square root: <em>P</em> = √64.
              \n\nWhat is that?`,
-      prompt: 'Orbital period of a planet at a = 4 AU',
+      prompt: 'Orbital period of a planet at <em>a</em> = 4 AU',
       unit: 'years',
       answer: 8,
       tolerance: 0.4,
@@ -836,13 +836,13 @@ const KEPLER = {
         {
           id: 'cubedNotRooted',
           equals: 64,
-          say: `That is a³. The law says P² = a³, so the period is the square
+          say: `That is <em>a</em>³. The law says <em>P</em>² = <em>a</em>³, so the period is the square
                 root of 64, not 64 itself.`,
         },
         {
           id: 'rootedTheAxis',
           equals: 2,
-          say: `That is √a. The cube comes first: work out a³ = 64, then take
+          say: `That is √<em>a</em>. The cube comes first: work out <em>a</em>³ = 64, then take
                 its square root.`,
         },
       ],
@@ -850,14 +850,14 @@ const KEPLER = {
         concept: `Kepler's third law ties the size of an orbit to how long it
                   takes, and to nothing else. In these units - years and AU,
                   around this star - the relation is as simple as it ever gets.`,
-        method: `P² = a³. Put a = 4 in, work out the right-hand side, then undo
+        method: `<em>P</em>² = <em>a</em>³. Put <em>a</em> = 4 in, work out the right-hand side, then undo
                  the square.`,
       },
-      worked: `a = 4, so a³ = 64. P² = 64, so P = √64 = 8 years. The check that
-               it is really a law: Jupiter sits at 5.204 AU, giving a³ = 141.0
-               and P = 11.87 years, against a measured 11.86.`,
+      worked: `<em>a</em> = 4, so <em>a</em>³ = 64. <em>P</em>² = 64, so <em>P</em> = √64 = 8 years. The check that
+               it is really a law: Jupiter sits at 5.204 AU, giving <em>a</em>³ = 141.0
+               and <em>P</em> = 11.87 years, against a measured 11.86.`,
       because:
-        "P = 8 years. Now try it on a planet you did measure: Jupiter sits at 5.204 AU, so a³ = 141.0 and P = √141.0 = 11.87 years. The table says 11.86. You have just predicted a real planet's year from nothing but its distance.",
+        "<em>P</em> = 8 years. Now try it on a planet you did measure: Jupiter sits at 5.204 AU, so <em>a</em>³ = 141.0 and <em>P</em> = √141.0 = 11.87 years. The table says 11.86. You have just predicted a real planet's year from nothing but its distance.",
       feedback: {
         close:
           'Close, but outside the tolerance. Re-check the cube and the square root separately.',
@@ -865,7 +865,7 @@ const KEPLER = {
           'That looks like days. With the distance in AU the law gives years, so convert before you answer.',
         'wrong-order-of-magnitude':
           'Out by a power of ten. Cube the distance first, then take the square root.',
-        off: 'Check the order of operations: cube a to get P squared, and only then undo the square.',
+        off: 'Check the order of operations: cube <em>a</em> to get <em>P</em> squared, and only then undo the square.',
         correct:
           'To test a law like this, apply it to a planet whose year you know and see that it agrees.',
       },
@@ -878,8 +878,9 @@ const KEPLER = {
       kind: 'choice',
       body: `Your four planets had wildly different masses: from a small rocky
              world to a gas giant hundreds of times heavier, and all gave the
-             same P²/a³.`,
-      prompt: 'The constant in P² = k·a³ depends on…',
+             same <em>P</em>²/<em>a</em>³.`,
+      prompt:
+        'The constant in <em>P</em>² = <em>k</em>·<em>a</em>³ depends on…',
       options: [
         'the mass of the planet',
         'the mass of the star',
@@ -888,7 +889,7 @@ const KEPLER = {
       ],
       answer: 1,
       because:
-        'It depends on the central mass: Newton showed k = 4π²/G(M+m), and since M ≫ m for a planet the planet’s own mass drops out. Read backwards, this is a way to weigh things you can never visit. Measure a period and a distance, and the mass falls out. It is how the Sun was first weighed, how exoplanet host stars are weighed today, and how the four-million-solar-mass black hole at the center of the Milky Way was weighed by tracking the star S2 through a sixteen-year orbit.',
+        'It depends on the central mass: Newton showed <em>k</em> = 4π<sup>2</sup>/<em>G</em>(<em>M</em>+<em>m</em>), and since <em>M</em> ≫ <em>m</em> for a planet the planet’s own mass drops out. Read backwards, this is a way to weigh things you can never visit. Measure a period and a distance, and the mass falls out. It is how the Sun was first weighed, how exoplanet host stars are weighed today, and how the four-million-solar-mass black hole at the center of the Milky Way was weighed by tracking the star S2 through a sixteen-year orbit.',
     },
     {
       sid: 'what-newton-added',
@@ -904,7 +905,7 @@ const KEPLER = {
              distance. The ellipse, the equal areas and the three-halves power
              law all drop out as consequences. And in deriving them he found the
              correction Kepler could not have known about:
-             \n\nP² = 4π² a³ / G(M + m)
+             \n\n<em>P</em>² = 4π<sup>2</sup> <em>a</em>³ / <em>G</em>(<em>M</em> + <em>m</em>)
              \n\nKepler's version assumed the constant was the same for
              everything orbiting the Sun. Newton's shows it depends on the
              <strong>total</strong> mass. For a planet around a star the planet's
@@ -938,7 +939,7 @@ const KEPLER = {
              wedges are drawn for its orbit; click another and they are redrawn
              for that one. Each planet's slices are equal to each other, and each
              planet has its own period, but every one of them satisfies the same
-             P squared over a cubed, with the constant set by this star's mass
+             <em>P</em> squared over <em>a</em> cubed, with the constant set by this star's mass
              rather than the Sun's.`,
       checklist: [
         'Click an inner planet and note its semi-major axis and period',
@@ -977,7 +978,7 @@ const KEPLER = {
              done for you one stage at a time, so you can see where the number
              comes from.
              \n\nWatch the units. The readout gives periods in <em>days</em>,
-             and M = a cubed / P squared only returns solar masses when P is in
+             and <em>M</em> = <em>a</em>³ / <em>P</em>² only returns solar masses when <em>P</em> is in
              <strong>years</strong> and a is in <strong>AU</strong>. Converting
              is the step that catches people.`,
       fields: [
@@ -993,21 +994,21 @@ const KEPLER = {
         },
         {
           id: 'w_a3',
-          label: 'Step 2: a cubed',
+          label: 'Step 2: <em>a</em> cubed',
           unit: 'AU cubed',
           compute: v => v.w_a ** 3,
           decimals: 8,
         },
         {
           id: 'w_P2',
-          label: 'Step 3: P squared',
+          label: 'Step 3: <em>P</em> squared',
           unit: 'yr squared',
           compute: v => (v.w_Pd / 365.25) ** 2,
           decimals: 8,
         },
         {
           id: 'w_M',
-          label: 'Step 4: star mass = a cubed / P squared',
+          label: 'Step 4: star mass = <em>a</em>³ / <em>P</em>²',
           unit: 'M_sun',
           compute: v => v.w_a ** 3 / (v.w_Pd / 365.25) ** 2,
           decimals: 4,
@@ -1073,11 +1074,11 @@ const KEPLER = {
       kind: 'numeric',
       body: `Here is the payoff. Kepler-10 is a Sun-like star about 600 light
              years away with a planet 2.4 times Earth’s radius, Kepler-10c,
-             discovered by transit.
+             discovered by [[transit|transit]].
              Its orbit has a semi-major axis of about 0.24 AU and a period of
              about 45 days, which is 0.123 years.
              \n\nUse Newton's form, taking the planet's mass as negligible:
-             \n\nM = a³ / P²  (in solar masses, with a in AU and P in years)
+             \n\n<em>M</em> = <em>a</em>³ / <em>P</em>²  (in solar masses, with <em>a</em> in AU and <em>P</em> in years)
              \n\n<strong>Step 1.</strong> Cube the distance: 0.24³ = 0.0138.
              \n\n<strong>Step 2.</strong> Square the period: 0.123² = 0.0151.
              \n\n<strong>Step 3.</strong> Divide.`,
@@ -1104,10 +1105,10 @@ const KEPLER = {
         concept: `Newton's version of the third law says the period and the
                   orbit size together tell you the mass of what is being
                   orbited. That is the whole reason it matters.`,
-        method: `M = a³ / P², with a in AU and P in *years*. The period is given
+        method: `<em>M</em> = <em>a</em>³ / <em>P</em>², with <em>a</em> in AU and <em>P</em> in *years*. The period is given
                  in days as well as years — use the years.`,
       },
-      worked: `a = 0.24, so a³ = 0.0138. P = 0.123 years, so P² = 0.01513.
+      worked: `<em>a</em> = 0.24, so <em>a</em>³ = 0.0138. <em>P</em> = 0.123 years, so <em>P</em>² = 0.01513.
                0.0138 / 0.01513 = 0.91 solar masses, within a few per cent of
                the published value.`,
       because:
@@ -1117,7 +1118,7 @@ const KEPLER = {
           'Close. Check the cube and the square separately, and the rounding in each.',
         'wrong-order-of-magnitude':
           'Out by powers of ten. Make sure the period is in years, not days: the days figure is far larger than the same time in years.',
-        off: 'Work in three parts: a cubed, then P squared, then divide the first by the second.',
+        off: 'Work in three parts: <em>a</em> cubed, then <em>P</em> squared, then divide the first by the second.',
       },
     },
     {
@@ -1127,7 +1128,7 @@ const KEPLER = {
       title: "Where Kepler's version breaks",
       kind: 'choice',
       body: `Newton's correction replaces Kepler's constant with one that
-             depends on M + m rather than M alone.`,
+             depends on <em>M</em> + <em>m</em> rather than <em>M</em> alone.`,
       prompt: 'For which system does that correction matter most?',
       options: [
         'Earth orbiting the Sun',
@@ -1137,7 +1138,7 @@ const KEPLER = {
       ],
       answer: 2,
       because:
-        "Two equal masses. There m = M, so M + m is twice what Kepler's version assumes and the predicted period is off by a factor of √2, about 41%. In the other three cases the orbiting body is a millionth to a thousandth of the central mass and the correction is invisible. It is exactly this term that lets astronomers measure the individual masses in a binary system rather than just their sum.",
+        "Two equal masses. There <em>m</em> = <em>M</em>, so <em>M</em> + <em>m</em> is twice what Kepler's version assumes and the predicted period is off by a factor of √2, about 41%. In the other three cases the orbiting body is a millionth to a thousandth of the central mass and the correction is invisible. It is exactly this term that lets astronomers measure the individual masses in a binary system rather than just their sum.",
     },
     {
       sid: 'where-this-leaves-you',
