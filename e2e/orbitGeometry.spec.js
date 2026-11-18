@@ -145,6 +145,9 @@ test('the Sizes button opens the statement, and Escape closes it', async ({
     ui.state.paused = true;
   });
   const button = page.locator('#readoutSizes');
+  // Named and shown once the size facts have loaded with the description.
+  await expect(button).toBeVisible();
+  await expect(button).toHaveText('Sizes');
   await button.focus();
   await page.keyboard.press('Enter');
   const dialog = page.locator('#sizesStatement');
@@ -155,4 +158,42 @@ test('the Sizes button opens the statement, and Escape closes it', async ({
   await page.keyboard.press('Escape');
   await expect(dialog).toBeHidden();
   await expect(button).toBeFocused();
+});
+
+test('switched on and straight off, the overlay ends off', async ({
+  page,
+  app,
+}) => {
+  await app.boot();
+  await requireScenarioKey(page, 'keplers-2nd-law');
+  const after = await page.evaluate(async () => {
+    const ui = await import('/js/ui.js');
+    ui.SETTINGS.preset_scenario = 'keplers-2nd-law';
+    ui.initialize_simulation({ seed: 'orbit-geometry' });
+    ui.state.paused = true;
+    const physics = await import('/js/physics.js');
+    const body = physics.planets.find(p => p.name === 'Eccentric Orbiter');
+    const og = await import('/js/orbitGeometryOverlay.js');
+    // The first call waits for the overlay's words; the second must win.
+    const on = og.setOrbitGeometry(true, body);
+    const off = og.setOrbitGeometry(false);
+    await Promise.all([on, off]);
+    const panel = document.getElementById('orbitGeometryPanel');
+    return {
+      active: ui.state.orbitGeometry.active,
+      shown: !!panel && !panel.hidden,
+    };
+  });
+  expect(after).toEqual({ active: false, shown: false });
+});
+
+test('closing the panel returns focus to the switch', async ({ page, app }) => {
+  await orbiter(page, app);
+  await page.locator('#ogClose').click();
+  await expect(page.locator('#orbitGeometryPanel')).toBeHidden();
+  await expect(page.locator('#orbitGeometryToggleBtn')).toBeFocused();
+  await expect(page.locator('#orbitGeometryToggleBtn')).toHaveAttribute(
+    'aria-checked',
+    'false'
+  );
 });

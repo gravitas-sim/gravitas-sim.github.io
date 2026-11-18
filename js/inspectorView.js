@@ -79,27 +79,15 @@ import {
   frameState,
 } from './referenceFrame.js';
 import { t, registerMessages } from './i18n/index.js';
+import { EN_ORBITGEOMETRYROW } from './i18n/en.orbitGeometryRow.js';
+import { ES_ORBITGEOMETRYROW } from './i18n/es.orbitGeometryRow.js';
 import { formatSpeed, formatDistance } from './units.js';
 import { state, SETTINGS, current_scenario_name, command } from './appState.js';
 
-// The orbit geometry row's help is in the overlay's words, fetched on first draw.
-let ogWords = null;
-const orbitGeometryHelp = () => {
-  if (!ogWords)
-    ogWords = Promise.all([
-      import('./i18n/en.orbitGeometry.js'),
-      import('./i18n/es.orbitGeometry.js'),
-    ])
-      .then(([en, es]) => {
-        registerMessages('en', en.EN_ORBITGEOMETRY);
-        registerMessages('es', es.ES_ORBITGEOMETRY);
-        ogWords = true;
-      })
-      .catch(() => {});
-  return ogWords === true
-    ? t('overlay.orbitGeometry.help')
-    : t('overlay.orbitGeometry');
-};
+// The orbit geometry row's name and help: a small word file of its own, so the
+// start-up catalog carries neither and the row is named offline.
+registerMessages('en', EN_ORBITGEOMETRYROW);
+registerMessages('es', ES_ORBITGEOMETRYROW);
 
 const markWorldTouched = command('markWorldTouched');
 const computeAreaSweep = command('computeAreaSweep');
@@ -425,7 +413,7 @@ export const buildInspectorView = (object, type, info) => {
     label: t('overlay.orbitGeometry'),
     on:
       state.orbitGeometry?.active && state.orbitGeometry.objectId === object.id,
-    help: orbitGeometryHelp(),
+    help: t('overlay.orbitGeometry.help'),
   });
 
   const sweepScenarios = [

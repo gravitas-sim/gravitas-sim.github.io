@@ -391,7 +391,18 @@ function build() {
       <p class="obs-panel-hint" id="ogKeys">${esc(t('orbitGeometry.keys'))}</p>
       <p id="ogDistance" class="og-distance"></p>
     </div>`;
-  root.querySelector('#ogClose').onclick = () => setOrbitGeometry(false);
+  root.querySelector('#ogClose').onclick = () => {
+    setOrbitGeometry(false);
+    // Focus goes back to the switch that opened the panel when the inspector
+    // still shows it, else to the controls region the skip link targets;
+    // never left on the hidden button.
+    const toggle = document.getElementById('orbitGeometryToggleBtn');
+    const back =
+      toggle && toggle.offsetParent !== null
+        ? toggle
+        : document.getElementById('mainControls');
+    back?.focus();
+  };
   const fold = root.querySelector('#ogFold');
   const showFold = () => {
     root.classList.toggle('is-collapsed', folded);
@@ -546,6 +557,8 @@ function wireCanvas(on) {
   }
 }
 
+let calls = 0;
+
 /**
  * Switch the overlay on for a body, or off.
  * @param {boolean} on - Whether to draw it
@@ -553,8 +566,12 @@ function wireCanvas(on) {
  */
 export async function setOrbitGeometry(on, body) {
   const cfg = og();
+  // Each call takes a number; a call that awaited its words and finds a later
+  // call has been made since does nothing, so a quick on-then-off ends off.
+  const mine = ++calls;
   if (on && body) {
     await ensureMessages().catch(() => {});
+    if (mine !== calls) return;
     if (cfg.objectId !== body.id) cfg.selected = [];
     cfg.active = true;
     cfg.objectId = body.id;

@@ -35,6 +35,4 @@ export const ES_ORBITGEOMETRY = {
   'orbitGeometry.fold': 'Detalles de la geometría de la órbita',
   'orbitGeometry.close': 'Cerrar la geometría de la órbita',
   'orbitGeometry.summary': 'Geometría de la órbita de {name}: {label}.',
-  'overlay.orbitGeometry.help':
-    'La elipse que seguiría este cuerpo alrededor de su primario si solo ese primario tirara de él, con los dos focos y los puntos más cercano y más lejano. Elige dos puntos para leer la distancia entre ellos.',
 };

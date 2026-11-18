@@ -20,7 +20,7 @@ import {
   bh_list,
   galaxies,
 } from './physics.js';
-import { t } from './i18n/index.js';
+import { t, onLocaleChange } from './i18n/index.js';
 import { lightingNotes } from './bodyDraw.js';
 import { drawnLabels } from './bodyLabels.js';
 import { crowdNotes } from './bodyDrawSky.js';
@@ -44,9 +44,25 @@ export const sceneWords = (load = false) => {
   return typeof scene?.frameLine === 'function' ? scene : null;
 };
 const sizeModule = () => {
-  if (!sizes) sizes = import('./sizeFacts.js').then(m => (sizes = m));
+  if (!sizes)
+    sizes = import('./sizeFacts.js')
+      .then(m => {
+        sizes = m;
+        labelSizesButton();
+        onLocaleChange(labelSizesButton);
+      })
+      .catch(() => {});
   return typeof sizes.sizeSentence === 'function' ? sizes : null;
 };
+
+// The readout's Sizes button is named from the size facts' words, so it is
+// shown only once they are here (offline before a first use, it stays hidden).
+function labelSizesButton() {
+  const btn = document.getElementById('readoutSizes');
+  if (!btn) return;
+  btn.textContent = t('sizes.button');
+  btn.hidden = false;
+}
 import { scenarioTitle } from './i18n/scenario.js';
 
 /** A scenario id, as opposed to 'None', the sentinel for a hand-built world. */
@@ -192,7 +208,9 @@ function wireSizesButton() {
   if (!btn || btn.dataset.wired) return;
   btn.dataset.wired = '1';
   btn.addEventListener('click', () =>
-    import('./sizeStatement.js').then(m => m.openSizeStatement(btn))
+    import('./sizeStatement.js')
+      .then(m => m.openSizeStatement(btn))
+      .catch(() => announce(t('sizes.offline')))
   );
 }
 

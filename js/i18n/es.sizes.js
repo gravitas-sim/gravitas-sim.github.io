@@ -21,4 +21,7 @@ export const ES_SIZES = {
   'sizes.timesRange': 'de {lo}× a {hi}×',
   'sizes.summary': 'Dibujados mayores que en la realidad: {list}.',
   'sizes.summary.selected': '{name} se dibuja {times} su radio real.',
+  'sizes.button': 'Tamaños',
+  'sizes.offline':
+    'No se pudo cargar la explicación de los tamaños: la primera vez necesita conexión.',
 };

@@ -21,4 +21,7 @@ export const EN_SIZES = {
   'sizes.timesRange': '{lo}× to {hi}×',
   'sizes.summary': 'Drawn larger than real: {list}.',
   'sizes.summary.selected': '{name} is drawn {times} its real radius.',
+  'sizes.button': 'Sizes',
+  'sizes.offline':
+    'The Sizes statement could not be loaded: it needs a connection the first time.',
 };
