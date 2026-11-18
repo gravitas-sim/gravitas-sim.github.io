@@ -28,7 +28,7 @@ beforeEach(() => {
 });
 
 const itemPage = id => {
-  document.body.innerHTML = `<div id="box"><article class="lib-item"><h2>x</h2><p>y</p></article></div>`;
+  document.body.innerHTML = `<div id="box"><article class="lib-item"><h2>x</h2><div class="lib-actions"></div></article></div>`;
   const box = document.getElementById('box');
   mountSave(box, byId.get(id), { t });
   return box;

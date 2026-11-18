@@ -40,8 +40,8 @@ const CASES = [
   {
     id: 'what-is-in-this-field',
     sid: 'the-curve',
-    row: /Magnitude at 50 percent found/i,
-    rowEs: /Magnitud con el 50 por ciento hallado/i,
+    row: /Magnitude\sat\s50\spercent\sfound/i,
+    rowEs: /Magnitud\scon\sel\s50\spor\sciento\shallado/i,
   },
 ];
 

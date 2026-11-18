@@ -237,8 +237,13 @@ export const readout = async page => {
     Object.fromEntries(
       [...document.querySelectorAll('#investigationToolReadout .inv-tool-row')]
         .map(r => [
-          r.querySelector('dt')?.textContent?.trim() ?? '',
-          r.querySelector('dd')?.textContent?.trim() ?? '',
+          // Lesson typography keeps a number with its unit by a no-break space; a spec matches the words.
+          (r.querySelector('dt')?.textContent ?? '')
+            .replace(/[\u00a0\u202f]/g, ' ')
+            .trim(),
+          (r.querySelector('dd')?.textContent ?? '')
+            .replace(/[\u00a0\u202f]/g, ' ')
+            .trim(),
         ])
         .filter(([k]) => k)
     )

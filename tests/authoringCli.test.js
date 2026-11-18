@@ -93,6 +93,7 @@ describe('npm run author:check', () => {
       'tools/authoring',
       'tools/lesson-standard.mjs',
       'tools/lesson-standard-ratchet.json',
+      'tools/neutral-start-map.json',
       'docs/lesson-acceptance.json',
       'tools/lesson-text.mjs',
       'lesson-text',

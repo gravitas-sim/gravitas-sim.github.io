@@ -1201,7 +1201,8 @@ export const ES = {
   'inv.browser.activities':
     '¿Con poco tiempo? Las actividades de clase son formatos de enseñanza preparados —una demostración de cinco minutos, una actividad de veinte, una práctica completa— recortados de estas mismas investigaciones.',
   'inv.browser.activities.link': 'Ver las actividades de clase',
-  'canvas.sizeDisclosure': 'Tamaños no a escala: detalles en Tamaños',
+  'canvas.sizeDisclosure':
+    'Cuerpos ampliados, no a escala: detalles en Tamaños',
   'canvas.reducedPopulation':
     'Población reducida en este dispositivo: {n} de {total} cuerpos',
   'canvas.crowdTrails':

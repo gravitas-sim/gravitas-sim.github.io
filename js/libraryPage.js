@@ -1,29 +1,10 @@
 // =============================================================================
 // /library/: everything a student or instructor can open, in one place
-// -----------------------------------------------------------------------------
-// Roadmap II Prompt 54 (LIBRARY.md), made to answer questions at scale by
-// Roadmap III Prompt 163. The page reads library/library.json, which
-// tools/build-library.mjs writes from the sources that own each thing.
-//
-// Four views, one page, no new destination:
-//
-//   start    the default: where you left off (from the one resume record), where
-//            to start (a committed handful per audience and level), the
-//            sequences and courses as pathways, and the subjects as topics with
-//            their counts. No grid of everything.
-//   browse   "Browse everything", or any filter or search: the full catalog with
-//            four facets (subject, level, time, kind as a student sees it) and
-//            the rest behind "More filters", a count on every option, and a
-//            search that says why each result matched (js/library/search.js,
-//            fetched on the first query).
-//   topic    ?topic=<subject>: that subject's paragraph, sequences, courses,
-//            investigations by level, datasets and scenarios (js/library/views.js).
-//   item     ?item=<id>: what comes before, what comes next, what goes with it.
-//
-// The filters live in the address (?q=, ?kind=, ?subject=, ...), so a link can
-// open the Library already narrowed. Nothing is stored but the one resume
-// record (js/storage/local.js); progress badges are read from what each surface
-// saved (js/library/progress.js). Its own bundle, like /catalog/.
+// Reads library/library.json (tools/build-library.mjs). Four views on one page:
+// start (where you left off, where to start, pathways, topics), browse (the full
+// catalog with facets and a search that says why each result matched), topic
+// (?topic=) and item (?item=). Filters live in the address; the one stored
+// record is the resume record (js/storage/local.js).
 // =============================================================================
 
 import {
@@ -32,7 +13,7 @@ import {
   progressBucket,
 } from './data/investigations/browse.js';
 import { LENGTHS, CALCULATIONS } from './data/investigations/sequences.js';
-import { libraryCardHtml } from './library/card.js';
+import { factsOf, libraryCardHtml } from './library/card.js';
 import { checkLibrary, entryIdOfItem, previewRoute } from './library/format.js';
 import { progressOf } from './library/progress.js';
 import {
@@ -572,7 +553,6 @@ function startHtml() {
             pick,
             shown,
             progress: progressBucket(progressFor(e.id)),
-            compact: true,
           })
         );
       return `<div class="lib-start-group"><h3>${escape(pick(g.audience))}</h3><ul class="lib-list">${rows.join('')}</ul></div>`;
@@ -632,7 +612,15 @@ async function renderDetail(kind) {
   const { topicView, itemView, mountSave, bindCollections } =
     await import('./library/views.js');
   if (mine !== drawn) return;
-  const c = { t, pick, shown, byId, path: state.path, preview: previewRoute };
+  const c = {
+    t,
+    pick,
+    shown,
+    byId,
+    path: state.path,
+    preview: previewRoute,
+    facts: e => factsOf(e, t),
+  };
   const lib = state.library;
   const out =
     kind === 'topic'

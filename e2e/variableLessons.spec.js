@@ -26,8 +26,8 @@ const CASES = [
   {
     id: 'leavitts-law',
     sid: 'the-calibration',
-    row: /Magnitude at a period of 10 days/i,
-    rowEs: /Magnitud con un periodo de 10 días/i,
+    row: /Magnitude\sat\sa\speriod\sof\s10\sdays/i,
+    rowEs: /Magnitud\scon\sun\speriodo\sde\s10\sdías/i,
   },
   {
     id: 'the-first-rung',
