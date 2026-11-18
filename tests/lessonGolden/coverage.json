@@ -6,6 +6,7 @@
     "transit-photometry",
     "what-is-a-gravitational-wave",
     "butterfly-effect",
+    "ios-fire",
     "binary-star-planets",
     "black-holes",
     "propose-an-observation",
@@ -166,6 +167,11 @@
       "key:predict.requires",
       "lock:null"
     ],
+    "ios-fire": [
+      "key:question.decides",
+      "key:read.compare",
+      "key:read.evidence"
+    ],
     "binary-star-planets": [
       "key:explore.requires",
       "lock:{\"placement\":true}"
@@ -279,16 +285,16 @@
   ],
   "totals": {
     "investigations": 124,
-    "steps": 1980,
+    "steps": 1983,
     "activityCuts": 6,
-    "lessonTokens": 150,
+    "lessonTokens": 153,
     "activityTokens": 29,
     "stepTypes": {
-      "read": 375,
+      "read": 376,
       "predict": 198,
       "ellipse": 1,
-      "question": 748,
-      "measure": 512,
+      "question": 751,
+      "measure": 511,
       "explore": 145,
       "wedges": 1
     }
