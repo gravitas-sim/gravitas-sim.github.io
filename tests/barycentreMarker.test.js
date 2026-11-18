@@ -185,6 +185,43 @@ describe('(b) binary-pair holds its centre of mass over ten orbits', () => {
   });
 });
 
+// Added after review: the same bound on an asymmetric system, where mirror
+// symmetry cannot hide a momentum defect. Stars of 1 and 0.5 solar masses and
+// a planet, mutual gravity on, so every pair pulls both ways; the centre of
+// mass of every body the frame averages, over ten periods of the inner pair.
+describe('(b) circumbinary-planet-lab holds its centre of mass too', () => {
+  test('60 frames a second, ten inner orbits: under 1e-6 of the separation', () => {
+    const { plan } = buildScene(
+      'circumbinary-planet-lab',
+      TOL.b.seed,
+      TOL.b.rate
+    );
+    const pair = physics.stars.slice(0, 2);
+    expect(pair[0].mass).not.toBe(pair[1].mass);
+    expect(physicsSettings.mutual_gravity).toBe(true);
+    const a0 = sep(pair[0], pair[1]);
+    const T = pairPeriod(pair);
+    const bodies = [...physics.barycenterBodies()];
+    const c0 = mean(bodies);
+    const t0 = physics.getSimulationTime();
+    let worst = 0;
+    let steps = 0;
+    engine(TOL.b.seed, () => {
+      while (physics.getSimulationTime() - t0 < TOL.b.orbits * T)
+        for (let i = 0; i < plan.substeps; i++) {
+          physics.updatePhysics(plan.step);
+          steps++;
+          const c = mean(bodies);
+          worst = Math.max(worst, Math.hypot(c.x - c0.x, c.y - c0.y) / a0);
+        }
+    });
+    console.log(
+      `barycentre (b, asymmetric) @60: a0 ${a0.toPrecision(6)}, T ${T.toPrecision(6)}, ${bodies.length} bodies, ${steps} steps of ${plan.step.toPrecision(6)}, worst ${worst.toExponential(3)} of a0 (bound ${TOL.b.relativeToInitialSeparation})`
+    );
+    expect(worst).toBeLessThan(TOL.b.relativeToInitialSeparation);
+  });
+});
+
 describe('the statement says what the engine sums', () => {
   // One plain body of every kind in every list, so every class is present.
   const LISTS = Object.keys(LIST_KIND);
