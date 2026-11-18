@@ -50,5 +50,19 @@ export default {
       because:
         'Tres masas solares, con incertidumbre de unos cuatro décimos. El reparto de la masa se conoce mejor que la masa misma, porque la razón de las dos distancias se mide directamente, mientras que el total depende de a al cubo.',
     },
+    'make-star-a-lighter': {
+      title: 'Haz más ligera la Estrella A',
+      body: 'Volvemos al par misterioso. La Estrella A es la más pesada de las dos, así que queda más cerca del punto de equilibrio que la Estrella B. Supón que la Estrella A pesara exactamente lo mismo que la Estrella B, sin cambiar nada más, y que el par se asentara.',
+      prompt:
+        '¿Cómo se compararían entonces las dos distancias al punto de equilibrio?',
+      options: [
+        'La Estrella B seguiría tres veces más lejos',
+        'Las dos distancias serían iguales',
+        'La Estrella A quedaría tres veces más lejos',
+        'La Estrella B quedaría nueve veces más lejos',
+      ],
+      because:
+        'Masas iguales se equilibran a distancias iguales, así que los dos brazos medirían lo mismo. Haz la prueba de las dos maneras y lee la razón de los brazos.',
+    },
   },
 };

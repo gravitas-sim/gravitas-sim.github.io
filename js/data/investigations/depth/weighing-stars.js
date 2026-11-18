@@ -152,5 +152,50 @@ export default {
       because:
         'Three solar masses, uncertain by about four tenths of one. The split of the mass is known better than the mass itself, because the ratio of the two distances is measured directly, while the total depends on a cubed.',
     },
+    {
+      // Depth II gate prototype (DEPTH_II_GATE.md): a controlled variation on a
+      // deeper step. Spike only; never merged.
+      sid: 'make-star-a-lighter',
+      after: 'one-on-your-own',
+      depth: 'quantitative',
+      type: 'question',
+      kind: 'choice',
+      title: 'Make Star A lighter',
+      body: `Back to the mystery pair. Star A is the heavier of the two, so it
+ stays closer to the balance point than Star B does. Suppose Star A were
+ made exactly as heavy as Star B, with nothing else changed, and the pair
+ left to settle.`,
+      prompt:
+        'How would the two distances from the balance point then compare?',
+      options: [
+        'Star B would still be three times further out',
+        'The two distances would be equal',
+        'Star A would be three times further out',
+        'Star B would be nine times further out',
+      ],
+      answer: 1,
+      reveal: 'and-which-one-is-heavier',
+      probe: ctx => {
+        const b = ctx.barycenter?.();
+        if (!b) return [{ id: 'ratio', label: 'B arm / A arm', value: '—' }];
+        const [a, bb] = b.arms;
+        return [
+          {
+            id: 'ratio',
+            label: 'B arm / A arm',
+            value: a.r > 0 ? (bb.r / a.r).toFixed(3) : '—',
+          },
+        ];
+      },
+      variation: {
+        param: 'm1',
+        values: [1, 3],
+        runFor: 365,
+        read: ['ratio'],
+        label: 'Mass of Star A',
+      },
+      because:
+        'Equal masses balance at equal distances, so the two arms would be the same length. Run it both ways and read the ratio of the arms.',
+    },
   ],
 };
