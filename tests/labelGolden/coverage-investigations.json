@@ -4,7 +4,7 @@
  "reached": 8,
  "unreached": [
   "js/observatory/fitPanel.js:745:62",
-  "js/observatory/guidePanel.js:332:53",
+  "js/observatory/guidePanel.js:334:53",
   "js/observatory/measurePanel.js:491:29",
   "js/observatoryPage.js:542:50"
  ],
@@ -18,7 +18,7 @@
   "js/investigations/stepView.js:882:13": [
    "hyphen"
   ],
-  "js/observatory/guides/core.js:320:27": [
+  "js/observatory/guides/core.js:361:27": [
    "hyphen",
    "non-finite"
   ]

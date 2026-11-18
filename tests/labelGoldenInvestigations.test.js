@@ -43,7 +43,7 @@ beforeAll(async () => {
 const UNREACHED = {
   'js/observatory/fitPanel.js:745':
     'the seconds a fit took, read from the clock when the run ends',
-  'js/observatory/guidePanel.js:332':
+  'js/observatory/guidePanel.js:334':
     'a rounding inside the guide panel, which needs a mounted observation',
   'js/observatory/measurePanel.js:491':
     'a rounding inside the measure panel, which needs a mounted pipeline',
@@ -221,7 +221,7 @@ describe('what the recording can tell apart', () => {
       'js/investigations/plotView.js:26:9',
       'js/investigations/plotView.js:420:32',
       'js/investigations/stepView.js:882:13',
-      'js/observatory/guides/core.js:320:27',
+      'js/observatory/guides/core.js:361:27',
     ])
       expect(at(site).hyphen).toBe(true);
     // The archive panel's link is a URL, which wants a hyphen: it stays.
