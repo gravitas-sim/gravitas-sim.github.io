@@ -62,6 +62,42 @@ Spanish and 910 where it was typed in English, which is why the ambiguous
 comma back for a test. The decision and its evidence are register row
 D-R10-282-01.
 
+## Lesson prose: numbers and formulas in running text
+
+Numbers in lesson prose are written by hand, so the rules live where the prose
+is rendered, in `typeset` in [`js/lessonMarkup.js`](js/lessonMarkup.js), and
+apply to every lesson in both languages, including the feedback a lesson builds
+in code.
+
+- **A number never ends a line apart from the word after it.** A digit (or a
+  superscript, as in 10<sup>13</sup>) followed by a space and a letter, a
+  percent sign or a degree sign gets a no-break space, and so does a scale
+  word (`million`, `millones`) before its unit. This is wider than a list of
+  units on purpose: it cannot miss a unit, and holding "3 planets" together
+  harms nothing.
+- **A hyphen before a digit is a minus** (U+2212), after a space or a bracket.
+  A range ("3-5") and a name ("Kepler-10") keep their hyphen.
+- **An operator stays with the term before it.** `=`, `≈`, `∝`, `÷`, `−` and
+  `±` take a no-break space before them, so a line never starts with one; a
+  multiplication sign takes narrow no-break spaces on both sides.
+- **Variables are italic and units upright.** A single-letter variable in a
+  formula is written `<em>a</em>`, with real subscripts and superscripts
+  (`<em>P</em><sup>2</sup> = <em>a</em><sup>3</sup>`), not `P²` in plain text
+  and not `a x e`, `sqrt()` or "a cubed". `<em>` is used rather than a new tag
+  because every consumer that flattens prose to plain text (the answer keys,
+  the lab report, the recovery notice) already removes it.
+- **A name the interface shows keeps the interface's spelling.** `k2` in the
+  tides lesson is the label of a control, so the prose says `k2`;
+  `R_Jupiter` is the unit a field prints and stays as it is.
+
+`tests/lessonTypography.test.js` renders the five pilot lessons in both
+languages and fails on a number parted from its unit, a hyphen standing for a
+minus, a spelled-out operator or an upright variable beside an operator.
+
+The body of a lesson step is 14 px (`--text-base`) where its column is 350 px or
+wider and 13 px (`--text-sm`) below, in lines capped at 36em: the measured
+line lengths, and the reason, are in register row D-R4-339-01.
+
 ## Where the threshold sits
 
 Scientific notation is used outside the range `1e-3` to `1e5`. The lower bound is

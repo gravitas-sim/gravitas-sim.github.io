@@ -140,7 +140,11 @@ export function readingProblems(step, { ctx, widget }) {
       );
       const live = widget?.live ? ctx : undefined;
       return (
-        widget?.readout({ ...v, ...step.tool?.values }, live, step.tool) || []
+        widget?.readout(
+          { ...v, ...(step.tool?.start ?? step.tool?.values) },
+          live,
+          step.tool
+        ) || []
       );
     } catch {
       return [];
@@ -495,7 +499,7 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
           'id/step',
           step.sid === undefined
             ? 'step has no sid; run `node tools/add-step-ids.mjs` to mint one'
-            : `sid ${JSON.stringify(step.sid)} is not usable as a key: it must be lowercase letters, digits and single hyphens, and not only digits`
+            : `sid ${JSON.stringify(step.sid)} is not usable as a key: lowercase letters, digits and single hyphens, not only digits`
         );
       } else if (sidsSeen.has(step.sid)) {
         E('id/step', `sid "${step.sid}" is already used by another step`);
@@ -507,15 +511,14 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
       if (!isNonEmptyString(step.body)) E('content/step', 'step has no body');
 
       // --- Placeholders and staged help --------------------------------------
-      // A cue in an empty box is visible before the student has thought about
-      // the question; it may name a form and never a value (tools/authoring/cueRules.mjs,
+      // A cue in an empty box may name a form and never a value (tools/authoring/cueRules.mjs,
       // handed in through the inputs: the Composer route carries no such rule).
       for (const c of cueFindings?.(
         step,
         hintValues(step),
         emptyProbeContext()
       ) ?? [])
-        add(c.level, 'content/placeholder', L, i, c.message);
+        add(c.level, c.rule || 'content/placeholder', L, i, c.message);
 
       // Staged hints go in order: a worked explanation is the last resort, not the only help.
       if (step.hints || step.worked) {
@@ -530,9 +533,8 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
         }
       }
 
-      // Misconception rules stand on their own: a step can name a mistake
-      // without offering hints. Each has to be matchable, or it is a message
-      // that can never be shown.
+      // Misconception rules stand on their own, but each has to be matchable,
+      // or it is a message that can never be shown.
       for (const rule of step.misconceptions || []) {
         const known = Object.hasOwn(STANDARD_MISCONCEPTIONS, rule?.id ?? '');
         if (
@@ -543,7 +545,7 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
         ) {
           E(
             'content/hints',
-            `misconception "${rule?.id ?? '?'}" is not a standard one and gives no factor or value to match`
+            `misconception "${rule?.id ?? '?'}" is not standard and gives no factor or value`
           );
         }
       }
@@ -622,22 +624,26 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
           } else {
             const controls = new Map((w.controls || []).map(c => [c.id, c]));
 
-            for (const [key, raw] of Object.entries(step.tool.values || {})) {
+            // `start` is where the instrument opens when the check is satisfied elsewhere.
+            const placed = ['values', 'start'].flatMap(part =>
+              Object.entries(step.tool[part] || {}).map(e => [...e, part])
+            );
+            for (const [key, raw, part] of placed) {
               const c = controls.get(key);
               if (!c) {
                 E(
                   'ref/control',
-                  `tool.values sets "${key}", which ${w.id} has no control for`
+                  `tool.${part} sets "${key}", which ${w.id} has no control for`
                 );
                 continue;
               }
               const v = Number(raw);
               if (!Number.isFinite(v)) {
-                E('setup/value', `tool.values.${key} is not a number`);
+                E('setup/value', `tool.${part}.${key} is not a number`);
               } else if (v < c.min || v > c.max) {
                 E(
                   'setup/value',
-                  `tool.values.${key} = ${v} is outside the control range ${c.min}..${c.max}, so the widget can never reach it`
+                  `tool.${part}.${key} = ${v} is outside the range ${c.min}..${c.max}`
                 );
               } else if (
                 Number.isFinite(c.step) &&
@@ -656,7 +662,7 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
                 if (offGrid > 1e-6 && !recoverable) {
                   W(
                     'setup/value',
-                    `tool.values.${key} = ${v} is not on the visible control's ${c.step} step and no preset of ${w.id} sets ${key} to it, so a student who moves it cannot get back`
+                    `tool.${part}.${key} = ${v} is off the ${c.step} step and no preset sets it, so a student cannot get back`
                   );
                 }
               }
@@ -671,15 +677,14 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
               }
             }
 
-            // A control's opening position belongs under `values`; a number under
-            // the control's own name is read by nothing (a string, like the
-            // playback's `track`, is a different spec field and is left alone).
+            // A control's opening position belongs under `values`; a number under its own name is read by nothing.
             for (const key of Object.keys(step.tool)) {
-              if (key === 'values' || !controls.has(key)) continue;
+              if (key === 'values' || key === 'start' || !controls.has(key))
+                continue;
               if (typeof step.tool[key] !== 'number') continue;
               E(
                 'ref/control',
-                `tool.${key} = ${step.tool[key]} names a control of ${w.id}, so it belongs under tool.values — where it is now, nothing reads it and the control opens at its own default`
+                `tool.${key} = ${step.tool[key]} names a control of ${w.id}: put it under tool.values, where nothing reads it now`
               );
             }
 
@@ -779,7 +784,7 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
               if (!ids.has(name) && !ids.has(base)) {
                 E(
                   'ref/field',
-                  `field "${f.id}" computes from "${name}", which this step does not declare, so it can only ever be blank`
+                  `field "${f.id}" computes from "${name}", which this step does not declare`
                 );
               }
             }
@@ -876,9 +881,8 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
             );
           }
 
-          // The author's own hint values are the model answer. A validator that
-          // rejects them is telling every student who reads the hints that they
-          // are wrong.
+          // The author's own hint values are the model answer: a validator that
+          // rejects them tells every student who reads the hints they are wrong.
           const hints = hintValues(step);
           const complete =
             Object.keys(hints).length ===
@@ -932,8 +936,7 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
       }
 
       // A remediation step shows only when an earlier graded step was answered
-      // wrongly (or rightly): stepApplies(). One level deep, so every student
-      // still walks a straight line to the end.
+      // wrongly (or rightly): stepApplies(), one level deep.
       if (step.when !== undefined) {
         const w = step.when;
         const at = isPlainObject(w)
@@ -1041,10 +1044,8 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
         }
       }
 
-      // A prediction whose marking waits for the experiment has to name the
-      // step where the experiment happens, and that step has to come after it.
-      // Pointing backwards, or at nothing, would leave the reader's answer
-      // unmarked for the rest of the lesson with no way to find out.
+      // A prediction whose marking waits for the experiment has to name a later
+      // step where it happens; otherwise the answer stays unmarked for good.
       if (step.reveal !== undefined) {
         const revealAt = steps.findIndex(x => x.sid === step.reveal);
         if (typeof step.reveal !== 'string' || !step.reveal) {
@@ -1153,9 +1154,8 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
           );
         }
       }
-      // Keyed by step sid (js/data/instructorExpectations.js): a number goes
-      // stale the moment a step is inserted above it. It must name a step
-      // and say something.
+      // Keyed by step sid (js/data/instructorExpectations.js), since a number
+      // goes stale when a step is inserted above it; it must name a step.
       const sids = steps.map(s => s.sid);
       for (const [key, text] of Object.entries(guide.expectations || {})) {
         const idx = sids.indexOf(key);
@@ -1228,7 +1228,7 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
             'agree/manifest',
             inv.id,
             null,
-            `the ${locale} manifest's ${key} is not the lesson's: ${JSON.stringify(entry[key])} vs ${JSON.stringify(expected[key])}`
+            `${locale} manifest ${key} is ${JSON.stringify(entry[key])}, not ${JSON.stringify(expected[key])}`
           );
         }
       }
@@ -1304,7 +1304,7 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
         for (const c of cueFindings?.(st, models, emptyProbeContext()) ?? [])
           add(
             c.level,
-            'content/placeholder',
+            c.rule || 'content/placeholder',
             id,
             si,
             `${locale}: ${c.message}`
@@ -1530,7 +1530,7 @@ function checkTranslationShape(
     if (overlay.length > base.length) {
       report(
         'error',
-        `${locale}: ${path.join('.')} has ${overlay.length} entries for ${base.length} in English; the extras are dropped`,
+        `${locale}: ${path.join('.')} has ${overlay.length} entries for ${base.length}; extras are dropped`,
         stepIndex
       );
     }
@@ -1561,7 +1561,7 @@ function checkTranslationShape(
       if (!Object.hasOwn(base, key)) {
         report(
           'error',
-          `${locale}: ${[...path, key].join('.')} is not a key the lesson has, so this translation is silently discarded`,
+          `${locale}: ${[...path, key].join('.')} is not a lesson key and is discarded`,
           stepIndex
         );
         continue;

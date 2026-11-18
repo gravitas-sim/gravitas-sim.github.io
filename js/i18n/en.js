@@ -1219,7 +1219,7 @@ export const EN = {
   'inv.browser.activities':
     'Short on time? Classroom activities are prepared teaching formats — a five-minute demonstration, a twenty-minute activity, a full lab — cut from these same investigations.',
   'inv.browser.activities.link': 'See the classroom activities',
-  'canvas.sizeDisclosure': 'Sizes not to scale: details under Sizes',
+  'canvas.sizeDisclosure': 'Bodies enlarged, not to scale: details under Sizes',
   'canvas.reducedPopulation':
     'Reduced population on this device: {n} of {total} bodies',
   'canvas.crowdTrails':

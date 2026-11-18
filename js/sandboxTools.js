@@ -425,10 +425,7 @@ function drawProtractor(ctx) {
   const v = world_to_screen(tools.protractor.vertex);
   const p1 = world_to_screen(tools.protractor.arm1);
   const p2 = world_to_screen(tools.protractor.arm2);
-  // Measured in world coordinates, not screen ones. The canvas transform flips
-  // y, so an angle read off the screen positions would be the mirror image of
-  // the angle in the simulation - equal for the enclosed angle, but not for
-  // anything built on top of it.
+  // Measured in world coordinates, not screen ones.
   const deg = angleAtVertex(
     tools.protractor.vertex,
     tools.protractor.arm1,
@@ -503,15 +500,11 @@ let capturing = false;
 
 // What the frame is of. The scale bar says how big, the clock says how long
 // into the run, and this says which run - the three facts a figure in a slide
-// or a lab report has to carry to be worth citing. It is set by the caller
-// rather than read from here because the scenario name lives in ui.js, and a
-// module that owns no physics should not start reaching for application state.
+// or a lab report has to carry to be worth citing.
 let captureCaption = '';
 
 // A student's own words about the moment, when the frame was reached by a
-// pause-at-event stop. Optional, and drawn under the caption so an exported
-// figure carries the observation as well as the scenario: "what did you notice"
-// is the part of a lab report a picture cannot otherwise hold.
+// pause-at-event stop.
 let captureNote = '';
 
 /**
@@ -762,10 +755,8 @@ export function drawInstrumentation(
   }
 
   if (settings.show_scale_bar !== false) {
-    // The zoom is pixels per simulation unit, so this is the one line that
-    // ties the drawn bar to the actual view transform. Nothing else in the
-    // instrumentation depends on the zoom, which is why a scale bar is the
-    // thing that makes a screenshot readable.
+    // The zoom is pixels per simulation unit, so this is the one line that ties
+    // the drawn bar to the actual view transform.
     const metersPerPx = METERS_PER_UNIT / (zoom > 0 ? zoom / k : 1);
     const barW = Math.min(160, W * 0.22);
     scaleBar(ctx, pad + 2, barY, barW, metersPerPx, {

@@ -51,12 +51,12 @@ export default {
     },
     {
       title: 'La primera ley, y la anatomía de una elipse',
-      body: '<strong>Primera ley</strong> de Kepler: todo planeta se mueve sobre una elipse, con la estrella en uno de los focos.\n\nUna elipse tiene dos focos. Su propiedad definitoria es que, para cualquier punto de la curva, las distancias a los dos focos suman siempre el mismo total. El <em>semieje mayor</em> <strong>a</strong> es la mitad del diámetro largo, y es el tamaño de la órbita. La <em>excentricidad</em> <strong>e</strong> es su forma: los focos quedan a una distancia a x e a cada lado del centro, así que e = 0 pone ambos focos en el centro y da un círculo, mientras que e acercándose a 1 estira la elipse hasta convertirla en una astilla.\n\nEl segundo foco es la parte rara. Allí no hay nada. Ninguna masa, ningún objeto, nada que lo marque. Es una consecuencia puramente geométrica de la fuerza del inverso del cuadrado.',
+      body: '<strong>Primera ley</strong> de Kepler: todo planeta se mueve sobre una elipse, con la estrella en uno de los focos.\n\nUna elipse tiene dos focos. Su propiedad definitoria es que, para cualquier punto de la curva, las distancias a los dos focos suman siempre el mismo total. El <em>[[semi-major-axis|semieje mayor]]</em> <strong>a</strong> es la mitad del diámetro largo, y es el tamaño de la órbita. La <em>[[eccentricity|excentricidad]]</em> <strong>e</strong> es su forma: los focos quedan a una distancia <em>a</em> × <em>e</em> a cada lado del centro, así que <em>e</em> = 0 pone ambos focos en el centro y da un círculo, mientras que e acercándose a 1 estira la elipse hasta convertirla en una astilla.\n\nEl segundo foco es la parte rara. Allí no hay nada. Ninguna masa, ningún objeto, nada que lo marque. Es una consecuencia puramente geométrica de la fuerza del inverso del cuadrado.',
       tip: 'Arrastra el deslizador del paso siguiente para ver cómo se separan los focos a medida que crece e.',
     },
     {
       title: 'Cambia la forma',
-      body: 'Arrastra el deslizador de excentricidad del panel contiguo. Cada magnitud se dibuja en su propio color, según la leyenda de debajo.\n\n<strong>a</strong>, el semieje mayor, es la mitad del diámetro largo y fija el <em>tamaño</em> de la órbita. Aquí se mantiene fijo en pantalla para que solo cambie la forma. <strong>b</strong> es el semieje menor, la mitad del diámetro corto. <strong>c = a x e</strong> es lo lejos que queda cada foco del centro, así que la excentricidad es simplemente la fracción de a en que la estrella está descentrada.\n\nAmbos están ligados por b = a x raíz(1 - e al cuadrado), y por eso la elipse se acorta a medida que se vuelve más excéntrica mientras su longitud se mantiene.\n\nFíjate en lo poco que tiene que crecer e antes de que la estrella se vea descentrada, y en lo difícil que es ver diferencia alguna por debajo de 0,1 aproximadamente. Por eso las órbitas casi circulares del Sistema Solar ocultaron la elipse durante dos mil años, y por eso fue Marte, uno de los planetas más excéntricos que Tycho podía medir bien, el que finalmente la delató.',
+      body: 'Arrastra el deslizador de excentricidad del panel contiguo. Cada magnitud se dibuja en su propio color, según la leyenda de debajo.\n\n<strong>a</strong>, el semieje mayor, es la mitad del diámetro largo y fija el <em>tamaño</em> de la órbita. Aquí se mantiene fijo en pantalla para que solo cambie la forma. <strong>b</strong> es el semieje menor, la mitad del diámetro corto. <strong><em>c</em> = <em>a</em> × <em>e</em></strong> es lo lejos que queda cada foco del centro, así que la excentricidad es simplemente la fracción de a en que la estrella está descentrada.\n\nAmbos están ligados por <em>b</em> = <em>a</em> × √(1 − <em>e</em>²), y por eso la elipse se acorta a medida que se vuelve más excéntrica mientras su longitud se mantiene.\n\nFíjate en lo poco que tiene que crecer e antes de que la estrella se vea descentrada, y en lo difícil que es ver diferencia alguna por debajo de 0,1 aproximadamente. Por eso las órbitas casi circulares del Sistema Solar ocultaron la elipse durante dos mil años, y por eso fue Marte, uno de los planetas más excéntricos que Tycho podía medir bien, el que finalmente la delató.',
       presets: [
         {
           label: 'Venus',
@@ -68,7 +68,7 @@ export default {
         },
         {
           label: 'Marte',
-          note: 'Marte, y la razón por la que Kepler llegó a ello. Con e = 0,093 la desviación respecto a un círculo es justo lo bastante grande como para aparecer en medidas a simple vista con precisión de un minuto de arco.',
+          note: 'Marte, y la razón por la que Kepler llegó a ello. Con <em>e</em> = 0,093 la desviación respecto a un círculo es justo lo bastante grande como para aparecer en medidas a simple vista con precisión de un minuto de arco.',
         },
         {
           label: 'Mercurio',
@@ -161,7 +161,7 @@ export default {
     },
     {
       title: 'Rápido y lento, en números',
-      body: 'Ahora ponle números, y deja que la simulación encuentre los dos momentos por ti: atraparlos a mano mide tus reflejos, no la órbita.\n\nLa herramienta <strong>Pausar en un evento</strong> se ha abierto abajo con el <strong>Eccentric Orbiter</strong> y su estrella ya seleccionados. Pon el evento en <strong>periastro</strong> y pulsa <strong>Armar</strong>. La simulación corre hasta que el planeta llega a su punto más cercano y se detiene ahí. Selecciona el planeta y anota la velocidad y la distancia. Luego ármala otra vez para el <strong>apoastro</strong> y haz lo mismo en el extremo lejano.\n\nLas dos cifras se miden <strong>respecto a la estrella</strong>: la lectura resta el movimiento propio de la estrella, así que la distancia y la velocidad describen la órbita y no la deriva del par por el encuadre. El cociente se calcula por ti.\n\n<strong>Lee las dos cifras que te da la herramienta.</strong> Informa de cuándo <em>fue</em> el evento y de cuánto más allá se <em>detuvo</em> de verdad la simulación. Son cosas distintas: el mundo se integra a pasos y el evento cae entre dos de ellos. La herramienta lo acota e interpola el instante, y luego para en el primer paso posterior; no rebobina el mundo hasta el evento, porque el reloj no es lo único indexado por el reloj. Así que la velocidad que lees es la del estado en pausa, un poco más allá del extremo, y el instante del evento es una estimación de cuándo ocurrió. En esta órbita la diferencia es pequeña, y lo honesto es saber que está ahí.',
+      body: 'Ahora ponle números, y deja que la simulación encuentre los dos momentos por ti: atraparlos a mano mide tus reflejos, no la órbita.\n\nLa herramienta <strong>Pausar en un evento</strong> se ha abierto abajo con el <strong>Eccentric Orbiter</strong> y su estrella ya seleccionados. Pon el evento en <strong>[[periapsis|periastro]]</strong> y pulsa <strong>Armar</strong>. La simulación corre hasta que el planeta llega a su punto más cercano y se detiene ahí. Selecciona el planeta y anota la velocidad y la distancia. Luego ármala otra vez para el <strong>[[apoapsis|apoastro]]</strong> y haz lo mismo en el extremo lejano.\n\nLas dos cifras se miden <strong>respecto a la estrella</strong>: la lectura resta el movimiento propio de la estrella, así que la distancia y la velocidad describen la órbita y no la deriva del par por el encuadre. El cociente se calcula por ti.\n\n<strong>Lee las dos cifras que te da la herramienta.</strong> Informa de cuándo <em>fue</em> el evento y de cuánto más allá se <em>detuvo</em> de verdad la simulación. Son cosas distintas: el mundo se integra a pasos y el evento cae entre dos de ellos. La herramienta lo acota e interpola el instante, y luego para en el primer paso posterior; no rebobina el mundo hasta el evento, porque el reloj no es lo único indexado por el reloj. Así que la velocidad que lees es la del estado en pausa, un poco más allá del extremo, y el instante del evento es una estimación de cuándo ocurrió. En esta órbita la diferencia es pequeña, y lo honesto es saber que está ahí.',
       tip: 'Si la herramienta se niega a armar y dice que la órbita es circular, no es un fallo. En una órbita perfectamente redonda no hay punto más cercano: la tasa radial es cero en todas partes y su signo lo decide el error de redondeo, así que una vigilancia dispararía en el primer paso y en todos los siguientes. La herramienta declina y lo dice. El Eccentric Orbiter es bastante excéntrico; el Circular Orbiter no lo es, y vale la pena armarlo una vez para ver el rechazo.',
       fields: [
         {
@@ -196,7 +196,7 @@ export default {
     },
     {
       title: 'La tercera ley de Kepler',
-      body: 'Las dos primeras leyes describen una sola órbita. La tercera relaciona órbitas <em>distintas</em> entre sí, y a Kepler le costó otra década encontrarla: el cuadrado del periodo orbital es proporcional al cubo del semieje mayor.\n\nEscrita para una estrella de una masa solar con <em>P</em> en años y <em>a</em> en UA, la constante vale exactamente 1, así que la ley se lee simplemente P² = a³. La Tierra lo cumple trivialmente: 1² = 1³.\n\nEstás a punto de ponerla a prueba contra el Sistema Solar real. Estos son los semiejes mayores reales y las masas reales, así que tus medidas deberían coincidir con una tabla de libro de texto dentro de tu error de lectura. La Tierra está aquí de verdad a 1 UA, y su periodo sale de verdad en un año.\n\nUna cosa que hay que notar de entrada: la vista está encuadrada de Mercurio a Saturno, y Urano y Neptuno ya están fuera de pantalla. Neptuno está treinta veces más lejos del Sol que la Tierra, y ninguna vista única muestra a la vez los planetas interiores y los exteriores a un tamaño útil. Eso no es una limitación de este programa. Es la razón por la que casi todos los diagramas del Sistema Solar que has visto están dibujados a una escala falsa.',
+      body: 'Las dos primeras leyes describen una sola órbita. La tercera relaciona órbitas <em>distintas</em> entre sí, y a Kepler le costó otra década encontrarla: el cuadrado del [[period|periodo]] orbital es proporcional al cubo del semieje mayor.\n\nEscrita para una estrella de una masa solar con <em>P</em> en años y <em>a</em> en UA, la constante vale exactamente 1, así que la ley se lee simplemente <em>P</em>² = <em>a</em>³. La Tierra lo cumple trivialmente: 1² = 1³.\n\nEstás a punto de ponerla a prueba contra el Sistema Solar real. Estos son los semiejes mayores reales y las masas reales, así que tus medidas deberían coincidir con una tabla de libro de texto dentro de tu error de lectura. La Tierra está aquí de verdad a 1 UA, y su periodo sale de verdad en un año.\n\nUna cosa que hay que notar de entrada: la vista está encuadrada de Mercurio a Saturno, y Urano y Neptuno ya están fuera de pantalla. Neptuno está treinta veces más lejos del Sol que la Tierra, y ninguna vista única muestra a la vez los planetas interiores y los exteriores a un tamaño útil. Eso no es una limitación de este programa. Es la razón por la que casi todos los diagramas del Sistema Solar que has visto están dibujados a una escala falsa.',
       tip: 'Usa la rueda para hacer zoom. Los planetas siguen visibles como puntos pequeños por lejos que vayas, y siguen siendo pulsables, pero solo se separan bien cuando amplías. Nada se mueve, así que tómate tu tiempo.',
     },
     {
@@ -233,11 +233,11 @@ export default {
         xLabel: 'a  (UA)',
         yLabel: 'P  (a)',
         transform: {
-          label: 'Elevar P al cuadrado, a al cubo',
+          label: 'Elevar <em>P</em> al cuadrado, <em>a</em> al cubo',
           xLabel: 'a³  (UA³)',
           yLabel: 'P²  (a²)',
         },
-        note: 'En crudo, los puntos se curvan: una ley de potencias siempre lo hace. Pulsa <strong>Elevar P al cuadrado, a al cubo</strong> y deberían caer sobre una recta que pasa por el origen. Enderezar una curva eligiendo los ejes adecuados es la manera de identificar una ley de potencias, y la pendiente de esa recta es la constante de P² = k·a³.',
+        note: 'En crudo, los puntos se curvan: una ley de potencias siempre lo hace. Pulsa <strong>Elevar <em>P</em> al cuadrado, <em>a</em> al cubo</strong> y deberían caer sobre una recta que pasa por el origen. Enderezar una curva eligiendo los ejes adecuados es la manera de identificar una ley de potencias, y la pendiente de esa recta es la constante de <em>P</em>² = <em>k</em>·<em>a</em>³.',
       },
     },
     {
@@ -246,34 +246,34 @@ export default {
       fields: [
         { label: 'Semieje mayor a', unit: 'UA' },
         { label: 'Periodo P', unit: 'a' },
-        { label: 'Paso 1: a³', unit: 'UA³' },
-        { label: 'Paso 2: P²', unit: 'a²' },
-        { label: 'Paso 3: P² ÷ a³', unit: '' },
+        { label: 'Paso 1: <em>a</em>³', unit: 'UA³' },
+        { label: 'Paso 2: <em>P</em>²', unit: 'a²' },
+        { label: 'Paso 3: <em>P</em>² ÷ <em>a</em>³', unit: '' },
       ],
     },
     {
       title: 'Usa la ley',
-      body: 'La prueba de verdad de una ley es si predice algo que no has medido.\n\nSupón que un noveno planeta orbitara esta misma estrella con un semieje mayor de exactamente 4 UA, entre Marte y Júpiter. Nadie ha medido su periodo, porque no existe. Calcúlalo de todos modos.\n\n<strong>Paso 1.</strong> Sabes que P² = a³, y sabes que a = 4 UA.\n\n<strong>Paso 2.</strong> Eleva la distancia al cubo: a³ = 4 × 4 × 4 = 64. Así que P² = 64.\n\n<strong>Paso 3.</strong> Tienes P al cuadrado, pero la pregunta pide P. Deshaz el cuadrado con la raíz cuadrada: P = √64.\n\n¿Cuánto es?',
-      prompt: 'Periodo orbital de un planeta a a = 4 UA',
+      body: 'La prueba de verdad de una ley es si predice algo que no has medido.\n\nSupón que un noveno planeta orbitara esta misma estrella con un semieje mayor de exactamente 4 UA, entre Marte y Júpiter. Nadie ha medido su periodo, porque no existe. Calcúlalo de todos modos.\n\n<strong>Paso 1.</strong> Sabes que <em>P</em>² = <em>a</em>³, y sabes que <em>a</em> = 4 UA.\n\n<strong>Paso 2.</strong> Eleva la distancia al cubo: <em>a</em>³ = 4 × 4 × 4 = 64. Así que <em>P</em>² = 64.\n\n<strong>Paso 3.</strong> Tienes <em>P</em> al cuadrado, pero la pregunta pide <em>P</em>. Deshaz el cuadrado con la raíz cuadrada: <em>P</em> = √64.\n\n¿Cuánto es?',
+      prompt: 'Periodo orbital de un planeta a <em>a</em> = 4 UA',
       unit: 'años',
       because:
-        'P = 8 años. Ahora pruébalo con un planeta que sí mediste: Júpiter está a 5,204 UA, así que a³ = 141,0 y P = √141,0 = 11,87 años. La tabla dice 11,86. Acabas de predecir el año de un planeta real a partir de nada más que su distancia.',
+        '<em>P</em> = 8 años. Ahora pruébalo con un planeta que sí mediste: Júpiter está a 5,204 UA, así que <em>a</em>³ = 141,0 y <em>P</em> = √141,0 = 11,87 años. La tabla dice 11,86. Acabas de predecir el año de un planeta real a partir de nada más que su distancia.',
       misconceptions: [
         {
-          say: 'Eso es a³. La ley dice P² = a³, así que el periodo es la raíz cuadrada de 64, no 64.',
+          say: 'Eso es <em>a</em>³. La ley dice <em>P</em>² = <em>a</em>³, así que el periodo es la raíz cuadrada de 64, no 64.',
         },
         {
-          say: 'Eso es √a. El cubo va primero: calcula a³ = 64 y después su raíz cuadrada.',
+          say: 'Eso es √<em>a</em>. El cubo va primero: calcula <em>a</em>³ = 64 y después su raíz cuadrada.',
         },
       ],
       hints: {
         concept:
           'La tercera ley de Kepler relaciona el tamaño de una órbita con lo que tarda, y con nada más. En estas unidades — años y UA, alrededor de esta estrella — la relación es todo lo simple que llega a ser.',
         method:
-          'P² = a³. Sustituye a = 4, calcula el lado derecho y después deshaz el cuadrado.',
+          '<em>P</em>² = <em>a</em>³. Sustituye <em>a</em> = 4, calcula el lado derecho y después deshaz el cuadrado.',
       },
       worked:
-        'a = 4, así que a³ = 64. P² = 64, luego P = √64 = 8 años. La comprobación de que es de verdad una ley: Júpiter está a 5,204 UA, lo que da a³ = 141,0 y P = 11,87 años, frente a los 11,86 medidos.',
+        '<em>a</em> = 4, así que <em>a</em>³ = 64. <em>P</em>² = 64, luego <em>P</em> = √64 = 8 años. La comprobación de que es de verdad una ley: Júpiter está a 5,204 UA, lo que da <em>a</em>³ = 141,0 y <em>P</em> = 11,87 años, frente a los 11,86 medidos.',
       feedback: {
         close:
           'Cerca, pero fuera de la tolerancia. Revisa por separado el cubo y la raíz cuadrada.',
@@ -281,15 +281,16 @@ export default {
           'Eso parece días. Con la distancia en UA la ley da años, así que convierte antes de responder.',
         'wrong-order-of-magnitude':
           'Te pasas en una potencia de diez. Eleva primero la distancia al cubo y luego saca la raíz cuadrada.',
-        off: 'Revisa el orden: eleva a al cubo para obtener P al cuadrado, y solo después deshaz el cuadrado.',
+        off: 'Revisa el orden: eleva <em>a</em> al cubo para obtener <em>P</em> al cuadrado, y solo después deshaz el cuadrado.',
         correct:
           'Para poner a prueba una ley así, aplícala a un planeta cuyo año conozcas y comprueba que coincide.',
       },
     },
     {
       title: 'De qué depende la constante',
-      body: 'Tus cuatro planetas tenían masas descabelladamente distintas: desde un pequeño mundo rocoso hasta un gigante gaseoso cientos de veces más pesado, y todos dieron el mismo P²/a³.',
-      prompt: 'La constante de P² = k·a³ depende de…',
+      body: 'Tus cuatro planetas tenían masas descabelladamente distintas: desde un pequeño mundo rocoso hasta un gigante gaseoso cientos de veces más pesado, y todos dieron el mismo <em>P</em>²/<em>a</em>³.',
+      prompt:
+        'La constante de <em>P</em>² = <em>k</em>·<em>a</em>³ depende de…',
       options: [
         'la masa del planeta',
         'la masa de la estrella',
@@ -297,16 +298,16 @@ export default {
         'nada: es la misma en todo el universo',
       ],
       because:
-        'Depende de la masa central: Newton demostró que k = 4π²/G(M+m) y, dado que M ≫ m para un planeta, la masa del propio planeta se cancela. Leído al revés, esta es una manera de pesar cosas que nunca podrás visitar. Mide un periodo y una distancia, y la masa sale sola. Así se pesó el Sol por primera vez, así se pesan hoy las estrellas anfitrionas de exoplanetas, y así se pesó el agujero negro de cuatro millones de masas solares del centro de la Vía Láctea, siguiendo la estrella S2 a lo largo de una órbita de dieciséis años.',
+        'Depende de la masa central: Newton demostró que <em>k</em> = 4π<sup>2</sup>/<em>G</em>(<em>M</em>+<em>m</em>) y, dado que <em>M</em> ≫ <em>m</em> para un planeta, la masa del propio planeta se cancela. Leído al revés, esta es una manera de pesar cosas que nunca podrás visitar. Mide un periodo y una distancia, y la masa sale sola. Así se pesó el Sol por primera vez, así se pesan hoy las estrellas anfitrionas de exoplanetas, y así se pesó el agujero negro de cuatro millones de masas solares del centro de la Vía Láctea, siguiendo la estrella S2 a lo largo de una órbita de dieciséis años.',
     },
     {
       title: 'Lo que añadió Newton',
-      body: 'Las tres leyes de Kepler describen el Sistema Solar, pero no lo explican. Kepler las encontró ajustando curvas a los números de Tycho a lo largo de veinte años de aritmética; no tenía ni idea de <em>por qué</em> las órbitas debían ser elipses ni de por qué los periodos debían escalar así.\n\nSesenta años después Newton dedujo las tres a partir de un solo supuesto: que la gravedad decae como el inverso del cuadrado de la distancia. La elipse, las áreas iguales y la ley de la potencia tres medios salen todas como consecuencias. Y al deducirlas encontró la corrección que Kepler no podía conocer:\n\nP² = 4π² a³ / G(M + m)\n\nLa versión de Kepler suponía que la constante era la misma para todo lo que orbitara el Sol. La de Newton muestra que depende de la masa <strong>total</strong>. Para un planeta alrededor de una estrella, la masa del propio planeta es despreciable y las dos coinciden, y por eso funcionaba la versión de Kepler. Para dos estrellas de masa comparable orbitándose entre sí, no, y solo la forma de Newton es correcta.\n\nEsto es lo que convirtió una descripción de un sistema solar en una herramienta que funciona en cualquier parte.',
+      body: 'Las tres leyes de Kepler describen el Sistema Solar, pero no lo explican. Kepler las encontró ajustando curvas a los números de Tycho a lo largo de veinte años de aritmética; no tenía ni idea de <em>por qué</em> las órbitas debían ser elipses ni de por qué los periodos debían escalar así.\n\nSesenta años después Newton dedujo las tres a partir de un solo supuesto: que la gravedad decae como el inverso del cuadrado de la distancia. La elipse, las áreas iguales y la ley de la potencia tres medios salen todas como consecuencias. Y al deducirlas encontró la corrección que Kepler no podía conocer:\n\n<em>P</em>² = 4π<sup>2</sup> <em>a</em>³ / <em>G</em>(<em>M</em> + <em>m</em>)\n\nLa versión de Kepler suponía que la constante era la misma para todo lo que orbitara el Sol. La de Newton muestra que depende de la masa <strong>total</strong>. Para un planeta alrededor de una estrella, la masa del propio planeta es despreciable y las dos coinciden, y por eso funcionaba la versión de Kepler. Para dos estrellas de masa comparable orbitándose entre sí, no, y solo la forma de Newton es correcta.\n\nEsto es lo que convirtió una descripción de un sistema solar en una herramienta que funciona en cualquier parte.',
       tip: 'Despejada para M, esta ecuación es la manera en que se mide esencialmente toda masa estelar de la literatura.',
     },
     {
       title: 'Las mismas leyes, a cuarenta años luz',
-      body: 'En pantalla está TRAPPIST-1, una enana roja real con siete planetas, ninguno de los cuales Kepler habría podido imaginar. Tiene una décima parte de la masa del Sol y sus planetas orbitan más cerca que Mercurio, así que nada de ella se parece al sistema que Kepler ajustó.\n\nLas leyes se cumplen de todos modos. Pulsa cualquier planeta y se dibujan las cuñas de área igual para su órbita; pulsa otro y se redibujan para ese. Las rebanadas de cada planeta son iguales entre sí, y cada planeta tiene su propio periodo, pero todos ellos satisfacen el mismo P al cuadrado sobre a al cubo, con la constante fijada por la masa de esta estrella en lugar de la del Sol.',
+      body: 'En pantalla está TRAPPIST-1, una enana roja real con siete planetas, ninguno de los cuales Kepler habría podido imaginar. Tiene una décima parte de la masa del Sol y sus planetas orbitan más cerca que Mercurio, así que nada de ella se parece al sistema que Kepler ajustó.\n\nLas leyes se cumplen de todos modos. Pulsa cualquier planeta y se dibujan las cuñas de área igual para su órbita; pulsa otro y se redibujan para ese. Las rebanadas de cada planeta son iguales entre sí, y cada planeta tiene su propio periodo, pero todos ellos satisfacen el mismo <em>P</em> al cuadrado sobre <em>a</em> al cubo, con la constante fijada por la masa de esta estrella en lugar de la del Sol.',
       checklist: [
         'Pulsa un planeta interior y anota su semieje mayor y su periodo',
         'Pulsa un planeta exterior y observa que ambos son mayores',
@@ -316,23 +317,23 @@ export default {
     },
     {
       title: 'Pesa TRAPPIST-1 tú mismo',
-      body: 'Elige cualquiera de los siete planetas, lee su semieje mayor y su periodo en la lectura e introdúcelos abajo. La aritmética se hace por ti etapa a etapa, para que veas de dónde sale el número.\n\nCuidado con las unidades. La lectura da los periodos en <em>días</em>, y M = a al cubo / P al cuadrado solo devuelve masas solares cuando P está en <strong>años</strong> y a en <strong>UA</strong>. Convertir es el paso donde tropieza la gente.',
+      body: 'Elige cualquiera de los siete planetas, lee su semieje mayor y su periodo en la lectura e introdúcelos abajo. La aritmética se hace por ti etapa a etapa, para que veas de dónde sale el número.\n\nCuidado con las unidades. La lectura da los periodos en <em>días</em>, y <em>M</em> = <em>a</em>³ / <em>P</em>² solo devuelve masas solares cuando <em>P</em> está en <strong>años</strong> y a en <strong>UA</strong>. Convertir es el paso donde tropieza la gente.',
       fields: [
         { label: 'Planeta que estás usando', unit: '' },
         { label: 'Semieje mayor a', unit: 'UA' },
         { label: 'Periodo P', unit: 'días' },
         { label: 'Paso 1: periodo en años (días / 365,25)', unit: 'a' },
-        { label: 'Paso 2: a al cubo', unit: 'UA al cubo' },
-        { label: 'Paso 3: P al cuadrado', unit: 'a al cuadrado' },
+        { label: 'Paso 2: <em>a</em> al cubo', unit: 'UA al cubo' },
+        { label: 'Paso 3: <em>P</em> al cuadrado', unit: 'a al cuadrado' },
         {
-          label: 'Paso 4: masa estelar = a al cubo / P al cuadrado',
+          label: 'Paso 4: masa estelar = <em>a</em>³ / <em>P</em>²',
           unit: 'M_sol',
         },
       ],
     },
     {
       title: 'Pesar otra estrella',
-      body: 'Aquí está la recompensa. Kepler-10 es una estrella parecida al Sol a unos 600 años luz con un planeta de 2,4 radios terrestres, Kepler-10c, descubierto por tránsito. Su órbita tiene un semieje mayor de unas 0,24 UA y un periodo de unos 45 días, que son 0,123 años.\n\nUsa la forma de Newton, tomando la masa del planeta como despreciable:\n\nM = a³ / P²  (en masas solares, con a en UA y P en años)\n\n<strong>Paso 1.</strong> Eleva la distancia al cubo: 0,24³ = 0,0138.\n\n<strong>Paso 2.</strong> Eleva el periodo al cuadrado: 0,123² = 0,0151.\n\n<strong>Paso 3.</strong> Divide.',
+      body: 'Aquí está la recompensa. Kepler-10 es una estrella parecida al Sol a unos 600 años luz con un planeta de 2,4 radios terrestres, Kepler-10c, descubierto por [[transit|tránsito]]. Su órbita tiene un semieje mayor de unas 0,24 UA y un periodo de unos 45 días, que son 0,123 años.\n\nUsa la forma de Newton, tomando la masa del planeta como despreciable:\n\n<em>M</em> = <em>a</em>³ / <em>P</em>²  (en masas solares, con <em>a</em> en UA y <em>P</em> en años)\n\n<strong>Paso 1.</strong> Eleva la distancia al cubo: 0,24³ = 0,0138.\n\n<strong>Paso 2.</strong> Eleva el periodo al cuadrado: 0,123² = 0,0151.\n\n<strong>Paso 3.</strong> Divide.',
       prompt: 'Masa de Kepler-10, en masas solares',
       unit: 'M_sol',
       because:
@@ -346,21 +347,21 @@ export default {
         concept:
           'La versión de Newton de la tercera ley dice que el periodo y el tamaño de la órbita juntos te dan la masa de aquello que se orbita. Esa es toda la razón por la que importa.',
         method:
-          'M = a³ / P², con a en UA y P en *años*. El periodo se da en días y también en años: usa los años.',
+          '<em>M</em> = <em>a</em>³ / <em>P</em>², con <em>a</em> en UA y <em>P</em> en *años*. El periodo se da en días y también en años: usa los años.',
       },
       worked:
-        'a = 0,24, así que a³ = 0,0138. P = 0,123 años, luego P² = 0,01513. 0,0138 / 0,01513 = 0,91 masas solares, dentro de un pequeño porcentaje del valor publicado.',
+        '<em>a</em> = 0,24, así que <em>a</em>³ = 0,0138. <em>P</em> = 0,123 años, luego <em>P</em>² = 0,01513. 0,0138 / 0,01513 = 0,91 masas solares, dentro de un pequeño porcentaje del valor publicado.',
       feedback: {
         close:
           'Cerca. Revisa por separado el cubo y el cuadrado, y el redondeo de cada uno.',
         'wrong-order-of-magnitude':
           'Te pasas en potencias de diez. Asegúrate de que el periodo esté en años, no en días: la cifra en días es mucho mayor que el mismo tiempo en años.',
-        off: 'Hazlo en tres partes: a al cubo, luego P al cuadrado, y divide la primera entre la segunda.',
+        off: 'Hazlo en tres partes: <em>a</em> al cubo, luego <em>P</em> al cuadrado, y divide la primera entre la segunda.',
       },
     },
     {
       title: 'Dónde falla la versión de Kepler',
-      body: 'La corrección de Newton sustituye la constante de Kepler por una que depende de M + m en lugar de solo de M.',
+      body: 'La corrección de Newton sustituye la constante de Kepler por una que depende de <em>M</em> + <em>m</em> en lugar de solo de <em>M</em>.',
       prompt: '¿Para qué sistema importa más esa corrección?',
       options: [
         'La Tierra orbitando el Sol',
@@ -369,7 +370,7 @@ export default {
         'Una nave espacial orbitando la Tierra',
       ],
       because:
-        'Dos masas iguales. Ahí m = M, así que M + m es el doble de lo que supone la versión de Kepler y el periodo predicho falla en un factor √2, alrededor del 41 %. En los otros tres casos el cuerpo en órbita es entre una millonésima y una milésima de la masa central y la corrección es invisible. Es exactamente este término el que permite a los astrónomos medir las masas individuales de un sistema binario en lugar de solo su suma.',
+        'Dos masas iguales. Ahí <em>m</em> = <em>M</em>, así que <em>M</em> + <em>m</em> es el doble de lo que supone la versión de Kepler y el periodo predicho falla en un factor √2, alrededor del 41 %. En los otros tres casos el cuerpo en órbita es entre una millonésima y una milésima de la masa central y la corrección es invisible. Es exactamente este término el que permite a los astrónomos medir las masas individuales de un sistema binario en lugar de solo su suma.',
     },
     {
       title: 'Dónde te deja esto',

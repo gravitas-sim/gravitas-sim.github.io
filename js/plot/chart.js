@@ -292,8 +292,12 @@ export function createChart(host, opts = {}) {
   const idOf = (s, k) => s.id ?? s.label ?? String(k);
   const isHidden = (s, k) => hidden.get(idOf(s, k)) === true;
 
+  // The layout width rounded down, so a fractional column never draws the plot a pixel wider than it is shown (ticks would fall under 11 px).
+  const widthNow = () =>
+    Math.floor(wrap.getBoundingClientRect().width || wrap.clientWidth);
+
   function measure() {
-    const w = Math.round(wrap.clientWidth);
+    const w = widthNow();
     let h = opts.height ?? FALLBACK.height;
     if (h === 'fill') {
       h = Math.max(
@@ -1123,7 +1127,7 @@ export function createChart(host, opts = {}) {
   let ro = null;
   if (typeof window.ResizeObserver === 'function') {
     ro = new window.ResizeObserver(() => {
-      const w = Math.round(wrap.clientWidth);
+      const w = widthNow();
       if (w > 0 && (!size || size.w !== w || opts.height === 'fill')) {
         size = null;
         render();

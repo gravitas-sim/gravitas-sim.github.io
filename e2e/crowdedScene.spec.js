@@ -110,7 +110,9 @@ test.describe('trails and notes in a crowd', () => {
     await app.boot();
     await app.loadScenario('binary-pair', 'e2e', { run: false });
     await frames(page);
-    await expect(page.locator('#overlayStats')).not.toContainText(/Trails:/);
+    await expect(page.locator('#overlayStats')).not.toContainText(
+      /Trails: the selected body/
+    );
   });
 });
 

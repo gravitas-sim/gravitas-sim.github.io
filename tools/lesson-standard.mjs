@@ -34,6 +34,7 @@ import {
   makeView,
   viewFindings,
 } from './authoring/standardRules.mjs';
+import { loadMap } from './authoring/neutralStart.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 export const RECORD = path.join(ROOT, 'tools', 'lesson-standard-ratchet.json');
@@ -61,12 +62,13 @@ export const UNREVIEWED = 'unreviewed';
 export async function standardFindings(inputs, depth) {
   const findings = [];
   let layouts = 0;
+  const context = { widgets: inputs.widgets, map: loadMap() };
   for (const core of inputs.investigations) {
     const { laid, shadows } = await layOut(core, {
       ...depth,
       shadow: inputs.translations?.es?.[core.id],
     });
-    findings.push(...viewFindings(makeView(laid, shadows)));
+    findings.push(...viewFindings(makeView(laid, shadows, context)));
     findings.push(...completionFindings(inputs, laid));
     layouts += 3;
   }

@@ -1,0 +1,26 @@
+{
+  "about": "Which readout row fills which answer field, for the neutral-start detector (tools/authoring/neutralStart.mjs). Keyed by '<lesson id>/<step sid>'; each field names a row by id or by the label the student reads in English, or null where the field is not read from the instrument. A reviewed table: a step that is not here is reported unmapped, never fine.",
+  "steps": {
+    "ios-fire/heating-at-the-maximum": {
+      "power": "Heating",
+      "orbit": "Energy in one orbit (period)"
+    },
+    "measuring-the-moon/scale-from-the-disc": {
+      "pair": "Length of the pair",
+      "scale": "Scale from the pair"
+    },
+    "phases-and-albedo/full-phase-albedo": {
+      "ag": "Geometric albedo of a Lambert sphere that fits",
+      "ab": "Bond albedo of that Lambert sphere"
+    },
+    "why-venus-is-hot/gray-depth-for-venus": {
+      "tau": {
+        "control": "tau"
+      }
+    },
+    "orbital-energy/write-down-the-dividing-speed": {
+      "back": null,
+      "gone": null
+    }
+  }
+}

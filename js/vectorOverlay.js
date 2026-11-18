@@ -1,7 +1,5 @@
-// Velocity and acceleration arrows for the selected body, per-source components,
-// and the potential-well underlay. Nothing here computes gravity: the numbers come
-// from js/physics.js (the acceleration the integrator used), so an arrow cannot
-// disagree with the motion. Arrow length means magnitude (see below).
+// Velocity and acceleration arrows for the selected body, per-source
+// components, and the potential-well underlay.
 
 import {
   accelerationBreakdown,
@@ -506,9 +504,7 @@ export function drawPotentialWell(ctx, canvas, toWorld, G, softening, sources) {
     const phi = new Float64Array(cols * rows);
 
     // The screen-to-world map is affine, so it is sampled three times here and
-    // then stepped, rather than called once per cell. That removes thirteen
-    // thousand function calls and thirteen thousand short-lived objects from
-    // every rebuild, which on a full-screen canvas was most of the cost.
+    // then stepped, rather than called once per cell.
     const o = toWorld({ x: 0.5 * POTENTIAL_CELL, y: 0.5 * POTENTIAL_CELL });
     const ex = toWorld({ x: 1.5 * POTENTIAL_CELL, y: 0.5 * POTENTIAL_CELL });
     const ey = toWorld({ x: 0.5 * POTENTIAL_CELL, y: 1.5 * POTENTIAL_CELL });
@@ -555,10 +551,7 @@ export function drawPotentialWell(ctx, canvas, toWorld, G, softening, sources) {
     const deep = Math.abs(minPhi) || shallow;
     const decades = Math.max(0.4, Math.log10(deep / shallow) || 0.4);
 
-    // Contour rings, one per fifth of a decade of depth. A smooth wash is a
-    // picture of a blur; the thing that makes a potential well read as a well
-    // is the spacing of its contours crowding together as it steepens, which is
-    // the same reason a topographic map has contours rather than a gradient.
+    // Contour rings, one per fifth of a decade of depth.
     const RINGS_PER_DECADE = 5;
 
     for (let n = 0; n < cols * rows; n++) {

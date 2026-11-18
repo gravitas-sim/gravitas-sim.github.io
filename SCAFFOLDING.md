@@ -101,6 +101,24 @@ On a choice, `misconceptions: [{id, option, say}]` binds a wrong option to the
 mistake it is; the wrong pick shows and announces `say`. Not on shuffled
 options (their numbers move).
 
+## Named slips on a measure field (Prompt 326)
+
+A measure field can carry `misconceptions: [{id, say, ...}]`, each with one of:
+`factor` or `equals` (the slip a value shows, against the field's `want`; the
+standard ids such as `radiusForDiameter` carry their factor), or `when` (how the
+reading was taken, from the provenance beside the answer): `role` (a role name
+or a list), `moment` (`{min, max}` on the simulated clock), `setting` (`{name:
+value or {min, max}}`) and `interval` (`{from, to, n}`, each `{min, max}`). A
+typed value has no provenance and never matches a `when`. Nothing is said while a
+governing prediction is uncommitted. A try is a reading taken or a value set
+committed when focus leaves the fields, once per distinct set, counted in
+`attempts`; the slip is announced and drawn then, never per keystroke, and says
+only what the author wrote and that the student can try again. The report prints
+"answered on try n" and the slip by name; the key lists the slips. `author:check`
+fails a `say` (or a measure step's `feedback`) that holds the field's `want`, the
+step's `answer` or a number within tolerance of either. The generated ladder is
+not involved, and `:tries` and `:gen` are not written for a measure step.
+
 ## Reflections
 
 `type: 'question', kind: 'short', reflect: true`: a written step with no

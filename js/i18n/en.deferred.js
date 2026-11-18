@@ -590,8 +590,7 @@ export const EN_DEFERRED = {
   'sweep.partial':
     'Some trials did not produce a measurement, so this describes the values that ran rather than the range that was asked for.',
 
-  // The guided example. One question, one parameter, and a note about what the
-  // answer does and does not establish.
+  // The guided example. One question, one parameter, and a note about what the answer does and does not establish.
   'sweep.guide.title': 'How far out can a planet orbit one star of a pair?',
   'sweep.guide.body':
     'This sweeps the planet\u2019s starting orbit from close in to well out, holding the stars, the seed and the timestep fixed, and measures how far the planet gets from its star. Close in, the orbit is the planet\u2019s own and the distance barely changes. Further out the second star starts to matter, and past a point the planet stops being in orbit at all.',
@@ -730,6 +729,7 @@ export const EN_DEFERRED = {
   'inv.tool.reloadNeeded':
     'This instrument still could not be loaded. Reload the page to try again; your answers are kept.',
   'inv.tool.reload': 'Reload the page',
+  'inv.tool.start': 'Return the instrument to its starting position',
   'inv.tool.pickable':
     'Diagram you can point at. Click or drag to move the cursor; the arrow keys move it too, and the sliders below do the same thing with numbers.',
   'inv.error.scenario': 'Could not load this step’s scenario.',
@@ -772,12 +772,12 @@ export const EN_DEFERRED = {
   'inv.span.take': 'Take interval reading',
   'inv.span.done':
     'Reading taken: {what}, mean {mean}, {n} points, standard error {se}.',
+  'inv.slip.again': 'You can try again.',
   'inv.action.finish': 'Finish',
   'inv.action.next': 'Next',
   'inv.probe.unavailable': 'Readout unavailable',
-  // The object list's chips. A role is the lesson author's handle for a body;
-  // the label comes from the key (`starA` is "star A") and is dropped where it
-  // would only repeat the body's name. These words differ between languages.
+  // The object list's chips: a role is the lesson author's handle for a body; its label comes from the
+  // key (`starA` is "star A"), and these are the words that differ between languages.
   'inv.role.star': 'star',
   'inv.role.planet': 'planet',
   'inv.role.earth': 'Earth',
