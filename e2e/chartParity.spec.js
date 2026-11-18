@@ -75,10 +75,10 @@ async function readComponent({ hostId, mod, accessor }) {
     return {
       type: ticks.every(([v]) => Number.isFinite(v)) ? 'linear' : 'category',
       title: parts[`${a}Title`],
-      titleColor: style('text[font-size="11"]', 'fill'),
-      titleSize: size('text[font-size="11"]'),
-      tickColor: style('text[font-size="10"]', 'fill'),
-      tickSize: size('text[font-size="10"]'),
+      titleColor: style('text[font-size="12"]', 'fill'),
+      titleSize: size('text[font-size="12"]'),
+      tickColor: style('text[font-size="11"]', 'fill'),
+      tickSize: size('text[font-size="11"]'),
       tickCount: ticks.length,
       tickValues: ticks.map(([v]) => v),
       tickTexts: ticks.map(([, text]) => text),
@@ -288,9 +288,9 @@ function portedExpectation(f, lineCount) {
   for (const a of ['x', 'y']) {
     const axis = e[a];
     axis.type = 'linear';
-    // The component's type sizes are its own (11 and 10).
-    axis.titleSize = 11;
-    axis.tickSize = 10;
+    // The component's type sizes are its own (12 and 11, the reading sizes).
+    axis.titleSize = 12;
+    axis.tickSize = 11;
     // A1's fixed light-on-dark text and grid are the tokens that play the part.
     if (axis.titleColor === '#e0e0e0') axis.titleColor = 'token:label';
     if (axis.tickColor === '#e0e0e0') axis.tickColor = 'token:tick|neutral';

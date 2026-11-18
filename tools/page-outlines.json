@@ -297,7 +297,7 @@
       "path": "/",
       "scope": "page",
       "h1": "Gravitas: interactive astrophysics sandbox",
-      "headings": "1 2",
+      "headings": "1",
       "landmarks": [
         "banner",
         "navigation:Gravitas",
@@ -310,7 +310,7 @@
       "path": "/",
       "scope": "dialog",
       "h1": "",
-      "headings": "3+",
+      "headings": "2+",
       "landmarks": []
     },
     "sandbox.share": {

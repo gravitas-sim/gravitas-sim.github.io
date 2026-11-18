@@ -201,7 +201,11 @@ const SURFACES = [
       await page.waitForSelector('#investigationToolCanvas', {
         timeout: 20_000,
       });
-      // Fill the fields so the plot has points and the table has rows.
+      // Fill the fields so the plot has points and the table has rows. They
+      // are built with the step, so wait for them rather than fill none.
+      await page.waitForSelector('#investigationBody input[data-field]', {
+        timeout: 20_000,
+      });
       await page.evaluate(() => {
         const fields = [
           ...document.querySelectorAll('#investigationBody input[data-field]'),
