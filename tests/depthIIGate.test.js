@@ -7,6 +7,7 @@
 // =============================================================================
 
 import { readFileSync } from 'node:fs';
+import { URL } from 'node:url';
 import { describe, test, expect } from '@jest/globals';
 
 const read = name =>

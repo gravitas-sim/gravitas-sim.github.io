@@ -166,7 +166,7 @@ is applied analytically, and Part B builds slices 1, 4 and 5:
   the batches.
 
 What would change the verdict: criterion 6 measured on a quiet machine with
-`tools/depth-ii-perf.spike.mjs` would make B reachable. A needs the failure in
+the spike's frame-time script (tools/depth-ii-perf.spike.mjs on gate/depth-ii) would make B reachable. A needs the failure in
 criterion 2 fixed first. Opening a deeper step should keep, or put back, the
 scene its anchor stood. That is a change to the lesson runtime and is outside
 this gate.
