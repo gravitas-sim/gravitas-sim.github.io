@@ -319,6 +319,167 @@
         }
       }
     },
+    "crowded-scenes-full": {
+      "command": "npm run perf -- --scene tests/fixtures/scene-records/star-cluster-midnight-1366.json --scene tests/fixtures/scene-records/kuiper-belt-midnight-1366.json --tier full --seconds 5",
+      "description": "The two crowded sandbox scenes (star-cluster, 255 bodies; kuiper-belt, 309) at their recorded state, then run live: headless Chromium 1366x800, device pixel ratio 1, no throttle, full tier. The budget the crowded-scene drawing change is judged against; advisory.",
+      "enforced": false,
+      "measured": {
+        "date": "2026-11-18",
+        "machine": "Intel Core i5-10500 (UHD 630), 24 GB, macOS, headless Chromium (Playwright 1.64) with GPU rasterisation through ANGLE, on the tree before the crowded-scene drawing change (the tree of the close-world light-and-phase change), 3 runs of 5 s per scene, median reported; other jobs were using the machine heavily (load average 18 to 31 across the runs), so every median carries that load and the thresholds below are correspondingly loose; quietestRunFrameMs is the smallest of the three",
+        "runs": 3,
+        "statistic": "median",
+        "seconds": 5
+      },
+      "scenarios": {
+        "star-cluster-midnight-1366": {
+          "measuredFrameMs": 37.92,
+          "frameMsThreshold": 57,
+          "measuredHeapAfterMB": 6.4,
+          "heapAfterMBThreshold": 10,
+          "runsFrameMs": [
+            37.92,
+            43.88,
+            30.11
+          ],
+          "quietestRunFrameMs": 30.11,
+          "medianSceneMs": 11.52
+        },
+        "kuiper-belt-midnight-1366": {
+          "measuredFrameMs": 32.59,
+          "frameMsThreshold": 49,
+          "measuredHeapAfterMB": 6.6,
+          "heapAfterMBThreshold": 10,
+          "runsFrameMs": [
+            26.62,
+            32.59,
+            40.83
+          ],
+          "quietestRunFrameMs": 26.62,
+          "medianSceneMs": 10.29
+        }
+      }
+    },
+    "crowded-scenes-ultra-dpr2": {
+      "command": "npm run perf -- --scene tests/fixtures/scene-records/star-cluster-midnight-1366.json --scene tests/fixtures/scene-records/kuiper-belt-midnight-1366.json --tier ultra --dpr 2 --seconds 5",
+      "description": "The same two scenes at the ultra tier on a ratio-2 display, the one place the ultra tier differs from full (its pixel budget, js/quality.js); no throttle.",
+      "enforced": false,
+      "measured": {
+        "date": "2026-11-18",
+        "machine": "Intel Core i5-10500 (UHD 630), 24 GB, macOS, headless Chromium (Playwright 1.64) with GPU rasterisation through ANGLE, on the tree before the crowded-scene drawing change (the tree of the close-world light-and-phase change), 3 runs of 5 s per scene, median reported; other jobs were using the machine heavily (load average 18 to 31 across the runs), so every median carries that load and the thresholds below are correspondingly loose; quietestRunFrameMs is the smallest of the three",
+        "runs": 3,
+        "statistic": "median",
+        "seconds": 5
+      },
+      "scenarios": {
+        "star-cluster-midnight-1366": {
+          "measuredFrameMs": 34.34,
+          "frameMsThreshold": 52,
+          "measuredHeapAfterMB": 7.4,
+          "heapAfterMBThreshold": 12,
+          "runsFrameMs": [
+            33.85,
+            34.34,
+            58.35
+          ],
+          "quietestRunFrameMs": 33.85,
+          "medianSceneMs": 9.79
+        },
+        "kuiper-belt-midnight-1366": {
+          "measuredFrameMs": 41.58,
+          "frameMsThreshold": 62.5,
+          "measuredHeapAfterMB": 7.4,
+          "heapAfterMBThreshold": 12,
+          "runsFrameMs": [
+            41.58,
+            33.82,
+            51.01
+          ],
+          "quietestRunFrameMs": 33.82,
+          "medianSceneMs": 9.22
+        }
+      }
+    },
+    "crowded-scenes-low-cpu4": {
+      "command": "npm run perf -- --scene tests/fixtures/scene-records/star-cluster-midnight-1366.json --scene tests/fixtures/scene-records/kuiper-belt-midnight-1366.json --tier low --cpu 4 --seconds 5",
+      "description": "The same two scenes, CPU throttled 4x (main thread only), low tier, 1366x800 at ratio 1. A proxy, not a Chromebook.",
+      "enforced": false,
+      "measured": {
+        "date": "2026-11-18",
+        "machine": "Intel Core i5-10500 (UHD 630), 24 GB, macOS, headless Chromium (Playwright 1.64) with GPU rasterisation through ANGLE, on the tree before the crowded-scene drawing change (the tree of the close-world light-and-phase change), 3 runs of 5 s per scene, median reported; other jobs were using the machine heavily (load average 18 to 31 across the runs), so every median carries that load and the thresholds below are correspondingly loose; quietestRunFrameMs is the smallest of the three",
+        "runs": 3,
+        "statistic": "median",
+        "seconds": 5
+      },
+      "scenarios": {
+        "star-cluster-midnight-1366": {
+          "measuredFrameMs": 61.8,
+          "frameMsThreshold": 93,
+          "measuredHeapAfterMB": 4.7,
+          "heapAfterMBThreshold": 8,
+          "runsFrameMs": [
+            77.52,
+            34.97,
+            61.8
+          ],
+          "quietestRunFrameMs": 34.97,
+          "medianSceneMs": 28.08
+        },
+        "kuiper-belt-midnight-1366": {
+          "measuredFrameMs": 40.7,
+          "frameMsThreshold": 61.5,
+          "measuredHeapAfterMB": 4.6,
+          "heapAfterMBThreshold": 7,
+          "runsFrameMs": [
+            40.7,
+            40.49,
+            42.88
+          ],
+          "quietestRunFrameMs": 40.49,
+          "medianSceneMs": 15.63
+        }
+      }
+    },
+    "crowded-scenes-phone-low-cpu4": {
+      "command": "npm run perf -- --scene tests/fixtures/scene-records/star-cluster-midnight-375.json --scene tests/fixtures/scene-records/kuiper-belt-midnight-375.json --tier low --cpu 4 --dpr 2 --seconds 5",
+      "description": "The same two scenes at 375x812, ratio 2, CPU throttled 4x, low tier. A proxy, not a phone.",
+      "enforced": false,
+      "measured": {
+        "date": "2026-11-18",
+        "machine": "Intel Core i5-10500 (UHD 630), 24 GB, macOS, headless Chromium (Playwright 1.64) with GPU rasterisation through ANGLE, on the tree before the crowded-scene drawing change (the tree of the close-world light-and-phase change), 3 runs of 5 s per scene, median reported; other jobs were using the machine heavily (load average 18 to 31 across the runs), so every median carries that load and the thresholds below are correspondingly loose; quietestRunFrameMs is the smallest of the three",
+        "runs": 3,
+        "statistic": "median",
+        "seconds": 5,
+        "note": "the first star-cluster run (105 ms) met a load average of 31 and is the slowest of the three; the median is the middle run"
+      },
+      "scenarios": {
+        "star-cluster-midnight-375": {
+          "measuredFrameMs": 47.42,
+          "frameMsThreshold": 71.5,
+          "measuredHeapAfterMB": 4.8,
+          "heapAfterMBThreshold": 8,
+          "runsFrameMs": [
+            104.82,
+            46.36,
+            47.42
+          ],
+          "quietestRunFrameMs": 46.36,
+          "medianSceneMs": 24.33
+        },
+        "kuiper-belt-midnight-375": {
+          "measuredFrameMs": 31.57,
+          "frameMsThreshold": 47.5,
+          "measuredHeapAfterMB": 4.6,
+          "heapAfterMBThreshold": 7,
+          "runsFrameMs": [
+            39.93,
+            31.57,
+            27.64
+          ],
+          "quietestRunFrameMs": 27.64,
+          "medianSceneMs": 13.91
+        }
+      }
+    },
     "real-chromebook": {
       "command": "npm run perf on the device, then the protocol in OFFLINE_AND_LOW_END.md",
       "description": "To be filled from real hardware (Prompt 112 part 1, skipped under D-PLAN-02).",
