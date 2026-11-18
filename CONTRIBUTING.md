@@ -175,7 +175,7 @@ their ceilings:
 | `js/i18n/en.deferred.js` | 3,998 | 3,998 |
 | `js/data/investigations/observing-sequence.js` | 3,341 | 3,341 |
 | `js/data/investigations/measurement-sequence.js` | 3,270 | 3,270 |
-| `js/investigations.js` | 3,108 | 3,108 |
+| `js/investigations.js` | 3,104 | 3,104 |
 | `js/render.js` | 2,856 | 2,856 |
 | `js/data/investigations/depth/measurement-sequence.js` | 2,840 | 2,840 |
 <!--/fact-block-->
@@ -307,7 +307,7 @@ object: its five pieces of live state (`builtSystem`, `worldPack`,
 module-level bindings (the sixth the slice 10 count named, `allBodies`, is a
 function of the physics lists), so there is one holder
 and nothing to hand in. `ui.js` still writes two of them, through
-`setBuiltSystem()` (Blank Simulation) and `setPendingSettings()` (Apply); a third
+`setBuiltSystem()` (Clear All Bodies) and `setPendingSettings()` (Apply); a third
 writer is a design decision. `initWorld()` wires the listeners where `ui.js` ran
 them. The embed shell (`initEmbedMode()`, `embedWorldBuilt()`) lives in the same
 module, to pay for its request.

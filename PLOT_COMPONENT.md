@@ -1211,3 +1211,24 @@ describing a table is a separate question (D-R10-280-05). ACCESSIBILITY.md
 no listener has checked.
 
 <!-- Listed in DOCUMENTS.md. -->
+
+### Reading size, marker shapes and direct labels (Prompt 338)
+
+The shared type scale is the single source of the sizes (`TYPE` in
+`js/widgetCanvas.js`, a leaf with no imports): the series chart's axis numbers
+are `TYPE.TICK` (11, were 10) and its axis titles `TYPE.LABEL` (12, were 11),
+and the instrument floor, `TYPE.MIN`, is 11 (was 10; `typeAt` already clamped
+to 11), held by `e2e/canvasLegibility.spec.js`. The lesson's scatter plot draws
+its ticks at 11 CSS px and its titles and point names at 12 whatever the
+panel's width (`size()` in `js/investigations/plotView.js`).
+
+A series of the chart may name a `marker` (`circle`, `square`, `triangle`,
+`cross`): at every point of a
+points series, a few along a line series, and in the legend's swatch. Nothing
+changes for a series that names none. A spec may ask for `direct: true`, which
+writes each series' name at the end of its line (pushed apart where two meet)
+and keeps the legend for more than four series; the light curve of the transit
+lesson does. The lesson's fit line carries three triangles and its slope as
+its name at its upper end; the dots are circles. The table beside the plot,
+and the sound and description, are unchanged. `e2e/plotReadingSize.spec.js`
+is the check.

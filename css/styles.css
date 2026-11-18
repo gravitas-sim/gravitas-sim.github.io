@@ -52,7 +52,6 @@
   .ui-container,
   #overlay,
   #scenarioInfoDisplay,
-  #scenarioInfoBox,
   .mobile-menu-toggle {
     opacity: 0;
     visibility: hidden;
@@ -65,7 +64,6 @@
   /* Show UI elements after splash */
   .ui-container.showUI,
   #scenarioInfoDisplay.showUI,
-  #scenarioInfoBox.showUI,
   .mobile-menu-toggle.showUI {
     opacity: 1;
     visibility: visible;
@@ -81,15 +79,6 @@
     visibility: visible;
     pointer-events: auto;
     animation: fadeInOverlay 1.5s ease-out forwards;
-  }
-
-  /* Mobile menu dropdown should remain hidden until explicitly shown */
-  /* Ensure scenario info box is properly styled when shown with showUI class */
-  #scenarioInfoBox.showUI {
-    opacity: 1;
-    visibility: visible;
-    pointer-events: auto;
-    animation: scenarioInfoSlideIn 0.6s cubic-bezier(0.4, 0, 0.2, 1);
   }
   #splash .splash-wordmark {
     margin: 0;
@@ -474,12 +463,6 @@
       padding: 8px 12px !important;
       font-size: 13px !important;
     }
-
-    .speed-btn {
-      padding: 6px 10px !important;
-      font-size: 12px !important;
-      min-height: 32px;
-    }
   }
 
   @media (max-width: 1200px) {
@@ -541,12 +524,6 @@
      rail that is already long. */
   #stopwatchControls .measure-btn {
     flex: 1 1 calc(50% - 3px);
-  }
-
-  .speed-btn {
-    padding: 6px 12px;
-    font-size: 12px;
-    min-width: 60px;
   }
 
   .speed-display {
@@ -1189,52 +1166,6 @@
     }
   }
 
-  /* Enhanced Scenario Info Box Styles */
-  .scenario-info-box {
-    position: fixed;
-    top: calc(20px + var(--shell-height, 0px));
-    left: 50%;
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-    pointer-events: none;
-  }
-
-  .scenario-info-content {
-    background: var(--panel-bg);
-    position: relative;
-    text-align: left;
-  }
-
-  .scenario-info-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 8px;
-    position: relative;
-  }
-
-  .scenario-info-header h2 {
-    flex: 1;
-    margin: 0;
-    font-size: 18px;
-    font-weight: 600;
-    color: var(--primary-color);
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-    hyphens: auto;
-    max-width: calc(100% - 50px);
-    line-height: 1.3;
-  }
-
-  .scenario-info-actions {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-left: 12px;
-    justify-content: flex-end;
-  }
-
   .sonification-toggle {
     font-size: 12px;
     line-height: 1;
@@ -1265,201 +1196,6 @@
 
   .overlay-stats {
     margin-top: 12px;
-  }
-
-  .scenario-info-close {
-    background: none !important;
-    /* Transparent, not none: under forced-colors the system palette draws a
-       transparent border, and the bare X gets an edge (Prompt 279). */
-    border: 1px solid transparent !important;
-    color: var(--text-color) !important;
-    font-size: 18px !important;
-    cursor: pointer !important;
-    padding: 4px 8px !important;
-    border-radius: 4px !important;
-    transition: all var(--duration) ease !important;
-    box-shadow: none !important;
-    transform: none !important;
-    text-shadow: none;
-    font-weight: normal !important;
-    min-width: auto;
-    width: auto !important;
-    height: auto !important;
-    line-height: 1 !important;
-    display: inline-block !important;
-    position: relative !important;
-    top: auto !important;
-    right: auto !important;
-    z-index: 1001 !important;
-    pointer-events: auto !important;
-    flex-shrink: 0;
-  }
-
-  .scenario-info-close:hover {
-    background: var(--c15) !important;
-    color: var(--primary-color) !important;
-    box-shadow: 0 0 8px var(--accent-line) !important;
-    transform: scale(1.1) !important;
-    text-shadow: none !important;
-  }
-
-  .scenario-info-close:active {
-    background: var(--c15) !important;
-    box-shadow: none !important;
-    transform: none !important;
-    text-shadow: none !important;
-  }
-
-  /* :focus-visible, not :focus - this drew a ring around the close button
-     every time it was clicked with a mouse. */
-  .scenario-info-close:focus-visible {
-    outline: var(--focus-ring) !important;
-    outline-offset: var(--focus-ring-offset) !important;
-  }
-
-  .scenario-info-body {
-    color: var(--text-color);
-    line-height: 1.4;
-    text-align: left;
-  }
-
-  .scenario-info-body p {
-    font-size: 14px;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-    hyphens: auto;
-    max-width: 100%;
-    line-height: 1.5;
-    overflow: hidden;
-    text-align: left;
-  }
-
-  .scenario-info-details {
-    margin-top: 8px;
-  }
-
-  .scenario-info-details ul {
-    margin: 0;
-    padding-left: 16px;
-    list-style: none;
-  }
-
-  .scenario-info-details li {
-    margin: 2px 0;
-    padding-left: 12px;
-    position: relative;
-    color: var(--text-color);
-    font-size: 13px;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-    hyphens: auto;
-    max-width: 100%;
-    line-height: 1.4;
-    overflow: hidden;
-  }
-
-  .scenario-info-details li::before {
-    content: '•';
-    position: absolute;
-    left: 0;
-    color: var(--primary-color);
-  }
-
-  .scenario-info-details li.merging-disabled-notice {
-    color: var(--warning);
-  }
-
-  .scenario-info-details li.merging-disabled-notice::before {
-    content: '⚠';
-    color: var(--warning);
-  }
-
-  @keyframes scenarioInfoSlideIn {
-    from {
-      opacity: 0;
-      transform: translateX(-50%) translateY(-20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateX(-50%) translateY(0);
-    }
-  }
-
-  @media (max-width: 1200px) {
-    .scenario-info-box {
-      top: calc(15px + var(--shell-height, 0px));
-      left: 10px;
-      right: 10px;
-    }
-
-    .scenario-info-header h2 {
-      font-size: 16px;
-      max-width: calc(100% - 40px);
-    }
-
-    .scenario-info-close {
-      font-size: 20px !important;
-      padding: 6px 10px !important;
-      top: auto !important;
-      right: auto !important;
-    }
-
-    .scenario-info-body p {
-      font-size: 13px;
-      word-wrap: break-word;
-      overflow-wrap: break-word;
-      hyphens: auto;
-      max-width: 100%;
-      line-height: 1.5;
-      overflow: hidden;
-    }
-  }
-
-  @media (max-width: 767px) {
-    .scenario-info-box {
-      top: calc(10px + var(--shell-height, 0px));
-      left: 8px;
-      right: 8px;
-    }
-
-    .scenario-info-header h2 {
-      font-size: 15px;
-      max-width: calc(100% - 45px);
-    }
-
-    .scenario-info-close {
-      font-size: 22px !important;
-      padding: 8px 12px !important;
-      top: auto !important;
-      right: auto !important;
-      background: rgba(0, 0, 0, 0.8) !important;
-      border-radius: 50% !important;
-      width: 36px !important;
-      height: 36px !important;
-      display: flex !important;
-      align-items: center !important;
-      justify-content: center;
-    }
-
-    .scenario-info-body p {
-      font-size: 12px;
-      word-wrap: break-word;
-      overflow-wrap: break-word;
-      hyphens: auto;
-      max-width: 100%;
-      line-height: 1.5;
-      overflow: hidden;
-    }
-
-    .scenario-info-details li {
-      font-size: 12px;
-      word-wrap: break-word;
-      overflow-wrap: break-word;
-      hyphens: auto;
-      max-width: 100%;
-      line-height: 1.4;
-      overflow: hidden;
-    }
   }
 
   /* ===== Settings Info Icons ===== */

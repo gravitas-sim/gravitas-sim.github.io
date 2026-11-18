@@ -468,6 +468,27 @@
     text-align: center;
   }
 
+  /* Fit view and Undo, above the sections, side by side; the labels wrap to a
+     second line rather than push the open section off the rail. */
+  .rail-at-hand {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    padding-bottom: var(--space-1);
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .ui-container .rail-at-hand .ui-button {
+    padding: 6px var(--space-2);
+    font-size: var(--text-2xs);
+    line-height: 1.25;
+  }
+
+  /* A label that wraps stays against the left edge, like the rest of the rail. */
+  .ui-container .ui-button {
+    text-align: left;
+  }
+
   /* The view pad (zoom and pan as buttons): six in one row, because Tools has
      to fit the rail without scrolling and three rows of two did not. */
   .ui-container .view-pad {
@@ -574,25 +595,6 @@
   .ui-container #stopwatchControls .measure-btn {
     justify-content: center;
     text-align: center;
-  }
-
-  /* The speed control is a single object - slow, reading, fast - and reads as
-     one when the three parts share a surface. */
-  .ui-container .speed-controls {
-    display: grid;
-    grid-template-columns: 1fr auto 1fr;
-    align-items: center;
-    gap: 2px;
-    margin: var(--space-1) 0;
-    padding: 2px;
-    background: var(--surface-2);
-    border-radius: var(--radius-sm);
-  }
-
-  .ui-container .speed-controls .ui-button {
-    justify-content: center;
-    padding: 4px var(--space-1);
-    font-size: var(--text-2xs);
   }
 
   /* Sections are tighter now that there are more of them. */
@@ -1733,25 +1735,6 @@
    sheets share it. e2e/responsiveLayout.spec.js measures it at each width.
    ========================================================================== */
 @layer overrides {
-  /* --- The scenario card and the help button, without a lesson ------------
-     Below the desktop the readout and the Menu button hold the top corners,
-     and the card used to span the top between them and lie over both. It
-     stands on the transport bar instead, as it does on a phone (the phone
-     rule is in css/components.css), centered, and the help button stands on
-     the bar's right end rather than beside its left end, which the bar
-     reaches on a tablet. A lecture places the card itself. */
-  @media (min-width: 768px) and (max-width: 1200px) {
-    body:not(.presentation-lecture) #scenarioInfoBox {
-      top: auto;
-      bottom: calc(var(--transport-reserve, 76px) + 44px + var(--space-3));
-      left: var(--space-3);
-      right: var(--space-3);
-      width: auto;
-      max-width: 720px;
-      margin-inline: auto;
-      transform: none;
-    }
-  }
   @media (min-width: 768px) and (max-width: 900px) {
     .tutorial-btn {
       left: auto;
@@ -2112,7 +2095,6 @@
 
   @media (pointer: coarse) {
     .readout-icon-btn,
-    .scenario-info-close,
     .timeline-btn,
     .mobile-menu-toggle,
     .tutorial-btn,

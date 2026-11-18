@@ -15,6 +15,7 @@ import { SPACE_OBJECT_NAMES } from './data/objectNames.js';
 import { SCENARIO_INFO } from './data/scenarioInfo.js';
 
 import { onLocaleChange } from './i18n/index.js';
+import { loadFailed } from './notify.js';
 import { scenarioTitle, scenarioSummary } from './i18n/scenario.js';
 
 import { generateStarfield } from './render.js';
@@ -577,10 +578,13 @@ let pausedBeforeSettings = false;
 async function openSettings() {
   const panel = settingsPanel();
   if (!panel || settingsOpen()) return;
-  const [{ openDialog }, panelCode] = await Promise.all([
-    dialog(),
-    settingsCode(),
-  ]);
+  let openDialog, panelCode;
+  try {
+    [{ openDialog }, panelCode] = await Promise.all([dialog(), settingsCode()]);
+  } catch (err) {
+    loadFailed(openSettings, err);
+    return;
+  }
   // The first press waited for the code; a second press that arrived meanwhile
   // must not open it twice.
   if (settingsOpen()) return;
@@ -806,34 +810,6 @@ if (mobileMenuToggle && uiRail) {
 
   window.addEventListener(EV_ESCAPE, closeRail);
 }
-
-// Scenario info box close button
-/**
- * Close the card that names the scenario, and remember that it was closed: it
- * does not come back for this scenario (show_enhanced_scenario_info).
- */
-const dismissScenarioCard = () => {
-  const infoBox = document.getElementById('scenarioInfoBox');
-  if (!infoBox?.classList.contains('showUI')) return;
-  infoBox.classList.remove('showUI', 'show');
-  if (infoBox.dataset.scenarioKey)
-    infoBox.dataset.dismissed = infoBox.dataset.scenarioKey;
-};
-
-const closeScenarioInfoBtn = document.getElementById('closeScenarioInfo');
-if (closeScenarioInfoBtn) {
-  // The press is taken on mousedown as well as click so that a drag handler
-  // on the canvas beneath cannot swallow it.
-  for (const type of ['click', 'mousedown']) {
-    closeScenarioInfoBtn.addEventListener(type, e => {
-      e.preventDefault();
-      e.stopPropagation();
-      dismissScenarioCard();
-    });
-  }
-}
-// Escape closes it like any other overlay.
-window.addEventListener(EV_ESCAPE, dismissScenarioCard);
 
 // Run validation on page load
 document.addEventListener('DOMContentLoaded', () => {
@@ -1166,6 +1142,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // Hide inspector and scenario info
       hideObjectInspector && hideObjectInspector();
+      document.getElementById('scenarioInfoBox')?.setAttribute('hidden', '');
       const scenarioInfoDiv = document.getElementById('scenarioInfoDisplay');
       if (scenarioInfoDiv) scenarioInfoDiv.classList.remove('visible');
 

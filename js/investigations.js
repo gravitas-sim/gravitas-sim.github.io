@@ -16,6 +16,7 @@ import {
   progressFor,
   fieldModule,
   runsModule,
+  revealModule,
   renderProgressNotice,
   renderSaveStatus,
   roleEchoesName,
@@ -253,13 +254,8 @@ let authoring = null;
 // --- Persistence --------------------------------------------------------------
 
 /**
- * The assignment being worked through, if this is one rather than a lesson.
- *
- * A short activity cut from a lesson keeps its own answers: two assignments
- * built from the same lesson are two pieces of work, and neither is the
- * lesson. So the storage key comes from the assignment when there is one, and
- * the lesson's own progress is left exactly as the student left it.
- *
+ * The assignment being worked through, if any. A short activity keeps its own
+ * answers, so its storage key comes from the assignment, not the lesson.
  * @type {?object}
  */
 let assignment = null;
@@ -750,8 +746,6 @@ function releaseLocks() {
   syncPlacementAvailability();
 }
 
-// --- Answer feedback ----------------------------------------------------------
-
 // --- Step helpers -------------------------------------------------------------
 
 /**
@@ -887,7 +881,7 @@ let figures = null;
 let canvasMod = null;
 const canvasNow = (i = stepIndex) => canvasMod?.canvasAt(active, i) ?? null;
 
-/** Fetch the plot, ellipse, import, canvas and controlled-run code a lesson needs. */
+/** Fetch the plot, ellipse, import, reveal, canvas and controlled-run code a lesson needs. */
 const loadSeams = async ({ steps, canvas }) => {
   if (!canvasMod && (canvas || steps.some(s => s.canvas)))
     canvasMod = await import('./lessonCanvas.js');
@@ -905,6 +899,8 @@ const loadSeams = async ({ steps, canvas }) => {
     fieldModule((figures = await import('./investigations/figures.js')));
   if (!slots.runs && steps.some(s => s.variation))
     runsModule(await import('./lesson/runs.js'));
+  if (!slots.reveal && steps.some(s => s.evidence || s.kind === 'estimate'))
+    revealModule(await import('./investigations/reveal.js'));
 };
 
 /** Draw the step's scatter plot from the lesson's current state. */

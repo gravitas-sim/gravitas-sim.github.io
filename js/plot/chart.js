@@ -36,10 +36,12 @@
 // =============================================================================
 
 import { EV_THEME_CHANGED } from '../names.js';
+import { TYPE } from '../widgetCanvas.js';
 
 const NS = 'http://www.w3.org/2000/svg';
-const TICK = 10;
-const TITLE = 11;
+/** Axis numbers and axis titles: the shared type scale's tick and label. */
+const TICK = TYPE.TICK;
+const TITLE = TYPE.LABEL;
 /** Points per pixel column before a line is drawn as lows and highs. */
 const PER_COLUMN = 2;
 /** Fallbacks for a page that has not drawn the chart's size yet. */
@@ -54,6 +56,21 @@ const el = (name, attrs = {}) => {
 /** A coordinate as markup, to a tenth of a pixel. */
 const r1 = v => Math.round(v * 10) / 10;
 const isNum = v => typeof v === 'number' && Number.isFinite(v);
+
+/** Marker outlines (circle, square, triangle, cross) at centres, as path data. */
+const markPath = (shape, pts, r) =>
+  pts
+    .map(([x, y]) => {
+      [x, y] = [r1(x), r1(y)];
+      if (shape === 'square')
+        return `M${x - r},${y - r}h${2 * r}v${2 * r}h${-2 * r}z`;
+      if (shape === 'triangle')
+        return `M${x},${y - r}L${x + r},${y + r}L${x - r},${y + r}z`;
+      if (shape === 'cross')
+        return `M${x - r},${y - r}L${x + r},${y + r}M${x - r},${y + r}L${x + r},${y - r}`;
+      return `M${x - r},${y}a${r},${r} 0 1,0 ${2 * r},0a${r},${r} 0 1,0 ${-2 * r},0z`;
+    })
+    .join('');
 
 /** Set an attribute only when it changes: a draw at 15 Hz writes little. */
 function put(node, name, value) {
@@ -237,6 +254,7 @@ export function createChart(host, opts = {}) {
   svg.append(defs, axesG, seriesG, cursorG);
   const GRID = 'var(--border-subtle, rgba(128, 128, 128, 0.25))';
   const INK = 'var(--text-muted, #888)';
+  const TEXT = 'var(--text-primary, #eee)';
   // Each axis' ticks, the frame's two lines and the titles.
   const axisX = [];
   const axisY = [];
@@ -309,8 +327,12 @@ export function createChart(host, opts = {}) {
    *   there is more than one series)
    * @param {Array<object>} next.series - id, label, x, y, sigma? (and sigmaLow?, the lower bar
    *   where it differs), color,
-   *   width (2), dash ([]), mode ('line', 'points' or 'both'), fill (true, or
-   *   a color), radius (3), hidden, order, maxPoints
+   *   width (2), dash ([]), marker ('circle', 'square', 'triangle' or
+   *   'cross': at every point of a points series, a few along a line), mode
+   *   ('line', 'points' or 'both'), fill (true, or a color), radius (3),
+   *   hidden, order, maxPoints
+   * @param {boolean} [next.direct] - Label each line at its end; the legend
+   *   then shows only for more than four series
    */
   function draw(next) {
     spec = next;
@@ -450,15 +472,18 @@ export function createChart(host, opts = {}) {
             'stroke-linecap': 'round',
           }),
           pts: el('g'),
+          marks: el('path', { 'stroke-width': 2 }),
           dots: [],
         };
-        nd.g.append(nd.area, nd.bars, nd.line, nd.pts);
+        nd.g.append(nd.area, nd.bars, nd.line, nd.pts, nd.marks);
         nodes.set(id, nd);
         rebuilds++;
       }
       if (seriesG.children[at] !== nd.g) {
         seriesG.insertBefore(nd.g, seriesG.children[at] ?? null);
       }
+      nd.s = s;
+      nd.id = id;
       paintSeries(nd, s, entry, geo, base);
       drawn.push({ id, s, k, n: entry.n, from: entry.from });
     });
@@ -467,6 +492,33 @@ export function createChart(host, opts = {}) {
         nd.g.remove();
         nodes.delete(id);
       }
+    }
+    // Direct labels, each at its line's end, pushed apart where they meet.
+    let under = -Infinity;
+    for (const { id } of [...drawn].sort(
+      (a, b) =>
+        (nodes.get(a.id).end?.[1] ?? 0) - (nodes.get(b.id).end?.[1] ?? 0)
+    )) {
+      const nd = nodes.get(id);
+      if (!spec.direct || !nd.end) {
+        nd.tag?.remove();
+        nd.tag = null;
+        continue;
+      }
+      if (!nd.tag) {
+        nd.tag = el('text', { 'font-size': TITLE, fill: TEXT });
+        nd.g.append(nd.tag);
+      }
+      // Above its line's end, or below it where the line runs along the top.
+      const above = nd.end[1] - 8;
+      under = Math.max(
+        above >= frame.top + TITLE ? above : nd.end[1] + TITLE + 2,
+        under + TITLE + 3
+      );
+      put(nd.tag, 'x', nd.end[0] - 6);
+      put(nd.tag, 'y', Math.min(under, frame.top + fh - 3));
+      put(nd.tag, 'text-anchor', 'end');
+      say(nd.tag, String(nd.s.label ?? nd.id));
     }
     // The readout walks the series in the order they were given.
     drawn.sort((a, b) => a.k - b.k);
@@ -542,7 +594,7 @@ export function createChart(host, opts = {}) {
     // Points: a pool of circles, moved and, at the tail, added or dropped.
     const radius = s.radius ?? 3;
     let used = 0;
-    if (wantPts) {
+    if (wantPts && !s.marker) {
       for (let i = from; i < n; i++) {
         const x = s.x[i];
         const y = s.y[i];
@@ -561,6 +613,36 @@ export function createChart(host, opts = {}) {
       }
     }
     while (nd.dots.length > used) nd.dots.pop().remove();
+
+    // A marker shape (`marker`): at every point of a points series, else a few
+    // along the line, so the series differs from the others by more than color.
+    const shape = s.marker;
+    const at = [];
+    if (shape && wantPts) for (let i = from; i < n; i++) at.push(i);
+    else if (shape) {
+      for (let j = 1, m = Math.max(2, Math.round(fw / 100)); j <= m; j++) {
+        const i = nearestIndex(s.x, from, n, x0 + ((x1 - x0) * j) / (m + 1));
+        if (i >= 0) at.push(i);
+      }
+    }
+    const spots = at.filter(i => isNum(s.x[i]) && isNum(s.y[i]));
+    put(
+      nd.marks,
+      'd',
+      markPath(
+        shape,
+        spots.map(i => [sx(s.x[i]), sy(s.y[i])]),
+        radius + 1
+      )
+    );
+    put(nd.marks, 'data-marker', shape ?? null);
+    put(nd.marks, 'fill', shape && shape !== 'cross' ? c : 'none');
+    put(nd.marks, 'stroke', shape === 'cross' ? c : 'none');
+
+    // Where the line ends, for its direct label.
+    let e = n - 1;
+    while (e >= from && !(isNum(s.x[e]) && isNum(s.y[e]))) e--;
+    nd.end = e >= from && wantLine ? [sx(s.x[e]), sy(s.y[e])] : null;
 
     // Error bars: one path, each bar with its caps, a fixed count of pixels
     // wide whatever the chart's size.
@@ -675,7 +757,16 @@ export function createChart(host, opts = {}) {
         })
       );
     }
-    if (mode !== 'line')
+    if (s.marker) {
+      sv.append(
+        el('path', {
+          d: markPath(s.marker, [[13, 5]], 4),
+          fill: s.marker === 'cross' ? 'none' : c,
+          stroke: s.marker === 'cross' ? c : 'none',
+          'stroke-width': 2,
+        })
+      );
+    } else if (mode !== 'line')
       sv.append(el('circle', { cx: 13, cy: 5, r: 3, fill: c }));
     return sv;
   }
@@ -684,7 +775,8 @@ export function createChart(host, opts = {}) {
   let legendButtons = new Map();
 
   function syncLegend() {
-    const show = spec.legend ?? spec.series.length > 1;
+    // Direct labels stand in for the legend until there are more than four.
+    const show = spec.legend ?? spec.series.length > (spec.direct ? 4 : 1);
     const items = spec.series.map((s, k) => ({
       id: idOf(s, k),
       s,
@@ -697,7 +789,15 @@ export function createChart(host, opts = {}) {
     const sig = show
       ? items
           .map(i =>
-            [i.id, i.s.label, i.c, i.s.mode, i.s.dash, i.s.width].join('~')
+            [
+              i.id,
+              i.s.label,
+              i.c,
+              i.s.mode,
+              i.s.dash,
+              i.s.width,
+              i.s.marker,
+            ].join('~')
           )
           .join('|')
       : '';
@@ -1077,6 +1177,7 @@ export function createChart(host, opts = {}) {
         color: color(s.color) ?? 'currentColor',
         fill: s.fill ? (s.fill === true ? 'same' : color(s.fill)) : null,
         dash: s.dash ?? [],
+        marker: s.marker ?? null,
         width: s.width ?? 2,
         mode: s.mode ?? 'line',
         radius: s.radius ?? 3,
