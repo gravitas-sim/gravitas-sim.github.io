@@ -667,6 +667,13 @@ export const NEVER_PRECACHED = [
   // them (none yet), so an install has no use for the module or its words (the first-visit tier has little room).
   /^js\/investigations\/(reveal|evidence)\.js$/,
   /^js\/i18n\/(en|es)\.reveal\.js$/,
+  // The Exoplanet Observatory's guide suite and its words: the suite registry imports them when a reader opens that
+  // guide (js/observatory/guides/suites.js, a dynamic import), so no first visit needs them. They are kept by the
+  // service worker after that first use, not installed (the first-visit tier is at its data-budget ceiling).
+  // The answer key is read by the instructor-material build and the tests only; no page fetches it.
+  /^js\/observatory\/guides\/exoplanet\.js$/,
+  /^js\/i18n\/(en|es)\.exoplanet\.js$/,
+  /^js\/data\/exoplanetAnswerKey\.js$/,
 ];
 
 const ON_DEMAND_ONLY = new Set([
