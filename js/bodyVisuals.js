@@ -1,126 +1,87 @@
 // =============================================================================
 // How a body is drawn, decided once and shared
 // -----------------------------------------------------------------------------
-// Every body class in js/physics.js used to answer three questions for itself:
-// how much detail is worth drawing at this size, what color is this thing, and
-// where is the light coming from. They answered them differently, so a planet
-// faded out at a size where a moon was still drawing surface marks, and a
-// scenario's sunlight came from whichever direction each class had hard-coded.
+// One answer, for every body class in js/physics.js, to three questions: how
+// much detail to draw at this size, what color, and where the light comes
+// from. Pure arithmetic over values handed in (no simulation state, settings
+// or clock), so level of detail and comet-tail geometry are testable without a
+// canvas. See tests/bodyVisuals.test.js.
 //
-// This module answers them once. It is pure arithmetic over values handed in -
-// no simulation state, no settings, no clock - which is what lets the whole
-// level-of-detail policy and the comet-tail geometry be tested without a canvas
-// or a browser. See tests/bodyVisuals.test.js.
-//
-// Three rules it exists to enforce
+// Rules it enforces
 // -----------------------------------------------------------------------------
 // The visual radius is not the physical radius. Below a few pixels a body is
-// drawn at a floor so it stays visible and clickable; that floor is a drawing
-// decision and never reaches the collision test, the inspector or a saved
-// state. js/physics.js keeps `radius` for those and asks here for the other.
+// drawn at a floor to stay visible and clickable; that never reaches collision,
+// the inspector or a saved state (js/physics.js keeps `radius` for those).
 //
-// Nothing in a draw path may call Math.random(). A hand-placed comet and the
-// same comet after a reload must look identical, and a screenshot of a seeded
-// scenario must be reproducible. Every "random" visual detail - an asteroid's
-// silhouette, the phase of a surface mark - comes from visualSeed(), which is
-// derived from the object's own stable id.
+// Nothing in a draw path may call Math.random(). Every "random" detail (an
+// asteroid's silhouette, a surface mark's phase) comes from visualSeed(),
+// derived from the object's stable id, so reloads and screenshots reproduce.
 //
 // Nothing per-frame may allocate what it can reuse. Gradients, sprites and
-// arrays are cached by the small number of shapes actually needed, keyed on
-// quantised inputs so the cache cannot grow without bound.
+// arrays are cached by a few shapes, keyed on quantised inputs.
 // =============================================================================
 
 // --- Four radii, and which is which ------------------------------------------
 //
-// A body in Gravitas has four sizes, and confusing any two of them causes a
-// different bug. They are separated here so that every caller has to say which
-// one it wants.
+// A body has four sizes; confusing any two causes a different bug, so every
+// caller must say which one it wants.
 //
-//   1. The MODEL radius, `obj.radius`. What the simulation runs on: collisions,
-//      merging, Roche limits, the geometric part of a transit, the hit test's
-//      floor. Nothing in this file may change it, and nothing here returns it.
+//   1. The MODEL radius, `obj.radius`: what the simulation runs on (collisions,
+//      merging, Roche limits, the transit's geometry, the hit test's floor).
+//      Nothing here changes or returns it.
 //
-//   2. The ANALYTIC radius. What a body physically is, in kilometers or solar
-//      radii, derived from mass by js/lightCurve.js and js/habitability.js and
-//      reported by the inspector. It has nothing to do with either of the two
-//      below. A transit depth is (Rp/Rs)^2 from *these* numbers, which is why
-//      changing the drawing cannot change a light curve.
+//   2. The ANALYTIC radius: what a body physically is (km or solar radii),
+//      derived from mass by js/lightCurve.js and js/habitability.js. A transit
+//      depth is (Rp/Rs)^2 from these, so the drawing cannot change a curve.
 //
-//   3. The DISPLAY radius, below. What is drawn, and only what is drawn.
+//   3. The DISPLAY radius, below: what is drawn, and only that.
 //
-//   4. The HIT radius, also below. How close a click has to be. Deliberately
-//      independent of the display radius: an Earth eight times smaller than
-//      its star still has to be selectable, and inflating the drawing to make
-//      it clickable is how the sizes got misleading in the first place.
+//   4. The HIT radius, also below: how close a click must be, independent of
+//      the display radius so an Earth beside its star stays selectable.
 //
-// Why the display radius is not the model radius
+// Why factors, not the model radii or one exponent
 // -----------------------------------------------------------------------------
-// The model radii are Star 10, GasGiant 8, Planet 5. Drawn literally that makes
-// a Sun-like star twice the radius of an Earth-like planet and barely wider
-// than a Jupiter, which is not a compression of reality - it is a different
-// claim about it. The real ratios are about 109:1 and 9.7:1.
-//
-// They cannot be drawn literally either. At the Solar System's own framing an
-// Earth beside a visible Sun is a fraction of a pixel, which is why the model
-// radii were flattened in the first place. So the policy here is an explicit,
-// documented compression: one factor per family, applied everywhere, chosen so
-// that the hierarchy a reader sees is the right shape even though the numbers
-// are not the right numbers.
-//
-// Why factors and not one exponent
-// -----------------------------------------------------------------------------
-// A single power law on the true physical radius cannot hit both targets. To
-// bring 109:1 down to 8:1 needs an exponent of 0.44, and 9.7^0.44 is 2.7 - a
-// Jupiter under three times smaller than the Sun, outside the range this is
-// aiming for. The two ratios have to be set independently, which is what a
-// per-family factor does. The cost is that the mapping is a policy rather than
-// a formula, so it is written out in full and tested against its own targets.
+// Drawn literally, the model radii (Star 10, GasGiant 8, Planet 5) make a Sun
+// twice an Earth and barely wider than a Jupiter, against real ratios of about
+// 109:1 and 9.7:1. True scale is unusable (an Earth beside the Sun is a
+// fraction of a pixel). A single power law cannot hit both targets: 109:1 down
+// to 8:1 needs an exponent of 0.44, which leaves Jupiter under 3x smaller than
+// the Sun. So there is one factor per family, applied everywhere; the mapping
+// is a documented policy, tested against its own targets.
 
 /**
  * Displayed radius as a fraction of the model radius, by family.
  *
- * Applied to `obj.radius`, so a heavier planet is still drawn larger than a
- * lighter one: the compression changes the ratios *between* families and
- * leaves the ordering *within* one alone.
+ * Applied to `obj.radius`, so ordering within a family is kept; only ratios
+ * between families change.
  *
- * Calibrated on the Solar System, whose own model radii are Sol 15, Earth 5,
- * Jupiter 8 - a Sun three times an Earth and under twice a Jupiter, against
- * real ratios of 109 and 9.7. The targets are 8 and 4, which is what these
- * factors give exactly:
+ * Calibrated on the Solar System (model radii Sol 15, Earth 5, Jupiter 8;
+ * real ratios 109 and 9.7) to targets of 8 and 4, which these give exactly:
  *
  *     Sol      15 x 1.000 = 15.00
  *     Jupiter   8 x 0.469 =  3.75      Sol : Jupiter = 4.0   (real 9.7)
  *     Earth     5 x 0.375 =  1.88      Sol : Earth   = 8.0   (real 109)
  *                                      Jupiter : Earth = 2.0 (real 11.2)
  *
- * Stars are left at 1.000 deliberately. The hierarchy could have been widened
- * by growing the star instead of shrinking the planets, and it would have been
- * the wrong choice: a Sol drawn half again as wide reaches a third of the way
- * to Mercury in the scenario that names them both. Nothing that was on the
- * screen yesterday is larger today.
+ * Stars stay at 1.000: growing the star instead would put a Sol a third of the
+ * way to Mercury in the scenario that names both.
  */
 export const DISPLAY_FACTOR = Object.freeze({
   Star: 1.0,
   GasGiant: 0.469,
   Planet: 0.375,
-  // Smaller than a star, as required, and as reality insists rather more
-  // strongly: a white dwarf is about one hundredth of a solar radius.
+  // About 0.01 solar radii in reality.
   WhiteDwarf: 0.28,
-  // Below the visibility floor at any ordinary zoom, and meant to be. A
-  // neutron star is twenty kilometers across.
+  // Twenty kilometers across: below the visibility floor at ordinary zoom.
   NeutronStar: 0.3,
-  // The small solid bodies share the rocky-planet factor rather than carrying
-  // invented ones of their own. All three are far below the floor at any zoom
-  // a whole system is viewed at, so the factor decides only their ordering
-  // against the planets, and the planet factor is the honest answer to that.
+  // Small solid bodies share the rocky-planet factor: all are far below the
+  // floor at system zoom, so it only orders them against the planets.
   Asteroid: 0.375,
   Comet: 0.375,
   Debris: 0.375,
-  // A galaxy is already drawn as a diffuse patch at its own scale, and a black
-  // hole's horizon has its own documented illustrative policy in js/physics.js
-  // - it is drawn far larger than any real horizon so that the thing the
-  // scenario is about is visible at all. Neither belongs to the star/planet
-  // hierarchy this is correcting, so neither is touched.
+  // A galaxy is already a diffuse patch at its own scale, and a black hole's
+  // horizon has its own illustrative policy in js/physics.js; neither belongs
+  // to the star/planet hierarchy.
   Galaxy: 1,
   BlackHole: 1,
 });
@@ -437,30 +398,87 @@ export function lightDirection(pos, starPos) {
 /**
  * Which of several luminous bodies dominates the light at a point.
  *
- * By received flux, not by luminosity: in a wide binary the nearer, fainter
- * star can be the one casting the shadow, and in a scene with a distant giant
- * and a close dwarf the answer is the close dwarf. Ties go to the more
- * luminous, so the choice does not flicker between two equal stars as they
- * orbit.
+ * By received flux, not luminosity: in a wide binary the nearer, fainter star
+ * can cast the shadow. Ties go to the more luminous so the choice does not
+ * flicker between equal stars. A body keeps its current light until another
+ * sends LIGHT_HOLD more flux (near equal flux the two differ by rounding).
  *
  * @param {{x: number, y: number}} pos - Where the light is being received
  * @param {Array<{pos: object, luminosity: number}>} sources - Candidate stars
+ * @param {?object} [keep] - The star (a source's `star`, or the source) this
+ *   body was lit by last
  * @returns {?object} The winning source, or null if there is none
  */
-export function dominantLight(pos, sources) {
+export function dominantLight(pos, sources, keep = null) {
   let best = null;
   let bestFlux = 0;
+  let held = null;
+  let heldFlux = 0;
   for (const s of sources || []) {
     const l = Number(s?.luminosity);
     if (!(l > 0) || !s.pos) continue;
     const d2 = (s.pos.x - pos.x) ** 2 + (s.pos.y - pos.y) ** 2;
     const flux = d2 > 0 ? l / d2 : Infinity;
+    if (keep && (s.star ?? s) === keep) [held, heldFlux] = [s, flux];
     if (flux > bestFlux || (flux === bestFlux && l > (best?.luminosity ?? 0))) {
       bestFlux = flux;
       best = s;
     }
   }
-  return best;
+  return held && heldFlux * (1 + LIGHT_HOLD) >= bestFlux ? held : best;
+}
+
+/** Five per cent more flux, about 2.5 per cent less distance, to change light. */
+export const LIGHT_HOLD = 0.05;
+
+/**
+ * The phase a body shows an observer, as cos a: a is the angle at the body
+ * between the light and the observer, and the lit fraction of the disc the
+ * observer sees is (1 + cos a) / 2.
+ *
+ * @param {{x: number, y: number}} pos - The body
+ * @param {{x: number, y: number}} light - Unit vector toward the light
+ * @param {{x: number, y: number}} observer - Where it is seen from
+ * @returns {?number} cos a, or null when the observer is at the body
+ */
+export function phaseCos(pos, light, observer) {
+  const dx = observer.x - pos.x;
+  const dy = observer.y - pos.y;
+  const d = Math.hypot(dx, dy);
+  if (!(d > 0)) return null;
+  return Math.max(-1, Math.min(1, (light.x * dx + light.y * dy) / d));
+}
+
+/**
+ * The night side of a disc as a path, for the caller to fill.
+ *
+ * The limb away from the light, then back along the terminator: an ellipse
+ * whose axis along the light is |cos a| r, bulging into the dark half for a
+ * gibbous phase and into the lit half for a crescent. cos a = 0 is the half
+ * disc a view from above the orbital plane sees. The lit part then covers
+ * (1 + cos a) / 2 of the disc.
+ *
+ * @param {CanvasRenderingContext2D} ctx - Target
+ * @param {{x: number, y: number}} at - Centre
+ * @param {number} r - Drawn radius
+ * @param {{x: number, y: number}} light - Unit vector toward the light
+ * @param {number} [cosA] - The phase, from phaseCos
+ */
+export function nightPath(ctx, at, r, light, cosA = 0) {
+  const th = Math.atan2(light.y, light.x);
+  ctx.beginPath();
+  ctx.arc(at.x, at.y, r, th + Math.PI / 2, th + 1.5 * Math.PI);
+  ctx.ellipse(
+    at.x,
+    at.y,
+    Math.abs(cosA) * r,
+    r,
+    th,
+    1.5 * Math.PI,
+    Math.PI / 2,
+    cosA >= 0
+  );
+  ctx.closePath();
 }
 
 // --- Color ---------------------------------------------------------------------
@@ -549,13 +567,9 @@ export function tailActivity(flux) {
 /**
  * Where a comet's ion tail points.
  *
- * Directly away from the star, because the solar wind that carries it is
- * radial and travels far faster than the comet does. This is the thing the old
- * drawing got wrong: it pointed the tail opposite the comet's velocity, which
- * is where a tail is only by coincidence, and which has a comet dragging its
- * tail behind it like smoke - a picture students already arrive holding and
- * which the real geometry contradicts. Approaching the Sun the ion tail points
- * *outward*, ahead of nothing; leaving, it streams ahead of the comet.
+ * Directly away from the star: the solar wind carrying it is radial and far
+ * faster than the comet. The old anti-velocity drawing dragged the tail
+ * behind the comet like smoke, which the real geometry contradicts.
  *
  * @param {{x: number, y: number}} cometPos - The comet
  * @param {?{x: number, y: number}} starPos - The dominant star, or null
@@ -569,9 +583,8 @@ export function ionTailDirection(cometPos, starPos, vel) {
     const d = Math.hypot(dx, dy);
     if (d > 0 && Number.isFinite(d)) return { x: dx / d, y: dy / d };
   }
-  // No star: there is no ion tail to draw. A caller that wants something
-  // anyway gets the anti-velocity direction, and should be drawing it faintly
-  // if at all.
+  // No star, no ion tail. A caller that wants one anyway gets anti-velocity
+  // and should draw it faintly.
   if (!vel) return null;
   const s = Math.hypot(vel.x, vel.y);
   if (!(s > 0)) return null;
@@ -581,12 +594,10 @@ export function ionTailDirection(cometPos, starPos, vel) {
 /**
  * Where a comet's dust tail points.
  *
- * Dust grains are heavy enough that radiation pressure only nudges them: they
- * leave the nucleus at roughly its own orbital velocity and then fall behind,
- * so the dust tail lies between "away from the star" and "behind the comet"
- * and curves along the orbit. `curve` is how far toward the orbital trail it
- * has swung, from 0 at the nucleus to 1 at the tip, which is what lets a
- * caller draw it as an arc rather than a second straight line.
+ * Grains leave at the nucleus's orbital velocity and are only nudged by
+ * radiation pressure, so the tail lies between anti-solar and the orbital
+ * trail. `curve` is how far toward the trail it has swung (0 at the nucleus,
+ * 1 at the tip), so a caller can draw an arc.
  *
  * @param {{x: number, y: number}} cometPos - The comet
  * @param {?{x: number, y: number}} starPos - The dominant star, or null
@@ -602,12 +613,9 @@ export function dustTailDirection(cometPos, starPos, vel, curve = 1) {
   const trail = s > 0 ? { x: -vel.x / s, y: -vel.y / s } : null;
   if (!ion) return trail;
   if (!trail) return ion;
-  // A bounded lag. A real dust tail trails the anti-solar direction by tens of
-  // degrees, not by ninety: the grains leave with the nucleus's own orbital
-  // velocity and are then pushed outward, so they end up between the two and
-  // nearer the sunward-away side. Keeping the tip nearer anti-solar than the
-  // orbital trail is also what makes the two tails read as two tails rather
-  // than as one fan.
+  // A bounded lag: a real dust tail trails anti-solar by tens of degrees, not
+  // ninety. Keeping the tip nearer anti-solar also keeps two tails from
+  // reading as one fan.
   const t = Math.max(0, Math.min(1, curve)) * DUST_MAX_LAG;
   const x = ion.x * (1 - t) + trail.x * t;
   const y = ion.y * (1 - t) + trail.y * t;
@@ -617,22 +625,14 @@ export function dustTailDirection(cometPos, starPos, vel, curve = 1) {
 
 // --- Ring systems ------------------------------------------------------------
 //
-// A quarter of procedurally generated gas giants get rings. That number is a
-// choice about variety, not a claim about nature: nobody knows what fraction
-// of giant exoplanets carry a Saturn-like system, the one candidate detection
-// is disputed, and four planets out of four in our own outer system have rings
-// of some kind while only one of them is prominent. A quarter puts a ringed
-// giant in most generated systems without making rings the default, and the
-// model documentation says exactly this.
+// A quarter of generated gas giants get rings: a choice about variety, not a
+// claim about nature (the occurrence rate among exoplanets is unknown, and
+// the model documentation says so). Everything comes from the body's visual
+// seed, so it is identical after a reset, reload, share link or A/B run, and
+// is computed once and memoised, never in a draw call.
 //
-// Everything about a ring system comes from the body's own visual seed, so it
-// is the same after a reset, a reload, a share link, a screenshot and an A/B
-// run - and it is computed once and memoised, never in a draw call.
-//
-// None of it touches physics. The rings extend to two and a half planetary
-// radii and the planet's model radius does not change, so gravity, collisions,
-// the Roche limit, transit depth, the hit test and every measurement see the
-// planet they always saw.
+// None of it touches physics: rings extend to 2.5 planetary radii and the
+// model radius does not change.
 
 /** How many generated giants are ringed. Variety, not an occurrence rate. */
 export const RING_FRACTION = 0.25;
@@ -781,15 +781,9 @@ const SPRITE_CAP = 96;
 /**
  * Paint a limb-darkened stellar disc into a square surface.
  *
- * Here rather than in js/physics.js because two things draw a star now: the
- * simulation, and the Stellar Lab's preview. A second implementation would be
- * a second answer to "what does a star look like", and the whole point of the
- * lab is that the star it shows is the star the simulation would show at that
- * temperature.
- *
- * A compact bright core rather than a uniformly blazing disc: real stars are
- * brightest at the center of the visible disc and fall off towards the limb,
- * and a flat fill makes every star a sticker.
+ * Shared with the Stellar Lab preview so the lab shows the star the
+ * simulation would draw at that temperature. The core is brightest and falls
+ * off toward the limb; a flat fill makes every star a sticker.
  *
  * @param {CanvasRenderingContext2D} ctx - Target, with the disc filling it
  * @param {number} size - Width and height of the square, pixels
