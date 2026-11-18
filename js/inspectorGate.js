@@ -31,10 +31,9 @@ let cardModule = null;
 let cardLoading = null;
 /** Bumped by every show and hide, so a late card shows only the latest wish. */
 let wish = 0;
-/** Whether a first selection is waiting on the card's code. */
 let pending = false;
 
-/** @returns {boolean} Whether a selection is waiting on the card's code */
+/** @returns {boolean} Whether a first selection awaits the card's code */
 export const inspectorPending = () => pending;
 
 /**
@@ -96,9 +95,7 @@ export const showObjectInspector = (object, type) => {
       mod.showObjectInspector(object, type);
     },
     err => {
-      console.error('The inspector could not be loaded:', err);
       if (mine !== wish) return;
-      // Nothing is open, so nothing stays selected; the retry selects again.
       pending = false;
       state.selectedObject = null;
       paintFrameControls();
@@ -385,7 +382,6 @@ export function ensureManeuverPlanner() {
       });
       return planner;
     })();
-    // A failed import is not kept: the next press fetches again.
     loading.catch(() => (loading = null));
   }
   return loading;

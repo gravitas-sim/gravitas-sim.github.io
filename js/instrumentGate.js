@@ -30,7 +30,7 @@ export function watchForPanel({ buttonId, load, open }) {
   const first = async () => {
     if (busy) return;
     busy = true;
-    // Not `disabled`: that drops the keyboard focus off the button.
+    // Not `disabled`: that drops the keyboard focus.
     button.setAttribute('aria-busy', 'true');
     announce(t('failure.loading'));
     try {
@@ -40,7 +40,6 @@ export function watchForPanel({ buttonId, load, open }) {
       button.removeEventListener('click', first);
       open(mod);
     } catch (err) {
-      console.error(`${buttonId}: the panel could not be loaded:`, err);
       loadFailed(() => button.click(), err);
     } finally {
       busy = false;

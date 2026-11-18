@@ -35,8 +35,7 @@ export const resetRotationCurveFit = () => {
   lastFit = null;
 };
 
-// Registered here, not by the panel: a probe or the export reads the fit
-// without the panel, and a rebuilt world has no use for the old one.
+// Here, not in the panel: probes and the export read the fit without it.
 if (typeof window !== 'undefined')
   window.addEventListener(EV_SIMULATION_RESET, resetRotationCurveFit);
 

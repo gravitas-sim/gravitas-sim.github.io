@@ -582,7 +582,6 @@ async function openSettings() {
   try {
     [{ openDialog }, panelCode] = await Promise.all([dialog(), settingsCode()]);
   } catch (err) {
-    console.error('Settings could not be loaded:', err);
     loadFailed(openSettings, err);
     return;
   }
