@@ -437,6 +437,42 @@ is cheap, so that the next proposal starts from the right one.
 
 ---
 
+## Orbit geometry
+
+An inspector toggle, **Orbit geometry**, off by default, draws the selected
+body's two-body ellipse about its primary: the curve, both foci, the nearest
+and farthest points, and the distance between any two of them. It replaces the
+"Stable Orbit" circle the inspector used to build once at selection and freeze.
+The primary is the source that pulls hardest on the body, chosen from the
+sources the integrator itself sums over; the ellipse is the orbit about that
+primary **if only it pulled**, and the label says so.
+
+Whether a two-body ellipse is a claim the model can make is decided in one
+place, `twoBodyModel` in `js/orbital.js`: the pair's class (each pulls the
+other, so mu = G(M+m); only the primary pulls, so mu = G M; or the primary
+does not pull on the body at all) read from the engine's own rule for what is a
+source, and whether the force is inverse-square over the distances the claim
+covers. Inside the softening length, or under MOND, it is not, and no curve is
+drawn.
+
+### Tolerances, fixed before the code
+
+Committed in `tests/fixtures/orbit-geometry-tolerances.json` before the
+module, the overlay or their tests existed. A criterion that fails is reported
+with its numbers and its bound is not moved.
+
+| | What | Bound |
+|---|---|---|
+| (a) | a, e, periapsis direction, apsis points, foci and the 240 curve points against an independent eccentric-anomaly construction, e from 0 to 0.95, four orientations, both senses | 1e-9 of a |
+| (b) | each curve point's distances to the two foci sum to 2a | 1e-9 of a |
+| (c) | `keplers-2nd-law` Eccentric Orbiter (a 143 units, e 0.65), seed 1, stepped as the page steps it at 60 frames a second (about 7,300 steps an orbit), for one period: the largest distance from the ellipse drawn at the start | 0.5 percent of a (first-order step; INFERRED). Other rates reported, not judged. If the unmodified integrator misses, that is an integrator finding and the bound stays |
+| (d) | star 1, planet 0.1, r = 100, v = 0.1, G = 1 (the world's gravitational constant set to 1), mutual gravity off: the overlay's a and e | a = 100 and e = 0 to 1e-9 (the default mu gives a = 91.67, e = 0.0909, and still does) |
+| (d) | the engine's radius over one period, Velocity Verlet at a step of 0.1 | 2 (omega dt)^2 = 2e-8 of r, the circular-start form of the reference cases (R1) |
+| (e) | reciprocal stars 1 and 0.1 at r = 1, softening 5; the same pair at r = 10 with a point-mass periapsis of 1.111; a MOND world | no curve, and the reason in words |
+| sizes | `solar-system` as built: drawn Sun to Earth radius before the marker floor | 8.0, to 1e-12 |
+
+---
+
 ## What is not done
 
 - **The inspector's derived quantities for small bodies** — density, surface

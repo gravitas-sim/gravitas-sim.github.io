@@ -1,0 +1,57 @@
+{
+  "schema": "gravitas.orbit-geometry-tolerances/1",
+  "about": "Fixed before any code that meets them (SANDBOX_INSTRUMENTS.md, \"Orbit geometry\"). A criterion that fails is reported with its numbers; no bound here is moved, widened or made conditional after a result.",
+  "a": {
+    "what": "orbitGeometry's a, e, periapsis direction, both apsis points, both foci and its 240 curve points against an independent eccentric-anomaly construction of the same orbit",
+    "relativeToA": 1e-9,
+    "eccentricities": [0, 1e-6, 0.1, 0.3, 0.5, 0.65, 0.8, 0.9, 0.95],
+    "orientationsDeg": [0, 37, 141, 263],
+    "senses": [1, -1],
+    "note": "closed formulas in double precision; an error above 1e-9 of a is a bug, not round-off"
+  },
+  "b": {
+    "what": "every curve point's sum of distances to the two foci equals 2a",
+    "relativeToA": 1e-9
+  },
+  "c": {
+    "scenario": "keplers-2nd-law",
+    "body": "Eccentric Orbiter",
+    "seed": 1,
+    "rate": "60",
+    "stepping": "as the page steps it: frameAdvance(1/60 s), substepPlan, one updatePhysics per piece (the 445 reference runner's driver)",
+    "span": "one anomalistic period of the ellipse drawn at the start",
+    "what": "max over every step of the shortest distance from the body to the ellipse drawn at the start (fixed in the world), divided by a",
+    "bound": 0.005,
+    "reason": "a first-order step at about 7,300 steps an orbit (INFERRED)",
+    "reportedOnly": ["120", "30", "clamp"],
+    "stop": "run the unmodified integrator first; if it misses, stop and report an integrator finding; never widen"
+  },
+  "d": {
+    "what": "one-way circle: a star of mass 1 and a planet of mass 0.1 at r = 100, speed 0.1 tangential, G = 1 (the engine's gravitational_constant set to 1 for this world), mutual gravity off",
+    "overlayRelativeToA": 1e-9,
+    "overlayExpected": { "a": 100, "e": 0 },
+    "defaultMuExpected": { "a": 91.6666666667, "e": 0.0909090909, "tolerance": 1e-9 },
+    "engine": {
+      "integrator": "Velocity Verlet",
+      "step": 0.1,
+      "span": "one period, 2 pi sqrt(r^3 / (G M))",
+      "what": "max over every step of |r - 100| / 100",
+      "bound": "2 (omega dt)^2",
+      "boundValue": 2e-8,
+      "source": "the second-order form tests/fixtures/reference-cases/thresholds.json commits for a circular start (R1), applied to the radius, which on a circle moves with the energy to first order"
+    }
+  },
+  "e": {
+    "what": "no curve, and the reason in words, where the force is not inverse-square over the orbit",
+    "cases": [
+      "two reciprocal stars of mass 1 and 0.1 at r = 1, softening length 5, G = 1",
+      "the same pair at r = 10 at apoapsis with a point-mass periapsis of 1.111 (e = 0.8)",
+      "a world running MOND (a0 > 0)"
+    ]
+  },
+  "sizes": {
+    "what": "solar-system as built: drawn Sun to Earth radius ratio before the marker floor",
+    "expected": 8.0,
+    "tolerance": 1e-12
+  }
+}
