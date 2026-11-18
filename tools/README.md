@@ -50,6 +50,7 @@ current, and the orchestrator checks it.
 | `build-validation-data.mjs` | npm run validation:data | `npm run validation:data` |
 | `bundle-budget.mjs` | npm run budget  /  npm run budget:check | `npm run budget`, `npm run budget:check` |
 | `bundle-composition.mjs` | What is in the bundle, module by module | `npm run budget:composition` |
+| `canvas-acceptance.mjs` | (no header) |  |
 | `capabilities.mjs` | Capability packages at build time | `npm run capabilities` |
 | `capability-registries.mjs` | The lazy registries, generated from what describes them | `npm run registries` |
 | `cartridge-profile.mjs` | The Thin Common Cartridge profile, checked (Roadmap III Prompt 169) |  |
