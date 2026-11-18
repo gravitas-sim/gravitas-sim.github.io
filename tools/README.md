@@ -50,6 +50,7 @@ current, and the orchestrator checks it.
 | `build-validation-data.mjs` | npm run validation:data | `npm run validation:data` |
 | `bundle-budget.mjs` | npm run budget  /  npm run budget:check | `npm run budget`, `npm run budget:check` |
 | `bundle-composition.mjs` | What is in the bundle, module by module | `npm run budget:composition` |
+| `canvas-acceptance.mjs` | (no header) |  |
 | `capabilities.mjs` | Capability packages at build time | `npm run capabilities` |
 | `capability-registries.mjs` | The lazy registries, generated from what describes them | `npm run registries` |
 | `cartridge-profile.mjs` | The Thin Common Cartridge profile, checked (Roadmap III Prompt 169) |  |
@@ -192,6 +193,7 @@ current, and the orchestrator checks it.
 | `multimessenger-authentic.mjs` | Readers for the authentic files of the multi-messenger kernel (Prompt 244) |  |
 | `multimessenger-validate.mjs` | The multi-messenger kernel against its committed thresholds (Prompt 244) | `npm run multimessenger:validate` |
 | `navigation.mjs` | The navigation model, measured: the structural navigation checks' reader | `npm run navigation:check`, `npm run navigation:write`, `npm run navigation:report` |
+| `neutral-start-report.mjs` | Where do instruments open? Three lists over the catalog |  |
 | `new-investigation.mjs` | npm run author:new -- --id=<lesson-id> --title="..." | `npm run author:new` |
 | `number-ratchet.mjs` | Three migrations that may only go one way: numbers through the formatter, |  |
 | `numeric-cases.mjs` | The numerical routines' validation group (Prompt 152) |  |

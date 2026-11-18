@@ -6,251 +6,251 @@
     "trail_length": 33,
     "bh_behavior": "Orbiting"
   },
-  "example": "adaptive_detail=true\nassist_approach_deg=130.6\nassist_gate=4000\nassist_impact_parameter=40\nassist_orbit_radius=0\nassist_planet_mass=5\nassist_planet_speed=0.3\nassist_probe_mass_ratio=0.000001\nassist_v_infinity=0.461\nbarnes_hut_theta=0.4\nbh_behavior=\"Orbiting\"\nbh_disk_inclination=62\nbh_environment=\"accreting\"\nbh_explain_view=false\nbh_layout=null\nbh_mass=10\nbh_masses=[15,10]\nbinary_lab_binary_phase=0\nbinary_lab_eccentricity=0.4\nbinary_lab_m1=1\nbinary_lab_m2=0.5\nbinary_lab_periods=20\nbinary_lab_planet_a=0.15\nbinary_lab_planet_phase=0\nbinary_lab_separation=10\nchart_update_hz=8\ndark_matter_halo=false\ndisk_doppler=true\ndynamic_object_properties=true\nenable_asteroids=true\nenable_star_merging=true\nfollow_mode=\"None\"\ngalaxy_gravity=\"newtonian\"\ngalaxy_kpc_per_unit=0\ngalaxy_msun_per_unit=0\ngravitational_constant=2\nhabitable_zone_optimism=1\nhalo_core_radius=300\nhalo_v_flat=6\ninit_velocity=15\ninput_object_type=\"Star\"\nintegrator=\"Symplectic Euler\"\ninteractive_add=true\nlagrange_primary_mass=1\nlagrange_secondary_mass=0.03\nlagrange_separation=8\nlagrange_tracer_fraction=1e-9\nlagrange_tracer_vx=0\nlagrange_tracer_vy=0\nlagrange_tracer_x=0.6\nlagrange_tracer_y=0\nlensing_quality=\"medium\"\nmax_star_mass_before_bh=20\nmax_timestep=0\nmicro_star_high_velocity=false\nmicro_star_mass=0.1\nmin_interaction_distance=0\nmutual_gravity=false\nns_masses=[]\nnum_asteroids=30\nnum_black_holes=2\nnum_comets=0\nnum_gas_giants=2\nnum_micro_stars=0\nnum_neutron_stars=0\nnum_planets=10\nnum_stars=0\nnum_white_dwarfs=0\norbit_decay_rate=0.002\nplacement=\"Circular\"\nplanet_base_color=\"#6495ed\"\npreset_scenario=\"None\"\npreset_zoom=1.5\npreview_gravity_boost=4\nquality_tier=\"auto\"\nrealistic_disk_physics=true\nrecord_simulation=false\nshow_acceleration_vectors=false\nshow_accretion_disk=true\nshow_ambient_lighting=true\nshow_bh_glow=true\nshow_bh_jets=true\nshow_conservation_diagnostics=false\nshow_dynamic_overlays=true\nshow_elapsed_time=true\nshow_gravitational_waves=true\nshow_object_lensing=true\nshow_potential_well=false\nshow_scale_bar=true\nshow_trails=true\nshow_velocity_vectors=false\nsim_size=\"Large\"\nsim_speed=1\nsnap_min_speed=2\nstar_base_color=\"#ffff00\"\nstar_density=10000\nstar_only_gravity=false\nsticky_dir_only_angle_deg=15\ntarget_fps=60\ntest_star_slingshot=false\ntrail_color_mode=\"type\"\ntrail_length=15\ntrail_style=\"Glow\"\ntransfer_inner_au=1\ntransfer_outer_au=2.5\ntransfer_probe_mass_ratio=1e-9\ntransfer_star_mass=1\ntransfer_target_phase_deg=0\nuse_barnes_hut=false\nuse_individual_bh_masses=true\nuse_individual_ns_masses=false\nvelocity_stddev=5",
+  "example": "adaptive_detail=true\nassist_approach_deg=130.6\nassist_gate=4000\nassist_impact_parameter=40\nassist_orbit_radius=0\nassist_planet_mass=5\nassist_planet_speed=0.3\nassist_probe_mass_ratio=0.000001\nassist_v_infinity=0.461\nbarnes_hut_theta=0.4\nbh_behavior=\"Orbiting\"\nbh_disk_inclination=62\nbh_environment=\"accreting\"\nbh_explain_view=false\nbh_layout=null\nbh_mass=10\nbh_masses=[15,10]\nbinary_lab_binary_phase=0\nbinary_lab_eccentricity=0.4\nbinary_lab_m1=1\nbinary_lab_m2=0.5\nbinary_lab_periods=20\nbinary_lab_planet_a=0.15\nbinary_lab_planet_phase=0\nbinary_lab_separation=10\nbody_labels=\"all\"\nchart_update_hz=8\ndark_matter_halo=false\ndisk_doppler=true\ndynamic_object_properties=true\nenable_asteroids=true\nenable_star_merging=true\nfollow_mode=\"None\"\ngalaxy_gravity=\"newtonian\"\ngalaxy_kpc_per_unit=0\ngalaxy_msun_per_unit=0\ngravitational_constant=2\nhabitable_zone_optimism=1\nhalo_core_radius=300\nhalo_v_flat=6\ninit_velocity=15\ninput_object_type=\"Star\"\nintegrator=\"Symplectic Euler\"\ninteractive_add=true\nlagrange_primary_mass=1\nlagrange_secondary_mass=0.03\nlagrange_separation=8\nlagrange_tracer_fraction=1e-9\nlagrange_tracer_vx=0\nlagrange_tracer_vy=0\nlagrange_tracer_x=0.6\nlagrange_tracer_y=0\nlensing_quality=\"medium\"\nmax_star_mass_before_bh=20\nmax_timestep=0\nmicro_star_high_velocity=false\nmicro_star_mass=0.1\nmin_interaction_distance=0\nmutual_gravity=false\nns_masses=[]\nnum_asteroids=30\nnum_black_holes=2\nnum_comets=0\nnum_gas_giants=2\nnum_micro_stars=0\nnum_neutron_stars=0\nnum_planets=10\nnum_stars=0\nnum_white_dwarfs=0\norbit_decay_rate=0.002\nplacement=\"Circular\"\nplanet_base_color=\"#6495ed\"\npreset_scenario=\"None\"\npreset_zoom=1.5\npreview_gravity_boost=4\nquality_tier=\"auto\"\nrealistic_disk_physics=true\nrecord_simulation=false\nshow_acceleration_vectors=false\nshow_accretion_disk=true\nshow_ambient_lighting=true\nshow_bh_glow=true\nshow_bh_jets=true\nshow_conservation_diagnostics=false\nshow_dynamic_overlays=true\nshow_elapsed_time=true\nshow_gravitational_waves=true\nshow_object_lensing=true\nshow_potential_well=false\nshow_scale_bar=true\nshow_trails=true\nshow_velocity_vectors=false\nsim_size=\"Large\"\nsim_speed=1\nsnap_min_speed=2\nstar_base_color=\"#ffff00\"\nstar_density=10000\nstar_only_gravity=false\nsticky_dir_only_angle_deg=15\ntarget_fps=60\ntest_star_slingshot=false\ntrail_color_mode=\"type\"\ntrail_length=15\ntrail_style=\"Glow\"\ntransfer_inner_au=1\ntransfer_outer_au=2.5\ntransfer_probe_mass_ratio=1e-9\ntransfer_star_mass=1\ntransfer_target_phase_deg=0\nuse_barnes_hut=false\nuse_individual_bh_masses=true\nuse_individual_ns_masses=false\nvelocity_stddev=5",
   "cases": {
     "binary-bh": {
-      "base": "d6da9986",
-      "shared": "97834f3c"
+      "base": "43096d72",
+      "shared": "ccce4048"
     },
     "neutron-star-collision": {
-      "base": "6c9b198e",
-      "shared": "7bc2cbce"
+      "base": "746649ba",
+      "shared": "76a1cdb2"
     },
     "pulsar-system": {
-      "base": "6246c365",
-      "shared": "599d9719"
+      "base": "052b05f1",
+      "shared": "ecf95655"
     },
     "white-dwarf-binary": {
-      "base": "c171fd8f",
-      "shared": "882a2e93"
+      "base": "ee857eeb",
+      "shared": "476c865f"
     },
     "stellar-graveyard": {
-      "base": "33cdaa05",
-      "shared": "c0fd6775"
+      "base": "55016cd9",
+      "shared": "2f06d149"
     },
     "galactic-center": {
-      "base": "06588526",
-      "shared": "b0cf1d80"
+      "base": "90405d4a",
+      "shared": "28a8159c"
     },
     "supernova-remnant": {
-      "base": "aae86077",
-      "shared": "ad01bd6d"
+      "base": "4644d1e3",
+      "shared": "9fe63851"
     },
     "compact-object-zoo": {
-      "base": "bca7cb83",
-      "shared": "774a617e"
+      "base": "f492c16f",
+      "shared": "f1eac42a"
     },
     "millisecond-pulsar": {
-      "base": "f13923e0",
-      "shared": "7ea9d6f0"
+      "base": "5723e7cc",
+      "shared": "4c0e2cbc"
     },
     "tidal-disruption-event": {
-      "base": "07f8def5",
-      "shared": "7c9a6d40"
+      "base": "a4d98fa9",
+      "shared": "332ebdfc"
     },
     "intermediate-mass-bh": {
-      "base": "8727555c",
-      "shared": "4ec69e87"
+      "base": "78b0f89c",
+      "shared": "84018277"
     },
     "galactic-collision": {
-      "base": "03be222e",
-      "shared": "880157a1"
+      "base": "c95e3ff2",
+      "shared": "0238f9c5"
     },
     "micro-bh-swarm": {
-      "base": "b102d4ef",
-      "shared": "2b675566"
+      "base": "682827e7",
+      "shared": "32952cae"
     },
     "exoplanet-lab": {
-      "base": "91dbde18",
-      "shared": "f685a719"
+      "base": "29dcf854",
+      "shared": "fae4de0d"
     },
     "triple-bh-system": {
-      "base": "1724984a",
-      "shared": "f46abe0c"
+      "base": "62c4e752",
+      "shared": "266c80a4"
     },
     "supermassive-bh": {
-      "base": "e872cb22",
-      "shared": "1bfd090f"
+      "base": "32cb329a",
+      "shared": "f108b1b7"
     },
     "star-cluster": {
-      "base": "cabe010d",
-      "shared": "2364d026"
+      "base": "47fce1b1",
+      "shared": "74981872"
     },
     "kuiper-belt": {
-      "base": "0f927a85",
-      "shared": "f3ea4d44"
+      "base": "6b784ef1",
+      "shared": "713096e0"
     },
     "sagittarius-a": {
-      "base": "2fccc556",
-      "shared": "205336ff"
+      "base": "12e6fc9e",
+      "shared": "cebf9147"
     },
     "binary-star-system": {
-      "base": "a20edde8",
-      "shared": "85d69e94"
+      "base": "19c8fc34",
+      "shared": "9a6642f0"
     },
     "solar-system": {
-      "base": "f4515da9",
-      "shared": "8ca436d0"
+      "base": "a3a528d5",
+      "shared": "238dab6c"
     },
     "earth-moon-system": {
-      "base": "af9682ce",
-      "shared": "c07649c5"
+      "base": "343acd52",
+      "shared": "34f2e169"
     },
     "slingshot": {
-      "base": "278d8d92",
-      "shared": "dcfdebb0"
+      "base": "cd76d52a",
+      "shared": "4d19c2b8"
     },
     "rogue-encounter": {
-      "base": "668710b2",
-      "shared": "6a2df509"
+      "base": "051f2826",
+      "shared": "f1adce25"
     },
     "quasar-cannon": {
-      "base": "e9edf1da",
-      "shared": "6db286f6"
+      "base": "cad6265e",
+      "shared": "11630cf2"
     },
     "the-pinwheel-galaxy-core": {
-      "base": "31eeb9be",
-      "shared": "b4a5ee28"
+      "base": "f51fccbe",
+      "shared": "f7064920"
     },
     "star-frisbee": {
-      "base": "4b935c37",
-      "shared": "71c389b4"
+      "base": "73774573",
+      "shared": "38c8b1d0"
     },
     "kessler-cascade": {
-      "base": "74ee5df5",
-      "shared": "6330d745"
+      "base": "8346a461",
+      "shared": "c9a0ad71"
     },
     "alien-dyson-swarm-collapse": {
-      "base": "ee460381",
-      "shared": "55e2d2ca"
+      "base": "99032d15",
+      "shared": "adc7f29e"
     },
     "tidal-arm-tango": {
-      "base": "012cd26b",
-      "shared": "26dc9af0"
+      "base": "3e8f2e5b",
+      "shared": "d71a6110"
     },
     "hungry-hungry-holes": {
-      "base": "4b2fbe5e",
-      "shared": "08298484"
+      "base": "4d20c9fa",
+      "shared": "609ba338"
     },
     "slingshot-gauntlet": {
-      "base": "7ce0989d",
-      "shared": "7c282502"
+      "base": "77b4d12d",
+      "shared": "0c13a7fa"
     },
     "black-hole-billiards": {
-      "base": "30e56157",
-      "shared": "6f5c4571"
+      "base": "16aaf9ef",
+      "shared": "89a091a9"
     },
     "stellar-nursery": {
-      "base": "22ae2a4f",
-      "shared": "cdf9cacd"
+      "base": "a3a92913",
+      "shared": "75a3ee31"
     },
     "keplers-2nd-law": {
-      "base": "d9fde245",
-      "shared": "329e7f78"
+      "base": "a843d1c9",
+      "shared": "9199f5b4"
     },
     "retrograde-mars": {
-      "base": "3e72ceb7",
-      "shared": "a279423c"
+      "base": "bbf64a8b",
+      "shared": "47401f68"
     },
     "three-body-sensitivity-lab": {
-      "base": "d7553587",
-      "shared": "d058ccc2"
+      "base": "c2413ffb",
+      "shared": "69d144e6"
     },
     "galilean-resonance": {
-      "base": "7b1c6075",
-      "shared": "9112f9ae"
+      "base": "5adc9ad1",
+      "shared": "aa533262"
     },
     "broken-laplace-resonance": {
-      "base": "7b1c6075",
-      "shared": "9112f9ae"
+      "base": "5adc9ad1",
+      "shared": "aa533262"
     },
     "pluto-and-neptune": {
-      "base": "0b0083f7",
-      "shared": "f7aff39b"
+      "base": "e4d043fb",
+      "shared": "df747edf"
     },
     "jupiter-trojans": {
-      "base": "df4e0ad0",
-      "shared": "9f2f01b8"
+      "base": "07846fac",
+      "shared": "5ba78b5c"
     },
     "binary-pair": {
-      "base": "edf1d359",
-      "shared": "e6c7e28d"
+      "base": "858703ed",
+      "shared": "0c027bb9"
     },
     "black-hole-lab": {
-      "base": "e0e8fab7",
-      "shared": "407c61d6"
+      "base": "3fe8d8cf",
+      "shared": "1ac587b6"
     },
     "habitable-zone-lab": {
-      "base": "889c5ae3",
-      "shared": "c998212e"
+      "base": "516bcf7f",
+      "shared": "88864572"
     },
     "interstellar-visitor": {
-      "base": "b03b16b4",
-      "shared": "8205b30d"
+      "base": "bfad7a98",
+      "shared": "2e1d5571"
     },
     "spiral-galaxy": {
-      "base": "a3af47f5",
-      "shared": "ff330902"
+      "base": "9b68f791",
+      "shared": "ee4eda76"
     },
     "milky-way-rotation": {
-      "base": "a16e4981",
-      "shared": "6a50397a"
+      "base": "add23d95",
+      "shared": "d89925d6"
     },
     "coma-cluster": {
-      "base": "c103017b",
-      "shared": "5dbf557a"
+      "base": "b5a59987",
+      "shared": "a10f7c06"
     },
     "exoplanet-characterization-lab": {
-      "base": "bb90b49a",
-      "shared": "3786e87a"
+      "base": "02e57e06",
+      "shared": "8ae41c8e"
     },
     "binary-planet-lab": {
-      "base": "054c52b6",
-      "shared": "eb50f169"
+      "base": "ec1fcaa2",
+      "shared": "494493c5"
     },
     "circumbinary-planet-lab": {
-      "base": "99e63045",
-      "shared": "ea35c37d"
+      "base": "8c39b119",
+      "shared": "f26ca1f9"
     },
     "gravity-assist-lab": {
-      "base": "c69a8365",
-      "shared": "f5da27a7"
+      "base": "2e34cea1",
+      "shared": "07395813"
     },
     "gravity-assist-heliocentric": {
-      "base": "6c36c459",
-      "shared": "f360e4fd"
+      "base": "27079969",
+      "shared": "04be8951"
     },
     "lagrange-point-lab": {
-      "base": "56261238",
-      "shared": "47b95601"
+      "base": "536d1eac",
+      "shared": "016529ad"
     },
     "orbital-transfer-lab": {
-      "base": "6638af9f",
-      "shared": "06fb7b4b"
+      "base": "ecd0c043",
+      "shared": "09125867"
     },
     "transit-lab": {
-      "base": "ae6c6bc9",
-      "shared": "68f8dcfa"
+      "base": "e4613655",
+      "shared": "6fd68b7e"
     },
     "blended-binary": {
-      "base": "13770b22",
-      "shared": "f17c2ccd"
+      "base": "cd11c96e",
+      "shared": "ed536661"
     },
     "trappist-1-system": {
-      "base": "9269f0f4",
-      "shared": "94d42294"
+      "base": "5bc42ad8",
+      "shared": "813f41f0"
     },
     "gw150914": {
-      "base": "1585a5e2",
-      "shared": "b9a619ec"
+      "base": "d4ea6296",
+      "shared": "4bd78978"
     },
     "ring-gap": {
-      "base": "35215fa6",
-      "shared": "d46e09fe"
+      "base": "49f45c72",
+      "shared": "1226a7ba"
     },
     "roche-pass": {
-      "base": "55b36876",
-      "shared": "d9d9866c"
+      "base": "5b0e7c52",
+      "shared": "d3582580"
     }
   }
 }

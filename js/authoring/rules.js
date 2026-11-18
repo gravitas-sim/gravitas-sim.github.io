@@ -118,6 +118,8 @@ export const RULE_INDEX = {
   'interaction/when':
     'A remediation step follows an earlier graded step every student reaches',
   'interaction/animated': 'An animated widget can be rewound',
+  'interaction/auto-arm':
+    'A step arms its own event watch only where it does not ask when',
   'i18n/shape': 'A translation matches the shape of its lesson',
   'i18n/machinery': 'A translation never replaces machinery',
   'i18n/coverage': 'A translation is complete enough to ship',
@@ -334,11 +336,8 @@ function hintValues(step) {
 /**
  * The presets a step actually shows, resolved the way the panel resolves them.
  *
- * js/investigations.js lets a step suppress presets with `presets: false`, and
- * lets a widget compute them from the step - the rotation-curve instrument
- * hides its "published decomposition" button while a student is fitting with
- * stars alone. A rule that asked the widget for its presets and stopped there
- * would credit a step with a way back that the step has taken away.
+ * A step may suppress presets (`presets: false`) or a widget compute them from
+ * the step; asking only the widget would credit a way back the step took away.
  *
  * @param {object} widget - The widget definition
  * @param {object} spec - The step's `tool` block
@@ -374,6 +373,7 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
     gradedSteps,
     cueFindings,
     retiredFindings,
+    autoArmFindings,
   } = inputs;
 
   const widgetById = new Map(widgets.map(w => [w.id, w]));
@@ -443,6 +443,9 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
 
     // --- Step ids: positional, asserted because progress is keyed by them.
     retiredFindings?.(inv).forEach(c => err('id/retired', null, c));
+    autoArmFindings?.(inv, translations).forEach(f =>
+      err('interaction/auto-arm', f.step, f.message)
+    );
     const stepIds = steps.map((_, i) => `${inv.id}:${i}`);
     if (new Set(stepIds).size !== stepIds.length) {
       err('id/step', null, 'two steps derive the same id');
@@ -933,7 +936,9 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
         }
       }
 
-      // A remediation step is shown only when an earlier graded step was answered wrongly (or rightly): js/investigations.js stepApplies(). One level deep, so every student still walks a straight line to the end: the step it names is graded and one every student reaches (and, if a held prediction, already marked), and it is neither the last step nor where a prediction is marked.
+      // A remediation step shows only after an earlier graded step went wrong
+      // (or right): stepApplies(). One level deep: the step it names is graded,
+      // reached by all (marked, if held), and it is neither last nor a reveal.
       if (step.when !== undefined) {
         const w = step.when;
         const at = isPlainObject(w)
@@ -1467,10 +1472,8 @@ export function scaffoldProblems(step, english = true) {
 /**
  * Check one lesson, for the authoring preview.
  *
- * The same rules the command line runs, minus the ones that compare a lesson
- * with an artifact the browser does not have in hand - the manifest, the
- * translations, the instructor guide. What is left is everything that is a
- * property of the lesson itself, which is what an author is editing.
+ * The command line's rules minus those comparing the lesson with what the
+ * browser lacks (manifest, translations, instructor guide): what an author edits.
  *
  * @param {object} inv - One investigation
  * @param {object} refs - {widgets, scenarios, scenarioId, settingKeys,
