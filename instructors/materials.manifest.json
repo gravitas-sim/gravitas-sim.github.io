@@ -1,6 +1,6 @@
 {
   "version": "November 2026",
-  "generated": "2026-11-17",
+  "generated": "2026-11-18",
   "documents": 1222,
   "inventory": {
     "documents": 1222,
@@ -24,7 +24,7 @@
     }
   },
   "sourceFiles": 306,
-  "sourceDigest": "c70123fef8843dbeec147aaf41e1f8497dd99898c53f8da2fbeacbcb4cd6c714",
+  "sourceDigest": "90ce92b6e9e5cbcfafcdbc7640d35eee912042793b7435497704dd8bc94fb7d8",
   "sources": {
     "js/activities/activities.js": "af9b7e121b9a72c2a5cc18e07331d6ee841934d402b030294d25c442628881ef",
     "js/activities/activityBridge.js": "67a82aff98e0ed935d6b8b0f0f654c6ad4332ee929cb3604e896a7f790a6fdc1",
@@ -216,7 +216,7 @@
     "js/data/investigations/goldilocks-question.js": "b4fc5c99fc8967ad533d6def81144ff06bdfd90efa4d8b9ad5451522b461b5ca",
     "js/data/investigations/gravity-assist.js": "ef178317d7acbb7853ef997efc775e338e3ca687a63b1a3e6ae3701aab245b39",
     "js/data/investigations/hohmann-transfer.js": "749ea25219b284d3e34967feb7df7d8c2e56d144bc799a04eff1ffa756752e46",
-    "js/data/investigations/i18n.js": "b58ba59ef1fd8bc1f6b3a68bb57b90268da79b040087afe90d143cf04b14d511",
+    "js/data/investigations/i18n.js": "a1489ef771023b98b987837fefe116678229d9b01d3287bf44f075a3645cc4ea",
     "js/data/investigations/imaging-sequence.js": "692f28186c7672f124a80e244755ce62d85335424ef0ff069a8bcbfda1a84c84",
     "js/data/investigations/inside-a-star.js": "1d818e86352a2a49d5380253ffc1bbd7b749690cceb95ccb7e8242edcc84cfc8",
     "js/data/investigations/integrators-in-practice.js": "caef1b30a656b20fe9e2fcd45af2a8f660a5181f4727a72af133fd2818f6022b",
