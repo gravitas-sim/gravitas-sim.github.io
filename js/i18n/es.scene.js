@@ -2,7 +2,7 @@
 // which bodies pull on which, and the barycenter marker and its Tools control.
 // Registered by js/sceneStatement.js, which loads on first use.
 export const ES_SCENE = {
-  'rail.barycenterMarker': 'Mostrar el baricentro',
+  'rail.barycenterMarker': 'Baricentro',
   'rail.barycenterMarker.hint':
     'La posición media de estos cuerpos, ponderada por su masa. Allí no hay nada.',
   'rail.barycenterMarker.off': 'No',

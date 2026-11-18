@@ -28,16 +28,19 @@ test('the barycenter control is reached and changed from the keyboard', async ({
 }) => {
   await app.boot();
   await app.loadScenario('binary-pair');
-  // The scene words arrive after the route is usable; their strings
-  // re-render the rail, so the keys are pressed once they are here.
-  await expect(page.locator('#overlayStats')).toContainText('Frame', {
-    timeout: 15_000,
-  });
+  // No wait for the scene words: the control is used before they arrive,
+  // and its markup already reads in words, never in raw keys.
   await app.railControl('referenceFrameSelect');
   await page.locator('#referenceFrameSelect').focus();
   await page.keyboard.press('Tab');
   const select = page.locator('#barycenterMarkerSelect');
   await expect(select).toBeFocused();
+  await expect(page.locator('label[for=barycenterMarkerSelect]')).toHaveText(
+    'Barycenter'
+  );
+  expect(await select.locator('option').allTextContents()).not.toContainEqual(
+    expect.stringContaining('rail.')
+  );
   // Type-ahead on the focused select: the same on every platform, where an
   // arrow key opens the list on some and changes the value on others.
   await page.keyboard.press('w');

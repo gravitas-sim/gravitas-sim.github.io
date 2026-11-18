@@ -122,7 +122,7 @@ const BUDGETS = [
   {
     id: 'deferred',
     label: 'Deferred JavaScript (lazy chunks, gzipped)',
-    limit: 3198.0,
+    limit: 3198.1,
     reason:
       'Jumped from 1369 KB to 2105 KB when three.js and Chart.js stopped being ' +
       'CDN requests and became bundled chunks. That is the point of the change ' +
@@ -724,7 +724,7 @@ const BUDGETS = [
       '\n\nA world seen close (D-R4-448-06): the limit is raised from 3178.2 to 3178.6 KB, the exact overrun of a Node 22 build over v4 1f1235254 (3,254,824 bytes gzipped, 3178.54 KB) rounded up to 0.1 KB, under the standing approval of 2026-10-10.' +
       '\n\nCrowded-scene drawing (D-R4-450-07): the limit is raised from 3178.6 to 3178.8 KB, the exact overrun of a Node 22 build over the light-and-phase change merged with v4 (3,255,073 bytes gzipped, 3178.78 KB) rounded up to 0.1 KB, under the standing approval of 2026-10-10.' +
       '\n\nThe Sizes statement and the orbit geometry overlay (D-R4-447-07): the limit is raised from 3183.7 to 3195.7 KB, the exact overrun of a Node 22 build of the branch merged with v4 1ed519a17 and with the crowded-scene change (3,272,299 bytes gzipped, 3195.60 KB) rounded up to 0.1 KB, under the standing approval of 2026-10-10; the overlay, the statement, the size facts, the two-body model and their words load only when asked for.' +
-      '\n\nThe frame line, the barycenter marker and the statement of which bodies pull (D-R4-449-06): the limit is raised from 3195.7 to 3198.0 KB, the exact overrun of a Node 22 build of the branch merged with the orbit geometry branch 340fbcb8c (3,274,725 bytes gzipped, 3197.97 KB) rounded up to 0.1 KB, under the standing approval of 2026-10-10; the words, the marker and the source names are one lazy module with their two word files.',
+      '\n\nThe frame line, the barycenter marker and the statement of which bodies pull (D-R4-449-06): the limit is raised from 3195.7 to 3198.1 KB, the exact overrun of a Node 22 build of the branch merged with the orbit geometry branch 340fbcb8c (3,274,814 bytes gzipped, 3198.06 KB) rounded up to 0.1 KB, under the standing approval of 2026-10-10; the words, the marker and the source names are one lazy module with their two word files.',
   },
 ];
 

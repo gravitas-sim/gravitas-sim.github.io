@@ -32,13 +32,36 @@ import { sceneSources } from './engine/sources.js';
 import { dominantPrimary } from './orbital.js';
 import { barycenterOf, drawBarycenterCross } from './lesson/barycenter.js';
 import { frameState, WORLD, BARYCENTER, OBJECT } from './referenceFrame.js';
-import { t, getLocale, registerMessages } from './i18n/index.js';
+import {
+  t,
+  getLocale,
+  registerMessages,
+  onLocaleChange,
+} from './i18n/index.js';
 import { announce } from './notify.js';
 import { EN_SCENE } from './i18n/en.scene.js';
 import { ES_SCENE } from './i18n/es.scene.js';
 
 registerMessages('en', EN_SCENE);
 registerMessages('es', ES_SCENE);
+
+// The Tools control's words live here, not in the start-up catalogs, so its
+// markup carries English and data-scene-i18n keys that only this module
+// applies: text set in place on the existing nodes, so a choice being made
+// keeps its focus and type-ahead (and nothing shows a raw key before this
+// module arrives).
+function translateControl() {
+  for (const el of document.querySelectorAll('[data-scene-i18n]')) {
+    const text = t(el.getAttribute('data-scene-i18n'));
+    if (el.textContent !== text) el.textContent = text;
+  }
+  for (const el of document.querySelectorAll('[data-scene-i18n-title]'))
+    el.title = t(el.getAttribute('data-scene-i18n-title'));
+}
+if (typeof document !== 'undefined') {
+  translateControl();
+  onLocaleChange(translateControl);
+}
 
 // --- The frame --------------------------------------------------------------
 
@@ -199,7 +222,7 @@ function noteNoPrimary(none) {
     : 'rail.barycenterMarker.hint';
   if (note) {
     note.textContent = t(key);
-    note.setAttribute('data-i18n', key);
+    note.setAttribute('data-scene-i18n', key);
   }
   if (none) announce(t(key), false);
 }
