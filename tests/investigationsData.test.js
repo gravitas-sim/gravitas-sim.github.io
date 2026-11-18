@@ -521,7 +521,8 @@ describe('every lesson carries what its card needs', () => {
       // itself in, the Habitable Zone Lab; it stages one ellipse on screen 27
       // because that scenario is deliberately circular. Its card is honest,
       // and forcing it to draw its own would make it a picture of screen 27.
-      if (inv.steps[0]?.stage) {
+      // A lesson on a quiet canvas shows no scene, so its card is its own too.
+      if (inv.steps[0]?.stage || inv.canvas === 'quiet') {
         expect(inv.thumbnail).toBe(`images/investigations/${id}.webp`);
         return;
       }

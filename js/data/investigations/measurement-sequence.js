@@ -1405,7 +1405,11 @@ export const MEASURING_THE_MOON = {
             'The circle did not change, yet its diameter did. A pair that is short by some share makes every length read off the picture too long by the same share, so a scale error is carried into every size.',
         };
       },
-      tool: MM({ x1: 3, x2: 496, cx: 289, cy: 306, r: 25 }, ['cx', 'cy', 'r']),
+      tool: {
+        ...MM({ x1: 3, x2: 496, cx: 289, cy: 306, r: 25 }, ['cx', 'cy', 'r']),
+        // The circle is pinned and hidden here, so the circle's reset button is not offered.
+        presets: false,
+      },
     },
     {
       sid: 'why-a-pair',
