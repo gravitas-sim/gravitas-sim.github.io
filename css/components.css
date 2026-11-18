@@ -433,10 +433,7 @@
       visibility var(--duration-slow);
   }
 
-  /* Folded means out of the Tab order and the reading order, not only out of
-     sight. Visibility is discrete: it reads as visible for the whole of the
-     transition and hidden only once the fold has finished (1 ms under reduced
-     motion), so the fold still animates and opening shows the content at once. */
+  /* Folded is out of the Tab order too; visibility is discrete, so the fold still animates. */
   .settings-section.collapsed .settings-section-content {
     max-height: 0;
     padding-top: 0;

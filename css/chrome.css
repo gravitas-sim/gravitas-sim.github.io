@@ -2764,15 +2764,11 @@
   font-weight: 400;
 }
 
-/* A quiet canvas (js/lessonCanvas.js): the rail and the playback bar are in one
-   More, a closed <details> that takes them out of sight and out of the Tab
-   order, so the instrument gets the width they stood in. The summary is a pill
-   in the free corner; the panels keep their own fixed positions when it opens. */
+/* A quiet canvas (js/lessonCanvas.js): the rail and playback bar sit in one More. */
 @layer overrides {
   .stage-more {
     position: fixed;
     right: var(--space-3);
-    /* Above the attribution line, which keeps the corner. */
     bottom: 48px;
     z-index: var(--z-panel);
     background: var(--panel-bg);
@@ -2780,8 +2776,6 @@
     border-radius: var(--radius-lg);
   }
 
-  /* On a tablet and a phone it stands where the playback bar stood folded:
-     the middle of the bottom edge, under the lesson's sheet. */
   @media (max-width: 900px) {
     .stage-more {
       inset: auto auto var(--space-2) 50%;
@@ -2789,12 +2783,7 @@
     }
   }
 
-  /* Beside the lesson, the instrument takes what the rail used to stand in:
-     every docked panel starts where the lesson panel ends, and ends a gap short
-     of the window's edge. The width is set by this rule and never by the More,
-     because an instrument draws into its box once: a panel resized after that
-     stretches its picture, so the rail, when the reader opens it, lies over the
-     panel's edge and goes again when it is shut. */
+  /* The instrument takes the rail's width; static, as a resized panel stretches its picture. */
   @media (min-width: 901px) {
     body[data-lesson-canvas='quiet'] :is(.inv-plot-panel, .inv-dock-tabs) {
       width: min(calc(100vw - var(--lesson-width) - var(--space-3) * 3), 1100px);

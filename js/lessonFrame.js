@@ -53,7 +53,6 @@ export function lessonInset() {
     if (b.left < view.width * 0.5) left = Math.max(left, b.right);
     else right = Math.max(right, view.width - b.left);
   }
-  // What spans the free region (light curve, plot, bar) takes a band, not a side.
   let top = 0;
   let bottom = 0;
   const free = view.width - left - right;

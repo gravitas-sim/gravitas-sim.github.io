@@ -125,14 +125,7 @@ function words() {
   if (label) label.textContent = t('rail.mainControls.label');
 }
 
-/**
- * Tuck the sandbox's rail and playback bar behind one More, the disclosure
- * every other fold in the lesson layout is (js/settingsSchema.js wireMore): a
- * native <details>, shut until the reader opens it, remembered under its own
- * surface in the one disclosure preference and announced through the live
- * region. The two elements are moved into it and put back where they were, so
- * a closed More takes them out of the Tab order as well as out of sight.
- */
+/** Tuck the rail and playback bar behind one More (wireMore, surface 'stage'); put them back after. */
 function chromeFold(on) {
   if (!on) {
     for (const [el, mark] of marks) mark.replaceWith(el);
