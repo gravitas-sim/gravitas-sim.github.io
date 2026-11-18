@@ -247,6 +247,62 @@ describe('task/measure-all-computed', () => {
   });
 });
 
+describe('depth/decision', () => {
+  const deep = (step, depth = 'quantitative') => ({ ...step, depth });
+  const core = { type: 'read', body: 'The pair is 4 AU apart.' };
+
+  test('a deeper measure step whose fields are all computed or copied is found', () => {
+    const lesson = lessonOf([
+      core,
+      deep({
+        type: 'measure',
+        body: 'Use a = 4 and P = 4.',
+        decides: 'nothing really',
+        fields: [
+          { id: 'a', want: '4' },
+          { id: 'p', want: '4' },
+          { id: 'm', compute: v => v.a ** 3 / v.p ** 2 },
+        ],
+      }),
+    ]);
+    expect(rulesOf(lesson)).toContain('depth/decision');
+  });
+
+  test('a deeper step with an instrument and no named choice is found', () => {
+    const lesson = lessonOf([
+      core,
+      deep({ type: 'question', kind: 'numeric', tool: { id: 'binary' } }),
+    ]);
+    expect(rulesOf(lesson)).toContain('depth/decision');
+  });
+
+  test('a deeper step that names its decision and has a typed reading is clean', () => {
+    const lesson = lessonOf([
+      core,
+      deep({
+        type: 'measure',
+        tool: { id: 'binary' },
+        decides: 'which star to time, and over how many laps',
+        fields: [
+          { id: 'p', want: '5.7' },
+          { id: 'n', compute: v => v.p },
+        ],
+      }),
+    ]);
+    const rules = rulesOf(lesson);
+    expect(rules).not.toContain('depth/decision');
+  });
+
+  test('core and read steps are not judged', () => {
+    const lesson = lessonOf([
+      { type: 'question', kind: 'numeric', tool: { id: 'binary' } },
+      deep({ type: 'read', body: 'More about the pair.' }, 'advanced'),
+    ]);
+    const rules = rulesOf(lesson);
+    expect(rules).not.toContain('depth/decision');
+  });
+});
+
 describe('text/internal-vocabulary', () => {
   const said = (text, where = 'body') =>
     rulesOf(lessonOf([{ type: 'read', [where]: text }]));
