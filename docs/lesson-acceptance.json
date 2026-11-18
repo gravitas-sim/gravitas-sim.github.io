@@ -1114,6 +1114,7 @@
       "leakFree": true
     },
     "tides-that-move-the-moon": {
+      "canvas": ["quiet"],
       "centralExperimentId": "ce.moon-recedes",
       "object": "panel:tides-moon",
       "control": "tides-moon/gyr",
@@ -1122,20 +1123,21 @@
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["forward-predict", "forward-one-billion"],
       "evidenceFrom": "model",
-      "decision": "unreviewed",
+      "decision": "Which Q to give a constant-Q tide model so that it reproduces the Moon's measured recession, found by searching the slider and checked against the measured value in the readout, and then what that model does a billion years on and run backward.",
       "leakFree": true
     },
     "ios-fire": {
+      "canvas": ["portrait"],
       "centralExperimentId": "ce.ios-fire",
       "object": "panel:tides-heating",
       "control": "tides-heating/e",
-      "quantity": "the tidal heating of Io at k2 = 1.5 and Q = 100, 9.33 x 10^13 W at its eccentricity of 0.0041 and four times that when the eccentricity is doubled",
+      "quantity": "the tidal heating of Io with k2 = 0.8 and Q = 250 held fixed: 1.99 x 10^13 W at its eccentricity of 0.0041 and four times that, 7.96 x 10^13 W, when the eccentricity is doubled",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": ["double-predict", "double-the-eccentricity"],
+      "loop": ["double-predict", "heating-at-two-eccentricities"],
       "evidenceFrom": "model",
-      "decision": "unreviewed",
-      "leakFree": false
+      "decision": "Which eccentricities to compare while k2 and Q are held fixed, and then which two different pairs of k2 and Q bring the heating inside the observed range, found by searching the sliders against the observed band in the readout.",
+      "leakFree": true
     },
     "plan-an-exposure": {
       "centralExperimentId": "ce.plan-an-exposure",

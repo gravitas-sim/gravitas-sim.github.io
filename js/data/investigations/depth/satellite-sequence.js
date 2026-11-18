@@ -388,6 +388,8 @@ export const TIDES_DEEPER = {
       sid: 'moon-locking-time',
       after: 'the-model-run-backward',
       depth: 'quantitative',
+      decides:
+        'whose k2 and Q the torque uses: the Moon’s own, not the Earth’s that the instrument shows',
       type: 'question',
       kind: 'numeric',
       title: 'How long to lock the Moon',
@@ -418,6 +420,8 @@ export const TIDES_DEEPER = {
       sid: 'a-q-that-changes',
       after: 'moon-locking-time',
       depth: 'advanced',
+      decides:
+        'whether to doubt the model’s present rate or its assumption that Q never changed',
       type: 'question',
       kind: 'short',
       rubric:
@@ -437,19 +441,22 @@ export const IOS_DEEPER = {
   steps: [
     {
       sid: 'how-far-from-the-maximum',
-      after: 'the-bound',
+      after: 'two-interiors-one-heat',
       depth: 'quantitative',
+      decides:
+        'which k2/Q to divide into the model’s largest: the one the observed heat needs, which both pairs share',
       type: 'question',
       kind: 'numeric',
       title: 'How far from the largest k2/Q',
-      body: `The model allows k2/Q up to 0.3 (k2 = 1.5 over Q = 5). The k2/Q that the middle of
-             the observed heat needs is the number you read.`,
+      body: `Both of your pairs sit near the same k2/Q: the row <strong>k2/Q the observed middle
+             value needs</strong> gives it. The model allows k2/Q up to 0.3 (k2 = 1.5 over
+             Q = 5).`,
       prompt:
-        'How many times smaller is the needed k2/Q than the model’s largest?',
+        'How many times smaller is the k2/Q both pairs share than the model’s largest?',
       unit: '',
       answer: 17,
       tolerance: 0.5,
-      hints: ['Divide 0.3 by the k2/Q you read.'],
+      hints: ['Divide 0.3 by the k2/Q in that row.'],
       worked:
         '0.3 / 0.01768 = 17.0: the observed heat needs a k2/Q seventeen times below the largest the model allows, comfortably inside the range.',
       feedback: {
@@ -461,9 +468,85 @@ export const IOS_DEEPER = {
       tool: TH({ k2: 1.5, Q: 100, e: 0.0041 }),
     },
     {
-      sid: 'what-the-formula-leaves-out',
+      sid: 'how-wide-is-the-bound',
       after: 'how-far-from-the-maximum',
+      depth: 'quantitative',
+      decides:
+        'which two observed values set the ends of the range, and what the heating is proportional to',
+      type: 'question',
+      kind: 'numeric',
+      title: 'How wide is the answer',
+      body: `At one eccentricity the heating is proportional to k2/<em>Q</em>. The observed heat
+             flow is not one number: it runs from 6 &times; 10<sup>13</sup> W to
+             1.6 &times; 10<sup>14</sup> W, the two lines on the plot, so the k2/<em>Q</em> that
+             fits is a range too.`,
+      prompt:
+        'By what factor does the k2/Q that fits differ between the highest and the lowest observed heat?',
+      unit: '',
+      answer: 2.67,
+      tolerance: 0.1,
+      hints: [
+        'Heating is proportional to k2/Q, so compare the two observed values with each other.',
+      ],
+      worked:
+        'Heating is proportional to k2/Q, so the factor is 1.6 × 10¹⁴ / 6 × 10¹³ = 2.67: however many pairs you find, the observation fixes k2/Q only to within a factor of about two and a half.',
+      feedback: {
+        close: 'Close. The larger observed value goes on top.',
+        'wrong-order-of-magnitude':
+          'A power of ten out: the two observed values are not that far apart.',
+        off: 'Compare the highest and the lowest observed heat.',
+      },
+      tool: TH({ k2: 0.8, Q: 250, e: 0.0041 }),
+    },
+    {
+      sid: 'what-would-separate-them',
+      after: 'how-wide-is-the-bound',
       depth: 'advanced',
+      decides:
+        'which measurement depends on k2 or on Q alone, rather than on their ratio',
+      type: 'question',
+      kind: 'choice',
+      title: 'What would separate them',
+      body: `The observed heat fixes k2/<em>Q</em> and no more. Suppose a spacecraft could make one
+             more measurement of Io.`,
+      prompt: 'Which measurement would let you find k2 and Q separately?',
+      options: [
+        'The heat flow again, measured to a few percent',
+        'How high the tide on Io rises as it goes round its orbit, which depends on k2 alone',
+        'Io’s orbital period, measured to more digits',
+        'The temperature of the lava at the surface',
+      ],
+      answer: 1,
+      misconceptions: [
+        {
+          id: 'more-heat',
+          option: 0,
+          say: 'A better heat flow narrows k2/Q, but it is still the ratio. Many pairs share one ratio, so a more precise ratio does not split them.',
+        },
+        {
+          id: 'period',
+          option: 2,
+          say: 'The period is already known far better than anything else here, and it enters the formula the same way for every interior, so it cannot tell k2 from Q.',
+        },
+        {
+          id: 'lava',
+          option: 3,
+          say: 'The lava’s temperature says something about melting, but not how big the tide is or how much of it is lost, which are what k2 and Q are.',
+        },
+      ],
+      hints: [
+        'The heat depends on a ratio. You want a measurement that depends on one of the two numbers, not on their ratio.',
+      ],
+      because:
+        'The height of the tide is set by k2 alone, while the heat is set by k2 divided by Q. A spacecraft that measures how far Io’s shape and gravity flex as it circles Jupiter gets k2, and then the heat gives Q.',
+      tool: TH({ k2: 0.8, Q: 250, e: 0.0041 }),
+    },
+    {
+      sid: 'what-the-formula-leaves-out',
+      after: 'what-would-separate-them',
+      depth: 'advanced',
+      decides:
+        'what the formula takes as given and what keeps the orbit eccentric',
       type: 'question',
       kind: 'short',
       rubric:
@@ -1480,7 +1563,7 @@ export const INSTRUCTOR = {
       placement:
         'After Tides and Newton’s gravity. It needs an exponent and a unit conversion. It supports OpenStax Astronomy 2e chapter 4 (section 4.6, tides).',
       overview:
-        'Students read the Moon’s recession and the day’s lengthening for k2 = 0.30 and Q = 12 against lunar laser ranging and eclipse records, run the model forward one billion years, and run it backward until it stops: contact 1.58 billion years ago, long after the Moon formed.',
+        'Students choose the Q that makes the model give the Moon’s measured recession (3.82 cm per year, lunar laser ranging) and take the day’s lengthening it then gives (2.05 ms per century, against about 2.3 from eclipses), run the model forward one billion years, and run it backward until it stops: contact 1.58 billion years ago, long after the Moon formed.',
       priorKnowledge: [
         'Tides and the tidal bulge',
         'Angular momentum and its conservation',
@@ -1539,7 +1622,7 @@ export const INSTRUCTOR = {
       teachingNotes: [
         'Have students predict the sign of the Moon’s change before the table.',
         'The contact time is a model result; say what geologic evidence says and let the mismatch stand.',
-        'k2 = 0.30 and Q = 12 are chosen to match the present; the instrument does not fit them. The tier-b check holds the recession within 10 percent of 3.82 and the day within 15 percent of 2.3.',
+        'The student chooses Q with k2 fixed at 0.30; Q is a fit to the present recession, and the slider’s whole numbers leave only 12 inside the measured 3.82 ± 0.07 cm per year. The tier-b check holds the recession within 10 percent of 3.82 and the day within 15 percent of 2.3.',
         'The table stops at the first sample before contact; the model’s contact time (1.58 billion years) is the number to quote.',
       ],
       discussion: [
@@ -1562,7 +1645,7 @@ export const INSTRUCTOR = {
       placement:
         'After Tides and the Galilean moons. It needs squares and a power of ten. It supports OpenStax Astronomy 2e chapter 12 (section 12.2, the Galilean moons).',
       overview:
-        'Students read the heating of Io for k2 = 1.5 and Q = 100 (9.3 × 10¹³ W, inside the observed 0.6 to 1.6 × 10¹⁴), double the eccentricity (four times the heat), and read the k2/Q the observed heat needs (0.0177), seventeen times below the model’s largest.',
+        'Students predict what doubling Io’s eccentricity does to the heating, then change only the eccentricity on an instrument that opens at k2 = 0.8, Q = 250 and e = 0.001 and take two readings (1.99 and 7.96 × 10¹³ W); the reveal sets the prediction beside their readings. They then search the k2 and Q sliders for two different interiors whose heating at e = 0.0041 falls inside the observed 0.6 to 1.6 × 10¹⁴ W, and say why two interiors can give one heat. The quantitative layer reads the k2/Q they share (0.0177, seventeen times below the model’s largest) and how wide the observed range leaves it (a factor of 2.7); the advanced layer asks which other measurement would separate k2 from Q. The picture behind the lesson is Jupiter and its four large moons, held still.',
       priorKnowledge: [
         'Tides and the tidal bulge',
         'Orbital eccentricity',
@@ -1574,8 +1657,8 @@ export const INSTRUCTOR = {
           body: 'Io’s orbit is eccentric, so its tide rises and falls once an orbit; the friction is the heat, in proportion to e squared.',
         },
         {
-          heading: 'Energy in one orbit',
-          body: 'The heat times the period is the energy a tide dissipates in one orbit, 1.43 × 10¹⁹ J at the model’s maximum; the observation sets what the interior must do with it.',
+          heading: 'One heat, many interiors',
+          body: 'The heating depends on k2 and Q only through k2/Q, so a pair with half the k2 and half the Q gives the same heat; the observed heat fixes the ratio and not the interior.',
         },
         {
           heading: 'A bound, not a prediction',
@@ -1619,10 +1702,11 @@ export const INSTRUCTOR = {
         },
       ],
       teachingNotes: [
-        'Ask for the sign and size of the change before the eccentricity is doubled; the factor of four surprises students who expect two.',
+        'The prediction comes before any rule is stated; the factor of four surprises students who expect two. The reveal screen sets each student’s own two readings beside what they predicted.',
+        'The search has many right answers. Any pair whose heating lies inside the observed range passes if the two k2 values differ by at least 0.2; the check is the formula at e = 0.0041.',
         'The bound’s width is the point: say that agreement within the range is not evidence for a value of k2/Q.',
         'The observed heat flow is a range (Veeder et al. 1994; Spencer et al. 2000); the tier-b check holds the formula within a factor of two of it.',
-        'The numbers in the steps are the kernel’s for Io’s radius, orbit and mass, with e = 0.0041.',
+        'The numbers in the steps are the kernel’s for Io’s radius, orbit and mass, with e = 0.0041. The instrument opens at e = 0.001, k2 = 0.8 and Q = 250 so that no reading is at the answer; a button returns it there.',
       ],
       discussion: [
         'If k2/Q were ten times larger, what would Io’s surface look like?',
@@ -1747,8 +1831,8 @@ export const INSTRUCTOR = {
     'tides-that-move-the-moon': [
       {
         from: 'the-bulge-ahead',
-        to: 'the-moons-recession',
-        text: 'The bulge that runs ahead, and the recession and the day’s lengthening it gives.',
+        to: 'match-the-recession',
+        text: 'The bulge that runs ahead, and the Q that makes the model give the measured recession and the day’s lengthening.',
       },
       {
         from: 'forward-predict',
@@ -1773,19 +1857,14 @@ export const INSTRUCTOR = {
         text: 'Where Io’s heat comes from.',
       },
       {
-        from: 'heating-at-the-maximum',
-        to: 'heating-at-the-maximum',
-        text: 'Its size at k2 = 1.5 and Q = 100, and the energy in one orbit.',
-      },
-      {
         from: 'double-predict',
-        to: 'double-the-eccentricity',
-        text: 'Doubling the eccentricity quadruples the heat.',
+        to: 'what-doubling-did',
+        text: 'Doubling the eccentricity quadruples the heat: predicted, measured and compared.',
       },
       {
-        from: 'the-bound',
+        from: 'find-the-interiors',
         to: 'what-heat-is',
-        text: 'The bound over three orders of magnitude and the k2/Q the observed heat needs; the close.',
+        text: 'Two interiors that give the observed heat, why that makes the answer a bound; the close.',
       },
     ],
     'weighing-jupiter': [
@@ -1822,18 +1901,17 @@ export const INSTRUCTOR = {
         'The 2:1 resonance of Mimas at 116,883 km (within 400), 0.59 percent (within 0.1) inside the outer edge of the B ring.',
     },
     'tides-that-move-the-moon': {
-      'the-moons-recession':
-        'Recession 3.75 cm per year (within 0.06) and day lengthening 2.05 ms per century (within 0.06).',
+      'match-the-recession':
+        'A Q between 11.5 and 12.5 (the slider’s whole numbers allow 12 only), the one that gives the measured recession of 3.82 ± 0.07 cm per year, and the day lengthening of 2.05 ms per century that it then gives (within 0.06).',
       'forward-one-billion':
         'The Moon at 414.6 thousand km (within 1.5) and a day of 29.5 hours (within 0.4) in one billion years.',
       'the-model-run-backward': 'Contact 1.58 billion years ago (within 0.03).',
     },
     'ios-fire': {
-      'heating-at-the-maximum':
-        'Heating 9.33 × 10¹³ W (within 0.1) and 1.43 × 10¹⁹ J in one orbit (within 0.03).',
-      'double-the-eccentricity':
-        'Heating 3.73 × 10¹⁴ W (within 0.05), four times as much.',
-      'the-bound': 'The needed k2/Q is 0.0177 (within 0.0006).',
+      'heating-at-two-eccentricities':
+        'With k2 = 0.8 and Q = 250 held, heating 1.99 × 10¹³ W (within 0.05) at e = 0.0041 and 7.96 × 10¹³ W (within 0.15) at twice that, four times as much.',
+      'find-the-interiors':
+        'Two pairs of k2 and Q, with k2 values at least 0.2 apart, whose heating at e = 0.0041 lies between 0.6 and 1.6 × 10¹⁴ W, such as (0.5, 30) and (1.0, 60).',
     },
     'weighing-jupiter': {
       'how-fast-does-ganymede-move':
