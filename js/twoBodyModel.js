@@ -4,35 +4,25 @@
 // Which of a pair pulls the other, the mu that follows, and whether the force
 // is inverse-square over the distances the claim covers. Read by the orbit
 // geometry overlay (js/orbitGeometry.js), which loads lazily, so it lives
-// here rather than in js/orbital.js, a start-up module. It imports nothing:
-// the caller hands it the halo's field as a function, as it hands it the
-// softening (js/twoBodySettings.js).
+// here rather than in js/orbital.js, a start-up module. It imports only the
+// engine's pure source rule; the caller hands it the halo's field as a
+// function, as it hands it the softening (js/twoBodySettings.js).
 // =============================================================================
+
+import { isSourceKind } from './engine/sources.js';
 
 // Bound once: free globals are 8-25x slower in Jest's vm context.
 const { Math } = globalThis;
 
-// What the integrator counts as a source, by kind (js/engine/step.js,
-// updateCachedArrays): holes, stars and galaxies always; giants, neutron stars
-// and white dwarfs unless only stars pull; planets and asteroids only with
-// mutual gravity on and star-only gravity off; comets and debris never.
-const ALWAYS = new Set(['BlackHole', 'StarObject', 'Galaxy']);
-const UNLESS_STAR_ONLY = new Set(['GasGiant', 'NeutronStar', 'WhiteDwarf']);
-const WITH_MUTUAL = new Set(['Planet', 'Asteroid']);
-
 /**
- * Whether the integrator sums this body's gravity for others.
+ * Whether the integrator sums this body's gravity for others: the engine's own
+ * rule (js/engine/sources.js), which the step builds its sources from.
  * @param {Object} b - A body with `kind`
  * @param {Object} s - Settings (mutual_gravity, star_only_gravity)
  * @returns {boolean} True when it is a source
  */
 export function isGravitySource(b, s) {
-  const kind = b?.kind;
-  if (ALWAYS.has(kind)) return true;
-  const starOnly = s?.star_only_gravity === true;
-  if (UNLESS_STAR_ONLY.has(kind)) return !starOnly;
-  if (WITH_MUTUAL.has(kind)) return Boolean(s?.mutual_gravity) && !starOnly;
-  return false;
+  return isSourceKind(b?.kind, s);
 }
 
 /**
