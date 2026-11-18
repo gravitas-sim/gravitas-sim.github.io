@@ -365,7 +365,7 @@ function mount() {
 // Folded, the panel is its title bar alone, so on a phone it leaves the orbit
 // it describes in view; the label on the canvas still says what is drawn.
 let folded =
-  typeof matchMedia === 'function' && matchMedia('(max-width: 600px)').matches;
+  typeof matchMedia === 'function' && matchMedia('(max-width: 767px)').matches;
 
 function build() {
   root.innerHTML = `
