@@ -428,7 +428,8 @@ describe('size facts, from the built solar-system', () => {
     const e = sizeFacts(earth);
     const auUnits = SIM_UNITS_PER_AU;
     // Earth: the inspector's one Earth radius per PLANET_RADIUS of model.
-    const earthReal = (earth.radius / 5) * (EARTH_RADIUS_M / AU_METERS) * auUnits;
+    const earthReal =
+      (earth.radius / 5) * (EARTH_RADIUS_M / AU_METERS) * auUnits;
     expect(e.modelOverReal).toBeCloseTo(earth.radius / earthReal, 9);
     expect(e.drawnOverReal).toBeCloseTo(
       (earth.radius * DISPLAY_FACTOR.Planet) / earthReal,
