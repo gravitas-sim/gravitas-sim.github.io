@@ -713,20 +713,16 @@ export function drawInstrumentation(
     ctx.restore();
   }
 
-  // The frame the picture and its trails are drawn in: beside the size line
-  // where it fits, else the lowest note above the scale line.
-  const sizeLine = t('canvas.sizeDisclosure');
+  // The frame the picture and its trails are drawn in, as the lowest note
+  // above the scale and size lines: beside them it ran under the transport
+  // bar's step chip at 1366 px.
   const frame = sceneWords()?.frameLine() || '';
-  ctx.font = `12px ${INSTRUMENT_MONO}`;
-  const sizeW = ctx.measureText(sizeLine).width;
-  const frameW = ctx.measureText(frame).width;
-  const beside = !frame || sizeW + 24 + frameW <= W - 2 * pad;
 
   // What the tier or a crowd left out, above the scale line.
   let legendBottom = barY - 20;
   ctx.font = `11px ${INSTRUMENT_MONO}`;
   ctx.fillStyle = 'rgb(200, 214, 235)';
-  const notes = beside ? crowdNotes() : [...crowdNotes(), frame];
+  const notes = frame ? [...crowdNotes(), frame] : crowdNotes();
   const wrapped = wrapNotes(ctx, notes, W - 2 * pad);
   keptW = wrapped.width;
   for (const group of wrapped.groups)
@@ -794,11 +790,14 @@ export function drawInstrumentation(
   // bar, so it is in every screenshot.
   ctx.font = `12px ${INSTRUMENT_MONO}`;
   ctx.fillStyle = 'rgb(200, 214, 235)';
-  halo(ctx, sizeLine, pad + 2, barY + 14);
-  if (frame && beside) halo(ctx, frame, pad + 26 + sizeW, barY + 14);
+  halo(ctx, t('canvas.sizeDisclosure'), pad + 2, barY + 14);
   const bar =
     settings.show_scale_bar !== false ? Math.min(160, W * 0.22) + 70 : 0;
-  keptW = Math.max(keptW, bar, sizeW + (frame && beside ? 24 + frameW : 0));
+  keptW = Math.max(
+    keptW,
+    bar,
+    ctx.measureText(t('canvas.sizeDisclosure')).width
+  );
   keepClear(pad, Math.min(noteTop, barY) - 8, pad + keptW + 6, barY + 24);
 
   ctx.restore();
