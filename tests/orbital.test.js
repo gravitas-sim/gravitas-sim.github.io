@@ -4,6 +4,8 @@ import {
   dominantPrimary,
   pairEnergy,
   createPeriodTimer,
+  twoBodyModel,
+  isGravitySource,
 } from '../js/orbital.js';
 
 // A star heavy enough that the orbiter's own mass is negligible, so the
@@ -224,5 +226,167 @@ describe('createPeriodTimer', () => {
     timer.reset();
     expect(timer.count()).toBe(0);
     expect(timer.mean()).toBeNull();
+  });
+});
+
+describe('orbitalElements: the optional mu and the periapsis angle', () => {
+  const G = 1;
+  const body = { pos: { x: 100, y: 0 }, vel: { x: 0, y: 0.1 }, mass: 0.1 };
+  const sun = { pos: { x: 0, y: 0 }, vel: { x: 0, y: 0 }, mass: 1 };
+
+  test('without mu a present caller gets G(M+m), as before', () => {
+    const el = orbitalElements(body, sun, G);
+    expect(el.mu).toBe(1.1);
+    expect(el.a).toBeCloseTo(91.6666666667, 9);
+    expect(el.e).toBeCloseTo(0.0909090909, 9);
+  });
+
+  test('with mu = G M the one-way circle is a circle', () => {
+    const el = orbitalElements(body, sun, G, 1);
+    expect(Math.abs(el.a - 100)).toBeLessThan(1e-9 * 100);
+    expect(el.e).toBeLessThan(1e-9);
+  });
+
+  test('periapsis points along the eccentricity vector; a circle uses the body', () => {
+    const fast = { ...body, vel: { x: 0, y: 0.12 } };
+    // Faster than circular at r: the body is at periapsis, angle 0.
+    expect(orbitalElements(fast, sun, G, 1).periapsisAngle).toBeCloseTo(0, 12);
+    const slow = { ...body, vel: { x: 0, y: 0.08 } };
+    // Slower: the body is at apoapsis, so periapsis is opposite.
+    expect(
+      Math.abs(
+        Math.abs(orbitalElements(slow, sun, G, 1).periapsisAngle) - Math.PI
+      )
+    ).toBeLessThan(1e-12);
+    const up = { pos: { x: 0, y: 50 }, vel: { x: -Math.sqrt(1 / 50), y: 0 } };
+    expect(orbitalElements(up, sun, G, 1).periapsisAngle).toBeCloseTo(
+      Math.PI / 2,
+      6
+    );
+  });
+});
+
+describe('twoBodyModel', () => {
+  const base = {
+    gravitational_constant: 1,
+    mutual_gravity: false,
+    star_only_gravity: false,
+    bh_behavior: 'Orbiting',
+    softening: 5,
+    mondA0: 0,
+    halo: null,
+  };
+  const at = (kind, x, mass = 1) => ({
+    kind,
+    pos: { x, y: 0 },
+    vel: { x: 0, y: 0 },
+    mass,
+  });
+
+  test('the source rule by kind follows the engine', () => {
+    const s = (over = {}) => ({ ...base, ...over });
+    for (const k of ['BlackHole', 'StarObject', 'Galaxy'])
+      expect(isGravitySource({ kind: k }, s({ star_only_gravity: true }))).toBe(
+        true
+      );
+    for (const k of ['GasGiant', 'NeutronStar', 'WhiteDwarf']) {
+      expect(isGravitySource({ kind: k }, s())).toBe(true);
+      expect(isGravitySource({ kind: k }, s({ star_only_gravity: true }))).toBe(
+        false
+      );
+    }
+    for (const k of ['Planet', 'Asteroid']) {
+      expect(isGravitySource({ kind: k }, s())).toBe(false);
+      expect(isGravitySource({ kind: k }, s({ mutual_gravity: true }))).toBe(
+        true
+      );
+      expect(
+        isGravitySource(
+          { kind: k },
+          s({ mutual_gravity: true, star_only_gravity: true })
+        )
+      ).toBe(false);
+    }
+    for (const k of ['Comet', 'Debris'])
+      expect(isGravitySource({ kind: k }, s({ mutual_gravity: true }))).toBe(
+        false
+      );
+  });
+
+  test('a planet about a star: one-way with mutual gravity off, mu = G M', () => {
+    const m = twoBodyModel(at('Planet', 100, 0.1), at('StarObject', 0), base);
+    expect(m.pairClass).toBe('one-way');
+    expect(m.mu).toBe(1);
+    expect(m.domain).toBe('inverse-square');
+    expect(m.inverseSquare).toBe(true);
+  });
+
+  test('two stars pull each other: mutual, mu = G(M+m)', () => {
+    const m = twoBodyModel(at('StarObject', 100, 0.1), at('StarObject', 0), {
+      ...base,
+      gravitational_constant: 2,
+    });
+    expect(m.pairClass).toBe('mutual');
+    expect(m.mu).toBeCloseTo(2.2, 12);
+  });
+
+  test('a planet does not pull a hole, and a hole is moved only by holes', () => {
+    const hole = at('BlackHole', 0, 10);
+    const planet = at('Planet', 100, 0.1);
+    expect(twoBodyModel(planet, hole, base).pairClass).toBe('one-way');
+    // A hole about a star: the star is a source, but holes feel only holes.
+    expect(twoBodyModel(hole, at('StarObject', 100), base).pairClass).toBe(
+      'none'
+    );
+    expect(twoBodyModel(at('BlackHole', 100), hole, base).pairClass).toBe(
+      'mutual'
+    );
+    expect(
+      twoBodyModel(at('BlackHole', 100), hole, {
+        ...base,
+        bh_behavior: 'Static',
+      }).pairClass
+    ).toBe('none');
+  });
+
+  test('a comet as primary pulls nothing, and a prescribed body is not moved', () => {
+    expect(
+      twoBodyModel(at('Planet', 100), at('Comet', 0), {
+        ...base,
+        mutual_gravity: true,
+      }).pairClass
+    ).toBe('none');
+    const owned = { ...at('Planet', 100), model_owned: true };
+    expect(twoBodyModel(owned, at('StarObject', 0), base).pairClass).toBe(
+      'none'
+    );
+  });
+
+  test('inside the softening length, or under MOND, it is not inverse-square', () => {
+    const star = at('StarObject', 0);
+    expect(twoBodyModel(at('Planet', 4.9), star, base).domain).toBe('softened');
+    expect(
+      twoBodyModel(at('Planet', 100), star, base, [100, 4.99]).inverseSquare
+    ).toBe(false);
+    expect(
+      twoBodyModel(at('Planet', 100), star, base, [100, 5]).inverseSquare
+    ).toBe(true);
+    expect(
+      twoBodyModel(at('Planet', 100), star, { ...base, mondA0: 1e-6 }).domain
+    ).toBe('mond');
+  });
+
+  test('a halo at 1 percent or more of the primary marks the claim approximate', () => {
+    const star = at('StarObject', 0, 1);
+    // A flat halo: pull v^2 / r. At r = 100 the star pulls 1e-4.
+    const weak = { vFlat: Math.sqrt(0.009 * 1e-2), coreRadius: 1e-9 };
+    const strong = { vFlat: Math.sqrt(0.011 * 1e-2), coreRadius: 1e-9 };
+    const w = twoBodyModel(at('Planet', 100), star, { ...base, halo: weak });
+    const s = twoBodyModel(at('Planet', 100), star, { ...base, halo: strong });
+    expect(w.haloRatio).toBeLessThan(0.01);
+    expect(w.approximate).toBe(false);
+    expect(s.haloRatio).toBeGreaterThan(0.01);
+    expect(s.approximate).toBe(true);
+    expect(s.inverseSquare).toBe(true);
   });
 });

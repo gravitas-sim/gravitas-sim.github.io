@@ -660,3 +660,21 @@ export const ensureStepScratch = count => {
     stepAy = new Float64Array(stepAx.length);
   }
 };
+
+/**
+ * What a two-body claim needs to know of the force law in force, resolved the
+ * way the step resolves it: the softening floor, the MOND a0 and the halo come
+ * from their one authority each, so twoBodyModel (js/orbital.js) carries no
+ * fallback of its own.
+ *
+ * @returns {object} Settings for twoBodyModel
+ */
+export const twoBodySettings = () => ({
+  gravitational_constant: physicsSettings.gravitational_constant,
+  mutual_gravity: physicsSettings.mutual_gravity,
+  star_only_gravity: physicsSettings.star_only_gravity,
+  bh_behavior: physicsSettings.bh_behavior,
+  softening: minInteractionDistance(),
+  mondA0: activeMondA0(),
+  halo: activeHalo(),
+});
