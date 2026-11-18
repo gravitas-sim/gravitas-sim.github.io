@@ -2781,3 +2781,24 @@
 .series-table tbody th {
   font-weight: 400;
 }
+
+/* A quiet canvas (js/lessonCanvas.js): the controls that act on a scene fold. */
+@layer overrides {
+  body[data-lesson-canvas='quiet'] .timeline-bar.is-folded {
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    margin-inline: 0;
+    width: auto;
+    min-width: 0;
+  }
+
+  body[data-lesson-canvas='quiet'] .timeline-bar.is-folded > :not(.timeline-fold) {
+    display: none;
+  }
+
+  body[data-lesson-canvas='quiet']:not(:has(.rail-section-toggle[aria-expanded='true']))
+    #objectAdd {
+    display: none;
+  }
+}

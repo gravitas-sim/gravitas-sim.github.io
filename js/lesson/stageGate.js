@@ -70,6 +70,8 @@ export const applyStage = (...args) =>
   stage?.applyStage(...args) ?? { built: false, roles: [], problems: {} };
 export const stagedStars = () => stage?.stagedStars() ?? [];
 export const stageKey = () => stage?.stageKey() ?? '';
+export const stageMemo = () => stage?.stageMemo() ?? null;
+export const adoptStage = (...args) => stage?.adoptStage(...args) ?? [];
 export const stageScale = () => stage?.stageScale() ?? SCALE.DISPLAY;
 export const stagedPopulation = () => stage?.stagedPopulation() ?? null;
 export const pinnedSnapshots = () => stage?.pinnedSnapshots() ?? [];

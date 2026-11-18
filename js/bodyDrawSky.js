@@ -10,7 +10,8 @@
 
 import { SOLAR_MASS_UNIT } from './constants.js';
 import { formatNumber } from './format.js';
-import { drawSolarLabel, hexToRgb, computeDynamicColor } from './utils.js';
+import { hexToRgb, computeDynamicColor } from './utils.js';
+import { bodyLabel } from './bodyLabels.js';
 import { mulberry32 } from './rng.js';
 import { whiteDwarfColor, tracerColor } from './bodyEffects.js';
 import {
@@ -225,21 +226,6 @@ function drawStar(o, ctx) {
   const level = lodOf(o, 'Star');
 
   // Color from the temperature, not from the mass directly.
-  //
-  // The two agree for a main-sequence star, because the temperature is
-  // estimated from the mass when a star does not carry one - but a star that
-  // DOES carry one, which is every star a scenario builds from real data, was
-  // being colored from a mass-to-color table that knew nothing about it.
-  // stellarPropertiesFor is the same function the habitable-zone ring and the
-  // light curve read, so the color on screen and the physics in the panels
-  // now come from one number. An explicit baseColor still wins: a scenario
-  // that names a color means it.
-  // Memoised on the star, keyed on the mass it was computed from.
-  //
-  // The color only changes when the star does, which is on accretion or a
-  // merger - not sixty times a second. A cluster of five hundred stars was
-  // otherwise running stellarPropertiesFor, which allocates, once per star
-  // per frame to arrive at the same answer it gave on the previous one.
   if (
     !o._visual ||
     o._visual.mass !== o.mass ||
@@ -327,55 +313,17 @@ function drawStar(o, ctx) {
     // no-op
   }
 
-  ctx.save();
-  ctx.setTransform(1, 0, 0, 1, 0, 0);
-  const true_screen_pos = world_to_screen(world_pos);
-  // Two different sizes, on purpose.
-  //
-  // The offset follows the *drawn* body, so a label sits just off the disc
-  // the reader can see. Whether to label at all follows the *model* radius,
-  // which is the size this decision has always been made on: gating on the
-  // drawn size instead would have taken the names off every planet in the
-  // Solar System the moment the displayed-size policy shrank them, which is
-  // a labeling change nobody asked for.
-  const screen_radius = r * state.zoom;
-  const label_size = o.radius * state.zoom;
-
-  if (label_size > 5) {
-    const label_y_offset = screen_radius + 12;
-    ctx.font = '12px Roboto Mono';
-    ctx.fillStyle = '#fff';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.shadowColor = 'black';
-    ctx.shadowBlur = 4;
-
-    // Show name for Solar System sun, mass for others - unless a lesson has
-    // asked for neither. A step that puts three unlabeled stars up and asks
-    // a reader to judge them by eye is undone by a mass printed under each
-    // one, and that is the first screen of A Universe of Stars. The flag is
-    // set by js/lessonStage.js from the step's own declaration and cleared
-    // with the stage, so nothing else can leave a star anonymous.
-    if (o.anonymous) {
-      // Nothing. The lesson's object list still names it, so it is still
-      // selectable and still reachable from the keyboard.
-    } else if (o.isSolarSystemSun) {
-      ctx.fillText(
-        o.name,
-        true_screen_pos.x,
-        true_screen_pos.y + label_y_offset
-      );
-    } else {
-      drawSolarLabel(
-        ctx,
-        formatNumber(o.massInSuns),
-        true_screen_pos.x,
-        true_screen_pos.y + label_y_offset
-      );
-      // Remove subscript 'sun' drawing
-    }
-  }
-  ctx.restore();
+  // The offset follows the drawn disc; naming follows the model radius. A
+  // lesson can ask for neither (`anonymous`): the star stays selectable from
+  // the lesson's object list.
+  if (!o.anonymous)
+    bodyLabel(o, world_to_screen(world_pos), r * state.zoom, {
+      px: 12,
+      gate: o.radius * state.zoom > 5,
+      ...(o.isSolarSystemSun
+        ? { name: o.name }
+        : { value: formatNumber(o.massInSuns) }),
+    });
 }
 
 function drawNeutronStar(o, ctx) {
@@ -455,37 +403,12 @@ function drawNeutronStar(o, ctx) {
   }
 
   // Label
-  ctx.save();
-  ctx.setTransform(1, 0, 0, 1, 0, 0);
-  const true_screen_pos = world_to_screen(world_pos);
-  // Two different sizes, on purpose.
-  //
-  // The offset follows the *drawn* body, so a label sits just off the disc
-  // the reader can see. Whether to label at all follows the *model* radius,
-  // which is the size this decision has always been made on: gating on the
-  // drawn size instead would have taken the names off every planet in the
-  // Solar System the moment the displayed-size policy shrank them, which is
-  // a labeling change nobody asked for.
-  const screen_radius = nsR * state.zoom;
-  const label_size = o.radius * state.zoom;
-
-  if (label_size > 2) {
-    const label_y_offset = screen_radius * 8 + 12;
-    ctx.font = '12px Roboto Mono';
-    ctx.fillStyle = '#fff';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.shadowColor = 'black';
-    ctx.shadowBlur = 4;
-    drawSolarLabel(
-      ctx,
-      formatNumber(o.massInSuns),
-      true_screen_pos.x,
-      true_screen_pos.y + label_y_offset,
-      { suffix: ' NS' }
-    );
-  }
-  ctx.restore();
+  bodyLabel(o, world_to_screen(world_pos), nsR * state.zoom * 8, {
+    px: 12,
+    gate: o.radius * state.zoom > 2,
+    value: formatNumber(o.massInSuns),
+    suffix: ' NS',
+  });
 }
 
 function drawWhiteDwarf(o, ctx) {
@@ -547,37 +470,12 @@ function drawWhiteDwarf(o, ctx) {
   }
 
   // Label
-  ctx.save();
-  ctx.setTransform(1, 0, 0, 1, 0, 0);
-  const true_screen_pos = world_to_screen(world_pos);
-  // Two different sizes, on purpose.
-  //
-  // The offset follows the *drawn* body, so a label sits just off the disc
-  // the reader can see. Whether to label at all follows the *model* radius,
-  // which is the size this decision has always been made on: gating on the
-  // drawn size instead would have taken the names off every planet in the
-  // Solar System the moment the displayed-size policy shrank them, which is
-  // a labeling change nobody asked for.
-  const screen_radius = wdR * state.zoom;
-  const label_size = o.radius * state.zoom;
-
-  if (label_size > 3) {
-    const label_y_offset = screen_radius * 2 + 12;
-    ctx.font = '12px Roboto Mono';
-    ctx.fillStyle = '#fff';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.shadowColor = 'black';
-    ctx.shadowBlur = 4;
-    drawSolarLabel(
-      ctx,
-      formatNumber(o.massInSuns),
-      true_screen_pos.x,
-      true_screen_pos.y + label_y_offset,
-      { suffix: ' WD' }
-    );
-  }
-  ctx.restore();
+  bodyLabel(o, world_to_screen(world_pos), wdR * state.zoom * 2, {
+    px: 12,
+    gate: o.radius * state.zoom > 3,
+    value: formatNumber(o.massInSuns),
+    suffix: ' WD',
+  });
 }
 
 function drawGalaxy(o, ctx) {

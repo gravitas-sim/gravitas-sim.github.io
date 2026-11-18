@@ -97,6 +97,8 @@ import { allWidgets, whenWidgetsReady } from '../js/widgets.js';
 import { BUILTIN_SOURCES } from '../js/platform/builtins.js';
 import { CATALOGUE_DATA } from '../js/compute/catalogueData.js';
 import { auditBindings, parseCollected } from './acceptance-bindings.mjs';
+import { canvasAt, canvasKinds } from '../js/lesson/canvasKind.js';
+import { canvasAcceptance } from './canvas-acceptance.mjs';
 import { inOwnTransformCache } from './playwright-cache.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
@@ -108,6 +110,9 @@ const PROVENANCE = resolve(ROOT, 'js/data/investigations/provenance.js');
 const args = process.argv.slice(2);
 const wantJson = args.includes('--json');
 const wantCheck = args.includes('--check');
+
+/** What a lesson says its canvas is for (js/lesson/canvasKind.js). */
+const CANVAS_KINDS = ['scene', 'portrait', 'quiet'];
 
 /** The eight kinds. A step's `kinds` is a subset; several is normal. */
 const KIND = {
@@ -1573,6 +1578,9 @@ async function audit() {
             [],
         },
         kinds,
+        // What the canvas behind the step is for, where the lesson says
+        // (js/lesson/canvasKind.js); absent where it says nothing.
+        ...(canvasAt(inv, index) ? { canvas: canvasAt(inv, index).kind } : {}),
         actions,
         requires: step.requires ?? [],
         // The step where this prediction is marked, when its marking waits
@@ -1626,6 +1634,7 @@ async function audit() {
       id: inv.id,
       title: inv.title,
       lock: inv.lock || null,
+      ...(canvasKinds(inv).length ? { canvas: canvasKinds(inv) } : {}),
       steps,
       loops: loopsFor(steps),
       totals: totalsFor(steps),
@@ -1675,6 +1684,12 @@ async function audit() {
     lessons,
     totals: {
       ...totalsFor(all),
+      canvas: Object.fromEntries(
+        [...CANVAS_KINDS, 'unstated'].map(k => [
+          k,
+          all.filter(s => (s.canvas ?? 'unstated') === k).length,
+        ])
+      ),
       lessons: lessons.length,
       loops: lessons.reduce((n, l) => n + l.loops.length, 0),
       closedLoops: lessons.reduce(
@@ -1759,6 +1774,10 @@ function report(data) {
       `${pad(`${t.completeLoops}/${t.closedLoops}/${t.loops}`, 8)} ${t.mismatched}`
   );
   lines.push(`\n${t.prose} step(s) carry none of the eight kinds: prose.`);
+  lines.push(
+    `Canvas per step: ${CANVAS_KINDS.map(k => `${t.canvas[k]} ${k}`).join(', ')}, ` +
+      `${t.canvas.unstated} unstated.`
+  );
 
   const mismatches = data.lessons.flatMap(l =>
     l.steps.filter(s => s.loop.mismatch).map(s => [l.id, s])
@@ -1829,6 +1848,9 @@ function record(data, acceptance) {
     `${t.completeLoops} produce a measurement before they are answered, and`,
     `${t.explainedLoops} end in an explanation in the reader's own words.`,
     `${t.heldLoops} hold their marking until the experiment settles them.`,
+    `The canvas behind a step is stated as ${CANVAS_KINDS.map(
+      k => `${k} on ${t.canvas[k]}`
+    ).join(', ')}; ${t.canvas.unstated} state none.`,
     ''
   );
   for (const l of data.lessons) {
@@ -1864,6 +1886,7 @@ function record(data, acceptance) {
       `- **What students do:** ${actions.join(', ')}.`,
       `- **Objects the steps declare:** ${objects.length ? objects.join(', ') : 'none'}.`,
       `- **Instruments:** ${instruments.length ? instruments.join(', ') : 'none'}.`,
+      ...(l.canvas ? [`- **Canvas:** ${l.canvas.join(', ')}.`] : []),
       `- **Stored data:** ${datasets.length ? datasets.join('; ') : 'none'}.`,
       `- **Evidence kept:** ${
         evidence.length
@@ -2086,6 +2109,15 @@ async function checkAcceptance(data) {
         }
       }
     }
+
+    // The canvas a lesson declares is recorded in the map (tools/canvas-acceptance.mjs).
+    problems.push(
+      ...canvasAcceptance(
+        INVESTIGATIONS.find(i => i.id === lesson.id),
+        entry,
+        lesson.steps
+      )
+    );
 
     const sids = new Set(lesson.steps.map(s => s.sid));
     for (const sid of entry.loop || []) {

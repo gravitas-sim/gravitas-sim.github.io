@@ -126,6 +126,9 @@ const sameCamera = was =>
   Math.abs(state.pan.x - was.pan.x) < 0.5 &&
   Math.abs(state.pan.y - was.pan.y) < 0.5;
 
+/** Whether a fit has been asked for and not yet performed. */
+export const fitWanted = () => pending;
+
 /** Ask for a fit on the next tick, or cancel one. */
 export function requestFit(on = true) {
   pending = Boolean(on);
