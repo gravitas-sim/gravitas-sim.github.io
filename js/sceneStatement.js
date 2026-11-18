@@ -1,14 +1,10 @@
 // =============================================================================
 // The scene in words: its frame, what pulls on what, and the barycenter marker
 // -----------------------------------------------------------------------------
-// Loaded on first use (js/canvasSummary.js, sceneWords), never at start-up.
-// The frame line names the frame the picture and its trails are drawn in. The
-// source line reads the engine's own rule (js/engine/sources.js), so it cannot
-// differ from what the step sums. The rail marker is the mass-weighted mean
-// position of the whole system, as the barycentric frame averages it
-// (barycenterBodies()), or of the selected body and its primary, the source
-// that pulls hardest on it (dominantPrimary, as the orbit geometry overlay
-// chooses it). It is recomputed from the bodies every frame and never stored.
+// Loaded on first use (js/canvasSummary.js, sceneWords), never at start-up. The
+// source line reads the engine's own rule (js/engine/sources.js). The rail
+// marker is the mass-weighted mean position of the whole system, or of the
+// selected body and its primary (dominantPrimary), recomputed every frame.
 // =============================================================================
 
 import { state } from './appState.js';

@@ -48,18 +48,13 @@ export const sceneWords = (load = false) => {
   return typeof scene?.frameLine === 'function' ? scene : null;
 };
 
-// Not installed, so not fetched on its own offline: it waits for the network.
-const whenOnline = run =>
-  navigator.onLine === false
-    ? window.addEventListener('online', run, { once: true })
-    : run();
-
 let deferred = false;
 // Fetched 3 s after the splash, at idle: after the route is usable.
 function deferSceneWords() {
   if (deferred || !window.splashScreenEnded) return;
   deferred = true;
-  const go = () => whenOnline(() => sceneWords(true));
+  // Not installed, so not fetched on its own offline: asked again on the next rebuild.
+  const go = () => (navigator.onLine ? sceneWords(true) : (deferred = false));
   setTimeout(
     () =>
       window.requestIdleCallback
@@ -69,26 +64,24 @@ function deferSceneWords() {
   );
 }
 const sizeModule = () => {
-  if (!sizes)
-    sizes =
-      whenOnline(() =>
-        import('./sizeFacts.js')
-          .then(m => {
-            sizes = m;
-            labelSizesButton();
-            onLocaleChange(labelSizesButton);
-          })
-          .catch(() => {})
-      ) || 1;
-  return typeof sizes.sizeSentence === 'function' ? sizes : null;
+  if (!sizes && navigator.onLine)
+    sizes = import('./sizeFacts.js')
+      .then(m => {
+        sizes = m;
+        labelSizesButton();
+        onLocaleChange(labelSizesButton);
+      })
+      .catch(() => {});
+  return typeof sizes?.sizeSentence === 'function' ? sizes : null;
 };
 
 // Shown once the size facts' words are here.
 function labelSizesButton() {
   const btn = document.getElementById('readoutSizes');
-  if (!btn) return;
-  btn.textContent = t('sizes.button');
-  btn.hidden = false;
+  if (btn) {
+    btn.textContent = t('sizes.button');
+    btn.hidden = false;
+  }
 }
 import { scenarioTitle } from './i18n/scenario.js';
 
@@ -231,9 +224,7 @@ export function summaryText() {
 
 function wireSizesButton() {
   const btn = document.getElementById('readoutSizes');
-  if (!btn || btn.dataset.wired) return;
-  btn.dataset.wired = '1';
-  btn.addEventListener('click', () =>
+  btn?.addEventListener('click', () =>
     import('./sizeStatement.js')
       .then(m => m.openSizeStatement(btn))
       .catch(() => announce(t('sizes.offline')))
