@@ -314,19 +314,20 @@ export function figureFor(f, locale = getLocale()) {
 }
 
 /**
- * Draw a step's figure into the element its markup left for it.
+ * Draw a step's figure under its body text, once its module has loaded.
  *
- * @param {Element} el - The `<figure data-figure-from>` placeholder
+ * @param {Element} body - The step panel's body
  * @param {Object} f - The step's `figure`
  * @param {string} [locale] - The page's when omitted
  */
-export function fill(el, f, locale) {
+export function fill(body, f, locale) {
   const r = figureFor(f, locale);
-  if (!r.ok) {
-    el.hidden = true;
-    return;
-  }
+  const at = body.querySelector('.inv-step-body');
+  if (!r.ok || !at) return;
+  const el = document.createElement('figure');
+  el.className = 'inv-figure';
   el.innerHTML =
     `${r.svg}<figcaption><span class="inv-figure-caption">${esc(r.caption)}</span>` +
     `<span class="inv-figure-credit">${esc(r.numbers)}</span></figcaption>`;
+  at.after(el);
 }

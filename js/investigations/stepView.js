@@ -61,11 +61,7 @@ export const misconceptionText = missed =>
 // correct terse answer is not held hostage.
 export const SHORT_ANSWER_MIN = 40;
 
-/**
- * Six places a lazy module adds to a step (an empty slot is the step as it was),
- * filled when a lesson opens: field (importFromSelection, source, take, span),
- * runs (variation), reveal, time, canvas, feedback.
- */
+/** Six places a lazy module adds to a step; an empty slot is the step as it was. */
 export const slots = {
   field: null,
   runs: null,
@@ -159,9 +155,7 @@ export function stepMarkup(step, c) {
     );
   }
 
-  if (step.figure?.from) {
-    parts.push('<figure class="inv-figure" data-figure-from></figure>');
-  } else if (step.figure) {
+  if (step.figure && !step.figure.from) {
     const f = step.figure;
     // Credit is part of the block rather than a footnote: these are other
     // people's photographs, used under licenses that require naming them.
@@ -177,22 +171,13 @@ export function stepMarkup(step, c) {
       .filter(Boolean)
       .join(', ');
     parts.push(
-      `<figure class="inv-figure">
-         <img src="${attr(f.src)}" alt="${attr(f.alt)}" loading="lazy" decoding="async" />
-         <figcaption>
-           <span class="inv-figure-caption">${prose(f.caption)}</span>
-           ${credit ? `<span class="inv-figure-credit">${credit}</span>` : ''}
-         </figcaption>
-       </figure>`
+      `<figure class="inv-figure"><img src="${attr(f.src)}" alt="${attr(f.alt)}" loading="lazy" decoding="async" /><figcaption><span class="inv-figure-caption">${prose(f.caption)}</span>${credit ? `<span class="inv-figure-credit">${credit}</span>` : ''}</figcaption></figure>`
     );
   }
 
   if (step.quote) {
     parts.push(
-      `<figure class="inv-quote">
-         <blockquote>${prose(step.quote.text)}</blockquote>
-         <figcaption>${escape(step.quote.by)}</figcaption>
-       </figure>`
+      `<figure class="inv-quote"><blockquote>${prose(step.quote.text)}</blockquote><figcaption>${escape(step.quote.by)}</figcaption></figure>`
     );
   }
 
@@ -761,11 +746,9 @@ export function bindStepInputs(h) {
       }
     });
   }
-  const drawn = els.body.querySelector('[data-figure-from]');
-  if (drawn)
-    import('../lessonFigures.js').then(m =>
-      m.fill(drawn, h.currentStep().figure)
-    );
+  const drawn = h.currentStep().figure;
+  if (drawn?.from)
+    import('../lessonFigures.js').then(m => m.fill(els.body, drawn));
   if (els.body.querySelector('[data-recover]'))
     import('./recovery.js').then(m => m.fill(h, announce, getLocale, hintsFor));
 }

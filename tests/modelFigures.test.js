@@ -296,18 +296,18 @@ describe('the drawing', () => {
     }
   });
 
-  test('fill puts the picture and its caption in the placeholder, or hides it', () => {
-    const el = document.createElement('figure');
-    fill(el, figureSteps[0].figure, 'es');
+  test('fill puts the picture and its caption under the step text, or nothing', () => {
+    const body = document.createElement('div');
+    body.innerHTML = '<div class="inv-step-body"><p>Text</p></div>';
+    fill(body, figureSteps[0].figure, 'es');
+    const el = body.querySelector('.inv-step-body + figure.inv-figure');
     expect(el.querySelector('svg[role="img"]')).not.toBeNull();
     expect(el.querySelector('figcaption').textContent).toMatch(/Modelado/);
-    const bad = document.createElement('figure');
-    fill(bad, { from: 'orbit', params: { a: 10, e: 0.5 }, unit: 1 }, 'en');
-    // Sound params with a silly unit still draw; a state with no orbit hides.
-    const unbound = clone(ORBIT_UNBOUND);
-    const gone = document.createElement('figure');
-    fill(gone, unbound, 'en');
-    expect(gone.hidden).toBe(true);
+    // A state with no orbit in it draws nothing.
+    const gone = document.createElement('div');
+    gone.innerHTML = '<div class="inv-step-body"></div>';
+    fill(gone, ORBIT_UNBOUND, 'en');
+    expect(gone.querySelector('figure')).toBeNull();
   });
 });
 
@@ -441,12 +441,9 @@ describe('the step markup', () => {
     recomputeFields: () => {},
   });
 
-  test('a drawn figure leaves a placeholder and nothing else; a photograph is as it was', () => {
+  test('a drawn figure adds nothing to the markup (its module fills it in); a photograph is as it was', () => {
     const drawn = stepMarkup(figureSteps[0], ctx(figureSteps[0])).join('');
-    expect(drawn).toMatch(
-      /<figure class="inv-figure" data-figure-from><\/figure>/
-    );
-    expect(drawn).not.toMatch(/<img|<svg/);
+    expect(drawn).not.toMatch(/<img|<svg|<figure/);
     const photo = {
       ...LESSON.steps[4],
       sid: 'p',
