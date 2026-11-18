@@ -96,7 +96,7 @@ async function press(page, app, id) {
 const STATES = {
   fit: {
     en: [
-      /centre the camera on the bodies/i,
+      /center the camera on the bodies/i,
       /zoom to fit/i,
       /bodies, settings, seed, clock and pause stay/i,
     ],
