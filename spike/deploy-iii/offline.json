@@ -1,0 +1,145 @@
+{
+ "expectedCore": 3198,
+ "buildVersion": "gravitas-8837a26e97f7",
+ "routes": {
+  "front-door": {
+   "state": "opened",
+   "ok": true,
+   "problems": [],
+   "problemCount": 0
+  },
+  "sandbox": {
+   "state": "opened",
+   "ok": true,
+   "problems": [],
+   "problemCount": 0
+  },
+  "kepler": {
+   "state": "opened",
+   "ok": true,
+   "problems": [],
+   "problemCount": 0
+  },
+  "transit": {
+   "state": "opened",
+   "ok": true,
+   "problems": [],
+   "problemCount": 0
+  },
+  "power-law": {
+   "state": "opened",
+   "ok": true,
+   "problems": [],
+   "problemCount": 0
+  },
+  "largest-lesson": {
+   "state": "opened",
+   "ok": true,
+   "problems": [],
+   "problemCount": 0
+  },
+  "observatory": {
+   "state": "opened",
+   "ok": true,
+   "problems": [],
+   "problemCount": 0
+  },
+  "sky": {
+   "state": "opened",
+   "ok": false,
+   "problems": [
+    "504 http://127.0.0.1:4472/sky/bright-stars.json",
+    "504 http://127.0.0.1:4472/sky/ephemeris.json"
+   ],
+   "problemCount": 2
+  },
+  "experiments": {
+   "state": "redirected to /",
+   "ok": false,
+   "problems": [],
+   "problemCount": 0
+  },
+  "my-work": {
+   "state": "opened",
+   "ok": false,
+   "problems": [
+    "504 http://127.0.0.1:4472/library/library.json"
+   ],
+   "problemCount": 1
+  },
+  "instructors": {
+   "state": "redirected to /",
+   "ok": false,
+   "problems": [],
+   "problemCount": 0
+  },
+  "teaching": {
+   "state": "redirected to /",
+   "ok": false,
+   "problems": [],
+   "problemCount": 0
+  },
+  "adoption": {
+   "state": "redirected to /",
+   "ok": false,
+   "problems": [],
+   "problemCount": 0
+  },
+  "teach-find": {
+   "state": "redirected to /",
+   "ok": false,
+   "problems": [],
+   "problemCount": 0
+  },
+  "teach-kit": {
+   "state": "redirected to /",
+   "ok": false,
+   "problems": [],
+   "problemCount": 0
+  }
+ },
+ "expectedAll": 3371,
+ "installed": {
+  "name": "gravitas-8837a26e97f7",
+  "count": 3318
+ },
+ "installedAll": {
+  "name": "gravitas-8837a26e97f7",
+  "count": 3371
+ },
+ "controlled": true,
+ "pageErrors": [],
+ "rollback": {
+  "treeVersion": "gravitas-91ec47e7a373",
+  "treeCacheCreated": true,
+  "treeWorkerWaiting": true,
+  "beforeTabsClosed": {
+   "caches": [
+    "gravitas-8837a26e97f7",
+    "gravitas-91ec47e7a373"
+   ],
+   "waiting": true
+  },
+  "afterTabsClosed": {
+   "caches": [
+    "gravitas-91ec47e7a373"
+   ],
+   "servedTreeDocument": true,
+   "onPage": [
+    "js/utils.js",
+    "js/physics.js",
+    "js/render.js",
+    "js/ui.js",
+    "js/lightCurve.js",
+    "js/radialVelocity.js"
+   ]
+  },
+  "buildCacheGone": true
+ },
+ "t6": {
+  "unchanged_tree_same_version": true,
+  "one_precached_file_changed_new_version": true,
+  "restored_same_version": true,
+  "unprecached_file_added_same_version": true
+ }
+}

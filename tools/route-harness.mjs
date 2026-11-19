@@ -760,7 +760,7 @@ async function main() {
 
   const { chromium } = await import('playwright');
   const server = await serveStatic({
-    root: ROOT,
+    root: process.env.GRAVITAS_HARNESS_ROOT || ROOT,
     gzip: transport === 'gzip',
     cacheHeaders: transport === 'gzip',
   });
