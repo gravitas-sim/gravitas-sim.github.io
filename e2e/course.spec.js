@@ -169,7 +169,7 @@ test.describe('the course home', () => {
     expect(href).toMatch(/\/#a1[zr]/);
     await page.goto(href, { waitUntil: 'domcontentloaded' });
     await expect(page.locator('body')).toContainText(
-      '6 steps of Finding Planets by Their Shadows',
+      '7 steps of Finding Planets by Their Shadows',
       { timeout: 60_000 }
     );
   });

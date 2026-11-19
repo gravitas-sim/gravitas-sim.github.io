@@ -90,7 +90,7 @@ const watching = ctx => {
 /** The stretch of time on the plot, for a step where the student sets bounds. */
 const recording = ctx => {
   const a = ctx.photometry();
-  const { x } = a.series();
+  const { x } = a.series?.() ?? { x: [] };
   const rows = [{ label: 'Complete transits recorded', value: String(a.seen) }];
   rows.push(
     x.length
@@ -100,18 +100,13 @@ const recording = ctx => {
         }
       : { label: 'The plot', value: 'empty: let the simulation run' }
   );
-  if (a.last)
-    rows.push({
-      label: 'Latest dip, first to last contact',
-      value: `${(a.last.mid - a.last.duration / 2).toFixed(3)} to ${(a.last.mid + a.last.duration / 2).toFixed(3)} days`,
-    });
   return rows;
 };
 
 /** Two stretches of the recorded curve a student sets, and what they make. */
 const SPANS = {
-  outside: ctx => ({ ...ctx.photometry().series(), unit: 'days' }),
-  inside: ctx => ({ ...ctx.photometry().series(), unit: 'days' }),
+  outside: ctx => ({ ...ctx.photometry().series?.(), unit: 'days' }),
+  inside: ctx => ({ ...ctx.photometry().series?.(), unit: 'days' }),
 };
 const mean = (id, label, span) => ({
   id,
@@ -141,6 +136,11 @@ const judgeStretches = (lo, hi, ok) => v => {
   const d = v.base - v.bot;
   const say = (level, message) => ({ level, message });
   if (!Number.isFinite(d)) return null;
+  if (Math.abs(d) < 3e-4)
+    return say(
+      'warn',
+      'The two stretches have almost the same mean, so there is no depth between them. Put the in-transit stretch on the floor of a dip and the other on a flat stretch between dips.'
+    );
   if (d <= 0)
     return say(
       'error',
@@ -542,7 +542,7 @@ const TRANSITS = {
         },
       ],
       validate: judgeStretches(
-        0.0125,
+        0.013,
         0.0195,
         'Two stretches, one depth. Keep it: the next screens set it beside your estimate and say why the radius it gives is not quite right.'
       ),
@@ -576,9 +576,13 @@ const TRANSITS = {
              \n\n<strong><em>δ</em><sub>measured</sub> = 1.215 × (<em>R</em><sub>p</sub> /
              <em>R</em><sub>★</sub>)<sup>2</sup></strong>
              \n\nTaking the square root of your measured depth therefore
-             overestimates the radius ratio by √1.215 = 1.102, about 10%. On a
-             planet near a classification boundary, 10% is the difference between
-             two different answers about what the world is made of.
+             overestimates the radius ratio by √1.215 = 1.102, about 10%, when the
+             stretch you took is at the middle of the dip. The floor is curved,
+             because towards either end of it the planet is crossing dimmer
+             light, so a stretch that takes in more of the floor gives a smaller
+             depth and a smaller error; the factor 1.215 belongs to the middle.
+             On a planet near a classification boundary, 10% is the difference
+             between two different answers about what the world is made of.
              \n\nThis is not a quirk of the simulation. It is why nobody in the
              field reports √<em>δ</em> as a radius ratio: a real transit fit solves for the
              radius ratio, the limb-darkening coefficients, the [[impact-parameter|impact parameter]]
@@ -1303,7 +1307,7 @@ const TRANSITS = {
         ...depthFields('the light collected'),
       ],
       validate: judgeStretches(
-        0.0075,
+        0.008,
         0.0125,
         'Two stretches, one depth for the second system. The next screen puts it beside the first.'
       ),

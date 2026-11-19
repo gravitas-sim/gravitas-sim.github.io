@@ -293,6 +293,7 @@ export const INTRO_ASTRONOMY = {
             'where-the-depth-comes-from',
             'from-a-depth-to-a',
             'choose-the-two-stretches',
+            'why-that-radius-came-out',
           ],
           title: {
             en: 'A first transit',
@@ -300,9 +301,9 @@ export const INTRO_ASTRONOMY = {
             esOf: 'd1f6f34d',
           },
           intro: {
-            en: "Six steps from Finding Planets by Their Shadows: predict what a planet does to its star's light, watch it happen, and turn the dip into the size of HD 209458 b.",
-            es: 'Seis pasos de Encontrar planetas por sus sombras: predice qué le hace un planeta a la luz de su estrella, míralo ocurrir y convierte la caída en el tamaño de HD 209458 b.',
-            esOf: '4e151d2b',
+            en: "Seven steps from Finding Planets by Their Shadows: predict what a planet does to its star's light, watch it happen, measure the dip from two stretches of the curve, and see why your estimate and your reading differ.",
+            es: 'Siete pasos de Encontrar planetas por sus sombras: predice qué le hace un planeta a la luz de su estrella, míralo ocurrir, mide la caída con dos tramos de la curva y mira por qué tu estimación y tu lectura difieren.',
+            esOf: '8989162e',
           },
           teacherNote: {
             en: 'A thirty-minute cut of a seventy-minute investigation. It goes on to limb darkening, the period and a blended binary; set it instead for a longer class.',
@@ -315,15 +316,16 @@ export const INTRO_ASTRONOMY = {
             created: '2026-09-28',
           },
           pin: {
-            fp: '8908fdd2',
-            n: 29,
+            fp: '6a329d4d',
+            n: 30,
             f: [
               'fde58902',
-              '6fe103a3',
+              '94970d69',
               '5fd14104',
               '2402c515',
               'e111c463',
-              'e1abf441',
+              '961b092c',
+              '2402c515',
             ],
           },
         },

@@ -309,9 +309,9 @@ describe('reading a recorded light curve', () => {
       expect(d.x).toHaveLength(201);
       expect(d.unit).toBe('days');
     }
-    // The readout says where the plot runs and where the dip is, not its levels.
+    // The readout says where the plot runs, not its levels nor where the dip is.
     const rows = step.probe(withTransits()).map(r => `${r.label} ${r.value}`);
-    expect(rows.join(' ')).not.toMatch(/1\.0000|0\.9817/);
+    expect(rows.join(' ')).not.toMatch(/1\.0000|0\.9817|contact/);
   });
 
   test('the depth step judges the two stretches, and names the slip', () => {
@@ -333,6 +333,41 @@ describe('reading a recorded light curve', () => {
     expect(inDip.message).toMatch(/averages in part of a dip/);
     // The two stretches swapped.
     expect(judge(0.9831, 1.000065).level).toBe('error');
+    // Two flat stretches, or one stretch twice, are not called swapped.
+    const flat = judge(1.000065, 1.000065);
+    expect(flat.level).toBe('warn');
+    expect(flat.message).toMatch(/almost the same mean/);
+    expect(flat.message).not.toMatch(/swapped/);
+  });
+
+  test('a depth the stretches check accepts is never refused by the radius step', () => {
+    const measure = stepFor('Choose the two stretches');
+    const radius = stepFor('Correct it, and get a real radius');
+    const judge = d => {
+      const v = { base: 1, bot: 1 - d };
+      for (const f of measure.fields) if (f.compute) v[f.id] = f.compute(v);
+      return measure.validate(v, stubContext());
+    };
+    let accepted = 0;
+    for (let d = 0.0125; d <= 0.0196; d += 0.00005) {
+      if (judge(d).level !== 'ok') continue;
+      accepted++;
+      const v = { d2: d, rstar: 1.155 };
+      for (const f of radius.fields) if (f.compute) v[f.id] = f.compute(v);
+      expect(radius.validate(v, stubContext()).level).toBe('ok');
+    }
+    expect(accepted).toBeGreaterThan(100);
+    // The floor's edge, where the planet is just fully on the disk, is
+    // 1.32 percent for the clean system and that over 1.631 for the blend.
+    expect(judge(0.0132).level).toBe('ok');
+    const blend = stepFor('Compare the two curves');
+    const jb = d => {
+      const v = { base: 1, bot: 1 - d };
+      for (const f of blend.fields) if (f.compute) v[f.id] = f.compute(v);
+      return blend.validate(v, stubContext());
+    };
+    expect(jb(0.0132 / 1.631).level).toBe('ok');
+    expect(jb(0.0072).level).toBe('warn');
   });
 
   test('the timing step records the most recent transit and its number', () => {
