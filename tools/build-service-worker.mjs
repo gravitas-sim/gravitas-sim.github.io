@@ -259,6 +259,11 @@ export const NEVER_PRECACHED = [
   // data-budget ceiling and the idle tier has no room). The plot component
   // they draw with is installed already.
   /^js\/investigations\/(plotView|pointing)\.js$/,
+  // The deeper steps of Kepler's Laws and their Spanish: fetched when a student
+  // opens a deeper level and kept by the service worker after that, not
+  // installed (the first-visit tier is at its data-budget ceiling after the
+  // lesson was reworked around readings; D-R4-328-05).
+  /^js\/data\/investigations\/depth\/(es\/)?keplers-laws\.js$/,
   /^js\/i18n\/(en|es)\.linked\.js$/,
   // The controlled-run code: fetched by a lesson step that declares a variation
   // and kept by the service worker after that, not installed (first-visit tier).
