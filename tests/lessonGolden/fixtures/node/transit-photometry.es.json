@@ -2,48 +2,27 @@
  "id": "transit-photometry",
  "locale": "es",
  "title": "Encontrar planetas por sus sombras",
- "steps": 34,
+ "steps": 36,
  "depths": [
   [
    "core",
-   29
+   30
   ],
   [
    "quantitative",
-   31
+   33
   ],
   [
    "advanced",
-   34
+   36
   ]
  ],
  "grading": [
   {
-   "sid": "what-will-the-brightness-do",
+   "sid": "estimate-the-dip",
    "type": "predict",
-   "kind": null,
-   "grades": [
-    [
-     0,
-     false,
-     "incorrect"
-    ],
-    [
-     1,
-     true,
-     "correct"
-    ],
-    [
-     2,
-     false,
-     "incorrect"
-    ],
-    [
-     3,
-     false,
-     "incorrect"
-    ]
-   ]
+   "kind": "estimate",
+   "grades": []
   },
   {
    "sid": "from-a-depth-to-a",
@@ -104,6 +83,17 @@
      null,
      false,
      "blank"
+    ]
+   ]
+  },
+  {
+   "sid": "what-your-error-bar-measures",
+   "type": "question",
+   "kind": "short",
+   "grades": [
+    [
+     "ungraded",
+     null
     ]
    ]
   },
@@ -440,6 +430,12 @@
    ]
   },
   {
+   "sid": "will-the-dip-look-the-same",
+   "type": "predict",
+   "kind": "estimate",
+   "grades": []
+  },
+  {
    "sid": "what-it-does-to-a",
    "type": "question",
    "kind": "choice",
@@ -473,9 +469,9 @@
    "lesson": "transit-photometry",
    "stepSid": "what-you-did-and-where",
    "responses": {
-    "transit-photometry:what-will-the-brightness-do": 1,
     "transit-photometry:from-a-depth-to-a": "0,1",
     "transit-photometry:from-a-depth-to-a:locale": "es",
+    "transit-photometry:what-your-error-bar-measures": "A fixed sentence for the golden.",
     "transit-photometry:radius-with-an-error-bar": "1,37",
     "transit-photometry:radius-with-an-error-bar:locale": "es",
     "transit-photometry:forward-model-the-dip": "0,0183",
@@ -491,7 +487,6 @@
     "transit-photometry:what-it-does-to-a": 1
    },
    "attempts": {
-    "transit-photometry:what-will-the-brightness-do": 1,
     "transit-photometry:from-a-depth-to-a": 1,
     "transit-photometry:radius-with-an-error-bar": 1,
     "transit-photometry:forward-model-the-dip": 1,
@@ -506,12 +501,13 @@
    "visited": [
     "a-firefly-beside-a-lighthouse",
     "five-ways-to-find-a",
-    "what-will-the-brightness-do",
+    "estimate-the-dip",
     "your-first-transit",
     "where-the-depth-comes-from",
     "try-it-on-some-real",
     "from-a-depth-to-a",
-    "measure-the-dip",
+    "choose-the-two-stretches",
+    "what-your-error-bar-measures",
     "why-that-radius-came-out",
     "correct-it-and-get-a",
     "how-sure-is-the-depth",
@@ -534,8 +530,9 @@
     "things-that-are-not-planets",
     "a-star-you-did-not",
     "go-and-look",
-    "now-measure-it",
-    "recover-the-real-planet",
+    "will-the-dip-look-the-same",
+    "compare-the-two-curves",
+    "find-the-hidden-companion",
     "what-it-does-to-a",
     "what-you-did-and-where"
    ],
@@ -546,9 +543,9 @@
   },
   "read": {
    "responses": {
-    "transit-photometry:what-will-the-brightness-do": 1,
     "transit-photometry:from-a-depth-to-a": "0,1",
     "transit-photometry:from-a-depth-to-a:locale": "es",
+    "transit-photometry:what-your-error-bar-measures": "A fixed sentence for the golden.",
     "transit-photometry:radius-with-an-error-bar": "1,37",
     "transit-photometry:radius-with-an-error-bar:locale": "es",
     "transit-photometry:forward-model-the-dip": "0,0183",
@@ -564,7 +561,6 @@
     "transit-photometry:what-it-does-to-a": 1
    },
    "attempts": {
-    "transit-photometry:what-will-the-brightness-do": 1,
     "transit-photometry:from-a-depth-to-a": 1,
     "transit-photometry:radius-with-an-error-bar": 1,
     "transit-photometry:forward-model-the-dip": 1,
@@ -579,8 +575,12 @@
    "visited": [
     "a-firefly-beside-a-lighthouse",
     "a-star-you-did-not",
+    "choose-the-two-stretches",
+    "compare-the-two-curves",
     "correct-it-and-get-a",
     "does-the-model-agree",
+    "estimate-the-dip",
+    "find-the-hidden-companion",
     "five-ways-to-find-a",
     "forward-model-the-dip",
     "from-a-depth-to-a",
@@ -590,12 +590,9 @@
     "how-lucky-do-you-have",
     "how-sure-is-the-depth",
     "lay-the-model-over-the-data",
-    "measure-the-dip",
-    "now-measure-it",
     "radius-with-an-error-bar",
     "read-an-atmosphere",
     "reading-the-floor",
-    "recover-the-real-planet",
     "the-angle-you-happen-to",
     "the-planet-changes-size-with",
     "the-shape-of-the-dip",
@@ -605,11 +602,12 @@
     "what-a-transit-cannot-tell",
     "what-it-does-to-a",
     "what-the-method-misses",
-    "what-will-the-brightness-do",
     "what-you-did-and-where",
+    "what-your-error-bar-measures",
     "where-the-depth-comes-from",
     "why-that-radius-came-out",
     "why-the-depth-moves",
+    "will-the-dip-look-the-same",
     "your-first-transit"
    ],
    "stepSid": "what-you-did-and-where",
@@ -630,7 +628,7 @@
    "lesson": {
     "id": "transit-photometry",
     "title": "Encontrar planetas por sus sombras",
-    "stepCount": 34
+    "stepCount": 36
    },
    "student": null,
    "progress": {
@@ -639,12 +637,13 @@
     "visited": [
      "a-firefly-beside-a-lighthouse",
      "five-ways-to-find-a",
-     "what-will-the-brightness-do",
+     "estimate-the-dip",
      "your-first-transit",
      "where-the-depth-comes-from",
      "try-it-on-some-real",
      "from-a-depth-to-a",
-     "measure-the-dip",
+     "choose-the-two-stretches",
+     "what-your-error-bar-measures",
      "why-that-radius-came-out",
      "correct-it-and-get-a",
      "how-sure-is-the-depth",
@@ -667,15 +666,16 @@
      "things-that-are-not-planets",
      "a-star-you-did-not",
      "go-and-look",
-     "now-measure-it",
-     "recover-the-real-planet",
+     "will-the-dip-look-the-same",
+     "compare-the-two-curves",
+     "find-the-hidden-companion",
      "what-it-does-to-a",
      "what-you-did-and-where"
     ],
     "responses": {
-     "transit-photometry:what-will-the-brightness-do": 1,
      "transit-photometry:from-a-depth-to-a": "0,1",
      "transit-photometry:from-a-depth-to-a:locale": "es",
+     "transit-photometry:what-your-error-bar-measures": "A fixed sentence for the golden.",
      "transit-photometry:radius-with-an-error-bar": "1,37",
      "transit-photometry:radius-with-an-error-bar:locale": "es",
      "transit-photometry:forward-model-the-dip": "0,0183",
@@ -691,7 +691,6 @@
      "transit-photometry:what-it-does-to-a": 1
     },
     "attempts": {
-     "transit-photometry:what-will-the-brightness-do": 1,
      "transit-photometry:from-a-depth-to-a": 1,
      "transit-photometry:radius-with-an-error-bar": 1,
      "transit-photometry:forward-model-the-dip": 1,
@@ -719,9 +718,9 @@
     },
     {
      "index": 2,
-     "sid": "what-will-the-brightness-do",
-     "fingerprint": "predict|-|-|-|-|4|a=1;c=1",
-     "optionCount": 4
+     "sid": "estimate-the-dip",
+     "fingerprint": "predict|estimate|-|-|-|-|u=%",
+     "optionCount": null
     },
     {
      "index": 3,
@@ -749,162 +748,174 @@
     },
     {
      "index": 7,
-     "sid": "measure-the-dip",
-     "fingerprint": "measure|-|-|-|base+bot+depth+k_naive|-|-",
+     "sid": "choose-the-two-stretches",
+     "fingerprint": "measure|-|-|-|base+base_n+base_se+bot+bot_n+bot_se+depth+depthpc+k_naive|-|-",
      "optionCount": null
     },
     {
      "index": 8,
+     "sid": "what-your-error-bar-measures",
+     "fingerprint": "question|short|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 9,
      "sid": "why-that-radius-came-out",
      "fingerprint": "read|-|-|-|-|-|-",
      "optionCount": null
     },
     {
-     "index": 9,
+     "index": 10,
      "sid": "correct-it-and-get-a",
      "fingerprint": "measure|-|-|-|d2+rstar+k_true+rp_rj+rp_re|-|-",
      "optionCount": null
     },
     {
-     "index": 10,
+     "index": 11,
      "sid": "how-sure-is-the-depth",
      "fingerprint": "measure|-|-|-|sig+n_in+n_out+depth_in+s_depth+rp+s_rp|-|-",
      "optionCount": null
     },
     {
-     "index": 11,
+     "index": 12,
      "sid": "radius-with-an-error-bar",
      "fingerprint": "question|numeric|-|-|-|-|a=1.37;t=0.1",
      "optionCount": null
     },
     {
-     "index": 12,
+     "index": 13,
      "sid": "forward-model-the-dip",
      "fingerprint": "question|numeric|-|-|-|-|a=0.0183;t=0.0008",
      "optionCount": null
     },
     {
-     "index": 13,
+     "index": 14,
      "sid": "does-the-model-agree",
      "fingerprint": "question|choice|-|-|-|4|a=1;c=1",
      "optionCount": 4
     },
     {
-     "index": 14,
+     "index": 15,
      "sid": "lay-the-model-over-the-data",
      "fingerprint": "question|choice|compare-transit|-|-|4|a=0;c=0",
      "optionCount": 4
     },
     {
-     "index": 15,
+     "index": 16,
      "sid": "the-shape-of-the-dip",
      "fingerprint": "read|-|-|-|-|-|-",
      "optionCount": null
     },
     {
-     "index": 16,
+     "index": 17,
      "sid": "reading-the-floor",
      "fingerprint": "question|choice|-|-|-|4|a=1;c=1",
      "optionCount": 4
     },
     {
-     "index": 17,
+     "index": 18,
      "sid": "the-angle-you-happen-to",
      "fingerprint": "explore|-|geometry|-|-|-|-",
      "optionCount": null
     },
     {
-     "index": 18,
+     "index": 19,
      "sid": "how-lucky-do-you-have",
      "fingerprint": "question|numeric|-|-|-|-|a=215;t=40;u=to one",
      "optionCount": null
     },
     {
-     "index": 19,
+     "index": 20,
      "sid": "what-the-method-misses",
      "fingerprint": "question|short|-|-|-|-|-",
      "optionCount": null
     },
     {
-     "index": 20,
+     "index": 21,
      "sid": "getting-the-period",
      "fingerprint": "predict|-|-|-|-|4|a=1;c=1",
      "optionCount": 4
     },
     {
-     "index": 21,
+     "index": 22,
      "sid": "time-two-transits",
      "fingerprint": "measure|-|-|-|t1+n1+t2+n2+n+P|-|-",
      "optionCount": null
     },
     {
-     "index": 22,
+     "index": 23,
      "sid": "from-a-period-to-an",
      "fingerprint": "measure|-|-|-|P_d+M+P_yr+a_au+a_over_r+teq|-|-",
      "optionCount": null
     },
     {
-     "index": 23,
+     "index": 24,
      "sid": "what-a-transit-cannot-tell",
      "fingerprint": "read|-|-|-|-|-|-",
      "optionCount": null
     },
     {
-     "index": 24,
+     "index": 25,
      "sid": "the-planet-changes-size-with",
      "fingerprint": "read|-|-|-|-|-|-",
      "optionCount": null
     },
     {
-     "index": 25,
+     "index": 26,
      "sid": "read-an-atmosphere",
      "fingerprint": "explore|-|spectrum|-|-|-|-",
      "optionCount": null
     },
     {
-     "index": 26,
+     "index": 27,
      "sid": "why-the-depth-moves",
      "fingerprint": "question|choice|-|-|-|4|a=1;c=1",
      "optionCount": 4
     },
     {
-     "index": 27,
+     "index": 28,
      "sid": "things-that-are-not-planets",
      "fingerprint": "read|-|-|-|-|-|-",
      "optionCount": null
     },
     {
-     "index": 28,
+     "index": 29,
      "sid": "a-star-you-did-not",
      "fingerprint": "explore|-|dilution|-|-|-|-",
      "optionCount": null
     },
     {
-     "index": 29,
+     "index": 30,
      "sid": "go-and-look",
      "fingerprint": "explore|-|resolve|-|-|-|-",
      "optionCount": null
     },
     {
-     "index": 30,
-     "sid": "now-measure-it",
-     "fingerprint": "explore|-|-|Blended Binary|-|-|-",
-     "optionCount": null
-    },
-    {
      "index": 31,
-     "sid": "recover-the-real-planet",
-     "fingerprint": "measure|-|-|-|d_blend+d_clean+rp_blend+ratio+dm+corr+rp_true|-|-",
+     "sid": "will-the-dip-look-the-same",
+     "fingerprint": "predict|estimate|-|-|-|-|u=%",
      "optionCount": null
     },
     {
      "index": 32,
+     "sid": "compare-the-two-curves",
+     "fingerprint": "measure|-|-|Blended Binary|base+bot+depth+depthpc|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 33,
+     "sid": "find-the-hidden-companion",
+     "fingerprint": "measure|-|-|-|d_clean+d_blend+ratio+rp_blend+dm+rp_true|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 34,
      "sid": "what-it-does-to-a",
      "fingerprint": "question|choice|-|-|-|4|a=1;c=1",
      "optionCount": 4
     },
     {
-     "index": 33,
+     "index": 35,
      "sid": "what-you-did-and-where",
      "fingerprint": "read|-|-|-|-|-|-",
      "optionCount": null
@@ -916,9 +927,9 @@
   },
   "restored": {
    "responses": {
-    "transit-photometry:what-will-the-brightness-do": 1,
     "transit-photometry:from-a-depth-to-a": "0,1",
     "transit-photometry:from-a-depth-to-a:locale": "es",
+    "transit-photometry:what-your-error-bar-measures": "A fixed sentence for the golden.",
     "transit-photometry:radius-with-an-error-bar": "1,37",
     "transit-photometry:radius-with-an-error-bar:locale": "es",
     "transit-photometry:forward-model-the-dip": "0,0183",
@@ -934,7 +945,6 @@
     "transit-photometry:what-it-does-to-a": 1
    },
    "attempts": {
-    "transit-photometry:what-will-the-brightness-do": 1,
     "transit-photometry:from-a-depth-to-a": 1,
     "transit-photometry:radius-with-an-error-bar": 1,
     "transit-photometry:forward-model-the-dip": 1,
@@ -949,8 +959,12 @@
    "visited": [
     "a-firefly-beside-a-lighthouse",
     "a-star-you-did-not",
+    "choose-the-two-stretches",
+    "compare-the-two-curves",
     "correct-it-and-get-a",
     "does-the-model-agree",
+    "estimate-the-dip",
+    "find-the-hidden-companion",
     "five-ways-to-find-a",
     "forward-model-the-dip",
     "from-a-depth-to-a",
@@ -960,12 +974,9 @@
     "how-lucky-do-you-have",
     "how-sure-is-the-depth",
     "lay-the-model-over-the-data",
-    "measure-the-dip",
-    "now-measure-it",
     "radius-with-an-error-bar",
     "read-an-atmosphere",
     "reading-the-floor",
-    "recover-the-real-planet",
     "the-angle-you-happen-to",
     "the-planet-changes-size-with",
     "the-shape-of-the-dip",
@@ -975,14 +986,15 @@
     "what-a-transit-cannot-tell",
     "what-it-does-to-a",
     "what-the-method-misses",
-    "what-will-the-brightness-do",
     "what-you-did-and-where",
+    "what-your-error-bar-measures",
     "where-the-depth-comes-from",
     "why-that-radius-came-out",
     "why-the-depth-moves",
+    "will-the-dip-look-the-same",
     "your-first-transit"
    ],
-   "stepIndex": 33,
+   "stepIndex": 35,
    "startedAt": "2026-01-02T03:04:05.000Z",
    "moved": [],
    "dropped": [],
@@ -1037,13 +1049,13 @@
    },
    "answers": [
     {
-     "sid": "what-will-the-brightness-do",
-     "value": 1,
+     "sid": "from-a-depth-to-a",
+     "value": "0,1",
      "locale": "es"
     },
     {
-     "sid": "from-a-depth-to-a",
-     "value": "0,1",
+     "sid": "what-your-error-bar-measures",
+     "value": "A fixed sentence for the golden.",
      "locale": "es"
     },
     {
@@ -1111,13 +1123,13 @@
    },
    "answers": [
     {
-     "sid": "what-will-the-brightness-do",
-     "value": 1,
+     "sid": "from-a-depth-to-a",
+     "value": "0,1",
      "locale": "es"
     },
     {
-     "sid": "from-a-depth-to-a",
-     "value": "0,1",
+     "sid": "what-your-error-bar-measures",
+     "value": "A fixed sentence for the golden.",
      "locale": "es"
     },
     {
@@ -1209,13 +1221,13 @@
    },
    "answers": [
     {
-     "sid": "what-will-the-brightness-do",
-     "value": 1,
+     "sid": "from-a-depth-to-a",
+     "value": "0,1",
      "locale": "es"
     },
     {
-     "sid": "from-a-depth-to-a",
-     "value": "0,1",
+     "sid": "what-your-error-bar-measures",
+     "value": "A fixed sentence for the golden.",
      "locale": "es"
     },
     {
@@ -1284,13 +1296,13 @@
    },
    "answers": [
     {
-     "sid": "what-will-the-brightness-do",
-     "value": 1,
+     "sid": "from-a-depth-to-a",
+     "value": "0,1",
      "locale": "es"
     },
     {
-     "sid": "from-a-depth-to-a",
-     "value": "0,1",
+     "sid": "what-your-error-bar-measures",
+     "value": "A fixed sentence for the golden.",
      "locale": "es"
     },
     {
