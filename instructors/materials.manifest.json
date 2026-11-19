@@ -24,7 +24,7 @@
     }
   },
   "sourceFiles": 309,
-  "sourceDigest": "5c4e9bf6043c3218016c0af610362e6a74bab5d46c745263d3760bc050c9ea7d",
+  "sourceDigest": "dd43d4290854f01481eb17dea2e25e06afc980364e37a7c5a321df5460f2d83a",
   "sources": {
     "js/activities/activities.js": "af9b7e121b9a72c2a5cc18e07331d6ee841934d402b030294d25c442628881ef",
     "js/activities/activityBridge.js": "67a82aff98e0ed935d6b8b0f0f654c6ad4332ee929cb3604e896a7f790a6fdc1",
@@ -167,7 +167,7 @@
     "js/data/investigations/es/hohmann-transfer.js": "3013356d5c40095233f30b445be241c57d8a97bea509f8e3d53589723d25ec1e",
     "js/data/investigations/es/inside-a-star.js": "1bba3479e3339759666a031cb068f1a31afcdd40985ba656dc905d77ff4a36a9",
     "js/data/investigations/es/integrators-in-practice.js": "1a385f101d017249a5d4d938299315bf44ba0f445f669a8d4cae0d3dd5c208cd",
-    "js/data/investigations/es/keplers-laws.js": "f090857ee279a0b18513afd51953a7037ed7199444d95440ccc0dda6e857293e",
+    "js/data/investigations/es/keplers-laws.js": "e527a2c4b6aa20f509a32a377bd0e2072ebf846228b00e44126e4fb231d5928d",
     "js/data/investigations/es/lagrange-points.js": "6f7b491a04c2789202981574c8182342427df09fabf8948d05f70620232ca1b2",
     "js/data/investigations/es/leavitts-law.js": "bd62310e5b576b7737f73de1d7e049c7a278a832de039c54c21bd4dd198bbf1b",
     "js/data/investigations/es/lines-and-motion.js": "c5d05deb1b4bee8a6797e45ea30d7fca59132d8279a7327eccd46748844a98b7",
@@ -223,7 +223,7 @@
     "js/data/investigations/inside-a-star.js": "1d818e86352a2a49d5380253ffc1bbd7b749690cceb95ccb7e8242edcc84cfc8",
     "js/data/investigations/integrators-in-practice.js": "caef1b30a656b20fe9e2fcd45af2a8f660a5181f4727a72af133fd2818f6022b",
     "js/data/investigations/joint-sequence.js": "7877a1a03672ad2eeba8d8a8a8648b47dd238aef29a81e7c1c148b031974b0e3",
-    "js/data/investigations/keplers-laws.js": "a6292bb4fd1278a80cec343fea34e4f153f79046a3b681d18ed47b534d97bf37",
+    "js/data/investigations/keplers-laws.js": "82358ca3d91260476c76fa0db37fd1ac3bd475bf90dc07e41a13c4a56666b3ca",
     "js/data/investigations/lagrange-points.js": "674e88bb5a8b36bc49c4b7a9fae370f224935ac91b3789027226cb906acbba48",
     "js/data/investigations/leavitts-law.js": "301201ec610aa8e5f2089482b68c77eb1082f37d71e9f0410b61f652f942ef17",
     "js/data/investigations/lines-and-motion.js": "b0b4d4fce8a53dca84c98787bee6758518bfdce9942a906bf931d26aa768b7b4",
@@ -268,7 +268,7 @@
     "js/data/investigations/the-suns-motion.js": "73826fb368d91f2e63abff0022ac2979c4676a7e8964eacd1d63e4d396a8a353",
     "js/data/investigations/the-turning-sky.js": "a8dd32f39576d8ded61907eca523a04f908c5dc73bdf209abfbf7a6c24bb3ec1",
     "js/data/investigations/tides.js": "d6d41e7c2169e6b73cb662c6b2e42f04b1e64cda1f910bc9be26c53351a2d417",
-    "js/data/investigations/transit-photometry.js": "c55ca8e27bea28b11e6f47f32ad9d11e2215816cb248f153d02b4f5d7a7cf502",
+    "js/data/investigations/transit-photometry.js": "6fc4b8a58ad148eae328cee25a1c6fe3698f363236576aae365e42dfc5245ded",
     "js/data/investigations/ttv-sequence.js": "13e0e324362af968fda3fd8be51be2f887f1045bba6006ed31db4caeb179cbba",
     "js/data/investigations/twelve-nights.js": "ab50f92a9045d56c64afdc5fece64bd986479f14395a32843b8083352949766a",
     "js/data/investigations/two-periodograms.js": "8a6560b9c5753a7e741907c9cbfde5b5ffd8dee14527a125f7c16b3900b702b0",
@@ -336,5 +336,5 @@
     "tools/instructor-freshness.mjs": "96052b2f27080f0243fdd4d5f7608927bd67f0c50808b6eac3345a65c14d1e28",
     "tools/source-closure.mjs": "961828e4d0d40d8a6f8c029fe9b9435ecaf39a74b62640efc0b4145c35c7650a"
   },
-  "contentDigest": "2cbccb8ae935c9891fad41c0f2de7db1254c2f63d06e82fdf82ba81ec0fc286d"
+  "contentDigest": "27f356a5cf4c8190058072a56e4c93cd250ca24d635a1d398c9d2d1dd0001f0f"
 }
