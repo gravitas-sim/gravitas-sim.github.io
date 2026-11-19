@@ -83,7 +83,10 @@ async function open(mine) {
     separation: Number.isFinite(spec.separation) ? spec.separation : null,
     note: spec.note || '',
   };
-  await watch.openToolFor(armSpec, { onFired: draw });
+  await watch.openToolFor(armSpec, {
+    onFired: draw,
+    quiet: Boolean(step?.pauseAt?.quiet),
+  });
   if (spec.auto && mine === turn) await armStep(mine);
 }
 
@@ -158,7 +161,10 @@ export async function armAgain() {
   if (!armSpec) return;
   const mine = ++turn;
   watch.release();
-  await watch.openToolFor(armSpec, { onFired: draw });
+  await watch.openToolFor(armSpec, {
+    onFired: draw,
+    quiet: Boolean(step?.pauseAt?.quiet),
+  });
   if (mine === turn) await armStep(mine);
   draw();
 }

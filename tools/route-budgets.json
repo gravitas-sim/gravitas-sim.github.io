@@ -16,9 +16,9 @@
         "requests": 142
       },
       "transit": {
-        "kb": 2687.3,
+        "kb": 2687.4,
         "requests": 146,
-        "toolKb": 2838.9,
+        "toolKb": 2839.6,
         "toolRequests": 158
       },
       "power-law": {
@@ -76,7 +76,7 @@
         "requests": 31
       },
       "course-builder": {
-        "kb": 1153.9,
+        "kb": 1154,
         "requests": 48
       },
       "course-home": {
@@ -142,9 +142,9 @@
         "requests": 77
       },
       "transit": {
-        "kb": 946.7,
+        "kb": 946.8,
         "requests": 79,
-        "toolKb": 1025.9,
+        "toolKb": 1026.1,
         "toolRequests": 93
       },
       "power-law": {

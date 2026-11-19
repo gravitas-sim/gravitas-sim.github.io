@@ -192,10 +192,35 @@ for (const inv of lessons) {
         }
 
         // --- Grading, where the lesson declares the answer ---------------
+        const estimate = step.type === 'predict' && step.kind === 'estimate';
         const kind = step.type === 'predict' ? 'choice' : step.kind;
+        // A numeric estimate has no options and no declared answer: the reader
+        // commits a number, and the page holds it until the step named in
+        // `reveal` (see e2e/predictionLoops.spec.js for the other end).
+        if (estimate) {
+          const box = page.locator('#investigationBody [data-est]');
+          if (await box.count()) {
+            await box.fill('1.5');
+            await page.locator('#investigationBody [data-est-commit]').click();
+            if (step.reveal) {
+              const held = await page
+                .locator('#investigationBody .inv-held')
+                .count();
+              if (!held) {
+                note(
+                  i,
+                  `held estimate did not say where it will be marked ("${step.reveal}")`
+                );
+              }
+            }
+          } else {
+            note(i, 'an estimate step with no estimate box on screen');
+          }
+        }
         if (
           (step.type === 'predict' || step.type === 'question') &&
-          kind === 'choice'
+          kind === 'choice' &&
+          !estimate
         ) {
           const options = page.locator('#investigationBody .inv-option');
           const count = await options.count();

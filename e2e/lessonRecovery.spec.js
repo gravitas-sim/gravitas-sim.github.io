@@ -247,6 +247,16 @@ test.describe('an instrument and the scene describe the same thing', () => {
     test.slow();
     await open(page, app, 'transit-photometry');
     await goTo(page, 'Your first transit');
+    // The lesson arms the transit watch itself and has its own Replay, so the
+    // Pause at Event panel stays out of the scene's way; the watch is live.
+    await expect(page.locator('#pauseEventContainer')).toBeHidden();
+    await expect
+      .poll(() =>
+        page.evaluate(async () =>
+          (await import('/js/investigations/eventWatch.js')).lessonWatchState()
+        )
+      )
+      .toMatch(/armed|fired/);
     await page
       .locator('.inv-object', { hasText: 'HD 209458 b' })
       .press('Enter');
