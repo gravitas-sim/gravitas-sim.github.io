@@ -608,8 +608,10 @@ applied as committed, so the slice is named; whether the front door can be
 prepared without the routes that share its document is the first thing 316
 must settle, and the Observatory (its own page and document) is the slice that
 stands alone. The sky and My work misses are the spike policy's, which this
-run did not change. The verdict is evidence until Carl ratifies it; D-R10-33
-(C) and D-DEPLOY-01 (B) stand as written until then.
+run did not change.
+
+**Ratified by Carl on 2026-11-19, as recorded** (D-R4-315-02). Prompt 316
+prepares the build for the front door and the Observatory only.
 
 Not verified: Node 20 (byte counts may differ by a few bytes); Firefox and
 WebKit; a real phone (the profile is a proxy); transfer sizes beyond the
