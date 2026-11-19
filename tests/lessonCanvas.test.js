@@ -129,14 +129,16 @@ describe('the page', () => {
   const html = `
     <canvas id="simulationCanvas" role="img" aria-label="Gravitational simulation" aria-describedby="canvasSummary"></canvas>
     <button id="investigationResetScenario" aria-label="Reset the scene and instrument for this step" title="long title"></button>
-    <div id="timelineBar"><button id="timelinePlay">Play</button></div>
-    <button class="rail-section-toggle" id="railScenario" aria-expanded="true"></button>
-    <button class="rail-section-toggle" id="railState" aria-expanded="false"></button>
-    <div class="object-add" id="objectAdd"></div>`;
+    <div id="mainControls">
+      <button class="rail-section-toggle" id="railScenario" aria-expanded="true"></button>
+      <button class="rail-section-toggle" id="railState" aria-expanded="false"></button>
+      <div class="object-add" id="objectAdd"></div>
+    </div>
+    <div id="timelineBar"><button id="timelinePlay">Play</button></div>`;
   const canvas = () => document.getElementById('simulationCanvas');
   const reset = () => document.getElementById('investigationResetScenario');
   const bar = () => document.getElementById('timelineBar');
-  const fold = () => document.getElementById('timelineFold');
+  const more = () => document.getElementById('stageMore');
   const portrait = { kind: 'portrait', picture: 'Jupiter and Io' };
   const quiet = { kind: 'quiet', picture: '' };
 
@@ -170,7 +172,7 @@ describe('the page', () => {
     );
     // A portrait changes nothing else: the rail is as it was, no bar toggle.
     expect(document.getElementById('railScenario').ariaExpanded).toBe('true');
-    expect(fold()).toBeNull();
+    expect(more()).toBeNull();
     leaveCanvas();
     expect(document.body.dataset.lessonCanvas).toBeUndefined();
     expect(canvas().getAttribute('aria-label')).toBe(
@@ -188,7 +190,7 @@ describe('the page', () => {
     expect(canvas().getAttribute('aria-label')).toBe(
       'Gravitational simulation'
     );
-    expect(fold()).toBeNull();
+    expect(more()).toBeNull();
   });
 
   test('a quiet canvas empties the world and says so', () => {
@@ -212,57 +214,72 @@ describe('the page', () => {
     expect(stars).toHaveLength(0);
   });
 
-  test('the rail folds behind its toggles and leaving opens it again', () => {
+  test('the rail and the bar go into one More and leaving puts them back', () => {
+    const rail = document.getElementById('mainControls');
     enterCanvas(quiet);
-    const open = [...document.querySelectorAll('[aria-expanded="true"]')];
-    expect(
-      open.filter(e => e.classList.contains('rail-section-toggle'))
-    ).toEqual([]);
-    // A reader who opens a section during the lesson keeps it open.
+    expect(more().tagName).toBe('DETAILS');
+    expect(more().open).toBe(false);
+    expect(more().contains(rail)).toBe(true);
+    expect(more().contains(bar())).toBe(true);
+    // A reader who opens a section of the rail keeps it as it was.
     document.getElementById('railState').click();
     enterCanvas(quiet);
     expect(document.getElementById('railState').ariaExpanded).toBe('true');
     leaveCanvas();
-    expect(document.getElementById('railState').ariaExpanded).toBe('true');
+    expect(more()).toBeNull();
+    // Each is back where it stood: the rail, then the bar, in the page itself.
+    expect(rail.parentElement).toBe(document.body);
+    expect(rail.nextElementSibling).toBe(bar());
+    expect(rail.previousElementSibling).toBe(reset());
   });
 
   test('leaving mid-step hands the rail, the bar and the world back', () => {
     enterCanvas(quiet);
-    expect(document.getElementById('railScenario').ariaExpanded).toBe('false');
     leaveCanvas();
     expect(document.getElementById('railScenario').ariaExpanded).toBe('true');
-    expect(fold()).toBeNull();
-    expect(bar().classList.contains('is-folded')).toBe(false);
+    expect(more()).toBeNull();
+    expect(bar().parentElement).toBe(document.body);
     expect(ownsWorld()).toBe(false);
     expect(canvas().getAttribute('aria-label')).toBe(
       'Gravitational simulation'
     );
   });
 
-  test('moving from quiet to a scene unfolds, and back folds again', () => {
+  test('moving from quiet to a scene puts them back, and back tucks again', () => {
     enterCanvas(quiet);
     enterCanvas({ kind: 'scene', picture: '' });
-    expect(fold()).toBeNull();
-    expect(document.getElementById('railScenario').ariaExpanded).toBe('true');
+    expect(more()).toBeNull();
+    expect(bar().parentElement).toBe(document.body);
     enterCanvas(quiet);
-    expect(document.getElementById('railScenario').ariaExpanded).toBe('false');
-    expect(fold()).not.toBeNull();
+    expect(more()).not.toBeNull();
+    expect(more().contains(bar())).toBe(true);
   });
 
-  test('the playback bar is one toggle a keyboard can press', () => {
+  test('the More is a native disclosure named for the controls it holds', async () => {
     document.getElementById('timelinePlay').focus();
     enterCanvas(quiet);
-    expect(bar().classList.contains('is-folded')).toBe(true);
-    expect(fold().tagName).toBe('BUTTON');
-    expect(fold().textContent).toBe('Playback ▸');
-    expect(fold().getAttribute('aria-expanded')).toBe('false');
-    // The focus that stood on a folded control moved to the toggle.
-    expect(document.activeElement).toBe(fold());
-    fold().click();
-    expect(bar().classList.contains('is-folded')).toBe(false);
-    expect(fold().getAttribute('aria-expanded')).toBe('true');
-    fold().click();
-    expect(bar().classList.contains('is-folded')).toBe(true);
+    const summary = more().querySelector('summary');
+    expect(summary.textContent).toBe('Simulation controls');
+    // The focus that stood on a tucked control moved to the one control.
+    expect(document.activeElement).toBe(summary);
+    await setLocale('es', { persist: false });
+    expect(summary.textContent).toBe('Controles de la simulación');
+    await setLocale('en', { persist: false });
+  });
+
+  test('it starts shut, and what the reader chose is remembered', () => {
+    enterCanvas(quiet);
+    expect(more().open).toBe(false);
+    more().open = true;
+    more().dispatchEvent(new Event('toggle'));
+    leaveCanvas();
+    enterCanvas(quiet);
+    expect(more().open).toBe(true);
+    more().open = false;
+    more().dispatchEvent(new Event('toggle'));
+    expect(JSON.parse(localStorage.getItem('gravitas_disclosure')).stage).toBe(
+      0
+    );
   });
 
   test('the words follow the language', async () => {
