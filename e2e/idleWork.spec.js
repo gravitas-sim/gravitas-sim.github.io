@@ -50,11 +50,16 @@ const frames = (page, n) =>
     n
   );
 
-async function openKepler(page, app) {
-  await app.boot({ url: '/#investigation=keplers-laws' });
+async function openLesson(page, app, id) {
+  await app.boot({ url: `/#investigation=${id}` });
   await page.waitForSelector('#investigationNext', { timeout: 25_000 });
   await expect(page.locator('.inv-step-title')).not.toBeEmpty();
 }
+const openKepler = (page, app) => openLesson(page, app, 'keplers-laws');
+// A lesson whose second step declares the motion is the point (`motion`), so
+// that the clock runs from the second step. Kepler's Laws holds the clock until
+// its readings are taken: the planet must still be at its closest point then.
+const openRunning = (page, app) => openLesson(page, app, 'retrograde-motion');
 
 const stepText = page => page.locator('.inv-step-count').innerText();
 
@@ -73,7 +78,7 @@ test.describe('a reading step holds the clock', () => {
     app,
   }) => {
     test.slow();
-    await openKepler(page, app);
+    await openRunning(page, app);
 
     // Step 1 is a reading step: held, and the clock stays where it began.
     expect(await paused(page)).toBe(true);
@@ -88,12 +93,15 @@ test.describe('a reading step holds the clock', () => {
       .poll(() => clock(page), { timeout: 8000 })
       .toBeGreaterThan(start);
 
-    // A question step runs the scene as it always did.
+    // The next reading step declares no motion: held again.
+    await next(page);
+    expect(await paused(page)).toBe(true);
+
+    // An explore step runs the scene as it always did.
     await next(page);
     expect(await paused(page)).toBe(false);
 
     // Back to a reading step without motion: held again.
-    await back(page);
     await page.evaluate(
       () => (document.getElementById('srStatus').textContent = '')
     );
@@ -164,7 +172,7 @@ test.describe('a reading step that needs the clock, and the transport', () => {
     app,
   }) => {
     test.slow();
-    await openKepler(page, app);
+    await openRunning(page, app);
     expect(await paused(page)).toBe(true);
     await page.evaluate(async () => {
       const tl = await import('/js/timeline.js');
@@ -189,7 +197,7 @@ test.describe('a hidden document', () => {
     app,
   }) => {
     test.slow();
-    await openKepler(page, app);
+    await openRunning(page, app);
     await next(page); // a step that runs
     await countDraws(page);
     await frames(page, 30);
@@ -240,7 +248,7 @@ test.describe('a covered canvas', () => {
     app,
   }) => {
     test.slow();
-    await openKepler(page, app);
+    await openRunning(page, app);
     await next(page); // running, so the paused idle rate is not what is measured
     await countDraws(page);
     await frames(page, 30);

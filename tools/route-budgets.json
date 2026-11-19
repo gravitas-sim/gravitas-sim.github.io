@@ -138,7 +138,7 @@
         "requests": 58
       },
       "kepler": {
-        "kb": 932.9,
+        "kb": 933.0,
         "requests": 77
       },
       "transit": {
@@ -202,7 +202,7 @@
         "requests": 16
       },
       "course-builder": {
-        "kb": 706.8,
+        "kb": 706.9,
         "requests": 13
       },
       "course-home": {

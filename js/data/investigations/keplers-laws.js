@@ -1,9 +1,8 @@
 // =============================================================================
 // Kepler's Laws
 // -----------------------------------------------------------------------------
-// Content only, no imports: every step that needs a live number is handed a
-// `ctx` by the engine. The registry in ./registry.js imports this file on
-// demand; see ../investigations.js for the synchronous barrel.
+// Content only, no imports: a step that needs a live number is handed a `ctx`
+// by the engine. ./registry.js imports this file on demand.
 // =============================================================================
 
 /** Format a number for display in a probe row. */
@@ -1455,6 +1454,8 @@ const KEPLER = {
       feedback: {
         close:
           'Close. Check the cube and the square separately, and the rounding in each.',
+        'wrong-unit':
+          'The answer is out by a factor of 365, the days in a year. Put the period in years, not days.',
         'wrong-order-of-magnitude':
           'Out by powers of ten. Make sure the period is in years, not days: the days figure is far larger than the same time in years.',
         off: 'Work in three parts: <em>a</em> cubed, then <em>P</em> squared, then divide the first by the second.',

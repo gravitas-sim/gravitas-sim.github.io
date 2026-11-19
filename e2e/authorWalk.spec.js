@@ -192,7 +192,13 @@ for (const inv of lessons) {
         }
 
         // --- Grading, where the lesson declares the answer ---------------
-        const kind = step.type === 'predict' ? 'choice' : step.kind;
+        // An estimate prediction takes a number, not a choice.
+        const kind =
+          step.kind === 'estimate'
+            ? 'estimate'
+            : step.type === 'predict'
+              ? 'choice'
+              : step.kind;
         if (
           (step.type === 'predict' || step.type === 'question') &&
           kind === 'choice'
