@@ -837,7 +837,7 @@ const KEPLER = {
         if (rows.length >= 5) {
           return {
             level: 'ok',
-            message: `All ${rows.length} of your <em>P</em>²/<em>a</em>³ values agree to within ${(spread * 100).toFixed(0)}%, across a factor of ${range.toFixed(0)} in distance. That constancy across planets of wildly different sizes is Kepler's third law.`,
+            message: `All ${rows.length} of your <em>P</em>²/<em>a</em>³ values agree to within ${fixed(spread * 100, 0)}%, across a factor of ${fixed(range, 0)} in distance. That constancy across planets of wildly different sizes is Kepler's third law.`,
           };
         }
         return {

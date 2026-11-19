@@ -179,7 +179,7 @@
       "source": ["js/data/activities.js", "js/i18n/en.activities.js"],
       "shadows": ["js/i18n/es.activities.js"],
       "instrument_files": [],
-      "depths": { "core": 10 },
+      "depths": { "core": 11 },
       "languages": ["en", "es"],
       "sequences": [],
       "courses": [],
@@ -2659,7 +2659,7 @@
       ],
       "walk": "NOT RUN",
       "pr": null,
-      "hash": "f275c20c832851c3a64092ba710c46efa3cd8c803d32954ce8d7d1b1854beb4a"
+      "hash": "17916fccd395f91afa48d6797c3c448df2c9e6e6e71e576ef9b40846cb622578"
     },
     {
       "id": "investigation:l3-eclipse",

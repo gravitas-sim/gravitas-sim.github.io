@@ -789,7 +789,7 @@
     {
      "index": 19,
      "sid": "weighted-fit",
-     "fingerprint": "measure|-|-|-|n+k_ols+k_w+s_k+p4+s_p4|-|-",
+     "fingerprint": "measure|-|-|-|n+k_ols+k_w+s_k|-|-",
      "optionCount": null
     },
     {

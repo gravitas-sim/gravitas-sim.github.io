@@ -114,7 +114,9 @@ describe('the baseline the ledger reproduces', () => {
   test('every row is seeded with its owning prompt, and the questions are empty', () => {
     for (const r of ledger.rows) {
       expect([r.id, Number.isInteger(r.owner)]).toEqual([r.id, true]);
-      expect(Object.values(r.questions).every(v => v === '')).toBe(true);
+      // A row closed by a pilot (it has a recorded hash) holds its answers.
+      if (!r.hash)
+        expect(Object.values(r.questions).every(v => v === '')).toBe(true);
     }
     expect(
       ledger.rows

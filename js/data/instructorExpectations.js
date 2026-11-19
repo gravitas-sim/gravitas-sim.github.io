@@ -179,6 +179,8 @@ export default {
         'Speed at periapsis should exceed speed at apoapsis by roughly the inverse ratio of the distances. The validator warns if the two are swapped, which is the common error.',
       'measure-four-planets':
         'At least five Solar System planets, spread over a range of distances of a factor of four or more. P²/a³ should come out near 1 for every row when a is in AU and P in years; the validator names the row that disagrees when the spread is above 50%, which almost always means a period entered in days.',
+      'pick-a-distance':
+        'Any distance between 0.3 and 25 AU that falls in a gap between two planets; the step refuses a distance on top of a planet and names the nearest. Mid-gap choices such as 2.5 or 3 AU (between Mars and Jupiter) make the best check, since two planets bracket them. The next step holds an estimate of the period for this distance.',
       'check-the-estimate':
         'The period at the distance the student chose, scaled from the nearest measured planet by the law, is that distance raised to the power three halves in years; the estimate they committed is shown beside it. The validator asks for a planet within a factor of two of the chosen distance.',
       'work-the-law-out-step':
