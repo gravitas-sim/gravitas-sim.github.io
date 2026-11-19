@@ -120,7 +120,7 @@ test.describe('a measurement survives going back and forward', () => {
   }) => {
     test.slow();
     await open(page, app, 'keplers-laws');
-    await goTo(page, 'Measure the two orbits');
+    await goTo(page, 'Work the law out');
     const field = page.locator('#investigationBody input[data-field]').first();
     await expect(field).toBeVisible();
     await field.fill('1.234');
@@ -128,13 +128,13 @@ test.describe('a measurement survives going back and forward', () => {
     // Forward one, then back. A student who steps away to re-read the previous
     // screen must not come back to an empty box.
     await page.locator('#investigationNext').click();
-    await expect.poll(() => title(page)).not.toMatch(/Measure the two orbits/i);
+    await expect.poll(() => title(page)).not.toMatch(/Work the law out/i);
     const prev = page.locator('#investigationPrev');
     await expect(prev).toBeEnabled();
     await prev.click();
     await expect
       .poll(() => title(page), { timeout: 15_000 })
-      .toMatch(/Measure the two orbits/i);
+      .toMatch(/Work the law out/i);
     await expect(
       page.locator('#investigationBody input[data-field]').first()
     ).toHaveValue('1.234');
@@ -146,7 +146,7 @@ test.describe('a measurement survives going back and forward', () => {
   }) => {
     test.slow();
     await open(page, app, 'keplers-laws');
-    await goTo(page, 'Measure the two orbits');
+    await goTo(page, 'Work the law out');
     await page
       .locator('#investigationBody input[data-field]')
       .first()
@@ -158,7 +158,7 @@ test.describe('a measurement survives going back and forward', () => {
     await expect(page.locator('#investigationPanel')).toBeVisible();
     await expect
       .poll(() => title(page), { timeout: 20_000 })
-      .toMatch(/Measure the two orbits/i);
+      .toMatch(/Work the law out/i);
     await expect(
       page.locator('#investigationBody input[data-field]').first()
     ).toHaveValue('2.5');
@@ -170,7 +170,7 @@ test.describe('a measurement survives going back and forward', () => {
   }) => {
     test.slow();
     await open(page, app, 'keplers-laws');
-    await goTo(page, 'Measure four planets');
+    await goTo(page, 'Measure the planets');
     const importBtn = page.locator('.inv-import-btn');
     await expect(importBtn).toBeVisible();
 
@@ -206,13 +206,14 @@ test.describe('a missed moment is catchable', () => {
     test.slow();
     await open(page, app, 'keplers-laws');
     await goTo(page, 'Fast and slow, in numbers');
-    // The step opens the event tool with the right bodies chosen and arms
-    // nothing: pressing Arm is the interaction. What is being checked is that
-    // the reader has that option at all, so catching periapsis is not a matter
-    // of clicking at the right instant.
+    // The step opens the event tool with the right bodies chosen and the
+    // periapsis watch armed for the reader (`pauseAt.auto`); the reader arms
+    // the second event. What is being checked is that the reader has a watch at
+    // all, so catching periapsis is not a matter of clicking at the right
+    // instant.
     await expect(page.locator('#pauseEventKind')).toBeVisible();
     await expect(page.locator('#pauseEventKind')).toHaveValue('periapsis');
-    await page.locator('#pauseEventArm').click();
+    await expect(page.locator('#pauseEventArm')).toBeDisabled();
     await expect(page.locator('#pauseEventStatus')).toContainText(/watch/i);
     // What this test does not assert, and why. Whether an armed watch actually
     // stops the run is decided by js/pauseAtEvent.js, and it is decided in
@@ -424,7 +425,7 @@ test.describe('the required action stays possible at every size', () => {
   }) => {
     test.slow();
     await open(page, app, 'keplers-laws');
-    await goTo(page, 'Measure the two orbits');
+    await goTo(page, 'Find the empty focus');
     // Tab until the first chip has focus, then act on it. No pointer is used
     // anywhere in this test.
     let reached = false;

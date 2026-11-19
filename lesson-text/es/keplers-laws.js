@@ -351,6 +351,8 @@ export default {
       feedback: {
         close:
           'Cerca. Revisa por separado el cubo y el cuadrado, y el redondeo de cada uno.',
+        'wrong-unit':
+          'La respuesta se pasa por un factor de 365, los días de un año. Pon el periodo en años, no en días.',
         'wrong-order-of-magnitude':
           'Te pasas en potencias de diez. Asegúrate de que el periodo esté en años, no en días: la cifra en días es mucho mayor que el mismo tiempo en años.',
         off: 'Hazlo en tres partes: <em>a</em> al cubo, luego <em>P</em> al cuadrado, y divide la primera entre la segunda.',
