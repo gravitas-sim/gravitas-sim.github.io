@@ -256,7 +256,18 @@ export const MEASURING_THE_MOON = {
       ],
       because:
         'About 600 km, a little under a fifth of the Moon’s width: the plain spans roughly a fifth of the disc and the disc is 3,475 km across. The next step measures it.',
-      tool: MM({ x1: 3, x2: 496, cx: 289, cy: 306, r: 20 }, ['x1', 'x2']),
+      // Held prediction: the circle's controls are hidden, so the plain is
+      // compared by eye with the pair and cannot be measured before the guess.
+      tool: {
+        ...MM({ x1: 3, x2: 496, cx: 289, cy: 306, r: 20 }, [
+          'x1',
+          'x2',
+          'cx',
+          'cy',
+          'r',
+        ]),
+        presets: false,
+      },
     },
     {
       sid: 'measure-the-plain',
