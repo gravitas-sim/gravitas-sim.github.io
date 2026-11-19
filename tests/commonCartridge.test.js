@@ -89,6 +89,7 @@ const COURSES = Object.keys(BUILTIN_COURSES);
 /** Built, profile-checked, but not in the recorded schema run (D-R10-206-08, D-R10-216-06). */
 const UNVALIDATED = [
   'astronomy-semester',
+  'intro-astronomy', // its first-transit unit gained a step (D-R4-329-08)
   'observing-lab', // rebuilt around the observing sequence (Prompt 216, D-R10-216-06)
   'solar-system-and-the-sun',
   'stellar-astrophysics', // built around the stellar closeout (Prompt 224, D-R10-224-04)
