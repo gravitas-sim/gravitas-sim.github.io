@@ -27,10 +27,11 @@ const SHEET_PARTS = [
   '.gs-shell',
 ];
 
-function boxesOf(selectors) {
+function boxesOf(selectors, early = false) {
   const out = [];
   for (const el of document.querySelectorAll(selectors.join(','))) {
-    if (el.hidden || getComputedStyle(el).visibility === 'hidden') continue;
+    if (el.hidden || (!early && getComputedStyle(el).visibility === 'hidden'))
+      continue;
     const b = el.getBoundingClientRect();
     if (b.width > 8 && b.height > 8) out.push(b);
   }
@@ -44,11 +45,10 @@ export function lessonInset() {
     return insetFromBoxes(boxesOf(SHEET_PARTS), view);
   let left = 0;
   let right = 0;
-  for (const b of boxesOf([
-    '#investigationPanel',
-    '#investigationTool',
-    '#mainControls',
-  ])) {
+  for (const b of boxesOf(
+    ['#investigationPanel', '#investigationTool', '#mainControls'],
+    true
+  )) {
     if (b.bottom < view.height * 0.5) continue;
     if (b.left < view.width * 0.5) left = Math.max(left, b.right);
     else right = Math.max(right, view.width - b.left);
