@@ -153,26 +153,26 @@ export const TIDES_THAT_MOVE_THE_MOON = {
     'El alejamiento de la Luna, el día que se alarga y el modelo que falla al correrlo hacia atrás',
   objectives: [
     'Decir por qué la Luna se aleja y el día se alarga, como un solo proceso',
-    'Leer el alejamiento de la Luna y el alargamiento del día en un modelo de marea de Q constante y compararlos con la telemetría láser lunar y los registros de eclipses',
+    'Hallar la Q con la que un modelo de marea da el alejamiento medido de la Luna, y comparar el día que da',
     'Correr el modelo hacia delante y hacia atrás y hallar dónde se detiene',
     'Decir qué supone el modelo y qué dice de él su fallo hacia atrás',
   ],
   steps: {
     'the-bulge-ahead': {
       title: 'Un abultamiento que va por delante',
-      body: 'La Luna levanta dos abultamientos en los océanos y el cuerpo de la Tierra. La Tierra gira más rápido de lo que la Luna orbita, así que el abultamiento se adelanta un poco a la línea hacia la Luna. Ese abultamiento tira de la Luna hacia delante, así que la Luna gana energía y se aleja, y la Luna tira del abultamiento hacia atrás, así que el giro de la Tierra se frena. El par intercambia momento angular; la suma se conserva. La tabla de abajo es la forma cerrada del modelo, no una simulación.',
+      body: 'La Luna levanta dos abultamientos en los océanos y el cuerpo de la Tierra. La Tierra gira más rápido de lo que la Luna orbita, así que el abultamiento se adelanta un poco a la línea hacia la Luna. Ese abultamiento tira de la Luna hacia delante, así que la Luna gana energía y se aleja, y la Luna tira del abultamiento hacia atrás, así que el giro de la Tierra se frena. El par intercambia momento angular; la suma se conserva. La tabla de abajo es la forma cerrada del modelo, no una simulación. En el paso siguiente fijas el único número que deja libre, para que concuerde con el alejamiento medido de la Luna.',
     },
-    'the-moons-recession': {
-      title: 'Qué tan rápido se aleja ahora la Luna',
-      body: 'Con k2 = 0,30 y <em>Q</em> = 12 y el tiempo en 0, lee a qué ritmo se aleja la Luna, en cm por año, y cuánto se alarga el día, en milisegundos por siglo.',
+    'match-the-recession': {
+      title: 'Elige la Q que ajusta a la Luna',
+      body: 'La telemetría láser lunar, luz que rebota en los espejos que las tripulaciones Apolo dejaron en la Luna, mide que la Luna se aleja 3,82 &plusmn; 0,07 cm por año. El modelo tiene un solo número que puedes elegir, <em>Q</em>, cuán poca energía pierde la marea. Deja k2 en 0,30 y el tiempo en 0, y cambia <em>Q</em> hasta que la fila <strong>Alejamiento de la Luna ahora</strong> quede lo más cerca posible de esa medida. Anota la <em>Q</em> que elegiste, y toma el <strong>alargamiento del día</strong> que da esa misma <em>Q</em>, en milisegundos por siglo.',
       fields: [
-        { label: 'El alejamiento de la Luna (cm por año)' },
-        { label: 'El alargamiento del día (ms por siglo)' },
+        { label: 'La Q que coincide con el alejamiento medido', want: '12' },
+        { label: 'El alargamiento del día (ms por siglo)', want: '2,05' },
       ],
     },
     'forward-predict': {
       title: 'Dentro de mil millones de años',
-      body: 'La Luna está a unos 60 radios terrestres y se aleja unos pocos cm por año. El alejamiento se frena a medida que la Luna se aleja, porque la marea cae con fuerza con la distancia.',
+      body: 'La Luna está hoy a unos 60 radios terrestres. Usa el modelo que acabas de ajustar al alejamiento medido.',
       prompt: 'Dentro de mil millones de años la Luna estará a unos&hellip;',
       options: [
         '60 radios terrestres: casi no se mueve',
@@ -181,27 +181,29 @@ export const TIDES_THAT_MOVE_THE_MOON = {
         '100 radios terrestres',
       ],
       hints: [
-        'Mil millones de años a 3,75 cm por año serían 37 500 km si el ritmo fuera constante, y se frena en el camino.',
+        'Parte del ritmo que ajustaste y pregúntate de qué depende ese ritmo además de Q.',
       ],
       because:
         'El modelo pone a la Luna a 414,6 mil km dentro de mil millones de años, unos 65 radios terrestres: el ritmo de 3,75 cm por año baja al alejarse la Luna, así que gana menos que los 37 500 km de un ritmo constante.',
     },
     'forward-one-billion': {
       title: 'Mil millones de años adelante',
-      body: 'Pon el tiempo en <strong>1</strong> mil millones de años y lee la distancia de la Luna en miles de km y la duración del día en horas.',
+      body: 'Deja k2 en 0,30 y <em>Q</em> en el valor que hallaste. Pon el tiempo en <strong>1</strong> mil millones de años y lee la distancia de la Luna en miles de km y la duración del día en horas.',
       fields: [
-        { label: 'La distancia de la Luna (miles de km)' },
-        { label: 'El día' },
+        { label: 'La distancia de la Luna (miles de km)', want: '414,6' },
+        { label: 'El día', want: '29,5' },
       ],
     },
     'the-model-run-backward': {
       title: 'Córrelo hacia atrás',
-      body: 'Pon el tiempo en <strong>&minus;2</strong> mil millones de años. El modelo no puede ir tan atrás. Lee hace cuántos miles de millones de años la órbita habría llegado a la superficie de la Tierra.',
-      fields: [{ label: 'Contacto, hace miles de millones de años' }],
+      body: 'Corre hacia atrás el mismo modelo. Pon el tiempo en <strong>&minus;2</strong> mil millones de años. El modelo no puede ir tan atrás. Lee hace cuántos miles de millones de años la órbita habría llegado a la superficie de la Tierra.',
+      fields: [
+        { label: 'Contacto, hace miles de millones de años', want: '1,58' },
+      ],
     },
     'what-the-model-leaves-out': {
       title: 'Lo que has deducido',
-      body: 'La Luna se aleja 3,75 cm por año en un modelo con una sola Q, cerca de los 3,82 medidos, y el día se alarga 2,05 ms por siglo, cerca de los 2,3 de los eclipses. Corrido hacia atrás, el mismo modelo pone a la Luna en contacto con la Tierra hace 1,58 miles de millones de años, dentro de la edad del sistema solar. Así que Q no fue constante: en una historia real cambió con los océanos y los continentes. Un [[parameter|parámetro]] que ajusta el presente no es una ley.',
+      body: 'Elegiste una Q para ajustar el alejamiento medido de la Luna, y dio un día que se alarga casi lo que dice el registro de eclipses. Mil millones de años adelante, el mismo modelo pone a la Luna a 65 radios terrestres. Corrido hacia atrás, la pone en contacto con la Tierra hace 1,58 miles de millones de años, dentro de la edad del sistema solar. Así que Q no fue constante: en una historia real cambió con los océanos y los continentes. Un [[parameter|parámetro]] que ajusta el presente no es una ley. El fuego de Ío usa el mismo tipo de marea para calentar una luna, y hace la misma pregunta a un número que nadie conoce.',
     },
   },
 };
@@ -210,28 +212,21 @@ export const IOS_FIRE = {
   title: 'El fuego de Ío',
   subtitle:
     'El calentamiento de marea como energía por órbita, acotado por lo que nadie sabe del interior de Ío',
+  picture: 'Júpiter y sus cuatro lunas grandes, Ío la más interior',
   objectives: [
     'Decir de dónde viene el calor de Ío y por qué necesita una órbita que no es del todo circular',
-    'Leer el calor y la energía en una órbita en la fórmula de calentamiento de marea para un k2 y una Q dados',
-    'Decir por qué la respuesta es una cota y no una predicción, y qué k2/Q necesita el calor observado',
-    'Decir cómo depende el calentamiento de la excentricidad',
+    'Predecir, y luego medir, cómo cambia el calentamiento cuando solo cambia la excentricidad',
+    'Hallar dos interiores, un k2 y una Q, que den el calor de Ío',
+    'Decir por qué la respuesta es una cota y no una predicción',
   ],
   steps: {
     'a-moon-that-melts': {
       title: 'El cuerpo más volcánico que conocemos',
-      body: 'Ío es el cuerpo con más actividad volcánica del sistema solar, sin ayuda del Sol. Su calor es la marea: Júpiter levanta un abultamiento en Ío, y como la órbita de Ío no es del todo circular (<em>e</em> = 0,0041) el abultamiento sube y baja una vez por órbita, y el rozamiento de esa flexión es calor. Cuánto depende de lo fácil que Ío se flexiona (k2) y de cuánto pierde al hacerlo (Q), y ninguno se conoce para Ío.',
-    },
-    'heating-at-the-maximum': {
-      title: 'El calor para k2 = 1,5 y Q = 100',
-      body: 'Pon k2 en 1,5 (lo máximo que puede tener un cuerpo, para un fluido), Q en 100 y la [[eccentricity|excentricidad]] en 0,0041. Lee el <strong>calentamiento</strong> en unidades de 10<sup>13</sup> W, y la energía en una órbita en unidades de 10<sup>19</sup> J.',
-      fields: [
-        { label: 'Calentamiento' },
-        { label: 'Energía en una órbita (10¹⁹ J)' },
-      ],
+      body: 'Ío es el cuerpo con más actividad volcánica del sistema solar, y el Sol no lo calienta. Lo calienta Júpiter: levanta un abultamiento en Ío, y como la órbita de Ío no es del todo circular el abultamiento sube y baja una vez por órbita, así que la roca de Ío se flexiona y el rozamiento de esa flexión es calor. La imagen de fondo de esta actividad es Júpiter con Ío, la más interior de sus cuatro lunas grandes, detenida. Vas a predecir cómo depende el calor de la órbita, medirlo en un instrumento y luego buscar cómo debe ser el interior de Ío para dar el calor que se observa.',
     },
     'double-predict': {
       title: 'Una órbita más excéntrica',
-      body: 'El calentamiento es proporcional al cuadrado de la excentricidad, porque la subida y bajada del abultamiento es proporcional a ella y también el rozamiento.',
+      body: 'La órbita de Ío se aparta de un círculo con una excentricidad de 0,0041, poca cosa. Imagina la misma luna, con el mismo interior, en una órbita que se aparta el doble.',
       prompt:
         'Si se duplicara la excentricidad de Ío, el calentamiento sería&hellip;',
       options: [
@@ -240,23 +235,56 @@ export const IOS_FIRE = {
         'ocho veces mayor',
         'el mismo',
       ],
-      hints: ['El calentamiento va como <em>e</em> al cuadrado.'],
+      hints: [
+        'Piensa qué cambia la excentricidad en la marea de Ío antes de elegir.',
+      ],
       because:
-        'El calentamiento va como <em>e</em> al cuadrado, así que duplicar la excentricidad da cuatro veces el calor: de 9,33 × 10¹³ W a 3,73 × 10¹⁴ W con k2 = 1,5 y <em>Q</em> = 100.',
+        'El calentamiento va como <em>e</em> al cuadrado, así que duplicar la excentricidad da cuatro veces el calor: la subida y bajada del abultamiento es proporcional a <em>e</em>, y también el rozamiento en ella, sean cuales sean k2 y <em>Q</em>.',
     },
-    'double-the-eccentricity': {
-      title: 'Duplicar la excentricidad',
-      body: 'Pon la excentricidad en 0,0082 y lee el calentamiento en unidades de 10<sup>14</sup> W.',
-      fields: [{ label: 'Calentamiento' }],
+    'heating-at-two-eccentricities': {
+      title: 'El calentamiento con la excentricidad de Ío, y con el doble',
+      body: 'Cambia una sola cosa y deja el resto: deja k2 y <em>Q</em> donde se abre el instrumento y mueve solo la <strong>[[eccentricity|Excentricidad]]</strong>. Ponla en el valor de Ío, 0,0041, y toma el <strong>Calentamiento</strong>. Luego ponla en el doble de ese valor y toma otra vez el Calentamiento. Cada lectura está en unidades de 10<sup>13</sup> W.',
+      fields: [
+        {
+          label: 'Calentamiento con la excentricidad de Ío (10¹³ W)',
+          want: '1,99',
+        },
+        {
+          label: 'Calentamiento con el doble de esa excentricidad (10¹³ W)',
+          want: '7,96',
+        },
+      ],
     },
-    'the-bound': {
-      title: 'Lo que la fórmula puede y no puede decir',
-      body: 'Vuelve a poner la excentricidad en 0,0041. La línea <strong>Intervalo que permite el modelo</strong> es el calor para el mayor k2/<em>Q</em> (k2 = 1,5, <em>Q</em> = 5) y una milésima de él. Lee el <strong>k2/Q</strong> que necesita el valor medio del flujo de calor observado.',
-      fields: [{ label: 'k2/Q que necesita el valor medio observado' }],
+    'what-doubling-did': {
+      title: 'Tu predicción y tus lecturas',
+      body: 'El calentamiento va como el cuadrado de la excentricidad: la subida y bajada del abultamiento es proporcional a <em>e</em> y el rozamiento en ella lo es otra vez, así que duplicar <em>e</em> multiplica el calor por cuatro, sean cuales sean k2 y <em>Q</em>. Tu predicción y tus dos lecturas están debajo.',
+      compare:
+        'Divide tu segunda lectura entre la primera: ese es el factor en que cambió el calentamiento al duplicar la excentricidad.',
+    },
+    'find-the-interiors': {
+      title: 'Interiores que dan el calor',
+      body: 'Ío irradia cerca de 1 &times; 10<sup>14</sup> W, y se observa entre las dos líneas trazadas en 0,6 y 1,6 &times; 10<sup>14</sup> W. Deja la excentricidad en 0,0041, la de Ío, y busca con k2 y <em>Q</em> un par que meta la fila <strong>Calentamiento</strong> dentro de ese intervalo observado, y anótalo. Luego halla un segundo par que también lo haga, con un k2 que difiera al menos en 0,2.',
+      fields: [
+        { label: 'Primer par: k2', want: '0,5' },
+        { label: 'Primer par: Q', want: '30' },
+        { label: 'Segundo par: k2', want: '1,0' },
+        { label: 'Segundo par: Q', want: '60' },
+      ],
+    },
+    'two-interiors-one-heat': {
+      rubric:
+        'Crédito completo por decir que el calentamiento depende de k2 y Q solo por su cociente, así que muchos pares distintos dan un calor dentro del intervalo observado; que el calor observado fija por tanto ese cociente solo dentro de un intervalo y no identifica el interior; y que una fórmula cuyas dos incógnitas se pueden elegir para ajustar la observación da una cota, un resultado compatible con el calor y no una predicción de él, mientras k2 o Q no se conozcan por otro camino. Crédito parcial por una o dos.',
+      title: 'Dos interiores, una observación',
+      body: 'Has hallado dos interiores, con k2 y <em>Q</em> distintos, cuyo calentamiento queda dentro del intervalo observado.',
+      prompt:
+        'En dos o tres frases: ¿por qué dos interiores distintos pueden dar los dos un calor dentro del intervalo observado, y qué significa eso para llamar predicción a la respuesta de la fórmula?',
+      hints: [
+        'Compara los dos pares que anotaste: ¿en qué se diferencian, y qué cumplen los dos?',
+      ],
     },
     'what-heat-is': {
       title: 'Lo que has deducido',
-      body: 'El calor de Ío viene de la marea, y la fórmula lo da como un múltiplo de k2/Q con la excentricidad al cuadrado. Para un k2 y una Q plausibles coincide con lo observado, y la fórmula sola no puede decir más, porque k2/Q no se conoce: la respuesta es una cota de tres órdenes de magnitud, y la observación elige un punto dentro de ella. Lo que el modelo deja fuera es el interior: una capa parcialmente fundida cambia cómo se flexiona Ío.',
+      body: 'El calor de Ío es el rozamiento de una marea que sube y baja una vez por órbita, y creció como el cuadrado de la excentricidad. Ío, Europa y Ganímedes tiran unas de otras en una [[resonance|resonancia]] que impide que esa órbita se haga circular. En cuanto al interior, el calor observado fijó solo k2 dividido entre <em>Q</em>, y solo dentro de un intervalo: hallaste dos pares distintos dentro de él, así que la fórmula da una cota y la observación elige un punto dentro de ella. Lo que el modelo deja fuera es el interior: una capa parcialmente fundida cambia cómo se flexiona Ío. Haría falta una medida que dependa solo de k2 para separarlos, y los pasos más profundos preguntan cuál.',
     },
   },
 };

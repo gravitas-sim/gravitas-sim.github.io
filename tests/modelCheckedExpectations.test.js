@@ -228,8 +228,9 @@ describe('the instructor expectations record', () => {
     // 535 after What Is It Made Of? (Prompt 227): 2 more over 533.
     // 539 after Why We Cannot See Earth From Here and Architectures (Prompt 230): 4 more over 535.
     // 551 after the two Gaia investigations (Prompt 233 Part B): 4 more over 547.
-    // 552 after the Weighing the Stars pilot: one more measure step with a stated expectation.
-    expect(total).toBe(552);
+    // 552 over v4 551: the Moon lesson's two new steps (+2) and Io's Fire and Tides That Move the Moon keyed by their new steps (one fewer).
+    // 553 after the Weighing the Stars pilot: one more measure step with a stated expectation.
+    expect(total).toBe(553);
     // 542 after How Many Earths? (Prompt 229): 3 more over 539.
     // 547 after the four exoplanet closeout investigations (Prompt 231): 5 more over 542.
   });

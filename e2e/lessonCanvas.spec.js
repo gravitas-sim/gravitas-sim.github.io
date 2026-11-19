@@ -82,7 +82,7 @@ const paused = page =>
   page.evaluate(async () => (await import('/js/appState.js')).state.paused);
 
 test.describe('the canvas behind a lesson', () => {
-  test('a quiet step has nothing staged and its chrome folded behind toggles', async ({
+  test('a quiet step has nothing staged and its chrome tucked in one More', async ({
     page,
     app,
   }) => {
@@ -97,22 +97,21 @@ test.describe('the canvas behind a lesson', () => {
       'aria-label',
       /No scene on this step/
     );
-    // The rail's sections are closed and Add object has gone with them.
-    expect(await rail(page)).toEqual(['false', 'false', 'false']);
-    await expect(page.locator('#objectAdd')).toBeHidden();
-    // The playback bar is one button, reachable by keyboard, until opened.
-    const fold = page.locator('#timelineFold');
-    await expect(fold).toBeVisible();
+    // The rail and the playback bar are in one More, shut: out of sight and
+    // out of the Tab order, and reachable through its one control.
+    const more = page.locator('#stageMore');
+    await expect(more).toBeVisible();
+    await expect(more).not.toHaveAttribute('open', '');
     await expect(page.locator('#timelinePlay')).toBeHidden();
-    await fold.focus();
+    await expect(page.locator('#railScenario')).toBeHidden();
+    await more.locator('summary').focus();
     await page.keyboard.press('Enter');
+    await expect(more).toHaveAttribute('open', '');
     await expect(page.locator('#timelinePlay')).toBeVisible();
-    await expect(fold).toHaveAttribute('aria-expanded', 'true');
-    // A rail toggle opens its section by keyboard and Add object returns.
-    await page.locator('#railScenario').focus();
-    await page.keyboard.press('Enter');
-    await expect(page.locator('#loadScenarioBtn')).toBeVisible();
+    await expect(page.locator('#railScenario')).toBeVisible();
     await expect(page.locator('#objectAdd')).toBeVisible();
+    await page.keyboard.press('Enter');
+    await expect(page.locator('#timelinePlay')).toBeHidden();
   });
 
   test('a world built under a quiet step is emptied again', async ({
@@ -127,7 +126,9 @@ test.describe('the canvas behind a lesson', () => {
         (await import('/js/physics.js')).getWorldGeneration()
       );
     const before = await generation();
-    await page.locator('#railScenario').click();
+    await page.locator('#stageMore > summary').click();
+    if ((await rail(page)).every(open => open === 'false'))
+      await page.locator('#railScenario').click();
     await page.locator('#refreshScenarioBtn').click();
     await expect.poll(generation).toBeGreaterThan(before);
     await expect.poll(() => bodies(page), { timeout: 5_000 }).toBe(0);
@@ -162,7 +163,7 @@ test.describe('the canvas behind a lesson', () => {
     expect(await paused(page)).toBe(true);
     // The rail is as it was: a portrait folds nothing.
     expect(await rail(page)).toContain('true');
-    await expect(page.locator('#timelineFold')).toHaveCount(0);
+    await expect(page.locator('#stageMore')).toHaveCount(0);
   });
 
   test('a portrait stays still under reduced motion, in Spanish', async ({
@@ -212,7 +213,7 @@ test.describe('the canvas behind a lesson', () => {
       'scene'
     );
     expect(await bodies(page)).toBe(1);
-    await expect(page.locator('#timelineFold')).toHaveCount(0);
+    await expect(page.locator('#stageMore')).toHaveCount(0);
     expect(await rail(page)).toEqual(before);
     // And leaving mid-quiet puts everything back.
     await page.locator('#investigationPrev').click();
@@ -225,7 +226,7 @@ test.describe('the canvas behind a lesson', () => {
     await expect(page.locator('body')).not.toHaveAttribute(
       'data-lesson-canvas'
     );
-    await expect(page.locator('#timelineFold')).toHaveCount(0);
+    await expect(page.locator('#stageMore')).toHaveCount(0);
     expect(await rail(page)).toEqual(before);
     await expect(page.locator('#simulationCanvas')).toHaveAttribute(
       'aria-label',
@@ -243,7 +244,7 @@ test.describe('the canvas behind a lesson', () => {
     test(`a quiet step lays out at ${width} px`, async ({ page, app }) => {
       await page.setViewportSize({ width, height });
       await open(page, app, 'quiet-one');
-      const box = await page.locator('#timelineFold').boundingBox();
+      const box = await page.locator('#stageMore').boundingBox();
       expect(box.x).toBeGreaterThanOrEqual(0);
       expect(box.x + box.width).toBeLessThanOrEqual(width);
       expect(box.y + box.height).toBeLessThanOrEqual(height);

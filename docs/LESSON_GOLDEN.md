@@ -87,17 +87,18 @@ The browser half takes about seven minutes on the private port.
 | 5 | `the-saturated-star` | 6: `depth-step:advanced/predict`, `depth-step:quantitative/read`, `key:predict.after`, `key:predict.depth`, `key:predict.hints`, `key:predict.tool` |
 | 6 | `lagrange-points` | 4: `key:explore.requires`, `key:explore.rubric`, `key:predict.tip`, `lock:{"placement":true}` |
 | 7 | `black-holes` | 3: `key:question.checklist`, `key:read.explainView`, `lock:{"placement":true,"inspector":false,"areaSweep":false}` |
-| 8 | `butterfly-effect` | 2: `key:predict.requires`, `lock:null` |
-| 9 | `propose-an-observation` | 2: `key:measure.plan`, `key:question.rubricCriteria` |
-| 10 | `what-is-a-gravitational-wave` | 2: `audience:beginner`, `key:read.checklist` |
-| 11 | `a-night-at-the-telescope` | 1: `key:question.reflect` |
-| 12 | `counts-to-magnitudes` | 1: `depth-step:quantitative/predict` |
-| 13 | `detect-this-planet` | 1: `key:read.allowInspector` |
-| 14 | `extending-an-experiment` | 1: `key:measure.compute` |
-| 15 | `measuring-the-moon` | 1: `key:question.maxUncertainty` |
-| 16 | `power-law-gravity` | 1: `key:question.explain` |
-| 17 | `radial-velocity` | 1: `key:measure.setup` |
-| 18 | `retrograde-motion` | 1: `lock:{"placement":true,"inspector":false}` |
+| 8 | `measuring-the-moon` | 3: `key:question.maxUncertainty`, `key:question.minUncertainty`, `key:question.valueWithin` |
+| 9 | `butterfly-effect` | 2: `key:predict.requires`, `lock:null` |
+| 10 | `ios-fire` | 2: `key:read.compare`, `key:read.evidence` |
+| 11 | `propose-an-observation` | 2: `key:measure.plan`, `key:question.rubricCriteria` |
+| 12 | `what-is-a-gravitational-wave` | 2: `audience:beginner`, `key:read.checklist` |
+| 13 | `a-night-at-the-telescope` | 1: `key:question.reflect` |
+| 14 | `counts-to-magnitudes` | 1: `depth-step:quantitative/predict` |
+| 15 | `detect-this-planet` | 1: `key:read.allowInspector` |
+| 16 | `extending-an-experiment` | 1: `key:measure.compute` |
+| 17 | `power-law-gravity` | 1: `key:question.explain` |
+| 18 | `radial-velocity` | 1: `key:measure.setup` |
+| 19 | `retrograde-motion` | 1: `lock:{"placement":true,"inspector":false}` |
 
 | # | Activity cut | Tokens it adds |
 |---|---|---|

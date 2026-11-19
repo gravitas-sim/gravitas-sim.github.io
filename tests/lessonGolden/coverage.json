@@ -7,14 +7,15 @@
     "the-saturated-star",
     "lagrange-points",
     "black-holes",
+    "measuring-the-moon",
     "butterfly-effect",
+    "ios-fire",
     "propose-an-observation",
     "what-is-a-gravitational-wave",
     "a-night-at-the-telescope",
     "counts-to-magnitudes",
     "detect-this-planet",
     "extending-an-experiment",
-    "measuring-the-moon",
     "power-law-gravity",
     "radial-velocity",
     "retrograde-motion"
@@ -173,9 +174,18 @@
       "key:read.explainView",
       "lock:{\"placement\":true,\"inspector\":false,\"areaSweep\":false}"
     ],
+    "measuring-the-moon": [
+      "key:question.maxUncertainty",
+      "key:question.minUncertainty",
+      "key:question.valueWithin"
+    ],
     "butterfly-effect": [
       "key:predict.requires",
       "lock:null"
+    ],
+    "ios-fire": [
+      "key:read.compare",
+      "key:read.evidence"
     ],
     "propose-an-observation": [
       "key:measure.plan",
@@ -196,9 +206,6 @@
     ],
     "extending-an-experiment": [
       "key:measure.compute"
-    ],
-    "measuring-the-moon": [
-      "key:question.maxUncertainty"
     ],
     "power-law-gravity": [
       "key:question.explain"
@@ -279,16 +286,16 @@
   ],
   "totals": {
     "investigations": 124,
-    "steps": 1980,
+    "steps": 1985,
     "activityCuts": 6,
-    "lessonTokens": 153,
+    "lessonTokens": 157,
     "activityTokens": 29,
     "stepTypes": {
-      "read": 375,
+      "read": 376,
       "predict": 198,
       "ellipse": 1,
-      "question": 747,
-      "measure": 516,
+      "question": 750,
+      "measure": 517,
       "explore": 142,
       "wedges": 1
     }

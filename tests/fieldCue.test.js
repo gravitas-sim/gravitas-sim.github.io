@@ -292,7 +292,7 @@ describe('every lesson, depth and language', () => {
         ['weighing-stars', 'weigh-one-star-with-an-error-bar'],
         ['missing-mass', 'dark-fraction-with-an-error-bar'],
         ['what-is-a-measurement', 'a-position-with-an-error-bar'],
-        ['measuring-the-moon', 'a-diameter-with-an-error-bar'],
+        ['measuring-the-moon', 'a-diameter-with-the-squeeze'],
         ['weighing-jupiter', 'jupiters-mass'],
       ]) {
         const lesson = layDepth(

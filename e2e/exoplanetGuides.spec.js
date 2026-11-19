@@ -180,6 +180,56 @@ test.describe('the Exoplanet Observatory guides', () => {
     ]);
   });
 
+  test('the fit guide: the reader holds the limb darkening fixed, takes a published star radius, and ends on what limits the planet’s radius', async ({
+    page,
+  }) => {
+    test.slow();
+    await openGuide(page, 'guide=exo-fit');
+    await expect(title(page)).toContainText('Step 1 of 7');
+    await next(page);
+    await expect(title(page)).toContainText('Choose what the fit leaves free');
+    await page.locator('#gdGo').click();
+    await expect(page.locator('#fitRun')).toBeVisible({ timeout: 30_000 });
+    // No fit yet: the check says so. Then hold q1 and q2 fixed (at the panel's
+    // own values) and fit: any defensible choice passes.
+    await page.locator('#gdCheck').click();
+    await expect(feedback(page)).toHaveAttribute('data-ok', 'false');
+    for (const name of ['q1', 'q2'])
+      await page.locator(`#fitMode-${name}`).selectOption('fixed');
+    await page.locator('#fitRun').click();
+    await expect(page.locator('#fitStatus')).toContainText(/Fitted in/, {
+      timeout: 180_000,
+    });
+    await page.locator('#gdCheck').click();
+    await expect(feedback(page)).toHaveAttribute('data-ok', 'true');
+    await expect(feedback(page)).toContainText('Fitted: k = ');
+    // The star's radius: the step no longer says which; the table gives two.
+    await next(page);
+    await next(page);
+    await expect(title(page)).toContainText('From a ratio to a radius');
+    await expect(page.locator('#gdShow')).toContainText('Torres');
+    await expect(page.locator('#gdShow')).toContainText('Stassun');
+    await page.locator('#fitStellarRadius').fill('1.155');
+    await page.locator('#fitStellarRadiusSigma').fill('0.015');
+    await page.locator('#fitRun').click();
+    await expect(page.locator('#fitStatus')).toContainText(/Fitted in/, {
+      timeout: 180_000,
+    });
+    await page.locator('#gdCheck').click();
+    await expect(feedback(page)).toHaveAttribute('data-ok', 'true');
+    // The closing question reads the reader's own fit: nothing is typed.
+    await next(page);
+    await next(page);
+    await expect(title(page)).toContainText('What limits the planet’s radius?');
+    await expect(page.locator('#gdShow')).toContainText('Your fit');
+    await page.locator('input[value="fit"]').check();
+    await page.locator('#gdCheck').click();
+    await expect(feedback(page)).toHaveAttribute('data-ok', 'false');
+    await page.locator('input[value="star"]').check();
+    await page.locator('#gdCheck').click();
+    await expect(feedback(page)).toHaveAttribute('data-ok', 'true');
+  });
+
   test('in Spanish, and with no accessibility violations in either language', async ({
     page,
   }) => {
@@ -205,5 +255,49 @@ test.describe('the Exoplanet Observatory guides', () => {
       'Abrir la curva de luz de HD 209458'
     );
     expect(await axe()).toEqual([]);
+  });
+
+  test('offline on a first visit: the exoplanet suite is not installed, so the panel says so and the other suite still opens', async ({
+    page,
+    errors,
+  }) => {
+    // The production build has no service worker and bundles the suite into a
+    // hashed chunk, so there is no path to block: this is a property of the
+    // sources, where the precache lists the files by name.
+    test.skip(
+      process.env.GRAVITAS_E2E_TARGET === 'dist',
+      'the production build names its chunks by hash, so the suite cannot be blocked by path'
+    );
+    // The suite and its words are kept by the service worker after first use,
+    // not installed: block them as a first offline visit would.
+    await page.route(/\/js\/observatory\/guides\/exoplanet\.js/, r =>
+      r.abort('failed')
+    );
+    await page.route(/\/js\/i18n\/(en|es)\.exoplanet\.js/, r =>
+      r.abort('failed')
+    );
+    await page.goto('/observatory/', { waitUntil: 'domcontentloaded' });
+    await expect(page.locator('html')).toHaveAttribute('data-ready', 'true', {
+      timeout: 30_000,
+    });
+    await page.locator('#obsGuidePanel > summary').click();
+    await expect(page.locator('#gdSuiteIntro')).toHaveText(
+      'Available after one online visit.'
+    );
+    // The reader can still choose the suite that is installed.
+    await page
+      .locator('#obsGuidePanel select')
+      .first()
+      .selectOption('populations');
+    await expect(page.locator('#gdSuiteIntro')).not.toHaveText(
+      'Available after one online visit.'
+    );
+    await expect(page.locator('#gdStart')).toBeEnabled();
+    // The blocked fetches are the only console errors, and they are expected.
+    expect(errors.pageErrors).toEqual([]);
+    expect(
+      errors.consoleErrors.every(m => /ERR_FAILED|exoplanet/.test(m))
+    ).toBe(true);
+    errors.consoleErrors.length = 0;
   });
 });
