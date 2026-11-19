@@ -206,14 +206,35 @@ export function lessonEntries(root = REPO) {
     // the catalog spreads it. The ids are the lesson objects' own `id` lines.
     const file = path.join(root, dir, `${id}.js`);
     const text = existsSync(file) ? read(root, `${dir}/${id}.js`) : '';
-    if (/^export default \[$|^export default \[[A-Z_, ]+\];$/m.test(text))
+    if (/^export default \[$|^export default \[[A-Z_, ]+\];$/m.test(text)) {
+      // A lesson of the group may live in a file of its own that the group
+      // imports (measuring-the-moon.js): its id line is read from there, and
+      // the group's default array says where it stands.
+      const named = new Map();
+      const idLine =
+        /^export const ([A-Z_]+) = \{\n {2}id: '([a-z0-9-]+)',\n {2}thumbnail:/gm;
+      const own = [
+        ...text.matchAll(/^import .* from '\.\/([a-z0-9-]+)\.js';$/gm),
+      ]
+        .map(m => `${dir}/${m[1]}.js`)
+        .filter(f => existsSync(path.join(root, f)))
+        .map(f => read(root, f));
+      for (const t of [text, ...own])
+        for (const m of t.matchAll(idLine)) named.set(m[1], m[2]);
+      const order = /^export default \[\n([^\]]*)\];$/m.exec(text)?.[1];
       sharedIds.set(
         def.local.name,
-        [...text.matchAll(/^ {2}id: '([a-z0-9-]+)',\n {2}thumbnail:/gm)].map(
-          m => m[1]
-        )
+        order
+          ? order
+              .split(',')
+              .map(x => x.trim())
+              .filter(Boolean)
+              .map(x => named.get(x))
+          : [
+              ...text.matchAll(/^ {2}id: '([a-z0-9-]+)',\n {2}thumbnail:/gm),
+            ].map(m => m[1])
       );
-    else idOf.set(def.local.name, id);
+    } else idOf.set(def.local.name, id);
   }
   const catalog = topLevelConsts(program).get('INVESTIGATIONS');
   if (catalog?.type !== 'ArrayExpression')

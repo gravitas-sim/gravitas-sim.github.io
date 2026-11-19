@@ -75,6 +75,7 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { serveStatic } from './static-server.mjs';
+import { writeProgress } from '../js/investigations/progressSchema.js';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 export const THRESHOLDS = JSON.parse(
@@ -150,7 +151,7 @@ export async function contextFor(
   browser,
   profile,
   baseURL,
-  { serviceWorkers = 'block', locale = 'en' } = {}
+  { serviceWorkers = 'block', locale = 'en', resume = null } = {}
 ) {
   const context = await browser.newContext({
     baseURL,
@@ -170,6 +171,29 @@ export async function contextFor(
     },
     ['gravitas_welcome_seen_v1', '1', locale]
   );
+  // A returning visitor: the lesson's saved progress, written by the
+  // application's own writer, opens it where they stopped.
+  if (resume) {
+    await context.addInitScript(
+      ([k, v]) => {
+        try {
+          window.localStorage.setItem(k, v);
+        } catch {
+          /* storage unavailable */
+        }
+      },
+      [
+        `gravitas_investigation_${resume.lesson}`,
+        JSON.stringify(
+          writeProgress({
+            lesson: { id: resume.lesson },
+            stepSid: resume.stepSid,
+            visited: resume.visited,
+          })
+        ),
+      ]
+    );
+  }
   await context.addInitScript(INPUT_PROBE);
   return context;
 }
@@ -285,6 +309,13 @@ export const ROUTES = {
   'ios-fire': {
     label: 'Lesson, instrument (ios-fire)',
     path: '/#investigation=ios-fire',
+    // The instrument is on the lesson's third step (a read and a prediction
+    // come first), so the visitor is a returning one who stopped there.
+    resume: {
+      lesson: 'ios-fire',
+      stepSid: 'heating-at-two-eccentricities',
+      visited: ['a-moon-that-melts', 'double-predict'],
+    },
     usable: { kind: 'visible', arg: '#investigationNext' },
     drag: { selector: '#invTool-k2' },
     async act(page) {
@@ -568,6 +599,7 @@ export async function measureRoute(
     const ctx = await contextFor(browser, profile, server.url, {
       serviceWorkers: 'block',
       locale,
+      resume: route.resume,
     });
     out.cold = await loadOnce(ctx, server, route, profile, { limitMs });
     await ctx.close();
@@ -578,6 +610,7 @@ export async function measureRoute(
   const ctx = await contextFor(browser, profile, server.url, {
     serviceWorkers: 'allow',
     locale,
+    resume: route.resume,
   });
   try {
     out.coldSw = await loadOnce(ctx, server, route, profile, { limitMs });

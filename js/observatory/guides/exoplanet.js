@@ -94,6 +94,8 @@ export const ADOPTED = {
     radiusRatio: { value: 0.12086, ref: 'Torres et al. 2008, ApJ 677, 1324' },
     stellarRadiusTorres: {
       value: 1.155,
+      // Table 3 gives +0.014 and -0.016: taken as 0.015.
+      sigma: 0.015,
       unit: 'Rsun',
       ref: 'Torres et al. 2008, ApJ 677, 1324',
     },
@@ -275,26 +277,20 @@ export const ANSWERS = {
       ? null
       : Math.abs(p - ADOPTED.hd209458.period.value) * 1440;
   },
-  radiusRatio: c => c.quantity('fit', 'k'),
+  radiusRatio: c => c.quantity('choose-fit', 'k'),
   // The star's mean density from the fit's P and a/R*, circular orbit.
-  stellarDensity: c => c.quantity('fit', 'rhoStar'),
+  stellarDensity: c => c.quantity('choose-fit', 'rhoStar'),
   // How much too high a circular fit's density is for an eccentric orbit.
   densityFactor: () => eccentricFactor(ECCENTRIC_EXAMPLE),
   // The correlation of k and b in the fit's covariance.
   kbCorrelation: c => {
-    const fit = c.evidence('fit')?.results?.fit;
+    const fit = c.evidence('choose-fit')?.results?.fit;
     const i = fit?.free?.indexOf('k');
     const j = fit?.free?.indexOf('b');
     return fit?.correlation && i >= 0 && j >= 0 ? fit.correlation[i][j] : null;
   },
-  beta: c => c.evidence('fit')?.results?.fit?.redNoise?.beta ?? null,
-  planetRadius: c => c.quantity('radius', 'Rp'),
-  radiusIfTorres: c => {
-    const k = c.quantity('fit', 'k');
-    return k === null
-      ? null
-      : k * ADOPTED.hd209458.stellarRadiusTorres.value * RSUN_PER_RJUP;
-  },
+  beta: c => c.evidence('choose-fit')?.results?.fit?.redNoise?.beta ?? null,
+  planetRadius: c => c.quantity('star-radius', 'Rp'),
   depthRatio: c => {
     const P = periodOf('kepler13');
     const sap = transitOf(c, 'kepler13-sap', P)?.depth;
@@ -344,6 +340,18 @@ export const CORRECT = {
       if (!best || r > best.r) best = { pair, r };
     }
     return best?.pair ?? null;
+  },
+  // What limits the planet's radius: the fit's own uncertainty on k, or the
+  // star's radius, which two published values give 3 percent apart. Each is
+  // a relative uncertainty; one more than twice the other limits the radius.
+  limitsRadius: c => {
+    const k = c.quantity('choose-fit', 'k');
+    const sigma = c.quantity('choose-fit', 'kSigma');
+    if (!(k > 0) || sigma === null) return null;
+    const { stellarRadius: a, stellarRadiusTorres: b } = ADOPTED.hd209458;
+    const star = (2 * Math.abs(a.value - b.value)) / (a.value + b.value);
+    const fit = sigma / k;
+    return star > 2 * fit ? 'star' : fit > 2 * star ? 'fit' : 'equal';
   },
   // Could the transits of the sector tell the two grazing planets apart?
   vshape: () => (VSHAPE_RESULT.chi2All < VSHAPE.chi2Limit ? 'cannot' : 'can'),
@@ -521,13 +529,41 @@ export const GUIDES = [
   },
   {
     id: 'exo-fit',
-    minutes: { intro: 20, advanced: 50 },
+    minutes: { intro: 25, advanced: 55 },
     level: 'intro',
     tags: ['exoplanets', 'observing'],
+    // Steps revised under the task-change contract (CONTRIBUTING_CONTENT.md):
+    // the old id keeps its saved answer, shown as an earlier version.
+    retired: {
+      fit: {
+        to: 'choose-fit',
+        release: '3.1',
+        was: {
+          en: 'Fit the transit with the other stars’ share of the light at zero, and check that k lies in range.',
+          es: 'Ajustar el tránsito con la parte de luz de otras estrellas en cero, y comprobar que k está en el intervalo.',
+        },
+      },
+      radius: {
+        to: 'star-radius',
+        release: '3.1',
+        was: {
+          en: 'Enter the stellar radius the step gave, 1.19 ± 0.02 solar radii, and fit again.',
+          es: 'Introducir el radio estelar que daba el paso, 1,19 ± 0,02 radios solares, y ajustar de nuevo.',
+        },
+      },
+      torres: {
+        to: 'whose-star',
+        release: '3.1',
+        was: {
+          en: 'Work out the planet’s radius with the star’s radius from Torres, Winn and Holman (2008), from your k.',
+          es: 'Calcular el radio del planeta con el radio de la estrella de Torres, Winn y Holman (2008), a partir de tu k.',
+        },
+      },
+    },
     steps: [
       { id: 'intro', kind: 'read', path: 'both' },
       {
-        id: 'fit',
+        id: 'choose-fit',
         kind: 'do',
         path: 'both',
         go: { open: 'hd209458', panel: 'fit' },
@@ -537,6 +573,11 @@ export const GUIDES = [
           parameter: 'k',
           within: [0.11, 0.13],
           settings: { dilution: [0, 0] },
+          // At least four parameters free, the epoch and k among them (all
+          // seven fit and converge on every window the check allows), and a
+          // window of at least two periods of data.
+          free: { has: ['t0', 'k'], min: 4 },
+          data: { span: [7, 1e9] },
         },
       },
       {
@@ -549,7 +590,7 @@ export const GUIDES = [
         id: 'pair',
         kind: 'choose',
         path: 'advanced',
-        from: 'fit',
+        from: 'choose-fit',
         options: ['b-aRs', 'k-t0', 'P-t0', 'q1-P'],
         correct: { answer: 'strongestPair' },
       },
@@ -560,7 +601,7 @@ export const GUIDES = [
         expect: { answer: 'beta', tolerance: 0.05 },
       },
       {
-        id: 'radius',
+        id: 'star-radius',
         kind: 'do',
         path: 'both',
         go: { panel: 'fit' },
@@ -570,10 +611,19 @@ export const GUIDES = [
           target: 'hd209458',
           parameter: 'Rp',
           within: [1.2, 1.6],
-          settings: {
-            'stellarRadius.value': [1.19, 1.19],
-            'stellarRadius.sigma': [0.02, 0.02],
-          },
+          // Either published radius, with its own uncertainty.
+          settings: [
+            {
+              'stellarRadius.value': [1.19, 1.19],
+              'stellarRadius.sigma': [0.02, 0.02],
+            },
+            {
+              'stellarRadius.value': [1.155, 1.155],
+              'stellarRadius.sigma': [0.015, 0.015],
+            },
+          ],
+          free: { has: ['t0', 'k'], min: 4 },
+          data: { span: [7, 1e9] },
         },
       },
       {
@@ -583,10 +633,12 @@ export const GUIDES = [
         expect: { answer: 'planetRadius', tolerance: 0.01 },
       },
       {
-        id: 'torres',
-        kind: 'answer',
-        path: 'advanced',
-        expect: { answer: 'radiusIfTorres', tolerance: 0.01 },
+        id: 'whose-star',
+        kind: 'choose',
+        path: 'both',
+        show: 'myFit',
+        options: ['fit', 'star', 'equal'],
+        correct: { answer: 'limitsRadius' },
       },
       // Prompt 225: the upper depth. Steps are only added; every step above
       // is as it was (tests/exoplanetGuides.test.js).
@@ -830,12 +882,34 @@ export const SHOWS = {
     ],
   },
   stellarRadius: {
+    rows: (c, step, h) =>
+      [
+        ADOPTED.hd209458.stellarRadius,
+        ADOPTED.hd209458.stellarRadiusTorres,
+      ].map((r, i) => [
+        h.t(i ? 'gd.show.radiusB' : 'gd.show.radiusA'),
+        `${h.fmt(r.value)} ± ${h.fmt(r.sigma)} R☉ (${r.ref})`,
+      ]),
+  },
+  // The reader's own fit, read from the ledger, against the star's two radii.
+  myFit: {
     rows: (c, step, h) => {
-      const r = ADOPTED.hd209458.stellarRadius;
+      const k = c.quantity('choose-fit', 'k');
+      const sigma = c.quantity('choose-fit', 'kSigma');
+      const { stellarRadius: a, stellarRadiusTorres: b } = ADOPTED.hd209458;
+      if (k === null || sigma === null)
+        return [[h.t('gd.show.myK'), h.t('gd.show.notFitted')]];
+      const rp = r => `${h.fmt(k * r.value * RSUN_PER_RJUP)} RJ`;
       return [
         [
-          h.t('gd.show.adoptedRadius'),
-          `${h.fmt(r.value)} ± ${h.fmt(r.sigma)} R☉ (${r.ref})`,
+          h.t('gd.show.myK'),
+          `${h.fmt(k)} ± ${h.fmt(sigma)} (${h.fmt((100 * sigma) / k)} %)`,
+        ],
+        [h.t('gd.show.myRp'), `${h.fmt(c.quantity('star-radius', 'Rp'))} RJ`],
+        [h.t('gd.show.rpEach'), `${rp(a)}; ${rp(b)}`],
+        [
+          h.t('gd.show.starsApart'),
+          `${h.fmt((200 * Math.abs(a.value - b.value)) / (a.value + b.value))} %`,
         ],
       ];
     },

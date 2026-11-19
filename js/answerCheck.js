@@ -120,12 +120,17 @@ function readValue(value, step, locale) {
 
 /**
  * Whether a number is inside the step's tolerance (with `u`: overlaps it, and
- * is no wider than `maxUncertainty`). The slack is for binary floating point:
+ * is no wider than `maxUncertainty` nor narrower than `minUncertainty`, and
+ * the value is in `valueWithin` when the step gives one). The slack is for binary floating point:
  * |7.6 - 8| is 0.4000000000000004, and the edge of the tolerance must pass.
  */
 function withinTolerance({ value: n, u }, step) {
   const tol = toleranceFor(step);
   if (u !== undefined && u > (step.maxUncertainty ?? 2 * tol)) return false;
+  // Optional: a narrowest uncertainty, and the values a result may take.
+  if (u !== undefined && u < (step.minUncertainty ?? 0)) return false;
+  if (step.valueWithin && (n < step.valueWithin[0] || n > step.valueWithin[1]))
+    return false;
   return Math.abs(n - step.answer) <= (tol + (u ?? 0)) * (1 + 1e-9) + 1e-12;
 }
 

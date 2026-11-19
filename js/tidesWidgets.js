@@ -429,6 +429,7 @@ const MOON = {
         emphasis: true,
       },
       {
+        id: 'day',
         label: t('tideW.m.row.day'),
         value: `${fixed(f.dayMsPerCentury, 2)} ms/century (${t('tideW.m.eclipse')})`,
       },
@@ -570,6 +571,7 @@ const HEATING = {
         emphasis: true,
       },
       {
+        id: 'power',
         label: t('tideW.h.row.power'),
         value: `${sci(f.h.power)} W`,
         emphasis: true,

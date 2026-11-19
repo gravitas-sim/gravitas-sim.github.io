@@ -90,7 +90,11 @@ describe('the lessons are registered whole', () => {
     for (const id of IDS)
       for (const s of lesson(id).steps)
         if (s.setup?.scenario) used.add(s.setup.scenario);
-    expect([...used].sort()).toEqual(['Ring Gap', 'Roche Pass']);
+    expect([...used].sort()).toEqual([
+      'Galilean Resonance',
+      'Ring Gap',
+      'Roche Pass',
+    ]);
   });
 });
 
@@ -145,16 +149,56 @@ describe('Why Rings?: every stated number from the kernel', () => {
 
 describe('Tides That Move the Moon: every stated number from the kernel', () => {
   const L = 'tides-that-move-the-moon';
-  test('the recession 3.75 cm per year and the day 2.05 ms per century', () => {
+  test('the Q that matches the measured recession, 3.82 ± 0.07 cm per year, is the whole number 12, which gives 2.05 ms per century', () => {
     const m = W.moonView({ gyr: 0 });
     holds(
       L,
-      'the-moons-recession',
-      { rate: m.dadtCmPerYear, day: m.dayMsPerCentury },
-      { rate: 38, day: 20 }
+      'match-the-recession',
+      { q: m.Q, day: m.dayMsPerCentury },
+      { q: 30, day: 1 }
     );
-    expect(within(3.75, m.dadtCmPerYear, 0.06)).toBe(true);
+    // 3.75 against 3.82 ± 0.07: one standard error off, the closest the slider's whole numbers come.
+    expect(Math.abs(3.82 - m.dadtCmPerYear)).toBeLessThan(0.075);
     expect(within(2.05, m.dayMsPerCentury, 0.06)).toBe(true);
+    // Of the slider's whole numbers (5 to 200) 12 comes closest to the measurement.
+    let best = 5;
+    for (let Q = 5; Q <= 200; Q++)
+      if (
+        Math.abs(3.82 - W.moonView({ Q, gyr: 0 }).dadtCmPerYear) <
+        Math.abs(3.82 - W.moonView({ Q: best, gyr: 0 }).dadtCmPerYear)
+      )
+        best = Q;
+    expect(best).toBe(12);
+    const s = step(L, 'match-the-recession');
+    for (let Q = 5; Q <= 200; Q++)
+      expect(s.validate({ q: Q, day: m.dayMsPerCentury }).level).toBe(
+        Q === 12 ? 'ok' : 'error'
+      );
+  });
+  test('a Q that is too large or too small gets the authored message that points the other way', () => {
+    const s = step(L, 'match-the-recession');
+    const day = W.moonView({ gyr: 0 }).dayMsPerCentury;
+    expect(s.validate({ q: 40, day }).message).toMatch(/slower than laser/);
+    expect(s.validate({ q: 8, day }).message).toMatch(/faster than laser/);
+    expect(s.validate({ q: 12, day: 3 }).message).toMatch(/day’s lengthening/);
+    // The laser-ranging value is the task's, never the feedback to a reading.
+    for (const sid of ['forward-one-billion', 'the-model-run-backward'])
+      expect(
+        JSON.stringify(step(L, sid).validate({ a: 1, day: 1, gyr: 9 }))
+      ).not.toMatch(/3\.82/);
+    expect(step(L, 'what-the-model-leaves-out').body).not.toMatch(/3\.82/);
+  });
+  test('the instrument opens on the steps that read it at a time that is not the answer', () => {
+    for (const sid of [
+      'match-the-recession',
+      'forward-one-billion',
+      'the-model-run-backward',
+    ]) {
+      const s = step(L, sid);
+      expect(s.tool.start).toBeTruthy();
+      expect(s.tool.start.gyr === 0 || s.tool.start.Q === 40).toBe(true);
+    }
+    expect(step(L, 'forward-predict').tool).toBeUndefined();
   });
   test('a billion years on: 414.6 thousand km and a 29.5 hour day; the prediction is 65 radii', () => {
     const m = W.moonView({ gyr: 1 });
@@ -193,32 +237,187 @@ describe('Tides That Move the Moon: every stated number from the kernel', () => 
 
 describe('Io’s Fire: every stated number from the kernel', () => {
   const L = 'ios-fire';
-  test('9.33e13 W and 1.43e19 J in one orbit, inside the observed range', () => {
-    const h = W.heatingView({});
+  const HELD = { k2: 0.8, Q: 250 };
+  test('with k2 and Q held, 1.99e13 W at Io’s eccentricity and four times that, 7.96e13 W, at twice it', () => {
+    const a = W.heatingView({ ...HELD, e: 0.0041 }).h.power;
+    const b = W.heatingView({ ...HELD, e: 0.0082 }).h.power;
+    expect(b / a).toBeCloseTo(4, 12);
     holds(
       L,
-      'heating-at-the-maximum',
-      { power: h.h.power / 1e13, orbit: h.h.energyPerOrbit / 1e19 },
-      { power: 1, orbit: 1 }
+      'heating-at-two-eccentricities',
+      { p1: a / 1e13, p2: b / 1e13 },
+      { p1: 0.12, p2: 0.47 }
     );
-    expect(h.h.power).toBeGreaterThan(W.IO_OBSERVED.low);
-    expect(h.h.power).toBeLessThan(W.IO_OBSERVED.high);
-  });
-  test('double the eccentricity: four times the heat, 3.73e14 W', () => {
-    const a = W.heatingView({}).h.power;
-    const b = W.heatingView({ e: 0.0082 }).h.power;
-    expect(b / a).toBeCloseTo(4, 12);
-    holds(L, 'double-the-eccentricity', { power: b / 1e14 }, { power: 1.9 });
     expect(step(L, 'double-predict').answer).toBe(1);
   });
-  test('the bound: the heat needs k2/Q = 0.0177, within the model’s range; 17 times below its largest', () => {
+  test('the instrument opens where the reading is wrong, and the check says to move the eccentricity', () => {
+    const s = step(L, 'heating-at-two-eccentricities');
+    expect(s.tool.start).toEqual({ k2: 0.8, Q: 250, e: 0.001 });
+    const open = W.heatingView(s.tool.start).h.power / 1e13;
+    expect(s.validate({ p1: open, p2: open }).level).toBe('error');
+    expect(s.validate({ p1: open, p2: open }).message).toMatch(
+      /change only the eccentricity/
+    );
+    // A reading taken with k2 and Q moved is not the held-fixed reading.
+    const moved = W.heatingView({ k2: 1.5, Q: 100, e: 0.0041 }).h.power / 1e13;
+    expect(s.validate({ p1: moved, p2: moved * 4 }).level).toBe('error');
+  });
+  test('the reveal names the student’s two readings, and the prediction was asked before any rule', () => {
+    const reveal = step(L, 'what-doubling-did');
+    expect(reveal.evidence).toEqual([
+      { step: 'heating-at-two-eccentricities', field: 'p1' },
+      { step: 'heating-at-two-eccentricities', field: 'p2' },
+    ]);
+    const sids = lesson(L).steps.map(s => s.sid);
+    expect(sids.indexOf('double-predict')).toBe(1);
+    expect(step(L, 'double-predict').reveal).toBe('what-doubling-did');
+    for (const s of lesson(L).steps.slice(0, 2))
+      expect(`${s.body} ${(s.hints || []).join(' ')}`).not.toMatch(
+        /square|proportional|four times|e squared/i
+      );
+  });
+  describe('the search for interiors', () => {
+    const s = step(L, 'find-the-interiors');
+    const power = (k2, Q) => W.heatingView({ k2, Q, e: 0.0041 }).h.power;
+    const range = () => W.IO_OBSERVED;
+    const pair = (a, b) => ({ k2a: a[0], qa: a[1], k2b: b[0], qb: b[1] });
+    test('the check’s constants are the instrument’s: watts per unit of k2/Q and the observed range', () => {
+      const { low, high } = range();
+      for (const [k, q] of [
+        [0.5, 30],
+        [1.5, 5],
+        [0.1, 500],
+        [0.9, 77],
+      ])
+        expect(Math.abs((6.2226e15 * k) / q / power(k, q) - 1)).toBeLessThan(
+          1e-4
+        );
+      expect(low).toBe(6e13);
+      expect(high).toBe(1.6e14);
+    });
+    test('any two pairs that bring the heating inside the observed range, with k2 at least 0.2 apart, pass', () => {
+      const { low, high } = range();
+      const inside = [];
+      for (let i = 2; i <= 30; i++)
+        for (let Q = 5; Q <= 500; Q++) {
+          const k = +(i * 0.05).toFixed(2);
+          const p = power(k, Q);
+          if (p >= low && p <= high) inside.push([k, Q]);
+        }
+      expect(inside.length).toBeGreaterThan(100);
+      let accepted = 0;
+      for (let i = 0; i < inside.length; i += 7)
+        for (let j = 0; j < inside.length; j += 11) {
+          const ok =
+            Math.round(Math.abs(inside[i][0] - inside[j][0]) * 100) >= 20;
+          const r = s.validate(pair(inside[i], inside[j]));
+          expect(r.level).toBe(ok ? 'ok' : 'error');
+          if (ok) accepted++;
+          else expect(r.message).toMatch(/nearly the same interior/);
+        }
+      expect(accepted).toBeGreaterThan(50);
+    });
+    test('a k2 difference of exactly 0.2 passes whatever the float error (0.7 - 0.5, 1.0 - 0.8, 0.3 - 0.1)', () => {
+      const { low, high } = range();
+      for (const [a, b] of [
+        [
+          [0.5, 30],
+          [0.7, 42],
+        ],
+        [
+          [0.8, 50],
+          [1.0, 60],
+        ],
+        [
+          [0.1, 8],
+          [0.3, 18],
+        ],
+      ]) {
+        for (const p of [a, b]) {
+          expect(power(...p)).toBeGreaterThanOrEqual(low);
+          expect(power(...p)).toBeLessThanOrEqual(high);
+        }
+        expect(s.validate(pair(a, b)).level).toBe('ok');
+        expect(s.validate(pair(b, a)).level).toBe('ok');
+      }
+    });
+    test('a pair outside the range fails with the authored message for the side it is on', () => {
+      const { low, high } = range();
+      const good = [1.0, 60];
+      const hot = [1.5, 50];
+      const cold = [0.8, 250];
+      expect(power(...hot)).toBeGreaterThan(high);
+      expect(power(...cold)).toBeLessThan(low);
+      expect(s.validate(pair(good, hot)).message).toMatch(/^Too much/);
+      expect(s.validate(pair(cold, [0.4, 20])).message).toMatch(/^Too little/);
+      expect(s.validate(pair([0.6, 300], [0.4, 20])).level).toBe('error');
+      for (const bad of [
+        [2, 100],
+        [0.05, 5],
+        [1, 4],
+        [1, 600],
+      ])
+        expect(s.validate(pair(good, bad)).message).toMatch(/sliders can set/);
+      expect(s.validate({ k2a: 1 })).toBeNull();
+    });
+    test('the opening instrument is outside the range: the search is not handed over', () => {
+      const { low } = range();
+      expect(power(0.8, 250)).toBeLessThan(low);
+      expect(s.tool.start).toBeUndefined();
+      expect(s.tool.values).toMatchObject({ k2: 0.8, Q: 250, e: 0.0041 });
+    });
+  });
+  test('the deeper steps: 17 times below the model’s largest, a factor of 2.7 across the observed range, and the measurement that depends on k2 alone', () => {
     const h = W.heatingView({});
-    holds(L, 'the-bound', { need: h.need.k2OverQ }, { need: 0.3 });
     expect(h.need.withinModel).toBe(true);
     expect(h.range.k2OverQMax / h.need.k2OverQ).toBeCloseTo(
       step(L, 'how-far-from-the-maximum').answer,
       0
     );
+    expect(
+      within(
+        step(L, 'how-wide-is-the-bound').answer,
+        W.IO_OBSERVED.high / W.IO_OBSERVED.low,
+        0.1
+      )
+    ).toBe(true);
+    const ch = step(L, 'what-would-separate-them');
+    expect(ch.answer).toBe(1);
+    expect(ch.misconceptions.map(m => m.option).sort()).toEqual([0, 2, 3]);
+    expect(lesson(L).steps.map(s => s.sid)).toEqual([
+      'a-moon-that-melts',
+      'double-predict',
+      'heating-at-two-eccentricities',
+      'what-doubling-did',
+      'find-the-interiors',
+      'two-interiors-one-heat',
+      'how-far-from-the-maximum',
+      'how-wide-is-the-bound',
+      'what-would-separate-them',
+      'what-the-formula-leaves-out',
+      'what-heat-is',
+    ]);
+  });
+  test('retired steps name where they went, and the canvas is Jupiter and Io or quiet', () => {
+    const io = INVESTIGATIONS.find(l => l.id === L);
+    const live = new Set(io.steps.map(s => s.sid));
+    for (const [id, r] of Object.entries(io.retired)) {
+      expect(live.has(id)).toBe(false);
+      expect(live.has(r.to)).toBe(true);
+    }
+    expect(Object.keys(io.retired).sort()).toEqual([
+      'double-the-eccentricity',
+      'heating-at-the-maximum',
+      'the-bound',
+    ]);
+    expect(io.canvas).toBe('portrait');
+    expect(io.picture).toMatch(/Jupiter/);
+    expect(io.steps.every(s => s.bind?.io?.name === 'Io')).toBe(true);
+    expect(io.steps[0].setup.scenario).toBe('Galilean Resonance');
+    const moon = INVESTIGATIONS.find(l => l.id === 'tides-that-move-the-moon');
+    expect(moon.canvas).toBe('quiet');
+    expect(moon.steps.some(s => s.stage || s.bind || s.setup)).toBe(false);
+    expect(Object.keys(moon.retired)).toEqual(['the-moons-recession']);
   });
 });
 

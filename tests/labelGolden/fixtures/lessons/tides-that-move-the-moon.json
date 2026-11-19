@@ -3,8 +3,8 @@
  "static": {
   "en": {
    "units": [
-    ["steps.the-moons-recession.fields.0.unit",""],
-    ["steps.the-moons-recession.fields.1.unit",""],
+    ["steps.match-the-recession.fields.0.unit",""],
+    ["steps.match-the-recession.fields.1.unit",""],
     ["steps.forward-one-billion.fields.0.unit",""],
     ["steps.forward-one-billion.fields.1.unit","h"],
     ["steps.the-model-run-backward.fields.0.unit","Gyr"],
@@ -31,11 +31,11 @@
  "precision": [],
  "steps": {
   "en": {
-   "the-moons-recession": {
-    "validate": {"calls":232,"distinct":2,"digest":"6a35f74d1424152f","samples":[null,{"level":"error","message":"Set k2 to 0.30, Q to 12 and the time to 0, then read “Moon’s recession now” and “The day’s lengthening now”."}]}
+   "match-the-recession": {
+    "validate": {"calls":232,"distinct":3,"digest":"0d656c9b6c0c3864","samples":[null,{"level":"error","message":"That Q gives a recession faster than laser ranging measures. A larger Q is a tide that loses less energy: try higher, and read “Moon’s recession now”."},{"level":"error","message":"That Q gives a recession slower than laser ranging measures. A smaller Q is a tide that loses more energy: try lower, and read “Moon’s recession now”."}]}
    },
    "forward-one-billion": {
-    "validate": {"calls":232,"distinct":2,"digest":"a063468f9c033218","samples":[null,{"level":"error","message":"Keep k2 = 0.30 and <em>Q</em> = 12, set the time to 1, and read the distance and the day."}]}
+    "validate": {"calls":232,"distinct":2,"digest":"31a6be0c0ad3846a","samples":[null,{"level":"error","message":"Keep k2 = 0.30 and the Q you found, set the time to 1, and read the distance and the day."}]}
    },
    "the-model-run-backward": {
     "validate": {"calls":97,"distinct":2,"digest":"ec0734d66d15b32e","samples":[null,{"level":"error","message":"Set the time to −2 and read “The model stops”: it gives how many billion years away."}]}

@@ -11,16 +11,16 @@ The hand-written, human-reviewed acceptance map is
 [`lesson-acceptance.json`](lesson-acceptance.json); `npm run
 audit:scene:check` fails if it disagrees with what is generated here.
 
-Across 124 investigations and 1522 steps: 1430 steps
-declare a scene, 165 let a reader change one, 177 read the
-running integration, 1012 show a prescribed model result, 161 draw
-on a stored dataset, 881 put a self-contained panel beside the text,
-390 keep something, and 58 are prose.
-Of 196 prediction loops, 196 are returned to,
-196 produce a measurement before they are answered, and
+Across 124 investigations and 1524 steps: 1416 steps
+declare a scene, 167 let a reader change one, 177 read the
+running integration, 1009 show a prescribed model result, 161 draw
+on a stored dataset, 878 put a self-contained panel beside the text,
+390 keep something, and 59 are prose.
+Of 195 prediction loops, 195 are returned to,
+195 produce a measurement before they are answered, and
 0 end in an explanation in the reader's own words.
 195 hold their marking until the experiment settles them.
-The canvas behind a step is stated as scene on 0, portrait on 0, quiet on 0; 1522 state none.
+The canvas behind a step is stated as scene on 0, portrait on 7, quiet on 16; 1501 state none.
 
 ## Kepler's Laws (`keplers-laws`)
 
@@ -52,17 +52,17 @@ The canvas behind a step is stated as scene on 0, portrait on 0, quiet on 0; 152
 
 ## Finding Planets by Their Shadows (`transit-photometry`)
 
-- **Steps:** 30. Scene declared on 30; a reader can change something on 3; 27 declare a scene nobody on that step can touch.
+- **Steps:** 29. Scene declared on 29; a reader can change something on 5; 24 declare a scene nobody on that step can touch.
 - **Where the numbers come from:** 6 live engine, 5 prescribed model, 0 stored dataset, 5 self-contained panel.
-- **What students do:** read, read-a-prediction-prompt-that-collects-nothing, open-a-body-inspector, select-a-body, run-the-simulation, run-to-an-armed-event, record-a-light-curve, view-from-a-set-angle, tick-a-checklist, move-an-instrument-control, press-an-instrument-preset, record-values, choose-an-option, answer-in-words, commit-a-prediction, import-from-the-selection.
+- **What students do:** read, commit-a-prediction, open-a-body-inspector, select-a-body, run-the-simulation, record-a-light-curve, view-from-a-set-angle, tick-a-checklist, move-an-instrument-control, press-an-instrument-preset, record-values, import-from-the-selection, run-to-an-armed-event, choose-an-option, answer-in-words.
 - **Objects the steps declare:** star, planet.
 - **Instruments:** depth-size, geometry, spectrum, dilution, resolve.
 - **Stored data:** none.
 - **Evidence kept:** notebook-fields, imported-from-scene.
-- **Prediction loops:** estimate-the-dip → your-first-transit, try-it-on-some-real, choose-the-two-stretches, correct-it-and-get-a, the-shape-of-the-dip, the-angle-you-happen-to → from-a-depth-to-a; getting-the-period → time-two-transits, from-a-period-to-an, read-an-atmosphere, a-star-you-did-not, go-and-look → time-two-transits; will-the-dip-look-the-same → compare-the-two-curves, find-the-hidden-companion → find-the-hidden-companion.
-- **Recovery:** wrong body: the step binds the object by name, so there is none; reset: rebuilds the scenario on arrival; missed moment: an event watch stops the run at transit; null result: the probe names what is missing; missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand; null result: guarded, but the fallback is not spelled out; ambiguous result: the check refuses without saying why; ambiguous result: the check says in words how close is close enough; wrong body: select another and import again, which overwrites.
-- **Scene rebuilds:** 2 step(s) on arrival (a-firefly-beside-a-lighthouse, compare-the-two-curves).
-- **Accepted central experiment** (reviewed 2026-09-11): object `planet`, control depth-size/rp, measures transit depth, from the mean of a stretch out of transit and a stretch from the floor of the dip, and the planet radius it implies, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+- **Prediction loops:** what-will-the-brightness-do → your-first-transit, try-it-on-some-real, measure-the-dip, correct-it-and-get-a, the-shape-of-the-dip, the-angle-you-happen-to → your-first-transit; getting-the-period → time-two-transits, from-a-period-to-an, read-an-atmosphere, a-star-you-did-not, go-and-look, now-measure-it, recover-the-real-planet → time-two-transits.
+- **Recovery:** wrong body: the step binds the object by name, so there is none; reset: rebuilds the scenario on arrival; null result: the probe names what is missing; wrong body: select another and import again, which overwrites; missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand; ambiguous result: the check says in words how close is close enough; missed moment: an event watch stops the run at transit.
+- **Scene rebuilds:** 2 step(s) on arrival (a-firefly-beside-a-lighthouse, now-measure-it).
+- **Accepted central experiment** (reviewed 2026-09-11): object `planet`, control depth-size/rp, measures transit depth, and the planet radius it implies, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 
 ## Bound, Unbound and Escape (`orbital-energy`)
 
@@ -906,15 +906,16 @@ The canvas behind a step is stated as scene on 0, portrait on 0, quiet on 0; 152
 
 ## Measuring the Moon (`measuring-the-moon`)
 
-- **Steps:** 8. Scene declared on 8; a reader can change something on 0; 8 declare a scene nobody on that step can touch.
-- **Where the numbers come from:** 0 live engine, 8 prescribed model, 0 stored dataset, 8 self-contained panel.
+- **Steps:** 10. Scene declared on 0; a reader can change something on 0; 0 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 10 prescribed model, 0 stored dataset, 10 self-contained panel.
 - **What students do:** move-an-instrument-control, press-an-instrument-preset, commit-a-prediction, record-values, choose-an-option, answer-in-words.
-- **Objects the steps declare:** star.
+- **Objects the steps declare:** none.
 - **Instruments:** moon-marks.
+- **Canvas:** quiet.
 - **Stored data:** none.
 - **Evidence kept:** notebook-fields.
-- **Prediction loops:** predict-the-scale → scale-from-the-disc, why-a-pair → scale-from-the-disc; predict-the-plain → measure-the-plain, what-would-change-it, what-you-worked-out → measure-the-plain.
-- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
+- **Prediction loops:** predict-the-scale → mark-the-disc-width, a-pair-that-stops-short, why-a-pair → mark-the-disc-width; predict-the-plain → measure-the-plain, squeezed-at-the-plain, what-would-change-it, what-you-worked-out → measure-the-plain.
+- **Recovery:** ambiguous result: the check says in words how close is close enough.
 - **Scene rebuilds:** none.
 - **Accepted central experiment** (reviewed 2026-09-11): object `panel:moon-marks`, control moon-marks/r, measures the diameter in kilometers of a circle drawn on the Galileo picture of the Moon, from the scale a reference pair of known length sets, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 
@@ -1032,31 +1033,33 @@ The canvas behind a step is stated as scene on 0, portrait on 0, quiet on 0; 152
 
 ## Tides That Move the Moon (`tides-that-move-the-moon`)
 
-- **Steps:** 6. Scene declared on 6; a reader can change something on 0; 6 declare a scene nobody on that step can touch.
-- **Where the numbers come from:** 0 live engine, 6 prescribed model, 0 stored dataset, 6 self-contained panel.
+- **Steps:** 6. Scene declared on 0; a reader can change something on 0; 0 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 5 prescribed model, 0 stored dataset, 5 self-contained panel.
 - **What students do:** move-an-instrument-control, record-values, commit-a-prediction.
-- **Objects the steps declare:** star.
+- **Objects the steps declare:** none.
 - **Instruments:** tides-moon.
+- **Canvas:** quiet.
 - **Stored data:** none.
 - **Evidence kept:** notebook-fields.
 - **Prediction loops:** forward-predict → forward-one-billion, the-model-run-backward, what-the-model-leaves-out → forward-one-billion.
-- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
+- **Recovery:** ambiguous result: the check says in words how close is close enough.
 - **Scene rebuilds:** none.
 - **Accepted central experiment** (reviewed 2026-09-11): object `panel:tides-moon`, control tides-moon/gyr, measures the Moon's distance in a constant-Q model a given time on: 62.9 Earth radii in half a billion years and 65.1 in one billion, against the 60.3 of today, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 
 ## Io’s Fire (`ios-fire`)
 
-- **Steps:** 6. Scene declared on 6; a reader can change something on 0; 6 declare a scene nobody on that step can touch.
-- **Where the numbers come from:** 0 live engine, 6 prescribed model, 0 stored dataset, 6 self-contained panel.
-- **What students do:** move-an-instrument-control, record-values, commit-a-prediction.
-- **Objects the steps declare:** star.
+- **Steps:** 7. Scene declared on 7; a reader can change something on 0; 7 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 2 prescribed model, 0 stored dataset, 2 self-contained panel.
+- **What students do:** read, commit-a-prediction, record-values, move-an-instrument-control, answer-in-words.
+- **Objects the steps declare:** io, europa, ganymede, callisto.
 - **Instruments:** tides-heating.
+- **Canvas:** portrait.
 - **Stored data:** none.
 - **Evidence kept:** notebook-fields.
-- **Prediction loops:** double-predict → double-the-eccentricity, the-bound, what-heat-is → double-the-eccentricity.
-- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
-- **Scene rebuilds:** none.
-- **Accepted central experiment** (reviewed 2026-09-11): object `panel:tides-heating`, control tides-heating/e, measures the tidal heating of Io at k2 = 1.5 and Q = 100, 9.33 x 10^13 W at its eccentricity of 0.0041 and four times that when the eccentricity is doubled, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+- **Prediction loops:** double-predict → heating-at-two-eccentricities, find-the-interiors → what-doubling-did.
+- **Recovery:** wrong body: the step binds the object by name, so there is none; reset: rebuilds the scenario on arrival; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** 1 step(s) on arrival (a-moon-that-melts).
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:tides-heating`, control tides-heating/e, measures the tidal heating of Io with k2 = 0.8 and Q = 250 held fixed: 1.99 x 10^13 W at its eccentricity of 0.0041 and four times that, 7.96 x 10^13 W, when the eccentricity is doubled, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 
 ## The Gaps in the Belt (`the-gaps-in-the-belt`)
 

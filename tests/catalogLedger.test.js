@@ -111,10 +111,14 @@ describe('the baseline the ledger reproduces', () => {
     expect(lessons.every(r => r.scene_class)).toBe(true);
   });
 
-  test('every row is seeded with its owning prompt, and the questions are empty', () => {
+  test('every row is seeded with its owning prompt, and the questions are empty until its content prompt closes it', () => {
     for (const r of ledger.rows) {
       expect([r.id, Number.isInteger(r.owner)]).toEqual([r.id, true]);
-      expect(Object.values(r.questions).every(v => v === '')).toBe(true);
+      const closed = r.editorial !== 'OPEN' || r.redesign !== 'OPEN';
+      expect([
+        r.id,
+        Object.values(r.questions).every(v => (closed ? v !== '' : v === '')),
+      ]).toEqual([r.id, true]);
     }
     expect(
       ledger.rows

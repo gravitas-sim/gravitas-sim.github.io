@@ -8,7 +8,7 @@
 // closure is capped by file count (D-R10-67); the per-lesson paths every loader
 // and tool builds from an id are one-line re-exports of the named exports here.
 //
-// Content only, no imports: every number a step states is a row of the claim
+// Content only; the one import is the Moon lesson, which has its own file: every number a step states is a row of the claim
 // family's readout (js/claimWidgets.js), and tests/claimInvestigations.test.js
 // recomputes each of them. The data are synthetic, the truth is known, and each
 // lesson says so; no authentic data are used here on purpose (the truth is the
@@ -17,6 +17,10 @@
 // The instructor guides, flows and expectations at the end of this file are
 // merged into the instructor registries (js/data/instructor*.js).
 // =============================================================================
+
+import { MEASURING_THE_MOON } from './measuring-the-moon.js';
+
+export { MEASURING_THE_MOON };
 
 /** A placeholder star on the canvas: a display; the instrument is where the picture is. */
 const STAGE = {
@@ -1203,11 +1207,6 @@ export const WHEN_THE_METHOD_MUST_REFUSE = {
 // The image investigations (Prompt 191): three more lessons in this file, on the
 // image-measurement instruments (js/imagingWidgets.js). Same rules as above.
 // -----------------------------------------------------------------------------
-const MM = (values = {}, hide = []) => ({
-  id: 'moon-marks',
-  values,
-  hide,
-});
 const SP = (values = {}, hide = ['zero']) => ({
   id: 'star-parallax',
   values,
@@ -1218,234 +1217,6 @@ const BO = (values = {}, hide = ['plx']) => ({
   values,
   hide,
 });
-
-// -----------------------------------------------------------------------------
-// 4. Measuring the Moon
-// -----------------------------------------------------------------------------
-export const MEASURING_THE_MOON = {
-  id: 'measuring-the-moon',
-  thumbnail: 'images/investigations/measuring-the-moon.webp',
-  title: 'Measuring the Moon',
-  subtitle:
-    'Marks on a real picture, a scale from a known length, and a size in kilometers',
-  duration: '15-25 min',
-  level: 'Introductory astronomy',
-  audience: 'intro',
-  textbook: { chapter: 6, section: null },
-  courseLevel: 'survey',
-  depths: ['core', 'quantitative', 'advanced'],
-  mathematics: 'arithmetic',
-  prerequisites: ['what-is-a-measurement'],
-  tags: ['observing'],
-  lock: { placement: true, inspector: true },
-  objectives: [
-    'Say why a picture has no scale of its own, and where a scale comes from',
-    'Give a real picture a scale from a length you know, and read a size in kilometers from a circle on it',
-    'Predict the size of a feature before measuring it, and say what the stated uncertainty includes and what it leaves out',
-    'Say why this picture can be marked and measured in pixels but not read for brightness',
-  ],
-  steps: [
-    {
-      sid: 'a-picture-of-the-moon',
-      stage: STAGE,
-      type: 'read',
-      title: 'A real picture of the Moon',
-      body: `This is a <strong>real</strong> picture: the Moon, photographed by NASA&rsquo;s
-             Galileo spacecraft on 7 December 1992 as it flew past the Earth on
-             its way to Jupiter. It is an enhanced-color composite, shown here in
-             gray. <em>Enhanced</em> means the contrast was stretched to show
-             differences in the ground, so its gray levels are for the eye and are
-             not a measure of the light the Moon reflects. The Observatory calls such
-             a picture <strong>display-only</strong>: you may mark it and measure
-             it in [[pixel|pixels]], and nothing more.
-             \n\nA picture has no scale of its own. This one is 496 pixels across,
-             and a pixel is not a kilometer. The pixels are numbered from the lower
-             left, x to the right and y up, and the disc is cropped close: its right
-             edge touches the last column. In this investigation you give the picture a
-             scale and take one measurement off it.`,
-      tool: MM({}, ['x1', 'x2', 'cx', 'cy', 'r']),
-    },
-    {
-      sid: 'predict-the-scale',
-      stage: STAGE,
-      type: 'predict',
-      reveal: 'scale-from-the-disc',
-      title: 'What gives a picture its scale?',
-      body: `You want a length on the picture in kilometers, and you have only
-             pixels.`,
-      prompt: 'To turn pixels into kilometers you need&hellip;',
-      options: [
-        'the date the picture was taken',
-        'a length in the picture that you already know in kilometers',
-        'the brightness of the Moon in the picture',
-        'the number of colors in the picture',
-      ],
-      answer: 1,
-      hints: [
-        'Where could a length in kilometers come from, with nothing else on the picture?',
-      ],
-      because:
-        'A length in the picture that you already know. A picture records angles and pixels and never says how far away the thing is, so the only way to a scale is to point at something in it whose size you know by other means. Here that is the Moon itself, whose mean diameter, 3,474.8 km, was measured by other means.',
-      tool: MM({}, ['x1', 'x2', 'cx', 'cy', 'r']),
-    },
-    {
-      sid: 'scale-from-the-disc',
-      stage: STAGE,
-      type: 'measure',
-      title: 'A reference pair across the disc',
-      body: `Mark the full width of the disc with a <strong>reference pair</strong>: a
-             line along the horizontal through the middle of the disc (row 245), from
-             its left edge to its right edge. Set the left end to <strong>3</strong>
-             and the right end to <strong>496</strong>. The pair is taken to span
-             3,474.8 km, the Moon&rsquo;s mean diameter. Read its length in pixels and
-             the scale it gives.
-             \n\nThe right end sits on the last column of the frame, so the disc may
-             be a pixel or two wider than the picture. Keep that in mind: it is not in
-             the [[uncertainty|uncertainty]] the tool states.`,
-      fields: [
-        { id: 'pair', label: 'Length of the pair', unit: 'px', want: '493' },
-        {
-          id: 'scale',
-          label: 'Scale from the pair, in km per pixel',
-          unit: '',
-          want: '7.05',
-        },
-      ],
-      validate: v => {
-        if (![v.pair, v.scale].every(Number.isFinite)) return null;
-        if (near(v.pair, 493, 3) && near(v.scale, 7.05, 0.05)) {
-          return {
-            level: 'ok',
-            message:
-              'The pair spans 493 pixels, so one pixel is 7.05 km on the Moon. The scale is only as good as the two things it rests on: the diameter you assumed, and where you put the two ends.',
-          };
-        }
-        return {
-          level: 'error',
-          message:
-            'Set the left end to 3 and the right end to 496, then read “Length of the pair” and “Scale from the pair”.',
-        };
-      },
-      tool: MM({ x1: 60, x2: 440 }, ['cx', 'cy', 'r']),
-    },
-    {
-      sid: 'why-a-pair',
-      stage: STAGE,
-      type: 'question',
-      kind: 'choice',
-      title: 'Why the scale comes from you',
-      body: `The Observatory can give an image a scale in arcseconds per pixel when
-             the image carries world coordinates, and it refuses to for this picture.
-             The scale you just made came from a pair you marked.`,
-      prompt: 'Why does the scale have to come from a pair that you mark?',
-      options: [
-        'The picture was taken by a spacecraft, so it has no pixels',
-        'The picture carries no coordinates or units for its pixels, so no scale can be read from it; the only scale is one you make from a length you know',
-        'The Observatory does not trust pictures from NASA',
-        'A scale is only needed for pictures in color',
-      ],
-      answer: 1,
-      misconceptions: [
-        {
-          id: 'no-pixels',
-          option: 0,
-          say: 'Every digital picture has pixels. What this one lacks is a record of what a pixel is worth on the sky or on the ground.',
-        },
-        {
-          id: 'trust',
-          option: 2,
-          say: 'It is not about trust. A display picture was stretched and re-encoded for the eye, and no one recorded a scale for it; a scale you state yourself is yours, and the tool shows it as such.',
-        },
-      ],
-      hints: ['What does the picture record about its own pixels?'],
-      because:
-        'The picture carries no coordinates or units, so nothing in it says what a pixel is worth. A scale you make from a length you know is a measurement of yours, with the assumption written beside it, and that is the only kind this picture allows.',
-      tool: MM({ x1: 3, x2: 496 }, ['x1', 'x2', 'cx', 'cy', 'r']),
-    },
-    {
-      sid: 'predict-the-plain',
-      stage: STAGE,
-      type: 'predict',
-      reveal: 'measure-the-plain',
-      title: 'How wide is the dark plain?',
-      body: `Near the middle of the disc there is a large dark plain, nearly round,
-             with its center close to <em>x</em> = 289, <em>y</em> = 306. The Moon&rsquo;s dark plains are
-             old lava flows. Before you measure it, look at it beside the whole disc.`,
-      prompt: 'Across, the plain is about&hellip;',
-      options: ['6 km', '60 km', '600 km', '6,000 km'],
-      answer: 2,
-      hints: [
-        'The whole Moon is about 3,500 km across. What share of it is the plain?',
-      ],
-      because:
-        'About 600 km, a little under a fifth of the Moon’s width: the plain spans roughly a fifth of the disc and the disc is 3,475 km across. The next step measures it.',
-      tool: MM({ x1: 3, x2: 496, cx: 289, cy: 306, r: 20 }, ['x1', 'x2']),
-    },
-    {
-      sid: 'measure-the-plain',
-      stage: STAGE,
-      type: 'measure',
-      title: 'A circle on the plain',
-      body: `The pair stays across the disc. The circle starts at <em>x</em> = 289, <em>y</em> = 306.
-             Change the <strong>radius</strong> until the circle follows the edge of the
-             dark plain, and nudge the center if the circle drifts to one side. Read
-             the diameter of the circle in kilometers.`,
-      fields: [
-        {
-          id: 'km',
-          label: 'Diameter of the circle',
-          unit: 'km',
-          want: '630',
-        },
-      ],
-      validate: v => {
-        if (!Number.isFinite(v.km)) return null;
-        if (near(v.km, 634, 45)) {
-          return {
-            level: 'ok',
-            message:
-              'About 634 km across, as the prediction said, within the few pixels a careful person can place the edge of a soft dark plain. The tool states about 6 km; the next step is about what that number does and does not include.',
-          };
-        }
-        return {
-          level: 'error',
-          message:
-            'Fit the circle to the edge of the dark plain, then read “Diameter of the circle in kilometers”.',
-        };
-      },
-      tool: MM({ x1: 3, x2: 496, cx: 289, cy: 306, r: 30 }, ['x1', 'x2']),
-    },
-    {
-      sid: 'what-would-change-it',
-      stage: STAGE,
-      type: 'question',
-      kind: 'short',
-      rubric:
-        'Full credit for naming two things that change the diameter, for example where the edge of the plain is placed (a soft edge, so two careful people differ by a few pixels), where the two ends of the pair are placed, the assumed diameter of the Moon, or the picture being cropped at the right, and for saying that the stated uncertainty of about 6 km includes only the rounding of each placement, and so leaves the softness of the edge and the assumptions out. Do not credit saying the number is exact, or that more marks of the same kind remove the assumptions.',
-      title: 'What would change the number?',
-      body: `The tool states the diameter as about 634 &plusmn; 6 km. Two people who each
-             fit the circle by eye will not agree to 6 km.`,
-      prompt:
-        'In two or three sentences: name two things that would change the diameter you got, and say which of them the stated uncertainty includes.',
-      tool: MM({ x1: 3, x2: 496, cx: 289, cy: 306, r: 45 }, ['x1', 'x2']),
-    },
-    {
-      sid: 'what-you-worked-out',
-      stage: STAGE,
-      type: 'read',
-      title: 'What you worked out',
-      body: `A picture has no scale until you give it one, and the scale you give it is
-             a measurement of yours, resting on a length you assumed and on two marks you
-             placed. With it, a circle on a feature gave a size in kilometers, about
-             634 km for the plain, and the tool&rsquo;s stated uncertainty covered only the
-             rounding of your marks. The softness of the edge, the crop at the right,
-             the assumed diameter and the foreshortening (96 percent at the plain) are not in it. And because the picture is a
-             display picture, its gray levels are not light: you measured where things
-             are and how big they are, and nothing about how bright.`,
-      tool: MM({ x1: 3, x2: 496, cx: 289, cy: 306, r: 45 }, ['x1', 'x2']),
-    },
-  ],
-};
 
 // -----------------------------------------------------------------------------
 // 5. How far is that star?

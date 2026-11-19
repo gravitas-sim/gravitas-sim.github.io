@@ -313,12 +313,18 @@ const MOON_MARKS = {
         value: t('imgW.m.value.source'),
         emphasis: true,
       },
-      { label: t('imgW.m.row.pair'), value: px(f.pairPx), emphasis: true },
+      {
+        id: 'pair',
+        label: t('imgW.m.row.pair'),
+        value: px(f.pairPx),
+        emphasis: true,
+      },
       {
         label: t('imgW.m.row.assumed'),
         value: t('imgW.m.value.assumed', { km: fix(MOON.diameterKm, 1) }),
       },
       {
+        id: 'scale',
         label: t('imgW.m.row.scale'),
         value: f.scale?.value
           ? `${fix(f.scale.value, 2)} ± ${fix(f.scale.sigma, 3)} km/px`
@@ -328,6 +334,7 @@ const MOON_MARKS = {
       { label: t('imgW.m.row.radius'), value: px(f.radiusPx) },
       { label: t('imgW.m.row.diameterPx'), value: px(f.diameterPx) },
       {
+        id: 'diameterKm',
         label: t('imgW.m.row.diameterKm'),
         value: Number.isFinite(f.diameterKm)
           ? `${fix(f.diameterKm, 0)} ± ${fix(f.diameterSigmaKm, 0)} km`
@@ -336,6 +343,7 @@ const MOON_MARKS = {
       },
       { label: t('imgW.m.row.offset'), value: fix(f.offset, 2) },
       {
+        id: 'foreshort',
         label: t('imgW.m.row.foreshort'),
         value: Number.isFinite(f.foreshorten)
           ? `${fix(100 * f.foreshorten, 0)} %`

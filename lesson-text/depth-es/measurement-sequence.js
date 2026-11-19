@@ -228,16 +228,16 @@ export const MEASURING_THE_MOON_DEEPER = {
         off: '2 píxeles × 7,05 km por píxel.',
       },
     },
-    'a-diameter-with-an-error-bar': {
+    'a-diameter-with-the-squeeze': {
       title: 'El diámetro con su barra de error',
-      body: 'Informa el diámetro de la llanura oscura como un valor, luego &plusmn;, luego una incertidumbre que puedas defender. Una persona cuidadosa coloca el borde suave de esta llanura con unos tres píxeles de margen a cada lado, que son 21 km. Cuenta como correcto cuando el intervalo que das se solapa con el que permite la llanura, y no es más ancho que 60 km.',
+      body: 'Informa el diámetro de la llanura oscura como un valor, luego &plusmn;, luego una incertidumbre que puedas defender. Dos cosas no están en la cifra de la herramienta. Una persona cuidadosa coloca el borde suave con unos tres píxeles de margen a cada lado, que son 21 km. Y si la llanura es redonda, la inclinación que mediste la hace más ancha que tu círculo redondo en esa proporción, en una sola dirección. Cuenta como correcto cuando tu valor es uno que la llanura permite y el intervalo que das no es más estrecho de lo que ambas cosas hacen defendible ni más ancho que 60 km.',
       prompt: 'El diámetro, con su incertidumbre',
       placeholder: 'un valor y, luego, ± su incertidumbre',
       hints: [
-        'Escribe el diámetro, luego ±, luego una incertidumbre que incluya cuán bien se puede colocar el borde.',
+        'Escribe el diámetro, luego ±, luego una incertidumbre que incluya cuán bien se puede colocar el borde y la inclinación.',
       ],
       because:
-        'Unos 634 km, con 20 a 40 de más o de menos: los 6 km que indica la herramienta son el redondeo de las marcas y son demasiado pequeños para ser toda la incertidumbre, porque el borde de la llanura es suave. Una barra de error defendible incluye lo que la indicada deja fuera.',
+        'Unos 634 km, y hasta unos 660 si la llanura es redonda: los 6 km que indica la herramienta son solo el redondeo de las marcas. El borde suave añade unos 21 km a cada lado, y la inclinación, un 4 por ciento de 634 km, añade unos 26 km solo hacia arriba, así que una barra de error defendible es más larga por encima del valor que por debajo.',
     },
     'near-the-limb': {
       title: 'El mismo círculo cerca del limbo',

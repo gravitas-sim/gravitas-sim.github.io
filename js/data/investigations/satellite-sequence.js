@@ -271,8 +271,19 @@ const RS = (values = {}, hide = []) => ({
   values,
   hide,
 });
-const TM = (values = {}, hide = []) => ({ id: 'tides-moon', values, hide });
-const TH = (values = {}, hide = []) => ({ id: 'tides-heating', values, hide });
+// `start` is where the instrument opens when the check is somewhere else.
+const TM = (values = {}, hide = [], start) => ({
+  id: 'tides-moon',
+  values,
+  hide,
+  ...(start && { start }),
+});
+const TH = (values = {}, hide = [], start) => ({
+  id: 'tides-heating',
+  values,
+  hide,
+  ...(start && { start }),
+});
 
 // -----------------------------------------------------------------------------
 // 8. Why Rings?
@@ -511,16 +522,27 @@ export const TIDES_THAT_MOVE_THE_MOON = {
   prerequisites: [],
   tags: ['solar-system'],
   lock: { placement: true, inspector: true },
+  // The science is the instrument's closed-form table, so the canvas behind it says nothing.
+  canvas: 'quiet',
+  retired: {
+    'the-moons-recession': {
+      to: 'match-the-recession',
+      release: '3.1',
+      was: {
+        en: 'Set k2 to 0.30, Q to 12 and the time to 0, and read the Moon’s recession and the day’s lengthening.',
+        es: 'Poner k2 en 0,30, Q en 12 y el tiempo en 0, y leer el alejamiento de la Luna y el alargamiento del día.',
+      },
+    },
+  },
   objectives: [
     'Say why the Moon recedes and the day lengthens, as one process',
-    'Read the Moon’s recession and the day’s lengthening from a constant-Q tide model and compare them with lunar laser ranging and eclipse records',
+    'Find the Q that makes a tide model match the Moon’s measured recession, and compare the day it gives',
     'Run the model forward and backward and find where it stops',
     'Say what the model assumes, and what its failure backward says about it',
   ],
   steps: [
     {
       sid: 'the-bulge-ahead',
-      stage: STAGE,
       type: 'read',
       title: 'A bulge that runs ahead',
       body: `The Moon raises two bulges on the Earth&rsquo;s oceans and body. The Earth spins
@@ -528,56 +550,75 @@ export const TIDES_THAT_MOVE_THE_MOON = {
              the Moon. That bulge pulls the Moon forward, so the Moon gains energy and recedes,
              and the Moon pulls the bulge back, so the Earth&rsquo;s spin slows. The pair
              exchanges angular momentum; the sum is conserved. The table below is the
-             model&rsquo;s closed form, not a simulation.`,
-      tool: TM({ gyr: 0 }),
+             model&rsquo;s closed form, not a simulation. In the next step you set the one number
+             it leaves free, so that it agrees with the Moon&rsquo;s measured recession.`,
+      tool: TM({ k2: 0.3, Q: 40, gyr: 0 }),
     },
     {
-      sid: 'the-moons-recession',
-      stage: STAGE,
+      sid: 'match-the-recession',
       type: 'measure',
-      title: 'How fast the Moon recedes now',
-      body: `With k2 = 0.30 and <em>Q</em> = 12 and time 0, read how fast the Moon is receding,
-             in cm per year, and how much the day lengthens, in milliseconds per century.`,
+      title: 'Choose the Q that fits the Moon',
+      body: `Lunar laser ranging, light bounced off mirrors the Apollo crews left on the Moon,
+             measures the Moon receding at 3.82 &plusmn; 0.07 cm per year. The model has one
+             number you are free to choose, <em>Q</em>, how little energy the tide loses.
+             Leave k2 at 0.30 and the time at 0, then change <em>Q</em> until the row
+             <strong>Moon&rsquo;s recession now</strong> is as close as you can get it to that
+             measurement. Write down
+             the <em>Q</em> you chose, and take the <strong>day&rsquo;s lengthening</strong> that the
+             same <em>Q</em> gives, in milliseconds per century.`,
       fields: [
         {
-          id: 'rate',
-          label: 'The Moon’s recession (cm per year)',
+          id: 'q',
+          label: 'The Q that matches the measured recession',
           unit: '',
-          want: '3.75',
+          want: '12',
         },
         {
           id: 'day',
           label: 'The day’s lengthening (ms per century)',
           unit: '',
           want: '2.05',
+          source: { tool: 'day' },
         },
       ],
       validate: v => {
-        if (![v.rate, v.day].every(Number.isFinite)) return null;
-        if (near(v.rate, 3.75, 0.06) && near(v.day, 2.05, 0.06)) {
+        if (![v.q, v.day].every(Number.isFinite)) return null;
+        if (v.q > 12.5) {
+          return {
+            level: 'error',
+            message:
+              'That Q gives a recession slower than laser ranging measures. A smaller Q is a tide that loses more energy: try lower, and read “Moon’s recession now”.',
+          };
+        }
+        if (v.q < 11.5) {
+          return {
+            level: 'error',
+            message:
+              'That Q gives a recession faster than laser ranging measures. A larger Q is a tide that loses less energy: try higher, and read “Moon’s recession now”.',
+          };
+        }
+        if (near(v.day, 2.05, 0.06)) {
           return {
             level: 'ok',
             message:
-              '3.75 cm per year, against 3.82 ± 0.07 measured by lunar laser ranging, and 2.05 ms per century, against about 2.3 from ancient eclipses. Two numbers, one Q: the model is close, and k2 and Q were chosen to be.',
+              'Q = 12 comes as close to the measured recession as the slider allows, and the same Q gives a day that lengthens by about 2 ms per century, close to the record of ancient eclipses. Q was chosen to fit the present: it is a fitted parameter, not a measurement of the oceans.',
           };
         }
         return {
           level: 'error',
           message:
-            'Set k2 to 0.30, Q to 12 and the time to 0, then read “Moon’s recession now” and “The day’s lengthening now”.',
+            'Take the day’s lengthening from the row “The day’s lengthening now”, with the Q you found and the time at 0.',
         };
       },
-      tool: TM({ k2: 0.3, Q: 12, gyr: 0 }),
+      tool: TM({ k2: 0.3, Q: 12, gyr: 0 }, [], { k2: 0.3, Q: 40, gyr: 0 }),
     },
     {
       sid: 'forward-predict',
-      stage: STAGE,
       type: 'predict',
       reveal: 'forward-one-billion',
       title: 'A billion years on',
-      body: `The Moon is about 60 Earth radii away and recedes at a few cm per year.
-             Recession slows as the Moon gets farther, because the tide falls off steeply with
-             distance.`,
+      body: `The Moon is about 60 Earth radii away today. Use the model you have just matched to
+             the measured recession.`,
       prompt: 'In a billion years the Moon will be about&hellip;',
       options: [
         '60 Earth radii: it barely moves',
@@ -587,19 +628,18 @@ export const TIDES_THAT_MOVE_THE_MOON = {
       ],
       answer: 1,
       hints: [
-        'A billion years at 3.75 cm per year is 37,500 km if the rate were constant, and it slows as it goes.',
+        'Start from the rate you matched, and ask what that rate depends on besides Q.',
       ],
       because:
         'The model puts the Moon at 414.6 thousand km in a billion years, about 65 Earth radii: the rate of 3.75 cm per year slows as the Moon recedes, so it gains less than the 37,500 km a constant rate would give.',
-      tool: TM({ k2: 0.3, Q: 12, gyr: 1 }),
     },
     {
       sid: 'forward-one-billion',
-      stage: STAGE,
       type: 'measure',
       title: 'One billion years ahead',
-      body: `Set the time to <strong>1</strong> billion years and read the Moon&rsquo;s distance
-             in thousand km and the length of the day in hours.`,
+      body: `Keep k2 at 0.30 and <em>Q</em> at the value you found. Set the time to
+             <strong>1</strong> billion years and read the Moon&rsquo;s distance in thousand km
+             and the length of the day in hours.`,
       fields: [
         {
           id: 'a',
@@ -621,19 +661,18 @@ export const TIDES_THAT_MOVE_THE_MOON = {
         return {
           level: 'error',
           message:
-            'Keep k2 = 0.30 and <em>Q</em> = 12, set the time to 1, and read the distance and the day.',
+            'Keep k2 = 0.30 and the Q you found, set the time to 1, and read the distance and the day.',
         };
       },
-      tool: TM({ k2: 0.3, Q: 12, gyr: 1 }),
+      tool: TM({ k2: 0.3, Q: 12, gyr: 1 }, [], { k2: 0.3, Q: 12, gyr: 0 }),
     },
     {
       sid: 'the-model-run-backward',
-      stage: STAGE,
       type: 'measure',
       title: 'Run it backward',
-      body: `Set the time to <strong>&minus;2</strong> billion years. The model cannot go that
-             far back. Read in what year, counted back from now in billion years, the
-             orbit would have reached the Earth&rsquo;s surface.`,
+      body: `Run the same model backward. Set the time to <strong>&minus;2</strong> billion
+             years. The model cannot go that far back. Read in what year, counted back from now
+             in billion years, the orbit would have reached the Earth&rsquo;s surface.`,
       fields: [
         {
           id: 'gyr',
@@ -657,20 +696,21 @@ export const TIDES_THAT_MOVE_THE_MOON = {
             'Set the time to −2 and read “The model stops”: it gives how many billion years away.',
         };
       },
-      tool: TM({ k2: 0.3, Q: 12, gyr: -2 }),
+      tool: TM({ k2: 0.3, Q: 12, gyr: -2 }, [], { k2: 0.3, Q: 12, gyr: 0 }),
     },
     {
       sid: 'what-the-model-leaves-out',
-      stage: STAGE,
       type: 'read',
       title: 'What you worked out',
-      body: `The Moon recedes at 3.75 cm per year in a model with one Q, close to the 3.82
-             measured, and the day lengthens by 2.05 ms per century, close to the 2.3 from
-             eclipses. Run backward, the same model puts the Moon in contact with the Earth
-             1.58 billion years ago, well within the age of the Solar System. So Q was not
-             constant: in a real history it changed with the oceans and the continents. A
-             [[parameter|parameter]] that fits the present is not a law.`,
-      tool: TM({ k2: 0.3, Q: 12, gyr: -2 }),
+      body: `You chose one Q to match the Moon&rsquo;s measured recession, and it gave a day
+             that lengthens by about as much as the eclipse record says. A billion years ahead
+             the same model puts the Moon at 65 Earth radii. Run backward, it puts the Moon in
+             contact with the Earth 1.58 billion years ago, well within the age of the Solar
+             System. So Q was not constant: in a real history it changed with the oceans and the
+             continents. A [[parameter|parameter]] that fits the present is not a law. Io&rsquo;s
+             Fire uses the same kind of tide to heat a moon, and asks the same question of a
+             number nobody knows.`,
+      tool: TM({ k2: 0.3, Q: 12, gyr: -2 }, [], { k2: 0.3, Q: 12, gyr: 0 }),
     },
   ],
 };
@@ -678,9 +718,24 @@ export const TIDES_THAT_MOVE_THE_MOON = {
 // -----------------------------------------------------------------------------
 // 10. Io's Fire
 // -----------------------------------------------------------------------------
+// The picture is Jupiter and its large moons, held still; Io is named. The heating
+// check below is the instrument's formula at Io's eccentricity: watts per unit of k2/Q.
+const IO_BIND = {
+  io: { name: 'Io' },
+  europa: { name: 'Europa' },
+  ganymede: { name: 'Ganymede' },
+  callisto: { name: 'Callisto' },
+};
+const IO_SETUP = {
+  scenario: 'Galilean Resonance',
+  seed: 'resonance-lab',
+  paused: true,
+};
+const IO_HEAT = 6.2226e15;
+const IO_OBSERVED = [6e13, 1.6e14];
 export const IOS_FIRE = {
   id: 'ios-fire',
-  thumbnail: 'images/investigations/ios-fire.webp',
+  thumbnail: 'images/scenarios/galilean-resonance.webp',
   title: 'Io’s Fire',
   subtitle:
     'Tidal heating as energy per orbit, bounded by what nobody knows about Io’s interior',
@@ -694,68 +749,64 @@ export const IOS_FIRE = {
   prerequisites: ['tides-that-move-the-moon'],
   tags: ['solar-system'],
   lock: { placement: true, inspector: true },
+  canvas: 'portrait',
+  picture: 'Jupiter and its four large moons, Io the innermost',
+  retired: {
+    'heating-at-the-maximum': {
+      to: 'heating-at-two-eccentricities',
+      release: '3.1',
+      was: {
+        en: 'Set k2 to 1.5, Q to 100 and the eccentricity to 0.0041, and read the heating and the energy in one orbit.',
+        es: 'Poner k2 en 1,5, Q en 100 y la excentricidad en 0,0041, y leer el calentamiento y la energía en una órbita.',
+      },
+    },
+    'double-the-eccentricity': {
+      to: 'heating-at-two-eccentricities',
+      release: '3.1',
+      was: {
+        en: 'Set the eccentricity to 0.0082 and read the heating.',
+        es: 'Poner la excentricidad en 0,0082 y leer el calentamiento.',
+      },
+    },
+    'the-bound': {
+      to: 'find-the-interiors',
+      release: '3.1',
+      was: {
+        en: 'Set the eccentricity back to 0.0041 and read the k2/Q the middle of the observed heat flow needs.',
+        es: 'Volver a poner la excentricidad en 0,0041 y leer el k2/Q que necesita el valor medio del flujo de calor observado.',
+      },
+    },
+  },
   objectives: [
     'Say where Io’s heat comes from and why it needs an orbit that is not quite circular',
-    'Read the heat, and the energy in one orbit, from the tidal heating formula for a stated k2 and Q',
-    'Say why the answer is a bound and not a prediction, and what k2/Q the observed heat needs',
-    'Say how the heating depends on the eccentricity',
+    'Predict, then measure, how the heating changes when only the eccentricity does',
+    'Find two interiors, a k2 and a Q, that give the heat Io radiates',
+    'Say why the answer is a bound and not a prediction',
   ],
   steps: [
     {
       sid: 'a-moon-that-melts',
-      stage: STAGE,
+      bind: IO_BIND,
+      setup: IO_SETUP,
       type: 'read',
       title: 'The most volcanic body we know',
-      body: `Io is the most volcanically active body in the Solar System, with no help from
-             the Sun. Its heat is the tide: Jupiter raises a bulge on Io, and because
-             Io&rsquo;s orbit is not quite circular (<em>e</em> = 0.0041) the bulge rises and falls
-             once an orbit, and the friction in that flexing is heat. How much depends on how
-             easily Io flexes (k2) and how much it loses as it does (Q), and neither is known
-             for Io.`,
-      tool: TH({ k2: 1.5, Q: 100, e: 0.0041 }),
-    },
-    {
-      sid: 'heating-at-the-maximum',
-      stage: STAGE,
-      type: 'measure',
-      title: 'The heat for k2 = 1.5 and Q = 100',
-      body: `Set k2 to 1.5 (the most a body can have, for a fluid), Q to 100 and the
-             [[eccentricity|eccentricity]] to 0.0041. Read the <strong>heating</strong> in units of 10<sup>13</sup>
-             W, and the energy in one orbit in units of 10<sup>19</sup> J.`,
-      fields: [
-        { id: 'power', label: 'Heating', unit: '1e13 W', want: '9.33' },
-        {
-          id: 'orbit',
-          label: 'Energy in one orbit (10¹⁹ J)',
-          unit: '',
-          want: '1.43',
-        },
-      ],
-      validate: v => {
-        if (![v.power, v.orbit].every(Number.isFinite)) return null;
-        if (near(v.power, 9.33, 0.1) && near(v.orbit, 1.43, 0.03)) {
-          return {
-            level: 'ok',
-            message:
-              '9.33 × 10¹³ W, and 1.43 × 10¹⁹ J in each 1.77-day orbit. The observed heat flow is 0.6 to 1.6 × 10¹⁴ W: this is inside it. That is partly luck: k2 and Q were chosen, not known.',
-          };
-        }
-        return {
-          level: 'error',
-          message:
-            'Set k2 = 1.5, <em>Q</em> = 100, <em>e</em> = 0.0041, then read “Heating” and “Energy in one orbit”.',
-        };
-      },
-      tool: TH({ k2: 1.5, Q: 100, e: 0.0041 }),
+      body: `Io is the most volcanically active body in the Solar System, and the Sun does not
+             heat it. Jupiter does: it raises a bulge on Io, and because Io&rsquo;s orbit is not
+             quite circular the bulge rises and falls once an orbit, so Io&rsquo;s rock flexes
+             and the friction in that flexing is heat. The picture behind this activity is Jupiter
+             with Io, the innermost of its four large moons, held still. You will predict how
+             the heat depends on the orbit, measure it on an instrument, and then search for
+             what Io&rsquo;s interior must be like to give the heat that is observed.`,
     },
     {
       sid: 'double-predict',
-      stage: STAGE,
+      bind: IO_BIND,
       type: 'predict',
-      reveal: 'double-the-eccentricity',
+      reveal: 'what-doubling-did',
       title: 'A more eccentric orbit',
-      body: `The heating is proportional to the square of the eccentricity, because the
-             bulge&rsquo;s rise and fall is proportional to it and so is the friction.`,
+      body: `Io&rsquo;s orbit departs from a circle by an eccentricity of 0.0041, a small amount.
+             Picture the same moon, with the same interior, on an orbit that departs twice as
+             far.`,
       prompt: 'If Io’s eccentricity were doubled, the heating would be&hellip;',
       options: [
         'twice as large',
@@ -764,80 +815,161 @@ export const IOS_FIRE = {
         'unchanged',
       ],
       answer: 1,
-      hints: ['Heating goes as <em>e</em> squared.'],
+      hints: [
+        'Think about what the eccentricity changes in Io’s tide before you choose.',
+      ],
       because:
-        'The heating goes as <em>e</em> squared, so doubling the eccentricity gives four times the heat: from 9.33 × 10¹³ W to 3.73 × 10¹⁴ W for k2 = 1.5 and <em>Q</em> = 100.',
-      tool: TH({ k2: 1.5, Q: 100, e: 0.0041 }),
+        'The heating goes as <em>e</em> squared, so doubling the eccentricity gives four times the heat: the bulge’s rise and fall is proportional to <em>e</em>, and so is the friction in it, whatever k2 and <em>Q</em> are.',
     },
     {
-      sid: 'double-the-eccentricity',
-      stage: STAGE,
+      sid: 'heating-at-two-eccentricities',
+      bind: IO_BIND,
       type: 'measure',
-      title: 'Doubling the eccentricity',
-      body: `Set the eccentricity to 0.0082 and read the heating in units of 10<sup>14</sup> W.`,
-      fields: [{ id: 'power', label: 'Heating', unit: '1e14 W', want: '3.73' }],
-      validate: v => {
-        if (!Number.isFinite(v.power)) return null;
-        if (near(v.power, 3.73, 0.05)) {
-          return {
-            level: 'ok',
-            message:
-              '3.73 × 10¹⁴ W: four times as much, and now above the observed flow. Io’s orbit is kept slightly eccentric by its resonance with Europa and Ganymede; if the eccentricity decayed, the heat would too.',
-          };
-        }
-        return {
-          level: 'error',
-          message:
-            'Keep k2 = 1.5 and <em>Q</em> = 100, set <em>e</em> = 0.0082, and read “Heating”.',
-        };
-      },
-      tool: TH({ k2: 1.5, Q: 100, e: 0.0082 }),
-    },
-    {
-      sid: 'the-bound',
-      stage: STAGE,
-      type: 'measure',
-      title: 'What the formula can and cannot say',
-      body: `Set the eccentricity back to 0.0041. The line <strong>Range the model allows</strong>
-             is the heat for the largest k2/<em>Q</em> (k2 = 1.5, <em>Q</em> = 5) and a thousandth of it. Read the
-             <strong>k2/Q</strong> the middle of the observed heat flow needs.`,
+      title: 'Heating at Io’s eccentricity, and at twice it',
+      body: `Change one thing and hold the rest: leave k2 and <em>Q</em> where the instrument
+             opens, and move only the <strong>[[eccentricity|Eccentricity]]</strong>. Set it to Io&rsquo;s value,
+             0.0041, and take the <strong>Heating</strong>. Then set it to twice that value and
+             take the Heating again. Each reading is in units of 10<sup>13</sup> W.`,
       fields: [
         {
-          id: 'need',
-          label: 'k2/Q the observed middle value needs',
+          id: 'p1',
+          label: 'Heating at Io’s eccentricity (10¹³ W)',
           unit: '',
-          want: '0.0177',
+          want: '1.99',
+          source: { tool: 'power' },
+        },
+        {
+          id: 'p2',
+          label: 'Heating at twice that eccentricity (10¹³ W)',
+          unit: '',
+          want: '7.96',
+          source: { tool: 'power' },
         },
       ],
       validate: v => {
-        if (!Number.isFinite(v.need)) return null;
-        if (near(v.need, 0.0177, 0.0006)) {
+        if (![v.p1, v.p2].every(Number.isFinite)) return null;
+        if (near(v.p1, 1.99, 0.05) && near(v.p2, 7.96, 0.15)) {
           return {
             level: 'ok',
             message:
-              'k2/<em>Q</em> = 0.0177, a value inside what the model allows (from 0.0003 to 0.3). The heat spans three orders of magnitude, 1.9 × 10¹² to 1.9 × 10¹⁵ W, so the formula cannot tell us the interior; the heat we see tells us the interior’s k2/Q.',
+              'Two readings with k2 and Q held fixed and only the eccentricity changed. Compare them with the prediction you made: the next screen sets them side by side.',
           };
         }
         return {
           level: 'error',
           message:
-            'Set <em>e</em> = 0.0041 and read “k2/Q the observed middle value needs”.',
+            'Leave k2 and Q as the instrument opens, change only the eccentricity, and take the Heating at 0.0041 and then at twice that.',
         };
       },
-      tool: TH({ k2: 1.5, Q: 100, e: 0.0041 }),
+      tool: TH({ k2: 0.8, Q: 250, e: 0.0041 }, [], {
+        k2: 0.8,
+        Q: 250,
+        e: 0.001,
+      }),
+    },
+    {
+      sid: 'what-doubling-did',
+      bind: IO_BIND,
+      type: 'read',
+      title: 'Your prediction and your readings',
+      body: `The heating goes as the square of the eccentricity: the bulge&rsquo;s rise and fall
+             is proportional to <em>e</em> and the friction in it is proportional to that again,
+             so doubling <em>e</em> multiplies the heat by four, whatever k2 and <em>Q</em> are.
+             Your prediction and your two readings are below.`,
+      evidence: [
+        { step: 'heating-at-two-eccentricities', field: 'p1' },
+        { step: 'heating-at-two-eccentricities', field: 'p2' },
+      ],
+      compare:
+        'Divide your second reading by your first: that is the factor the heating changed by when the eccentricity doubled.',
+    },
+    {
+      sid: 'find-the-interiors',
+      bind: IO_BIND,
+      type: 'measure',
+      title: 'Interiors that match the heat',
+      body: `Io radiates about 1 &times; 10<sup>14</sup> W, observed to lie between the two lines
+             drawn at 0.6 and 1.6 &times; 10<sup>14</sup> W. Leave the eccentricity at
+             Io&rsquo;s 0.0041 and search with k2 and <em>Q</em> for a pair that brings the row
+             <strong>Heating</strong> inside that observed range, and write it down. Then find a
+             second pair that also does, with a k2 that differs by at least 0.2.`,
+      fields: [
+        { id: 'k2a', label: 'First pair: k2', unit: '', want: '0.5' },
+        { id: 'qa', label: 'First pair: Q', unit: '', want: '30' },
+        { id: 'k2b', label: 'Second pair: k2', unit: '', want: '1.0' },
+        { id: 'qb', label: 'Second pair: Q', unit: '', want: '60' },
+      ],
+      validate: v => {
+        const pairs = [
+          [v.k2a, v.qa],
+          [v.k2b, v.qb],
+        ];
+        if (!pairs.flat().every(Number.isFinite)) return null;
+        if (pairs.some(([k, q]) => k < 0.1 || k > 1.5 || q < 5 || q > 500)) {
+          return {
+            level: 'error',
+            message:
+              'Both pairs must be ones the sliders can set: k2 from 0.1 to 1.5 and Q from 5 to 500.',
+          };
+        }
+        const heat = pairs.map(([k, q]) => (IO_HEAT * k) / q);
+        if (heat.some(h => h > IO_OBSERVED[1])) {
+          return {
+            level: 'error',
+            message:
+              'Too much: one of your pairs gives more heat than Io is observed to radiate. Read the row Heating against the observed range, and change k2 or Q to bring it inside.',
+          };
+        }
+        if (heat.some(h => h < IO_OBSERVED[0])) {
+          return {
+            level: 'error',
+            message:
+              'Too little: one of your pairs gives less heat than Io is observed to radiate. Read the row Heating against the observed range, and change k2 or Q to bring it inside.',
+          };
+        }
+        if (Math.abs(v.k2a - v.k2b) < 0.2 - 1e-9) {
+          return {
+            level: 'error',
+            message:
+              'Your two pairs are nearly the same interior. Make k2 differ by at least 0.2 and find the Q that goes with it.',
+          };
+        }
+        return {
+          level: 'ok',
+          message:
+            'Two different interiors, with different k2 and Q, both give the observed heat. The heating depends on k2 divided by Q, so the observed heat fixes that ratio and not the two numbers: it cannot tell these interiors apart.',
+        };
+      },
+      tool: TH({ k2: 0.8, Q: 250, e: 0.0041 }),
+    },
+    {
+      sid: 'two-interiors-one-heat',
+      bind: IO_BIND,
+      type: 'question',
+      kind: 'short',
+      rubric:
+        'Full credit for saying that the heating depends on k2 and Q only through their ratio, so many different pairs give a heat inside the observed range; that the observed heat therefore fixes that ratio only to a range and does not identify the interior; and that a formula whose two unknowns can be chosen to match the observation gives a bound, a result that is consistent with the heat, not a prediction of it, until k2 or Q is known independently. Partial credit for one or two.',
+      title: 'Two interiors, one observation',
+      body: `You found two interiors, with different k2 and <em>Q</em>, whose heating lies inside the observed range.`,
+      prompt:
+        'In two or three sentences: why can two different interiors both give a heat inside the observed range, and what does that mean for calling the formula’s answer a prediction?',
+      hints: [
+        'Compare the two pairs you wrote down: what differs between them, and what do both satisfy?',
+      ],
     },
     {
       sid: 'what-heat-is',
-      stage: STAGE,
+      bind: IO_BIND,
       type: 'read',
       title: 'What you worked out',
-      body: `Io&rsquo;s heat comes from the tide, and the formula gives it as a multiple of
-             k2/Q with the eccentricity squared. For a plausible k2 and Q it matches what is
-             observed, and the formula alone cannot say more, because k2/Q is not known: the
-             answer is a bound over three orders of magnitude, and the observation picks a point
-             inside it. What the model leaves out is the interior: a partly molten layer changes
-             how Io flexes.`,
-      tool: TH({ k2: 1.5, Q: 100, e: 0.0041 }),
+      body: `Io&rsquo;s heat is the friction of a tide that rises and falls once an orbit, and it
+             grew as the square of the eccentricity. Io, Europa and Ganymede pull on each other in
+             a [[resonance|resonance]] that keeps that orbit from becoming circular. For
+             the interior, the observed heat fixed only k2 divided by <em>Q</em>, and only to a range:
+             you found two different pairs inside it, so the formula gives a bound and the observation picks
+             a point inside it. What the model leaves out is the interior: a partly molten layer
+             changes how Io flexes. A measurement that depends on k2 alone would be needed to
+             separate the two, and the deeper steps ask which.`,
     },
   ],
 };
