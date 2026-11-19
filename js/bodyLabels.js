@@ -21,6 +21,13 @@ export const setBoundTest = fn => {
   isBound = fn;
 };
 
+// A lesson step that asks for the masses to be worked out keeps them off the canvas.
+let massesHidden = false;
+export const hideMasses = on => {
+  massesHidden = on === true;
+};
+export const massesAreHidden = () => massesHidden;
+
 export function frameScale(canvas) {
   queue = [];
   spots = [];
@@ -50,7 +57,12 @@ export function bodyLabel(o, at, r, spec) {
 }
 
 /** What a label says: a name, null for its mass, false for nothing. */
-function say({ spec, chosen, o }, mode) {
+function say(q, mode) {
+  const word = sayMode(q, mode);
+  return word === null && massesHidden ? false : word;
+}
+
+function sayMode({ spec, chosen, o }, mode) {
   const mass = spec.text !== undefined || spec.value !== undefined;
   if (mode === 'names') {
     const name = spec.name ?? spec.known;
