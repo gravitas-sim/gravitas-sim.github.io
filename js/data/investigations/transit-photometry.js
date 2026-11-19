@@ -418,7 +418,6 @@ const TRANSITS = {
              of TRAPPIST-1 is nearly 1%, easily within reach of a small ground
              telescope. Nothing about the planet changed. The star did.`,
       tool: { id: 'depth-size' },
-      lightCurve: false,
       checklist: [
         'Find the depth of an Earth in front of the Sun',
         'Find the depth of a Jupiter in front of the Sun',
@@ -462,9 +461,9 @@ const TRANSITS = {
       bind: TRANSIT_PAIR,
       type: 'measure',
       title: 'Choose the two stretches',
-      body: `Now do it for real. The plot starts empty again and the simulation
-             runs. Let it draw one complete dip with flat curve on both sides,
-             then press the timeline's pause button: the curve is held still
+      body: `Now do it for real. The plot has kept the points since your first
+             transit and the simulation runs again. Let it draw one complete dip
+             with flat curve on both sides, then press the timeline's pause button: the curve is held still
              and the plot keeps every point.
              \n\nA depth is a difference between two levels, and you decide
              which stretches of the curve stand for them: one stretch of the

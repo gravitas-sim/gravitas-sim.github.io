@@ -172,7 +172,7 @@ export const PILOTS = {
   'transit-photometry': {
     measureSid: 'choose-the-two-stretches',
     // The step's own route: wait until the plot has drawn one complete dip
-    // with flat curve after it, pause the simulation as a student does, then
+    // and a little flat curve after it, pause the simulation as a student does, then
     // type the bounds of a stretch out of transit and of a stretch from the
     // floor of the dip (a student reads them off the plot's axis and the
     // readout's contact times; the walk reads them off the recording) and press
@@ -187,7 +187,7 @@ export const PILOTS = {
         });
       const until = Date.now() + 150_000;
       let c = await curve();
-      while (Date.now() < until && !(c.last && c.end - c.last.mid > 0.5)) {
+      while (Date.now() < until && !(c.last && c.end - c.last.mid > 0.1)) {
         await page.waitForTimeout(500);
         c = await curve();
       }
