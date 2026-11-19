@@ -6,6 +6,7 @@
     "transit-photometry",
     "what-is-a-gravitational-wave",
     "butterfly-effect",
+    "measuring-the-moon",
     "binary-star-planets",
     "black-holes",
     "propose-an-observation",
@@ -15,7 +16,6 @@
     "counts-to-magnitudes",
     "detect-this-planet",
     "extending-an-experiment",
-    "measuring-the-moon",
     "power-law-gravity",
     "radial-velocity",
     "retrograde-motion"
@@ -166,6 +166,11 @@
       "key:predict.requires",
       "lock:null"
     ],
+    "measuring-the-moon": [
+      "key:question.maxUncertainty",
+      "key:question.minUncertainty",
+      "key:question.valueWithin"
+    ],
     "binary-star-planets": [
       "key:explore.requires",
       "lock:{\"placement\":true}"
@@ -196,9 +201,6 @@
     ],
     "extending-an-experiment": [
       "key:measure.compute"
-    ],
-    "measuring-the-moon": [
-      "key:question.maxUncertainty"
     ],
     "power-law-gravity": [
       "key:question.explain"
@@ -281,7 +283,7 @@
     "investigations": 124,
     "steps": 1982,
     "activityCuts": 6,
-    "lessonTokens": 150,
+    "lessonTokens": 152,
     "activityTokens": 29,
     "stepTypes": {
       "read": 375,

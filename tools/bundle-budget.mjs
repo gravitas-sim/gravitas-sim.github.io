@@ -120,7 +120,7 @@ const BUDGETS = [
   {
     id: 'deferred',
     label: 'Deferred JavaScript (lazy chunks, gzipped)',
-    limit: 3190.4,
+    limit: 3192.2,
     reason:
       'Jumped from 1369 KB to 2105 KB when three.js and Chart.js stopped being ' +
       'CDN requests and became bundled chunks. That is the point of the change ' +
@@ -722,7 +722,7 @@ const BUDGETS = [
       '\n\nA world seen close (D-R4-448-06): the limit is raised from 3183.7 to 3184.0 KB, the exact overrun of a Node 22 build over v4 1ed519a17 (3,260,367 bytes gzipped, 3183.95 KB) rounded up to 0.1 KB, under the standing approval of 2026-10-10.' +
       '\n\nCrowded-scene drawing (D-R4-450-07): the limit is raised from 3184.0 to 3184.3 KB, the exact overrun of a Node 22 build over v4 dc0112f6b (3,260,637 bytes gzipped, 3184.22 KB) rounded up to 0.1 KB, under the standing approval of 2026-10-10.' +
       '\n\nOverlay, Library, lesson type, instrument start, reading feedback and lesson layout changes taken together (D-R4-TRAIN-03): the limit is raised from 3184.3 to 3188.7 KB, the exact overrun of a Node 22 build over v4 5c9942253 (3,265,116 bytes gzipped, 3188.59 KB) rounded up to 0.1 KB plus 0.1 KB because the margin is under 50 bytes, under the standing approval of 2026-10-10.' +
-      '\n\nThe Measuring the Moon and transit-fit guide revisions (D-R4-330-09): the limit is raised from 3188.7 to 3190.4 KB, the exact overrun of a Node 22 build (3,266,925 bytes gzipped, 3190.36 KB; the same build without the change measures 3,265,254) rounded up to 0.1 KB, under the standing approval of 2026-10-10.',
+      '\n\nThe Measuring the Moon and transit-fit guide revisions (D-R4-330-09): the limit is raised from 3188.7 to 3192.2 KB, the exact overrun of a Node 22 build (3,268,798 bytes gzipped, 3192.18 KB; the same build without the change measures 3,265,254) rounded up to 0.1 KB, under the standing approval of 2026-10-10. The 3.5 KB is the Moon lesson and its deeper steps (now two files), the guide choices and the check they need, the optional value range and narrowest uncertainty of the answer check, and the first-visit message of the guide panel.',
   },
 ];
 
