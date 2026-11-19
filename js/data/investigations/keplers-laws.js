@@ -1,30 +1,26 @@
 // =============================================================================
 // Kepler's Laws
 // -----------------------------------------------------------------------------
-// One lesson, lifted verbatim out of the single 8,460-line module these ten
-// used to share. Content only, no imports: every step that needs a live number
-// is handed a `ctx` by the engine, so a lesson stays a description of what is
-// being taught rather than a piece of the simulation.
-//
-// The registry in ./registry.js imports this file on demand, so opening one
-// lesson no longer pulls in the other nine. See ../investigations.js for the
-// synchronous barrel the answer-key generator, the instructor materials build
-// and the tests use.
+// Content only, no imports: every step that needs a live number is handed a
+// `ctx` by the engine. The registry in ./registry.js imports this file on
+// demand; see ../investigations.js for the synchronous barrel.
 // =============================================================================
 
 /** Format a number for display in a probe row. */
 const fixed = (v, n = 3) => (Number.isFinite(v) ? v.toFixed(n) : '-');
 
+/** The slip of reading the Circular Orbiter on the steps about the other. */
+const WRONG_BODY = {
+  id: 'wrongBody',
+  when: { role: 'circular' },
+  say: 'That reading is from the Circular Orbiter. This step is about the Eccentric Orbiter: select it in the object list and take the reading again.',
+};
+
 // --- 1. Kepler's Laws ---------------------------------------------------------
 
 /**
- * The bodies each scene of this lesson is about, bound by exact name.
- *
- * The lesson always told a reader which body to click, in prose. That works
- * until somebody clicks the wrong one, and then nothing on screen says which
- * was meant. A binding puts the intended bodies in the panel's object list, so
- * the answer to "which orbiter?" is a chip rather than a re-read - and the
- * list is also the keyboard route to a selection, which prose is not.
+ * The bodies each scene of this lesson is about, bound by exact name: the
+ * object list is a chip for each, and the keyboard route to a selection.
  */
 const KEPLER_PAIR = {
   star: { name: 'Kepler Star' },
@@ -33,17 +29,11 @@ const KEPLER_PAIR = {
 };
 
 /** The Solar System steps: the star plus the planets worth measuring. */
-const SOLAR = {
-  sun: { name: 'Sun' },
-  mercury: { name: 'Mercury' },
-  venus: { name: 'Venus' },
-  earth: { name: 'Earth' },
-  mars: { name: 'Mars' },
-  jupiter: { name: 'Jupiter' },
-  saturn: { name: 'Saturn' },
-  uranus: { name: 'Uranus' },
-  neptune: { name: 'Neptune' },
-};
+const SOLAR = Object.fromEntries(
+  'Sun Mercury Venus Earth Mars Jupiter Saturn Uranus Neptune'
+    .split(' ')
+    .map(n => [n.toLowerCase(), { name: n }])
+);
 
 /** TRAPPIST-1 and the three planets the weighing step uses. */
 const TRAPPIST_1 = {
@@ -208,13 +198,7 @@ const KEPLER = {
           unit: 'AU',
           want: '0.50',
           source: { probe: 'peri' },
-          misconceptions: [
-            {
-              id: 'wrongBody',
-              when: { role: 'circular' },
-              say: 'That reading is from the Circular Orbiter. This step is about the Eccentric Orbiter: select it in the object list and take the reading again.',
-            },
-          ],
+          misconceptions: [WRONG_BODY],
         },
         {
           id: 'f_apo',
@@ -222,13 +206,7 @@ const KEPLER = {
           unit: 'AU',
           want: '2.36',
           source: { probe: 'apo' },
-          misconceptions: [
-            {
-              id: 'wrongBody',
-              when: { role: 'circular' },
-              say: 'That reading is from the Circular Orbiter. This step is about the Eccentric Orbiter: select it in the object list and take the reading again.',
-            },
-          ],
+          misconceptions: [WRONG_BODY],
         },
         {
           id: 'f_sep',
@@ -532,15 +510,9 @@ const KEPLER = {
           id: 'v_peri',
           label: 'Speed at closest approach',
           unit: 'km/s',
-          want: '34',
+          want: '54',
           source: { probe: 'speed' },
-          misconceptions: [
-            {
-              id: 'wrongBody',
-              when: { role: 'circular' },
-              say: 'That reading is from the Circular Orbiter. This step is about the Eccentric Orbiter: select it in the object list and take the reading again.',
-            },
-          ],
+          misconceptions: [WRONG_BODY],
         },
         {
           id: 'r_peri',
@@ -553,15 +525,9 @@ const KEPLER = {
           id: 'v_apo',
           label: 'Speed at furthest point',
           unit: 'km/s',
-          want: '7',
+          want: '11.5',
           source: { probe: 'speed' },
-          misconceptions: [
-            {
-              id: 'wrongBody',
-              when: { role: 'circular' },
-              say: 'That reading is from the Circular Orbiter. This step is about the Eccentric Orbiter: select it in the object list and take the reading again.',
-            },
-          ],
+          misconceptions: [WRONG_BODY],
         },
         {
           id: 'r_apo',
@@ -779,32 +745,16 @@ const KEPLER = {
              simulation reports, not what you remember about the real Solar
              System.`,
       importLabel: 'Add reading',
-      fields: [
-        { id: 'p1_name', label: 'Planet 1: name', unit: '', kind: 'text' },
-        { id: 'p1_a', label: 'Planet 1: a', unit: 'AU' },
-        { id: 'p1_P', label: 'Planet 1: P', unit: 'yr' },
-        { id: 'p2_name', label: 'Planet 2: name', unit: '', kind: 'text' },
-        { id: 'p2_a', label: 'Planet 2: a', unit: 'AU' },
-        { id: 'p2_P', label: 'Planet 2: P', unit: 'yr' },
-        { id: 'p3_name', label: 'Planet 3: name', unit: '', kind: 'text' },
-        { id: 'p3_a', label: 'Planet 3: a', unit: 'AU' },
-        { id: 'p3_P', label: 'Planet 3: P', unit: 'yr' },
-        { id: 'p4_name', label: 'Planet 4: name', unit: '', kind: 'text' },
-        { id: 'p4_a', label: 'Planet 4: a', unit: 'AU' },
-        { id: 'p4_P', label: 'Planet 4: P', unit: 'yr' },
-        { id: 'p5_name', label: 'Planet 5: name', unit: '', kind: 'text' },
-        { id: 'p5_a', label: 'Planet 5: a', unit: 'AU' },
-        { id: 'p5_P', label: 'Planet 5: P', unit: 'yr' },
-        { id: 'p6_name', label: 'Planet 6: name', unit: '', kind: 'text' },
-        { id: 'p6_a', label: 'Planet 6: a', unit: 'AU' },
-        { id: 'p6_P', label: 'Planet 6: P', unit: 'yr' },
-        { id: 'p7_name', label: 'Planet 7: name', unit: '', kind: 'text' },
-        { id: 'p7_a', label: 'Planet 7: a', unit: 'AU' },
-        { id: 'p7_P', label: 'Planet 7: P', unit: 'yr' },
-        { id: 'p8_name', label: 'Planet 8: name', unit: '', kind: 'text' },
-        { id: 'p8_a', label: 'Planet 8: a', unit: 'AU' },
-        { id: 'p8_P', label: 'Planet 8: P', unit: 'yr' },
-      ],
+      fields: [1, 2, 3, 4, 5, 6, 7, 8].flatMap(i => [
+        {
+          id: `p${i}_name`,
+          label: `Planet ${i}: name`,
+          unit: '',
+          kind: 'text',
+        },
+        { id: `p${i}_a`, label: `Planet ${i}: a`, unit: 'AU' },
+        { id: `p${i}_P`, label: `Planet ${i}: P`, unit: 'yr' },
+      ]),
       // Lets the student copy the selected planet's readings into the next
       // empty row instead of transcribing four numbers by hand.
       importFromSelection: ctx => {
@@ -1109,6 +1059,22 @@ const KEPLER = {
             level: 'warn',
             message:
               'The period does not belong to the planet whose distance you took. Select one planet and take both readings from it.',
+          };
+        }
+        // The planet nearest in log distance to the student's chosen orbit.
+        const A = [0.387, 0.723, 1, 1.524, 5.203, 9.537, 19.19, 30.07];
+        const N = Object.values(SOLAR)
+          .slice(1)
+          .map(b => b.name);
+        const near = x =>
+          A.map((y, i) => [Math.abs(Math.log(x / y)), i]).sort(
+            (p, q) => p[0] - q[0]
+          )[0][1];
+        const nearest = near(v.ratio * v.near_a);
+        if (near(v.near_a) !== nearest) {
+          return {
+            level: 'warn',
+            message: `${N[nearest]} is the planet whose orbit is nearest the one you chose, and it is not the one you took. Select ${N[nearest]} and take both readings again.`,
           };
         }
         if (v.ratio > 2 || v.ratio < 0.5) {

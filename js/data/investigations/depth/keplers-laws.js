@@ -48,7 +48,10 @@ const table = earlier =>
 
 /** How uncertain each period is, as a fraction, from the repeated readings. */
 const fraction = earlier => {
-  const f = earlier('time-it-until-sure', 'frac');
+  // A report saved before the step was reworked kept it under its old name.
+  const f =
+    earlier('time-it-until-sure', 'frac') ||
+    earlier('repeat-the-timing', 'frac');
   return f > 0 ? f : 0.001;
 };
 
@@ -83,7 +86,8 @@ export default {
   steps: [
     {
       sid: 'time-it-until-sure',
-      decides: 'how many readings to take, and when the uncertainty is small enough to stop',
+      decides:
+        'how many readings to take, and when the uncertainty is small enough to stop',
       after: 'check-the-estimate',
       depth: 'quantitative',
       bind: SOLAR,
@@ -171,10 +175,8 @@ export default {
  P², are known less well in absolute terms, and a weighted fit
  counts each row by one over the square of its uncertainty.
  \n\nThe two should agree within the uncertainty. If they do not, a
- row is wrong. The last two boxes use the weighted constant to
- predict the period of a planet at 4 AU, with its uncertainty carried
- through: P = √(k·a³), so
- σ<sub>P</sub> = a<sup>3/2</sup>·σ<sub>k</sub> / (2√k).`,
+ row is wrong. The next step asks you to turn the weighted constant
+ and its uncertainty into a prediction.`,
       fields: [
         {
           id: 'n',
@@ -210,20 +212,6 @@ export default {
           compute: (v, e) => weighted(e).s,
           decimals: 4,
         },
-        {
-          id: 'p4',
-          label: 'Predicted period at 4 AU',
-          unit: 'yr',
-          compute: (v, e) => Math.sqrt(weighted(e).k * 64),
-          decimals: 3,
-        },
-        {
-          id: 's_p4',
-          label: 'Its uncertainty',
-          unit: 'yr',
-          compute: (v, e) => (4 * weighted(e).s) / Math.sqrt(weighted(e).k),
-          decimals: 3,
-        },
       ],
       validate: v => {
         if (!Number.isFinite(v.k_w) || !Number.isFinite(v.k_ols)) return null;
@@ -251,7 +239,9 @@ export default {
       body: `A prediction without an uncertainty cannot be tested: any
  measurement would be "close". Report the period of the planet at
  4 AU the way a result is reported: the value, then ±, then its
- uncertainty, from the last two boxes of the previous step.
+ uncertainty, worked out from the weighted constant and its uncertainty in
+ the previous step: <em>P</em> = √(<em>k</em>·<em>a</em>³), so
+ σ<sub><em>P</em></sub> = <em>a</em><sup>3/2</sup>·σ<sub><em>k</em></sub> / (2√<em>k</em>).
  \n\nIt counts as right when the range you give overlaps the range
  the law allows, and is no wider than twice that range's half-width,
  because an uncertainty large enough to overlap anything has not
@@ -266,8 +256,9 @@ export default {
         concept: `The weighted fit gives a constant k and how well it is
  known. The law turns that into a period and an uncertainty
  on the period.`,
-        method: `The weighted-fit step ends with a predicted period and its
- uncertainty for a planet at 4 AU. Write your answer as value ± uncertainty.`,
+        method: `Take k and its uncertainty from the weighted-fit step. Cube 4 AU,
+ multiply by k and take the square root; then carry the uncertainty through
+ with the formula above. Write your answer as value ± uncertainty.`,
       },
       because:
         'The law, fitted with weights, gives about 8 years with an uncertainty of a few hundredths of a year, which overlaps the 8 years the unweighted law gives.',
@@ -308,7 +299,8 @@ export default {
     },
     {
       sid: 'size-of-the-miss',
-      decides: 'whether the planet’s mass can be left out of the law, from the size of the change it makes to the period',
+      decides:
+        'whether the planet’s mass can be left out of the law, from the size of the change it makes to the period',
       after: 'weigh-the-host-star',
       depth: 'advanced',
       bind: TRAPPIST_1,

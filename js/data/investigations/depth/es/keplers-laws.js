@@ -21,26 +21,24 @@ export default {
     },
     {
       title: 'Ajusta la ley con pesos',
-      body: 'No hay nada nuevo que medir: este paso trabaja con la tabla que rellenaste y la incertidumbre que acabas de hallar.\n\nEnderezando los datos como antes, P² frente a a³ debe ser una recta por el origen con pendiente k. Hay dos maneras de hallarla. La pendiente de mínimos cuadrados simples trata igual a todos los planetas. Pero un periodo incierto en la misma <em>fracción</em> hace que P² sea incierto en el doble de esa fracción <em>de sí mismo</em>, así que los planetas exteriores, con P² grande, se conocen peor en términos absolutos, y un ajuste ponderado cuenta cada fila por uno entre el cuadrado de su incertidumbre.\n\nLas dos deben coincidir dentro de la incertidumbre. Si no, hay una fila equivocada. Las dos últimas casillas usan la constante ponderada para predecir el periodo de un planeta a 4 UA, propagando su incertidumbre: P = √(k·a³), así que σ<sub>P</sub> = a<sup>3/2</sup>·σ<sub>k</sub> / (2√k).',
+      body: 'No hay nada nuevo que medir: este paso trabaja con la tabla que rellenaste y la incertidumbre que acabas de hallar.\n\nEnderezando los datos como antes, P² frente a a³ debe ser una recta por el origen con pendiente k. Hay dos maneras de hallarla. La pendiente de mínimos cuadrados simples trata igual a todos los planetas. Pero un periodo incierto en la misma <em>fracción</em> hace que P² sea incierto en el doble de esa fracción <em>de sí mismo</em>, así que los planetas exteriores, con P² grande, se conocen peor en términos absolutos, y un ajuste ponderado cuenta cada fila por uno entre el cuadrado de su incertidumbre.\n\nLas dos deben coincidir dentro de la incertidumbre. Si no, hay una fila equivocada. El paso siguiente te pide convertir la constante ponderada y su incertidumbre en una predicción.',
       fields: [
         { label: 'Planetas usados de tu tabla' },
         { label: 'Constante k de mínimos cuadrados (yr²/AU³)' },
         { label: 'Constante k ponderada (yr²/AU³)' },
         { label: 'Su incertidumbre (yr²/AU³)' },
-        { label: 'Periodo previsto a 4 UA' },
-        { label: 'Su incertidumbre' },
       ],
     },
     {
       title: 'Predice, con barra de error',
-      body: 'Una predicción sin incertidumbre no se puede poner a prueba: cualquier medida sería «cercana». Da el periodo del planeta a 4 UA como se da un resultado: el valor, luego ±, luego su incertidumbre, tomados de las dos últimas casillas del paso anterior.\n\nCuenta como correcta cuando el rango que das se solapa con el que permite la ley y no es más ancho que el doble de la semianchura de ese rango, porque una incertidumbre capaz de solaparse con cualquier cosa no ha dicho nada a nadie.',
+      body: 'Una predicción sin incertidumbre no se puede poner a prueba: cualquier medida sería «cercana». Da el periodo del planeta a 4 UA como se da un resultado: el valor, luego ±, luego su incertidumbre, calculados a partir de la constante ponderada y su incertidumbre del paso anterior: <em>P</em> = √(<em>k</em>·<em>a</em>³), así que σ<sub><em>P</em></sub> = <em>a</em><sup>3/2</sup>·σ<sub><em>k</em></sub> / (2√<em>k</em>).\n\nCuenta como correcta cuando el rango que das se solapa con el que permite la ley y no es más ancho que el doble de la semianchura de ese rango, porque una incertidumbre capaz de solaparse con cualquier cosa no ha dicho nada a nadie.',
       prompt: 'Periodo a a = 4 UA, con su incertidumbre',
       placeholder: 'un valor y, luego, ± su incertidumbre',
       hints: {
         concept:
           'El ajuste ponderado da una constante k y lo bien que se conoce. La ley la convierte en un periodo y una incertidumbre del periodo.',
         method:
-          'El paso del ajuste ponderado termina con un periodo previsto y su incertidumbre para un planeta a 4 UA. Escribe tu respuesta como valor ± incertidumbre.',
+          'Toma k y su incertidumbre del paso del ajuste ponderado. Eleva 4 UA al cubo, multiplica por k y extrae la raíz cuadrada; luego propaga la incertidumbre con la fórmula de arriba. Escribe tu respuesta como valor ± incertidumbre.',
       },
       because:
         'La ley, ajustada con pesos, da unos 8 años con una incertidumbre de unas centésimas de año, que se solapa con los 8 años que da la ley sin pesos.',

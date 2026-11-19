@@ -131,8 +131,8 @@ async function setTool(page, id, value) {
  */
 export const PILOTS = {
   'keplers-laws': {
-    measureSid: 'measure-the-two-orbits',
-    // The readout of a clicked body: eccentricity and the two distances, in AU
+    measureSid: 'find-the-foci',
+    // The readout of the eccentric orbiter: its two distances, in AU
     // as the lesson's units are (scene units are hundredths of an AU).
     async readings(page) {
       return page.evaluate(async () => {
@@ -158,13 +158,10 @@ export const PILOTS = {
             ui.SETTINGS.gravitational_constant
           );
         };
-        const c = el('circular');
         const e = el('eccentric');
         return {
-          circ_e: c.e.toFixed(3),
-          ecc_e: e.e.toFixed(3),
-          ecc_peri: (e.periapsis * 0.01).toFixed(2),
-          ecc_apo: (e.apoapsis * 0.01).toFixed(2),
+          f_peri: (e.periapsis * 0.01).toFixed(2),
+          f_apo: (e.apoapsis * 0.01).toFixed(2),
         };
       });
     },

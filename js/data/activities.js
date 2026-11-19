@@ -179,6 +179,7 @@ export const ACTIVITIES = Object.freeze([
           'change-the-shape',
           'where-does-it-move-fastest',
           'watch-it-happen',
+          'equal-areas-however-you-slice',
           'fast-and-slow-in-numbers',
           'why-the-speed-changes',
         ]),
@@ -207,9 +208,10 @@ export const ACTIVITIES = Object.freeze([
          */
         steps: Object.freeze([
           'where-is-the-star',
+          'find-the-foci',
+          'the-first-law-and-the',
           'change-the-shape',
           'what-sits-at-the-other',
-          'find-the-foci',
           'where-does-it-move-fastest',
           'watch-it-happen',
           'equal-areas-however-you-slice',
