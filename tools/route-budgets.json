@@ -72,7 +72,7 @@
         "requests": 52
       },
       "composer": {
-        "kb": 545.7,
+        "kb": 546.2,
         "requests": 31
       },
       "course-builder": {
@@ -116,7 +116,7 @@
         "requests": 6
       },
       "course-packs": {
-        "kb": 740.1,
+        "kb": 740.7,
         "requests": 46
       },
       "sky": {
@@ -198,7 +198,7 @@
         "requests": 3
       },
       "composer": {
-        "kb": 296.1,
+        "kb": 296.4,
         "requests": 16
       },
       "course-builder": {
@@ -242,7 +242,7 @@
         "requests": 2
       },
       "course-packs": {
-        "kb": 338.0,
+        "kb": 338.4,
         "requests": 13
       },
       "sky": {
