@@ -16,10 +16,9 @@ import { describe, test, expect, beforeAll } from '@jest/globals';
 //              the stated 12 percent.
 //   PROBE      the probe's depth agrees with k^2 times the lesson's own
 //              limb-darkening factor (1.2146) to 2 percent of itself.
-//   STATED     the stated 1.7 percent is judged at 5 percent of the probe's
-//              depth. A miss is reported by the last test, not hidden: the test
-//              holds that the miss is what it is, so a later correction of the
-//              text, or of the model, moves it here.
+//   STATED     the stated dip is judged at 5 percent of the probe's depth.
+//              It said 1.7 and missed (7 percent); the text now says 1.8, and
+//              the test reads the text, so a drift in either shows here.
 // Included: the limb-darkened floor (quadratic law of js/lightCurve.js, the
 // lesson's factor), the phase-curve ripple in the baseline. Not included:
 // planet light, noise (the curve has none), sampling (the floor is sampled at
@@ -127,13 +126,19 @@ describe('the Transit Lab depth, from the probe and from the stated radii', () =
     expect(probe / areaOnly).toBeCloseTo(LD_FACTOR, 1);
   });
 
-  test('the stated 1.7 percent dip: judged at 5 percent, and the miss is reported', () => {
+  test('the dip the scenario text states matches the model, at 5 percent', async () => {
+    // The text first said 1.7 percent, which missed the model's 1.83 by 7
+    // percent (outside the committed 5); the text was corrected to 1.8 and
+    // this reads whatever it says now, so a drift in either shows here.
+    const { EN } = await import('../js/i18n/en.js');
+    const said = /(\d+(?:\.\d+)?)% dip/.exec(
+      EN['scenario.transit-lab.summary']
+    );
+    expect(said).not.toBeNull();
     const probe = found.seen.last.depth;
-    const miss = Math.abs(probe - STATED.dip) / probe;
-    // The scenario text understates the model's own dip (about 1.83 percent
-    // with the lesson's factor, 1.51 percent without it). Held here so that a
-    // correction of the text moves this test and not silently the lesson.
-    expect(miss).toBeGreaterThan(TOL.stated);
+    expect(Math.abs(Number(said[1]) / 100 - probe) / probe).toBeLessThan(
+      TOL.stated
+    );
     expect(probe).toBeGreaterThan(0.0178);
     expect(probe).toBeLessThan(0.0188);
   });

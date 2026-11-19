@@ -245,7 +245,6 @@ export function emptyProbeContext() {
       seen: 0,
       log: [],
       last: null,
-      series: () => ({ x: [], y: [] }),
     }),
     rotationCurve: () => ({
       bodies: [],
