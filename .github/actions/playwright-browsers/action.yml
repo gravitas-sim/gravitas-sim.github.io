@@ -97,5 +97,14 @@ runs:
           cat /etc/apt/apt-mirrors.txt 2>/dev/null || echo "(no /etc/apt/apt-mirrors.txt)"
           grep -rhE '^(URIs|deb) ' /etc/apt/sources.list /etc/apt/sources.list.d 2>/dev/null | head -n 4 || true
         done
+        # The ubuntu-24.04 runner image already carries the libraries Chromium
+        # needs (it ships Google Chrome), so a Chromium job goes on to its
+        # tests; a library that really is missing then fails at browser launch
+        # with the library named. Firefox and WebKit need libraries the image
+        # lacks, so they still stop here. Maintainer decision 2026-11-18.
+        if [ "$BROWSER" = "chromium" ]; then
+          echo "::warning::install-deps failed three times; continuing with the runner image's libraries"
+          exit 0
+        fi
         echo "::error::install-deps failed three times"
         exit 1
