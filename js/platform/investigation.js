@@ -134,7 +134,7 @@ const STEP_FIELDS = {
   read: ['motion'],
   explore: ['checklist'],
   measure: ['fields'],
-  predict: ['prompt', 'options', 'answer', 'because', 'reveal', 'kind', 'unit'],
+  predict: ['kind', 'unit', 'prompt', 'options', 'answer', 'because', 'reveal'],
   question: [
     'kind',
     'from',
@@ -549,41 +549,39 @@ function checkStep(s, path, index, ctx) {
       }
     });
   }
-  if (s.type === 'predict' && s.kind === 'estimate') {
-    // An estimate is a number in a unit, never marked: no options and no answer.
+  if (s.type === 'predict') {
     text(s.prompt, `${path}.prompt`, true);
-    need(
-      typeof s.unit === 'string' && s.unit.length > 0 && s.unit.length <= 16,
-      `${path}.unit`,
-      'unit',
-      'a unit such as "%"'
-    );
-    need(
-      sidAt.has(s.reveal) && sidAt.get(s.reveal) > index,
-      `${path}.reveal`,
-      'reveal',
-      'a later step, where the prediction is marked'
-    );
-  } else if (s.type === 'predict') {
-    text(s.prompt, `${path}.prompt`, true);
+    // An estimate is a number with a unit, held and marked at its reveal; it
+    // has no options. Its expected values are the original's, never the pack's.
+    const estimate = s.kind === 'estimate';
     const opts = Array.isArray(s.options) ? s.options : null;
-    need(
-      opts && opts.length >= 2 && opts.length <= 6,
-      `${path}.options`,
-      'options',
-      'from 2 to 6 options',
-      { min: 2, max: 6 }
-    );
-    (opts || []).forEach((o, j) => text(o, `${path}.options[${j}]`, true));
-    need(
-      Number.isInteger(s.answer) &&
-        opts &&
-        s.answer >= 0 &&
-        s.answer < opts.length,
-      `${path}.answer`,
-      'choiceAnswer',
-      'the number of the right option, counting from 0'
-    );
+    if (estimate) {
+      need(
+        typeof s.unit === 'string' && s.unit.length > 0 && s.unit.length <= 16,
+        `${path}.unit`,
+        'unit',
+        'a unit such as "days"'
+      );
+      checkUnitName(s.unit, `${path}.unit`, { need, api });
+    } else {
+      need(
+        opts && opts.length >= 2 && opts.length <= 6,
+        `${path}.options`,
+        'options',
+        'from 2 to 6 options',
+        { min: 2, max: 6 }
+      );
+      (opts || []).forEach((o, j) => text(o, `${path}.options[${j}]`, true));
+      need(
+        Number.isInteger(s.answer) &&
+          opts &&
+          s.answer >= 0 &&
+          s.answer < opts.length,
+        `${path}.answer`,
+        'choiceAnswer',
+        'the number of the right option, counting from 0'
+      );
+    }
     text(s.because, `${path}.because`, true);
     need(
       sidAt.has(s.reveal) && sidAt.get(s.reveal) > index,

@@ -11,7 +11,7 @@
       "centralExperimentId": "ce.keplers-laws",
       "object": "eccentric",
       "control": "the canvas: click a body, then Run and the event watch",
-      "quantity": "semi-major axis a and period P for four planets",
+      "quantity": "the speeds at the nearest and farthest points of an orbit, the distance between the star and the empty focus, and semi-major axis a and period P for five or more planets",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": [
@@ -20,7 +20,7 @@
         "why-the-speed-changes"
       ],
       "evidenceFrom": "engine",
-      "decision": "unreviewed",
+      "decision": "Which two points of the orbit geometry panel to measure between, when to take the speed at each end of the orbit, which five or more planets to measure across the range, which distance to predict a period for and which planet to scale from, and when the uncertainty is small enough to stop taking readings.",
       "leakFree": false
     },
     "retrograde-motion": {

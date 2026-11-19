@@ -244,10 +244,6 @@ export const MODELS = {
       return at(2) / at(0);
     },
   },
-  'keplers-laws/use-the-law': {
-    via: "js/tidalPhysics.js (G, solar mass, AU): Newton's form of the third law",
-    value: () => periodAboutSun(4) / YEAR_S,
-  },
   'keplers-laws/weighing-another-star': {
     via: 'js/tidalPhysics.js (G, solar mass, AU): M = 4 pi^2 a^3 / (G P^2)',
     value: () =>

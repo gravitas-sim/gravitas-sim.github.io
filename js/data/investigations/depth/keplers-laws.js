@@ -16,12 +16,23 @@
 
 import { fixed } from '../../../format.js';
 
+const TRAPPIST_1 = {
+  star: { name: 'TRAPPIST-1' },
+  e: { name: 'TRAPPIST-1e' },
+  f: { name: 'TRAPPIST-1f' },
+  g: { name: 'TRAPPIST-1g' },
+};
+
 const SOLAR = {
   sun: { name: 'Sun' },
   mercury: { name: 'Mercury' },
+  venus: { name: 'Venus' },
   earth: { name: 'Earth' },
+  mars: { name: 'Mars' },
   jupiter: { name: 'Jupiter' },
   saturn: { name: 'Saturn' },
+  uranus: { name: 'Uranus' },
+  neptune: { name: 'Neptune' },
 };
 
 /** The readout shows four decimals of a year; half a unit is its resolution. */
@@ -37,7 +48,10 @@ const table = earlier =>
 
 /** How uncertain each period is, as a fraction, from the repeated readings. */
 const fraction = earlier => {
-  const f = earlier('repeat-the-timing', 'frac');
+  // A report saved before the step was reworked kept it under its old name.
+  const f =
+    earlier('time-it-until-sure', 'frac') ||
+    earlier('repeat-the-timing', 'frac');
   return f > 0 ? f : 0.001;
 };
 
@@ -52,21 +66,29 @@ const weighted = earlier => {
   return { k, s: (2 * fraction(earlier)) / Math.sqrt(sw), n: rows.length };
 };
 
-const mean3 = v => (v.t1 + v.t2 + v.t3) / 3;
+/** The readings the student chose to take, up to six. */
+const readings = v =>
+  [1, 2, 3, 4, 5, 6].map(i => v[`t${i}`]).filter(Number.isFinite);
+const mean3 = v => {
+  const r = readings(v);
+  return r.length < 3 ? NaN : r.reduce((a, b) => a + b, 0) / r.length;
+};
 const sem3 = v => {
+  const r = readings(v);
+  if (r.length < 3) return NaN;
   const m = mean3(v);
-  const s = Math.sqrt(
-    ((v.t1 - m) ** 2 + (v.t2 - m) ** 2 + (v.t3 - m) ** 2) / 2
-  );
-  return Math.max(s / Math.sqrt(3), READOUT / Math.sqrt(3));
+  const s = Math.sqrt(r.reduce((a, x) => a + (x - m) ** 2, 0) / (r.length - 1));
+  return Math.max(s, READOUT) / Math.sqrt(r.length);
 };
 
 export default {
   id: 'keplers-laws',
   steps: [
     {
-      sid: 'repeat-the-timing',
-      after: 'use-the-law',
+      sid: 'time-it-until-sure',
+      decides:
+        'how many readings to take, and when the uncertainty is small enough to stop',
+      after: 'check-the-estimate',
       depth: 'quantitative',
       bind: SOLAR,
       type: 'measure',
@@ -74,14 +96,15 @@ export default {
       body: `Every number you have recorded so far is one reading, and a
  reading is not the same as the truth. Here the period of an orbit
  is read from the planet's motion at that moment, and the planets
- tug on one another, so reading it at three different moments gives
- three slightly different answers.
- \n\nSelect a planet and press the button three times, seconds apart. The
- spread of the three is the scale of your uncertainty. The
- uncertainty of their <em>mean</em> is the standard deviation
- divided by √3, and it cannot be smaller than the readout itself
- can resolve: a number shown to four decimals is good to half a
- unit in the last one.
+ tug on one another, so reading it at different moments gives
+ slightly different answers.
+ \n\nSelect a planet and press the button, seconds apart. Take at least
+ three readings and at most six. You decide when to stop: the uncertainty of
+ the <em>mean</em> is the standard deviation divided by the square root of how
+ many readings you took, and it cannot be smaller than the readout itself
+ can resolve, because a number shown to four decimals is good to half a
+ unit in the last one. Watch it respond as you add readings, and stop when
+ another reading would not change it much.
  \n\nThe fraction at the bottom is how uncertain <em>any one</em>
  of your periods is, as a share of itself. The next step uses it.`,
       importLabel: 'Take a reading',
@@ -92,11 +115,14 @@ export default {
         const P = ctx.years(el.period);
         return Number.isFinite(P) ? [fixed(P, 4)] : null;
       },
-      importGroups: [['t1'], ['t2'], ['t3']],
+      importGroups: [['t1'], ['t2'], ['t3'], ['t4'], ['t5'], ['t6']],
       fields: [
         { id: 't1', label: 'Reading 1: P', unit: 'yr' },
         { id: 't2', label: 'Reading 2: P', unit: 'yr' },
         { id: 't3', label: 'Reading 3: P', unit: 'yr' },
+        { id: 't4', label: 'Reading 4: P (optional)', unit: 'yr' },
+        { id: 't5', label: 'Reading 5: P (optional)', unit: 'yr' },
+        { id: 't6', label: 'Reading 6: P (optional)', unit: 'yr' },
         {
           id: 'mean',
           label: 'Mean period',
@@ -120,23 +146,23 @@ export default {
         },
       ],
       validate: v => {
-        if (![v.t1, v.t2, v.t3].every(Number.isFinite)) return null;
-        if ([v.t1, v.t2, v.t3].some(x => x <= 0)) {
+        if (readings(v).length < 3) return null;
+        if (readings(v).some(x => x <= 0)) {
           return { level: 'error', message: 'A period must be positive.' };
         }
         const f = sem3(v) / mean3(v);
         return {
           level: 'ok',
-          message: `The mean is ${fixed(mean3(v), 4)} yr, uncertain by ${fixed(f * 100, 3)}% of itself. Quote it as ${fixed(mean3(v), 4)} ± ${fixed(sem3(v), 4)} yr.`,
+          message: `From ${readings(v).length} readings the mean is ${fixed(mean3(v), 4)} yr, uncertain by ${fixed(f * 100, 3)}% of itself. Quote it as ${fixed(mean3(v), 4)} ± ${fixed(sem3(v), 4)} yr.`,
         };
       },
     },
     {
       sid: 'weighted-fit',
-      after: 'repeat-the-timing',
+      after: 'time-it-until-sure',
       depth: 'quantitative',
       bind: SOLAR,
-      requires: ['measure-four-planets', 'repeat-the-timing'],
+      requires: ['measure-four-planets', 'time-it-until-sure'],
       type: 'measure',
       title: 'Fit the law with weights',
       body: `Nothing new to measure: this step works on the table you filled
@@ -149,10 +175,8 @@ export default {
  P², are known less well in absolute terms, and a weighted fit
  counts each row by one over the square of its uncertainty.
  \n\nThe two should agree within the uncertainty. If they do not, a
- row is wrong. The last two boxes use the weighted constant to
- predict the period of the planet at 4 AU from the earlier step,
- with its uncertainty carried through: P = √(k·a³), so
- σ<sub>P</sub> = a<sup>3/2</sup>·σ<sub>k</sub> / (2√k).`,
+ row is wrong. The next step asks you to turn the weighted constant
+ and its uncertainty into a prediction.`,
       fields: [
         {
           id: 'n',
@@ -188,20 +212,6 @@ export default {
           compute: (v, e) => weighted(e).s,
           decimals: 4,
         },
-        {
-          id: 'p4',
-          label: 'Predicted period at 4 AU',
-          unit: 'yr',
-          compute: (v, e) => Math.sqrt(weighted(e).k * 64),
-          decimals: 3,
-        },
-        {
-          id: 's_p4',
-          label: 'Its uncertainty',
-          unit: 'yr',
-          compute: (v, e) => (4 * weighted(e).s) / Math.sqrt(weighted(e).k),
-          decimals: 3,
-        },
       ],
       validate: v => {
         if (!Number.isFinite(v.k_w) || !Number.isFinite(v.k_ols)) return null;
@@ -222,7 +232,6 @@ export default {
       after: 'weighted-fit',
       depth: 'quantitative',
       bind: SOLAR,
-      restates: 'use-the-law',
       type: 'question',
       kind: 'numeric',
       uncertainty: true,
@@ -230,7 +239,9 @@ export default {
       body: `A prediction without an uncertainty cannot be tested: any
  measurement would be "close". Report the period of the planet at
  4 AU the way a result is reported: the value, then ±, then its
- uncertainty, from the last two boxes of the previous step.
+ uncertainty, worked out from the weighted constant and its uncertainty in
+ the previous step: <em>P</em> = √(<em>k</em>·<em>a</em>³), so
+ σ<sub><em>P</em></sub> = <em>a</em><sup>3/2</sup>·σ<sub><em>k</em></sub> / (2√<em>k</em>).
  \n\nIt counts as right when the range you give overlaps the range
  the law allows, and is no wider than twice that range's half-width,
  because an uncertainty large enough to overlap anything has not
@@ -245,8 +256,9 @@ export default {
         concept: `The weighted fit gives a constant k and how well it is
  known. The law turns that into a period and an uncertainty
  on the period.`,
-        method: `Copy the predicted period and its uncertainty from the
- weighted-fit step, and write them as value ± uncertainty.`,
+        method: `Take k and its uncertainty from the weighted-fit step. Cube 4 AU,
+ multiply by k and take the square root; then carry the uncertainty through
+ with the formula above. Write your answer as value ± uncertainty.`,
       },
       because:
         'The law, fitted with weights, gives about 8 years with an uncertainty of a few hundredths of a year, which overlaps the 8 years the unweighted law gives.',
@@ -286,8 +298,47 @@ export default {
         'About 1.15 solar masses, uncertain by about 0.04. Almost all of that comes from the orbit size, because a is cubed: a 1% uncertainty in a is a 3% uncertainty in the mass, while the period, known to a few parts in a hundred thousand, hardly contributes.',
     },
     {
-      sid: 'two-methods-one-period',
+      sid: 'size-of-the-miss',
+      decides:
+        'whether the planet’s mass can be left out of the law, from the size of the change it makes to the period',
       after: 'weigh-the-host-star',
+      depth: 'advanced',
+      bind: TRAPPIST_1,
+      type: 'question',
+      kind: 'numeric',
+      title: 'How big is the miss?',
+      body: `Newton's form of the third law has the total mass, <em>M</em> +
+ <em>m</em>, where Kepler's version has the star's alone. For a planet the
+ difference is tiny, so Kepler's version works, but it is not zero.
+ \n\nTest it on TRAPPIST-1g: a planet of <strong>1.321</strong> Earth masses
+ around a star of <strong>0.0898</strong> solar masses. An Earth mass is
+ <strong>3.0035 × 10<sup>-6</sup></strong> solar masses. The period from
+ Kepler's form, which leaves the planet out, comes out a little too long. By
+ how much, as a fraction of the period, in parts per million?`,
+      prompt: 'How much too long is the period from Kepler’s form?',
+      unit: 'ppm',
+      answer: 22,
+      tolerance: 2,
+      misconceptions: [
+        {
+          id: 'forgotTheHalf',
+          factor: 2,
+          say: 'That is the ratio of the planet’s mass to the star’s. The period depends on the square root of the total mass, so the miss is half of that ratio.',
+        },
+      ],
+      hints: {
+        concept: `The period goes as one over the square root of the total
+ mass, so leaving the planet out changes the period by about half the
+ planet-to-star mass ratio, when that ratio is small.`,
+        method: `Convert the planet's mass to solar masses, divide by the
+ star's mass, and take half. Then write it in parts per million.`,
+      },
+      because:
+        'About 22 parts per million: the planet is a few times ten-millionths of a star this small, and the period goes as the square root of the total mass, so half of that ratio. It is far smaller than the readout can show, which is why Kepler’s form works for planets, and why the same correction is 41% for two equal stars.',
+    },
+    {
+      sid: 'two-methods-one-period',
+      after: 'size-of-the-miss',
       depth: 'advanced',
       bind: SOLAR,
       type: 'question',

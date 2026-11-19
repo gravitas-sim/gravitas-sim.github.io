@@ -60,28 +60,28 @@
  "steps": {
   "en": {
    "watch-from-outside-first": {
-    "probe": [[{"label":"Earth: speed","value":"Earth is not on the canvas yet"},{"label":"Mars: speed","value":"Mars is not on the canvas yet"},{"label":"Day","value":"0"}],[{"label":"Earth: speed","value":"33.3 km/s"},{"label":"Mars: speed","value":"25.9 km/s"},{"label":"Day","value":"3"}],[{"label":"Earth: speed","value":"33.3 km/s"},{"label":"Mars: speed","value":"25.9 km/s"},{"label":"Day","value":"13"}],[{"label":"Earth: speed","value":"33.3 km/s"},{"label":"Mars: speed","value":"25.9 km/s"},{"label":"Day","value":"400"}]]
+    "probe": [[{"label":"Earth: speed","value":"Earth is not on the canvas yet"},{"label":"Mars: speed","value":"Mars is not on the canvas yet"},{"label":"Day","value":"0"}],[{"label":"Earth: speed","value":"31.5 km/s"},{"label":"Mars: speed","value":"17.8 km/s"},{"label":"Day","value":"3"}],[{"label":"Earth: speed","value":"31.5 km/s"},{"label":"Mars: speed","value":"17.8 km/s"},{"label":"Day","value":"13"}],[{"label":"Earth: speed","value":"31.5 km/s"},{"label":"Mars: speed","value":"17.8 km/s"},{"label":"Day","value":"400"}]]
    },
    "the-two-orbits": {
-    "probe": [[{"label":"Earth","value":"not found"},{"label":"Mars","value":"not found"}],[{"label":"Earth: distance from the Sun","value":"- AU"},{"label":"Earth: period","value":"9.09 yr"},{"label":"Mars: distance from the Sun","value":"- AU"},{"label":"Mars: period","value":"1.51 yr"}]]
+    "probe": [[{"label":"Earth","value":"not found"},{"label":"Mars","value":"not found"}],[{"label":"Earth: distance from the Sun","value":"- AU"},{"label":"Earth: period","value":"10.7 yr"},{"label":"Mars: distance from the Sun","value":"- AU"},{"label":"Mars: period","value":"4.68 yr"}]]
    },
    "how-fast-each-one-goes": {
-    "probe": [[{"label":"Earth: period","value":"Earth is not on the canvas yet"},{"label":"Mars: period","value":"Mars is not on the canvas yet"}],[{"label":"Earth: period","value":"9.09 yr"},{"label":"Mars: period","value":"1.51 yr"}]]
+    "probe": [[{"label":"Earth: period","value":"Earth is not on the canvas yet"},{"label":"Mars: period","value":"Mars is not on the canvas yet"}],[{"label":"Earth: period","value":"10.7 yr"},{"label":"Mars: period","value":"4.68 yr"}]]
    },
    "put-yourself-on-earth": {
-    "probe": [[{"label":"Reference frame","value":"World, not switched yet"}],[{"label":"Reference frame","value":"Earth"},{"label":"Mars: distance from Earth","value":"0.781 AU"},{"label":"Mars: direction from Earth","value":"34.9°"}]]
+    "probe": [[{"label":"Reference frame","value":"World, not switched yet"}],[{"label":"Reference frame","value":"Earth"},{"label":"Mars: distance from Earth","value":"4.30 AU"},{"label":"Mars: direction from Earth","value":"28.6°"}]]
    },
    "catch-the-reversal": {
-    "probe": [[{"label":"Select Mars","value":"-"}],[{"label":"Mars: direction from Earth","value":"34.9°"},{"label":"Mars: distance from Earth","value":"0.781 AU"},{"label":"Day","value":"3"}],[{"label":"Mars: direction from Earth","value":"34.9°"},{"label":"Mars: distance from Earth","value":"0.781 AU"},{"label":"Day","value":"13"}],[{"label":"Mars: direction from Earth","value":"34.9°"},{"label":"Mars: distance from Earth","value":"0.781 AU"},{"label":"Day","value":"400"}]]
+    "probe": [[{"label":"Select Mars","value":"-"}],[{"label":"Mars: direction from Earth","value":"28.6°"},{"label":"Mars: distance from Earth","value":"4.30 AU"},{"label":"Day","value":"3"}],[{"label":"Mars: direction from Earth","value":"28.6°"},{"label":"Mars: distance from Earth","value":"4.30 AU"},{"label":"Day","value":"13"}],[{"label":"Mars: direction from Earth","value":"28.6°"},{"label":"Mars: distance from Earth","value":"4.30 AU"},{"label":"Day","value":"400"}]]
    },
    "nearest-and-furthest": {
-    "probe": [[{"label":"Select Mars","value":"-"}],[{"label":"Mars: distance from Earth","value":"0.781 AU"}]]
+    "probe": [[{"label":"Select Mars","value":"-"}],[{"label":"Mars: distance from Earth","value":"4.30 AU"}]]
    },
    "do-it-for-the-sun": {
-    "probe": [[{"label":"Reference frame","value":"World"},{"label":"Sun: as seen from Earth","value":"the Sun is not on the canvas yet"}],[{"label":"Reference frame","value":"A body"},{"label":"Sun: distance from Earth","value":"3.30 AU"},{"label":"Sun: direction from Earth","value":"316.5°"}],[{"label":"Reference frame","value":"World"},{"label":"Sun: distance from Earth","value":"3.30 AU"},{"label":"Sun: direction from Earth","value":"316.5°"}]]
+    "probe": [[{"label":"Reference frame","value":"World"},{"label":"Sun: as seen from Earth","value":"the Sun is not on the canvas yet"}],[{"label":"Reference frame","value":"A body"},{"label":"Sun: distance from Earth","value":"2.84 AU"},{"label":"Sun: direction from Earth","value":"341.6°"}],[{"label":"Reference frame","value":"World"},{"label":"Sun: distance from Earth","value":"2.84 AU"},{"label":"Sun: direction from Earth","value":"341.6°"}]]
    },
    "how-long-does-a-loop": {
-    "probe": [[{"label":"Select Mars","value":"-"}],[{"label":"Mars: direction from Earth","value":"34.9°"},{"label":"Day","value":"3"}],[{"label":"Mars: direction from Earth","value":"34.9°"},{"label":"Day","value":"13"}],[{"label":"Mars: direction from Earth","value":"34.9°"},{"label":"Day","value":"400"}]]
+    "probe": [[{"label":"Select Mars","value":"-"}],[{"label":"Mars: direction from Earth","value":"28.6°"},{"label":"Day","value":"3"}],[{"label":"Mars: direction from Earth","value":"28.6°"},{"label":"Day","value":"13"}],[{"label":"Mars: direction from Earth","value":"28.6°"},{"label":"Day","value":"400"}]]
    }
   },
   "es": "same"

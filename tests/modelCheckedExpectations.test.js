@@ -53,7 +53,8 @@ describe('the allowlist only shrinks', () => {
   test('there are 65 numeric literals, and each is in exactly one table', () => {
     // 52 after Plan an Exposure (Prompt 210): two literals, both model-checked.
     // 65 after the five observing closeout investigations (Prompt 216): 13 more, all model-checked.
-    expect(literals).toHaveLength(65);
+    // 64 after Kepler's Laws was reworked: its period question is retired.
+    expect(literals).toHaveLength(64);
     for (const l of literals) {
       const homes = [MODELS, SOURCED, UNCHECKED].filter(t => t[l.key]);
       expect({ key: l.key, homes: homes.length }).toEqual({
@@ -69,7 +70,7 @@ describe('the allowlist only shrinks', () => {
     expect(UNCHECKED_CEILING).toBe(34);
     expect(
       Object.keys(MODELS).length + Object.keys(SOURCED).length + UNCHECKED_COUNT
-    ).toBe(65);
+    ).toBe(64);
   });
 
   test('every entry names a real literal and gives a reason', () => {

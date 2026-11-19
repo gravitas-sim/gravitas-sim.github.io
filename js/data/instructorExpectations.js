@@ -173,12 +173,16 @@ export default {
         'B − V (Vega system) of about 1.69 at 3,000 K, 0.60 at 6,000 K and 0.15 at 10,000 K. Within 0.05 is accepted; a student who reads the g − r row instead will be a little off at every temperature.',
     },
     'keplers-laws': {
-      'measure-the-two-orbits':
-        'The Circular Orbiter comes out at e near 0.02; the Eccentric Orbiter at roughly e = 0.6–0.7. The derived semi-major axis is the mean of the periapsis and apoapsis distances, and the validator warns if the two are entered the wrong way round.',
+      'find-the-foci':
+        'Closest approach about 0.5 AU, furthest about 2.36 AU; the star-to-empty-focus distance is their difference, about 1.86 AU.',
       'fast-and-slow-in-numbers':
         'Speed at periapsis should exceed speed at apoapsis by roughly the inverse ratio of the distances. The validator warns if the two are swapped, which is the common error.',
       'measure-four-planets':
-        'Any two or more Solar System planets. P²/a³ should come out near 1 for every row when a is in AU and P in years; the validator flags a spread greater than 50%, which almost always means a period entered in days.',
+        'At least five planets, spread over a factor of four or more in distance. P²/a³ should be near 1 for every row; the validator names the row that disagrees when the spread is above 50%, almost always a period in days.',
+      'pick-a-distance':
+        'Any distance from 0.3 to 25 AU in a gap between planets.',
+      'check-the-estimate':
+        'The period at the chosen distance, scaled from the nearest planet by the power three halves, shown beside the estimate.',
       'work-the-law-out-step':
         'P² ÷ a³ = 1 within reading error. The star in this scenario is exactly one solar mass, so the constant is exactly 1 by construction, and the validator says so.',
       'weigh-trappist-1-yourself':

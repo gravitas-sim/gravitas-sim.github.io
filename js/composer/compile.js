@@ -291,19 +291,19 @@ export function compileInvestigation(pack, api) {
       });
       w.fields = (s.fields || []).map(f => ({ label: es(f.label) }));
     } else if (s.type === 'predict') {
-      const est = s.kind === 'estimate';
+      const estimate = s.kind === 'estimate';
       Object.assign(out, {
         prompt: en(s.prompt),
-        ...(est
-          ? { kind: 'estimate', unit: s.unit }
-          : { options: s.options.map(en), answer: s.answer }),
         because: en(s.because),
         reveal: s.reveal,
+        ...(estimate
+          ? { kind: 'estimate', unit: s.unit }
+          : { options: s.options.map(en), answer: s.answer }),
       });
       Object.assign(w, {
         prompt: es(s.prompt),
-        ...(est ? {} : { options: s.options.map(es) }),
         because: es(s.because),
+        ...(estimate ? {} : { options: s.options.map(es) }),
       });
     } else if (s.type === 'question') {
       const item =

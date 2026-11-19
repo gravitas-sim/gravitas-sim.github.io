@@ -112,7 +112,6 @@ describe('the steps that declare motion', () => {
       'binary-star-planets/nothing-here-is-random',
       'binary-star-planets/two-suns',
       'black-holes/not-a-hole-and-not',
-      'keplers-laws/what-you-are-looking-at',
       'orbital-energy/something-that-came-from-outside',
       'retrograde-motion/what-you-are-looking-at',
       'weighing-stars/what-are-they-going-round',

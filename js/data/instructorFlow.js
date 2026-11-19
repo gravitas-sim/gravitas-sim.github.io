@@ -406,17 +406,17 @@ export default {
       {
         from: 'eight-minutes-of-arc',
         to: 'what-sits-at-the-other',
-        text: 'Tycho’s data and Kepler’s problem, then the anatomy of an ellipse with an eccentricity slider. Ends with the empty second focus.',
+        text: 'Tycho’s data and Kepler’s problem. Students predict where the star sits, then find the empty focus from two distances they take.',
       },
       {
-        from: 'measure-the-two-orbits',
-        to: 'why-the-speed-changes',
-        text: 'The second law. Students measure both orbits, watch the equal-area wedges, then measure speed at periapsis and apoapsis and write down why it changes.',
+        from: 'where-does-it-move-fastest',
+        to: 'equal-areas-however-you-slice',
+        text: 'The second law. Students predict where the planet is fastest, take its speeds, explain, then meet the wedges.',
       },
       {
         from: 'kepler-s-third-law',
         to: 'what-the-constant-depends-on',
-        text: 'The third law. Four planets are tabulated from the live Solar System, plotted automatically, and the constant is worked out and then used to predict a period.',
+        text: 'The third law. Five planets are plotted, a period is estimated for an unmeasured orbit, and a controlled run tests the constant.',
       },
       {
         from: 'what-newton-added',

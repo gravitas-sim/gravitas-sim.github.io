@@ -49,7 +49,8 @@ const goldilocks =
 const RIGHT = {
   'where-is-the-star': '1',
   'what-sits-at-the-other': '2',
-  'use-the-law': '8',
+  'where-does-it-move-fastest': '0',
+  'what-the-constant-depends-on': '1',
   'weighing-another-star': '0.91',
   'where-kepler-s-version-breaks': '2',
 };
@@ -118,22 +119,22 @@ describe('grading one submission', () => {
       submission({
         responses: {
           ...RIGHT,
-          'use-the-law': '5',
+          'weighing-another-star': '5',
           'why-the-speed-changes': 'Because it is closer to the star.',
         },
-        fields: { 'measure-the-two-orbits': { circ_e: '0', ecc_e: '0.5' } },
+        fields: { 'find-the-foci': { f_peri: '0.5', f_apo: '1.5' } },
       })
     );
-    // Thirteen steps ask for input; nine were answered.
-    expect(r.scorable).toBe(13);
-    expect(r.correct).toBe(4);
+    // Fifteen steps ask for input.
+    expect(r.scorable).toBe(15);
+    expect(r.correct).toBe(5);
     expect(r.incorrect).toBe(1);
     // A written answer and a live measurement are the instructor's to judge.
     expect(r.unmarked).toBe(2);
-    expect(r.incomplete).toBe(6);
-    expect(r.questions).toHaveLength(13);
+    expect(r.incomplete).toBe(7);
+    expect(r.questions).toHaveLength(15);
     const verdict = sid => r.questions.find(q => q.sid === sid).verdict;
-    expect(verdict('use-the-law')).toBe('incorrect');
+    expect(verdict('weighing-another-star')).toBe('incorrect');
     expect(verdict('why-the-speed-changes')).toBe('unmarked');
     expect(verdict('fast-and-slow-in-numbers')).toBe('incomplete');
   });
@@ -173,11 +174,13 @@ describe('grading one submission', () => {
 
   test('a step rewritten since the report was saved is flagged', () => {
     const sub = submission();
-    sub.b.steps.find(s => s.sid === 'use-the-law').fingerprint =
+    sub.b.steps.find(s => s.sid === 'weighing-another-star').fingerprint =
       'an-older-text';
     const r = grade(sub);
     expect(r.changedSteps).toBe(1);
-    expect(r.questions.find(q => q.sid === 'use-the-law').changed).toBe(true);
+    expect(
+      r.questions.find(q => q.sid === 'weighing-another-star').changed
+    ).toBe(true);
   });
 
   test('records what it was graded against, and what it was handed', () => {
@@ -227,25 +230,23 @@ describe('what the lesson engine actually stores', () => {
     choose('where-is-the-star', 1);
     responses[`${id('change-the-shape')}:e`] = '0.6';
     choose('what-sits-at-the-other', 2);
-    const orbit = id('measure-the-two-orbits');
-    responses[`${orbit}:circ_e`] = '0';
-    responses[`${orbit}:ecc_e`] = '0.6';
-    responses[`${orbit}:ecc_peri`] = '0.4';
-    responses[`${orbit}:ecc_apo`] = '1.6';
-    responses[`${orbit}:ecc_a`] = '1.00';
+    const orbit = id('find-the-foci');
+    responses[`${orbit}:f_peri`] = '0.4';
+    responses[`${orbit}:f_apo`] = '1.6';
+    responses[`${orbit}:f_sep`] = '1.2';
     for (let i = 0; i < 4; i++) {
       responses[`${id('watch-it-happen')}:check:${i}`] = true;
     }
     responses[id('why-the-speed-changes')] = 'Closer to the star, so faster.';
     responses[`${id('why-the-speed-changes')}:shown`] = true;
-    responses[`${id('use-the-law')}:help`] = 'concept,method';
-    responses[`${id('use-the-law')}:first`] = '7';
-    recordAnswer(responses, id('use-the-law'), '7', 'en');
-    attempts[id('use-the-law')] = 1;
-    recordAnswer(responses, id('use-the-law'), '8', 'en');
-    attempts[id('use-the-law')] += 1;
-    recordAnswer(responses, id('weighing-another-star'), '0,91', 'es');
+    responses[`${id('weighing-another-star')}:help`] = 'concept,method';
+    responses[`${id('weighing-another-star')}:first`] = '7';
+    recordAnswer(responses, id('weighing-another-star'), '7', 'en');
     attempts[id('weighing-another-star')] = 1;
+    recordAnswer(responses, id('weighing-another-star'), '0.91', 'en');
+    attempts[id('weighing-another-star')] += 1;
+    recordAnswer(responses, id('where-does-it-move-fastest'), '0', 'es');
+    attempts[id('where-does-it-move-fastest')] = 1;
     choose('where-kepler-s-version-breaks', 0);
 
     const visited = new Set(active.steps.map(s => s.sid));
@@ -282,15 +283,15 @@ describe('what the lesson engine actually stores', () => {
 
     const r = grade(sub);
     expect(r).toMatchObject({
-      scorable: 13,
+      scorable: 15,
       correct: 4,
       incorrect: 1,
       unmarked: 2,
-      incomplete: 6,
+      incomplete: 8,
       stale: 0,
     });
     // One row per question the lesson asks. Not one per thing stored.
-    expect(r.questions).toHaveLength(13);
+    expect(r.questions).toHaveLength(15);
     expect(r.questions.every(q => !q.sid.includes(':'))).toBe(true);
 
     const q = sid => r.questions.find(x => x.sid === sid);
@@ -301,19 +302,19 @@ describe('what the lesson engine actually stores', () => {
     });
     expect(q('where-kepler-s-version-breaks').verdict).toBe('incorrect');
     // The answer, not the first number tried, and every try counted.
-    expect(q('use-the-law')).toMatchObject({
+    expect(q('weighing-another-star')).toMatchObject({
       verdict: 'correct',
       attempts: 2,
-      response: '8',
+      response: '0.91',
       locale: 'en',
     });
-    expect(q('weighing-another-star')).toMatchObject({
+    expect(q('where-does-it-move-fastest')).toMatchObject({
       verdict: 'correct',
       locale: 'es',
     });
-    expect(q('measure-the-two-orbits')).toMatchObject({
+    expect(q('find-the-foci')).toMatchObject({
       verdict: 'unmarked',
-      response: 'circ_e=0; ecc_e=0.6; ecc_peri=0.4; ecc_apo=1.6; ecc_a=1.00',
+      response: 'f_peri=0.4; f_apo=1.6; f_sep=1.2',
     });
     expect(q('why-the-speed-changes').verdict).toBe('unmarked');
     expect(annotate([r])[0].warnings).toEqual([]);
@@ -356,7 +357,7 @@ describe('what the lesson engine actually stores', () => {
         responses: {},
         fields: {
           'why-the-speed-changes': { shown: true, help: 'concept' },
-          'use-the-law': { first: '7', locale: 'en' },
+          'weighing-another-star': { first: '7', locale: 'en' },
           'a-removed-step': { shown: true },
         },
       })
@@ -364,13 +365,13 @@ describe('what the lesson engine actually stores', () => {
     expect(
       r.questions.find(q => q.sid === 'why-the-speed-changes').verdict
     ).toBe('incomplete');
-    expect(r.questions.find(q => q.sid === 'use-the-law').verdict).toBe(
-      'incomplete'
-    );
+    expect(
+      r.questions.find(q => q.sid === 'weighing-another-star').verdict
+    ).toBe('incomplete');
     // Nor is it a stale answer when the step has gone: which sub-keys were
     // answers, the lesson no longer says.
     expect(r.stale).toBe(0);
-    expect(r.questions).toHaveLength(13);
+    expect(r.questions).toHaveLength(15);
   });
 });
 
@@ -401,7 +402,7 @@ describe('a pile of submissions', () => {
     const early = submission({
       roster: 'S-1',
       assignment: 'a',
-      responses: { ...RIGHT, 'use-the-law': '5' },
+      responses: { ...RIGHT, 'weighing-another-star': '5' },
       savedAt: '2026-09-02T10:00:00.000Z',
     });
     const rows = annotate([grade(late), grade(early)]);
@@ -417,7 +418,9 @@ describe('a pile of submissions', () => {
   test('without a roster id nothing is grouped, whatever the typed name says', () => {
     const rows = annotate([
       grade(submission({ name: 'Ada' })),
-      grade(submission({ name: 'Ada', responses: { 'use-the-law': '5' } })),
+      grade(
+        submission({ name: 'Ada', responses: { 'weighing-another-star': '5' } })
+      ),
     ]);
     expect(rows.map(r => r.attemptGroup)).toEqual([null, null]);
     for (const r of rows) expect(r.warnings).toContain('noRosterId');
@@ -477,10 +480,10 @@ describe('the CSV exports', () => {
     const at = col => summary[1][SUMMARY_COLUMNS.indexOf(col)];
     expect(at('schema')).toBe(RESULTS_SCHEMA_ID);
     expect(at('roster_id')).toBe('S-1');
-    expect(at('scorable')).toBe('13');
-    expect(at('correct')).toBe('5');
+    expect(at('scorable')).toBe('15');
+    expect(at('correct')).toBe('6');
     expect(at('warnings')).toBe('');
-    expect(fromCsv(questionCsv(rows))).toHaveLength(1 + 13);
+    expect(fromCsv(questionCsv(rows))).toHaveLength(1 + 15);
   });
 
   test('written answers are withheld unless asked for; checked answers are not', () => {
@@ -496,8 +499,10 @@ describe('the CSV exports', () => {
     expect(col(plain, 'why-the-speed-changes', 'response_status')).toBe(
       'withheld'
     );
-    expect(col(plain, 'use-the-law', 'response')).toBe('8');
-    expect(col(plain, 'use-the-law', 'response_status')).toBe('checked');
+    expect(col(plain, 'weighing-another-star', 'response')).toBe('0.91');
+    expect(col(plain, 'weighing-another-star', 'response_status')).toBe(
+      'checked'
+    );
     expect(col(plain, 'fast-and-slow-in-numbers', 'response_status')).toBe(
       'none'
     );
@@ -608,16 +613,16 @@ describe('the JSON export', () => {
     });
     expect(doc.notice).toMatch(/not identity or authorship/);
     expect(doc.submissions[0].counts).toEqual({
-      scorable: 13,
-      correct: 5,
+      scorable: 15,
+      correct: 6,
       incorrect: 0,
       unmarked: 1,
-      incomplete: 7,
+      incomplete: 8,
       stale: 0,
-      // One point a question, as the Composer counts: five right, and the
+      // One point a question, as the Composer counts: six right, and the
       // written answer's point waiting for the instructor rather than lost.
-      points: 5,
-      pointsPossible: 13,
+      points: 6,
+      pointsPossible: 15,
       pointsUnmarked: 1,
       // Help taken is a fact beside the answers; this fixture took none.
       hintsTaken: 0,
@@ -645,7 +650,7 @@ describe('the JSON export', () => {
     const one = grade(submission({ responses: RIGHT }), lesson);
     const q = one.questions.find(x => x.sid === 'where-is-the-star');
     expect(q.pointsPossible).toBe(3);
-    expect(one.pointsPossible).toBe(15);
+    expect(one.pointsPossible).toBe(17);
   });
 
   test('the CSVs end with the points columns, after everything version 1 had', () => {
@@ -715,7 +720,6 @@ describe('the JSON export', () => {
   test('a numeric step’s unit travels with its answer, in both exports', () => {
     const records = annotate([grade(submission())]);
     const q = sid => records[0].questions.find(x => x.sid === sid);
-    expect(q('use-the-law').unit).toBe('years');
     expect(q('weighing-another-star').unit).toBe('M_sun');
     expect(q('where-is-the-star').unit).toBeNull();
     const csv = fromCsv(questionCsv(records));
@@ -723,12 +727,14 @@ describe('the JSON export', () => {
     // Then the two help columns, added after it.
     expect(col).toBe(csv[0].length - 3);
     const row = sid => csv.find(r => r[csv[0].indexOf('step_id')] === sid);
-    expect(row('use-the-law')[col]).toBe('years');
+    expect(row('weighing-another-star')[col]).toBe('M_sun');
     expect(row('where-is-the-star')[col]).toBe('');
     const json = JSON.parse(resultsJson(records, { now }));
     expect(
-      json.submissions[0].questions.find(x => x.stepId === 'use-the-law').unit
-    ).toBe('years');
+      json.submissions[0].questions.find(
+        x => x.stepId === 'weighing-another-star'
+      ).unit
+    ).toBe('M_sun');
     // A version 2 file written before the column reads as it was.
     for (const sub of json.submissions)
       for (const x of sub.questions) delete x.unit;

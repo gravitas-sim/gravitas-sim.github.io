@@ -97,7 +97,7 @@ export const LESSON_PILOTS = [
     id: 'keplers-2nd-law',
     label: "Kepler's 2nd Law",
     lesson: 'keplers-laws',
-    sid: 'measure-the-two-orbits',
+    sid: 'find-the-foci',
     subject: 'scene',
     scenario: "Kepler's 2nd Law",
   },

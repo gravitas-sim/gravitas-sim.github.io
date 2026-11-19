@@ -15,7 +15,7 @@ export const kepler =
 export const RIGHT = {
   'where-is-the-star': '1',
   'what-sits-at-the-other': '2',
-  'use-the-law': '8',
+  'where-does-it-move-fastest': '0',
   'weighing-another-star': '0.91',
   'where-kepler-s-version-breaks': '2',
 };
@@ -72,14 +72,17 @@ export function pile() {
       name: '=HYPERLINK("http://example.invalid","x")',
       roster: 'S-2',
       assignment: 'wk3',
-      responses: { 'where-is-the-star': '0', 'use-the-law': '8' },
+      responses: {
+        'where-is-the-star': '0',
+        'where-does-it-move-fastest': '0',
+      },
     }),
     submission({
       name: 'Cleo',
       roster: 'S-3',
       assignment: 'wk3',
       savedAt: '2026-09-02T09:00:00.000Z',
-      responses: { 'use-the-law': '5' },
+      responses: { 'where-does-it-move-fastest': '1' },
     }),
     submission({
       name: 'Cleo',
@@ -98,7 +101,7 @@ export function pile() {
       name: 'Ada Lovelace',
       roster: 'S-1',
       assignment: 'wk4',
-      responses: { 'use-the-law': '8' },
+      responses: { 'where-does-it-move-fastest': '0' },
     }),
   ]);
 }
