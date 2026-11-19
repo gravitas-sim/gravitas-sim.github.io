@@ -13,6 +13,7 @@ export const EN_GUIDES = {
   'gd.suite.populations':
     'Stars and their populations: spectra, clusters and variables',
   'gd.loading': 'Loading the investigations…',
+  'gd.offline': 'Available after one online visit.',
   'gd.intro':
     'Guided investigations with real observations, done with this page’s own tools. Choose a suite, then an investigation and a path: the introductory path is the core, and the advanced path adds steps to it. Every number a step checks comes from the data or from a cited source it names.',
   'gd.pick': 'Investigation',
