@@ -1259,8 +1259,7 @@ const KEPLER = {
         scenario: 'TRAPPIST-1 System',
         seed: 'newton-lab',
         settings: { enable_asteroids: false, num_asteroids: 0, num_comets: 0 },
-        // The system is 6.2 units across at 100 units per AU, so the view has
-        // to come a long way in.
+        // 6.2 units across at 100 per AU: the view has to come a long way in.
         camera: { zoom: 55, pan: { x: 0, y: 0 } },
         paused: false,
       },
@@ -1269,6 +1268,7 @@ const KEPLER = {
       sid: 'the-same-laws-forty-light',
       bind: TRAPPIST_1,
       type: 'explore',
+      allowInspector: true,
       showAreaSweep: true,
       title: 'The same laws, forty light years away',
       body: `On screen is TRAPPIST-1, a real red dwarf with seven planets, none

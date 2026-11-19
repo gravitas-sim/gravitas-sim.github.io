@@ -454,6 +454,7 @@ describe('what the app reads, and where the wedges show', () => {
   test('the step that says wedges are drawn asks for them', () => {
     expect(KEPLER.lock.areaSweep).toBe(false);
     expect(step('the-same-laws-forty-light').showAreaSweep).toBe(true);
+    expect(step('the-same-laws-forty-light').allowInspector).toBe(true);
     expect(step('equal-areas-however-you-slice').wedgeOf).toBeTruthy();
   });
 
