@@ -398,7 +398,7 @@ export default {
     },
     {
       title: 'Lo que hiciste, y a dónde va después',
-      body: 'Cada radio de esta lección es un cociente respecto a la estrella, mejorado tres veces, y cada corrección se apoyó en algo más que la caída: cómo se oscurece el borde de la estrella, cómo está inclinada la órbita respecto a nosotros, qué más brilla en la misma abertura. El radio de un planeta es tan bueno como todo eso.\n\nTESS, JWST y PLATO están midiendo tránsitos ahora, y detrás de cada uno de sus planetas está el seguimiento de los tres últimos pasos: alguien tiene que mirar la estrella anfitriona con un telescopio lo bastante grande para averiguar qué más hay allí.',
+      body: 'Cada radio que encontraste es un cociente respecto a la estrella, mejorado tres veces, y cada corrección se apoyó en algo más que la caída: cómo se oscurece el borde de la estrella, cómo está inclinada la órbita respecto a nosotros, qué más brilla en la misma abertura. El radio de un planeta es tan bueno como todo eso.\n\nTESS, JWST y PLATO están midiendo tránsitos ahora, y detrás de cada uno de sus planetas está el seguimiento de los tres últimos pasos: alguien tiene que mirar la estrella anfitriona con un telescopio lo bastante grande para averiguar qué más hay allí.',
       tip: 'Una nota sobre los números: los resultados de sondeo citados aquí vienen del Robo-AO Kepler Survey y del SOAR TESS Survey, que se propusieron ambos fotografiar todas las anfitrionas de candidatos a planeta a su alcance. El censo de Robo-AO cubre 3857 anfitrionas de Kepler; el programa SOAR ha observado cerca de 3000 objetivos de TESS y encuentra una corrección mediana del radio de la anfitriona primaria de alrededor de 1,07, que sube a 1,33 para la décima parte peor.',
     },
   ],

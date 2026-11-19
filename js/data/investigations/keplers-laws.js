@@ -105,8 +105,8 @@ const KEPLER = {
       title: 'Three questions about an orbit',
       body: `What path does a planet follow around its star, and what sets how
              fast it moves and how long its year is? You will answer it in the
-             live orbit view: predict first, then take readings of distance,
-             speed and period from orbits you choose.
+             live orbit view: predict first, then measure distances, speeds
+             and years in orbits you choose.
              \n\nJohannes Kepler answered it four hundred years ago from
              positions of Mars measured without a telescope. Why he trusted
              them comes after your first prediction.`,

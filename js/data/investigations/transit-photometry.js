@@ -1425,7 +1425,7 @@ const TRANSITS = {
       bind: TRANSIT_PAIR,
       type: 'read',
       title: 'What you did, and where it goes next',
-      body: `Every radius in this lesson is a ratio to the star, made better
+      body: `Every radius you found is a ratio to the star, made better
              three times over, and each correction rested on something besides
              the dip: how the star's edge darkens, how the orbit is tilted to
              us, what else shines in the same aperture. A planet's radius is
