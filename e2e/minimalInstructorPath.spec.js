@@ -185,10 +185,10 @@ async function walk(page, locale, clock) {
 
   // The student hands in; the instructor reads, marks nothing, exports.
   const ada = await tokenFor(activity, 'ada01', {
-    'what-will-the-brightness-do': '1',
+    'getting-the-period': '1',
   });
   const ben = await tokenFor(activity, 'ben02', {
-    'what-will-the-brightness-do': '0',
+    'getting-the-period': '0',
   });
   await page.goto('/instructors/submissions/');
   await expect(page.locator('#count')).toHaveText(W.nothing);

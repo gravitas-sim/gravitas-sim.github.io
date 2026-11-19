@@ -111,7 +111,7 @@ describe('how long a lesson takes is read off the lesson', () => {
     // real lesson rather than a number invented by the test.
     expect(metaFor('orbital-energy').numericCount).toBe(0);
     expect(calculationOf({ id: 'orbital-energy' })).toBe('none');
-    expect(metaFor('keplers-laws').numericCount).toBe(2);
+    expect(metaFor('keplers-laws').numericCount).toBe(1);
     expect(calculationOf({ id: 'keplers-laws' })).toBe('some');
     expect(metaFor('hohmann-transfer').numericCount).toBe(6);
     expect(calculationOf({ id: 'hohmann-transfer' })).toBe('lots');

@@ -22,8 +22,8 @@ export const MANIFEST = [
     level: 'Astronomía introductoria',
     thumbnail: 'images/scenarios/keplers-2nd-law.webp',
     depths: 3,
-    stepCount: 23,
-    gradedCount: 13,
+    stepCount: 26,
+    gradedCount: 15,
     objectiveCount: 4,
   },
   {
@@ -47,8 +47,8 @@ export const MANIFEST = [
     thumbnail: 'images/scenarios/transit-lab.webp',
     series: 'Detección de exoplanetas',
     depths: 3,
-    stepCount: 29,
-    gradedCount: 13,
+    stepCount: 30,
+    gradedCount: 15,
     objectiveCount: 6,
   },
   {
@@ -72,7 +72,7 @@ export const MANIFEST = [
     thumbnail: 'images/investigations/weighing-stars.webp',
     depths: 3,
     stepCount: 36,
-    gradedCount: 18,
+    gradedCount: 21,
     objectiveCount: 6,
   },
   {

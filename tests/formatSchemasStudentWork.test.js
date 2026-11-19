@@ -169,7 +169,7 @@ const kepler = INVESTIGATIONS.find(l => l.id === 'keplers-laws');
 const RIGHT = {
   'where-is-the-star': '1',
   'what-sits-at-the-other': '2',
-  'use-the-law': '8',
+  'where-does-it-move-fastest': '0',
   'weighing-another-star': '0.91',
 };
 
@@ -190,7 +190,7 @@ function report({
   const backup = BK.buildBackup({
     lesson: kepler,
     responses: stored,
-    attempts: { [stepKey(kepler.id, 'use-the-law')]: 2 },
+    attempts: { [stepKey(kepler.id, 'where-does-it-move-fastest')]: 2 },
     visited,
     stepSid: visited.at(-1),
     startedAt: '2026-09-01T10:00:00.000Z',
@@ -352,7 +352,7 @@ describe('the submission results schema', () => {
     const b = report({
       roster: 'r1',
       savedAt: '2026-09-03T10:00:00.000Z',
-      responses: { ...RIGHT, 'use-the-law': '5' },
+      responses: { ...RIGHT, 'where-does-it-move-fastest': '1' },
     });
     const c = report({ name: null, responses: { 'gone-step': 'x' } });
     const records = RS.annotate([

@@ -109,7 +109,16 @@ describe('the rules refuse what would change the science', () => {
   };
 
   test('a depth-specific expectation that disagrees with the core one', () => {
-    expect(run(d => (d[2].answer = 9))).toContain('depth/expectation');
+    // A deeper step that restates a core one: Kepler's Laws no longer has one
+    // (its period question is now each student's own), so another lesson does.
+    const lesson = 'missing-mass';
+    const c = core(lesson);
+    const deeper = clone(DEEPER[lesson]);
+    const at = deeper.findIndex(x => x.restates);
+    deeper[at].answer = deeper[at].answer + 9;
+    expect(
+      checkDepth(c, layDepth(c, deeper), deeper, null).map(f => f.rule)
+    ).toContain('depth/expectation');
   });
   test('a deeper step that opens a scenario of its own', () => {
     expect(run(d => (d[0].setup = { scenario: 'Solar System' }))).toContain(
@@ -179,13 +188,13 @@ describe('computed fields use the numbers already measured', () => {
       'measure-four-planets:p1_P': 1,
       'measure-four-planets:p2_a': 5.204,
       'measure-four-planets:p2_P': 11.86,
-      'repeat-the-timing:frac': 0.0003,
+      'time-it-until-sure:frac': 0.0003,
     };
     const e = (s, f) => Number(t[`${s}:${f}`]);
     const fit = DEEPER['keplers-laws'][1].fields;
     const by = id => fit.find(f => f.id === id).compute({}, e);
     expect(by('k_w')).toBeCloseTo(1, 2);
-    expect(by('p4')).toBeCloseTo(8, 1);
+    expect(Math.sqrt(by('k_w') * 64)).toBeCloseTo(8, 1);
     expect(by('s_k')).toBeGreaterThan(0);
   });
   test('the mass of the pair carries its uncertainty from the entered a and P', () => {

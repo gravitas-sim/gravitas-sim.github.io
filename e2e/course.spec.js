@@ -169,7 +169,7 @@ test.describe('the course home', () => {
     expect(href).toMatch(/\/#a1[zr]/);
     await page.goto(href, { waitUntil: 'domcontentloaded' });
     await expect(page.locator('body')).toContainText(
-      '6 steps of Finding Planets by Their Shadows',
+      '7 steps of Finding Planets by Their Shadows',
       { timeout: 60_000 }
     );
   });
@@ -355,24 +355,24 @@ test.describe('the course-pack builder', () => {
     await page.locator('#cb-units-3 > summary').click();
     await page.locator('#cb-units-3-items-0 > summary').click();
     const steps = page.locator('#cb-units-3-items-0-steps input');
-    await expect(steps).toHaveCount(29);
-    // "Recover the real planet" uses a measurement made at "Now measure it",
-    // the step that builds the Blended Binary world it is about.
+    await expect(steps).toHaveCount(30);
+    // "Find the hidden companion" uses a measurement made at "Compare the two
+    // curves", the step that builds the Blended Binary world it is about.
     await page
       .locator('#cb-units-3-items-0-steps label', {
-        hasText: 'Recover the real planet',
+        hasText: 'Find the hidden companion',
       })
       .click();
     await clean(page);
     const after = (await current(page)).units[3].items[0];
-    expect(after.steps).toContain('recover-the-real-planet');
-    expect(after.steps).toContain('now-measure-it');
+    expect(after.steps).toContain('find-the-hidden-companion');
+    expect(after.steps).toContain('compare-the-two-curves');
     expect(after.steps).toHaveLength(before.steps.length + 2);
     expect(after.assignment.id).not.toBe(before.assignment.id);
     expect(after.pin.f).toHaveLength(after.steps.length);
     await expect(
       page.locator('#cb-units-3-items-0-steps label', {
-        hasText: 'Now measure it',
+        hasText: 'Compare the two curves',
       })
     ).toContainText('(needed by a chosen step)');
   });

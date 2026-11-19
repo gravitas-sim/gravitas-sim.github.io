@@ -171,10 +171,10 @@ their ceilings:
 | Module | Lines | Ceiling |
 | --- | ---: | ---: |
 | `js/data/instructorContent.js` | 6,761 | 6,761 |
-| `js/i18n/es.deferred.js` | 4,250 | 4,250 |
+| `js/i18n/es.deferred.js` | 4,248 | 4,248 |
 | `js/i18n/en.deferred.js` | 3,998 | 3,998 |
 | `js/data/investigations/observing-sequence.js` | 3,341 | 3,341 |
-| `js/investigations.js` | 3,052 | 3,052 |
+| `js/investigations.js` | 3,046 | 3,046 |
 | `js/data/investigations/measurement-sequence.js` | 3,041 | 3,041 |
 | `js/render.js` | 2,785 | 2,785 |
 | `js/data/investigations/stellar-sequence.js` | 2,733 | 2,733 |
@@ -509,7 +509,7 @@ npm run author:check -- --json            # for an editor
 that a step names a widget and that the widget has a control called `mass`; it
 cannot see that the widget painted, that the scenario built, that a probe
 produced rows against a live world, or that Next moved. The walker opens all <!--fact:investigations-->124<!--/fact--> investigations in
-a browser and takes all <!--fact:investigationSteps-->1524<!--/fact--> steps,
+a browser and takes all <!--fact:investigationSteps-->1528<!--/fact--> steps,
 sharded one lesson per test so contexts are reused and a failure names its lesson. It takes about two
 minutes and runs as part of `npm run e2e`.
 

@@ -24,7 +24,7 @@ export default {
   steps: {
     'eight-minutes-of-arc': {
       title: 'Ocho minutos de arco',
-      body: 'Durante casi toda la historia registrada las órbitas fueron círculos. Cuando las observaciones no encajaban, los astrónomos añadían más círculos —epiciclos— hasta que el modelo cuadraba. Copérnico movió el Sol al centro pero mantuvo los círculos, y su modelo no fue más preciso que el que sustituía.\n\nLo que rompió el círculo fueron los datos. Tycho Brahe pasó dos décadas midiendo posiciones planetarias con una precisión de un minuto de arco, el límite de lo posible sin telescopio. Cuando Johannes Kepler intentó ajustar las observaciones de Marte de Tycho a una órbita circular, el mejor ajuste que consiguió fallaba por ocho minutos de arco. Podría haber llamado a eso error observacional y haber seguido adelante. En vez de eso confió en las medidas de Tycho por encima de dos mil años de suposiciones, y pasó años averiguando qué curva encajaría.\n\nLa respuesta fue una elipse, con el Sol fuera de su centro.',
+      body: 'Durante casi toda la historia registrada las órbitas fueron círculos. Cuando las observaciones no encajaban, los astrónomos añadían más círculos —epiciclos— hasta que el modelo cuadraba. Copérnico movió el Sol al centro pero mantuvo los círculos, y su modelo no fue más preciso que el que sustituía.\n\nLo que rompió el círculo fueron los datos. Tycho Brahe pasó dos décadas midiendo posiciones planetarias con una precisión de un minuto de arco, el límite de lo posible sin telescopio. Cuando Johannes Kepler intentó ajustar las observaciones de Marte de Tycho a una órbita circular, el mejor ajuste que consiguió fallaba por ocho minutos de arco. Podría haber llamado a eso error observacional y haber seguido adelante. En vez de eso confió en las medidas de Tycho por encima de dos mil años de suposiciones, y pasó años averiguando qué curva encajaría.\n\nLa respuesta fue una elipse. Dónde se sitúa el Sol dentro de ella es lo primero que hay que averiguar.',
       quote: {
         text: 'Puesto que estos ocho minutos no podían ignorarse, ellos solos han abierto el camino a la reforma de toda la astronomía.',
         by: 'Johannes Kepler, Astronomia Nova, 1609',
@@ -33,12 +33,12 @@ export default {
     },
     'what-you-are-looking-at': {
       title: 'Lo que estás mirando',
-      body: 'Una sola estrella de una masa solar está en el centro de la vista con dos cuerpos orbitándola.\n\nEl cuerpo <strong>azul pálido</strong> de la trayectoria ancha y casi redonda es el Orbitador Circular. El cuerpo <strong>naranja</strong> de la trayectoria estirada es el Orbitador Excéntrico, que se acerca mucho más a la estrella y se aleja mucho más. Las órbitas casi circulares son las que siguen la mayoría de los planetas del Sistema Solar, que es exactamente por lo que la elipse pasó desapercibida tanto tiempo.\n\nLas cuñas de colores que se abren en abanico detrás del cuerpo naranja tienen todas la misma área. Obsérvalas un momento: cerca de la estrella son estrechas y largas, lejos son anchas y cortas. Esa es la segunda ley de Kepler dibujándose sola, antes de que hayas medido nada.',
-      tip: 'Todavía no hay que seleccionar nada. Si las cuñas no aparecen, pulsa el botón de reinicio junto a la barra de progreso para reconstruir el sistema.',
+      body: 'Una sola estrella de una masa solar está en el centro de la vista con dos cuerpos orbitándola.\n\nEl cuerpo <strong>azul pálido</strong> de la trayectoria ancha y casi redonda es el Orbitador Circular. El cuerpo <strong>naranja</strong> de la trayectoria estirada es el Orbitador Excéntrico, que se acerca mucho más a la estrella y se aleja mucho más. Las órbitas casi circulares son las que siguen la mayoría de los planetas del Sistema Solar, que es exactamente por lo que la elipse pasó desapercibida tanto tiempo.\n\nLa escena está en pausa y el anillo señala la estrella. Todavía no se mide nada: el paso siguiente te pide decir dónde se sitúa esa estrella dentro de la trayectoria del cuerpo naranja antes de mirar más de cerca.',
+      tip: 'Todavía no hay que seleccionar nada. Si la escena se ve mal, pulsa el botón de reinicio junto a la barra de progreso para reconstruir el sistema.',
     },
     'where-is-the-star': {
       title: '¿Dónde está la estrella?',
-      body: 'Una elipse tiene un centro y dos focos. En un círculo los tres coinciden; cuanto más alargada es la elipse, más lejos del centro quedan los focos.\n\nMira la trayectoria del cuerpo naranja y dónde se sitúa la estrella dentro de ella. Comprométete con una respuesta antes de medir nada.',
+      body: 'Una elipse tiene un centro, a mitad de su diámetro largo, y dos puntos especiales llamados focos, uno a cada lado del centro.\n\nMira la trayectoria del cuerpo naranja y dónde se sitúa la estrella dentro de ella. Comprométete con una respuesta antes de medir nada: el paso siguiente te da una manera de comprobarla.',
       prompt: 'La estrella se sitúa en…',
       options: [
         'el centro de la elipse',
@@ -49,10 +49,42 @@ export default {
       because:
         'La estrella se sitúa en uno de los focos, y el otro foco está vacío: allí no hay absolutamente nada. Esto no es una casualidad del Sistema Solar: cualquier atracción con ley del inverso del cuadrado produce una sección cónica con la fuente en un foco, cosa que Newton demostró sesenta años después de que Kepler la midiera. En un círculo los dos focos se funden en el centro, y por eso una órbita de baja excentricidad parece centrada.',
     },
+    'find-the-foci': {
+      title: 'Encuentra el foco vacío',
+      body: 'La simulación puede dibujar la elipse que sigue un planeta, con los dos focos marcados. Úsala para comprobar tu predicción con dos cosas que lees tú mismo.\n\nPrimero toma las distancias. Selecciona el <strong>Orbitador Excéntrico</strong> en la lista de objetos y pulsa <strong>Tomar la lectura</strong> junto a <em>[[closest-approach|máximo acercamiento]]</em> y de nuevo junto a <em>distancia máxima</em>.\n\nDespués activa <strong>Geometría de la órbita</strong> en la ficha del planeta. Un panel enumera los puntos que puedes medir. Elige el punto de la estrella (<em>Foco en Kepler Star</em>) y el <em>Foco vacío</em>, con el puntero o con Izquierda, Derecha y Intro en la lista. El panel da la distancia entre los dos que elegiste: escríbela. La última casilla calcula cuánto dicen tus dos distancias que deben distar los focos.',
+      tip: 'El panel se puede cerrar con su X cuando tengas el número. Los dos puntos se eligen uno tras otro; elegir un tercero sustituye al más antiguo.',
+      fields: [
+        {
+          label: 'Orbitador Excéntrico: máximo acercamiento a la estrella',
+          unit: 'UA',
+          misconceptions: [
+            { say: 'Esa lectura es del Orbitador Circular. Este paso trata del Orbitador Excéntrico: selecciónalo en la lista de objetos y toma la lectura otra vez.' },
+          ],
+        },
+        {
+          label: 'Orbitador Excéntrico: distancia máxima a la estrella',
+          unit: 'UA',
+          misconceptions: [
+            { say: 'Esa lectura es del Orbitador Circular. Este paso trata del Orbitador Excéntrico: selecciónalo en la lista de objetos y toma la lectura otra vez.' },
+          ],
+        },
+        {
+          label: 'Distancia entre la estrella y el foco vacío, según el panel',
+          unit: 'UA',
+          misconceptions: [
+            { say: 'Esa es la distancia de la estrella al centro de la elipse, que es solo la mitad del camino hasta el foco vacío. El foco vacío queda tan lejos del centro, al otro lado, como la estrella queda de él.' },
+            { say: 'Esa es la distancia entre la estrella y el punto más cercano de la órbita, o entre el foco vacío y el punto lejano. Elige el punto de la estrella y el Foco vacío, y lee la distancia entre esos dos.' },
+            { say: 'Esa es la distancia entre la estrella y el punto lejano de la órbita, o entre el foco vacío y el punto cercano. Elige el punto de la estrella y el Foco vacío, y lee la distancia entre esos dos.' },
+          ],
+        },
+        { label: 'Lo que dicen tus dos distancias que distan los focos', unit: 'UA' },
+      ],
+    },
     'the-first-law-and-the': {
       title: 'La primera ley, y la anatomía de una elipse',
       body: '<strong>Primera ley</strong> de Kepler: todo planeta se mueve sobre una elipse, con la estrella en uno de los focos.\n\nUna elipse tiene dos focos. Su propiedad definitoria es que, para cualquier punto de la curva, las distancias a los dos focos suman siempre el mismo total. El <em>[[semi-major-axis|semieje mayor]]</em> <strong>a</strong> es la mitad del diámetro largo, y es el tamaño de la órbita. La <em>[[eccentricity|excentricidad]]</em> <strong>e</strong> es su forma: los focos quedan a una distancia <em>a</em> × <em>e</em> a cada lado del centro, así que <em>e</em> = 0 pone ambos focos en el centro y da un círculo, mientras que e acercándose a 1 estira la elipse hasta convertirla en una astilla.\n\nEl segundo foco es la parte rara. Allí no hay nada. Ninguna masa, ningún objeto, nada que lo marque. Es una consecuencia puramente geométrica de la fuerza del inverso del cuadrado.',
       tip: 'Arrastra el deslizador del paso siguiente para ver cómo se separan los focos a medida que crece e.',
+      compare: 'La estrella se sitúa en uno de los focos y el otro foco está vacío. La separación del panel y la que dan tus dos distancias son el mismo número porque los focos son simétricos respecto al centro.',
     },
     'change-the-shape': {
       title: 'Cambia la forma',
@@ -105,35 +137,9 @@ export default {
       because:
         'Nada en absoluto. El foco vacío es un rasgo geométrico de la elipse, no un lugar físico, y allí no hay ningún objeto ni ninguna fuerza. El centro de masas queda muy cerca de la estrella, no en el foco lejano, y el planeta se mueve más despacio en el apoastro, que es un punto de la órbita y no de su interior.',
     },
-    'measure-the-two-orbits': {
-      title: 'Mide las dos órbitas',
-      body: 'Pulsa el <strong>Orbitador Circular</strong> y lee sus valores en la lectura en vivo, después pulsa el <strong>Orbitador Excéntrico</strong> y lee los suyos.\n\nLa excentricidad <em>e</em> va de 0 para un círculo perfecto a algo menos de 1 para una elipse muy alargada. Para comparar: la Tierra es 0,017, Marte 0,093, Plutón 0,249 y el cometa Halley 0,967.',
-      fields: [
-        {
-          label: 'Orbitador Circular: excentricidad e',
-          unit: '',
-        },
-        {
-          label: 'Orbitador Excéntrico: excentricidad e',
-          unit: '',
-        },
-        {
-          label: 'Orbitador Excéntrico: máximo acercamiento',
-          unit: 'UA',
-        },
-        {
-          label: 'Orbitador Excéntrico: distancia máxima',
-          unit: 'UA',
-        },
-        {
-          label: 'Semieje mayor a partir de tus dos distancias',
-          unit: 'UA',
-        },
-      ],
-    },
     'where-does-it-move-fastest': {
       title: '¿Dónde se mueve más rápido?',
-      body: 'La segunda ley de Kepler dice que una línea trazada de la estrella al planeta barre áreas iguales en tiempos iguales. Piensa en lo que eso obliga a hacer a la velocidad en distintos puntos de la órbita.',
+      body: 'La distancia del planeta excéntrico a su estrella cambia durante toda la órbita: se acerca mucho y se aleja mucho. Piensa en lo que eso hace a su velocidad y comprométete con una respuesta antes de medir nada.',
       prompt: 'El planeta excéntrico se mueve más rápido…',
       options: [
         'en su máximo acercamiento a la estrella',
@@ -151,7 +157,6 @@ export default {
         'Observa la lectura de velocidad cuando el planeta pasa junto a la estrella',
         'Obsérvala otra vez en el extremo lejano de la órbita',
         'Observa que el semieje mayor y la excentricidad apenas se mueven: la órbita es fija, solo cambia la posición sobre ella',
-        'Fíjate en las cuñas: finas y largas cerca de la estrella, anchas y cortas lejos, pero de igual área',
       ],
     },
     'equal-areas-however-you-slice': {
@@ -161,29 +166,26 @@ export default {
     },
     'fast-and-slow-in-numbers': {
       title: 'Rápido y lento, en números',
-      body: 'Ahora ponle números, y deja que la simulación encuentre los dos momentos por ti: atraparlos a mano mide tus reflejos, no la órbita.\n\nLa herramienta <strong>Pausar en un evento</strong> se ha abierto abajo con el <strong>Eccentric Orbiter</strong> y su estrella ya seleccionados. Pon el evento en <strong>[[periapsis|periastro]]</strong> y pulsa <strong>Armar</strong>. La simulación corre hasta que el planeta llega a su punto más cercano y se detiene ahí. Selecciona el planeta y anota la velocidad y la distancia. Luego ármala otra vez para el <strong>[[apoapsis|apoastro]]</strong> y haz lo mismo en el extremo lejano.\n\nLas dos cifras se miden <strong>respecto a la estrella</strong>: la lectura resta el movimiento propio de la estrella, así que la distancia y la velocidad describen la órbita y no la deriva del par por el encuadre. El cociente se calcula por ti.\n\n<strong>Lee las dos cifras que te da la herramienta.</strong> Informa de cuándo <em>fue</em> el evento y de cuánto más allá se <em>detuvo</em> de verdad la simulación. Son cosas distintas: el mundo se integra a pasos y el evento cae entre dos de ellos. La herramienta lo acota e interpola el instante, y luego para en el primer paso posterior; no rebobina el mundo hasta el evento, porque el reloj no es lo único indexado por el reloj. Así que la velocidad que lees es la del estado en pausa, un poco más allá del extremo, y el instante del evento es una estimación de cuándo ocurrió. En esta órbita la diferencia es pequeña, y lo honesto es saber que está ahí.',
+      body: 'Ahora ponle números, y deja que la simulación encuentre los dos momentos por ti: atraparlos a mano mide tus reflejos, no la órbita.\n\nLa herramienta <strong>Pausar en un evento</strong> de abajo tiene elegidos el <strong>Orbitador Excéntrico</strong> y su estrella y, con tu predicción comprometida, está armada para el <strong>[[periapsis|periastro]]</strong>: la simulación corre hasta que el planeta llega a su punto más cercano y se detiene ahí. Selecciona el planeta en la lista de objetos y pulsa <strong>Tomar la lectura</strong> junto a la velocidad y junto a la distancia. Después fija el evento en el <strong>[[apoapsis|apoastro]]</strong>, pulsa <strong>Armar</strong> y toma las mismas dos lecturas en el extremo lejano.\n\nAmbos números se miden <strong>respecto a la estrella</strong>: la lectura resta el movimiento propio de la estrella, así que la distancia y la velocidad describen la órbita y no la deriva del par por el sistema de referencia. El cociente te lo calculamos nosotros.\n\nLa herramienta informa de cuándo <em>ocurrió</em> el evento y de cuánto se pasó la simulación al <em>detenerse</em>. Son cosas distintas: el mundo se integra por pasos y el evento cae entre dos de ellos, así que la velocidad que lees es la de un instante poco posterior al extremo. Para esta órbita la diferencia es pequeña, y lo honesto es saber que existe.',
       tip: 'Si la herramienta se niega a armar y dice que la órbita es circular, no es un fallo. En una órbita perfectamente redonda no hay punto más cercano: la tasa radial es cero en todas partes y su signo lo decide el error de redondeo, así que una vigilancia dispararía en el primer paso y en todos los siguientes. La herramienta declina y lo dice. El Eccentric Orbiter es bastante excéntrico; el Circular Orbiter no lo es, y vale la pena armarlo una vez para ver el rechazo.',
       fields: [
         {
           label: 'Velocidad en el máximo acercamiento',
           unit: 'km/s',
+          misconceptions: [
+            { say: 'Esa lectura es del Orbitador Circular. Este paso trata del Orbitador Excéntrico: selecciónalo en la lista de objetos y toma la lectura otra vez.' },
+          ],
         },
-        {
-          label: 'Distancia a la estrella ahí',
-          unit: 'AU',
-        },
+        { label: 'Distancia a la estrella ahí', unit: 'AU' },
         {
           label: 'Velocidad en el punto más lejano',
           unit: 'km/s',
+          misconceptions: [
+            { say: 'Esa lectura es del Orbitador Circular. Este paso trata del Orbitador Excéntrico: selecciónalo en la lista de objetos y toma la lectura otra vez.' },
+          ],
         },
-        {
-          label: 'Distancia a la estrella ahí',
-          unit: 'AU',
-        },
-        {
-          label: 'Cociente (rápida ÷ lenta)',
-          unit: '',
-        },
+        { label: 'Distancia a la estrella ahí', unit: 'AU' },
+        { label: 'Cociente (rápida ÷ lenta)', unit: '' },
       ],
     },
     'why-the-speed-changes': {
@@ -193,6 +195,7 @@ export default {
         'En una o dos frases, explica por qué el planeta acelera al acercarse a la estrella. ¿Qué magnitud se mantiene constante, y por qué la gravedad no la cambia?',
       rubric:
         'El momento angular L = m·v·r·sen(ángulo) se conserva porque la gravedad es una fuerza central: actúa a lo largo de la línea que une los dos cuerpos y por tanto no ejerce par respecto a la estrella. Al caer r, v debe subir para mantener el producto constante. (La energía también se conserva, con la potencial convirtiéndose en cinética; cualquiera de los dos argumentos puntúa, pero el momento angular es el que da directamente la regla de las áreas iguales.)',
+      compare: 'El planeta es más rápido en su máximo acercamiento y más lento en su punto más lejano. Tus dos velocidades son la evidencia que debe explicar tu respuesta de abajo.',
     },
     'kepler-s-third-law': {
       title: 'La tercera ley de Kepler',
@@ -200,8 +203,8 @@ export default {
       tip: 'Usa la rueda para hacer zoom. Los planetas siguen visibles como puntos pequeños por lejos que vayas, y siguen siendo pulsables, pero solo se separan bien cuando amplías. Nada se mueve, así que tómate tu tiempo.',
     },
     'measure-four-planets': {
-      title: 'Mide cuatro planetas',
-      body: 'Pulsa cada planeta por turno y anota su semieje mayor y su periodo. Elige cuatro que estén bien repartidos, porque un rango estrecho de <em>a</em> no distingue una ley de potencias de una recta.\n\nHay sitio para los ocho planetas, y la recta ajustada mejora visiblemente conforme los añades. Mercurio, la Tierra, Júpiter y Saturno están al alcance con el zoom inicial; aleja la vista para Urano y Neptuno.\n\nSi los planetas exteriores aplastan a los interiores en un rincón de la gráfica, pulsa <strong>Ejes logarítmicos</strong>. En una gráfica log-log una ley de potencias es una recta sea cual sea su exponente, y todos los planetas reciben el mismo espacio.\n\nTus puntos aparecen en la gráfica según los escribes. Anota lo que informa la simulación, no lo que recuerdes del Sistema Solar real.',
+      title: 'Mide los planetas',
+      body: 'Selecciona un planeta y pulsa <strong>Añadir lectura</strong> para anotar juntos su semieje mayor y su periodo, con el nombre del planeta del que salieron. Elige al menos cinco, y elígelos bien repartidos, porque un rango estrecho de <em>a</em> no distingue una ley de potencias de una recta.\n\nHay sitio para los ocho planetas, y la recta ajustada mejora visiblemente conforme los añades. Mercurio, la Tierra, Júpiter y Saturno están al alcance con el zoom inicial; aleja la vista para Urano y Neptuno. Selecciona un punto de la gráfica, o una fila de la tabla, para rodear el planeta del que viene.\n\nSi los planetas exteriores aplastan a los interiores en un rincón de la gráfica, pulsa <strong>Ejes logarítmicos</strong>. En una gráfica log-log una ley de potencias es una recta sea cual sea su exponente, y todos los planetas reciben el mismo espacio.\n\nTus puntos aparecen en la gráfica según los añades. Anota lo que informa la simulación, no lo que recuerdes del Sistema Solar real.',
       fields: [
         { label: 'Planeta 1: nombre', unit: '' },
         { label: 'Planeta 1: a', unit: 'UA' },
@@ -239,6 +242,7 @@ export default {
         },
         note: 'En crudo, los puntos se curvan: una ley de potencias siempre lo hace. Pulsa <strong>Elevar <em>P</em> al cuadrado, <em>a</em> al cubo</strong> y deberían caer sobre una recta que pasa por el origen. Enderezar una curva eligiendo los ejes adecuados es la manera de identificar una ley de potencias, y la pendiente de esa recta es la constante de <em>P</em>² = <em>k</em>·<em>a</em>³.',
       },
+      importLabel: 'Añadir lectura',
     },
     'work-the-law-out-step': {
       title: 'Deduce la ley, paso a paso',
@@ -251,44 +255,36 @@ export default {
         { label: 'Paso 3: <em>P</em>² ÷ <em>a</em>³', unit: '' },
       ],
     },
-    'use-the-law': {
-      title: 'Usa la ley',
-      body: 'La prueba de verdad de una ley es si predice algo que no has medido.\n\nSupón que un noveno planeta orbitara esta misma estrella con un semieje mayor de exactamente 4 UA, entre Marte y Júpiter. Nadie ha medido su periodo, porque no existe. Calcúlalo de todos modos.\n\n<strong>Paso 1.</strong> Sabes que <em>P</em>² = <em>a</em>³, y sabes que <em>a</em> = 4 UA.\n\n<strong>Paso 2.</strong> Eleva la distancia al cubo: <em>a</em>³ = 4 × 4 × 4 = 64. Así que <em>P</em>² = 64.\n\n<strong>Paso 3.</strong> Tienes <em>P</em> al cuadrado, pero la pregunta pide <em>P</em>. Deshaz el cuadrado con la raíz cuadrada: <em>P</em> = √64.\n\n¿Cuánto es?',
-      prompt: 'Periodo orbital de un planeta a <em>a</em> = 4 UA',
-      unit: 'años',
-      because:
-        '<em>P</em> = 8 años. Ahora pruébalo con un planeta que sí mediste: Júpiter está a 5,204 UA, así que <em>a</em>³ = 141,0 y <em>P</em> = √141,0 = 11,87 años. La tabla dice 11,86. Acabas de predecir el año de un planeta real a partir de nada más que su distancia.',
-      misconceptions: [
-        {
-          say: 'Eso es <em>a</em>³. La ley dice <em>P</em>² = <em>a</em>³, así que el periodo es la raíz cuadrada de 64, no 64.',
-        },
-        {
-          say: 'Eso es √<em>a</em>. El cubo va primero: calcula <em>a</em>³ = 64 y después su raíz cuadrada.',
-        },
+    'pick-a-distance': {
+      title: 'Elige una órbita que nadie ha medido',
+      body: 'La prueba de verdad de una ley es si predice algo que no has medido. Elige una distancia a la estrella, en UA, para un noveno planeta que no existe. Elige una que caiga en un hueco entre dos de los planetas que mediste, no encima de uno de ellos, para que la predicción signifique algo.\n\nNadie ha medido su periodo. Los dos pasos siguientes te piden que lo estimes a partir de tu gráfica y que después compruebes la estimación.',
+      fields: [
+        { label: 'Distancia del noveno planeta a la estrella', unit: 'UA' },
       ],
-      hints: {
-        concept:
-          'La tercera ley de Kepler relaciona el tamaño de una órbita con lo que tarda, y con nada más. En estas unidades — años y UA, alrededor de esta estrella — la relación es todo lo simple que llega a ser.',
-        method:
-          '<em>P</em>² = <em>a</em>³. Sustituye <em>a</em> = 4, calcula el lado derecho y después deshaz el cuadrado.',
-      },
-      worked:
-        '<em>a</em> = 4, así que <em>a</em>³ = 64. <em>P</em>² = 64, luego <em>P</em> = √64 = 8 años. La comprobación de que es de verdad una ley: Júpiter está a 5,204 UA, lo que da <em>a</em>³ = 141,0 y <em>P</em> = 11,87 años, frente a los 11,86 medidos.',
-      feedback: {
-        close:
-          'Cerca, pero fuera de la tolerancia. Revisa por separado el cubo y la raíz cuadrada.',
-        'wrong-unit':
-          'Eso parece días. Con la distancia en UA la ley da años, así que convierte antes de responder.',
-        'wrong-order-of-magnitude':
-          'Te pasas en una potencia de diez. Eleva primero la distancia al cubo y luego saca la raíz cuadrada.',
-        off: 'Revisa el orden: eleva <em>a</em> al cubo para obtener <em>P</em> al cuadrado, y solo después deshaz el cuadrado.',
-        correct:
-          'Para poner a prueba una ley así, aplícala a un planeta cuyo año conozcas y comprueba que coincide.',
-      },
+    },
+    'estimate-the-year': {
+      title: 'Estima su año',
+      body: 'Mira tu gráfica y tu tabla. Estima el periodo orbital del planeta a la distancia que elegiste, en años. No calcules todavía una fórmula: léelo en el patrón y comprométete con un número. Queda sin marcar hasta el paso siguiente.',
+      prompt: 'Periodo del noveno planeta',
+    },
+    'check-the-estimate': {
+      title: 'Compruébala con un planeta real',
+      body: 'Comprueba la estimación con el planeta cuya órbita esté más cerca de la que elegiste. Selecciona ese planeta y pulsa <strong>Tomar la lectura</strong> junto a su distancia y junto a su periodo.\n\nDespués usa la tercera ley de Kepler para calcular el periodo a tu distancia, escalando desde ese planeta, y ponlo en la última casilla. ¿Cae cerca de tu estimación?',
+      fields: [
+        { label: 'Planeta medido más cercano: distancia', unit: 'UA' },
+        { label: 'Planeta medido más cercano: periodo', unit: 'años' },
+        { label: 'Tu distancia como múltiplo de la de ese planeta', unit: '' },
+        { label: 'Periodo a tu distancia, según la ley', unit: 'años' },
+      ],
+    },
+    'compare-the-estimate': {
+      compare: 'La ley da un periodo solo a partir de la distancia. Donde tu estimación y el número de la ley difieren, la curva de la que leíste la estimación era la menos exacta de las dos.',
+      title: 'Tu estimación y la ley',
+      body: 'Arriba están tu estimación, el periodo que da la ley a tu distancia y el planeta desde el que lo escalaste. Una ley es más que una curva que pasa por tus puntos: dice cuál tiene que ser el periodo a una distancia que nadie ha medido, y un planeta puesto ahí estaría obligado a cumplirla.\n\nSi tu estimación se desvió, fíjate en de dónde salió: de leer a ojo una gráfica curva. Enderezar la gráfica, o usar el exponente, es para lo que sirve la ley.',
     },
     'what-the-constant-depends-on': {
       title: 'De qué depende la constante',
-      body: 'Tus cuatro planetas tenían masas descabelladamente distintas: desde un pequeño mundo rocoso hasta un gigante gaseoso cientos de veces más pesado, y todos dieron el mismo <em>P</em>²/<em>a</em>³.',
+      body: 'Tus planetas tenían masas descabelladamente distintas, desde un pequeño mundo rocoso hasta un gigante gaseoso cientos de veces más pesado, y todos dieron el mismo <em>P</em>²/<em>a</em>³. ¿De qué depende entonces esa constante?\n\nAquí hay un planeta en una órbita circular a 1 UA. Pulsa <strong>Ejecutar A</strong> y lee su periodo; después <strong>Cambiar masa de la estrella</strong> y pulsa <strong>Ejecutar B</strong>: el mismo planeta a la misma distancia, alrededor de una estrella de doble masa. Las dos ejecuciones quedan en la tabla.',
       prompt:
         'La constante de <em>P</em>² = <em>k</em>·<em>a</em>³ depende de…',
       options: [
@@ -299,6 +295,7 @@ export default {
       ],
       because:
         'Depende de la masa central: Newton demostró que <em>k</em> = 4π<sup>2</sup>/<em>G</em>(<em>M</em>+<em>m</em>) y, dado que <em>M</em> ≫ <em>m</em> para un planeta, la masa del propio planeta se cancela. Leído al revés, esta es una manera de pesar cosas que nunca podrás visitar. Mide un periodo y una distancia, y la masa sale sola. Así se pesó el Sol por primera vez, así se pesan hoy las estrellas anfitrionas de exoplanetas, y así se pesó el agujero negro de cuatro millones de masas solares del centro de la Vía Láctea, siguiendo la estrella S2 a lo largo de una órbita de dieciséis años.',
+      variation: { label: 'masa de la estrella' },
     },
     'what-newton-added': {
       title: 'Lo que añadió Newton',
@@ -354,6 +351,8 @@ export default {
       feedback: {
         close:
           'Cerca. Revisa por separado el cubo y el cuadrado, y el redondeo de cada uno.',
+        'wrong-unit':
+          'La respuesta se pasa por un factor de 365, los días de un año. Pon el periodo en años, no en días.',
         'wrong-order-of-magnitude':
           'Te pasas en potencias de diez. Asegúrate de que el periodo esté en años, no en días: la cifra en días es mucho mayor que el mismo tiempo en años.',
         off: 'Hazlo en tres partes: <em>a</em> al cubo, luego <em>P</em> al cuadrado, y divide la primera entre la segunda.',

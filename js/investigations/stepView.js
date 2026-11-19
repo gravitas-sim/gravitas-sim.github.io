@@ -89,6 +89,26 @@ export function runsModule(m) {
   return (slots.runs = m);
 }
 
+/** Fetch the run and reveal code with the step that needs it: offline, the lesson opens. */
+export function fetchSeams(step, again) {
+  const get = (needed, load, use) =>
+    needed &&
+    load().then(
+      m => (use(m), again()),
+      () => {}
+    );
+  get(
+    step.variation && !slots.runs,
+    () => import('../lesson/runs.js'),
+    runsModule
+  );
+  get(
+    (step.evidence || step.kind === 'estimate') && !slots.reveal,
+    () => import('./reveal.js'),
+    revealModule
+  );
+}
+
 /** Install the field slot's module with the engine functions it needs. */
 export function fieldModule(m) {
   m.setKit({
@@ -626,6 +646,7 @@ function judgeReadings(taken) {
 }
 
 const setAreaSweepWedges = command('setAreaSweepWedges');
+const showAreaSweepFor = command('showAreaSweepFor');
 
 /**
  * Wire the step's answer controls: choices, written and numeric answers, hints,
@@ -642,6 +663,13 @@ export function bindStepInputs(h) {
   bound = h;
 
   slots.reveal?.bind(h, els.body);
+  // The orbit geometry panel belongs to the step that has the object card:
+  // where a lesson withholds the card again, the panel goes with it.
+  if (
+    state.orbitGeometry?.active &&
+    document.getElementById('objectInspector')?.style.display === 'none'
+  )
+    import('../orbitGeometryOverlay.js').then(m => m.setOrbitGeometry(false));
   els.body.querySelector('[data-change]')?.addEventListener('click', () => {
     delete h.responses()[id];
     h.save();
@@ -766,6 +794,10 @@ export function bindStepInputs(h) {
     const apply = () => {
       const n = wedgeSlider.valueAsNumber;
       out.textContent = String(n);
+      // A lesson that keeps the wedges off until this step names the body.
+      const of = h.currentStep().wedgeOf;
+      if (of && !state.areaSweepOverlay.active)
+        showAreaSweepFor(h.probeContext().find(of));
       setAreaSweepWedges(n);
       const ov = state.areaSweepOverlay;
       if (readout && ov?.wedgeTime) {

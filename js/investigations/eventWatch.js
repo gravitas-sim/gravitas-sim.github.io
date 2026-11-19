@@ -111,7 +111,10 @@ export function resolveByName(bodies, name) {
  * @param {object} [opts] - { onFired }, called with our event when it fires
  * @returns {Promise<{ok: boolean, reason?: string}>} Whether it could be shown
  */
-export async function openToolFor(spec, { onFired = null } = {}) {
+export async function openToolFor(
+  spec,
+  { onFired = null, quiet = false } = {}
+) {
   const { events, panel, physics } = await ensureLoaded();
 
   // A watch armed before the step opened is the reader's; armForLesson refuses it.
@@ -122,6 +125,7 @@ export async function openToolFor(spec, { onFired = null } = {}) {
     preexisting,
     world: physics.getWorldGeneration(),
     onFired,
+    quiet,
   };
 
   unsubscribe?.();
@@ -160,6 +164,8 @@ export async function openToolFor(spec, { onFired = null } = {}) {
   panel.setPauseAtEventEnabled(true);
   // Via the panel's API, so only the panel knows its markup.
   const shown = panel.presetSelection?.(spec);
+  // `pauseAt.quiet`: the same watch, its panel out of the scene's way.
+  if (quiet) panel.hidePauseAtEventPanel?.();
   return shown === false ? { ok: false, reason: 'cannotSelect' } : { ok: true };
 }
 
@@ -223,6 +229,7 @@ export function release({ keepEvent = false } = {}) {
   generation++;
   // A watch that pre-dated the activity was never ours.
   const wasOurs = Boolean(activity && activity.armed && !activity.preexisting);
+  const hidden = Boolean(activity?.quiet);
   activity = null;
   unsubscribe?.();
   unsubscribe = null;
@@ -230,6 +237,9 @@ export function release({ keepEvent = false } = {}) {
     ourEvent = null;
     state = WATCH.IDLE;
   }
+  // A panel this step hid closes with it.
+  if (hidden && loaded)
+    loaded.then(({ panel }) => panel.setPauseAtEventEnabled(false));
   if (wasOurs && loaded) {
     // Fire-and-forget: release() runs in synchronous teardown paths.
     loaded.then(({ events }) => {

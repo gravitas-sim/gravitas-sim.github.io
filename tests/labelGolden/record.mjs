@@ -280,6 +280,7 @@ const PROFILES = [
       baseline: 1.000123,
       seen: 3,
       last: { seq: 3, bottom: 0.984123, mid: 6.2832, depth: 0.016 },
+      series: () => ({ x: [5.1234, 6.2832, 7.4321], y: [1, 0.984, 1] }),
       log: [
         { seq: 1, mid: 0.7854 },
         { seq: 2, mid: 3.6126 },

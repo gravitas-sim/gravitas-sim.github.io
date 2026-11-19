@@ -3,14 +3,31 @@ export default {
   steps: [
     {
       title: '¿Qué tan seguro es el total?',
-      body: 'Tus dos medidas fueron lecturas, no valores exactos: los anillos son algo más anchos que una línea, y un cronómetro lo arranca y lo para una persona. Di cuánto podría desviarse cada una.\n\nLa masa es a³ / P², así que un error fraccionario en a cuenta tres veces y uno en P dos, y los errores independientes se suman en cuadratura: σ<sub>M</sub>/M = √((3σ<sub>a</sub>/a)² + (2σ<sub>P</sub>/P)²). El tamaño de la órbita y el periodo son los que anotaste en el paso de pesar.',
+      body: 'Tu periodo salió de un cronómetro que arranca y para una persona. Cronometra una vuelta otra vez las veces que decidas (al menos dos) y toma cada tiempo: la dispersión de tus propios tiempos (su desviación típica) es la barra de error de una vuelta cronometrada. El tamaño de la órbita se lee del panel, así que su barra de error es la finura con que lo imprime. Di cuánto podría desviarse cada una.\n\nLuego la página mueve una lectura cada vez con las que ya tomaste, <em>a</em> por su barra de error y <em>P</em> por la suya, y recalcula la masa <em>a</em>³ / <em>P</em>²: una comparación calculada, no una nueva ejecución de la escena.',
+      tool: {
+        title: 'Cronometra una vuelta otra vez',
+        note: 'Pulsa Marcar, espera a que la Estrella A vuelva a la línea de puntos, y pulsa Parar.',
+      },
       fields: [
-        { label: 'Cuánto podría desviarse a' },
-        { label: 'Cuánto podría desviarse P' },
-        { label: 'Tamaño de la órbita a' },
-        { label: 'Periodo P' },
-        { label: 'Masa total' },
-        { label: 'Su incertidumbre' },
+        { label: 'Tiempo 1, una vuelta', unit: 'años' },
+        { label: 'Tiempo 2, una vuelta', unit: 'años' },
+        { label: 'Tiempo 3, una vuelta', unit: 'años' },
+        { label: 'Tiempos tomados' },
+        { label: 'Dispersión de un tiempo', unit: 'años' },
+        {
+          label: 'Cuánto podría desviarse P',
+          unit: 'años',
+          hint: 'de tus propios tiempos',
+        },
+        {
+          label: 'Cuánto podría desviarse a',
+          unit: 'UA',
+          hint: 'de la precisión del panel',
+        },
+        { label: 'Cambio de la masa solo por a', unit: 'M☉' },
+        { label: 'Cambio de la masa solo por P', unit: 'M☉' },
+        { label: 'Masa total', unit: 'M☉' },
+        { label: 'Su incertidumbre', unit: 'M☉' },
       ],
     },
     {
@@ -22,24 +39,24 @@ export default {
         concept: 'Una masa es un valor y lo bien que se conoce.',
         method: 'Copia el total y su incertidumbre del paso anterior.',
       },
-      because: 'Cuatro masas solares, con incertidumbre de media.',
+      because:
+        'Unas cuatro masas solares, con la incertidumbre que dieron tus propios tiempos.',
     },
     {
       title: '¿Qué medida te limita?',
-      body: 'Di que a = 4,0 ± 0,1 UA y P = 4,0 ± 0,2 años. La primera es incierta en un 2,5 % y la segunda en un 5 %. La masa va como a³ / P².',
-      prompt: '¿Cuál contribuye más a la incertidumbre de la masa?',
-      options: [
-        'el tamaño de la órbita, porque se eleva al cubo',
-        'el periodo, porque se eleva al cuadrado y es el menos seguro de los dos',
-        'contribuyen igual, porque las dos están medidas',
-        'ninguna: la masa es exacta si la ley es exacta',
+      body: 'En el paso anterior moviste una lectura cada vez por su barra de error. Lee cuánto desplazó cada movimiento tu masa, y di qué lectura la limita: la que más la mueve.',
+      fields: [
+        { label: 'Cambio de la masa solo por a', unit: 'M☉' },
+        { label: 'Cambio de la masa solo por P', unit: 'M☉' },
+        {
+          label: 'Qué lectura limita la masa, a o P',
+          hint: 'a o P',
+        },
       ],
-      because:
-        'El tamaño de la órbita contribuye 3 × 2,5 % = 7,5 % y el periodo 2 × 5 % = 10 %. La potencia importa, pero también lo bien que se conoce cada una; aquí gana el periodo, así que medir con más cuidado el cronómetro, por ejemplo cronometrando varias vueltas y dividiendo, mejora más la masa que medir con más cuidado la regla.',
     },
     {
       title: 'Pesa una estrella, con barra de error',
-      body: 'El total es 4,0 ± 0,5 masas solares. El punto de equilibrio queda de modo que la Estrella A, la más pesada, lleva 0,75 del total, conocido con ±0,02. Una parte de un total es un producto, así que las incertidumbres fraccionarias se suman en cuadratura: σ<sub>m</sub>/m = √((σ<sub>M</sub>/M)² + (σ<sub>f</sub>/f)²).',
+      body: 'Toma el total como 4,0 ± 0,5 masas solares, el tamaño de barra que da una vuelta cronometrada a mano. El punto de equilibrio queda de modo que la Estrella A, la más pesada, lleva 0,75 del total, conocido con ±0,02. Una parte de un total es un producto, así que las incertidumbres fraccionarias se suman en cuadratura: σ<sub>m</sub>/m = √((σ<sub>M</sub>/M)² + (σ<sub>f</sub>/f)²).',
       prompt: 'Masa de la Estrella A, con su incertidumbre',
       placeholder: 'un valor y, luego, ± su incertidumbre',
       hints: {

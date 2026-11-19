@@ -71,9 +71,9 @@ test.describe('a ladder of hints, one at a time', () => {
 
 test.describe('feedback says which check to make, not the answer', () => {
   test('a number in the wrong unit is told so', async ({ page, app }) => {
-    await openStep(app, page, 'keplers-laws', 16);
-    // 8 years is 2922 days.
-    await page.locator('[data-numeric]').fill('2922');
+    await openStep(app, page, 'keplers-laws', 24);
+    // 0.91 solar masses, with the period read in days where years were wanted.
+    await page.locator('[data-numeric]').fill('332');
     await page.locator('[data-check-numeric]').click();
     await expect(page.locator('.inv-feedback')).toHaveClass(/is-wrong/);
     await expect(page.locator('.inv-class')).toContainText(/days/i);
@@ -84,18 +84,19 @@ test.describe('feedback says which check to make, not the answer', () => {
     page,
     app,
   }) => {
-    await openStep(app, page, 'keplers-laws', 16);
-    await page.locator('[data-numeric]').fill('80');
+    await openStep(app, page, 'keplers-laws', 24);
+    await page.locator('[data-numeric]').fill('9.1');
     await page.locator('[data-check-numeric]').click();
-    await expect(page.locator('.inv-class')).toContainText(/power of ten/i);
+    await expect(page.locator('.inv-class')).toContainText(/powers of ten/i);
   });
 
   test('a named mistake still wins over the class', async ({ page, app }) => {
-    await openStep(app, page, 'keplers-laws', 16);
-    await page.locator('[data-numeric]').fill('64');
+    await openStep(app, page, 'keplers-laws', 24);
+    // The mass the formula gives when the period is put in as 45 days.
+    await page.locator('[data-numeric]').fill('0.0000068');
     await page.locator('[data-check-numeric]').click();
     await expect(page.locator('.inv-misconception')).toContainText(
-      /square root/i
+      /period has to be in years/i
     );
   });
 

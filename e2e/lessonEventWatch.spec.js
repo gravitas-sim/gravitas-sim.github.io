@@ -3,8 +3,10 @@
 // -----------------------------------------------------------------------------
 // The Kepler lesson used to say "press Space and catch the planet at each end
 // of its orbit", which measures reaction time: on a fast machine periapsis goes
-// past in two frames. Step 11 now opens the pause-at-event tool with the right
-// bodies chosen and asks the reader to arm it themselves.
+// past in two frames. The step opens the pause-at-event tool with the right
+// bodies chosen and the periapsis watch armed for the reader (`pauseAt.auto`:
+// a setting, not an answer); the reader arms the second event, apoapsis,
+// themselves.
 //
 // Driven through the real controls - the panel's own selects and its Arm button
 // - because the thing being tested is that a student can do this, and a test
@@ -56,6 +58,15 @@ async function openCaptureStep(page, app) {
   await expect(page.locator('.inv-step-title')).toContainText('Fast and slow');
 }
 
+/**
+ * Let the clock run, as it does in a walk: the step before this one ("watch it
+ * happen") runs the scene, while a resume opens the lesson paused at its start.
+ */
+const runClock = page =>
+  page.evaluate(async () => {
+    (await import('/js/appState.js')).state.paused = false;
+  });
+
 /** The tool's state, read from the module rather than from pixels. */
 const toolState = page =>
   page.evaluate(async () => {
@@ -77,8 +88,8 @@ const toolState = page =>
     };
   });
 
-test.describe('the step opens the tool ready to arm', () => {
-  test('the tool is on screen with the right bodies and nothing armed', async ({
+test.describe('the step opens the tool with periapsis armed', () => {
+  test('the tool is on screen with the right bodies and the periapsis watch armed', async ({
     page,
     app,
   }) => {
@@ -100,11 +111,15 @@ test.describe('the step opens the tool ready to arm', () => {
     expect(selected.body).toContain('Eccentric');
     expect(selected.primary).toContain('Star');
 
-    // Selecting is not arming. The lesson must not answer its own question.
-    const state = await toolState(page);
-    expect(state.armed).toBe(null);
-    expect(state.lessonState).toBe('idle');
-    await expect(page.locator('#pauseEventArm')).toBeEnabled();
+    // The step arms the first event for the reader: it sets the experiment up
+    // and says nothing of when it will fire, so it does not answer the
+    // prediction. The second event is the reader's to arm.
+    await expect
+      .poll(async () => (await toolState(page)).armed?.kind)
+      .toBe('periapsis');
+    expect((await toolState(page)).lessonState).toBe('armed');
+    await expect(page.locator('#pauseEventArm')).toBeDisabled();
+    await expect(page.locator('#pauseEventDisarm')).toBeEnabled();
   });
 
   test('the step no longer tells anybody to press Space', async ({
@@ -126,7 +141,7 @@ test.describe('arming it, twice', () => {
     app,
   }) => {
     await openCaptureStep(page, app);
-    await page.locator('#pauseEventArm').click();
+    await runClock(page);
     await expect
       .poll(async () => (await toolState(page)).armed !== null)
       .toBe(true);
@@ -168,8 +183,8 @@ test.describe('arming it, twice', () => {
   }) => {
     await openCaptureStep(page, app);
 
-    // First capture.
-    await page.locator('#pauseEventArm').click();
+    // First capture: the step armed it.
+    await runClock(page);
     await expect
       .poll(async () => (await toolState(page)).fired?.kind, {
         timeout: 120_000,
@@ -209,6 +224,9 @@ test.describe('arming it, twice', () => {
     // The refusal path itself is covered where the eccentricity can be
     // controlled: tests/pauseAtEvent.test.js exercises canArm directly.
     await openCaptureStep(page, app);
+    // The step armed the Eccentric Orbiter; take that watch down first, as a
+    // reader would to try the other body.
+    await page.locator('#pauseEventDisarm').click();
     const picked = await page.evaluate(() => {
       const select = document.getElementById('pauseEventBody');
       const option = [...select.options].find(o =>
@@ -238,7 +256,6 @@ test.describe('arming it, twice', () => {
 test.describe('leaving an armed activity', () => {
   test('advancing a step releases the lesson watch', async ({ page, app }) => {
     await openCaptureStep(page, app);
-    await page.locator('#pauseEventArm').click();
     await expect
       .poll(async () => (await toolState(page)).armed !== null)
       .toBe(true);
@@ -254,7 +271,6 @@ test.describe('leaving an armed activity', () => {
 
   test('closing the lesson releases it too', async ({ page, app }) => {
     await openCaptureStep(page, app);
-    await page.locator('#pauseEventArm').click();
     await expect
       .poll(async () => (await toolState(page)).armed !== null)
       .toBe(true);

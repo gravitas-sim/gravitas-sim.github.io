@@ -11,7 +11,7 @@
       "centralExperimentId": "ce.keplers-laws",
       "object": "eccentric",
       "control": "the canvas: click a body, then Run and the event watch",
-      "quantity": "semi-major axis a and period P for four planets",
+      "quantity": "the speeds at the nearest and farthest points of an orbit, the distance between the star and the empty focus, and semi-major axis a and period P for five or more planets",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": [
@@ -20,7 +20,7 @@
         "why-the-speed-changes"
       ],
       "evidenceFrom": "engine",
-      "decision": "unreviewed",
+      "decision": "Which two points of the orbit geometry panel to measure between, when to take the speed at each end of the orbit, which five or more planets to measure across the range, which distance to predict a period for and which planet to scale from, and when the uncertainty is small enough to stop taking readings.",
       "leakFree": false
     },
     "retrograde-motion": {
@@ -39,16 +39,16 @@
       "centralExperimentId": "ce.transit-photometry",
       "object": "planet",
       "control": "depth-size/rp",
-      "quantity": "transit depth, and the planet radius it implies",
+      "quantity": "transit depth, from the mean of a stretch out of transit and a stretch from the floor of the dip, and the planet radius it implies",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": [
-        "what-will-the-brightness-do",
-        "measure-the-dip",
+        "estimate-the-dip",
+        "choose-the-two-stretches",
         "what-the-method-misses"
       ],
       "evidenceFrom": "engine",
-      "decision": "unreviewed",
+      "decision": "Which stretch of the recorded light curve stands for out of transit and which for in transit, on a curve held still after one transit; a stretch that includes part of a dip or the sloping sides of one gives a different depth and is told so.",
       "leakFree": true
     },
     "orbital-energy": {
@@ -83,7 +83,7 @@
       ],
       "evidenceFrom": "engine",
       "decision": "unreviewed",
-      "leakFree": false
+      "leakFree": true
     },
     "black-holes": {
       "centralExperimentId": "ce.black-holes",

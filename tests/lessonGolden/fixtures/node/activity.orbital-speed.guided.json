@@ -15,18 +15,18 @@
    "change-the-shape",
    "where-does-it-move-fastest",
    "watch-it-happen",
-   "equal-areas-however-you-slice",
    "fast-and-slow-in-numbers",
-   "why-the-speed-changes"
+   "why-the-speed-changes",
+   "equal-areas-however-you-slice"
   ],
   "f": [
    "ac4f2f95",
    "589c83e1",
    "0086f3c7",
    "5fd14104",
-   "086efbfc",
    "c4e6d0fa",
-   "36370368"
+   "36370368",
+   "086efbfc"
   ],
   "c": "2026-01-02",
   "p": [
@@ -39,9 +39,9 @@
   "change-the-shape",
   "where-does-it-move-fastest",
   "watch-it-happen",
-  "equal-areas-however-you-slice",
   "fast-and-slow-in-numbers",
-  "why-the-speed-changes"
+  "why-the-speed-changes",
+  "equal-areas-however-you-slice"
  ],
  "added": [
   "eight-minutes-of-arc"

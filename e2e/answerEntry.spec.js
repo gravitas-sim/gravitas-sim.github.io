@@ -38,29 +38,28 @@ test.describe('what the box says back', () => {
     // A placeholder is visible before the student has thought about the
     // question, so one showing the expected measurement gives it away to
     // everyone. author:check enforces this; here it is on screen.
-    await openStep(app, page, 'keplers-laws', 16);
+    await openStep(app, page, 'keplers-laws', 24);
     const text = await answer(page).getAttribute('placeholder');
-    expect(text).toMatch(/years/);
-    expect(text).not.toMatch(/\d/);
+    expect(text ?? '').not.toMatch(/\d/);
   });
 
   test('an unreadable answer is not a wrong one', async ({ page, app }) => {
-    await openStep(app, page, 'keplers-laws', 16);
-    await answer(page).fill('8 AU');
+    await openStep(app, page, 'keplers-laws', 24);
+    await answer(page).fill('0.91 AU');
     await check(page).click();
 
     await expect(feedback(page)).toHaveClass(/is-unreadable/);
     await expect(feedback(page)).not.toHaveClass(/is-wrong/);
     // And it says what is wrong with it, rather than just refusing.
     await expect(feedback(page)).toContainText(/unit of length/i);
-    await expect(feedback(page)).toContainText(/should be a time/i);
+    await expect(feedback(page)).toContainText(/should be a mass/i);
   });
 
   test('a blank is refused rather than graded as zero', async ({
     page,
     app,
   }) => {
-    await openStep(app, page, 'keplers-laws', 16);
+    await openStep(app, page, 'keplers-laws', 24);
     await answer(page).fill('   ');
     await check(page).click();
     await expect(feedback(page)).toHaveClass(/is-unreadable/);
@@ -71,8 +70,8 @@ test.describe('what the box says back', () => {
     page,
     app,
   }) => {
-    await openStep(app, page, 'keplers-laws', 16);
-    await answer(page).fill('2922 days');
+    await openStep(app, page, 'keplers-laws', 24);
+    await answer(page).fill('1.81e30 kg');
     await check(page).click();
     await expect(feedback(page)).toHaveClass(/is-right/);
     await expect(feedback(page)).toContainText(/read as/i);
@@ -82,14 +81,14 @@ test.describe('what the box says back', () => {
     page,
     app,
   }) => {
-    await openStep(app, page, 'keplers-laws', 16);
+    await openStep(app, page, 'keplers-laws', 24);
 
-    // a³ without the square root: the specific slip this question invites.
-    await answer(page).fill('64');
+    // The period taken in days: the specific slip this question invites.
+    await answer(page).fill('0.0000068');
     await check(page).click();
     await expect(feedback(page)).toHaveClass(/is-wrong/);
     await expect(page.locator('.inv-misconception')).toContainText(
-      /square root/i
+      /period has to be in years/i
     );
 
     // A number that is merely wrong gets no story invented about it.
@@ -102,7 +101,7 @@ test.describe('what the box says back', () => {
 
 test.describe('hints arrive one at a time, and only when asked', () => {
   test('nothing is shown before the first press', async ({ page, app }) => {
-    await openStep(app, page, 'keplers-laws', 16);
+    await openStep(app, page, 'keplers-laws', 24);
     await expect(page.locator('.inv-hint')).toHaveCount(0);
     await expect(page.locator('[data-hint]')).toBeVisible();
   });
@@ -111,13 +110,11 @@ test.describe('hints arrive one at a time, and only when asked', () => {
     page,
     app,
   }) => {
-    await openStep(app, page, 'keplers-laws', 16);
+    await openStep(app, page, 'keplers-laws', 24);
 
     await page.locator('[data-hint]').click();
     await expect(page.locator('.inv-hint')).toHaveCount(1);
-    await expect(page.locator('.inv-hint').first()).toContainText(
-      /Think about/i
-    );
+    await expect(page.locator('.inv-hint').first()).toContainText(/Newton/i);
     // The worked answer is not among what has been shown.
     await expect(page.locator('.inv-hint.is-worked')).toHaveCount(0);
 
@@ -137,7 +134,7 @@ test.describe('hints arrive one at a time, and only when asked', () => {
     page,
     app,
   }) => {
-    await openStep(app, page, 'keplers-laws', 16);
+    await openStep(app, page, 'keplers-laws', 24);
     await page.locator('[data-hint]').click();
     await expect(page.locator('.inv-hint-tally')).toContainText('1 hint');
 
@@ -148,7 +145,7 @@ test.describe('hints arrive one at a time, and only when asked', () => {
     );
 
     // And the answer still grades on its merits.
-    await answer(page).fill('8');
+    await answer(page).fill('0.91');
     await check(page).click();
     await expect(feedback(page)).toHaveClass(/is-right/);
   });
@@ -187,10 +184,10 @@ test.describe('hints arrive one at a time, and only when asked', () => {
     await expect(answer(page)).toBeVisible();
 
     // A first attempt, then a revision after being told it is wrong.
-    await answer(page).fill('64');
+    await answer(page).fill('30');
     await check(page).click();
     await expect(feedback(page)).toHaveClass(/is-wrong/);
-    await answer(page).fill('8');
+    await answer(page).fill('0.91');
     await check(page).click();
     await expect(feedback(page)).toHaveClass(/is-right/);
 
@@ -201,13 +198,13 @@ test.describe('hints arrive one at a time, and only when asked', () => {
         first: data.responses?.[`keplers-laws:${sid}`.concat(':first')],
         current: data.responses?.[`keplers-laws:${sid}`],
       };
-    }, 'use-the-law');
+    }, 'weighing-another-star');
 
     // The number they committed to before any help, kept beside the one they
     // arrived at. A report that only holds the second describes a different
     // moment from the one being assessed.
-    expect(stored.first).toBe('64');
-    expect(stored.current).toBe('8');
+    expect(stored.first).toBe('30');
+    expect(stored.current).toBe('0.91');
   });
 });
 
@@ -254,7 +251,7 @@ test.describe('a saved answer comes back exactly as it was written', () => {
     await app.boot();
     await storeProgress(page, LESSON, {
       visited: [],
-      stepSid: 'use-the-law',
+      stepSid: 'weighing-another-star',
       startedAt: new Date().toISOString(),
     });
     await openAsStudent(page);
@@ -271,7 +268,7 @@ test.describe('a saved answer comes back exactly as it was written', () => {
       key => JSON.parse(localStorage.getItem(key)).responses,
       STORAGE
     );
-    expect(stored[`${LESSON}:use-the-law`]).toBe(INJECTED);
+    expect(stored[`${LESSON}:weighing-another-star`]).toBe(INJECTED);
 
     // And from storage alone, in a fresh page.
     await app.boot();

@@ -389,6 +389,13 @@ export function setPauseAtEventEnabled(on) {
   layoutObservationPanels();
 }
 
+/** Hide the panel and keep the watch running (a lesson's `pauseAt.quiet`). */
+export function hidePauseAtEventPanel() {
+  const e = cacheElements();
+  if (e.container) e.container.style.display = 'none';
+  layoutObservationPanels();
+}
+
 /** What the watcher has to say. */
 function handleEvent(payload) {
   if (payload.type === 'fired') {

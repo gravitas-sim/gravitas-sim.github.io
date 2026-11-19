@@ -85,7 +85,6 @@ export const ES_DEFERRED = {
     'La velocidad respecto del planeta cambió un {residual}% en este encuentro, y en la versión aislada no cambia nada en absoluto. Ese residuo es la aproximación: el planeta acelera, así que su sistema no es inercial, y la estrella también tira de la nave. Las lecturas se tomaron a {gate} AU, frente a un radio de Hill de {hill} AU: la distancia más allá de la cual lo que la nave orbita de verdad es la estrella y no el planeta. Esto es la aproximación de cónicas empalmadas, y es la que usan de verdad quienes diseñan misiones.',
   'assist.hint':
     'Las dos columnas describen el mismo encuentro en los mismos dos instantes. La de la izquierda no puede cambiar, porque en el sistema del propio planeta este no realiza trabajo sobre la nave. La de la derecha cambia porque se ha rotado un vector de longitud fija y luego se ha sumado a la velocidad del planeta. No se crea nada: el planeta se frena exactamente en el momento lineal que gana la nave.',
-  // --- La comparacion guardada y el barrido opcional -----------------------
   'assist.exp.cancel': 'Detener',
   'assist.exp.keep': 'Guardar en el cuaderno',
   'assist.exp.running': 'Paso {done} de {total}\u2026',
@@ -151,7 +150,6 @@ export const ES_DEFERRED = {
     'Ninguna de las dos respuestas es una regla. Girar la velocidad relativa solo ayuda mientras se la lleva hacia la direccion en que se mueve el planeta; girala mas alla y la ganancia vuelve a caer. En este laboratorio ese giro optimo ronda los 131\u00b0 y el paso mas cercano que el planeta sobrevive alcanza unos 97\u00b0, asi que el barrido nunca llega al otro lado de la loma.',
   'assist.sweep.caveat.held':
     'Fijo en todos los pasos: velocidad de aproximacion {vinf} km/s, paso de integracion {step}, semilla {seed}. Solo cambio el parametro de impacto.',
-  // --- El par controlado de la leccion del caos ----------------------------
   'bench.chaos.title': 'El par controlado de la investigación',
   'bench.chaos.hint':
     'Prepara la comparacion y ejecuta los dos brazos sobre el mismo tramo de tiempo simulado: capturar, Ejecucion A, volver al inicio, el empujon, Ejecucion B. Todo lo que hace es lo que habrias hecho a mano, en el mismo orden.',
@@ -195,7 +193,6 @@ export const ES_DEFERRED = {
     'NO RESUELTO: los tiempos de e-plegado abarcan un {spread}%, mas de lo que el refinamiento deberia mover una respuesta fisica. El informe honesto es que esta medida no esta resuelta numericamente.',
   'bench.chaos.canceled':
     'Esto se detuvo antes de terminar, asi que al menos un brazo es mas corto de lo que se le pidio.',
-  // --- El par controlado de la leccion de Lagrange -------------------------
   'cr3bp.pair.title': 'Dos direcciones, una misma region accesible',
   'cr3bp.pair.hint':
     'El mismo trazador, en el mismo sitio, a la misma rapidez en el sistema rotante, lanzado en dos direcciones. Misma constante de Jacobi, mismo cuello abierto, todo lo demas fijo. Dos periodos binarios cada uno.',
@@ -339,7 +336,6 @@ export const ES_DEFERRED = {
   'exoW.preset.earthTwin': 'Gemela de la Tierra, TESS',
   'exoW.preset.earthTwin.note':
     'Una Tierra alrededor de un Sol, vista por TESS: 84 ppm, un tránsito de trece horas, un tránsito al año. El tránsito más largo de aquí y el planeta menos detectable, lo que merece una pausa.',
-  // --- La comprobacion de fiabilidad numerica --------------------------------
   'reliability.title': 'Fiabilidad numerica',
   'reliability.hint':
     'Repite este experimento dos veces durante el mismo tiempo simulado - una con el paso que usa el motor y otra con la mitad - e indica que conclusiones se mantienen.',
@@ -412,7 +408,6 @@ export const ES_DEFERRED = {
   'reliability.agrees': 'sin cambio dentro de {tolerance}',
   'reliability.moved': 'cambio {change}',
   'reliability.noValue': 'no medido',
-  // --- The A/B experiment bench ---------------------------------------------
   'bench.title': 'Experimento A/B',
   'bench.untitled': 'Experimento sin título',
   'bench.copyOf': 'Copia de {name}',
@@ -529,7 +524,6 @@ export const ES_DEFERRED = {
   'bench.driftWithdrawn':
     'Una versión anterior grabó mal la deriva de energía y de momento angular de este experimento, como los totales multiplicados por cien. Esos valores se han quitado. Vuelve a grabar las ejecuciones para medir la deriva.',
   'bench.error.import': 'No se pudo leer ese archivo ({reason}).',
-  // --- El barrido de parametros -----------------------------------------------
   'sweep.title': 'Barrido de parámetros',
   'sweep.hint':
     'Repite el mismo escenario varias veces cambiando un solo parametro, y muestra como se mueve la medida con el.',
@@ -603,8 +597,7 @@ export const ES_DEFERRED = {
     'Fijate donde la medida deja de comportarse suavemente: ese es el limite que tiene este escenario, con esta duracion. Una pasada mas larga solo puede moverlo hacia dentro: una orbita que sobrevivio 20 periodos binarios no ha demostrado sobrevivir 200.',
   'sweep.guide.run': 'Ejecutar el barrido guiado',
 
-  // --- Tareas para clase --------------------------------------------------
-  // Shown from lazy chunks (the builder, the link bridge, a lesson panel with an assignment open), never a first visit; ensureDeferredMessages() registers them.
+  // --- Tareas para clase --- shown from lazy chunks (the builder, the link bridge, a lesson panel with an assignment open), never a first visit; ensureDeferredMessages() registers them.
   'assign.title': 'Crear una actividad',
   'assign.hint':
     'Elige los pasos que quieres asignar. Los pasos que construyen el mundo del que trata otro paso se añaden solos, y se indican donde corresponden.',
@@ -679,7 +672,6 @@ export const ES_DEFERRED = {
     'Esta actividad se creó con {pinned}, del que este Gravitas ya no toma la investigación. Se abre con la investigación tal como es ahora.',
   'assign.error.badPackage': 'Ese enlace de actividad nombra mal su paquete.',
 
-  // --- El planificador de maniobras --------------------------------------------
   'burn.title': 'Planificador de maniobras',
   'burn.close': 'Ocultar el planificador de maniobras',
   'burn.body': 'Cuerpo',
@@ -756,6 +748,7 @@ export const ES_DEFERRED = {
   'inv.run.running': 'Ejecutando {run}. La escena vuelve después.',
   'inv.run.done': 'Ejecución {run} terminada: {readings}.',
   'inv.run.canceled': 'Ejecución cancelada. La escena está como estaba.',
+  'inv.run.none': 'No hay escena que ejecutar. Vuelve un paso y regresa.',
   'inv.run.same': 'Cambia {param} antes de la siguiente ejecución.',
   'inv.run.all': 'Ya están todas. Bórralas para empezar.',
   'inv.run.clear': 'Borrar ejecuciones',
@@ -763,6 +756,7 @@ export const ES_DEFERRED = {
   'inv.run.empty': 'Aún no hay ejecuciones.',
   'inv.run.caption': 'Ejecuciones: {param}, y lo que leyó cada una',
   'inv.run.col': 'Ejecución',
+  'inv.span.for': 'Intervalo para: {what}',
   'inv.span.title': 'Lectura de un intervalo',
   'inv.span.from': 'Desde',
   'inv.span.to': 'Hasta',
@@ -1117,7 +1111,6 @@ export const ES_DEFERRED = {
   'hzW.planetC': 'Planeta C',
   'hzW.threePlanetsSimilarStarlight': 'Tres planetas, luz estelar parecida',
   'hzW.showing': 'Mostrando',
-  // --- El análisis de incertidumbre ---------------------------------------------
   'rvfit.mc.title': 'Análisis de incertidumbre (opcional)',
   'rvfit.mc.hint':
     'Simula esta campaña de observación una y otra vez —las mismas épocas, las mismas incertidumbres declaradas, un sorteo de ruido nuevo cada vez— y reajusta cada una con la búsqueda que acabas de hacer. Donde caen los reajustes indica con qué precisión tus datos fijan el período.',
@@ -1145,12 +1138,10 @@ export const ES_DEFERRED = {
   'rvfit.mc.refused.badBounds':
     'El rango de períodos no es un rango. Revisa los límites de búsqueda de arriba.',
   'rvfit.mc.refused.badTrials': 'Elige entre {min} y {max} pruebas.',
-
   'rvfit.mc.failed.noSearch':
     'la búsqueda de período no encontró nada que ajustar',
   'rvfit.mc.failed.notFinite':
     'el cálculo devolvió un valor que no era un número',
-
   'rvfit.mc.assume.model':
     'Una órbita circular con un solo acompañante. Todos los intervalos de abajo están condicionados a que ese modelo sea el correcto.',
   'rvfit.mc.assume.gaussian':
@@ -1162,7 +1153,6 @@ export const ES_DEFERRED = {
   'rvfit.mc.assume.precision':
     'Esto mide precisión, no corrección. Un modelo equivocado puede dar un intervalo muy estrecho.',
   'rvfit.mc.assumptions': 'Estos intervalos están condicionados a:',
-
   'rvfit.mc.result.single':
     'Período {median} d, de {p16} a {p84} ({pct}% de las pruebas). Amplitud {kMedian} m/s, de {kP16} a {kP84}.',
   'rvfit.mc.result.multimodal': {
@@ -1178,7 +1168,6 @@ export const ES_DEFERRED = {
   'rvfit.mc.result.failures': '{n} pruebas no dieron ajuste: {why}.',
   'rvfit.mc.result.epochs':
     '{n} épocas, línea de base de {baseline} d, {samples} puntos de rejilla por prueba, semilla {seed}.',
-
   'rvfit.mc.families': 'Familias de alias',
   'rvfit.mc.col.share': 'Proporción',
   'rvfit.mc.col.period': 'Período (d)',
@@ -1726,7 +1715,6 @@ export const ES_DEFERRED = {
     'El análisis tomó el valor como exacto: no se estimó nada.',
   'nb.report.notRecorded': 'no registrado',
 
-  // --- Búsqueda y filtros del catálogo ----------------------------------------
   'inv.filter.search.placeholder': 'Buscar por título, tema o materia',
   'inv.filter.query': 'Búsqueda',
   'inv.filter.subject': 'Materia',
@@ -2286,7 +2274,6 @@ export const ES_DEFERRED = {
     'Esta respuesta se comprueba con tus propias medidas. Regístralas en los pasos anteriores y se podrá comprobar.',
   'inv.answer.check': 'Comprobar',
 
-  // --- El modo didactico del problema restringido de tres cuerpos --------------
   'cr3bp.title': 'Modo de tres cuerpos restringido',
   'cr3bp.close': 'Ocultar la superposicion de tres cuerpos',
   'cr3bp.convention':
@@ -2343,8 +2330,6 @@ export const ES_DEFERRED = {
     'Estable: una tercera cuestion distinta. Significa que un trazador desplazado ligeramente de un equilibrio vuelve en lugar de irse, y aqui solo es cierto de L4 y L5, y solo por debajo de la razon de masas de Routh. Nada en una curva de velocidad cero lo implica.',
 
   // --- The exoplanet lesson widgets ---------------------------------------------
-  // js/exoplanetWidgets.js is reached only through the lazy js/widgets.js and
-  // js/investigations.js; nobody sees these until a lesson opens.
   'exoW.whoIsActuallyMoving': '¿Quién se mueve de verdad?',
   'exoW.theStarAndThePlanet':
     'La estrella y el planeta giran ambos alrededor del mismo punto. Sube el aumento para ver hacerlo a la estrella.',
@@ -2463,7 +2448,6 @@ export const ES_DEFERRED = {
   'exoW.excessScatterIsNotAPlanet':
     'Una dispersión mayor significa que la velocidad no es constante. No identifica un planeta, ni un periodo, ni una masa.',
 
-  // --- Calendarios de observacion, y la comparacion de dos ---------------------
   'rvsched.shape': 'Calendario',
   'rvsched.shape.regular': 'Cadencia regular',
   'rvsched.shape.irregular': 'Irregular',
@@ -2538,8 +2522,6 @@ export const ES_DEFERRED = {
   'rvsched.compare.oneDraw':
     'Un solo sorteo de ruido en cada brazo: esto dice lo que hicieron estos dos calendarios en esta campana, no que calendario es mejor.',
   // --- The synthetic observing run's own controls ------------------------------
-  // The section is opt-in and hidden until switched on, which is when the panel
-  // registers this catalog, so no one who never records downloads its prose.
   'rv.survey.hint':
     'Conserva solo las medidas que un calendario concreto habría producido realmente, cada una con su incertidumbre. Entre ellas no se registra nada.',
   'rv.survey.cadence': 'Cadencia',
@@ -2560,7 +2542,6 @@ export const ES_DEFERRED = {
   'rv.survey.coarse':
     'La simulación va demasiado rápido para esta cadencia: algunas medidas se leyeron entre fotogramas muy separados y sus extremos pueden quedar achatados. Reduce la velocidad y reinicia la campaña.',
 
-  // --- El barrido de la leccion binaria ---------------------------------------
   'binarySweep.title': 'Barrer el radio inicial',
   'binarySweep.hint':
     'La misma ejecucion que has hecho a mano, con cinco radios iniciales y todo lo demas fijo. Cada ensayo informa de lo que le paso al planeta, no de un promedio de donde estuvo.',
@@ -3448,7 +3429,6 @@ export const ES_DEFERRED = {
   'stellar.phase.neutron-star': 'Estrella de neutrones',
   'stellar.phase.black-hole': 'Agujero negro',
   'stellar.phase.unknown': 'Sin modelar',
-  // ---------------------------------------------------------------------------
   'stelE.title': 'Una estrella, de principio a fin',
   'stelE.note':
     'Una traza evolutiva publicada, reproducida. La edad manda sobre todo lo demás: temperatura, radio, luminosidad, color, masa actual y fase salen del mismo punto de la misma traza. La nube del principio y el remanente del final son ilustraciones a ambos lados de lo que el modelo cubre de verdad, y las dos lo dicen.',
@@ -3906,12 +3886,41 @@ export const ES_DEFERRED = {
   'nb.stellar.limit.fitted':
     'La comparación se dibujó con cada estrella ajustada a su recuadro, así que los tamaños aparentes no son comparables.',
   // --- Words a lesson computes ----------------------------------------------
+  'lessonFn.yourErrorBarForThePeriod129':
+    'Tu barra de error del periodo es menor que la dispersión de uno de tus propios tiempos: afirma más de lo que mediste. Ensánchala.',
+  'lessonFn.thatErrorBarIsMoreThan140':
+    'Esa barra de error es más de la mitad de la masa: no dice casi nada. Mira otra vez la dispersión de tus tiempos y la precisión del panel.',
+  'lessonFn.answerWithAOrP19': 'Responde con a o P.',
+  'lessonFn.yesTheReadingThatMovesThe118':
+    'Sí: la lectura que más mueve la masa es la que la limita, así que mejorar la otra primero cambiaría poco.',
+  'lessonFn.lookAgainAtTheTwoChanges96':
+    'Mira otra vez los dos cambios de arriba: el mayor corresponde a la lectura que limita la masa.',
+  'lessonFn.theseReadingsDoNotFitTogether109':
+    'Estas lecturas no encajan: los dos brazos deberían sumar la distancia de estrella a estrella. Vuelve a tomarlas.',
+  'lessonFn.theTwoArmsAddUpTo106':
+    'Los dos brazos suman la distancia de estrella a estrella, como debe ser. Guarda estas lecturas para el paso de pesar.',
+  'lessonFn.countWholeLapsAndTimeAt40':
+    'Cuenta vueltas enteras, y cronometra al menos una.',
+  'lessonFn.thePeriodOfOneLapIs109':
+    'El periodo de una vuelta es la lectura de tu cronómetro dividida entre el número de vueltas. Guárdalo para el paso de pesar.',
+  'lessonFn.checkTheOrbitSizeAgainstYour99':
+    'Revisa el tamaño de la órbita con tus lecturas: es la distancia de estrella a estrella, los dos brazos juntos.',
+  'lessonFn.checkThePeriodAgainstYourStopwatch104':
+    'Revisa el periodo con tu cronómetro: una vuelta de la Estrella A, desde la línea de puntos hasta la misma línea otra vez.',
+  'lessonFn.theTwoAddUpCorrectlyBut134':
+    'Suman bien, pero no en la razón que dan tus lecturas de los brazos. La estrella que se aleja más es más ligera en el mismo factor.',
+  'lessonFn.aMassHasToBeA35': 'Una masa tiene que ser un número positivo.',
+  'lessonFn.notQuiteTheFormulaIsThe129':
+    'No del todo. La fórmula es el tamaño de la órbita al cubo, dividido entre el periodo al cuadrado, con el tamaño en UA y el periodo en años.',
+  'lessonFn.threeSolarMassesBetweenTheTwo43':
+    'Tres masas solares entre las dos.',
+  'lessonFn.takeAtLeastTwoTimingsOne70':
+    'Toma al menos dos tiempos: un solo tiempo no puede mostrarte su propia dispersión.',
   'lessonFn.distancesHaveToBePositiveNumbers38':
     'Las distancias tienen que ser números positivos.',
   'lessonFn.closestApproachIsLargerThanFurthest70':
     'El máximo acercamiento es mayor que la distancia máxima: parecen intercambiados.',
   'lessonFn.eccentric9': 'Excéntrico',
-  'lessonFn.clickAPlanetToSelectIt27': 'Pulsa un planeta para seleccionarlo',
   'lessonFn.body4': 'Cuerpo',
   'lessonFn.noOrbitFound14': 'no se encontró órbita',
   'lessonFn.selected8': 'Seleccionado',
@@ -3964,20 +3973,9 @@ export const ES_DEFERRED = {
   'lessonFn.aBody6': 'Un cuerpo',
   'lessonFn.sunDistanceFromEarth24': 'Sol: distancia a la Tierra',
   'lessonFn.sunDirectionFromEarth25': 'Sol: dirección desde la Tierra',
-  'lessonFn.baselineOutOfTransit24': 'Línea de base, fuera del tránsito',
   'lessonFn.completeTransitsRecorded26': 'Tránsitos completos registrados',
   'lessonFn.waitingForACompleteTransit30': 'Esperando un tránsito completo',
   'lessonFn.clock5': 'Reloj',
-  'lessonFn.theBottomOfATransitSits137':
-    'El fondo de un tránsito queda <em>por debajo</em> de la línea de base, así que la profundidad tiene que salir positiva. Comprueba que no los hayas intercambiado.',
-  'lessonFn.a20DipWouldBeA153':
-    'Una caída del 20 % sería un eclipse estelar, no un planeta. Si has introducido números como 98,2 y 100, introduce el brillo en sí y no un porcentaje de él.',
-  'lessonFn.thatIsShallowerThanThisSystem156':
-    'Eso es menos profundo de lo que este sistema puede producir. Asegúrate de que el valor del fondo viene de verdad del punto más bajo de una caída y no del hombro de entrada.',
-  'lessonFn.goodAbout18GivingA152':
-    'Bien: alrededor del 1,8 %, lo que da un cociente de radios cercano a 0,135. Quédate con ese número, porque el paso siguiente va a decirte que es un 10 % demasiado grande, y por qué.',
-  'lessonFn.expectedSomewhereNear0018For153':
-    'Se esperaba algo cercano a 0,018 para este sistema. Lee la línea de base en un tramo plano bien alejado de cualquier caída, y el fondo en el punto más bajo de una.',
   'lessonFn.theStarRadiusGoesInSolar93':
     'El radio de la estrella va en radios solares, no en kilómetros ni en júpiteres. HD 209458 es 1,155 R☉.',
   'lessonFn.theDepthIsAFractionNot65':
@@ -4010,16 +4008,6 @@ export const ES_DEFERRED = {
     'Unas 0,047 UA: una octava parte de la distancia de Mercurio al Sol, y a unos nueve radios estelares. A 1450 K el lado diurno del planeta está lo bastante caliente para brillar con un rojo apagado por sí mismo. Nada de la teoría de formación planetaria anterior a 1995 ponía allí un gigante gaseoso, y averiguar cómo llegó sigue siendo una discusión activa entre la migración por el disco y la dispersión por otros planetas.',
   'lessonFn.expectedRoughly0047AuCheck84':
     'Se esperaban unas 0,047 UA. Comprueba que el periodo esté en días y la masa en masas solares.',
-  'lessonFn.bothDepthsAreFractionsNotPercentages66':
-    'Ambas profundidades son fracciones, no porcentajes: 1,1 % se introduce como 0,011.',
-  'lessonFn.theBlendedDepthHasToBe110':
-    'La profundidad mezclada tiene que ser la <em>menos</em> profunda de las dos. Comprueba que no las hayas puesto en las casillas equivocadas.',
-  'lessonFn.thatIsTheResultTheBlended291':
-    'Ese es el resultado. La curva mezclada dice unos 12 radios terrestres; la corrección de aproximadamente ×1,28 lo devuelve a unos 15,5, que son los 1,38 radios de Júpiter que mediste antes de que estuviera la compañera. El contraste implicado debería caer cerca de Δm = 0,5, que es lo que la compañera es en realidad.',
-  'lessonFn.theRatioIsLargerThanThis135':
-    'El cociente es mayor de lo que esta compañera puede producir. Vuelve a leer la profundidad mezclada: debería estar cerca de 0,011, no cerca de la mitad del valor limpio.',
-  'lessonFn.expectedARatioNear163135':
-    'Se esperaba un cociente cercano a 1,63 y un radio corregido cercano a 15,5 R⊕. Comprueba que ambas profundidades vinieron del fondo de una caída y no de un hombro.',
   'lessonFn.clickABodyInTheSimulation30': 'Pulsa un cuerpo en la simulación',
   'lessonFn.nothingToOrbit16': 'nada que orbitar',
   'lessonFn.distanceFromTheStar22': 'Distancia a la estrella',
@@ -4037,22 +4025,8 @@ export const ES_DEFERRED = {
     '2 × 2 × 2 es 8, y 2 × 2 es 4, y 8 dividido entre 4 es 2. El par pesa <strong>2 masas solares</strong> entre los dos. Nadie fue hasta allí. Nadie pesó nada. Dos medidas de una órbita bastaron.',
   'lessonFn.bothMeasurementsHaveToBePositive46':
     'Ambas medidas tienen que ser números positivos.',
-  'lessonFn.thatLooksLikeOneStarS187':
-    'Eso parece la distancia de una estrella al punto de equilibrio y no la órbita entera. El tamaño de la órbita se mide de una estrella <em>a la otra</em>: suma ambas distancias.',
-  'lessonFn.checkTheOrbitSizeAgainstThe137':
-    'Comprueba el tamaño de la órbita con los anillos. La Estrella A está en un anillo y la Estrella B en otro, y el número que quieres es la suma de los dos.',
-  'lessonFn.checkThePeriodTimeStarA106':
-    'Comprueba el periodo. Cronometra la Estrella A desde la línea de puntos hasta que vuelva a cruzar la misma línea.',
   'lessonFn.youHaveThemTheWrongWay130':
     'Los tienes al revés. La Estrella A es la que se queda cerca del punto de equilibrio, lo que la convierte en la más pesada de las dos.',
-  'lessonFn.threeSolarMassesAndOneSolar125':
-    'Tres masas solares y una masa solar. Acabas de pesar dos estrellas individuales, por separado, usando una regla y un cronómetro.',
-  'lessonFn.theTwoAddUpCorrectlyBut126':
-    'Los dos suman correctamente, pero no en una proporción de tres a uno. Cuenta los bloques: tres del lado de la Estrella A por cada uno del lado de la Estrella B.',
-  'lessonFn.put3InBothBoxesThe65':
-    'Pon 3 en ambas casillas: el par está a 3 UA con un periodo de 3 años.',
-  'lessonFn.333Is27And102':
-    '3 × 3 × 3 es 27, y 3 × 3 es 9, y 27 dividido entre 9 es 3. Tres masas solares entre las dos.',
   'lessonFn.whatEarthGets15': 'lo que recibe la Tierra',
   'lessonFn.distancesAndStarlightAreBothPositive50':
     'Las distancias y la luz estelar son ambas números positivos.',
@@ -4247,4 +4221,28 @@ export const ES_DEFERRED = {
     'Cuanto más frío el cuerpo negro, mayor el índice de color. Un color es un termómetro y, a diferencia de la longitud de onda del máximo, solo necesita dos medidas ordinarias de brillo.',
   'lessonFn.setTheBandsToBV94':
     'Pon las bandas en B − V y lee la fila del índice de color. Lo más frío es más rojo, es decir, mayor.',
+  'lessonFn.theInTransitMeanSitsBelow154':
+    'La media en tránsito queda <em>por debajo</em> de la media fuera de tránsito, así que la profundidad tiene que salir positiva. Comprueba que no has intercambiado los dos tramos.',
+  'lessonFn.yourOutOfTransitStretchAverages164':
+    'Tu tramo fuera de tránsito promedia parte de una caída: su media está por debajo del nivel que la estrella mantiene entre tránsitos. Muévelo a un tramo plano, lejos de toda caída.',
+  'lessonFn.theTwoStretchesHaveAlmostThe174':
+    'Los dos tramos tienen casi la misma media, así que no hay profundidad entre ellos. Pon el tramo en tránsito sobre el fondo de una caída y el otro en un tramo plano entre caídas.',
+  'lessonFn.yourInTransitStretchIncludesThe232':
+    'Tu tramo en tránsito incluye los lados inclinados de la caída, o sale de ella, donde el planeta solo está en parte sobre la estrella. Elige un tramo del fondo, entre los dos lados, y la profundidad será la sombra completa del planeta.',
+  'lessonFn.thatIsDeeperThanTheFloor138':
+    'Eso es más profundo que el fondo de cualquier caída de esta curva. Comprueba que ambos tramos están en la curva que hay ahora en el gráfico y en las casillas correctas.',
+  'lessonFn.twoStretchesOneDepthKeepIt131':
+    'Dos tramos, una profundidad. Consérvala: las pantallas siguientes la ponen junto a tu estimación y explican por qué el radio que da no es del todo correcto.',
+  'lessonFn.twoStretchesOneDepthForThe89':
+    'Dos tramos, una profundidad para el segundo sistema. La pantalla siguiente la pone junto a la primera.',
+  'lessonFn.theBlendedDepthHasToBe120':
+    'La profundidad mezclada tiene que ser la <em>menos</em> profunda de las dos. Comprueba que ambas profundidades se midieron en las curvas correctas.',
+  'lessonFn.theRatioOnlyMeasuresTheCompanion166':
+    'El cociente solo mide la compañera si ambas profundidades salen de la misma parte de sus fondos. Toma el medio de cada fondo, mide otra vez y el cociente seguirá.',
+  'lessonFn.thatIsTheResultTheBlended270':
+    'Ese es el resultado. La curva mezclada por sí sola dice un planeta más pequeño; la corrección lo devuelve al radio que encontraste sin la compañera. La compañera de esta escena es media magnitud más tenue que su estrella, y el contraste que dedujiste debería quedar cerca de eso.',
+  'lessonFn.checkTheContrastTheRatioIs116':
+    'Comprueba el contraste. El cociente es 1 + F₂/F₁, así que resta uno antes de tomar el logaritmo: Δm = −2,5 log₁₀(cociente − 1).',
+  'lessonFn.checkTheRadiusTheCorrectionMultiplies120':
+    'Comprueba el radio. La corrección multiplica el radio mezclado por la raíz cuadrada del cociente, no por el cociente mismo.',
 };

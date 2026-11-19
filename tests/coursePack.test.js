@@ -881,7 +881,7 @@ describe('time, the graph and the manifest', () => {
     expect(by.get('reading-orbits-and-gravity').license).toBe('CC BY 4.0');
     expect(by.get('reading-orbits-and-gravity').offline).toBe('online');
     expect(by.get('a-first-transit').offline).toBe('precache');
-    expect(by.get('a-first-transit').opens.steps).toHaveLength(6);
+    expect(by.get('a-first-transit').opens.steps).toHaveLength(7);
     expect(m.dependencies.edges.length).toBeGreaterThan(20);
     expect(m.remaining.every(x => x.level !== 'error')).toBe(true);
     expect(licenseOf({ kind: 'reading' }, facts)).toBeNull();

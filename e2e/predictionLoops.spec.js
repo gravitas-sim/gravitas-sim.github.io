@@ -60,7 +60,7 @@ const LOOPS = [
   },
   {
     id: 'transit-photometry',
-    predict: 'what-will-the-brightness-do',
+    predict: 'getting-the-period',
     family: 'transit widgets',
   },
   {
@@ -326,7 +326,9 @@ test.describe('a prediction is settled by the experiment, not by the answer key'
       const verdict = page.locator('#investigationBody .inv-verdict');
       await expect(verdict).toBeVisible();
       await expect(verdict).toHaveClass(/is-wrong/);
-      await expect(verdict.locator('.inv-verdict-mark')).not.toBeEmpty();
+      await expect(
+        verdict.locator('.inv-verdict-mark').first()
+      ).not.toBeEmpty();
       await expect(verdict.locator('.inv-because')).toBeVisible();
 
       // Going back, the prediction is marked now - both the pick and the

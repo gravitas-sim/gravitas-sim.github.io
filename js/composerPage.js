@@ -1996,8 +1996,8 @@ function renderKey(r) {
     let answer = '';
     if (s.type === 'predict') {
       const at = lesson.steps.findIndex(x => x.sid === s.reveal);
-      answer = `${s.options[s.answer] ?? ''} (${t('composer.key.prediction', { n: at + 1 })})`;
-    } else if (s.kind === 'choice') answer = s.options[s.answer] ?? '';
+      answer = `${s.options?.[s.answer] ?? ''} (${t(`composer.key.${s.options ? 'prediction' : 'estimate'}`, { n: at + 1, unit: s.unit })})`;
+    } else if (s.kind === 'choice') answer = s.options?.[s.answer] ?? '';
     else if (s.kind === 'numeric' && s.formula)
       answer = t('composer.key.formula', {
         expr: s.formula.expr,

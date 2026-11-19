@@ -175,7 +175,10 @@ const FILES = [
   { path: 'cosmology/coma-cluster-quoted.json', core: false },
   { path: 'favicon.ico', core: false },
   { path: 'favicon.png', core: false },
-  { path: 'images/transit-of-venus-2012.jpg', core: false },
+  // images/transit-of-venus-2012.jpg (56 KB gzipped) is not installed: the figure on
+  // one read step of Transit Photometry is fetched with that step and kept by the
+  // service worker after that (the first-visit tier is at its data-budget ceiling,
+  // D-R4-329-05); the step's caption and alt text stand without it.
 ];
 
 /**
@@ -247,18 +250,17 @@ export const NEVER_PRECACHED = [
   /^js\/lessonCanvas\.js$/,
   /^js\/lesson\/canvasKind\.js$/,
   /^js\/i18n\/(en|es)\.canvas\.js$/,
-  // The words of a lesson step's Replay and armed watch: fetched by a step that
-  // declares one and kept by the service worker after that, not installed (the
-  // first-visit tier is at its data-budget ceiling). The module that reads
-  // them, js/investigations/eventWindow.js, is installed: every pauseAt step
-  // opens its tool through it.
-  /^js\/i18n\/(en|es)\.eventWindow\.js$/,
   // The lesson plot's glue, the ring a step draws round an object and their
   // words: fetched by the first lesson step that needs them and kept by the
   // service worker after that, not installed (the first-visit tier is at its
   // data-budget ceiling and the idle tier has no room). The plot component
   // they draw with is installed already.
   /^js\/investigations\/(plotView|pointing)\.js$/,
+  // The deeper steps of Kepler's Laws and their Spanish: fetched when a student
+  // opens a deeper level and kept by the service worker after that, not
+  // installed (the first-visit tier is at its data-budget ceiling after the
+  // lesson was reworked around readings; D-R4-328-05).
+  /^js\/data\/investigations\/depth\/(es\/)?keplers-laws\.js$/,
   /^js\/i18n\/(en|es)\.linked\.js$/,
   // The controlled-run code: fetched by a lesson step that declares a variation
   // and kept by the service worker after that, not installed (first-visit tier).
@@ -663,10 +665,6 @@ export const NEVER_PRECACHED = [
   /^js\/lab3d\/libration\.js$/,
   // Its addendum's step-budget rule, in the same position: only the validator and the tests import it.
   /^js\/lab3d\/stepBudget\.js$/,
-  // An estimate and the box where a prediction meets the student's readings: fetched when a lesson declares
-  // them (none yet), so an install has no use for the module or its words (the first-visit tier has little room).
-  /^js\/investigations\/(reveal|evidence)\.js$/,
-  /^js\/i18n\/(en|es)\.reveal\.js$/,
   // The orbit geometry overlay and the Sizes statement (D-R4-447-08): the two lazy modules, the
   // size facts the canvas description fetches on its first rebuild, the geometry, the two-body
   // model and its settings reader only the overlay imports, and their words. Kept by the service

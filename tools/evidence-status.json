@@ -370,7 +370,7 @@
     {
       "id": "cartridge-profile-valid",
       "claim": "A course exported as a Thin Common Cartridge validates against the Common Cartridge v1.3 schemas and the Thin Common Cartridge profile's rules.",
-      "scope": "the built-in courses in English and Spanish, with and without the notes for instructors, as built by the course builder's and the kit's export; the recorded schema run covers the introductory course (4 cartridges as built now); the observing lab (rebuilt by Prompt 216), the one-semester course, the upper-level modules and The Solar System and the Sun are checked by the profile checker only and are NOT in the recorded run",
+      "scope": "the built-in courses in English and Spanish, with and without the notes for instructors, as built by the course builder's and the kit's export; the recorded schema run was made before the first-transit unit of the introductory course gained a step, so the introductory course is also checked by the profile checker only now; the observing lab (rebuilt by Prompt 216), the one-semester course, the upper-level modules and The Solar System and the Sun are checked by the profile checker only and are NOT in the recorded run, and neither is the introductory course as it is now",
       "version": "2.1.0",
       "class": "S",
       "status": "partial",

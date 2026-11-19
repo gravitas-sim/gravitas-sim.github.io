@@ -15,8 +15,7 @@ import {
   parseFieldNumber,
   progressFor,
   fieldModule,
-  runsModule,
-  revealModule,
+  fetchSeams,
   renderProgressNotice,
   renderSaveStatus,
   roleEchoesName,
@@ -170,6 +169,7 @@ import {
   stageContext,
   stageLoaded,
   stageMemo,
+  stageOf,
   stageScale,
   stagePresence,
   stagedStars,
@@ -585,8 +585,7 @@ function applySetup(setup) {
 }
 
 /**
- * Hold the simulation still in the ways a lesson depends on. Placement is off by default during a lesson (a
- * click on a planet and a drag that places a new body are one gesture a few pixels apart), and can be turned back on.
+ * Hold the simulation still in the ways a lesson depends on: placement is off during a lesson.
  * @param {boolean} [fresh] - The step's own scene was just built: frame it
  */
 function bindStepRoles(force, fresh) {
@@ -596,12 +595,9 @@ function bindStepRoles(force, fresh) {
   holdClock(canvasMod?.clockStep(step, canvas?.kind) ?? step, appliedSetup);
   if (running && state.paused) announce(t('readout.status.paused'));
   timeline.setParkedPause(state.paused);
-  // Whatever the last step illustrated is not this step's business; a widget
-  // re-asserts its own on its first tick, one frame later.
+  // What the last step illustrated is not this step's; a widget re-asserts its own a frame later.
   clearEvolutionScene();
-  // Frozen copies belong to the screen that froze them, and two consecutive
-  // steps can share a stage - in which case applyStage does nothing and the
-  // copies would otherwise still be standing there under a different question.
+  // Frozen copies belong to the screen that froze them (steps can share a stage, which applyStage leaves alone).
   clearSnapshots();
   const warn = (problems, what) => {
     for (const [role, why] of Object.entries(problems))
@@ -615,11 +611,10 @@ function bindStepRoles(force, fresh) {
   }
   canvasMod?.enterCanvas(canvas, force);
   if (quiet) return;
-  // A stage declares the whole scene and binds its own roles, so it takes
-  // precedence: a step cannot both stand its own stars on the canvas and bind
-  // roles to somebody else's.
-  if (step?.stage) {
-    const { problems } = applyStage(step.stage, { force });
+  // A stage declares the whole scene and binds its own roles, so it takes precedence over a bind.
+  const stage = stageOf(active.steps, step);
+  if (stage) {
+    const { problems } = applyStage(stage, { force });
     // Its fit is asked for here and taken on the panel's tick, after layout and
     // after the boot has finished with the camera.
     warn(problems, 'staged star');
@@ -658,9 +653,9 @@ function applyLocks() {
   // live system.
   const allowInspector = step?.allowInspector === true;
   setInspectorSuppressed(lock.inspector !== false && !allowInspector);
-  // A lesson that borrows a scenario built for a different lesson can refuse
-  // the overlay that scenario switches on for itself.
-  setAreaSweepSuppressed(lock.areaSweep === false);
+  // A lesson can refuse the overlay its borrowed scenario switches on.
+  const sweepOk = step?.wedgeOf || step?.showAreaSweep;
+  setAreaSweepSuppressed(lock.areaSweep === false && !sweepOk);
 }
 
 /**
@@ -842,7 +837,7 @@ let figures = null;
 let canvasMod = null;
 const canvasNow = (i = stepIndex) => canvasMod?.canvasAt(active, i) ?? null;
 
-/** Fetch the plot, ellipse, import, reveal, canvas and controlled-run code a lesson needs. */
+/** Fetch the plot, ellipse, import and canvas code a lesson needs. */
 const loadSeams = async ({ steps, canvas }) => {
   if (!canvasMod && (canvas || steps.some(s => s.canvas)))
     canvasMod = await import('./lessonCanvas.js');
@@ -858,10 +853,6 @@ const loadSeams = async ({ steps, canvas }) => {
     )
   )
     fieldModule((figures = await import('./investigations/figures.js')));
-  if (!slots.runs && steps.some(s => s.variation))
-    runsModule(await import('./lesson/runs.js'));
-  if (!slots.reveal && steps.some(s => s.evidence || s.kind === 'estimate'))
-    revealModule(await import('./investigations/reveal.js'));
 };
 
 /** Draw the step's scatter plot from the lesson's current state. */
@@ -882,6 +873,11 @@ function renderStep() {
   if (!step || !els.body) return;
   const id = stepId(stepIndex);
   const saved = responses[id];
+
+  // The code for a controlled run, or for an estimate and the box where a
+  // prediction meets its readings, comes with the step that shows it, not with
+  // the lesson, so a lesson nobody opened before the network dropped still opens.
+  fetchSeams(step, () => currentStep() === step && renderStep());
 
   const parts = stepMarkup(step, {
     id,
@@ -1675,9 +1671,9 @@ const OBJECT_LIST_MAX = 12;
 function renderObjectList() {
   if (!els.objects || !els.objectsWrap) return;
   const step = currentStep();
-  const wanted = Boolean(step?.bind || step?.stage);
+  const wanted = Boolean(step?.bind || stageOf(active.steps, step));
   els.objectsWrap.hidden = !wanted;
-  if (els.stageTools) els.stageTools.hidden = !step?.stage;
+  if (els.stageTools) els.stageTools.hidden = !stageOf(active.steps, step);
   if (!wanted) {
     lastObjectsKey = '';
     els.objects.replaceChildren();
@@ -1768,15 +1764,13 @@ let lastProbeSelection = null;
 function renderProbe() {
   const step = currentStep();
   canvasMod?.keepQuiet();
-  // A stage owns the scene: if something else replaced it (a cold load into a
-  // staged step, where the app rebuilds its world after the lesson opened) the
-  // stage puts itself back. Cheap: it rebuilds only when the stars have gone.
-  if (step?.stage) {
-    // Only when the scene was *replaced*, never when the reader experimented
-    // (deleted a body, merged two): a wholesale swap leaves nothing of the stage.
+  // A stage owns the scene: if something replaced it wholesale (a cold load into a staged step) it puts
+  // itself back; never when the reader only experimented (deleted a body, merged two).
+  const stage = stageOf(active.steps, step);
+  if (stage) {
     const presence = stagePresence();
     if (presence.allGone) {
-      applyStage(step.stage, { force: true });
+      applyStage(stage, { force: true });
       // The instrument is what places a model-driven stage - the binary's
       // separation and phase come from the waveform, not from the declaration
       // - so a rebuilt stage needs one repaint to be put where it belongs.
@@ -1939,7 +1933,7 @@ function goToStep(index, { rebuild = false, open = false } = {}) {
   slots.runs?.release();
   const at = Math.max(0, Math.min(active.steps.length - 1, index));
   // A step that stages waits for the stage code; opening rejects on failure.
-  const declared = active.steps[at]?.stage;
+  const declared = stageOf(active.steps, active.steps[at]);
   if (declared && !stageLoaded(declared)) {
     const turn = openGeneration;
     els.panel.setAttribute('aria-busy', 'true');
@@ -2553,7 +2547,7 @@ function resetStepScene() {
   for (const k in responses)
     if (k.startsWith(`${stepId(stepIndex)}:tool:`)) delete responses[k];
   goToStep(stepIndex, { rebuild: true });
-  const scene = step.stage || setupInForceAt(stepIndex);
+  const scene = stageOf(active.steps, step) || setupInForceAt(stepIndex);
   const which = +!!step.tool + 2 * !!scene + 4 * (getLocale() === 'es');
   toast(els.resetScenario.dataset.said.split('|')[which]);
 }

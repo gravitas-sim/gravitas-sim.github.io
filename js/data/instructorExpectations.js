@@ -1,13 +1,7 @@
-// =============================================================================
 // What an instructor should expect to see at a step, by lesson and step sid
-// -----------------------------------------------------------------------------
-// Keyed by the step's sid, so inserting or reordering a step cannot slide an
-// expectation onto the wrong screen (the old key was the 1-based step number).
-// js/instructorExpectations.js reads it through readVersioned and still reads
-// the number-keyed /1 form. Not imported by any route: the answer-key PDF and
-// the author check read it. Generated once from instructorContent.js by
-// tools/migrate-expectations.mjs; edited by hand since.
-// =============================================================================
+// (so inserting a step cannot slide an expectation onto the wrong screen).
+// Read through readVersioned in js/instructorExpectations.js, which still reads
+// the number-keyed /1 form; the answer-key PDF and the author check use it.
 
 import { INSTRUCTOR as MEASUREMENT } from './investigations/depth/measurement-sequence.js';
 import { INSTRUCTOR as SATELLITE } from './investigations/depth/satellite-sequence.js';
@@ -173,12 +167,16 @@ export default {
         'B − V (Vega system) of about 1.69 at 3,000 K, 0.60 at 6,000 K and 0.15 at 10,000 K. Within 0.05 is accepted; a student who reads the g − r row instead will be a little off at every temperature.',
     },
     'keplers-laws': {
-      'measure-the-two-orbits':
-        'The Circular Orbiter comes out at e near 0.02; the Eccentric Orbiter at roughly e = 0.6–0.7. The derived semi-major axis is the mean of the periapsis and apoapsis distances, and the validator warns if the two are entered the wrong way round.',
+      'find-the-foci':
+        'Closest about 0.5 AU, furthest about 2.36 AU; the foci lie about 1.86 AU apart.',
       'fast-and-slow-in-numbers':
         'Speed at periapsis should exceed speed at apoapsis by roughly the inverse ratio of the distances. The validator warns if the two are swapped, which is the common error.',
       'measure-four-planets':
-        'Any two or more Solar System planets. P²/a³ should come out near 1 for every row when a is in AU and P in years; the validator flags a spread greater than 50%, which almost always means a period entered in days.',
+        'At least five planets, spread over a factor of four or more in distance. P²/a³ should be near 1 for every row; the validator names the row that disagrees when the spread is above 50%, almost always a period in days.',
+      'pick-a-distance':
+        'Any distance from 0.3 to 25 AU in a gap between planets.',
+      'check-the-estimate':
+        'The period at the chosen distance, scaled from the nearest planet by the power three halves.',
       'work-the-law-out-step':
         'P² ÷ a³ = 1 within reading error. The star in this scenario is exactly one solar mass, so the constant is exactly 1 by construction, and the validator says so.',
       'weigh-trappist-1-yourself':
@@ -203,16 +201,18 @@ export default {
         'About 70 to 80 days between the direction starting to fall and starting to rise again. The real figure for Mars is about 72 days, and it varies from one opposition to the next by a couple of weeks for reasons this planar circular model does not include.',
     },
     'transit-photometry': {
-      'measure-the-dip':
-        'Baseline near 1.000; depth about 1.8%. The naive radius ratio is then about 0.135, which is roughly ten percent larger than the true value, and the investigation goes on to explain why.',
+      'choose-the-two-stretches':
+        'Out of transit the mean is near 1.0000. The floor is curved, so √δ overshoots the radius ratio by 6 to 10%, by where the stretch sits.',
       'correct-it-and-get-a':
         'With the limb-darkening correction and a stellar radius of 1.155 solar radii, the recovered planet radius lands near 1.38 Jupiter radii, the published value for HD 209458 b.',
       'time-two-transits':
         'Two successive transits are about 3.52 days apart. Students who miss a transit will get a multiple of that; the validator catches the doubled value and says so.',
       'from-a-period-to-an':
         'A 3.52-day period around a 1.148 solar mass star gives a semi-major axis near 0.047 AU and an equilibrium temperature of order 1400 K.',
-      'recover-the-real-planet':
-        'The blended depth is shallower than the clean one. Correcting for a companion half a magnitude fainter recovers a planet radius consistent with the unblended measurement.',
+      'compare-the-two-curves':
+        'With a companion half a magnitude fainter, the depth is near 1.1%; period and shape do not change.',
+      'find-the-hidden-companion':
+        'The blended depth is shallower; the ratio of the depths gives a contrast near half a magnitude and the corrected radius matches the clean one.',
     },
     'orbital-energy': {
       'fire-it':
@@ -238,13 +238,15 @@ export default {
       'a-practice-run':
         'Practice pair: a = 2 AU, P = 2 years, giving a total of 2 solar masses.',
       'measurement-one-how-big-is':
-        'The mystery pair is 4 AU apart: Star A about 1 AU from the balance point, Star B about 3 AU. Both are read off the canvas, and the inspector is deliberately closed on this screen so the masses cannot simply be looked up.',
+        'The mystery pair is 4 AU apart: Star A about 1 AU from the balance point, Star B about 3 AU. Students take both arms and the separation from the panel; any phase gives the same readings.',
       'measurement-two-how-long-does':
-        'One lap takes about 4 years. Capture this orbit records the separation, both arm lengths and the timing into the notebook, and marks the period as student-timed - a period taken from the model instead is recorded as a prediction, which is the distinction that entry exists to keep.',
+        'One lap takes about 4 years. Students say how many laps they timed and take the stopwatch reading; the page divides. Expect the half-lap slip.',
       'weigh-the-pair':
-        'a³ = 64, P² = 16, so the total is 4 solar masses. A student who uses one star’s barycenter distance instead of the separation gets 0.5 and is told so.',
+        'a³ = 64, P² = 16, so the total is 4 solar masses. Students choose which reading is a; each wrong choice, half a lap and months get a named slip.',
+      'back-to-the-balance-point':
+        'Star B swings about three times as far out as Star A; the nearer star is the heavier.',
       'now-weigh-each-one':
-        'The 3:1 distance ratio splits 4 solar masses into 3 and 1. Star A, on the smaller circle, is the heavier one.',
+        'The 3:1 distance ratio splits the 4 solar masses into 3 and 1.',
       'one-on-your-own':
         'The independent pair is a = 3 AU, P = 3 years, giving 3 solar masses.',
     },

@@ -331,7 +331,7 @@ describe('instructor marks', () => {
 });
 
 describe('a class code on every report (P81 R-1, R-2)', () => {
-  const MEASURE = 'measure-the-two-orbits';
+  const MEASURE = 'find-the-foci';
   const classPile = () =>
     recordsOf(
       ['Ada', 'Ben', 'Cy'].map((name, i) =>
@@ -341,7 +341,7 @@ describe('a class code on every report (P81 R-1, R-2)', () => {
           assignment: 'wk3',
           responses: {
             ...RIGHT,
-            [MEASURE]: 'circ_e=1.5; ecc_e=0.7',
+            [MEASURE]: 'f_peri=0.4; f_apo=1.6',
             ...(i === 0 ? { [WRITTEN_SID]: 'It speeds up.' } : {}),
           },
         })

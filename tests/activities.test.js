@@ -236,14 +236,19 @@ describe('what each format is required to contain', () => {
     );
     expect(measure.fields.find(f => f.id === 'v_ratio').compute).toBeTruthy();
 
-    // And it ends by revisiting the prediction in the student's own words.
-    expect(steps.at(-1).sid).toBe('why-the-speed-changes');
+    // And it revisits the prediction in the student's own words, then shows
+    // the areas: the lesson now holds the wedges back until that explanation.
+    const sids = steps.map(s => s.sid);
+    expect(sids.slice(-2)).toEqual([
+      'why-the-speed-changes',
+      'equal-areas-however-you-slice',
+    ]);
   });
 
   test('the lab has a controlled comparison and a transfer task', () => {
     const steps = stepsOf('lab');
     // Both orbiters go round the same star, so eccentricity is what differs.
-    expect(steps.map(s => s.sid)).toContain('measure-the-two-orbits');
+    expect(steps.map(s => s.sid)).toContain('find-the-foci');
     // The last step is the transfer: where "the planet orbits the star" stops
     // being the right description.
     expect(steps.at(-1).sid).toBe('where-kepler-s-version-breaks');

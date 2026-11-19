@@ -7,13 +7,13 @@
       "key": "a:wk3",
       "id": "wk3",
       "title": "Week 3: Kepler",
-      "pointsPossible": 13
+      "pointsPossible": 15
     },
     {
       "key": "a:wk4",
       "id": "wk4",
       "title": "Week 4",
-      "pointsPossible": 13
+      "pointsPossible": 15
     }
   ],
   "rows": [
@@ -25,7 +25,7 @@
       "activity": "Week 3: Kepler",
       "lessonId": "keplers-laws",
       "submission": 1,
-      "fingerprint": "10df065b333557",
+      "fingerprint": "1fca1a3f4a684a",
       "savedAt": "2026-09-02T10:00:00.000Z",
       "attemptsConsidered": 1,
       "attemptUsed": 1,
@@ -39,9 +39,9 @@
         "Names the speed-up."
       ],
       "points": 6,
-      "pointsPossible": 13,
-      "percent": 0.46153846153846156,
-      "completion": 0.2608695652173913,
+      "pointsPossible": 15,
+      "percent": 0.4,
+      "completion": 0.23076923076923078,
       "changedSteps": 0,
       "evidenceMismatch": false
     },
@@ -53,7 +53,7 @@
       "activity": "Week 3: Kepler",
       "lessonId": "keplers-laws",
       "submission": 2,
-      "fingerprint": "07014fe725f362",
+      "fingerprint": "1cf58071dd213a",
       "savedAt": "2026-09-02T10:00:00.000Z",
       "attemptsConsidered": 1,
       "attemptUsed": 1,
@@ -65,9 +65,9 @@
       "awaiting": 0,
       "instructorComments": [],
       "points": 1,
-      "pointsPossible": 13,
-      "percent": 0.07692307692307693,
-      "completion": 0.2608695652173913,
+      "pointsPossible": 15,
+      "percent": 0.06666666666666667,
+      "completion": 0.23076923076923078,
       "changedSteps": 0,
       "evidenceMismatch": false
     },
@@ -79,7 +79,7 @@
       "activity": "Week 3: Kepler",
       "lessonId": "keplers-laws",
       "submission": 4,
-      "fingerprint": "16de52563031f5",
+      "fingerprint": "1a5529c7884e0b",
       "savedAt": "2026-09-03T09:00:00.000Z",
       "attemptsConsidered": 2,
       "attemptUsed": 2,
@@ -93,9 +93,9 @@
         "=Needs the second law"
       ],
       "points": 5.5,
-      "pointsPossible": 13,
-      "percent": 0.4230769230769231,
-      "completion": 0.2608695652173913,
+      "pointsPossible": 15,
+      "percent": 0.36666666666666664,
+      "completion": 0.23076923076923078,
       "changedSteps": 0,
       "evidenceMismatch": false
     },
@@ -107,7 +107,7 @@
       "activity": "Week 4",
       "lessonId": "keplers-laws",
       "submission": 6,
-      "fingerprint": "0ec246baba9375",
+      "fingerprint": "179ef3269fee15",
       "savedAt": "2026-09-02T10:00:00.000Z",
       "attemptsConsidered": 1,
       "attemptUsed": 1,
@@ -119,9 +119,9 @@
       "awaiting": 0,
       "instructorComments": [],
       "points": 1,
-      "pointsPossible": 13,
-      "percent": 0.07692307692307693,
-      "completion": 0.2608695652173913,
+      "pointsPossible": 15,
+      "percent": 0.06666666666666667,
+      "completion": 0.23076923076923078,
       "changedSteps": 0,
       "evidenceMismatch": false
     }

@@ -6,9 +6,12 @@
   "derivedFrom": {
     "id": "keplers-laws",
     "version": "1.0.0",
-    "digest": "a87c02e7"
+    "digest": "b672d4be"
   },
-  "locales": ["en", "es"],
+  "locales": [
+    "en",
+    "es"
+  ],
   "title": {
     "en": "Kepler’s laws, my section"
   },
@@ -61,9 +64,9 @@
         "esOf": "c0560536"
       },
       "body": {
-        "en": "For most of recorded history orbits were circles. When observations\n             disagreed, astronomers added more circles: epicycles: until the\n             model fit. Copernicus moved the Sun to the center but kept the\n             circles, and his model was no more accurate than the one it\n             replaced.\n             \n\nWhat broke the circle was data. Tycho Brahe spent two decades\n             measuring planetary positions to about one arcminute, the limit of\n             what is possible without a telescope. When Johannes Kepler tried to\n             fit Tycho's observations of Mars to a circular orbit, the best fit\n             he could manage was off by eight arcminutes. He could have called\n             that observational error and moved on. Instead he trusted Tycho's\n             measurements over two thousand years of assumption, and spent years\n             working out what curve would fit.\n             \n\nThe answer was an ellipse, with the Sun not at its center.",
-        "es": "Durante casi toda la historia registrada las órbitas fueron círculos. Cuando las observaciones no encajaban, los astrónomos añadían más círculos —epiciclos— hasta que el modelo cuadraba. Copérnico movió el Sol al centro pero mantuvo los círculos, y su modelo no fue más preciso que el que sustituía.\n\nLo que rompió el círculo fueron los datos. Tycho Brahe pasó dos décadas midiendo posiciones planetarias con una precisión de un minuto de arco, el límite de lo posible sin telescopio. Cuando Johannes Kepler intentó ajustar las observaciones de Marte de Tycho a una órbita circular, el mejor ajuste que consiguió fallaba por ocho minutos de arco. Podría haber llamado a eso error observacional y haber seguido adelante. En vez de eso confió en las medidas de Tycho por encima de dos mil años de suposiciones, y pasó años averiguando qué curva encajaría.\n\nLa respuesta fue una elipse, con el Sol fuera de su centro.",
-        "esOf": "f0094c27"
+        "en": "For most of recorded history orbits were circles. When observations\n             disagreed, astronomers added more circles: epicycles: until the\n             model fit. Copernicus moved the Sun to the center but kept the\n             circles, and his model was no more accurate than the one it\n             replaced.\n             \n\nWhat broke the circle was data. Tycho Brahe spent two decades\n             measuring planetary positions to about one arcminute, the limit of\n             what is possible without a telescope. When Johannes Kepler tried to\n             fit Tycho's observations of Mars to a circular orbit, the best fit\n             he could manage was off by eight arcminutes. He could have called\n             that observational error and moved on. Instead he trusted Tycho's\n             measurements over two thousand years of assumption, and spent years\n             working out what curve would fit.\n             \n\nThe answer was an ellipse. Where the Sun sits in it is the first thing to find out.",
+        "es": "Durante casi toda la historia registrada las órbitas fueron círculos. Cuando las observaciones no encajaban, los astrónomos añadían más círculos —epiciclos— hasta que el modelo cuadraba. Copérnico movió el Sol al centro pero mantuvo los círculos, y su modelo no fue más preciso que el que sustituía.\n\nLo que rompió el círculo fueron los datos. Tycho Brahe pasó dos décadas midiendo posiciones planetarias con una precisión de un minuto de arco, el límite de lo posible sin telescopio. Cuando Johannes Kepler intentó ajustar las observaciones de Marte de Tycho a una órbita circular, el mejor ajuste que consiguió fallaba por ocho minutos de arco. Podría haber llamado a eso error observacional y haber seguido adelante. En vez de eso confió en las medidas de Tycho por encima de dos mil años de suposiciones, y pasó años averiguando qué curva encajaría.\n\nLa respuesta fue una elipse. Dónde se sitúa el Sol dentro de ella es lo primero que hay que averiguar.",
+        "esOf": "72407ceb"
       },
       "tip": {
         "en": "While an investigation is running, clicking selects an object without opening the inspector card, and placing new objects is switched off so a stray click cannot alter the system you are measuring.",
@@ -73,7 +76,7 @@
       "setup": {
         "scenario": "Kepler's 2nd Law",
         "seed": "kepler-lab",
-        "paused": false,
+        "paused": true,
         "zoom": 1.5
       }
     },
@@ -86,14 +89,14 @@
         "esOf": "64e67f78"
       },
       "body": {
-        "en": "A single star of one solar mass sits at the center of the view with\n             two bodies orbiting it.\n             \n\nThe <strong>pale blue</strong> body on the wide, almost round\n             path is the Circular Orbiter. The <strong>orange</strong> body on\n             the stretched path is the Eccentric Orbiter, which swings in much\n             closer to the star and back out much further. Nearly circular\n             orbits are what most Solar System planets are on, which is exactly\n             why the ellipse went unnoticed for so long.\n             \n\nThe colored wedges fanning out behind the orange body are all\n             equal in area. Watch them for a moment: near the star they are\n             narrow and long, far away they are broad and short. That is\n             Kepler's second law drawing itself, before you have measured\n             anything.",
-        "es": "Una sola estrella de una masa solar está en el centro de la vista con dos cuerpos orbitándola.\n\nEl cuerpo <strong>azul pálido</strong> de la trayectoria ancha y casi redonda es el Orbitador Circular. El cuerpo <strong>naranja</strong> de la trayectoria estirada es el Orbitador Excéntrico, que se acerca mucho más a la estrella y se aleja mucho más. Las órbitas casi circulares son las que siguen la mayoría de los planetas del Sistema Solar, que es exactamente por lo que la elipse pasó desapercibida tanto tiempo.\n\nLas cuñas de colores que se abren en abanico detrás del cuerpo naranja tienen todas la misma área. Obsérvalas un momento: cerca de la estrella son estrechas y largas, lejos son anchas y cortas. Esa es la segunda ley de Kepler dibujándose sola, antes de que hayas medido nada.",
-        "esOf": "f3552741"
+        "en": "A single star of one solar mass sits at the center of the view with\n             two bodies orbiting it.\n             \n\nThe <strong>pale blue</strong> body on the wide, almost round\n             path is the Circular Orbiter. The <strong>orange</strong> body on\n             the stretched path is the Eccentric Orbiter, which swings in much\n             closer to the star and back out much further. Nearly circular\n             orbits are what most Solar System planets are on, which is exactly\n             why the ellipse went unnoticed for so long.\n             \n\nThe scene is paused, and the ring marks the star. Nothing is\n             measured yet: the next step asks you to say where that star sits\n             in the orange body's path before you look any closer.",
+        "es": "Una sola estrella de una masa solar está en el centro de la vista con dos cuerpos orbitándola.\n\nEl cuerpo <strong>azul pálido</strong> de la trayectoria ancha y casi redonda es el Orbitador Circular. El cuerpo <strong>naranja</strong> de la trayectoria estirada es el Orbitador Excéntrico, que se acerca mucho más a la estrella y se aleja mucho más. Las órbitas casi circulares son las que siguen la mayoría de los planetas del Sistema Solar, que es exactamente por lo que la elipse pasó desapercibida tanto tiempo.\n\nLa escena está en pausa y el anillo señala la estrella. Todavía no se mide nada: el paso siguiente te pide decir dónde se sitúa esa estrella dentro de la trayectoria del cuerpo naranja antes de mirar más de cerca.",
+        "esOf": "a21777ba"
       },
       "tip": {
-        "en": "Nothing needs selecting yet. If the wedges are not showing, press the reset button beside the progress bar to rebuild the system.",
-        "es": "Todavía no hay que seleccionar nada. Si las cuñas no aparecen, pulsa el botón de reinicio junto a la barra de progreso para reconstruir el sistema.",
-        "esOf": "6cbc584c"
+        "en": "Nothing needs selecting yet. If the scene looks wrong, press the reset button beside the progress bar to rebuild the system.",
+        "es": "Todavía no hay que seleccionar nada. Si la escena se ve mal, pulsa el botón de reinicio junto a la barra de progreso para reconstruir el sistema.",
+        "esOf": "5372e446"
       }
     },
     {
@@ -105,9 +108,9 @@
         "esOf": "2c4260fe"
       },
       "body": {
-        "en": "An ellipse has a center and two foci. For a circle all three\n             coincide; the more elongated the ellipse, the further the foci sit\n             from the center.\n             \n\nLook at the orange body's path and where the star sits inside\n             it. Commit to an answer before measuring anything.",
-        "es": "Una elipse tiene un centro y dos focos. En un círculo los tres coinciden; cuanto más alargada es la elipse, más lejos del centro quedan los focos.\n\nMira la trayectoria del cuerpo naranja y dónde se sitúa la estrella dentro de ella. Comprométete con una respuesta antes de medir nada.",
-        "esOf": "36c072b9"
+        "en": "An ellipse has a center, halfway along its long diameter, and two\n             special points called foci, one on each side of the center.\n             \n\nLook at the orange body's path and where the star sits inside\n             it. Commit to an answer before measuring anything: the next step\n             gives you a way to check it.",
+        "es": "Una elipse tiene un centro, a mitad de su diámetro largo, y dos puntos especiales llamados focos, uno a cada lado del centro.\n\nMira la trayectoria del cuerpo naranja y dónde se sitúa la estrella dentro de ella. Comprométete con una respuesta antes de medir nada: el paso siguiente te da una manera de comprobarla.",
+        "esOf": "d6028954"
       },
       "prompt": {
         "en": "The star sits at…",
@@ -142,7 +145,64 @@
         "es": "La estrella se sitúa en uno de los focos, y el otro foco está vacío: allí no hay absolutamente nada. Esto no es una casualidad del Sistema Solar: cualquier atracción con ley del inverso del cuadrado produce una sección cónica con la fuente en un foco, cosa que Newton demostró sesenta años después de que Kepler la midiera. En un círculo los dos focos se funden en el centro, y por eso una órbita de baja excentricidad parece centrada.",
         "esOf": "45cc4465"
       },
-      "reveal": "measure-the-two-orbits"
+      "reveal": "the-first-law-and-the"
+    },
+    {
+      "sid": "find-the-foci",
+      "type": "measure",
+      "title": {
+        "en": "Find the empty focus",
+        "es": "Encuentra el foco vacío",
+        "esOf": "b04a71ac"
+      },
+      "body": {
+        "en": "The simulation can draw the ellipse a planet follows, with both\n             foci marked. Use it to check your prediction against two things you\n             read yourself.\n             \n\nFirst take the distances. Select the <strong>Eccentric\n             Orbiter</strong> from the object list, then press <strong>Take\n             reading</strong> beside <em>[[closest-approach|closest approach]]</em> and again beside\n             <em>furthest distance</em>.\n             \n\nThen switch on <strong>Orbit geometry</strong> in the planet's\n             card. A panel lists the points you can measure. Choose the star's\n             point (<em>Focus at Kepler Star</em>) and the <em>Empty focus</em>,\n             by pointer, or with Left and Right and Enter in the list. The panel\n             gives the distance between the two you chose: type it in. The last\n             box works out what your two distances say that separation must be.",
+        "es": "La simulación puede dibujar la elipse que sigue un planeta, con los dos focos marcados. Úsala para comprobar tu predicción con dos cosas que lees tú mismo.\n\nPrimero toma las distancias. Selecciona el <strong>Orbitador Excéntrico</strong> en la lista de objetos y pulsa <strong>Tomar la lectura</strong> junto a <em>[[closest-approach|máximo acercamiento]]</em> y de nuevo junto a <em>distancia máxima</em>.\n\nDespués activa <strong>Geometría de la órbita</strong> en la ficha del planeta. Un panel enumera los puntos que puedes medir. Elige el punto de la estrella (<em>Foco en Kepler Star</em>) y el <em>Foco vacío</em>, con el puntero o con Izquierda, Derecha y Intro en la lista. El panel da la distancia entre los dos que elegiste: escríbela. La última casilla calcula cuánto dicen tus dos distancias que deben distar los focos.",
+        "esOf": "15508fc1"
+      },
+      "tip": {
+        "en": "The panel can be closed with its X once you have the number. The two points are chosen one after the other; choosing a third replaces the oldest.",
+        "es": "El panel se puede cerrar con su X cuando tengas el número. Los dos puntos se eligen uno tras otro; elegir un tercero sustituye al más antiguo.",
+        "esOf": "77166bf2"
+      },
+      "fields": [
+        {
+          "id": "f_peri",
+          "label": {
+            "en": "Eccentric Orbiter: closest approach to the star",
+            "es": "Orbitador Excéntrico: máximo acercamiento a la estrella",
+            "esOf": "eb3b3cc1"
+          },
+          "unit": "AU"
+        },
+        {
+          "id": "f_apo",
+          "label": {
+            "en": "Eccentric Orbiter: furthest distance from the star",
+            "es": "Orbitador Excéntrico: distancia máxima a la estrella",
+            "esOf": "9bfc8e6d"
+          },
+          "unit": "AU"
+        },
+        {
+          "id": "f_sep",
+          "label": {
+            "en": "Distance between the star and the empty focus, from the panel",
+            "es": "Distancia entre la estrella y el foco vacío, según el panel",
+            "esOf": "a7fc572d"
+          },
+          "unit": "AU"
+        },
+        {
+          "id": "f_implied",
+          "label": {
+            "en": "What your two distances say the foci are apart",
+            "es": "Lo que dicen tus dos distancias que distan los focos",
+            "esOf": "7a880ed7"
+          },
+          "unit": "AU"
+        }
+      ]
     },
     {
       "sid": "the-first-law-and-the",
@@ -153,9 +213,9 @@
         "esOf": "393e267f"
       },
       "body": {
-        "en": "Kepler's <strong>first law</strong>: every planet moves on an\n             ellipse, with the star at one focus.\n             \n\nAn ellipse has two foci. Their defining property is that for\n             any point on the curve, the distances to the two foci always add to\n             the same total. The <em>semi-major axis</em> <strong>a</strong> is\n             half the long diameter, and it is the orbit's size. The\n             <em>eccentricity</em> <strong>e</strong> is its shape: the foci sit\n             a distance a x e either side of the center, so e = 0 puts both foci\n             at the center and gives a circle, while e approaching 1 stretches\n             the ellipse into a sliver.\n             \n\nThe second focus is the strange part. There is nothing there.\n             No mass, no object, nothing to mark it. It is a purely geometric\n             consequence of the inverse-square force.",
-        "es": "<strong>Primera ley</strong> de Kepler: todo planeta se mueve sobre una elipse, con la estrella en uno de los focos.\n\nUna elipse tiene dos focos. Su propiedad definitoria es que, para cualquier punto de la curva, las distancias a los dos focos suman siempre el mismo total. El <em>semieje mayor</em> <strong>a</strong> es la mitad del diámetro largo, y es el tamaño de la órbita. La <em>excentricidad</em> <strong>e</strong> es su forma: los focos quedan a una distancia a x e a cada lado del centro, así que e = 0 pone ambos focos en el centro y da un círculo, mientras que e acercándose a 1 estira la elipse hasta convertirla en una astilla.\n\nEl segundo foco es la parte rara. Allí no hay nada. Ninguna masa, ningún objeto, nada que lo marque. Es una consecuencia puramente geométrica de la fuerza del inverso del cuadrado.",
-        "esOf": "88ec515d"
+        "en": "Kepler's <strong>first law</strong>: every planet moves on an\n             ellipse, with the star at one focus.\n             \n\nAn ellipse has two foci. Their defining property is that for\n             any point on the curve, the distances to the two foci always add to\n             the same total. The <em>[[semi-major-axis|semi-major axis]]</em> <strong>a</strong> is\n             half the long diameter, and it is the orbit's size. The\n             <em>[[eccentricity|eccentricity]]</em> <strong>e</strong> is its shape: the foci sit\n             a distance <em>a</em> × <em>e</em> either side of the center, so <em>e</em> = 0 puts both foci\n             at the center and gives a circle, while <em>e</em> approaching 1 stretches\n             the ellipse into a sliver.\n             \n\nThe second focus is the strange part. There is nothing there.\n             No mass, no object, nothing to mark it. It is a purely geometric\n             consequence of the inverse-square force.",
+        "es": "<strong>Primera ley</strong> de Kepler: todo planeta se mueve sobre una elipse, con la estrella en uno de los focos.\n\nUna elipse tiene dos focos. Su propiedad definitoria es que, para cualquier punto de la curva, las distancias a los dos focos suman siempre el mismo total. El <em>[[semi-major-axis|semieje mayor]]</em> <strong>a</strong> es la mitad del diámetro largo, y es el tamaño de la órbita. La <em>[[eccentricity|excentricidad]]</em> <strong>e</strong> es su forma: los focos quedan a una distancia <em>a</em> × <em>e</em> a cada lado del centro, así que <em>e</em> = 0 pone ambos focos en el centro y da un círculo, mientras que e acercándose a 1 estira la elipse hasta convertirla en una astilla.\n\nEl segundo foco es la parte rara. Allí no hay nada. Ninguna masa, ningún objeto, nada que lo marque. Es una consecuencia puramente geométrica de la fuerza del inverso del cuadrado.",
+        "esOf": "e80e1630"
       },
       "tip": {
         "en": "Drag the slider on the next step to watch the foci separate as e grows.",
@@ -172,9 +232,9 @@
         "esOf": "e882de43"
       },
       "body": {
-        "en": "Drag the eccentricity slider in the panel beside this one. Each\n             quantity is drawn in its own color, matching the key underneath.\n             \n\n<strong>a</strong>, the semi-major axis, is half the long\n             diameter and sets the orbit's <em>size</em>. It is held fixed on\n             screen here so that only the shape changes.\n             <strong>b</strong> is the semi-minor axis, half the short diameter.\n             <strong>c = a x e</strong> is how far each focus sits from the\n             center, so the eccentricity is just the fraction of a by which the\n             star is off-center.\n             \n\nThe two are tied together by b = a x sqrt(1 - e squared),\n             which is why the ellipse gets shorter as it gets more eccentric\n             while its length stays the same.\n             \n\nNotice how little e has to grow before the star is visibly\n             off-center, and how hard it is to see any difference at all below\n             about 0.1. That is why the Solar System's near-circular orbits hid\n             the ellipse for two thousand years, and why it was Mars, one of the\n             more eccentric planets Tycho could measure well, that finally gave\n             it away.",
-        "es": "Arrastra el deslizador de excentricidad del panel contiguo. Cada magnitud se dibuja en su propio color, según la leyenda de debajo.\n\n<strong>a</strong>, el semieje mayor, es la mitad del diámetro largo y fija el <em>tamaño</em> de la órbita. Aquí se mantiene fijo en pantalla para que solo cambie la forma. <strong>b</strong> es el semieje menor, la mitad del diámetro corto. <strong>c = a x e</strong> es lo lejos que queda cada foco del centro, así que la excentricidad es simplemente la fracción de a en que la estrella está descentrada.\n\nAmbos están ligados por b = a x raíz(1 - e al cuadrado), y por eso la elipse se acorta a medida que se vuelve más excéntrica mientras su longitud se mantiene.\n\nFíjate en lo poco que tiene que crecer e antes de que la estrella se vea descentrada, y en lo difícil que es ver diferencia alguna por debajo de 0,1 aproximadamente. Por eso las órbitas casi circulares del Sistema Solar ocultaron la elipse durante dos mil años, y por eso fue Marte, uno de los planetas más excéntricos que Tycho podía medir bien, el que finalmente la delató.",
-        "esOf": "cf56b0fa"
+        "en": "Drag the eccentricity slider in the panel beside this one. Each\n             quantity is drawn in its own color, matching the key underneath.\n             \n\n<strong>a</strong>, the semi-major axis, is half the long\n             diameter and sets the orbit's <em>size</em>. It is held fixed on\n             screen here so that only the shape changes.\n             <strong>b</strong> is the semi-minor axis, half the short diameter.\n             <strong><em>c</em> = <em>a</em> × <em>e</em></strong> is how far each focus sits from the\n             center, so the eccentricity is just the fraction of a by which the\n             star is off-center.\n             \n\nThe two are tied together by <em>b</em> = <em>a</em> × √(1 − <em>e</em>²),\n             which is why the ellipse gets shorter as it gets more eccentric\n             while its length stays the same.\n             \n\nNotice how little <em>e</em> has to grow before the star is visibly\n             off-center, and how hard it is to see any difference at all below\n             about 0.1. That is why the Solar System's near-circular orbits hid\n             the ellipse for two thousand years, and why it was Mars, one of the\n             more eccentric planets Tycho could measure well, that finally gave\n             it away.",
+        "es": "Arrastra el deslizador de excentricidad del panel contiguo. Cada magnitud se dibuja en su propio color, según la leyenda de debajo.\n\n<strong>a</strong>, el semieje mayor, es la mitad del diámetro largo y fija el <em>tamaño</em> de la órbita. Aquí se mantiene fijo en pantalla para que solo cambie la forma. <strong>b</strong> es el semieje menor, la mitad del diámetro corto. <strong><em>c</em> = <em>a</em> × <em>e</em></strong> es lo lejos que queda cada foco del centro, así que la excentricidad es simplemente la fracción de a en que la estrella está descentrada.\n\nAmbos están ligados por <em>b</em> = <em>a</em> × √(1 − <em>e</em>²), y por eso la elipse se acorta a medida que se vuelve más excéntrica mientras su longitud se mantiene.\n\nFíjate en lo poco que tiene que crecer e antes de que la estrella se vea descentrada, y en lo difícil que es ver diferencia alguna por debajo de 0,1 aproximadamente. Por eso las órbitas casi circulares del Sistema Solar ocultaron la elipse durante dos mil años, y por eso fue Marte, uno de los planetas más excéntricos que Tycho podía medir bien, el que finalmente la delató.",
+        "esOf": "ca39493b"
       }
     },
     {
@@ -230,67 +290,6 @@
       }
     },
     {
-      "sid": "measure-the-two-orbits",
-      "type": "measure",
-      "title": {
-        "en": "Measure the two orbits",
-        "es": "Mide las dos órbitas",
-        "esOf": "b539f87b"
-      },
-      "body": {
-        "en": "Click the <strong>Circular Orbiter</strong> and read its values from\n             the live readout, then click the <strong>Eccentric Orbiter</strong>\n             and read its.\n             \n\nEccentricity <em>e</em> runs from 0 for a perfect circle to\n             just under 1 for a very elongated ellipse. For comparison: Earth is\n             0.017, Mars is 0.093, Pluto is 0.249, and Halley's Comet is 0.967.",
-        "es": "Pulsa el <strong>Orbitador Circular</strong> y lee sus valores en la lectura en vivo, después pulsa el <strong>Orbitador Excéntrico</strong> y lee los suyos.\n\nLa excentricidad <em>e</em> va de 0 para un círculo perfecto a algo menos de 1 para una elipse muy alargada. Para comparar: la Tierra es 0,017, Marte 0,093, Plutón 0,249 y el cometa Halley 0,967.",
-        "esOf": "f2841a94"
-      },
-      "fields": [
-        {
-          "id": "circ_e",
-          "label": {
-            "en": "Circular Orbiter: eccentricity e",
-            "es": "Orbitador Circular: excentricidad e",
-            "esOf": "fed5650a"
-          },
-          "unit": ""
-        },
-        {
-          "id": "ecc_e",
-          "label": {
-            "en": "Eccentric Orbiter: eccentricity e",
-            "es": "Orbitador Excéntrico: excentricidad e",
-            "esOf": "771a0a15"
-          },
-          "unit": ""
-        },
-        {
-          "id": "ecc_peri",
-          "label": {
-            "en": "Eccentric Orbiter: closest approach",
-            "es": "Orbitador Excéntrico: máximo acercamiento",
-            "esOf": "4bfacd4f"
-          },
-          "unit": "AU"
-        },
-        {
-          "id": "ecc_apo",
-          "label": {
-            "en": "Eccentric Orbiter: furthest distance",
-            "es": "Orbitador Excéntrico: distancia máxima",
-            "esOf": "84c34598"
-          },
-          "unit": "AU"
-        },
-        {
-          "id": "ecc_a",
-          "label": {
-            "en": "Semi-major axis from your two distances",
-            "es": "Semieje mayor a partir de tus dos distancias",
-            "esOf": "38c7761d"
-          },
-          "unit": "AU"
-        }
-      ]
-    },
-    {
       "sid": "where-does-it-move-fastest",
       "type": "predict",
       "title": {
@@ -299,9 +298,9 @@
         "esOf": "724d9836"
       },
       "body": {
-        "en": "Kepler's second law says a line drawn from the star to the planet\n             sweeps out equal areas in equal times. Think about what that forces\n             the speed to do at different points on the orbit.",
-        "es": "La segunda ley de Kepler dice que una línea trazada de la estrella al planeta barre áreas iguales en tiempos iguales. Piensa en lo que eso obliga a hacer a la velocidad en distintos puntos de la órbita.",
-        "esOf": "a135c56b"
+        "en": "The eccentric planet's distance from its star changes all the way\n             round its orbit: it swings in close and out far. Think about what\n             that does to its speed, then commit to an answer before you measure\n             anything.",
+        "es": "La distancia del planeta excéntrico a su estrella cambia durante toda la órbita: se acerca mucho y se aleja mucho. Piensa en lo que eso hace a su velocidad y comprométete con una respuesta antes de medir nada.",
+        "esOf": "ac8dcaf7"
       },
       "prompt": {
         "en": "The eccentric planet moves fastest…",
@@ -336,7 +335,7 @@
         "es": "Más rápido en el máximo acercamiento. Una cuña trazada cerca de la estrella es corta en radio, así que para encerrar la misma área tiene que ser larga en su arco: el planeta debe cubrir más terreno por unidad de tiempo cuando está cerca. Kepler encontró esta regla antes de encontrar la elipse, y es la razón de que el verano del hemisferio norte sea unos días más largo que el del sur: la Tierra está cerca del afelio en julio y se demora.",
         "esOf": "6f93cb0b"
       },
-      "reveal": "watch-it-happen"
+      "reveal": "why-the-speed-changes"
     },
     {
       "sid": "watch-it-happen",
@@ -366,32 +365,8 @@
           "en": "Note that the semi-major axis and eccentricity barely move: the orbit is fixed, only the position on it changes",
           "es": "Observa que el semieje mayor y la excentricidad apenas se mueven: la órbita es fija, solo cambia la posición sobre ella",
           "esOf": "e576f257"
-        },
-        {
-          "en": "Notice the wedges: thin and long near the star, wide and short far away, but equal in area",
-          "es": "Fíjate en las cuñas: finas y largas cerca de la estrella, anchas y cortas lejos, pero de igual área",
-          "esOf": "902fa6e0"
         }
       ]
-    },
-    {
-      "sid": "equal-areas-however-you-slice",
-      "type": "wedges",
-      "title": {
-        "en": "Equal areas, however you slice it",
-        "es": "Áreas iguales, sea cual sea el corte",
-        "esOf": "b120a931"
-      },
-      "body": {
-        "en": "The orbit on screen is cut into equal-time slices, and every slice\n             is labeled with its share of the total area. Change how many slices\n             there are and watch what happens to those numbers.\n             \n\nWith 5 slices each is 20%. With 12 each is 8.3%. The count is\n             arbitrary; what is not arbitrary is that they are always equal. The\n             planet takes exactly the same time to travel along each slice's\n             stretch of orbit, whether that stretch is a short fast dash past the\n             star or a long slow crawl across the far side.",
-        "es": "La órbita en pantalla está cortada en rebanadas de igual tiempo, y cada rebanada lleva etiquetada su parte del área total. Cambia cuántas rebanadas hay y observa qué les ocurre a esos números.\n\nCon 5 rebanadas cada una es el 20 %. Con 12, cada una es el 8,3 %. El número es arbitrario; lo que no es arbitrario es que siempre son iguales. El planeta tarda exactamente el mismo tiempo en recorrer el tramo de órbita de cada rebanada, tanto si ese tramo es una carrera corta y rápida junto a la estrella como un arrastre largo y lento por el lado lejano.",
-        "esOf": "6b5d4bc3"
-      },
-      "tip": {
-        "en": "The wedge time below is the real answer to \"equal areas in equal times\": it is the same number for every wedge because they all represent the same interval.",
-        "es": "El tiempo de cuña de abajo es la respuesta real a «áreas iguales en tiempos iguales»: es el mismo número para todas las cuñas porque todas representan el mismo intervalo.",
-        "esOf": "aad0cefd"
-      }
     },
     {
       "sid": "fast-and-slow-in-numbers",
@@ -402,9 +377,9 @@
         "esOf": "5dcede6a"
       },
       "body": {
-        "en": "Now put numbers on it — and let the simulation find the two\n             moments for you, because catching them by hand measures your\n             reflexes rather than the orbit.\n             \n\nThe <strong>Pause at Event</strong> tool has opened below\n             with the <strong>Eccentric Orbiter</strong> and its star already\n             chosen. Set the event to <strong>periapsis</strong> and press\n             <strong>Arm</strong>. The simulation runs until the planet reaches\n             its closest point and stops there. Select the planet and record\n             the speed. Then arm it again for <strong>apoapsis</strong> and do\n             the same at the far end.\n             \n\nBoth numbers are measured <strong>relative to the star</strong>\n             — the readout subtracts the star's own motion, so the distance and\n             the speed describe the orbit rather than the pair's drift through\n             the frame. The ratio is worked out for you.\n             \n\n<strong>Read the two numbers the tool gives you.</strong> It\n             reports when the event <em>was</em>, and how far past it the\n             simulation actually <em>stopped</em>. Those are different things:\n             the world is integrated in steps, and the event falls between two\n             of them. The tool brackets it and interpolates the time, then stops\n             at the first step after it — it does not wind the world back onto\n             the event, because the clock is not the only thing indexed by the\n             clock. So the speed you read is the speed at the paused state, a\n             short way past the extreme, and the event time is an estimate of\n             when the extreme happened. For this orbit the difference is small,\n             and the honest thing is to know it is there.",
-        "es": "Ahora ponle números, y deja que la simulación encuentre los dos momentos por ti: atraparlos a mano mide tus reflejos, no la órbita.\n\nLa herramienta <strong>Pausar en un evento</strong> se ha abierto abajo con el <strong>Eccentric Orbiter</strong> y su estrella ya seleccionados. Pon el evento en <strong>periastro</strong> y pulsa <strong>Armar</strong>. La simulación corre hasta que el planeta llega a su punto más cercano y se detiene ahí. Selecciona el planeta y anota la velocidad y la distancia. Luego ármala otra vez para el <strong>apoastro</strong> y haz lo mismo en el extremo lejano.\n\nLas dos cifras se miden <strong>respecto a la estrella</strong>: la lectura resta el movimiento propio de la estrella, así que la distancia y la velocidad describen la órbita y no la deriva del par por el encuadre. El cociente se calcula por ti.\n\n<strong>Lee las dos cifras que te da la herramienta.</strong> Informa de cuándo <em>fue</em> el evento y de cuánto más allá se <em>detuvo</em> de verdad la simulación. Son cosas distintas: el mundo se integra a pasos y el evento cae entre dos de ellos. La herramienta lo acota e interpola el instante, y luego para en el primer paso posterior; no rebobina el mundo hasta el evento, porque el reloj no es lo único indexado por el reloj. Así que la velocidad que lees es la del estado en pausa, un poco más allá del extremo, y el instante del evento es una estimación de cuándo ocurrió. En esta órbita la diferencia es pequeña, y lo honesto es saber que está ahí.",
-        "esOf": "46be4c64"
+        "en": "Now put numbers on it, and let the simulation find the two\n             moments for you, because catching them by hand measures your\n             reflexes rather than the orbit.\n             \n\nThe <strong>Pause at Event</strong> tool below has the\n             <strong>Eccentric Orbiter</strong> and its star chosen, and with\n             your prediction committed it is armed for\n             <strong>[[periapsis|periapsis]]</strong>: the simulation runs until\n             the planet reaches its closest point and stops there. Select the\n             planet in the object list and press <strong>Take reading</strong>\n             beside the speed and beside the distance. Then set the event to\n             <strong>[[apoapsis|apoapsis]]</strong>, press <strong>Arm</strong>,\n             and take the same two readings at the far end.\n             \n\nBoth numbers are measured <strong>relative to the star</strong>:\n             the readout subtracts the star's own motion, so the distance and\n             the speed describe the orbit rather than the pair's drift through\n             the frame. The ratio is worked out for you.\n             \n\nThe tool reports when the event <em>was</em>, and how far past\n             it the simulation actually <em>stopped</em>. Those are different\n             things: the world is integrated in steps, and the event falls\n             between two of them, so the speed you read is a short way past the\n             extreme. For this orbit the difference is small, and the honest\n             thing is to know it is there.",
+        "es": "Ahora ponle números, y deja que la simulación encuentre los dos momentos por ti: atraparlos a mano mide tus reflejos, no la órbita.\n\nLa herramienta <strong>Pausar en un evento</strong> de abajo tiene elegidos el <strong>Orbitador Excéntrico</strong> y su estrella y, con tu predicción comprometida, está armada para el <strong>[[periapsis|periastro]]</strong>: la simulación corre hasta que el planeta llega a su punto más cercano y se detiene ahí. Selecciona el planeta en la lista de objetos y pulsa <strong>Tomar la lectura</strong> junto a la velocidad y junto a la distancia. Después fija el evento en el <strong>[[apoapsis|apoastro]]</strong>, pulsa <strong>Armar</strong> y toma las mismas dos lecturas en el extremo lejano.\n\nAmbos números se miden <strong>respecto a la estrella</strong>: la lectura resta el movimiento propio de la estrella, así que la distancia y la velocidad describen la órbita y no la deriva del par por el sistema de referencia. El cociente te lo calculamos nosotros.\n\nLa herramienta informa de cuándo <em>ocurrió</em> el evento y de cuánto se pasó la simulación al <em>detenerse</em>. Son cosas distintas: el mundo se integra por pasos y el evento cae entre dos de ellos, así que la velocidad que lees es la de un instante poco posterior al extremo. Para esta órbita la diferencia es pequeña, y lo honesto es saber que existe.",
+        "esOf": "528f7a94"
       },
       "tip": {
         "en": "If the tool refuses to arm and says the orbit is circular, that is not a fault. On a perfectly round orbit there is no closest point: the radial rate is zero everywhere and its sign is decided by rounding error, so a watch would fire on the first step and every step after it. The tool declines and says so. The Eccentric Orbiter is eccentric enough; the Circular Orbiter is not, and it is worth arming it once to see the refusal.",
@@ -489,6 +464,25 @@
       }
     },
     {
+      "sid": "equal-areas-however-you-slice",
+      "type": "wedges",
+      "title": {
+        "en": "Equal areas, however you slice it",
+        "es": "Áreas iguales, sea cual sea el corte",
+        "esOf": "b120a931"
+      },
+      "body": {
+        "en": "The orbit on screen is cut into equal-time slices, and every slice\n             is labeled with its share of the total area. Change how many slices\n             there are and watch what happens to those numbers.\n             \n\nWith 5 slices each is 20%. With 12 each is 8.3%. The count is\n             arbitrary; what is not arbitrary is that they are always equal. The\n             planet takes exactly the same time to travel along each slice's\n             stretch of orbit, whether that stretch is a short fast dash past the\n             star or a long slow crawl across the far side.",
+        "es": "La órbita en pantalla está cortada en rebanadas de igual tiempo, y cada rebanada lleva etiquetada su parte del área total. Cambia cuántas rebanadas hay y observa qué les ocurre a esos números.\n\nCon 5 rebanadas cada una es el 20 %. Con 12, cada una es el 8,3 %. El número es arbitrario; lo que no es arbitrario es que siempre son iguales. El planeta tarda exactamente el mismo tiempo en recorrer el tramo de órbita de cada rebanada, tanto si ese tramo es una carrera corta y rápida junto a la estrella como un arrastre largo y lento por el lado lejano.",
+        "esOf": "6b5d4bc3"
+      },
+      "tip": {
+        "en": "The wedge time below is the real answer to \"equal areas in equal times\": it is the same number for every wedge because they all represent the same interval.",
+        "es": "El tiempo de cuña de abajo es la respuesta real a «áreas iguales en tiempos iguales»: es el mismo número para todas las cuñas porque todas representan el mismo intervalo.",
+        "esOf": "aad0cefd"
+      }
+    },
+    {
       "sid": "kepler-s-third-law",
       "type": "read",
       "title": {
@@ -497,9 +491,9 @@
         "esOf": "b7811a5d"
       },
       "body": {
-        "en": "The first two laws describe a single orbit. The third relates\n             <em>different</em> orbits to each other, and it took Kepler another\n             decade to find: the square of the orbital period is proportional to\n             the cube of the semi-major axis.\n             \n\nWritten for a one-solar-mass star with <em>P</em> in years and\n             <em>a</em> in AU, the constant is exactly 1, so the law reads\n             simply P² = a³. Earth checks out trivially: 1² = 1³.\n             \n\nYou are about to test it against the real Solar System. These\n             are the true semi-major axes and the true masses, so your\n             measurements should match a textbook table to within your reading\n             error. Earth really is at 1 AU here, and its period really does\n             come out at one year.\n             \n\nOne thing to notice straight away: the view is framed on\n             Mercury out to Saturn, and Uranus and Neptune are already off\n             screen. Neptune is thirty times further from the Sun than Earth is,\n             and no single view shows the inner planets and the outer ones at a\n             useful size at once. That is not a limitation of this software. It\n             is why almost every diagram of the Solar System you have ever seen\n             is drawn to the wrong scale.",
-        "es": "Las dos primeras leyes describen una sola órbita. La tercera relaciona órbitas <em>distintas</em> entre sí, y a Kepler le costó otra década encontrarla: el cuadrado del periodo orbital es proporcional al cubo del semieje mayor.\n\nEscrita para una estrella de una masa solar con <em>P</em> en años y <em>a</em> en UA, la constante vale exactamente 1, así que la ley se lee simplemente P² = a³. La Tierra lo cumple trivialmente: 1² = 1³.\n\nEstás a punto de ponerla a prueba contra el Sistema Solar real. Estos son los semiejes mayores reales y las masas reales, así que tus medidas deberían coincidir con una tabla de libro de texto dentro de tu error de lectura. La Tierra está aquí de verdad a 1 UA, y su periodo sale de verdad en un año.\n\nUna cosa que hay que notar de entrada: la vista está encuadrada de Mercurio a Saturno, y Urano y Neptuno ya están fuera de pantalla. Neptuno está treinta veces más lejos del Sol que la Tierra, y ninguna vista única muestra a la vez los planetas interiores y los exteriores a un tamaño útil. Eso no es una limitación de este programa. Es la razón por la que casi todos los diagramas del Sistema Solar que has visto están dibujados a una escala falsa.",
-        "esOf": "ed2fde10"
+        "en": "The first two laws describe a single orbit. The third relates\n             <em>different</em> orbits to each other, and it took Kepler another\n             decade to find: the square of the orbital [[period|period]] is proportional to\n             the cube of the semi-major axis.\n             \n\nWritten for a one-solar-mass star with <em>P</em> in years and\n             <em>a</em> in AU, the constant is exactly 1, so the law reads\n             simply <em>P</em>² = <em>a</em>³. Earth checks out trivially: 1² = 1³.\n             \n\nYou are about to test it against the real Solar System. These\n             are the true semi-major axes and the true masses, so your\n             measurements should match a textbook table to within your reading\n             error. Earth really is at 1 AU here, and its period really does\n             come out at one year.\n             \n\nOne thing to notice straight away: the view is framed on\n             Mercury out to Saturn, and Uranus and Neptune are already off\n             screen. Neptune is thirty times further from the Sun than Earth is,\n             and no single view shows the inner planets and the outer ones at a\n             useful size at once. That is not a limitation of this software. It\n             is why almost every diagram of the Solar System you have ever seen\n             is drawn to the wrong scale.",
+        "es": "Las dos primeras leyes describen una sola órbita. La tercera relaciona órbitas <em>distintas</em> entre sí, y a Kepler le costó otra década encontrarla: el cuadrado del [[period|periodo]] orbital es proporcional al cubo del semieje mayor.\n\nEscrita para una estrella de una masa solar con <em>P</em> en años y <em>a</em> en UA, la constante vale exactamente 1, así que la ley se lee simplemente <em>P</em>² = <em>a</em>³. La Tierra lo cumple trivialmente: 1² = 1³.\n\nEstás a punto de ponerla a prueba contra el Sistema Solar real. Estos son los semiejes mayores reales y las masas reales, así que tus medidas deberían coincidir con una tabla de libro de texto dentro de tu error de lectura. La Tierra está aquí de verdad a 1 UA, y su periodo sale de verdad en un año.\n\nUna cosa que hay que notar de entrada: la vista está encuadrada de Mercurio a Saturno, y Urano y Neptuno ya están fuera de pantalla. Neptuno está treinta veces más lejos del Sol que la Tierra, y ninguna vista única muestra a la vez los planetas interiores y los exteriores a un tamaño útil. Eso no es una limitación de este programa. Es la razón por la que casi todos los diagramas del Sistema Solar que has visto están dibujados a una escala falsa.",
+        "esOf": "5fde2f1d"
       },
       "tip": {
         "en": "Scroll to zoom. The planets stay visible as small dots however far out you go, and stay clickable, but they only separate properly when you zoom in. Nothing is moving, so take your time.",
@@ -517,14 +511,14 @@
       "sid": "measure-four-planets",
       "type": "measure",
       "title": {
-        "en": "Measure four planets",
-        "es": "Mide cuatro planetas",
-        "esOf": "a67ec4a6"
+        "en": "Measure the planets",
+        "es": "Mide los planetas",
+        "esOf": "b0f5ac67"
       },
       "body": {
-        "en": "Click each planet in turn and record its semi-major axis and\n             period. Choose four that are well spread out, because a narrow range\n             of <em>a</em> cannot tell a power law apart from a straight line.\n             \n\nThere is room for all eight planets, and the fitted line gets\n             visibly better as you add them. Mercury, Earth, Jupiter and Saturn\n             are reachable at the starting zoom; scroll out for Uranus and\n             Neptune.\n             \n\nIf the outer planets squash the inner ones into the corner of\n             the plot, press <strong>Log axes</strong>. On a log-log plot a power\n             law is a straight line whatever its exponent, and every planet gets\n             the same amount of room.\n             \n\nYour points appear on the plot as you type. Record what the\n             simulation reports, not what you remember about the real Solar\n             System.",
-        "es": "Pulsa cada planeta por turno y anota su semieje mayor y su periodo. Elige cuatro que estén bien repartidos, porque un rango estrecho de <em>a</em> no distingue una ley de potencias de una recta.\n\nHay sitio para los ocho planetas, y la recta ajustada mejora visiblemente conforme los añades. Mercurio, la Tierra, Júpiter y Saturno están al alcance con el zoom inicial; aleja la vista para Urano y Neptuno.\n\nSi los planetas exteriores aplastan a los interiores en un rincón de la gráfica, pulsa <strong>Ejes logarítmicos</strong>. En una gráfica log-log una ley de potencias es una recta sea cual sea su exponente, y todos los planetas reciben el mismo espacio.\n\nTus puntos aparecen en la gráfica según los escribes. Anota lo que informa la simulación, no lo que recuerdes del Sistema Solar real.",
-        "esOf": "501f4835"
+        "en": "Select a planet and press <strong>Add reading</strong> to record\n             its semi-major axis and period together, with the name of the\n             planet they came from. Choose at least five, and choose them so\n             that they are well spread out, because a narrow range of <em>a</em>\n             cannot tell a power law apart from a straight line.\n             \n\nThere is room for all eight planets, and the fitted line gets\n             visibly better as you add them. Mercury, Earth, Jupiter and Saturn\n             are reachable at the starting zoom; scroll out for Uranus and\n             Neptune. Select a point on the plot, or a row of the table, to ring\n             the planet it came from.\n             \n\nIf the outer planets squash the inner ones into the corner of\n             the plot, press <strong>Log axes</strong>. On a log-log plot a power\n             law is a straight line whatever its exponent, and every planet gets\n             the same amount of room.\n             \n\nYour points appear on the plot as you add them. Record what the\n             simulation reports, not what you remember about the real Solar\n             System.",
+        "es": "Selecciona un planeta y pulsa <strong>Añadir lectura</strong> para anotar juntos su semieje mayor y su periodo, con el nombre del planeta del que salieron. Elige al menos cinco, y elígelos bien repartidos, porque un rango estrecho de <em>a</em> no distingue una ley de potencias de una recta.\n\nHay sitio para los ocho planetas, y la recta ajustada mejora visiblemente conforme los añades. Mercurio, la Tierra, Júpiter y Saturno están al alcance con el zoom inicial; aleja la vista para Urano y Neptuno. Selecciona un punto de la gráfica, o una fila de la tabla, para rodear el planeta del que viene.\n\nSi los planetas exteriores aplastan a los interiores en un rincón de la gráfica, pulsa <strong>Ejes logarítmicos</strong>. En una gráfica log-log una ley de potencias es una recta sea cual sea su exponente, y todos los planetas reciben el mismo espacio.\n\nTus puntos aparecen en la gráfica según los añades. Anota lo que informa la simulación, no lo que recuerdes del Sistema Solar real.",
+        "esOf": "a16fc855"
       },
       "fields": [
         {
@@ -758,7 +752,9 @@
         "es": "Toma tu planeta <strong>más exterior</strong>: el de mayor <em>a</em>. Copia sus dos valores en las dos primeras casillas de abajo y el resto se calcula por ti, etapa a etapa, para que veas de dónde sale el número.\n\nEleva la distancia al cubo. Eleva el periodo al cuadrado. Divide el segundo entre el primero. Si Kepler tenía razón, lo que salga no debería depender del planeta que hayas elegido.",
         "esOf": "56f0dede"
       },
-      "requires": ["measure-four-planets"],
+      "requires": [
+        "measure-four-planets"
+      ],
       "fields": [
         {
           "id": "k_a",
@@ -781,135 +777,139 @@
         {
           "id": "k_a3",
           "label": {
-            "en": "Step 1: a³",
-            "es": "Paso 1: a³",
-            "esOf": "cdbe818a"
+            "en": "Step 1: <em>a</em>³",
+            "es": "Paso 1: <em>a</em>³",
+            "esOf": "05ea0895"
           },
           "unit": "AU³"
         },
         {
           "id": "k_P2",
           "label": {
-            "en": "Step 2: P²",
-            "es": "Paso 2: P²",
-            "esOf": "47a08d5d"
+            "en": "Step 2: <em>P</em>²",
+            "es": "Paso 2: <em>P</em>²",
+            "esOf": "12b861aa"
           },
           "unit": "yr²"
         },
         {
           "id": "k_ratio",
           "label": {
-            "en": "Step 3: P² ÷ a³",
-            "es": "Paso 3: P² ÷ a³",
-            "esOf": "b9fe6785"
+            "en": "Step 3: <em>P</em>² ÷ <em>a</em>³",
+            "es": "Paso 3: <em>P</em>² ÷ <em>a</em>³",
+            "esOf": "b158165d"
           },
           "unit": ""
         }
       ]
     },
     {
-      "sid": "use-the-law",
-      "type": "question",
+      "sid": "pick-a-distance",
+      "type": "measure",
       "title": {
-        "en": "Use the law",
-        "es": "Usa la ley",
-        "esOf": "0fa5ae23"
+        "en": "Pick an orbit nobody has measured",
+        "es": "Elige una órbita que nadie ha medido",
+        "esOf": "934afd8a"
       },
       "body": {
-        "en": "The real test of a law is whether it predicts something you have\n             not measured.\n             \n\nSuppose a ninth planet orbited this same star at a semi-major\n             axis of exactly 4 AU, out between Mars and Jupiter. Nobody has\n             measured its period, because it does not exist. Work it out anyway.\n             \n\n<strong>Step 1.</strong> You know P² = a³, and you know\n             a = 4 AU.\n             \n\n<strong>Step 2.</strong> Cube the distance:\n             a³ = 4 × 4 × 4 = 64. So P² = 64.\n             \n\n<strong>Step 3.</strong> You have P squared, but the question\n             asks for P. Undo the square by taking the square root: P = √64.\n             \n\nWhat is that?",
-        "es": "La prueba de verdad de una ley es si predice algo que no has medido.\n\nSupón que un noveno planeta orbitara esta misma estrella con un semieje mayor de exactamente 4 UA, entre Marte y Júpiter. Nadie ha medido su periodo, porque no existe. Calcúlalo de todos modos.\n\n<strong>Paso 1.</strong> Sabes que P² = a³, y sabes que a = 4 UA.\n\n<strong>Paso 2.</strong> Eleva la distancia al cubo: a³ = 4 × 4 × 4 = 64. Así que P² = 64.\n\n<strong>Paso 3.</strong> Tienes P al cuadrado, pero la pregunta pide P. Deshaz el cuadrado con la raíz cuadrada: P = √64.\n\n¿Cuánto es?",
-        "esOf": "e5d79844"
+        "en": "The real test of a law is whether it predicts something you have\n             not measured. Choose a distance from the star, in AU, for a ninth\n             planet that does not exist. Pick one that falls in a gap between\n             two of the planets you measured, not on top of one of them, so that\n             the prediction means something.\n             \n\nNobody has measured its period. The next two steps ask you\n             to estimate it from your plot, and then to check the estimate.",
+        "es": "La prueba de verdad de una ley es si predice algo que no has medido. Elige una distancia a la estrella, en UA, para un noveno planeta que no existe. Elige una que caiga en un hueco entre dos de los planetas que mediste, no encima de uno de ellos, para que la predicción signifique algo.\n\nNadie ha medido su periodo. Los dos pasos siguientes te piden que lo estimes a partir de tu gráfica y que después compruebes la estimación.",
+        "esOf": "39513a2d"
       },
-      "kind": "numeric",
-      "prompt": {
-        "en": "Orbital period of a planet at a = 4 AU",
-        "es": "Periodo orbital de un planeta a a = 4 UA",
-        "esOf": "6563c26a"
-      },
-      "answer": 8,
-      "because": {
-        "en": "P = 8 years. Now try it on a planet you did measure: Jupiter sits at 5.204 AU, so a³ = 141.0 and P = √141.0 = 11.87 years. The table says 11.86. You have just predicted a real planet's year from nothing but its distance.",
-        "es": "P = 8 años. Ahora pruébalo con un planeta que sí mediste: Júpiter está a 5,204 UA, así que a³ = 141,0 y P = √141,0 = 11,87 años. La tabla dice 11,86. Acabas de predecir el año de un planeta real a partir de nada más que su distancia.",
-        "esOf": "87fd35e0"
-      },
-      "unit": "years",
-      "tolerance": 0.4,
-      "expect": {
-        "dimension": "time",
-        "unit": "yr",
-        "accept": ["yr", "years", "d", "days"]
-      },
-      "hints": {
-        "concept": {
-          "en": "Kepler's third law ties the size of an orbit to how long it\n                  takes, and to nothing else. In these units - years and AU,\n                  around this star - the relation is as simple as it ever gets.",
-          "es": "La tercera ley de Kepler relaciona el tamaño de una órbita con lo que tarda, y con nada más. En estas unidades — años y UA, alrededor de esta estrella — la relación es todo lo simple que llega a ser.",
-          "esOf": "49761854"
-        },
-        "method": {
-          "en": "P² = a³. Put a = 4 in, work out the right-hand side, then undo\n                 the square.",
-          "es": "P² = a³. Sustituye a = 4, calcula el lado derecho y después deshaz el cuadrado.",
-          "esOf": "4061013c"
-        }
-      },
-      "worked": {
-        "en": "a = 4, so a³ = 64. P² = 64, so P = √64 = 8 years. The check that\n               it is really a law: Jupiter sits at 5.204 AU, giving a³ = 141.0\n               and P = 11.87 years, against a measured 11.86.",
-        "es": "a = 4, así que a³ = 64. P² = 64, luego P = √64 = 8 años. La comprobación de que es de verdad una ley: Júpiter está a 5,204 UA, lo que da a³ = 141,0 y P = 11,87 años, frente a los 11,86 medidos.",
-        "esOf": "40b3c60a"
-      },
-      "misconceptions": [
-        {
-          "id": "cubedNotRooted",
-          "equals": 64,
-          "say": {
-            "en": "That is a³. The law says P² = a³, so the period is the square\n                root of 64, not 64 itself.",
-            "es": "Eso es a³. La ley dice P² = a³, así que el periodo es la raíz cuadrada de 64, no 64.",
-            "esOf": "9e99ae95"
-          }
-        },
-        {
-          "id": "rootedTheAxis",
-          "equals": 2,
-          "say": {
-            "en": "That is √a. The cube comes first: work out a³ = 64, then take\n                its square root.",
-            "es": "Eso es √a. El cubo va primero: calcula a³ = 64 y después su raíz cuadrada.",
-            "esOf": "a96a2073"
-          }
-        }
+      "requires": [
+        "measure-four-planets"
       ],
-      "feedback": {
-        "close": {
-          "en": "Close, but outside the tolerance. Re-check the cube and the square root separately.",
-          "es": "Cerca, pero fuera de la tolerancia. Revisa por separado el cubo y la raíz cuadrada.",
-          "esOf": "0f408c76"
-        },
-        "wrong-unit": {
-          "en": "That looks like days. With the distance in AU the law gives years, so convert before you answer.",
-          "es": "Eso parece días. Con la distancia en UA la ley da años, así que convierte antes de responder.",
-          "esOf": "ebc0119d"
-        },
-        "wrong-order-of-magnitude": {
-          "en": "Out by a power of ten. Cube the distance first, then take the square root.",
-          "es": "Te pasas en una potencia de diez. Eleva primero la distancia al cubo y luego saca la raíz cuadrada.",
-          "esOf": "4c2a615f"
-        },
-        "off": {
-          "en": "Check the order of operations: cube a to get P squared, and only then undo the square.",
-          "es": "Revisa el orden: eleva a al cubo para obtener P al cuadrado, y solo después deshaz el cuadrado.",
-          "esOf": "c4c39871"
-        },
-        "correct": {
-          "en": "To test a law like this, apply it to a planet whose year you know and see that it agrees.",
-          "es": "Para poner a prueba una ley así, aplícala a un planeta cuyo año conozcas y comprueba que coincide.",
-          "esOf": "80fa6a13"
+      "fields": [
+        {
+          "id": "a_new",
+          "label": {
+            "en": "Distance of the ninth planet from the star",
+            "es": "Distancia del noveno planeta a la estrella",
+            "esOf": "4c9d737c"
+          },
+          "unit": "AU"
         }
-      },
-      "scoring": {
-        "points": 1,
-        "attempts": "first"
-      }
+      ]
     },
     {
-      "sid": "repeat-the-timing",
+      "sid": "estimate-the-year",
+      "type": "predict",
+      "title": {
+        "en": "Estimate its year",
+        "es": "Estima su año",
+        "esOf": "7a8d325e"
+      },
+      "body": {
+        "en": "Look at your plot and your table. Estimate the orbital period of\n             the planet at the distance you chose, in years. Do not work out a\n             formula yet: read it off the pattern, then commit to a number. It\n             stays unmarked until the next step.",
+        "es": "Mira tu gráfica y tu tabla. Estima el periodo orbital del planeta a la distancia que elegiste, en años. No calcules todavía una fórmula: léelo en el patrón y comprométete con un número. Queda sin marcar hasta el paso siguiente.",
+        "esOf": "b82ab9db"
+      },
+      "prompt": {
+        "en": "Period of the ninth planet",
+        "es": "Periodo del noveno planeta",
+        "esOf": "3aaba047"
+      },
+      "kind": "estimate",
+      "unit": "yr",
+      "reveal": "compare-the-estimate"
+    },
+    {
+      "sid": "check-the-estimate",
+      "type": "measure",
+      "title": {
+        "en": "Check it against a real planet",
+        "es": "Compruébala con un planeta real",
+        "esOf": "fe063a06"
+      },
+      "body": {
+        "en": "Check the estimate against the planet whose orbit is nearest the\n             one you chose. Select that planet and press <strong>Take\n             reading</strong> beside its distance and beside its period.\n             \n\nThen use Kepler's third law to work out the period at your\n             distance, scaling from that planet, and put it in the last box.\n             Does it land near your estimate?",
+        "es": "Comprueba la estimación con el planeta cuya órbita esté más cerca de la que elegiste. Selecciona ese planeta y pulsa <strong>Tomar la lectura</strong> junto a su distancia y junto a su periodo.\n\nDespués usa la tercera ley de Kepler para calcular el periodo a tu distancia, escalando desde ese planeta, y ponlo en la última casilla. ¿Cae cerca de tu estimación?",
+        "esOf": "03ec73fe"
+      },
+      "requires": [
+        "pick-a-distance"
+      ],
+      "fields": [
+        {
+          "id": "near_a",
+          "label": {
+            "en": "Nearest measured planet: distance",
+            "es": "Planeta medido más cercano: distancia",
+            "esOf": "5b23b476"
+          },
+          "unit": "AU"
+        },
+        {
+          "id": "near_P",
+          "label": {
+            "en": "Nearest measured planet: period",
+            "es": "Planeta medido más cercano: periodo",
+            "esOf": "04847dd0"
+          },
+          "unit": "yr"
+        },
+        {
+          "id": "ratio",
+          "label": {
+            "en": "Your distance as a multiple of that planet’s",
+            "es": "Tu distancia como múltiplo de la de ese planeta",
+            "esOf": "5fa5af38"
+          },
+          "unit": ""
+        },
+        {
+          "id": "P_calc",
+          "label": {
+            "en": "Period at your distance, from the law",
+            "es": "Periodo a tu distancia, según la ley",
+            "esOf": "470fe3d8"
+          },
+          "unit": "yr"
+        }
+      ]
+    },
+    {
+      "sid": "time-it-until-sure",
       "type": "measure",
       "title": {
         "en": "How sure is a period?",
@@ -917,9 +917,9 @@
         "esOf": "b4ba1cb3"
       },
       "body": {
-        "en": "Every number you have recorded so far is one reading, and a\n reading is not the same as the truth. Here the period of an orbit\n is read from the planet's motion at that moment, and the planets\n tug on one another, so reading it at three different moments gives\n three slightly different answers.\n \n\nSelect a planet and press the button three times, seconds apart. The\n spread of the three is the scale of your uncertainty. The\n uncertainty of their <em>mean</em> is the standard deviation\n divided by √3, and it cannot be smaller than the readout itself\n can resolve: a number shown to four decimals is good to half a\n unit in the last one.\n \n\nThe fraction at the bottom is how uncertain <em>any one</em>\n of your periods is, as a share of itself. The next step uses it.",
-        "es": "Cada número que has anotado hasta ahora es una lectura, y una lectura no es la verdad. Aquí el periodo de una órbita se lee del movimiento del planeta en ese instante, y los planetas se atraen entre sí, así que leerlo en tres momentos distintos da tres respuestas ligeramente distintas.\n\nSelecciona un planeta y pulsa el botón tres veces, con unos segundos de diferencia, para que cada lectura sea de un momento distinto. La dispersión de las tres es la escala de tu incertidumbre. La incertidumbre de su <em>media</em> es la desviación estándar dividida por √3, y no puede ser menor que lo que el propio indicador resuelve: un número mostrado con cuatro decimales es bueno hasta media unidad del último.\n\nLa fracción de abajo es cuán incierto es <em>cualquiera</em> de tus periodos, como parte de sí mismo. El paso siguiente la usa.",
-        "esOf": "27fc4a93"
+        "en": "Every number you have recorded so far is one reading, and a\n reading is not the same as the truth. Here the period of an orbit\n is read from the planet's motion at that moment, and the planets\n tug on one another, so reading it at different moments gives\n slightly different answers.\n \n\nSelect a planet and press the button, seconds apart. Take at least\n three readings and at most six. You decide when to stop: the uncertainty of\n the <em>mean</em> is the standard deviation divided by the square root of how\n many readings you took, and it cannot be smaller than the readout itself\n can resolve, because a number shown to four decimals is good to half a\n unit in the last one. Watch it respond as you add readings, and stop when\n another reading would not change it much.\n \n\nThe fraction at the bottom is how uncertain <em>any one</em>\n of your periods is, as a share of itself. The next step uses it.",
+        "es": "Cada número que has anotado hasta ahora es una lectura, y una lectura no es la verdad. Aquí el periodo de una órbita se lee del movimiento del planeta en ese instante, y los planetas se atraen entre sí, así que leerlo en momentos distintos da respuestas ligeramente distintas.\n\nSelecciona un planeta y pulsa el botón, con segundos de diferencia. Toma al menos tres lecturas y como mucho seis. Tú decides cuándo parar: la incertidumbre de la <em>media</em> es la desviación típica dividida entre la raíz del número de lecturas que tomaste, y no puede ser menor que lo que la propia lectura puede resolver, porque un número mostrado con cuatro decimales es bueno hasta media unidad del último. Observa cómo responde al añadir lecturas, y para cuando otra lectura ya no la cambie mucho.\n\nLa fracción de abajo es lo incierto que es <em>cualquiera</em> de tus periodos, como parte de sí mismo. El paso siguiente la usa.",
+        "esOf": "29a5613e"
       },
       "depth": "quantitative",
       "fields": [
@@ -947,6 +947,33 @@
             "en": "Reading 3: P",
             "es": "Lectura 3: P",
             "esOf": "8ffcfc74"
+          },
+          "unit": "yr"
+        },
+        {
+          "id": "t4",
+          "label": {
+            "en": "Reading 4: P (optional)",
+            "es": "Lectura 4: P (opcional)",
+            "esOf": "8cc52d22"
+          },
+          "unit": "yr"
+        },
+        {
+          "id": "t5",
+          "label": {
+            "en": "Reading 5: P (optional)",
+            "es": "Lectura 5: P (opcional)",
+            "esOf": "7a085081"
+          },
+          "unit": "yr"
+        },
+        {
+          "id": "t6",
+          "label": {
+            "en": "Reading 6: P (optional)",
+            "es": "Lectura 6: P (opcional)",
+            "esOf": "da8cb110"
           },
           "unit": "yr"
         },
@@ -988,12 +1015,15 @@
         "esOf": "83586f88"
       },
       "body": {
-        "en": "Nothing new to measure: this step works on the table you filled\n in and the uncertainty you just found.\n \n\nStraightening the data as before, P² against a³ should be a\n line through the origin with slope k. Two ways to find it. The\n plain least-squares slope treats every planet alike. But a period\n uncertain by the same <em>fraction</em> makes P² uncertain by twice\n that fraction <em>of itself</em>, so the outer planets, with large\n P², are known less well in absolute terms, and a weighted fit\n counts each row by one over the square of its uncertainty.\n \n\nThe two should agree within the uncertainty. If they do not, a\n row is wrong. The last two boxes use the weighted constant to\n predict the period of the planet at 4 AU from the earlier step,\n with its uncertainty carried through: P = √(k·a³), so\n σ<sub>P</sub> = a<sup>3/2</sup>·σ<sub>k</sub> / (2√k).",
-        "es": "No hay nada nuevo que medir: este paso trabaja con la tabla que rellenaste y la incertidumbre que acabas de hallar.\n\nEnderezando los datos como antes, P² frente a a³ debe ser una recta por el origen con pendiente k. Hay dos maneras de hallarla. La pendiente de mínimos cuadrados simples trata igual a todos los planetas. Pero un periodo incierto en la misma <em>fracción</em> hace que P² sea incierto en el doble de esa fracción <em>de sí mismo</em>, así que los planetas exteriores, con P² grande, se conocen peor en términos absolutos, y un ajuste ponderado cuenta cada fila por uno entre el cuadrado de su incertidumbre.\n\nLas dos deben coincidir dentro de la incertidumbre. Si no, hay una fila equivocada. Las dos últimas casillas usan la constante ponderada para predecir el periodo del planeta a 4 UA del paso anterior, propagando su incertidumbre: P = √(k·a³), así que σ<sub>P</sub> = a<sup>3/2</sup>·σ<sub>k</sub> / (2√k).",
-        "esOf": "16519029"
+        "en": "Nothing new to measure: this step works on the table you filled\n in and the uncertainty you just found.\n \n\nStraightening the data as before, P² against a³ should be a\n line through the origin with slope k. Two ways to find it. The\n plain least-squares slope treats every planet alike. But a period\n uncertain by the same <em>fraction</em> makes P² uncertain by twice\n that fraction <em>of itself</em>, so the outer planets, with large\n P², are known less well in absolute terms, and a weighted fit\n counts each row by one over the square of its uncertainty.\n \n\nThe two should agree within the uncertainty. If they do not, a\n row is wrong. The next step asks you to turn the weighted constant\n and its uncertainty into a prediction.",
+        "es": "No hay nada nuevo que medir: este paso trabaja con la tabla que rellenaste y la incertidumbre que acabas de hallar.\n\nEnderezando los datos como antes, P² frente a a³ debe ser una recta por el origen con pendiente k. Hay dos maneras de hallarla. La pendiente de mínimos cuadrados simples trata igual a todos los planetas. Pero un periodo incierto en la misma <em>fracción</em> hace que P² sea incierto en el doble de esa fracción <em>de sí mismo</em>, así que los planetas exteriores, con P² grande, se conocen peor en términos absolutos, y un ajuste ponderado cuenta cada fila por uno entre el cuadrado de su incertidumbre.\n\nLas dos deben coincidir dentro de la incertidumbre. Si no, hay una fila equivocada. El paso siguiente te pide convertir la constante ponderada y su incertidumbre en una predicción.",
+        "esOf": "6f625ef1"
       },
       "depth": "quantitative",
-      "requires": ["measure-four-planets", "repeat-the-timing"],
+      "requires": [
+        "measure-four-planets",
+        "time-it-until-sure"
+      ],
       "fields": [
         {
           "id": "n",
@@ -1030,24 +1060,6 @@
             "esOf": "207e2b23"
           },
           "unit": ""
-        },
-        {
-          "id": "p4",
-          "label": {
-            "en": "Predicted period at 4 AU",
-            "es": "Periodo previsto a 4 UA",
-            "esOf": "b1ea3821"
-          },
-          "unit": "yr"
-        },
-        {
-          "id": "s_p4",
-          "label": {
-            "en": "Its uncertainty",
-            "es": "Su incertidumbre",
-            "esOf": "c238bfad"
-          },
-          "unit": "yr"
         }
       ]
     },
@@ -1060,9 +1072,9 @@
         "esOf": "e396578e"
       },
       "body": {
-        "en": "A prediction without an uncertainty cannot be tested: any\n measurement would be \"close\". Report the period of the planet at\n 4 AU the way a result is reported: the value, then ±, then its\n uncertainty, from the last two boxes of the previous step.\n \n\nIt counts as right when the range you give overlaps the range\n the law allows, and is no wider than twice that range's half-width,\n because an uncertainty large enough to overlap anything has not\n told anyone anything.",
-        "es": "Una predicción sin incertidumbre no se puede poner a prueba: cualquier medida sería «cercana». Da el periodo del planeta a 4 UA como se da un resultado: el valor, luego ±, luego su incertidumbre, tomados de las dos últimas casillas del paso anterior.\n\nCuenta como correcta cuando el rango que das se solapa con el que permite la ley y no es más ancho que el doble de la semianchura de ese rango, porque una incertidumbre capaz de solaparse con cualquier cosa no ha dicho nada a nadie.",
-        "esOf": "44661a07"
+        "en": "A prediction without an uncertainty cannot be tested: any\n measurement would be \"close\". Report the period of the planet at\n 4 AU the way a result is reported: the value, then ±, then its\n uncertainty, worked out from the weighted constant and its uncertainty in\n the previous step: <em>P</em> = √(<em>k</em>·<em>a</em>³), so\n σ<sub><em>P</em></sub> = <em>a</em><sup>3/2</sup>·σ<sub><em>k</em></sub> / (2√<em>k</em>).\n \n\nIt counts as right when the range you give overlaps the range\n the law allows, and is no wider than twice that range's half-width,\n because an uncertainty large enough to overlap anything has not\n told anyone anything.",
+        "es": "Una predicción sin incertidumbre no se puede poner a prueba: cualquier medida sería «cercana». Da el periodo del planeta a 4 UA como se da un resultado: el valor, luego ±, luego su incertidumbre, calculados a partir de la constante ponderada y su incertidumbre del paso anterior: <em>P</em> = √(<em>k</em>·<em>a</em>³), así que σ<sub><em>P</em></sub> = <em>a</em><sup>3/2</sup>·σ<sub><em>k</em></sub> / (2√<em>k</em>).\n\nCuenta como correcta cuando el rango que das se solapa con el que permite la ley y no es más ancho que el doble de la semianchura de ese rango, porque una incertidumbre capaz de solaparse con cualquier cosa no ha dicho nada a nadie.",
+        "esOf": "fd8d0861"
       },
       "depth": "quantitative",
       "kind": "numeric",
@@ -1082,7 +1094,10 @@
       "expect": {
         "dimension": "time",
         "unit": "yr",
-        "accept": ["yr", "years"]
+        "accept": [
+          "yr",
+          "years"
+        ]
       },
       "hints": {
         "concept": {
@@ -1091,9 +1106,9 @@
           "esOf": "5d3bafe8"
         },
         "method": {
-          "en": "Copy the predicted period and its uncertainty from the\n weighted-fit step, and write them as value ± uncertainty.",
-          "es": "Copia el periodo previsto y su incertidumbre del paso del ajuste ponderado y escríbelos como valor ± incertidumbre.",
-          "esOf": "23d22ae7"
+          "en": "Take k and its uncertainty from the weighted-fit step. Cube 4 AU,\n multiply by k and take the square root; then carry the uncertainty through\n with the formula above. Write your answer as value ± uncertainty.",
+          "es": "Toma k y su incertidumbre del paso del ajuste ponderado. Eleva 4 UA al cubo, multiplica por k y extrae la raíz cuadrada; luego propaga la incertidumbre con la fórmula de arriba. Escribe tu respuesta como valor ± incertidumbre.",
+          "esOf": "a42dbaa8"
         }
       },
       "scoring": {
@@ -1141,6 +1156,62 @@
           "esOf": "3cd8c212"
         }
       },
+      "scoring": {
+        "points": 1,
+        "attempts": "first"
+      }
+    },
+    {
+      "sid": "size-of-the-miss",
+      "type": "question",
+      "title": {
+        "en": "How big is the miss?",
+        "es": "¿Cuánto falla?",
+        "esOf": "45a7b9cb"
+      },
+      "body": {
+        "en": "Newton's form of the third law has the total mass, <em>M</em> +\n <em>m</em>, where Kepler's version has the star's alone. For a planet the\n difference is tiny, so Kepler's version works, but it is not zero.\n \n\nTest it on TRAPPIST-1g: a planet of <strong>1.321</strong> Earth masses\n around a star of <strong>0.0898</strong> solar masses. An Earth mass is\n <strong>3.0035 × 10<sup>-6</sup></strong> solar masses. The period from\n Kepler's form, which leaves the planet out, comes out a little too long. By\n how much, as a fraction of the period, in parts per million?",
+        "es": "La forma de Newton de la tercera ley lleva la masa total, <em>M</em> + <em>m</em>, donde la de Kepler lleva solo la de la estrella. Para un planeta la diferencia es minúscula, así que la de Kepler funciona, pero no es cero.\n\nPruébalo con TRAPPIST-1g: un planeta de <strong>1,321</strong> masas terrestres alrededor de una estrella de <strong>0,0898</strong> masas solares. Una masa terrestre son <strong>3,0035 × 10<sup>-6</sup></strong> masas solares. El periodo según la forma de Kepler, que deja fuera al planeta, sale un poco largo. ¿Cuánto, como fracción del periodo, en partes por millón?",
+        "esOf": "08ffa4cd"
+      },
+      "depth": "advanced",
+      "kind": "numeric",
+      "prompt": {
+        "en": "How much too long is the period from Kepler’s form?",
+        "es": "¿Cuánto más largo sale el periodo con la forma de Kepler?",
+        "esOf": "e5edb5da"
+      },
+      "answer": 22,
+      "because": {
+        "en": "About 22 parts per million: the planet is a few times ten-millionths of a star this small, and the period goes as the square root of the total mass, so half of that ratio. It is far smaller than the readout can show, which is why Kepler’s form works for planets, and why the same correction is 41% for two equal stars.",
+        "es": "Unas 22 partes por millón: el planeta es unas pocas diezmillonésimas de una estrella tan pequeña, y el periodo va como la raíz de la masa total, así que la mitad de esa razón. Es mucho menor de lo que la lectura puede mostrar, y por eso la forma de Kepler funciona para planetas, y por eso la misma corrección es del 41 % para dos estrellas iguales.",
+        "esOf": "59c681bf"
+      },
+      "unit": "ppm",
+      "tolerance": 2,
+      "hints": {
+        "concept": {
+          "en": "The period goes as one over the square root of the total\n mass, so leaving the planet out changes the period by about half the\n planet-to-star mass ratio, when that ratio is small.",
+          "es": "El periodo va como uno entre la raíz de la masa total, así que dejar fuera al planeta cambia el periodo en la mitad de la razón de masas planeta-estrella, cuando esa razón es pequeña.",
+          "esOf": "07abdb4e"
+        },
+        "method": {
+          "en": "Convert the planet's mass to solar masses, divide by the\n star's mass, and take half. Then write it in parts per million.",
+          "es": "Pasa la masa del planeta a masas solares, divídela entre la de la estrella y toma la mitad. Después exprésalo en partes por millón.",
+          "esOf": "10da3518"
+        }
+      },
+      "misconceptions": [
+        {
+          "id": "forgotTheHalf",
+          "factor": 2,
+          "say": {
+            "en": "That is the ratio of the planet’s mass to the star’s. The period depends on the square root of the total mass, so the miss is half of that ratio.",
+            "es": "Esa es la razón entre la masa del planeta y la de la estrella. El periodo depende de la raíz de la masa total, así que el fallo es la mitad de esa razón.",
+            "esOf": "16f69d2d"
+          }
+        }
+      ],
       "scoring": {
         "points": 1,
         "attempts": "first"
@@ -1200,6 +1271,20 @@
       }
     },
     {
+      "sid": "compare-the-estimate",
+      "type": "read",
+      "title": {
+        "en": "Your estimate and the law",
+        "es": "Tu estimación y la ley",
+        "esOf": "9b16589a"
+      },
+      "body": {
+        "en": "Above are your estimate, the period the law gives at your distance,\n             and the planet you scaled it from. A law is more than a curve\n             through your points: it says what the period has to be at a\n             distance nobody has measured, and a planet put there would be\n             held to it.\n             \n\nIf your estimate was off, notice what it came from: reading\n             a curved plot by eye. Straightening the plot, or using the\n             exponent, is what the law is for.",
+        "es": "Arriba están tu estimación, el periodo que da la ley a tu distancia y el planeta desde el que lo escalaste. Una ley es más que una curva que pasa por tus puntos: dice cuál tiene que ser el periodo a una distancia que nadie ha medido, y un planeta puesto ahí estaría obligado a cumplirla.\n\nSi tu estimación se desvió, fíjate en de dónde salió: de leer a ojo una gráfica curva. Enderezar la gráfica, o usar el exponente, es para lo que sirve la ley.",
+        "esOf": "c378ce1a"
+      }
+    },
+    {
       "sid": "what-the-constant-depends-on",
       "type": "question",
       "title": {
@@ -1208,15 +1293,15 @@
         "esOf": "b6c35c60"
       },
       "body": {
-        "en": "Your four planets had wildly different masses: from a small rocky\n             world to a gas giant hundreds of times heavier, and all gave the\n             same P²/a³.",
-        "es": "Tus cuatro planetas tenían masas descabelladamente distintas: desde un pequeño mundo rocoso hasta un gigante gaseoso cientos de veces más pesado, y todos dieron el mismo P²/a³.",
-        "esOf": "68e69a67"
+        "en": "Your planets had wildly different masses, from a small rocky world to\n             a gas giant hundreds of times heavier, and all gave the same\n             <em>P</em>²/<em>a</em>³. So what does that constant depend on?\n             \n\nHere is one planet on a circular orbit at 1 AU. Press\n             <strong>Run A</strong> and read its period, then\n             <strong>Change star mass</strong> and press <strong>Run B</strong>:\n             the same planet at the same distance, around a star of twice the\n             mass. The two runs are kept in the table.",
+        "es": "Tus planetas tenían masas descabelladamente distintas, desde un pequeño mundo rocoso hasta un gigante gaseoso cientos de veces más pesado, y todos dieron el mismo <em>P</em>²/<em>a</em>³. ¿De qué depende entonces esa constante?\n\nAquí hay un planeta en una órbita circular a 1 UA. Pulsa <strong>Ejecutar A</strong> y lee su periodo; después <strong>Cambiar masa de la estrella</strong> y pulsa <strong>Ejecutar B</strong>: el mismo planeta a la misma distancia, alrededor de una estrella de doble masa. Las dos ejecuciones quedan en la tabla.",
+        "esOf": "7031088f"
       },
       "kind": "choice",
       "prompt": {
-        "en": "The constant in P² = k·a³ depends on…",
-        "es": "La constante de P² = k·a³ depende de…",
-        "esOf": "99a7dbc4"
+        "en": "The constant in <em>P</em>² = <em>k</em>·<em>a</em>³ depends on…",
+        "es": "La constante de <em>P</em>² = <em>k</em>·<em>a</em>³ depende de…",
+        "esOf": "b357117f"
       },
       "options": [
         {
@@ -1242,9 +1327,9 @@
       ],
       "answer": 1,
       "because": {
-        "en": "It depends on the central mass: Newton showed k = 4π²/G(M+m), and since M ≫ m for a planet the planet’s own mass drops out. Read backwards, this is a way to weigh things you can never visit. Measure a period and a distance, and the mass falls out. It is how the Sun was first weighed, how exoplanet host stars are weighed today, and how the four-million-solar-mass black hole at the center of the Milky Way was weighed by tracking the star S2 through a sixteen-year orbit.",
-        "es": "Depende de la masa central: Newton demostró que k = 4π²/G(M+m) y, dado que M ≫ m para un planeta, la masa del propio planeta se cancela. Leído al revés, esta es una manera de pesar cosas que nunca podrás visitar. Mide un periodo y una distancia, y la masa sale sola. Así se pesó el Sol por primera vez, así se pesan hoy las estrellas anfitrionas de exoplanetas, y así se pesó el agujero negro de cuatro millones de masas solares del centro de la Vía Láctea, siguiendo la estrella S2 a lo largo de una órbita de dieciséis años.",
-        "esOf": "7607a835"
+        "en": "It depends on the central mass: Newton showed <em>k</em> = 4π<sup>2</sup>/<em>G</em>(<em>M</em>+<em>m</em>), and since <em>M</em> ≫ <em>m</em> for a planet the planet’s own mass drops out. Read backwards, this is a way to weigh things you can never visit. Measure a period and a distance, and the mass falls out. It is how the Sun was first weighed, how exoplanet host stars are weighed today, and how the four-million-solar-mass black hole at the center of the Milky Way was weighed by tracking the star S2 through a sixteen-year orbit.",
+        "es": "Depende de la masa central: Newton demostró que <em>k</em> = 4π<sup>2</sup>/<em>G</em>(<em>M</em>+<em>m</em>) y, dado que <em>M</em> ≫ <em>m</em> para un planeta, la masa del propio planeta se cancela. Leído al revés, esta es una manera de pesar cosas que nunca podrás visitar. Mide un periodo y una distancia, y la masa sale sola. Así se pesó el Sol por primera vez, así se pesan hoy las estrellas anfitrionas de exoplanetas, y así se pesó el agujero negro de cuatro millones de masas solares del centro de la Vía Láctea, siguiendo la estrella S2 a lo largo de una órbita de dieciséis años.",
+        "esOf": "ff67b45c"
       },
       "scoring": {
         "points": 1,
@@ -1260,9 +1345,9 @@
         "esOf": "0af876fc"
       },
       "body": {
-        "en": "Kepler's three laws describe the Solar System, but they do not\n             explain it. Kepler found them by fitting curves to Tycho's numbers\n             over twenty years of arithmetic; he had no idea <em>why</em> orbits\n             should be ellipses or why the periods should scale that way.\n             \n\nSixty years later Newton derived all three from a single\n             assumption: that gravity falls off as the inverse square of\n             distance. The ellipse, the equal areas and the three-halves power\n             law all drop out as consequences. And in deriving them he found the\n             correction Kepler could not have known about:\n             \n\nP² = 4π² a³ / G(M + m)\n             \n\nKepler's version assumed the constant was the same for\n             everything orbiting the Sun. Newton's shows it depends on the\n             <strong>total</strong> mass. For a planet around a star the planet's\n             own mass is negligible and the two agree, which is why Kepler's\n             version worked. For two stars of comparable mass orbiting each\n             other, it does not, and only Newton's form is right.\n             \n\nThis is what turned a description of one solar system into a\n             tool that works anywhere.",
-        "es": "Las tres leyes de Kepler describen el Sistema Solar, pero no lo explican. Kepler las encontró ajustando curvas a los números de Tycho a lo largo de veinte años de aritmética; no tenía ni idea de <em>por qué</em> las órbitas debían ser elipses ni de por qué los periodos debían escalar así.\n\nSesenta años después Newton dedujo las tres a partir de un solo supuesto: que la gravedad decae como el inverso del cuadrado de la distancia. La elipse, las áreas iguales y la ley de la potencia tres medios salen todas como consecuencias. Y al deducirlas encontró la corrección que Kepler no podía conocer:\n\nP² = 4π² a³ / G(M + m)\n\nLa versión de Kepler suponía que la constante era la misma para todo lo que orbitara el Sol. La de Newton muestra que depende de la masa <strong>total</strong>. Para un planeta alrededor de una estrella, la masa del propio planeta es despreciable y las dos coinciden, y por eso funcionaba la versión de Kepler. Para dos estrellas de masa comparable orbitándose entre sí, no, y solo la forma de Newton es correcta.\n\nEsto es lo que convirtió una descripción de un sistema solar en una herramienta que funciona en cualquier parte.",
-        "esOf": "7297469d"
+        "en": "Kepler's three laws describe the Solar System, but they do not\n             explain it. Kepler found them by fitting curves to Tycho's numbers\n             over twenty years of arithmetic; he had no idea <em>why</em> orbits\n             should be ellipses or why the periods should scale that way.\n             \n\nSixty years later Newton derived all three from a single\n             assumption: that gravity falls off as the inverse square of\n             distance. The ellipse, the equal areas and the three-halves power\n             law all drop out as consequences. And in deriving them he found the\n             correction Kepler could not have known about:\n             \n\n<em>P</em>² = 4π<sup>2</sup> <em>a</em>³ / <em>G</em>(<em>M</em> + <em>m</em>)\n             \n\nKepler's version assumed the constant was the same for\n             everything orbiting the Sun. Newton's shows it depends on the\n             <strong>total</strong> mass. For a planet around a star the planet's\n             own mass is negligible and the two agree, which is why Kepler's\n             version worked. For two stars of comparable mass orbiting each\n             other, it does not, and only Newton's form is right.\n             \n\nThis is what turned a description of one solar system into a\n             tool that works anywhere.",
+        "es": "Las tres leyes de Kepler describen el Sistema Solar, pero no lo explican. Kepler las encontró ajustando curvas a los números de Tycho a lo largo de veinte años de aritmética; no tenía ni idea de <em>por qué</em> las órbitas debían ser elipses ni de por qué los periodos debían escalar así.\n\nSesenta años después Newton dedujo las tres a partir de un solo supuesto: que la gravedad decae como el inverso del cuadrado de la distancia. La elipse, las áreas iguales y la ley de la potencia tres medios salen todas como consecuencias. Y al deducirlas encontró la corrección que Kepler no podía conocer:\n\n<em>P</em>² = 4π<sup>2</sup> <em>a</em>³ / <em>G</em>(<em>M</em> + <em>m</em>)\n\nLa versión de Kepler suponía que la constante era la misma para todo lo que orbitara el Sol. La de Newton muestra que depende de la masa <strong>total</strong>. Para un planeta alrededor de una estrella, la masa del propio planeta es despreciable y las dos coinciden, y por eso funcionaba la versión de Kepler. Para dos estrellas de masa comparable orbitándose entre sí, no, y solo la forma de Newton es correcta.\n\nEsto es lo que convirtió una descripción de un sistema solar en una herramienta que funciona en cualquier parte.",
+        "esOf": "1f1d2035"
       },
       "tip": {
         "en": "Rearranged for M, this equation is how essentially every stellar mass in the literature is measured.",
@@ -1285,9 +1370,9 @@
         "esOf": "2dcd2a13"
       },
       "body": {
-        "en": "On screen is TRAPPIST-1, a real red dwarf with seven planets, none\n             of which Kepler could have imagined. It is a tenth of the Sun's mass\n             and its planets orbit closer in than Mercury, so nothing about it\n             resembles the system Kepler fitted.\n             \n\nThe laws hold anyway. Click any planet and the equal-area\n             wedges are drawn for its orbit; click another and they are redrawn\n             for that one. Each planet's slices are equal to each other, and each\n             planet has its own period, but every one of them satisfies the same\n             P squared over a cubed, with the constant set by this star's mass\n             rather than the Sun's.",
-        "es": "En pantalla está TRAPPIST-1, una enana roja real con siete planetas, ninguno de los cuales Kepler habría podido imaginar. Tiene una décima parte de la masa del Sol y sus planetas orbitan más cerca que Mercurio, así que nada de ella se parece al sistema que Kepler ajustó.\n\nLas leyes se cumplen de todos modos. Pulsa cualquier planeta y se dibujan las cuñas de área igual para su órbita; pulsa otro y se redibujan para ese. Las rebanadas de cada planeta son iguales entre sí, y cada planeta tiene su propio periodo, pero todos ellos satisfacen el mismo P al cuadrado sobre a al cubo, con la constante fijada por la masa de esta estrella en lugar de la del Sol.",
-        "esOf": "71e735c8"
+        "en": "On screen is TRAPPIST-1, a real red dwarf with seven planets, none\n             of which Kepler could have imagined. It is a tenth of the Sun's mass\n             and its planets orbit closer in than Mercury, so nothing about it\n             resembles the system Kepler fitted.\n             \n\nThe laws hold anyway. Click any planet and the equal-area\n             wedges are drawn for its orbit; click another and they are redrawn\n             for that one. Each planet's slices are equal to each other, and each\n             planet has its own period, but every one of them satisfies the same\n             <em>P</em> squared over <em>a</em> cubed, with the constant set by this star's mass\n             rather than the Sun's.",
+        "es": "En pantalla está TRAPPIST-1, una enana roja real con siete planetas, ninguno de los cuales Kepler habría podido imaginar. Tiene una décima parte de la masa del Sol y sus planetas orbitan más cerca que Mercurio, así que nada de ella se parece al sistema que Kepler ajustó.\n\nLas leyes se cumplen de todos modos. Pulsa cualquier planeta y se dibujan las cuñas de área igual para su órbita; pulsa otro y se redibujan para ese. Las rebanadas de cada planeta son iguales entre sí, y cada planeta tiene su propio periodo, pero todos ellos satisfacen el mismo <em>P</em> al cuadrado sobre <em>a</em> al cubo, con la constante fijada por la masa de esta estrella en lugar de la del Sol.",
+        "esOf": "699b2e6c"
       },
       "checklist": [
         {
@@ -1321,9 +1406,9 @@
         "esOf": "c0a13331"
       },
       "body": {
-        "en": "Pick any one of the seven planets, read its semi-major axis and\n             period off the readout, and enter them below. The arithmetic is\n             done for you one stage at a time, so you can see where the number\n             comes from.\n             \n\nWatch the units. The readout gives periods in <em>days</em>,\n             and M = a cubed / P squared only returns solar masses when P is in\n             <strong>years</strong> and a is in <strong>AU</strong>. Converting\n             is the step that catches people.",
-        "es": "Elige cualquiera de los siete planetas, lee su semieje mayor y su periodo en la lectura e introdúcelos abajo. La aritmética se hace por ti etapa a etapa, para que veas de dónde sale el número.\n\nCuidado con las unidades. La lectura da los periodos en <em>días</em>, y M = a al cubo / P al cuadrado solo devuelve masas solares cuando P está en <strong>años</strong> y a en <strong>UA</strong>. Convertir es el paso donde tropieza la gente.",
-        "esOf": "2c7f0454"
+        "en": "Pick any one of the seven planets, read its semi-major axis and\n             period off the readout, and enter them below. The arithmetic is\n             done for you one stage at a time, so you can see where the number\n             comes from.\n             \n\nWatch the units. The readout gives periods in <em>days</em>,\n             and <em>M</em> = <em>a</em>³ / <em>P</em>² only returns solar masses when <em>P</em> is in\n             <strong>years</strong> and a is in <strong>AU</strong>. Converting\n             is the step that catches people.",
+        "es": "Elige cualquiera de los siete planetas, lee su semieje mayor y su periodo en la lectura e introdúcelos abajo. La aritmética se hace por ti etapa a etapa, para que veas de dónde sale el número.\n\nCuidado con las unidades. La lectura da los periodos en <em>días</em>, y <em>M</em> = <em>a</em>³ / <em>P</em>² solo devuelve masas solares cuando <em>P</em> está en <strong>años</strong> y a en <strong>UA</strong>. Convertir es el paso donde tropieza la gente.",
+        "esOf": "595a602b"
       },
       "fields": [
         {
@@ -1365,27 +1450,27 @@
         {
           "id": "w_a3",
           "label": {
-            "en": "Step 2: a cubed",
-            "es": "Paso 2: a al cubo",
-            "esOf": "e284237d"
+            "en": "Step 2: <em>a</em> cubed",
+            "es": "Paso 2: <em>a</em> al cubo",
+            "esOf": "9cbacf3a"
           },
           "unit": "AU cubed"
         },
         {
           "id": "w_P2",
           "label": {
-            "en": "Step 3: P squared",
-            "es": "Paso 3: P al cuadrado",
-            "esOf": "410ac301"
+            "en": "Step 3: <em>P</em> squared",
+            "es": "Paso 3: <em>P</em> al cuadrado",
+            "esOf": "d34c92c2"
           },
           "unit": "yr squared"
         },
         {
           "id": "w_M",
           "label": {
-            "en": "Step 4: star mass = a cubed / P squared",
-            "es": "Paso 4: masa estelar = a al cubo / P al cuadrado",
-            "esOf": "041fb8f0"
+            "en": "Step 4: star mass = <em>a</em>³ / <em>P</em>²",
+            "es": "Paso 4: masa estelar = <em>a</em>³ / <em>P</em>²",
+            "esOf": "3f1bfe81"
           },
           "unit": "M_sun"
         }
@@ -1400,9 +1485,9 @@
         "esOf": "b25b682e"
       },
       "body": {
-        "en": "Here is the payoff. Kepler-10 is a Sun-like star about 600 light\n             years away with a rocky planet, Kepler-10c, discovered by transit.\n             Its orbit has a semi-major axis of about 0.24 AU and a period of\n             about 45 days, which is 0.123 years.\n             \n\nUse Newton's form, taking the planet's mass as negligible:\n             \n\nM = a³ / P²  (in solar masses, with a in AU and P in years)\n             \n\n<strong>Step 1.</strong> Cube the distance: 0.24³ = 0.0138.\n             \n\n<strong>Step 2.</strong> Square the period: 0.123² = 0.0151.\n             \n\n<strong>Step 3.</strong> Divide.",
-        "es": "Aquí está la recompensa. Kepler-10 es una estrella parecida al Sol a unos 600 años luz con un planeta rocoso, Kepler-10c, descubierto por tránsito. Su órbita tiene un semieje mayor de unas 0,24 UA y un periodo de unos 45 días, que son 0,123 años.\n\nUsa la forma de Newton, tomando la masa del planeta como despreciable:\n\nM = a³ / P²  (en masas solares, con a en UA y P en años)\n\n<strong>Paso 1.</strong> Eleva la distancia al cubo: 0,24³ = 0,0138.\n\n<strong>Paso 2.</strong> Eleva el periodo al cuadrado: 0,123² = 0,0151.\n\n<strong>Paso 3.</strong> Divide.",
-        "esOf": "51978024"
+        "en": "Here is the payoff. Kepler-10 is a Sun-like star about 600 light\n             years away with a planet 2.4 times Earth’s radius, Kepler-10c,\n             discovered by [[transit|transit]].\n             Its orbit has a semi-major axis of about 0.24 AU and a period of\n             about 45 days, which is 0.123 years.\n             \n\nUse Newton's form, taking the planet's mass as negligible:\n             \n\n<em>M</em> = <em>a</em>³ / <em>P</em>²  (in solar masses, with <em>a</em> in AU and <em>P</em> in years)\n             \n\n<strong>Step 1.</strong> Cube the distance: 0.24³ = 0.0138.\n             \n\n<strong>Step 2.</strong> Square the period: 0.123² = 0.0151.\n             \n\n<strong>Step 3.</strong> Divide.",
+        "es": "Aquí está la recompensa. Kepler-10 es una estrella parecida al Sol a unos 600 años luz con un planeta de 2,4 radios terrestres, Kepler-10c, descubierto por [[transit|tránsito]]. Su órbita tiene un semieje mayor de unas 0,24 UA y un periodo de unos 45 días, que son 0,123 años.\n\nUsa la forma de Newton, tomando la masa del planeta como despreciable:\n\n<em>M</em> = <em>a</em>³ / <em>P</em>²  (en masas solares, con <em>a</em> en UA y <em>P</em> en años)\n\n<strong>Paso 1.</strong> Eleva la distancia al cubo: 0,24³ = 0,0138.\n\n<strong>Paso 2.</strong> Eleva el periodo al cuadrado: 0,123² = 0,0151.\n\n<strong>Paso 3.</strong> Divide.",
+        "esOf": "e7a05020"
       },
       "kind": "numeric",
       "prompt": {
@@ -1421,7 +1506,12 @@
       "expect": {
         "dimension": "mass",
         "unit": "M_sun",
-        "accept": ["M_sun", "M_jup", "M_earth", "kg"]
+        "accept": [
+          "M_sun",
+          "M_jup",
+          "M_earth",
+          "kg"
+        ]
       },
       "hints": {
         "concept": {
@@ -1430,15 +1520,15 @@
           "esOf": "7e48635a"
         },
         "method": {
-          "en": "M = a³ / P², with a in AU and P in *years*. The period is given\n                 in days as well as years — use the years.",
-          "es": "M = a³ / P², con a en UA y P en *años*. El periodo se da en días y también en años: usa los años.",
-          "esOf": "9a8edb3b"
+          "en": "<em>M</em> = <em>a</em>³ / <em>P</em>², with <em>a</em> in AU and <em>P</em> in *years*. The period is given\n                 in days as well as years — use the years.",
+          "es": "<em>M</em> = <em>a</em>³ / <em>P</em>², con <em>a</em> en UA y <em>P</em> en *años*. El periodo se da en días y también en años: usa los años.",
+          "esOf": "c8f5fef4"
         }
       },
       "worked": {
-        "en": "a = 0.24, so a³ = 0.0138. P = 0.123 years, so P² = 0.01513.\n               0.0138 / 0.01513 = 0.91 solar masses, within a few per cent of\n               the published value.",
-        "es": "a = 0,24, así que a³ = 0,0138. P = 0,123 años, luego P² = 0,01513. 0,0138 / 0,01513 = 0,91 masas solares, dentro de un pequeño porcentaje del valor publicado.",
-        "esOf": "2692b079"
+        "en": "<em>a</em> = 0.24, so <em>a</em>³ = 0.0138. <em>P</em> = 0.123 years, so <em>P</em>² = 0.01513.\n               0.0138 / 0.01513 = 0.91 solar masses, within a few per cent of\n               the published value.",
+        "es": "<em>a</em> = 0,24, así que <em>a</em>³ = 0,0138. <em>P</em> = 0,123 años, luego <em>P</em>² = 0,01513. 0,0138 / 0,01513 = 0,91 masas solares, dentro de un pequeño porcentaje del valor publicado.",
+        "esOf": "648972e1"
       },
       "misconceptions": [
         {
@@ -1463,9 +1553,9 @@
           "esOf": "1fb1c6dc"
         },
         "off": {
-          "en": "Work in three parts: a cubed, then P squared, then divide the first by the second.",
-          "es": "Hazlo en tres partes: a al cubo, luego P al cuadrado, y divide la primera entre la segunda.",
-          "esOf": "e839b3d4"
+          "en": "Work in three parts: <em>a</em> cubed, then <em>P</em> squared, then divide the first by the second.",
+          "es": "Hazlo en tres partes: <em>a</em> al cubo, luego <em>P</em> al cuadrado, y divide la primera entre la segunda.",
+          "esOf": "1877ef66"
         }
       },
       "scoring": {
@@ -1482,9 +1572,9 @@
         "esOf": "9d9d74c3"
       },
       "body": {
-        "en": "Newton's correction replaces Kepler's constant with one that\n             depends on M + m rather than M alone.",
-        "es": "La corrección de Newton sustituye la constante de Kepler por una que depende de M + m en lugar de solo de M.",
-        "esOf": "bae1c095"
+        "en": "Newton's correction replaces Kepler's constant with one that\n             depends on <em>M</em> + <em>m</em> rather than <em>M</em> alone.",
+        "es": "La corrección de Newton sustituye la constante de Kepler por una que depende de <em>M</em> + <em>m</em> en lugar de solo de <em>M</em>.",
+        "esOf": "70ee456a"
       },
       "kind": "choice",
       "prompt": {
@@ -1516,9 +1606,9 @@
       ],
       "answer": 2,
       "because": {
-        "en": "Two equal masses. There m = M, so M + m is twice what Kepler's version assumes and the predicted period is off by a factor of √2, about 41%. In the other three cases the orbiting body is a millionth to a thousandth of the central mass and the correction is invisible. It is exactly this term that lets astronomers measure the individual masses in a binary system rather than just their sum.",
-        "es": "Dos masas iguales. Ahí m = M, así que M + m es el doble de lo que supone la versión de Kepler y el periodo predicho falla en un factor √2, alrededor del 41 %. En los otros tres casos el cuerpo en órbita es entre una millonésima y una milésima de la masa central y la corrección es invisible. Es exactamente este término el que permite a los astrónomos medir las masas individuales de un sistema binario en lugar de solo su suma.",
-        "esOf": "9bb30b90"
+        "en": "Two equal masses. There <em>m</em> = <em>M</em>, so <em>M</em> + <em>m</em> is twice what Kepler's version assumes and the predicted period is off by a factor of √2, about 41%. In the other three cases the orbiting body is a millionth to a thousandth of the central mass and the correction is invisible. It is exactly this term that lets astronomers measure the individual masses in a binary system rather than just their sum.",
+        "es": "Dos masas iguales. Ahí <em>m</em> = <em>M</em>, así que <em>M</em> + <em>m</em> es el doble de lo que supone la versión de Kepler y el periodo predicho falla en un factor √2, alrededor del 41 %. En los otros tres casos el cuerpo en órbita es entre una millonésima y una milésima de la masa central y la corrección es invisible. Es exactamente este término el que permite a los astrónomos medir las masas individuales de un sistema binario en lugar de solo su suma.",
+        "esOf": "fb5b03f4"
       },
       "scoring": {
         "points": 1,

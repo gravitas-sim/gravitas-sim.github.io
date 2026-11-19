@@ -367,8 +367,14 @@ test.describe('the central experiment of each investigation', () => {
     await openInvestigation(page, app, id);
     const plan = await lessonPlan(page, id);
 
+    // The estimate, committed and held: nothing on the screen marks it.
     const predict = await walkToSid(page, plan, predictSid);
-    await commitPredictionHeld(page, predict);
+    expect(predict.reveal).toBeTruthy();
+    await page.locator('#investigationBody [data-est]').fill('1.5');
+    await page.locator('#investigationBody [data-est-commit]').click();
+    const body = page.locator('#investigationBody');
+    await expect(body.locator('.inv-held')).toBeVisible();
+    await expect(body.locator('.inv-verdict')).toHaveCount(0);
 
     // The size control lives on the screen between the prediction and the
     // measurement, which is where the lesson puts it.
@@ -394,19 +400,92 @@ test.describe('the central experiment of each investigation', () => {
     // And the panel's own two numbers agree with each other.
     expect(depth[14] / 100).toBeCloseTo(ratio ** 2, 3);
 
+    // The measurement: the student sets two stretches of a curve that has just
+    // been recorded, and the page reports what is inside them.
     await walkToSid(page, plan, measureSid);
-    const delta = depth[11.2] / 100;
-    const evidence = { base: '1.00000', bot: (1 - delta).toFixed(5) };
-    await recordFields(page, id, measureSid, evidence);
-    await expectEvidenceRetained(page, id, measureSid, evidence);
-    // The two boxes the lesson works out for itself are the point of the
-    // exercise: a depth is a difference, and a radius ratio is its square root.
+    const curve = () =>
+      page.evaluate(async () => {
+        const m = await import('/js/lightCurve.js');
+        const a = m.transitAnalysis();
+        const { x, y } = a.series();
+        return { a: { last: a.last }, first: x[0], end: x.at(-1), x, y };
+      });
+    await expect
+      .poll(
+        async () => {
+          const c = await curve();
+          // A secondary eclipse (the planet behind the star, 0.007 percent)
+          // is also a dip to the recorder when there is no noise: wait for a
+          // transit.
+          return (
+            c.a.last && c.a.last.depth > 0.005 && c.end - c.a.last.mid > 0.5
+          );
+        },
+        { timeout: 120_000, intervals: [500] }
+      )
+      .toBeTruthy();
+    await page.getByRole('button', { name: /pause simulation/i }).click();
+    const { a, first, x, y } = await curve();
+    const half = a.last.duration / 2;
+    const groups = page.locator('#investigationBody [data-span]');
+    const stretch = async (g, from, to) => {
+      const grp = groups.nth(g);
+      await grp.locator('[data-bound="from"]').fill(String(from));
+      await grp.locator('[data-bound="to"]').fill(String(to));
+      await grp.locator('[data-take-span]').click();
+      await expect(grp.locator('[data-take-span]')).toBeEnabled();
+    };
+    const check = page.locator('#investigationBody .inv-check');
+
+    // A wrong decision is not accepted and gets authored words: a flat stretch
+    // that runs into the dip, then a dip stretch that is only its slope.
+    // (Retried as a unit: on a loaded machine the page can redraw the step
+    // between the two readings and drop the first.)
+    await expect(async () => {
+      await stretch(0, a.last.mid - 3 * half, a.last.mid);
+      await stretch(1, a.last.mid - half * 0.4, a.last.mid + half * 0.4);
+      await expect(check).not.toHaveClass(/is-ok/);
+      await expect(check).toContainText('averages in part of a dip', {
+        timeout: 4000,
+      });
+    }).toPass({ timeout: 40_000 });
+    await stretch(0, first, a.last.mid - 1.3 * half);
+    // The sloping side: the flat point before the dip and the points on the way
+    // into it that are under 1.2 percent down, which no floor stretch can
+    // average to (a stretch needs two points).
+    const down = i => i >= 0 && x[i] < a.last.mid && 1 - y[i] < 0.012;
+    const on = x.map((t, i) => i).filter(i => down(i) && 1 - y[i] > 0.0005);
+    expect(on.length).toBeGreaterThan(0);
+    await stretch(1, x[on[0] - 1] - 1e-6, x[on.at(-1)] + 1e-6);
+    await expect(check).not.toHaveClass(/is-ok/);
+    await expect(check).toContainText('sloping sides');
+
+    // The decision made well: a flat stretch and a stretch from the floor.
+    await stretch(1, a.last.mid - half * 0.4, a.last.mid + half * 0.4);
+    await expect(check).toHaveClass(/is-ok/);
+    const field = f =>
+      `#investigationBody [data-field="${id}:${measureSid}:${f}"]`;
+    const base = Number(await page.locator(field('base')).inputValue());
+    const bot = Number(await page.locator(field('bot')).inputValue());
+    expect(base).toBeCloseTo(1, 3);
+    // The value the lesson works out, the value taken and the model agree: the
+    // floor of this transit is 1.83 percent at its middle, 1.3 at its edge.
+    expect(base - bot).toBeGreaterThan(0.0125);
+    expect(base - bot).toBeLessThan(0.0195);
     await expectDerived(page, id, measureSid, {
-      depth: delta,
-      k_naive: Math.sqrt(delta),
+      depth: base - bot,
+      k_naive: Math.sqrt(base - bot),
+    });
+    await expectEvidenceRetained(page, id, measureSid, {
+      base: String(await page.locator(field('base')).inputValue()),
+      bot: String(await page.locator(field('bot')).inputValue()),
     });
 
+    // The estimate returns beside the reading on the step it named.
     await expectVerdictRevealed(page, plan, predict);
+    await expect(page.locator('#investigationBody .inv-verdict')).toContainText(
+      'You estimated: 1.5 %'
+    );
   });
 
   test('orbital-energy: the dividing speed is where the total energy crosses zero @accepts:ce.orbital-energy', async ({
@@ -472,34 +551,41 @@ test.describe('the central experiment of each investigation', () => {
     const predict = await walkToSid(page, plan, entry.loop[0]);
     await commitPredictionHeld(page, predict);
 
+    // The weighed total and the taken ratio are the student's own: the step
+    // that shares the total out reads them back.
+    await walkToSid(page, plan, 'weigh-the-pair');
+    await recordFields(page, id, 'weigh-the-pair', { a: '4.00', p: '4.00' });
+    await walkToSid(page, plan, 'back-to-the-balance-point');
+    await page.locator('#investigationBody [data-take="ratio"]').click();
+
     await walkToSid(page, plan, measureSid);
     const seen = [];
+    // The see-saw opens with both stars equally far out: the student sets it.
+    await setControl(page, 'd2', 4);
     for (const d1 of [1, 2]) {
       const { before, after } = await setControl(page, control, d1);
       if (d1 !== 1) expect(after).not.toEqual(before);
       seen.push({
         aArm: reading(after, /star a is this far/i),
         bArm: reading(after, /star b is this far/i),
-        // "Star A, by 3 times" - the ratio, at full precision. The split below
-        // it is rounded to whole solar masses for display, so 2.4 and 1.6 both
-        // read as "2" and cannot carry any arithmetic.
+        // "Star A, by 3 times" - the ratio, at full precision.
         ratio: reading(after, /heavier star/i),
-        split: row(after, /splitting/i).numbers,
       });
     }
 
-    for (const { aArm, bArm, ratio, split } of seen) {
+    for (const { aArm, bArm, ratio } of seen) {
       // The center of mass is a lever. The nearer star is the heavier one and
       // the mass ratio is exactly the inverse of the arm ratio, which is what
       // turns one total mass into two separate ones.
       expect(aArm).toBeLessThan(bArm);
       expect(ratio).toBeCloseTo(bArm / aArm, 2);
-      expect(split[0] + split[1]).toBeCloseTo(4, 1);
-      expect(split[0]).toBeGreaterThanOrEqual(split[1]);
     }
     // And the control really swept: the answer is not the same every time.
     expect(Math.abs(seen[0].ratio - seen[1].ratio)).toBeGreaterThan(0.1);
 
+    // The page reads the student's own total back, and the two masses the
+    // student writes share it out.
+    await expectDerived(page, id, measureSid, { tot: 4 }, 0.02);
     const { aArm, bArm } = seen[seen.length - 1];
     const total = 4;
     const ma = (total * bArm) / (aArm + bArm);

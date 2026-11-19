@@ -17,7 +17,7 @@ import AxeBuilder from '@axe-core/playwright';
 import { test, expect, openMore } from './fixtures.js';
 
 const LESSON = 'keplers-laws';
-const NUMERIC = 'use-the-law';
+const NUMERIC = 'weighing-another-star';
 
 /** Open a lesson at a step, with the given saved answers, as a returning student. */
 async function openAt(page, app, id, sid, responses = {}, locale = 'en') {
@@ -158,7 +158,7 @@ test.describe('the reset beside the progress bar', () => {
     app,
   }) => {
     await openAt(page, app, LESSON, NUMERIC, {
-      [`${LESSON}:${NUMERIC}`]: '8',
+      [`${LESSON}:${NUMERIC}`]: '0.91',
     });
     const before = await bodies(page);
     await disturb(page);
@@ -168,7 +168,7 @@ test.describe('the reset beside the progress bar', () => {
     await expect(said(page)).toHaveText(
       'Scene back at the start of this step. Your answers are kept.'
     );
-    expect((await stored(page)).responses[`${LESSON}:${NUMERIC}`]).toBe('8');
+    expect((await stored(page)).responses[`${LESSON}:${NUMERIC}`]).toBe('0.91');
   });
 
   test('in a lesson with no setup it restages what the step shows, and the instrument', async ({
@@ -210,9 +210,9 @@ test.describe('the reset beside the progress bar', () => {
 
 test.describe('Restart asks first', () => {
   const answers = {
-    [`${LESSON}:${NUMERIC}`]: '8',
+    [`${LESSON}:${NUMERIC}`]: '0.91',
     [`${LESSON}:${NUMERIC}:locale`]: 'en',
-    [`${LESSON}:weighing-another-star`]: '3',
+    [`${LESSON}:where-kepler-s-version-breaks`]: '1',
     [`${LESSON}:eight-minutes-of-arc:shown`]: true,
   };
   const dialog = page => page.locator('#investigationRestart');

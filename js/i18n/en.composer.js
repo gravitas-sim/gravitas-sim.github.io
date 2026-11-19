@@ -280,6 +280,8 @@ export const EN_COMPOSER = {
   'composer.key.shuffled': 'Options shuffled',
   'composer.key.none': 'Nothing is graded yet.',
   'composer.key.rubric': 'Marked by rubric: {rubric}',
+  'composer.key.estimate':
+    'Own estimate in {unit}, set beside the reading at step {n}; not marked',
   'composer.key.prediction': 'Prediction, marked at step {n}',
   'composer.report.heading': 'Report evidence',
   'composer.report.hint':
