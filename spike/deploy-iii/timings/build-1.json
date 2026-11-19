@@ -1,0 +1,251 @@
+{
+  "when": "2026-11-19T23:34:34.209Z",
+  "profile": "mid-range-phone",
+  "transport": "gzip",
+  "locale": "en",
+  "runs": 1,
+  "node": "v22.23.4",
+  "chromium": "156.0.8078.4",
+  "results": {
+    "home": {
+      "cold": {
+        "usableMs": {
+          "median": 6420.699999809265,
+          "min": 6420.699999809265,
+          "max": 6420.699999809265,
+          "n": 1
+        },
+        "firstActionMs": {
+          "median": 12881,
+          "min": 12881,
+          "max": 12881,
+          "n": 1
+        },
+        "actionMs": {
+          "median": 6008.900000572205,
+          "min": 6008.900000572205,
+          "max": 6008.900000572205,
+          "n": 1
+        },
+        "delayP50": {
+          "median": 13.5,
+          "min": 13.5,
+          "max": 13.5,
+          "n": 1
+        },
+        "delayP95": {
+          "median": 60.5,
+          "min": 60.5,
+          "max": 60.5,
+          "n": 1
+        },
+        "delayMax": {
+          "median": 60.5,
+          "min": 60.5,
+          "max": 60.5,
+          "n": 1
+        },
+        "slowestMs": {
+          "median": 256,
+          "min": 256,
+          "max": 256,
+          "n": 1
+        },
+        "requests": {
+          "median": 68,
+          "min": 68,
+          "max": 68,
+          "n": 1
+        },
+        "bytes": {
+          "median": 409052,
+          "min": 409052,
+          "max": 409052,
+          "n": 1
+        },
+        "modules": {
+          "median": 59,
+          "min": 59,
+          "max": 59,
+          "n": 1
+        },
+        "totalRequests": {
+          "median": 84,
+          "min": 84,
+          "max": 84,
+          "n": 1
+        },
+        "totalBytes": {
+          "median": 516640,
+          "min": 516640,
+          "max": 516640,
+          "n": 1
+        },
+        "served": {
+          "median": 84,
+          "min": 84,
+          "max": 84,
+          "n": 1
+        },
+        "opened": 1,
+        "runs": 1,
+        "errors": [],
+        "swActive": [
+          false
+        ]
+      }
+    },
+    "keplers-laws": {
+      "cold": {
+        "usableMs": {
+          "median": 9209.89999961853,
+          "min": 9209.89999961853,
+          "max": 9209.89999961853,
+          "n": 1
+        },
+        "firstActionMs": {
+          "median": 12577.60000038147,
+          "min": 12577.60000038147,
+          "max": 12577.60000038147,
+          "n": 1
+        },
+        "actionMs": {
+          "median": 3054.4000005722046,
+          "min": 3054.4000005722046,
+          "max": 3054.4000005722046,
+          "n": 1
+        },
+        "delayP50": {
+          "median": 6.699999809265137,
+          "min": 6.699999809265137,
+          "max": 6.699999809265137,
+          "n": 1
+        },
+        "delayP95": {
+          "median": 24.800000190734863,
+          "min": 24.800000190734863,
+          "max": 24.800000190734863,
+          "n": 1
+        },
+        "delayMax": {
+          "median": 30.600000381469727,
+          "min": 30.600000381469727,
+          "max": 30.600000381469727,
+          "n": 1
+        },
+        "slowestMs": {
+          "median": 56,
+          "min": 56,
+          "max": 56,
+          "n": 1
+        },
+        "requests": {
+          "median": 90,
+          "min": 90,
+          "max": 90,
+          "n": 1
+        },
+        "bytes": {
+          "median": 571970,
+          "min": 571970,
+          "max": 571970,
+          "n": 1
+        },
+        "modules": {
+          "median": 79,
+          "min": 79,
+          "max": 79,
+          "n": 1
+        },
+        "totalRequests": {
+          "median": 92,
+          "min": 92,
+          "max": 92,
+          "n": 1
+        },
+        "totalBytes": {
+          "median": 575158,
+          "min": 575158,
+          "max": 575158,
+          "n": 1
+        },
+        "served": {
+          "median": 92,
+          "min": 92,
+          "max": 92,
+          "n": 1
+        },
+        "opened": 1,
+        "runs": 1,
+        "errors": [],
+        "swActive": [
+          false
+        ]
+      }
+    }
+  },
+  "raw": {
+    "home": [
+      {
+        "cold": {
+          "usableMs": 6420.699999809265,
+          "firstActionMs": 12881,
+          "actionMs": 6008.900000572205,
+          "atUsable": {
+            "requests": 68,
+            "bytes": 409052,
+            "modules": 59
+          },
+          "total": {
+            "requests": 84,
+            "bytes": 516640,
+            "modules": 64
+          },
+          "served": 84,
+          "input": {
+            "events": 3,
+            "delayP50": 13.5,
+            "delayP95": 60.5,
+            "delayMax": 60.5,
+            "slowEvents": 81,
+            "slowestMs": 256
+          },
+          "swActive": false,
+          "error": null,
+          "servedAtUsable": 68
+        }
+      }
+    ],
+    "keplers-laws": [
+      {
+        "cold": {
+          "usableMs": 9209.89999961853,
+          "firstActionMs": 12577.60000038147,
+          "actionMs": 3054.4000005722046,
+          "atUsable": {
+            "requests": 90,
+            "bytes": 571970,
+            "modules": 79
+          },
+          "total": {
+            "requests": 92,
+            "bytes": 575158,
+            "modules": 81
+          },
+          "served": 92,
+          "input": {
+            "events": 43,
+            "delayP50": 6.699999809265137,
+            "delayP95": 24.800000190734863,
+            "delayMax": 30.600000381469727,
+            "slowEvents": 17,
+            "slowestMs": 56
+          },
+          "swActive": false,
+          "error": null,
+          "servedAtUsable": 90
+        }
+      }
+    ]
+  }
+}
