@@ -402,4 +402,96 @@ in `experimentSchedulerRealm.spec.js`, `assignmentLogic.spec.js` and
 with the browser suite. The workflow table does not count them as judged on the
 build.
 
+## Third run, part B (Roadmap IV, Prompt 315): the committed criteria
+
+Written on 2026-11-19 against `v4` at 87338a7a, **before any build of this run
+is made or measured**. The second run's verdict (C, D-R10-33) and the first's
+(B, D-DEPLOY-01) stand until this run is ratified. Nothing here changes the
+deploy job, and no switch is made by this run whatever its verdict.
+
+### The thresholds, unchanged in kind
+
+The same six as the first and second runs, measured against the tree as it is
+after the tree-weight work (Prompts 309 to 312, all merged into this base).
+
+- **T1 start-up.** The build cuts the front door's JavaScript by at least 50%
+  of its bytes and 30% of its requests, and each of the four measured lesson
+  routes (kepler, transit, power-law, largest-lesson) by at least 40% of its
+  bytes. Instrument: `node tools/route-budget.mjs --report` on both
+  configurations, JavaScript as served, cold cache, service worker blocked,
+  exactly as the second run measured it.
+- **T2 offline.** The build's service worker installs from its own precache,
+  and a reader who has opened it once can open it offline. Judged on the build
+  as `node build.js` produces it at this base.
+- **T3 committed artifacts.** The build needs no more committed generated
+  artifacts than the tree (`tools/generate-graph.mjs` outputs).
+- **T4 workflows.** At least 10 of the 11 workflows (S1 to S10 and the
+  instructor path I1 of `tools/conformance/product.json`) are judged on the
+  build: every spec the workflow names runs against `dist/` and passes there,
+  not in part. Instrument: `npm run e2e:dist:workflows` as committed at this
+  base, Chromium, the specs unchanged. A spec that is not DOM-level (part A's
+  table) leaves its workflow not judged. No spec is edited, skipped, made
+  conditional or loosened for this run.
+- **T5 instructor bundle.** The build publishes the encrypted instructor bundle
+  without the passphrase reaching any job but the one that publishes. The
+  passphrase is not read in this run.
+- **T6 updates.** In the build, a deploy changes the precache version exactly
+  when a published file changes.
+
+**Reported, never judged.** Time to usable, the harness routes `home` and
+`keplers-laws` on both configurations, by Prompt 298's harness
+(`tools/route-harness.mjs`, its `cold` load, profile `mid-range-phone` of
+`tools/perf-thresholds.json`, compressed transport), three runs per cell, sources and build interleaved,
+median with the range, labelled a proxy for a slow device. `uptime` is printed
+before and after, and nothing is timed while the one-minute load is above 24.
+A median that differs between the configurations by less than the spread of
+its own three runs is reported as not distinguishable. The test-count ratio of
+the first run, and route numbers other than T1's five, are reported beside the
+verdict and decide nothing except the B slice below.
+
+**The spike.** On a branch that is never merged (`spike/deploy-model-iii`): a
+generated precache of the second run's kind over a copy of `dist/`, with the
+offline open and the version behaviour run against it, and the harness pointed
+at `dist/` for the timings. That evidence decides whether T2 and T6 are a
+bounded task (A against B); it never turns the shipped build's T2 or T6 into a
+pass. A rollback is shown on the spike: the copy is replaced by the tree and the
+tree's own worker takes over a context the build's worker served.
+
+### Outcomes, fixed before measurement
+
+- **A.** T1, T3 and T5 met on the shipped build; the spike's precache installs,
+  serves the offline opens and changes its version exactly when a published
+  file changes (T2 and T6 shown to be a bounded task); and T4 met. Prompt 316
+  runs; then Carl's switch.
+- **B, the build for named routes.** T1 met, and the build cannot yet be judged
+  by the suite (T4) or kept offline (T2). A route is named when all three hold:
+  on the build it meets T1's bar for its kind (front door and sandbox: 50% of
+  bytes and 30% of requests; every other route: 40% of bytes); every spec of
+  every workflow mapped to it below passes against `dist/` unchanged; and the
+  spike's precache opens it offline. A route with no workflow mapped to it is
+  not named, because nothing judges it on the build. Prompt 316 prepares the
+  build for the named routes only.
+
+  | Route (`route-budgets.json`) | Workflows that open it |
+  |---|---|
+  | front-door | S1 |
+  | sandbox | S2, S10 |
+  | kepler, transit, power-law, largest-lesson | S3, S4, S8 |
+  | observatory | S5 |
+  | sky | S6 |
+  | experiments | S7 |
+  | my-work | S9 |
+  | instructors, teaching, adoption, teach-find, teach-kit | I1 |
+  | every other route | none |
+
+  If no route is named, B is not reached.
+- **C.** Otherwise. The tree stays published; Prompt 316 is recorded NOT RUN
+  with the register row of this run as its reason; the tree-level savings of
+  Prompts 309 to 313 are the answer.
+
+The second run's B-hybrid slice is not part of this run: Prompt 315 defines B
+as named routes only. An unmeasurable threshold fails the gate on that
+threshold and Carl resets it; no threshold or mapping above is changed after
+this section's commit.
+
 <!-- Listed in DOCUMENTS.md. -->
