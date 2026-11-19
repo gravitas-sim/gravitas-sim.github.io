@@ -1,13 +1,6 @@
 {
  "family": "js/data/investigations",
- "calls": 101,
- "reached": 95,
- "unreached": [
-  "js/data/investigations/transit-photometry.js:35:60",
-  "js/data/investigations/transit-photometry.js:41:28",
-  "js/data/investigations/transit-photometry.js:46:28",
-  "js/data/investigations/transit-photometry.js:51:52",
-  "js/data/investigations/transit-photometry.js:99:26",
-  "js/data/investigations/transit-photometry.js:99:59"
- ]
+ "calls": 97,
+ "reached": 97,
+ "unreached": []
 }
