@@ -2,6 +2,14 @@
 export default {
   steps: [
     {
+      title: 'Qué miden los errores estándar',
+      body: 'Cada tramo que elegiste dio una media y un error estándar. El error estándar es la dispersión de los puntos dentro del tramo, dividida entre la raíz cuadrada de cuántos hay. Esta curva está calculada, sin ruido de medida, así que estos números describen los tramos que elegiste y no el instrumento.',
+      prompt:
+        'Di cuál de tus dos errores estándar es mayor y por qué, y qué fijaría la incertidumbre de la profundidad si esta fuera una curva de luz real.',
+      rubric:
+        'El tramo en tránsito tiene el mayor error estándar en la mayoría de las elecciones, porque el fondo de una caída está curvado por el oscurecimiento del limbo, así que sus puntos no son iguales; el tramo fuera del tránsito solo lleva la lenta ondulación de la curva de fase. Un tramo con más puntos tiene un error estándar menor, de modo que la respuesta depende de las longitudes elegidas. En datos reales la incertidumbre la fija el ruido fotométrico de cada exposición, el número de exposiciones dentro y fuera del tránsito, y los sistemáticos como las manchas estelares y la deriva del detector, de los que el error estándar de un tramo de puntos de modelo no dice nada. Da crédito a quien diga que este error estándar es una propiedad del tramo elegido y no una incertidumbre de medida.',
+    },
+    {
       title: '¿Qué tan seguro es el radio?',
       body: 'Tu radio salió de una sola profundidad, y una profundidad es la diferencia de dos brillos, cada uno promediado sobre muchas exposiciones. Supón que cada exposición se dispersa 3 × 10⁻⁴ del brillo de la estrella, que un tránsito tiene 90 exposiciones dentro y la línea base 450. La incertidumbre de la profundidad es entonces σ<sub>δ</sub> = σ·√(1/n<sub>dentro</sub> + 1/n<sub>fuera</sub>).\n\nEl radio va como √δ, así que su incertidumbre fraccionaria es la mitad de la de la profundidad: σ<sub>R</sub>/R = σ<sub>δ</sub> / (2δ). La profundidad y el radio de la estrella son los que anotaste en la medición anterior; solo los tres números de arriba son nuevos. El radio de la estrella se toma aquí como exacto, que es lo siguiente que un análisis real no haría.',
       fields: [

@@ -275,10 +275,12 @@ export function spanGroups(step, c) {
   const bound = which =>
     `<label class="inv-field"><span class="inv-field-label">${escape(t(`inv.span.${which}`))}</span><input type="number" inputmode="decimal" data-bound="${which}" step="any" /></label>`;
   return ids
-    .map(
-      id =>
-        `<div class="inv-fields" role="group" aria-label="${attr(t('inv.span.title'))}" data-span="${attr(id)}">${bound('from')}${bound('to')}<p class="inv-import-hint" data-span-step></p><p class="inv-field-label" data-span-result></p><div class="inv-import-row"><button type="button" class="inv-import-btn" data-take-span>${escape(step.take?.label || t('inv.span.take'))}</button><span class="inv-import-hint" data-span-hint></span></div></div>`
-    )
+    .map(id => {
+      const of = t('inv.span.for', {
+        what: plain(step.fields.find(f => f.source?.span === id).label),
+      });
+      return `<div class="inv-fields" role="group" aria-label="${attr(of)}" data-span="${attr(id)}"><p class="inv-field-label">${escape(of)}</p>${bound('from')}${bound('to')}<p class="inv-import-hint" data-span-step></p><p class="inv-field-label" data-span-result></p><div class="inv-import-row"><button type="button" class="inv-import-btn" data-take-span>${escape(step.take?.label || t('inv.span.take'))}</button><span class="inv-import-hint" data-span-hint></span></div></div>`;
+    })
     .join('');
 }
 

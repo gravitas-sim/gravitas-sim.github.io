@@ -47,8 +47,8 @@ export const MANIFEST = [
     thumbnail: 'images/scenarios/transit-lab.webp',
     series: 'Detección de exoplanetas',
     depths: 3,
-    stepCount: 29,
-    gradedCount: 13,
+    stepCount: 30,
+    gradedCount: 15,
     objectiveCount: 6,
   },
   {

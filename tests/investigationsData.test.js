@@ -96,6 +96,7 @@ const stubContext = () => ({
     seen: 0,
     log: [],
     last: null,
+    series: () => ({ x: [], y: [] }),
   }),
   // The rotation-curve instrument with nothing to plot, which is the state a
   // step is in the moment it opens and before the panel has been shown.
@@ -115,6 +116,25 @@ const stubContext = () => ({
   find: () => null,
 });
 
+/**
+ * A recorded curve as the panel records it: a flat stretch at 1.000065, then a
+ * transit with sloping sides and a limb-darkened floor (1.2 percent at the
+ * edge of the floor, 1.83 at the middle), then flat again. Times in days.
+ */
+const CURVE = (() => {
+  const x = [];
+  const y = [];
+  for (let i = 0; i <= 200; i++) {
+    const t = 0.8 + i * 0.01;
+    const d = Math.abs(t - 1.5);
+    const floor = d < 0.07 ? 0.0183 - 0.0063 * (d / 0.07) ** 2 : 0;
+    const side = d >= 0.07 && d < 0.14 ? 0.012 * (1 - (d - 0.07) / 0.07) : 0;
+    x.push(t);
+    y.push(1.000065 - floor - side);
+  }
+  return { x, y };
+})();
+
 /** The same context once a couple of transits have gone past. */
 const withTransits = () => {
   const log = [
@@ -129,6 +149,7 @@ const withTransits = () => {
       seen: 2,
       log,
       last: log[1],
+      series: () => CURVE,
     }),
   };
 };
@@ -238,7 +259,8 @@ describe('every lesson', () => {
         const blank = {};
         for (const f of step.fields) blank[f.id] = NaN;
         for (const f of step.fields) {
-          if (f.compute) expect(() => f.compute(blank)).not.toThrow();
+          if (f.compute)
+            expect(() => f.compute(blank, () => NaN)).not.toThrow();
         }
         if (step.validate) {
           expect(() => step.validate(blank, stubContext())).not.toThrow();
@@ -278,14 +300,76 @@ describe('reading a recorded light curve', () => {
     }
   });
 
-  test('the depth step copies the baseline and the bottom in one press', () => {
-    const step = stepFor('Measure the dip');
-    const values = step.importFromSelection(withTransits());
-    expect(values).toHaveLength(2);
-    expect(Number(values[0])).toBeCloseTo(1.000065, 5);
-    expect(Number(values[1])).toBeCloseTo(0.981733, 5);
-    // One press has to fill both fields: the row is the pair.
-    expect(step.importGroups).toEqual([['base', 'bot']]);
+  test('the depth step takes two stretches of the recorded curve, never the panel’s own levels', () => {
+    const step = stepFor('Choose the two stretches');
+    expect(step.importFromSelection).toBeUndefined();
+    expect(Object.keys(step.series)).toEqual(['outside', 'inside']);
+    for (const read of Object.values(step.series)) {
+      const d = read(withTransits());
+      expect(d.x).toHaveLength(201);
+      expect(d.unit).toBe('days');
+    }
+    // The readout says where the plot runs, not its levels nor where the dip is.
+    const rows = step.probe(withTransits()).map(r => `${r.label} ${r.value}`);
+    expect(rows.join(' ')).not.toMatch(/1\.0000|0\.9817|contact/);
+  });
+
+  test('the depth step judges the two stretches, and names the slip', () => {
+    const step = stepFor('Choose the two stretches');
+    const judge = (base, bot) => {
+      const v = { base, bot };
+      for (const f of step.fields) if (f.compute) v[f.id] = f.compute(v);
+      return step.validate(v, stubContext());
+    };
+    // A stretch on the floor (about 1.7 percent) is accepted.
+    expect(judge(1.000065, 0.9831).level).toBe('ok');
+    // An ingress-only stretch (a shallow mean) is told about the sloping sides.
+    const sides = judge(1.000065, 0.9925);
+    expect(sides.level).toBe('warn');
+    expect(sides.message).toMatch(/sloping sides/);
+    // A baseline stretch that includes part of a dip pulls its mean below one.
+    const inDip = judge(0.9986, 0.9831);
+    expect(inDip.level).toBe('error');
+    expect(inDip.message).toMatch(/averages in part of a dip/);
+    // The two stretches swapped.
+    expect(judge(0.9831, 1.000065).level).toBe('error');
+    // Two flat stretches, or one stretch twice, are not called swapped.
+    const flat = judge(1.000065, 1.000065);
+    expect(flat.level).toBe('warn');
+    expect(flat.message).toMatch(/almost the same mean/);
+    expect(flat.message).not.toMatch(/swapped/);
+    // The same stretch twice on the floor is a baseline inside a dip.
+    expect(judge(0.9831, 0.9831).message).toMatch(/averages in part of a dip/);
+  });
+
+  test('a depth the stretches check accepts is never refused by the radius step', () => {
+    const measure = stepFor('Choose the two stretches');
+    const radius = stepFor('Correct it, and get a real radius');
+    const judge = d => {
+      const v = { base: 1, bot: 1 - d };
+      for (const f of measure.fields) if (f.compute) v[f.id] = f.compute(v);
+      return measure.validate(v, stubContext());
+    };
+    let accepted = 0;
+    for (let d = 0.0125; d <= 0.0196; d += 0.00005) {
+      if (judge(d).level !== 'ok') continue;
+      accepted++;
+      const v = { d2: d, rstar: 1.155 };
+      for (const f of radius.fields) if (f.compute) v[f.id] = f.compute(v);
+      expect(radius.validate(v, stubContext()).level).toBe('ok');
+    }
+    expect(accepted).toBeGreaterThan(100);
+    // The floor's edge, where the planet is just fully on the disk, is
+    // 1.32 percent for the clean system and that over 1.631 for the blend.
+    expect(judge(0.0132).level).toBe('ok');
+    const blend = stepFor('Compare the two curves');
+    const jb = d => {
+      const v = { base: 1, bot: 1 - d };
+      for (const f of blend.fields) if (f.compute) v[f.id] = f.compute(v);
+      return blend.validate(v, stubContext());
+    };
+    expect(jb(0.0132 / 1.631).level).toBe('ok');
+    expect(jb(0.0072).level).toBe('warn');
   });
 
   test('the timing step records the most recent transit and its number', () => {
@@ -316,10 +400,14 @@ describe('reading a recorded light curve', () => {
     expect(run({ t1: 0.88, t2: 4.4055, n: 1 }).level).toBe('ok');
   });
 
-  test('the blended step copies the depth it just measured', () => {
-    const step = stepFor('Recover the real planet');
-    const values = step.importFromSelection(withTransits());
-    expect(Number(values[0])).toBeCloseTo(0.018334, 5);
+  test('the blended pair is measured from stretches too, with nothing copied', () => {
+    const measure = stepFor('Compare the two curves');
+    const find = stepFor('Find the hidden companion');
+    expect(measure.importFromSelection).toBeUndefined();
+    expect(find.importFromSelection).toBeUndefined();
+    expect(Object.keys(measure.series)).toEqual(['outside', 'inside']);
+    // The scene is not cleared by a redraw of the step: a taken reading redraws it.
+    expect(measure.clearLightCurve).toBeUndefined();
   });
 
   test('the readouts render with and without transits', () => {
@@ -424,24 +512,41 @@ describe('the transit lesson', () => {
     expect(check.level).toBe('ok');
   });
 
+  /** The two depths come from the earlier steps' own answers, through `e`. */
+  const hidden = (clean, blend, typed) => {
+    const step = stepFor('Find the hidden companion');
+    const e = (sid, id) =>
+      sid === 'choose-the-two-stretches' && id === 'depth' ? clean : blend;
+    const v = { ...typed };
+    for (const f of step.fields) if (f.compute) v[f.id] = f.compute(v, e);
+    return { values: v, check: step.validate(v, stubContext()) };
+  };
+
   test('the blended pair recovers the companion and the true radius', () => {
     // The two depths the Transit Lab and Blended Binary scenarios produce.
-    const { values, check } = run(stepFor('Recover the real planet'), {
-      d_blend: 0.011241,
-      d_clean: 0.018333,
+    const { values, check } = hidden(0.018333, 0.011241, {
+      dm: 0.5,
+      rp_true: 15.5,
     });
     expect(values.ratio).toBeCloseTo(1.631, 2);
-    expect(values.dm).toBeCloseTo(0.5, 1);
-    expect(values.corr).toBeCloseTo(1.277, 2);
-    expect(values.rp_true).toBeCloseTo(15.5, 0);
+    expect(values.rp_blend).toBeCloseTo(12.1, 0);
     expect(check.level).toBe('ok');
   });
 
-  test('rejects the two depths entered the wrong way round', () => {
-    const { check } = run(stepFor('Recover the real planet'), {
-      d_blend: 0.018333,
-      d_clean: 0.011241,
-    });
+  test('names the logarithm slip and the radius slip', () => {
+    const base = [0.018333, 0.011241];
+    // Ratio instead of ratio minus one: -2.5 log10(1.631) = -0.53.
+    expect(hidden(...base, { dm: 0.53, rp_true: 15.5 }).check.message).toMatch(
+      /subtract one/
+    );
+    // The ratio instead of its square root multiplies the radius too far.
+    expect(hidden(...base, { dm: 0.5, rp_true: 19.7 }).check.message).toMatch(
+      /square root/
+    );
+  });
+
+  test('rejects the two depths the wrong way round', () => {
+    const { check } = hidden(0.011241, 0.018333, { dm: 0.5, rp_true: 15.5 });
     expect(check.level).toBe('error');
     expect(check.message).toMatch(/shallower/);
   });
@@ -454,7 +559,9 @@ describe('the transit lesson', () => {
     expect(withSetup.at(-1).scenario).toBe('Blended Binary');
     // The clean measurement has to come first, or the comparison in the last
     // step has nothing to compare against.
-    const measureDip = inv.steps.findIndex(s => s.title === 'Measure the dip');
+    const measureDip = inv.steps.findIndex(
+      s => s.title === 'Choose the two stretches'
+    );
     expect(measureDip).toBeLessThan(withSetup.at(-1).i);
   });
 });

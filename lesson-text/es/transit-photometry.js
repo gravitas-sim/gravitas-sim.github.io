@@ -36,26 +36,21 @@ export default {
       body: '<strong>[[radial-velocity|Velocidad radial]].</strong> Un planeta y su estrella orbitan ambos su centro de masas común, así que la estrella se bambolea, y el bamboleo desplaza sus líneas espectrales al azul y luego al rojo. Júpiter mueve al Sol a 12,5 m/s; la Tierra logra 9 cm/s. Así se encontró el primer planeta alrededor de una estrella normal: Michel Mayor y Didier Queloz anunciaron 51 Pegasi b en 1995, un mundo de masa joviana en una órbita de cuatro días que ninguna teoría de formación planetaria había permitido. Les valió parte del Premio Nobel de 2019. La velocidad radial mide una masa mínima, porque una órbita vista de frente no produce desplazamiento alguno.\n\n<strong>[[transit|Tránsitos]].</strong> Si la órbita resulta estar de canto respecto a nosotros, el planeta cruza el disco estelar y la estrella se atenúa en una fracción fija, una vez por órbita, para siempre. Esto mide un radio. Es con diferencia el método más productivo, y es el que estás a punto de aplicar.\n\n<strong>Microlente.</strong> Cuando una estrella pasa por delante de otra, su gravedad enfoca la luz de la estrella de fondo. Un planeta añade un breve pico extra. Esto encuentra planetas a miles de años luz, incluidos los fríos más allá de la línea de nieve, pero cada suceso ocurre una vez y no se repite jamás.\n\n<strong>Astrometría.</strong> El mismo bamboleo que la velocidad radial, medido como una posición en el cielo en lugar de como un desplazamiento Doppler. Gaia tiene la precisión para hacerlo a gran escala y empieza a dar resultados.\n\n<strong>Imagen directa.</strong> Bloquear la luz estelar con un coronógrafo y fotografiar el planeta mismo. Rara, difícil, y el único método que te consigue un fotón que de verdad vino del planeta.\n\nFíjate en lo que falta en todos ellos salvo el último: nadie ha visto el planeta. Todo se infiere de un efecto sobre otra cosa, y toda inferencia lleva supuestos que pueden ser falsos. Llevar la cuenta de qué es qué es la mayor parte del oficio.',
       tip: 'La velocidad radial da una masa, los tránsitos dan un radio. Ninguno da ambas cosas, y por eso las dos juntas valen mucho más que cualquiera por separado.',
     },
-    'what-will-the-brightness-do': {
-      title: '¿Qué hará el brillo?',
-      body: 'El planeta está a punto de cruzar por delante de la estrella desde tu punto de vista. Dentro de un momento abrirás un fotómetro y lo observarás. Comprométete primero con una respuesta.',
-      prompt: 'Mientras el planeta cruza la estrella, el brillo medido…',
-      options: [
-        'subirá, porque el planeta refleja luz extra hacia nosotros',
-        'bajará una pequeña cantidad, y después se recuperará',
-        'bajará a cero hasta que el planeta haya pasado',
-        'se mantendrá plano: el planeta es demasiado pequeño para importar',
-      ],
-      because:
-        'Baja una pequeña cantidad y se recupera. El planeta bloquea una fracción del disco de la estrella igual al cociente de sus áreas, e incluso un Júpiter delante de una estrella parecida al Sol solo cubre alrededor del 1 % de ella. Todo lo de esta investigación se sigue de que ese único número sea pequeño pero perfectamente medible.',
+    'estimate-the-dip': {
+      title: '¿Qué profundidad tendrá la caída?',
+      body: 'El planeta está a punto de cruzar por delante de la estrella desde tu punto de vista. La estrella es algo mayor que el Sol, 1,15 veces su radio, y el planeta tiene 1,4 veces el radio de Júpiter. El radio de Júpiter es aproximadamente una décima parte del del Sol.\n\nDentro de un momento un fotómetro registrará el brillo total de la estrella mientras el planeta cruza. Antes de que lo haga, comprométete con una estimación de cuánta luz falta en el punto más profundo del cruce.',
+      prompt:
+        'En el punto más profundo del cruce, ¿qué porcentaje de la luz de la estrella faltará, aproximadamente?',
     },
     'your-first-transit': {
       title: 'Tu primer tránsito',
-      body: 'El panel de <strong>Curva de luz</strong> se ha abierto a la derecha. Representa el brillo total de todo lo que hay a la vista frente al tiempo, exactamente lo que registra un fotómetro en un telescopio, y nada más: ninguna imagen, ninguna posición, un número por instante.\n\nEl planeta da una vuelta cada 13 segundos aproximadamente de tu tiempo, y el tránsito mismo se acaba en medio segundo. Esa proporción es real: el tránsito ocupa el 4 % de la órbita, o tres horas y media de un año de tres días y medio. Pasa demasiado deprisa para observarlo con detenimiento, que es exactamente la situación de un observador real y exactamente por lo que la medida se hace después sobre el registro. La curva conserva todas las caídas que han pasado.\n\nEl control de <em>ángulo del observador</em> gira tu punto de vista alrededor del sistema. Pruébalo: los tránsitos se mueven a otro momento pero no dejan de ocurrir, porque esta simulación corre en un solo plano y todas las órbitas de ella están de canto. Las órbitas reales están inclinadas, y eso lo cambia todo: volverás a ello.',
+      body: 'El panel de <strong>Curva de luz</strong> se ha abierto a la derecha. Representa el brillo total de todo lo que hay a la vista frente al tiempo, exactamente lo que registra un fotómetro en un telescopio, y nada más: ninguna imagen, ninguna posición, un número por instante.\n\nEl planeta da una vuelta cada 13 segundos aproximadamente de tu tiempo, y el tránsito mismo se acaba en medio segundo: ocupa el 4 % de la órbita, tres horas y media de un año de tres días y medio. Pasa demasiado deprisa para observarlo con detenimiento, así que la simulación se detiene sola en cuanto se ha registrado un tránsito completo. Pulsa <strong>Repetir</strong> para ver el cruce otra vez desde un poco antes, tantas veces como quieras.\n\nLa lectura de abajo dice dónde está el planeta respecto a la estrella en el momento que ves en pantalla (fuera del disco, cruzando el limbo o completamente sobre él), junto al brillo que registra el fotómetro en ese mismo momento. El punto del lienzo y la caída de la gráfica son un solo suceso descrito dos veces, y Repetir te permite comprobarlo tú mismo en lugar de que te lo digan.\n\nEl control de <em>ángulo del observador</em> gira tu punto de vista alrededor del sistema. Pruébalo: los tránsitos se mueven a otro momento pero no dejan de ocurrir, porque esta simulación corre en un solo plano y todas las órbitas de ella están de canto. Las órbitas reales están inclinadas, y eso lo cambia todo: volverás a ello.',
       checklist: [
-        'Espera hasta que haya al menos dos caídas en la gráfica',
+        'Selecciona el planeta, desde el lienzo o desde la lista de abajo',
+        'Pulsa Repetir y observa cómo la lectura pasa de «fuera del disco» a «cruzando el limbo» y a «completamente sobre el disco»',
+        'Comprueba que el brillo empieza a caer cuando el planeta llega al limbo',
         'Pasa el puntero por la parte plana de la curva y lee el valor en la etiqueta',
-        'Pasa el puntero por el fondo de una caída y lee también ese valor',
+        'Pasa el puntero por el fondo de la caída y lee también ese valor',
         'Mueve el ángulo del observador y confirma que las caídas se desplazan pero no desaparecen',
         'Fíjate en la ligerísima subida y bajada de la línea de base entre tránsitos',
       ],
@@ -101,20 +96,24 @@ export default {
           'Para comprobar un resultado así, elévalo al cuadrado y verifica que recuperas la profundidad.',
       },
     },
-    'measure-the-dip': {
-      title: 'Mide la caída',
-      body: 'Ahora hazlo de verdad, con la curva que has estado observando.\n\nNecesitas dos números: el brillo en el tramo plano entre tránsitos, y el brillo en el fondo de una caída.\n\nEl panel ya los está encontrando. Toma como línea de base el nivel en el que la estrella se sitúa durante casi toda su órbita, y mide el fondo de todas las caídas completas que han pasado. Espera hasta que la lectura de abajo muestre al menos un tránsito, y después pulsa el botón para copiar ambos números. Si prefieres leerlos tú, pasa el puntero por la [[light-curve|curva de luz]] y te dará el valor que hay debajo con seis decimales.\n\nLa profundidad y el cociente de radios se calculan a partir de lo que introduzcas, así que una coma decimal descolocada en tu aritmética no puede confundirse con un malentendido de la física.',
-      importLabel: 'Copiar el último tránsito',
+    'choose-the-two-stretches': {
+      title: 'Elige los dos tramos',
+      body: 'Ahora hazlo de verdad. La gráfica empieza vacía otra vez y la simulación corre. Deja que dibuje una caída completa con curva plana a ambos lados y pulsa después el botón de pausa de la línea de tiempo: la curva se queda quieta y la gráfica conserva todos los puntos.\n\nUna profundidad es una diferencia entre dos niveles, y tú decides qué tramos de la curva los representan: un tramo de la curva plana entre tránsitos, <em>fuera del tránsito</em>, y un tramo dentro de la caída, <em>en tránsito</em>. Para cada uno, escribe dónde empieza y dónde acaba, en días sobre el eje inferior de la gráfica, y pulsa el botón de debajo. La página promedia los puntos de tu tramo y da la media, cuántos puntos hay y el error estándar de esa media.\n\nLa profundidad y el cociente de radios se calculan a partir de tus dos medias. Una elección distinta de tramo da una profundidad distinta, así que comprueba de qué está hecho cada uno. Si el tramo plano te resulta demasiado corto, pulsa reproducir unos segundos más y vuelve a pausar.',
       fields: [
+        { label: 'Brillo medio, fuera del tránsito', unit: '' },
+        { label: 'Puntos del tramo fuera del tránsito', unit: '' },
+        { label: 'Error estándar, fuera del tránsito', unit: '' },
+        { label: 'Brillo medio, en tránsito', unit: '' },
+        { label: 'Puntos del tramo en tránsito', unit: '' },
+        { label: 'Error estándar, en tránsito', unit: '' },
         {
-          label: 'Brillo fuera del tránsito',
+          label: 'Profundidad del tránsito <em>δ</em> = fuera − en tránsito',
           unit: '',
-          want: 'p. ej. 1,000065',
         },
-        { label: 'Brillo en el fondo de la caída', unit: '' },
         {
-          label: 'Profundidad del tránsito <em>δ</em> = base − fondo',
-          unit: '',
+          label:
+            'La misma profundidad, como porcentaje de la luz de la estrella',
+          unit: '%',
         },
         {
           label:
@@ -122,11 +121,13 @@ export default {
           unit: '',
         },
       ],
-      tip: 'Una curva de luz real tiene ruido, y nadie lee el fondo a ojo: se ajusta un tránsito modelo a todos los puntos a la vez, que es cómo la precisión acaba siendo mejor que cualquier medida individual de ella. Lo que hace aquí el panel es la misma idea sin el ruido.',
+      tip: 'Una curva de luz real tiene ruido, y nadie lee un nivel a ojo: se ajusta un tránsito modelo a todos los puntos a la vez, que es cómo la precisión acaba siendo mejor que cualquier medida individual de ella. La curva de aquí no tiene ruido, así que el error estándar que obtienes es la dispersión de los puntos del propio modelo dentro de tu tramo, una propiedad del tramo que elegiste y no una incertidumbre de medida.',
     },
     'why-that-radius-came-out': {
       title: 'Por qué ese radio salió demasiado grande',
-      body: 'Una estrella no es un disco uniformemente brillante. Estás mirando hacia abajo a través de una atmósfera parcialmente transparente, y en el centro del disco ves directamente hacia dentro, hasta capas calientes y brillantes, mientras que cerca del borde tu línea de visión se inclina y se detiene en capas más frías y tenues. El disco es más brillante en el medio y se apaga hacia el borde. Esto es el <strong>oscurecimiento del limbo</strong>, y es visible en cualquier fotografía decente del Sol.\n\nAsí que un planeta que cruza el centro del disco cubre luz más brillante que la media, y la caída a mitad del tránsito es más profunda de lo que predice el simple cociente de áreas. Para los coeficientes usados aquí, el centro del disco es <strong>1,215</strong> veces más brillante que la media del disco, así que:\n\n<strong><em>δ</em><sub>medida</sub> = 1,215 × (<em>R</em><sub>p</sub> / <em>R</em><sub>★</sub>)<sup>2</sup></strong>\n\nTomar la raíz cuadrada de tu profundidad medida sobreestima por tanto el cociente de radios en √1,215 = 1,102, alrededor del 10 %. En un planeta cerca de una frontera de clasificación, un 10 % es la diferencia entre dos respuestas distintas sobre de qué está hecho el mundo.\n\nEsto no es una peculiaridad de la simulación. Es la razón de que nadie en el campo dé √<em>δ</em> como cociente de radios: un ajuste de tránsito real resuelve a la vez el cociente de radios, los coeficientes de oscurecimiento del limbo, el [[impact-parameter|parámetro de impacto]] y la órbita, porque están todos enredados en la misma curva.',
+      compare:
+        'Un planeta que bloqueara solo el área que cubre daría una profundidad igual al cociente de radios al cuadrado; pon tu estimación y tu lectura una junto a otra, y los párrafos de abajo dicen qué hace más profunda la caída que mediste.',
+      body: 'Una estrella no es un disco uniformemente brillante. Estás mirando hacia abajo a través de una atmósfera parcialmente transparente, y en el centro del disco ves directamente hacia dentro, hasta capas calientes y brillantes, mientras que cerca del borde tu línea de visión se inclina y se detiene en capas más frías y tenues. El disco es más brillante en el medio y se apaga hacia el borde. Esto es el <strong>oscurecimiento del limbo</strong>, y es visible en cualquier fotografía decente del Sol.\n\nAsí que un planeta que cruza el centro del disco cubre luz más brillante que la media, y la caída a mitad del tránsito es más profunda de lo que predice el simple cociente de áreas. Para los coeficientes usados aquí, el centro del disco es <strong>1,215</strong> veces más brillante que la media del disco, así que:\n\n<strong><em>δ</em><sub>medida</sub> = 1,215 × (<em>R</em><sub>p</sub> / <em>R</em><sub>★</sub>)<sup>2</sup></strong>\n\nTomar la raíz cuadrada de tu profundidad medida sobreestima por tanto el cociente de radios en √1,215 = 1,102, alrededor del 10 %, cuando el tramo que tomaste está en el medio de la caída. El fondo es curvo, porque hacia cualquiera de sus extremos el planeta cruza luz más tenue, así que un tramo que abarca más del fondo da una profundidad menor y un error menor; el factor 1,215 pertenece al medio. En un planeta cerca de una frontera de clasificación, un 10 % es la diferencia entre dos respuestas distintas sobre de qué está hecho el mundo.\n\nEsto no es una peculiaridad de la simulación. Es la razón de que nadie en el campo dé √<em>δ</em> como cociente de radios: un ajuste de tránsito real resuelve a la vez el cociente de radios, los coeficientes de oscurecimiento del limbo, el [[impact-parameter|parámetro de impacto]] y la órbita, porque están todos enredados en la misma curva.',
       figure: {
         alt: 'El Sol fotografiado en luz blanca. Su disco es claramente más brillante en el medio y se apaga hacia el borde. El pequeño disco negro de bordes nítidos de Venus está cerca del borde superior derecho, y varias manchas solares se reparten por el centro.',
         caption:
@@ -142,7 +143,7 @@ export default {
         {
           label: 'Profundidad que mediste',
           unit: '',
-          hint: 'del paso anterior',
+          hint: 'tu profundidad de los dos tramos',
         },
         {
           label: 'Radio de la estrella R<sub>★</sub>',
@@ -330,39 +331,50 @@ export default {
       ],
       tip: 'Robo-AO alcanzó unos 0,15 segundos de arco en un telescopio de 1,5 m y fotografió 3857 anfitrionas de Kepler; el moteado de SOAR alcanza unos 0,04 segundos de arco en uno de 4,1 m y ha observado cerca de 3000 objetivos de TESS. Ninguno es un telescopio grande según los estándares modernos. Lo que los hizo funcionar fue hacerlo con todas las anfitrionas, y no con unas pocas elegidas.',
     },
-    'now-measure-it': {
-      title: 'Ahora mídelo',
-      body: 'La misma estrella y el mismo planeta están de vuelta, con un cambio: una segunda estrella media magnitud más tenue está a 300 UA. A la distancia de este sistema son unos seis segundos de arco en el cielo, cómodamente dentro de un solo píxel de TESS y dentro de una apertura de Kepler, y está a 30 000 unidades de simulación de la estrella que estás observando, muy fuera de la vista. Está ahí. No puedes verla. El sondeo tampoco podía.\n\nMide otra vez la profundidad del tránsito exactamente como lo hiciste antes. La lectura de abajo está midiendo la nueva curva a medida que entra; espera un tránsito completo y compara su fondo con lo que obtuviste la primera vez.',
+    'will-the-dip-look-the-same': {
+      title: '¿Se verá igual la caída?',
+      body: 'La misma estrella y el mismo planeta están de vuelta, con un cambio: una segunda estrella, en el mismo píxel, suma su luz a cada medida. Está a 300 UA de la estrella que estás observando. A la distancia de este sistema son unos seis segundos de arco en el cielo, cómodamente dentro de un solo píxel de TESS y dentro de una apertura de Kepler, y está a 30 000 unidades de simulación de la estrella, muy fuera de la vista. No puedes verla. El sondeo tampoco podía. No se te dice cuán brillante es.\n\nDentro de un momento registrarás el tránsito de este sistema como registraste el primero. Antes de hacerlo, estima qué profundidad tendrá su caída, como porcentaje de la luz que recoge el fotómetro.',
+      prompt:
+        '¿Qué profundidad, en porcentaje, tendrá aproximadamente la caída de la luz combinada?',
+    },
+    'compare-the-two-curves': {
+      title: 'Compara las dos curvas',
+      body: 'La simulación está ahora ejecutando el segundo sistema y la gráfica está vacía. Deja que dibuje una caída completa con curva plana a ambos lados y pulsa después el botón de pausa de la línea de tiempo.\n\nMide este tránsito exactamente como mediste el primero: elige un tramo fuera del tránsito y un tramo del fondo de la caída, escribe dónde empieza y dónde acaba cada uno y pulsa el botón de debajo. Después compara la curva nueva con la que mediste antes: el tiempo entre tránsitos, la duración de la caída y su forma, y su profundidad.',
+      fields: [
+        { label: 'Brillo medio, fuera del tránsito', unit: '' },
+        { label: 'Brillo medio, en tránsito', unit: '' },
+        {
+          label: 'Profundidad del tránsito <em>δ</em> = fuera − en tránsito',
+          unit: '',
+        },
+        {
+          label: 'La misma profundidad, como porcentaje de la luz recogida',
+          unit: '%',
+        },
+      ],
       checklist: [
-        'Espera un tránsito completo y lee la nueva línea de base y el nuevo fondo',
-        'Confirma que la caída es visiblemente menos profunda que antes',
-        'Comprueba los instantes centrales: el periodo no ha cambiado en absoluto',
-        'Observa que la forma y la duración del tránsito son exactamente las de antes',
+        'Compara el tiempo entre los instantes centrales de dos tránsitos con el del primer sistema',
+        'Compara la duración de la caída y la forma de sus lados y de su fondo',
+        'Compara la profundidad con la que mediste antes',
+        'Decide qué podría hacer la profundidad menor mientras el periodo y la forma siguen como estaban',
       ],
       tip: 'Solo cambia la profundidad. El periodo, la duración y la forma quedan intactos, que es precisamente por lo que la mezcla es tan fácil de pasar por alto: nada de la curva de luz parece mal.',
     },
-    'recover-the-real-planet': {
-      title: 'Recupera el planeta real',
-      body: 'Has medido el mismo planeta dos veces, una limpia y otra mezclada. El cociente de las dos profundidades es 1 + <em>F</em>₂/<em>F</em>₁ directamente, lo que significa que este par de medidas contiene el brillo de la compañera aunque nunca la vieras.\n\nEn la práctica nunca obtienes la medida limpia: esa es toda la dificultad, y es la razón de que alguien tenga que ir y tomar una imagen de alta resolución. Aquí tienes las dos, así que puedes comprobar que la corrección hace lo que dice.',
-      importLabel: 'Copiar la profundidad mezclada',
+    'find-the-hidden-companion': {
+      title: 'Encuentra la compañera oculta',
+      compare:
+        'Pon tu estimación junto a la caída que mediste con la compañera: la caída se hizo menos profunda mientras el periodo y la forma seguían iguales, y esa combinación es el aspecto de la dilución.',
+      body: 'Has medido el mismo planeta dos veces, una limpia y otra mezclada, y las dos profundidades están en el recuadro de arriba. El cociente de la profundidad limpia entre la mezclada es 1 + <em>F</em>₂/<em>F</em>₁ directamente, lo que significa que este par de medidas contiene el brillo de la compañera aunque nunca la vieras.\n\nA partir del cociente de abajo, calcula el contraste de la compañera como diferencia de magnitudes, <em>F</em>₂/<em>F</em>₁ = 10<sup>−0,4Δm</sup>, y el radio que daría la curva mezclada si no supieras de la compañera, y luego el radio una vez corregido.\n\nEn la práctica nunca obtienes la medida limpia: esa es toda la dificultad, y es la razón de que alguien tenga que ir y tomar una imagen de alta resolución. Aquí tienes las dos, así que puedes comprobar que la corrección hace lo que dice.',
       fields: [
-        { label: 'Profundidad que acabas de medir, mezclada', unit: '' },
-        {
-          label: 'Profundidad que mediste antes, sin mezclar',
-          unit: '',
-          want: 'del paso 8',
-        },
-        { label: 'Radio que implica la curva mezclada', unit: 'R⊕' },
+        { label: 'Profundidad medida sin la compañera', unit: '' },
+        { label: 'Profundidad medida con la compañera', unit: '' },
         {
           label: 'Cociente de profundidades = 1 + <em>F</em>₂/<em>F</em>₁',
           unit: '',
         },
-        { label: 'Contraste implicado de la compañera Δm', unit: 'mag' },
-        {
-          label: 'Corrección del radio √(1 + <em>F</em>₂/<em>F</em>₁)',
-          unit: '',
-        },
-        { label: 'Radio corregido del planeta', unit: 'R⊕' },
+        { label: 'Radio que implica la curva mezclada', unit: 'R⊕' },
+        { label: 'Contraste Δm de la compañera que deduces', unit: 'mag' },
+        { label: 'Radio corregido del planeta que deduces', unit: 'R⊕' },
       ],
       tip: 'Fíjate en lo que la corrección no necesita: la distancia de la compañera, su masa, o si está siquiera ligada a la estrella. Solo cuánta luz añade.',
     },

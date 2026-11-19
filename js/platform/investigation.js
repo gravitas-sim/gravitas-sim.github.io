@@ -134,7 +134,7 @@ const STEP_FIELDS = {
   read: ['motion'],
   explore: ['checklist'],
   measure: ['fields'],
-  predict: ['prompt', 'options', 'answer', 'because', 'reveal'],
+  predict: ['prompt', 'options', 'answer', 'because', 'reveal', 'kind', 'unit'],
   question: [
     'kind',
     'from',
@@ -549,7 +549,22 @@ function checkStep(s, path, index, ctx) {
       }
     });
   }
-  if (s.type === 'predict') {
+  if (s.type === 'predict' && s.kind === 'estimate') {
+    // An estimate is a number in a unit, never marked: no options and no answer.
+    text(s.prompt, `${path}.prompt`, true);
+    need(
+      typeof s.unit === 'string' && s.unit.length > 0 && s.unit.length <= 16,
+      `${path}.unit`,
+      'unit',
+      'a unit such as "%"'
+    );
+    need(
+      sidAt.has(s.reveal) && sidAt.get(s.reveal) > index,
+      `${path}.reveal`,
+      'reveal',
+      'a later step, where the prediction is marked'
+    );
+  } else if (s.type === 'predict') {
     text(s.prompt, `${path}.prompt`, true);
     const opts = Array.isArray(s.options) ? s.options : null;
     need(

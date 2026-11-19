@@ -203,16 +203,18 @@ export default {
         'About 70 to 80 days between the direction starting to fall and starting to rise again. The real figure for Mars is about 72 days, and it varies from one opposition to the next by a couple of weeks for reasons this planar circular model does not include.',
     },
     'transit-photometry': {
-      'measure-the-dip':
-        'Baseline near 1.000; depth about 1.8%. The naive radius ratio is then about 0.135, which is roughly ten percent larger than the true value, and the investigation goes on to explain why.',
+      'choose-the-two-stretches':
+        'Out of transit the mean is near 1.0000; a stretch on the floor gives a depth near 1.8%, so a naive radius ratio of about 0.13, ten percent too large. Sloping sides or part of a dip get a message.',
       'correct-it-and-get-a':
         'With the limb-darkening correction and a stellar radius of 1.155 solar radii, the recovered planet radius lands near 1.38 Jupiter radii, the published value for HD 209458 b.',
       'time-two-transits':
         'Two successive transits are about 3.52 days apart. Students who miss a transit will get a multiple of that; the validator catches the doubled value and says so.',
       'from-a-period-to-an':
         'A 3.52-day period around a 1.148 solar mass star gives a semi-major axis near 0.047 AU and an equilibrium temperature of order 1400 K.',
-      'recover-the-real-planet':
-        'The blended depth is shallower than the clean one. Correcting for a companion half a magnitude fainter recovers a planet radius consistent with the unblended measurement.',
+      'compare-the-two-curves':
+        'With a companion half a magnitude fainter in the aperture, the depth is near 1.1%, with the same period and shape.',
+      'find-the-hidden-companion':
+        'The blended depth is shallower; the ratio of the depths gives a contrast near half a magnitude and the corrected radius matches the clean one.',
     },
     'orbital-energy': {
       'fire-it':

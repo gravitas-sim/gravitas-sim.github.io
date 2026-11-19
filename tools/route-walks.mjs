@@ -170,33 +170,44 @@ export const PILOTS = {
     },
   },
   'transit-photometry': {
-    measureSid: 'measure-the-dip',
-    // The step's own route: wait until the light curve has shown a transit,
-    // then press "Copy the last transit", which fills both boxes. The time
-    // includes the wait for that transit, as a student's does.
+    measureSid: 'choose-the-two-stretches',
+    // The step's own route: wait until the plot has drawn one complete dip
+    // with flat curve after it, pause the simulation as a student does, then
+    // type the bounds of a stretch out of transit and of a stretch from the
+    // floor of the dip (a student reads them off the plot's axis and the
+    // readout's contact times; the walk reads them off the recording) and press
+    // each stretch's button until the step's own check accepts the pair.
     async act(page) {
-      const button = page.getByRole('button', {
-        name: /Copy the last transit/i,
-      });
-      const first = page
-        .locator('#investigationBody input[data-field]')
-        .first();
-      // A transit that is still being drawn copies as a bottom equal to the
-      // baseline, and the step says it is too shallow; the student presses the
-      // button again after the next one. So does the walk, until the step's
-      // own check accepts the copy.
-      const accepted = page.locator('#investigationBody .inv-check.is-ok');
+      const curve = () =>
+        page.evaluate(async () => {
+          const m = await import('/js/lightCurve.js');
+          const a = m.transitAnalysis();
+          const { x } = a.series();
+          return { last: a.last, first: x[0], end: x.at(-1) };
+        });
       const until = Date.now() + 150_000;
-      while (Date.now() < until) {
-        await button.click();
+      let c = await curve();
+      while (Date.now() < until && !(c.last && c.end - c.last.mid > 0.5)) {
         await page.waitForTimeout(500);
-        if ((await first.inputValue()) && (await accepted.count())) break;
-        await page.waitForTimeout(1500);
+        c = await curve();
       }
+      await page.getByRole('button', { name: /pause simulation/i }).click();
+      c = await curve();
+      const half = c.last.duration / 2;
+      const groups = page.locator('#investigationBody [data-span]');
+      const stretch = async (g, from, to) => {
+        const grp = groups.nth(g);
+        await grp.locator('[data-bound="from"]').fill(String(from));
+        await grp.locator('[data-bound="to"]').fill(String(to));
+        await grp.locator('[data-take-span]').click();
+        await page.waitForTimeout(300);
+      };
+      await stretch(0, c.first, c.last.mid - 1.3 * half);
+      await stretch(1, c.last.mid - 0.3 * half, c.last.mid + 0.3 * half);
       return {
-        copied: await page
+        taken: await page
           .locator('#investigationBody input[data-field]')
-          .evaluateAll(els => els.slice(0, 2).map(e => e.value)),
+          .evaluateAll(els => els.slice(0, 6).map(e => e.value)),
       };
     },
   },
@@ -287,6 +298,12 @@ async function nudge(page) {
   for (let i = 0; i < (await fields.count()); i++) {
     const field = fields.nth(i);
     if (!(await field.inputValue())) await field.fill('1').catch(() => {});
+  }
+  // An estimate commits as a student's does: type, press the button.
+  const est = page.locator('#investigationBody [data-est]:not([readonly])');
+  if (await est.count()) {
+    await est.first().fill('1.5');
+    await page.locator('#investigationBody [data-est-commit]').click();
   }
   const open = page.locator('#investigationBody .inv-option:not([disabled])');
   if (await open.count())

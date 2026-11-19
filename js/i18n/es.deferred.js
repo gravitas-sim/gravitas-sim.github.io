@@ -597,7 +597,7 @@ export const ES_DEFERRED = {
     'Fijate donde la medida deja de comportarse suavemente: ese es el limite que tiene este escenario, con esta duracion. Una pasada mas larga solo puede moverlo hacia dentro: una orbita que sobrevivio 20 periodos binarios no ha demostrado sobrevivir 200.',
   'sweep.guide.run': 'Ejecutar el barrido guiado',
 
-  // --- Tareas para clase --------------------------------------------------
+  // --- Tareas para clase --- shown from lazy chunks (the builder, the link bridge, a lesson panel with an assignment open), never a first visit; ensureDeferredMessages() registers them.
   'assign.title': 'Crear una actividad',
   'assign.hint':
     'Elige los pasos que quieres asignar. Los pasos que construyen el mundo del que trata otro paso se añaden solos, y se indican donde corresponden.',
@@ -756,6 +756,7 @@ export const ES_DEFERRED = {
   'inv.run.empty': 'Aún no hay ejecuciones.',
   'inv.run.caption': 'Ejecuciones: {param}, y lo que leyó cada una',
   'inv.run.col': 'Ejecución',
+  'inv.span.for': 'Intervalo para: {what}',
   'inv.span.title': 'Lectura de un intervalo',
   'inv.span.from': 'Desde',
   'inv.span.to': 'Hasta',

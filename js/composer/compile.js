@@ -291,16 +291,18 @@ export function compileInvestigation(pack, api) {
       });
       w.fields = (s.fields || []).map(f => ({ label: es(f.label) }));
     } else if (s.type === 'predict') {
+      const est = s.kind === 'estimate';
       Object.assign(out, {
         prompt: en(s.prompt),
-        options: s.options.map(en),
-        answer: s.answer,
+        ...(est
+          ? { kind: 'estimate', unit: s.unit }
+          : { options: s.options.map(en), answer: s.answer }),
         because: en(s.because),
         reveal: s.reveal,
       });
       Object.assign(w, {
         prompt: es(s.prompt),
-        options: s.options.map(es),
+        ...(est ? {} : { options: s.options.map(es) }),
         because: es(s.because),
       });
     } else if (s.type === 'question') {

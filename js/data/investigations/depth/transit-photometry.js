@@ -2,7 +2,7 @@
 // Finding Planets by Their Shadows, deeper (Prompt 72)
 // -----------------------------------------------------------------------------
 // The same dip, the same depth and the same radius the student already found
-// (`measure-the-dip`, `correct-it-and-get-a`), with an uncertainty carried
+// (`choose-the-two-stretches`, `correct-it-and-get-a`), with an uncertainty carried
 // through them and the result set against a forward model. Nothing is measured
 // again, and the factor that undoes limb darkening is the lesson's own 1.2146.
 // =============================================================================
@@ -26,6 +26,25 @@ const depthError = v => v.sig * Math.sqrt(1 / v.n_in + 1 / v.n_out);
 export default {
   id: 'transit-photometry',
   steps: [
+    {
+      sid: 'what-your-error-bar-measures',
+      after: 'choose-the-two-stretches',
+      depth: 'quantitative',
+      decides:
+        'Which of the two stretches carries the larger scatter, and what would set the uncertainty of the depth if the curve were measured data',
+      type: 'question',
+      kind: 'short',
+      title: 'What the standard errors measure',
+      body: `Each stretch you chose gave a mean and a standard error. The
+ standard error is the scatter of the points inside the stretch,
+ divided by the square root of how many there are. This curve is
+ computed, with no measurement noise in it, so these numbers
+ describe the stretches you chose and not the instrument.`,
+      prompt:
+        'Say which of your two standard errors is larger and why, and what would set the uncertainty of the depth if this were a real light curve.',
+      rubric:
+        'The in-transit stretch has the larger standard error in most choices, because the floor of a dip is curved by limb darkening, so its points are not equal; the out-of-transit stretch carries only the slow phase-curve ripple. A stretch with more points has a smaller standard error, so the answer depends on the stretch lengths chosen. For real data the uncertainty is set by the photometric noise of each exposure, the number of exposures in and out of transit, and by systematics such as starspots and detector drift, which the standard error of a stretch of model points says nothing about. Credit a student who says that this standard error is a property of the chosen stretch, not a measurement uncertainty.',
+    },
     {
       sid: 'how-sure-is-the-depth',
       after: 'correct-it-and-get-a',

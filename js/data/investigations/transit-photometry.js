@@ -21,37 +21,6 @@ const TRANSIT_LAB = {
   paused: false,
 };
 
-/**
- * What the recorded light curve says.
- *
- * A transit of this system goes past in half a second of wall clock, so asking
- * a student to read a value off the screen at the right instant measures their
- * reflexes rather than their understanding. The panel finds the transits in the
- * recording instead, which is also how the measurement is really made.
- */
-const photometry = ctx => {
-  const a = ctx.photometry();
-  const rows = [
-    { label: 'Baseline, out of transit', value: a.baseline.toFixed(6) },
-    { label: 'Complete transits recorded', value: String(a.seen) },
-  ];
-  if (a.last) {
-    rows.push({
-      label: `Transit ${a.last.seq}: bottom`,
-      value: a.last.bottom.toFixed(6),
-      emphasis: true,
-    });
-    rows.push({
-      label: `Transit ${a.last.seq}: mid-time`,
-      value: `${a.last.mid.toFixed(4)} days`,
-    });
-  } else {
-    rows.push({ label: 'Waiting for a complete transit', value: '...' });
-  }
-  rows.push({ label: 'Clock', value: `${ctx.days().toFixed(4)} days` });
-  return rows;
-};
-
 /** The last few transit times, for the step that measures a period. */
 const timing = ctx => {
   const a = ctx.photometry();
@@ -71,6 +40,97 @@ const timing = ctx => {
   }
   rows.push({ label: 'Clock', value: `${ctx.days().toFixed(4)} days` });
   return rows;
+};
+
+/**
+ * What a first look at the recording shows: the moment on screen and how many
+ * transits have gone by, and not the levels the next steps ask the student to
+ * find (the panel's own baseline and bottoms would hand them over).
+ */
+const watching = ctx => {
+  const a = ctx.photometry();
+  return [
+    ...transitRows(ctx),
+    { label: 'Complete transits recorded', value: String(a.seen) },
+    { label: 'Clock', value: `${ctx.days().toFixed(4)} days` },
+  ];
+};
+
+/** The stretch of time on the plot, for a step where the student sets bounds. */
+const recording = ctx => {
+  const a = ctx.photometry();
+  const { x } = a.series?.() ?? { x: [] };
+  const rows = [{ label: 'Complete transits recorded', value: String(a.seen) }];
+  rows.push(
+    x.length
+      ? {
+          label: 'The plot runs from',
+          value: `${x[0].toFixed(3)} to ${x[x.length - 1].toFixed(3)} days`,
+        }
+      : { label: 'The plot', value: 'empty: let the simulation run' }
+  );
+  return rows;
+};
+
+/** Two stretches of the recorded curve a student sets, and what they make. */
+const SPANS = {
+  outside: ctx => ({ ...ctx.photometry().series?.(), unit: 'days' }),
+  inside: ctx => ({ ...ctx.photometry().series?.(), unit: 'days' }),
+};
+const mean = (id, label, span) => ({
+  id,
+  label,
+  unit: '',
+  source: { span, stat: 'mean' },
+});
+const DEPTH = 'Transit depth <em>δ</em> = out of transit − in transit';
+const depthFields = of => [
+  {
+    id: 'depth',
+    label: DEPTH,
+    unit: '',
+    decimals: 5,
+    compute: v => v.base - v.bot,
+  },
+  {
+    id: 'depthpc',
+    label: `The same depth, as a percent of ${of}`,
+    unit: '%',
+    decimals: 2,
+    compute: v => (100 * (v.base - v.bot)) / v.base,
+  },
+];
+/** The check on two stretches: the wrong turns they can take, or `ok` for a floor's depth between `lo` and `hi`. */
+const judgeStretches = (lo, hi, ok) => v => {
+  const d = v.base - v.bot;
+  const say = (level, message) => ({ level, message });
+  if (!Number.isFinite(d)) return null;
+  if (d < -3e-4)
+    return say(
+      'error',
+      'The in-transit mean sits <em>below</em> the out-of-transit mean, so the depth has to come out positive. Check that you have not swapped the two stretches.'
+    );
+  if (v.base < 0.9995)
+    return say(
+      'error',
+      'Your out-of-transit stretch averages in part of a dip: its mean is below the level the star holds between transits. Move it onto a flat stretch, clear of every dip.'
+    );
+  if (Math.abs(d) < 3e-4)
+    return say(
+      'warn',
+      'The two stretches have almost the same mean, so there is no depth between them. Put the in-transit stretch on the floor of a dip and the other on a flat stretch between dips.'
+    );
+  if (d < lo)
+    return say(
+      'warn',
+      'Your in-transit stretch includes the sloping sides of the dip, or runs outside it, where the planet is only partly on the star. Choose a stretch from the floor, between the two sides, and the depth will be the planet’s whole shadow.'
+    );
+  if (d > hi)
+    return say(
+      'warn',
+      'That is deeper than the floor of any dip on this curve. Check that both stretches are on the curve now on the plot and in the right boxes.'
+    );
+  return say('ok', ok);
 };
 
 /**
@@ -137,6 +197,40 @@ const TRANSITS = {
   // the whole set without a second list to keep in step.
   tags: ['exoplanets', 'observing'],
   lock: { placement: true, inspector: true },
+  retired: {
+    'what-will-the-brightness-do': {
+      to: 'estimate-the-dip',
+      release: '3.1',
+      was: {
+        en: 'Choose what the brightness does while the planet crosses the star: rise, drop a little and recover, drop to zero, or stay flat.',
+        es: 'Elegir qué hace el brillo mientras el planeta cruza la estrella: subir, bajar un poco y recuperarse, bajar a cero o mantenerse plano.',
+      },
+    },
+    'measure-the-dip': {
+      to: 'choose-the-two-stretches',
+      release: '3.1',
+      was: {
+        en: 'Copy the brightness outside transit and at the bottom of the dip from the panel, and work out the depth and the radius ratio.',
+        es: 'Copiar del panel el brillo fuera del tránsito y en el fondo de la caída, y calcular la profundidad y el cociente de radios.',
+      },
+    },
+    'now-measure-it': {
+      to: 'compare-the-two-curves',
+      release: '3.1',
+      was: {
+        en: 'Watch the same planet with a companion half a magnitude fainter in the aperture and read the new baseline and bottom from the panel.',
+        es: 'Observar el mismo planeta con una compañera media magnitud más tenue en la abertura y leer del panel la nueva línea base y el fondo.',
+      },
+    },
+    'recover-the-real-planet': {
+      to: 'find-the-hidden-companion',
+      release: '3.1',
+      was: {
+        en: 'Copy the blended depth, enter the clean depth, and read the companion’s contrast and the corrected radius the page works out.',
+        es: 'Copiar la profundidad mezclada, introducir la profundidad limpia y leer el contraste de la compañera y el radio corregido que calcula la página.',
+      },
+    },
+  },
   objectives: [
     'Explain why almost every known exoplanet was found indirectly, and what each method actually measures',
     'Derive the relation between transit depth and radius ratio, and use it on a measured light curve',
@@ -216,63 +310,65 @@ const TRANSITS = {
       tip: 'Radial velocity gives a mass, transits give a radius. Neither gives both, which is why the two together are worth far more than either alone.',
     },
     {
-      sid: 'what-will-the-brightness-do',
+      sid: 'estimate-the-dip',
       bind: TRANSIT_PAIR,
       type: 'predict',
-      reveal: 'your-first-transit',
-      title: 'What will the brightness do?',
-      body: `The planet is about to cross in front of the star from your point of
-             view. In a moment you will open a photometer and watch. Commit to an
-             answer first.`,
+      kind: 'estimate',
+      unit: '%',
+      reveal: 'why-that-radius-came-out',
+      title: 'How deep will the dip be?',
+      body: `The planet is about to cross in front of the star from your point
+             of view. The star is a little larger than the Sun, 1.15 times its
+             radius, and the planet is 1.4 times the radius of Jupiter. Jupiter's
+             radius is about a tenth of the Sun's.
+             \n\nIn a moment a photometer will record the star's total
+             brightness while the planet crosses. Before it does, commit to an
+             estimate of how much light goes missing at the deepest point of the
+             crossing.`,
       prompt:
-        'While the planet crosses the star, the measured brightness will…',
-      options: [
-        'rise, because the planet reflects extra light towards us',
-        'drop by a small amount, then recover',
-        'drop to zero until the planet has passed',
-        'stay flat: the planet is far too small to matter',
-      ],
-      answer: 1,
-      because:
-        'It drops by a small amount and recovers. The planet blocks a fraction of the star’s disk equal to the ratio of their areas, and even a Jupiter in front of a Sun-like star only covers about 1% of it. Everything in this investigation follows from that one number being small but perfectly measurable.',
+        'At the deepest point of the crossing, about what percent of the star’s light will be missing?',
     },
     {
       sid: 'your-first-transit',
       bind: TRANSIT_PAIR,
       type: 'explore',
       title: 'Your first transit',
+      // The transit itself is over in half a second of wall clock. The watch
+      // stops the run as soon as one complete transit has been recorded and
+      // Replay shows the crossing again, so the event is something to look at
+      // rather than something to catch.
+      pauseAt: { kind: 'transit', auto: true, replay: true },
       body: `The <strong>Light Curve</strong> panel has opened on the right. It
              plots the total brightness of everything in view against time,
              exactly what a photometer on a telescope records, and nothing else:
              no image, no positions, one number per moment.
              \n\nThe planet goes around once every 13 seconds or so of your
-             time, and the transit itself is over in half a second. That ratio is
-             real: the transit occupies 4% of the orbit, or three and a half hours
-             out of a three and a half day year. It goes past too quickly to
-             watch closely, which is exactly the situation a real observer is in
-             and exactly why the measurement is made on the recording afterwards.
-             The curve keeps every dip that has gone past.
+             time, and the transit itself is over in half a second: it occupies
+             4% of the orbit, three and a half hours out of a three and a half
+             day year. It goes past too quickly to watch closely, so the
+             simulation stops itself as soon as one complete transit has been
+             recorded. Press <strong>Replay</strong> to see the crossing again
+             from a little before it, as often as you like.
+             \n\nThe readout below names where the planet is against the star at
+             the moment on screen - clear of the disc, crossing the limb, or
+             fully on it - beside the brightness the photometer records at that
+             same moment. The dot on the canvas and the dip on the plot are one
+             event described twice, and Replay lets you check that for yourself
+             rather than being told.
              \n\nThe <em>observer angle</em> control rotates your vantage point
              around the system. Try it: the transits move to a different moment
              but they never stop happening, because this simulation runs in a
              single plane and every orbit in it is edge-on. Real orbits are
-             tilted, and that changes everything: you will come back to it.
-             \n\nWatch the two things together. The readout below names where
-             the planet is against the star at this instant - clear of the disc,
-             crossing the limb, or fully on it - beside the brightness the
-             photometer is recording at the same instant. The dot on the canvas
-             and the dip on the plot are one event described twice, and this is
-             how you can check that for yourself rather than being told.`,
+             tilted, and that changes everything: you will come back to it.`,
       lightCurve: true,
       observerAngle: 0,
       allowInspector: true,
       checklist: [
         'Select the planet, from the canvas or the list below',
-        'Watch the readout change from "clear of the disc" to "crossing the limb"',
-        'Check that the brightness starts falling at the same moment',
-        'Wait until at least two dips are on the plot',
+        'Press Replay and watch the readout change from "clear of the disc" to "crossing the limb" and on to "fully on the disc"',
+        'Check that the brightness starts falling as the planet reaches the limb',
         'Hover over the flat part of the curve and read the value in the tooltip',
-        'Hover over the bottom of a dip and read that value too',
+        'Hover over the bottom of the dip and read that value too',
         'Move the observer angle and confirm the dips shift but do not disappear',
         'Notice the very slight rise and fall of the baseline between transits',
       ],
@@ -281,7 +377,7 @@ const TRANSITS = {
       // then what the photometer has recorded. Merged rather than replaced -
       // two `probe` keys in one object mean the later one silently wins, which
       // is how the geometry rows vanished the first time.
-      probe: ctx => [...transitRows(ctx), ...photometry(ctx)],
+      probe: watching,
     },
     {
       sid: 'where-the-depth-comes-from',
@@ -362,47 +458,49 @@ const TRANSITS = {
       },
     },
     {
-      sid: 'measure-the-dip',
+      sid: 'choose-the-two-stretches',
       bind: TRANSIT_PAIR,
       type: 'measure',
-      title: 'Measure the dip',
-      body: `Now do it for real, on the curve you have been watching.
-             \n\nYou need two numbers: the brightness on the flat stretch
-             between transits, and the brightness at the bottom of a dip.
-             \n\nThe panel is already finding them. It takes the baseline as
-             the level the star sits at for nearly all of its orbit, and it
-             measures the bottom of every complete dip that has gone past. Wait
-             until the readout below shows at least one transit, then press the
-             button to copy both numbers in. If you would rather read them
-             yourself, hover the pointer over the [[light-curve|light curve]] and it reports the
-             value under it to six decimal places.
-             \n\nThe depth and the radius ratio are worked out from what you
-             enter, so a slipped decimal point in your arithmetic cannot be
-             mistaken for a misunderstanding of the physics.`,
+      title: 'Choose the two stretches',
+      body: `Now do it for real. The plot starts empty again and the simulation
+             runs. Let it draw one complete dip with flat curve on both sides,
+             then press the timeline's pause button: the curve is held still
+             and the plot keeps every point.
+             \n\nA depth is a difference between two levels, and you decide
+             which stretches of the curve stand for them: one stretch of the
+             flat curve between transits, <em>out of transit</em>, and one
+             stretch inside the dip, <em>in transit</em>. For each, type where
+             the stretch begins and ends, in days along the plot's bottom axis,
+             and press the button under it. The page averages the points inside
+             your stretch and reports the mean, how many points there are and
+             the standard error of that mean.
+             \n\nThe depth and the radius ratio are worked out from your two
+             means. A different choice of stretch gives a different depth, so
+             check what each one is made of. If the flat stretch is too short
+             for you, press play for a few seconds more and pause again.`,
+      time: { paused: false },
       lightCurve: true,
-      importLabel: 'Copy the last transit',
-      importFromSelection: ctx => {
-        const a = ctx.photometry();
-        return a.last
-          ? [a.baseline.toFixed(6), a.last.bottom.toFixed(6)]
-          : null;
-      },
-      importGroups: [['base', 'bot']],
+      series: SPANS,
       fields: [
+        mean('base', 'Mean brightness, out of transit', 'outside'),
         {
-          id: 'base',
-          label: 'Brightness outside transit',
-          unit: '',
-          want: 'e.g. 1.000065',
+          ...mean('base_n', 'Points in the out-of-transit stretch', 'outside'),
+          source: { span: 'outside', stat: 'n' },
         },
-        { id: 'bot', label: 'Brightness at the bottom of the dip', unit: '' },
         {
-          id: 'depth',
-          label: 'Transit depth <em>δ</em> = baseline − bottom',
-          unit: '',
-          decimals: 5,
-          compute: v => v.base - v.bot,
+          ...mean('base_se', 'Standard error, out of transit', 'outside'),
+          source: { span: 'outside', stat: 'se' },
         },
+        mean('bot', 'Mean brightness, in transit', 'inside'),
+        {
+          ...mean('bot_n', 'Points in the in-transit stretch', 'inside'),
+          source: { span: 'inside', stat: 'n' },
+        },
+        {
+          ...mean('bot_se', 'Standard error, in transit', 'inside'),
+          source: { span: 'inside', stat: 'se' },
+        },
+        ...depthFields('the star’s light'),
         {
           id: 'k_naive',
           label:
@@ -412,51 +510,26 @@ const TRANSITS = {
           compute: v => Math.sqrt(v.base - v.bot),
         },
       ],
-      validate: v => {
-        const d = v.base - v.bot;
-        if (!Number.isFinite(d)) return null;
-        if (d <= 0) {
-          return {
-            level: 'error',
-            message:
-              'The bottom of a transit sits <em>below</em> the baseline, so the depth has to come out positive. Check that you have not swapped the two.',
-          };
-        }
-        if (d > 0.2) {
-          return {
-            level: 'error',
-            message:
-              'A 20% dip would be a stellar eclipse, not a planet. If you entered numbers like 98.2 and 100, enter the brightness itself rather than a percentage of it.',
-          };
-        }
-        if (d < 0.005) {
-          return {
-            level: 'warn',
-            message:
-              'That is shallower than this system can produce. Make sure the bottom value really is from the lowest point of a dip and not from the shoulder on the way in.',
-          };
-        }
-        if (d > 0.014 && d < 0.024) {
-          return {
-            level: 'ok',
-            message:
-              'Good: about 1.8%, giving a radius ratio near 0.135. Hold on to that number, because the next step is going to tell you it is about 10% too big, and why.',
-          };
-        }
-        return {
-          level: 'warn',
-          message:
-            'Expected somewhere near 0.018 for this system. Read the baseline from a flat stretch well away from any dip, and the bottom from the lowest point of one.',
-        };
-      },
-      probe: photometry,
-      tip: 'A real light curve is noisy, and nobody reads the bottom off it by eye: you fit a model transit to every point at once, which is how the precision ends up better than any single measurement in it. What the panel does here is the same idea with the noise left out.',
+      validate: judgeStretches(
+        0.013,
+        0.0195,
+        'Two stretches, one depth. Keep it: the next screens set it beside your estimate and say why the radius it gives is not quite right.'
+      ),
+      probe: recording,
+      tip: 'A real light curve is noisy, and nobody reads a level off it by eye: you fit a model transit to every point at once, which is how the precision ends up better than any single measurement in it. The curve here has no noise, so the standard error you get is the scatter of the model’s own points inside your stretch, a feature of the stretch you chose and not a measurement uncertainty.',
     },
     {
       sid: 'why-that-radius-came-out',
       bind: TRANSIT_PAIR,
       type: 'read',
       title: 'Why that radius came out too big',
+      evidence: [
+        { step: 'choose-the-two-stretches', field: 'depthpc' },
+        { step: 'choose-the-two-stretches', field: 'base' },
+        { step: 'choose-the-two-stretches', field: 'bot' },
+      ],
+      compare:
+        'A planet that blocked only the area it covers would give a depth equal to the radius ratio squared; set your estimate and your reading side by side, and the paragraphs below say what makes the dip you measured deeper.',
       body: `A star is not a uniformly bright disk. You are looking down through
              a partly transparent atmosphere, and at the center of the disk you
              see straight down into hot, bright layers, while near the edge your
@@ -472,9 +545,13 @@ const TRANSITS = {
              \n\n<strong><em>δ</em><sub>measured</sub> = 1.215 × (<em>R</em><sub>p</sub> /
              <em>R</em><sub>★</sub>)<sup>2</sup></strong>
              \n\nTaking the square root of your measured depth therefore
-             overestimates the radius ratio by √1.215 = 1.102, about 10%. On a
-             planet near a classification boundary, 10% is the difference between
-             two different answers about what the world is made of.
+             overestimates the radius ratio by √1.215 = 1.102, about 10%, when the
+             stretch you took is at the middle of the dip. The floor is curved,
+             because towards either end of it the planet is crossing dimmer
+             light, so a stretch that takes in more of the floor gives a smaller
+             depth and a smaller error; the factor 1.215 belongs to the middle.
+             On a planet near a classification boundary, 10% is the difference
+             between two different answers about what the world is made of.
              \n\nThis is not a quirk of the simulation. It is why nobody in the
              field reports √<em>δ</em> as a radius ratio: a real transit fit solves for the
              radius ratio, the limb-darkening coefficients, the [[impact-parameter|impact parameter]]
@@ -519,7 +596,7 @@ const TRANSITS = {
           id: 'd2',
           label: 'Depth you measured',
           unit: '',
-          hint: 'from the previous step',
+          hint: 'your depth from the two stretches',
         },
         {
           id: 'rstar',
@@ -1150,21 +1227,40 @@ const TRANSITS = {
       tip: 'Robo-AO reached about 0.15 arcseconds on a 1.5 m telescope and imaged 3,857 Kepler hosts; SOAR speckle reaches about 0.04 arcseconds on a 4.1 m and has observed close to 3,000 TESS targets. Neither is a large telescope by modern standards. What made them work was doing it to every host, not to a chosen few.',
     },
     {
-      sid: 'now-measure-it',
+      sid: 'will-the-dip-look-the-same',
       bind: TRANSIT_PAIR,
-      type: 'explore',
-      title: 'Now measure it',
+      type: 'predict',
+      kind: 'estimate',
+      unit: '%',
+      reveal: 'find-the-hidden-companion',
+      title: 'Will the dip look the same?',
       body: `The same star and the same planet are back, with one change: a
-             second star half a magnitude fainter sits 300 AU away. At the
+             second star, in the same pixel, adds its light to every
+             measurement. It sits 300 AU from the star you are watching. At the
              distance of this system that is about six arcseconds on the sky,
-             comfortably inside a single TESS pixel and inside a Kepler aperture,
-             and it is 30,000 simulation units from the star you are watching, far
-             outside the view. It is there. You cannot see it. Neither could the
-             survey.
-             \n\nMeasure the transit depth again exactly as you did before. The
-             readout below is measuring the new curve as it comes in; wait for a
-             complete transit and compare its bottom with what you got the first
-             time.`,
+             comfortably inside a single TESS pixel and inside a Kepler
+             aperture, and it is 30,000 simulation units from the star, far
+             outside the view. You cannot see it. Neither could the survey. You
+             are not told how bright it is.
+             \n\nIn a moment you will record this system's transit the way you
+             recorded the first one. Before you do, estimate how deep its dip
+             will be, as a percent of the light the photometer collects.`,
+      prompt: 'The dip in the combined light will be about what percent deep?',
+    },
+    {
+      sid: 'compare-the-two-curves',
+      bind: TRANSIT_PAIR,
+      type: 'measure',
+      title: 'Compare the two curves',
+      body: `The simulation is now running the second system and the plot is
+             empty. Let it draw one complete dip with flat curve on both sides,
+             then press the timeline's pause button.
+             \n\nMeasure this transit exactly as you measured the first: choose
+             a stretch out of transit and a stretch from the floor of the dip,
+             type where each begins and ends, and press the button under it.
+             Then compare the new curve with the one you measured before: the
+             time between transits, the length of the dip and its shape, and
+             its depth.`,
       setup: {
         scenario: 'Blended Binary',
         seed: 'transit-lab',
@@ -1173,58 +1269,65 @@ const TRANSITS = {
       },
       lightCurve: true,
       observerAngle: 0,
-      clearLightCurve: true,
-      checklist: [
-        'Wait for a complete transit and read the new baseline and the new bottom',
-        'Confirm the dip is visibly shallower than it was',
-        'Check the mid-times: the period has not changed at all',
-        'Note that the shape and duration of the transit are exactly as before',
+      series: SPANS,
+      fields: [
+        mean('base', 'Mean brightness, out of transit', 'outside'),
+        mean('bot', 'Mean brightness, in transit', 'inside'),
+        ...depthFields('the light collected'),
       ],
-      probe: photometry,
+      validate: judgeStretches(
+        0.008,
+        0.0125,
+        'Two stretches, one depth for the second system. The next screen puts it beside the first.'
+      ),
+      probe: recording,
+      checklist: [
+        'Compare the time between the mid-times of two transits with the first system',
+        'Compare the length of the dip, and the shape of its sides and floor',
+        'Compare the depth with the one you measured before',
+        'Decide what could make the depth shallower while the period and the shape stay as they were',
+      ],
       tip: 'Only the depth changes. The period, the duration and the shape are untouched, which is precisely why blending is so easy to miss: nothing about the light curve looks wrong.',
     },
     {
-      sid: 'recover-the-real-planet',
+      sid: 'find-the-hidden-companion',
       bind: TRANSIT_PAIR,
       // The clean depth and the blended depth, one from each of those two
       // measurements. Neither on its own recovers anything.
-      requires: ['measure-the-dip', 'now-measure-it'],
+      requires: ['choose-the-two-stretches', 'compare-the-two-curves'],
+      evidence: [{ step: 'compare-the-two-curves', field: 'depthpc' }],
+      compare:
+        'Set your estimate beside the dip you measured with the companion: the dip got shallower while the period and the shape stayed the same, and that combination is what dilution looks like.',
       type: 'measure',
-      title: 'Recover the real planet',
+      title: 'Find the hidden companion',
       body: `You have measured the same planet twice, once clean and once
-             blended. The ratio of the two depths is 1 + <em>F</em>₂/<em>F</em>₁
+             blended, and the two depths are in the box above. The ratio of the
+             clean depth to the blended depth is 1 + <em>F</em>₂/<em>F</em>₁
              directly, which means this pair of measurements contains the
              companion's brightness even though you never saw it.
-             \n\nIn practice you never get the clean measurement: that is the whole
-             difficulty, and it is why somebody has to go and take a
-             high-resolution image. Here you have both, so you can check that the
-             correction does what it claims.`,
+             \n\nFrom the ratio below, work out the companion's contrast as a
+             magnitude difference, <em>F</em>₂/<em>F</em>₁ = 10<sup>−0.4Δm</sup>,
+             and the radius the blended curve would give if you did not know
+             about the companion, then the radius once it is corrected for.
+             \n\nIn practice you never get the clean measurement: that is the
+             whole difficulty, and it is why somebody has to go and take a
+             high-resolution image. Here you have both, so you can check that
+             the correction does what it claims.`,
       lightCurve: true,
-      importLabel: 'Copy the blended depth',
-      importFromSelection: ctx => {
-        const a = ctx.photometry();
-        return a.last ? [a.last.depth.toFixed(6)] : null;
-      },
-      importGroups: [['d_blend']],
-      probe: photometry,
       fields: [
         {
-          id: 'd_blend',
-          label: 'Depth you just measured, blended',
-          unit: '',
-        },
-        {
           id: 'd_clean',
-          label: 'Depth you measured earlier, unblended',
+          label: 'Depth measured without the companion',
           unit: '',
-          want: 'from step 8',
+          decimals: 5,
+          compute: (v, e) => e('choose-the-two-stretches', 'depth'),
         },
         {
-          id: 'rp_blend',
-          label: 'Radius the blended curve implies',
-          unit: 'R⊕',
-          decimals: 2,
-          compute: v => Math.sqrt(v.d_blend / 1.2146) * 1.155 * 109.198,
+          id: 'd_blend',
+          label: 'Depth measured with the companion',
+          unit: '',
+          decimals: 5,
+          compute: (v, e) => e('compare-the-two-curves', 'depth'),
         },
         {
           id: 'ratio',
@@ -1234,73 +1337,55 @@ const TRANSITS = {
           compute: v => v.d_clean / v.d_blend,
         },
         {
-          id: 'dm',
-          label: 'Implied companion contrast Δm',
-          unit: 'mag',
+          id: 'rp_blend',
+          label: 'Radius the blended curve implies',
+          unit: 'R⊕',
           decimals: 2,
-          compute: v => -2.5 * Math.log10(v.d_clean / v.d_blend - 1),
+          compute: v => Math.sqrt(v.d_blend / 1.2146) * 1.155 * 109.198,
         },
         {
-          id: 'corr',
-          label: 'Radius correction √(1 + <em>F</em>₂/<em>F</em>₁)',
-          unit: '',
-          decimals: 4,
-          compute: v => Math.sqrt(v.d_clean / v.d_blend),
+          id: 'dm',
+          label: 'Companion contrast Δm you infer',
+          unit: 'mag',
         },
         {
           id: 'rp_true',
-          label: 'Corrected planet radius',
+          label: 'Corrected planet radius you infer',
           unit: 'R⊕',
-          decimals: 2,
-          compute: v =>
-            Math.sqrt(v.d_blend / 1.2146) *
-            1.155 *
-            109.198 *
-            Math.sqrt(v.d_clean / v.d_blend),
         },
       ],
       validate: v => {
         const ratio = v.d_clean / v.d_blend;
-        const rp = Math.sqrt(v.d_blend / 1.2146) * 1.155 * 109.198;
-        if (!Number.isFinite(ratio) || !Number.isFinite(rp)) return null;
-        if (v.d_clean > 1 || v.d_blend > 1) {
-          return {
-            level: 'error',
-            message:
-              'Both depths are fractions, not percentages: 1.1% goes in as 0.011.',
-          };
-        }
+        if (!Number.isFinite(ratio)) return null;
         if (ratio <= 1) {
           return {
             level: 'error',
             message:
-              'The blended depth has to be the <em>shallower</em> of the two. Check you have not put them in the wrong boxes.',
+              'The blended depth has to be the <em>shallower</em> of the two. Check that both depths were measured on the right curves.',
           };
         }
-        const corrected = rp * Math.sqrt(ratio);
-        if (
-          ratio > 1.4 &&
-          ratio < 1.95 &&
-          corrected > 13.5 &&
-          corrected < 17.5
-        ) {
+        if (![v.dm, v.rp_true].every(Number.isFinite)) return null;
+        const dm = -2.5 * Math.log10(ratio - 1);
+        const rp =
+          Math.sqrt(v.d_blend / 1.2146) * 1.155 * 109.198 * Math.sqrt(ratio);
+        if (Math.abs(v.dm - dm) < 0.02 && Math.abs(v.rp_true - rp) < 0.5) {
           return {
             level: 'ok',
             message:
-              'That is the result. The blended curve says about 12 Earth radii; the correction of roughly ×1.28 takes it back to about 15.5, which is the 1.38 Jupiter radii you measured before the companion was there. The implied contrast should land near Δm = 0.5, which is what the companion actually is.',
+              'That is the result. The blended curve alone says a smaller planet; the correction takes it back to the radius you found without the companion. The companion in this scene is half a magnitude fainter than its star, and the contrast you inferred should land close to that.',
           };
         }
-        if (ratio > 1.95) {
+        if (Math.abs(v.dm - dm) >= 0.02) {
           return {
             level: 'warn',
             message:
-              'The ratio is larger than this companion can produce. Re-read the blended depth: it should be near 0.011, not near half the clean value.',
+              'Check the contrast. The ratio is 1 + F₂/F₁, so subtract one before taking the logarithm: Δm = −2.5 log₁₀(ratio − 1).',
           };
         }
         return {
           level: 'warn',
           message:
-            'Expected a ratio near 1.63 and a corrected radius near 15.5 R⊕. Check both depths came from the bottom of a dip rather than a shoulder.',
+            'Check the radius. The correction multiplies the blended radius by the square root of the ratio, not by the ratio itself.',
         };
       },
       tip: 'Notice what the correction does not need: the companion’s distance, its mass, or whether it is even bound to the star. Only how much light it adds.',

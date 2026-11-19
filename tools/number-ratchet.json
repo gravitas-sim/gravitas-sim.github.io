@@ -24,7 +24,7 @@
     "js/data/investigations/radial-velocity.js": 3,
     "js/data/investigations/retrograde-motion.js": 7,
     "js/data/investigations/tides.js": 4,
-    "js/data/investigations/transit-photometry.js": 12,
+    "js/data/investigations/transit-photometry.js": 8,
     "js/data/investigations/weighing-stars.js": 11,
     "js/data/investigations/what-is-a-gravitational-wave.js": 4,
     "js/data/investigations/when-orbits-lock.js": 4,

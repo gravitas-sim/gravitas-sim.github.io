@@ -5681,8 +5681,8 @@
         "js/data/investigations/es/transit-photometry.js"
       ],
       "instrument_files": ["js/compareWidgets.js", "js/transitWidgets.js"],
-      "depths": { "core": 29, "quantitative": 2, "advanced": 3 },
-      "spanish_steps": { "core": 29, "deeper": 5 },
+      "depths": { "core": 30, "quantitative": 3, "advanced": 3 },
+      "spanish_steps": { "core": 30, "deeper": 6 },
       "languages": ["en", "es"],
       "sequences": [
         { "id": "planets-and-exoplanets", "position": 0 },
