@@ -372,7 +372,7 @@ const TRANSITS = {
         'Move the observer angle and confirm the dips shift but do not disappear',
         'Notice the very slight rise and fall of the baseline between transits',
       ],
-      tip: 'That slow baseline ripple is the planet’s phase curve: like the Moon, it shows us more or less of its lit side as it goes round. It is a real signal, roughly a hundred times smaller than the transit, and space telescopes measure it.',
+      tip: 'That slow baseline ripple is the planet’s phase curve: like the Moon, it shows us more or less of its lit side as it goes round. It is a real signal, roughly a thousand times smaller than the transit, and space telescopes measure it.',
       // Both halves of the same instant: where the planet is against the disc,
       // then what the photometer has recorded. Merged rather than replaced -
       // two `probe` keys in one object mean the later one silently wins, which
@@ -522,7 +522,7 @@ const TRANSITS = {
       sid: 'why-that-radius-came-out',
       bind: TRANSIT_PAIR,
       type: 'read',
-      title: 'Why that radius came out too big',
+      title: 'Why the square root of the depth is not the radius ratio',
       evidence: [
         { step: 'choose-the-two-stretches', field: 'depthpc' },
         { step: 'choose-the-two-stretches', field: 'base' },
@@ -544,14 +544,16 @@ const TRANSITS = {
              average, so:
              \n\n<strong><em>δ</em><sub>measured</sub> = 1.215 × (<em>R</em><sub>p</sub> /
              <em>R</em><sub>★</sub>)<sup>2</sup></strong>
-             \n\nTaking the square root of your measured depth therefore
-             overestimates the radius ratio by √1.215 = 1.102, about 10%, when the
-             stretch you took is at the middle of the dip. The floor is curved,
-             because towards either end of it the planet is crossing dimmer
-             light, so a stretch that takes in more of the floor gives a smaller
-             depth and a smaller error; the factor 1.215 belongs to the middle.
-             On a planet near a classification boundary, 10% is the difference
-             between two different answers about what the world is made of.
+             \n\nTaking the square root of your measured depth therefore gives a radius
+             ratio that is off, by an amount that depends on where on the floor
+             your stretch sits. At the middle of the dip it is too large by
+             √1.215 = 1.102, about 10%. The floor is curved, because towards
+             either end of it the planet is crossing dimmer light, so a stretch
+             over the whole floor has a lower mean depth and its square root is
+             about 6% too large, and near the ends of the floor it is too small.
+             On a planet near a classification boundary, an error of that size is
+             the difference between two different answers about what the world is
+             made of.
              \n\nThis is not a quirk of the simulation. It is why nobody in the
              field reports √<em>δ</em> as a radius ratio: a real transit fit solves for the
              radius ratio, the limb-darkening coefficients, the [[impact-parameter|impact parameter]]
@@ -629,7 +631,7 @@ const TRANSITS = {
       validate: v => {
         const rj = Math.sqrt(v.d2 / 1.2146) * v.rstar * 9.7311;
         if (!Number.isFinite(rj)) return null;
-        if (v.rstar > 50) {
+        if (v.rstar > 50 || Math.abs(v.rstar - 1.155) > 0.01) {
           return {
             level: 'error',
             message:
@@ -643,14 +645,14 @@ const TRANSITS = {
               'The depth is a fraction, not a percentage: 1.8% goes in as 0.018.',
           };
         }
-        if (rj > 1.15 && rj < 1.65) {
+        if (rj > 1.15 && rj < 1.45) {
           return {
             level: 'ok',
             message:
               'That is it: about 1.38 Jupiter radii, or 15.5 Earth radii. The published value from a decade of Hubble transits is 1.38 R_Jupiter. You just measured a planet 160 light years away by watching a star get slightly dimmer.',
           };
         }
-        if (rj > 1.65) {
+        if (rj >= 1.45) {
           return {
             level: 'warn',
             message:
@@ -1186,7 +1188,7 @@ const TRANSITS = {
       lightCurve: false,
       checklist: [
         'Set Δm = 0 and confirm the correction is exactly √2',
-        'Set Δm = 0.5, the contrast in the scenario you are about to load',
+        'Set Δm = 1.0 and read what the correction is',
         'Find the Δm beyond which the correction is under 1%',
         'Set the measured radius to 1.5 R⊕ and find the Δm that pushes it past 1.6',
       ],
@@ -1365,6 +1367,13 @@ const TRANSITS = {
           };
         }
         if (![v.dm, v.rp_true].every(Number.isFinite)) return null;
+        if (Math.abs(ratio - 1.631) > 0.04) {
+          return {
+            level: 'warn',
+            message:
+              'The ratio only measures the companion if both depths come from the same part of their floors. Take the middle of each floor, measure again, and the ratio will follow.',
+          };
+        }
         const dm = -2.5 * Math.log10(ratio - 1);
         const rp =
           Math.sqrt(v.d_blend / 1.2146) * 1.155 * 109.198 * Math.sqrt(ratio);

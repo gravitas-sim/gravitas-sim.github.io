@@ -545,6 +545,38 @@ describe('the transit lesson', () => {
     );
   });
 
+  test('depths from different parts of the floors are told to take the same part', () => {
+    // 0.0183 and 0.0104 give a ratio of 1.755, a contrast of 0.30 magnitudes,
+    // whatever the student types.
+    for (const typed of [
+      { dm: 0.5, rp_true: 15.5 },
+      { dm: 0.3, rp_true: 15.5 },
+    ]) {
+      const { check } = hidden(0.0183, 0.0104, typed);
+      expect(check.level).toBe('warn');
+      expect(check.message).toMatch(/same part/);
+    }
+  });
+
+  test('the radius step refuses a star radius that is not the star’s', () => {
+    const step = stepFor('Correct it, and get a real radius');
+    const run = (d2, rstar) => {
+      const v = { d2, rstar };
+      for (const f of step.fields) if (f.compute) v[f.id] = f.compute(v);
+      return step.validate(v, stubContext());
+    };
+    expect(run(0.0183, 1.155).level).toBe('ok');
+    for (const wrong of [1.0, 1.3, 2]) {
+      const c = run(0.0183, wrong);
+      expect(c.level).toBe('error');
+      expect(c.message).toMatch(/1\.155/);
+    }
+    // No depth the stretches check accepts gives a radius the step calls too
+    // large or too small.
+    expect(run(0.0195, 1.155).level).toBe('ok');
+    expect(run(0.013, 1.155).level).toBe('ok');
+  });
+
   test('rejects the two depths the wrong way round', () => {
     const { check } = hidden(0.011241, 0.018333, { dm: 0.5, rp_true: 15.5 });
     expect(check.level).toBe('error');

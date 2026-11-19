@@ -204,7 +204,7 @@ export default {
     },
     'transit-photometry': {
       'choose-the-two-stretches':
-        'Out of transit the mean is near 1.0000; a stretch on the floor gives a depth near 1.8%, so a naive radius ratio of about 0.13, ten percent too large. Sloping sides or part of a dip get a message.',
+        'Out of transit the mean is near 1.0000. The floor of the dip is curved: its middle is about 1.8% deep and the whole floor averages nearer 1.6%, so the square root of the depth overshoots the radius ratio by 6 to 10%, by where the stretch sits. Sloping sides or part of a dip get a message.',
       'correct-it-and-get-a':
         'With the limb-darkening correction and a stellar radius of 1.155 solar radii, the recovered planet radius lands near 1.38 Jupiter radii, the published value for HD 209458 b.',
       'time-two-transits':
