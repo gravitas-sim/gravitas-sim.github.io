@@ -3861,6 +3861,18 @@
     font-size: var(--text-sm);
     color: var(--text-primary);
   }
+  /* The finish dialog's ending: the student's own answers, in a box that
+     scrolls so that the name field stays near (js/investigations/ending.js). */
+  .inv-ending-list {
+    max-height: min(40vh, 16rem);
+    overflow-y: auto;
+    margin: var(--space-2) 0 0;
+    padding-left: var(--space-4);
+    font-size: var(--text-sm);
+  }
+  #investigationEnding {
+    margin-bottom: var(--space-3);
+  }
   .inv-verdict .inv-because {
     background: none;
     padding: var(--space-2) 0 0;

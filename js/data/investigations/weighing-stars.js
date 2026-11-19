@@ -17,6 +17,8 @@ const WEIGHING = {
   thumbnail: 'images/investigations/weighing-stars.webp',
   title: 'Weighing the Stars',
   subtitle: 'Use an orbit to measure something you cannot put on a scale',
+  question: 'How can anyone weigh a star they can never touch?',
+  medium: { kind: 'scene', name: 'the live view' },
   duration: '35-45 min',
   level: 'Introductory astronomy',
   audience: 'intro',
@@ -41,21 +43,13 @@ const WEIGHING = {
       stage: EQUAL_PAIR,
       type: 'read',
       title: 'You cannot put a star on a scale',
-      body: `A bathroom scale works by pushing back. Stand on it, and it measures
-             how hard the Earth is pulling you down. There is no version of that
-             for a star. Stars are enormous, they are unreachable, and the
-             nearest one after the Sun is forty thousand years away at the speed
-             of a spacecraft.
-             \n\nAnd yet, open any astronomy textbook and it will tell you the
-             mass of dozens of stars, to two decimal places. Somebody measured
-             them. How?
-             \n\nThe answer is the last thing the Kepler investigation showed
-             you. Kepler found that the size and the timing of an orbit go
-             together. Newton found that the <em>mass</em> of whatever is doing
-             the pulling belongs in that relationship too, and once you know
-             that, an orbit becomes a measuring instrument.
-             \n\nThis investigation is about pointing that instrument at a pair of
-             stars.`,
+      body: `How can anyone weigh a star they can never touch? You will choose a
+             way it could be done, then try it in the live view and take the
+             measurements yourself.
+             \n\nA bathroom scale works by pushing back: stand on it, and it
+             measures how hard the Earth is pulling you down. There is no
+             version of that for a star, and yet any astronomy textbook gives
+             the masses of dozens of stars, to two decimal places.`,
       tip: 'Nothing here needs algebra. You will read two numbers off a screen and do one division.',
     },
     {
@@ -1176,20 +1170,13 @@ const WEIGHING = {
       sid: 'what-you-can-now-say',
       stage: MYSTERY_PAIR,
       type: 'read',
-      title: 'What you can now say',
-      body: `In ordinary words, with nothing memorized:
-             \n\n<strong>When two stars orbit each other, both of them move
-             around a shared balance point. How big their orbit is and how long
-             it takes tell us their combined mass. How far each star sits from
-             the balance point tells us how that mass is divided between
-             them.</strong>
-             \n\nThat is why binary stars matter so much. They are the only
-             direct way we have of weighing a star, and very nearly everything
-             else we claim to know about stellar masses rests on them. When a
-             textbook says the Sun is an average sort of star, or that a star ten
-             times the Sun's mass burns out in a few tens of millions of years,
-             the numbers behind those statements were calibrated on pairs of
-             stars measured exactly the way you just did it.
+      title: 'Why it matters',
+      body: `Binary stars are the only direct way we have of weighing a star,
+             and very nearly everything else we claim to know about stellar
+             masses rests on them. When a textbook says that a star ten times
+             the Sun's mass burns out in a few tens of millions of years, the
+             masses behind that statement were calibrated on pairs of stars
+             measured the way you measured this one.
              \n\nAbout half the stars in the sky have a companion. Every one of
              them is quietly announcing its own mass to anyone who watches long
              enough.`,

@@ -149,6 +149,9 @@ export const WHY_RINGS = {
 
 export const TIDES_THAT_MOVE_THE_MOON = {
   title: 'Mareas que mueven la Luna',
+  question:
+    '¿Por qué se aleja la Luna de la Tierra, y explica la misma marea todo el pasado de la Luna?',
+  medium: { name: 'el modelo de marea' },
   subtitle:
     'El alejamiento de la Luna, el día que se alarga y el modelo que falla al correrlo hacia atrás',
   objectives: [
@@ -160,7 +163,7 @@ export const TIDES_THAT_MOVE_THE_MOON = {
   steps: [
     {
       title: 'Un abultamiento que va por delante',
-      body: 'La Luna levanta dos abultamientos en los océanos y el cuerpo de la Tierra. La Tierra gira más rápido de lo que la Luna orbita, así que el abultamiento se adelanta un poco a la línea hacia la Luna. Ese abultamiento tira de la Luna hacia delante, así que la Luna gana energía y se aleja, y la Luna tira del abultamiento hacia atrás, así que el giro de la Tierra se frena. El par intercambia momento angular; la suma se conserva. La tabla de abajo es la forma cerrada del modelo, no una simulación. En el paso siguiente fijas el único número que deja libre, para que concuerde con el alejamiento medido de la Luna.',
+      body: '¿Por qué se aleja la Luna de la Tierra, y explica la misma marea todo el pasado de la Luna? Fijarás el único número libre del modelo de marea para que coincida con el alejamiento medido de la Luna, y después lo correrás mil millones de años hacia delante y hacia atrás para ver dónde se sostiene.\n\nLa Luna levanta un abultamiento en la Tierra, y como la Tierra gira más rápido de lo que la Luna orbita, el abultamiento se adelanta un poco a la línea hacia la Luna. Tira de la Luna hacia delante, así que la Luna gana energía y se aleja, y la Luna tira de él hacia atrás, así que el giro de la Tierra se frena. La tabla de abajo es la forma cerrada del modelo, no una simulación.',
     },
     {
       title: 'Elige la Q que ajusta a la Luna',
@@ -203,13 +206,16 @@ export const TIDES_THAT_MOVE_THE_MOON = {
     },
     {
       title: 'Lo que has deducido',
-      body: 'Elegiste una Q para ajustar el alejamiento medido de la Luna, y dio un día que se alarga casi lo que dice el registro de eclipses. Mil millones de años adelante, el mismo modelo pone a la Luna a 65 radios terrestres. Corrido hacia atrás, la pone en contacto con la Tierra hace 1,58 miles de millones de años, dentro de la edad del sistema solar. Así que Q no fue constante: en una historia real cambió con los océanos y los continentes. Un [[parameter|parámetro]] que ajusta el presente no es una ley. El fuego de Ío usa el mismo tipo de marea para calentar una luna, y hace la misma pregunta a un número que nadie conoce.',
+      body: 'Corrido hacia atrás, el modelo que coincide con el presente pone a la Luna en contacto con la Tierra dentro de la edad del sistema solar, y eso no ocurrió. Así que <em>Q</em> no fue constante: en una historia real cambió con los océanos y los continentes, que fijan cuánta energía pierde la marea. Un [[parameter|parámetro]] que ajusta el presente no es una ley.',
     },
   ],
 };
 
 export const IOS_FIRE = {
   title: 'El fuego de Ío',
+  question:
+    '¿De dónde viene el calor de Ío, y qué nos dice sobre el interior de Ío?',
+  medium: { name: 'el instrumento de calentamiento de marea' },
   subtitle:
     'El calentamiento de marea como energía por órbita, acotado por lo que nadie sabe del interior de Ío',
   picture: 'Júpiter y sus cuatro lunas grandes, Ío la más interior',
@@ -222,7 +228,7 @@ export const IOS_FIRE = {
   steps: [
     {
       title: 'El cuerpo más volcánico que conocemos',
-      body: 'Ío es el cuerpo con más actividad volcánica del sistema solar, y el Sol no lo calienta. Lo calienta Júpiter: levanta un abultamiento en Ío, y como la órbita de Ío no es del todo circular el abultamiento sube y baja una vez por órbita, así que la roca de Ío se flexiona y el rozamiento de esa flexión es calor. La imagen de fondo de esta actividad es Júpiter con Ío, la más interior de sus cuatro lunas grandes, detenida. Vas a predecir cómo depende el calor de la órbita, medirlo en un instrumento y luego buscar cómo debe ser el interior de Ío para dar el calor que se observa.',
+      body: '¿De dónde viene el calor de Ío, y qué nos dice sobre el interior de Ío? Predecirás cómo depende el calor de la órbita de Ío, lo medirás en el instrumento de calentamiento de marea y después buscarás interiores que den el calor que emite Ío.\n\nÍo es el cuerpo con más actividad volcánica del sistema solar, y el Sol no lo calienta. Júpiter levanta una marea en Ío, y como la órbita de Ío no es del todo circular la marea sube y baja una vez por órbita. La imagen de fondo de esta actividad es Júpiter con Ío, la más interior de sus cuatro lunas grandes, detenida.',
     },
     {
       title: 'Una órbita más excéntrica',
@@ -284,7 +290,7 @@ export const IOS_FIRE = {
     },
     {
       title: 'Lo que has deducido',
-      body: 'El calor de Ío es el rozamiento de una marea que sube y baja una vez por órbita, y creció como el cuadrado de la excentricidad. Ío, Europa y Ganímedes tiran unas de otras en una [[resonance|resonancia]] que impide que esa órbita se haga circular. En cuanto al interior, el calor observado fijó solo k2 dividido entre <em>Q</em>, y solo dentro de un intervalo: hallaste dos pares distintos dentro de él, así que la fórmula da una cota y la observación elige un punto dentro de ella. Lo que el modelo deja fuera es el interior: una capa parcialmente fundida cambia cómo se flexiona Ío. Haría falta una medida que dependa solo de k2 para separarlos, y los pasos más profundos preguntan cuál.',
+      body: 'La órbita de Ío se habría vuelto circular hace mucho, y el calentamiento se habría detenido, si Europa y Ganímedes no siguieran tirando de ella en una [[resonance|resonancia]]. El calor fija solo k2 dividido entre <em>Q</em>, así que cualquier interior con el mismo cociente lo cumple: la fórmula da una cota, no una predicción. Lo que deja fuera es el propio interior, donde una capa parcialmente fundida cambia cómo se flexiona Ío. Una medida que dependa solo de k2 separaría las posibilidades, y los pasos más profundos preguntan cuál.',
     },
   ],
 };
