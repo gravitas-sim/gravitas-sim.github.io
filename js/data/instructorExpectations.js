@@ -1,13 +1,7 @@
-// =============================================================================
 // What an instructor should expect to see at a step, by lesson and step sid
-// -----------------------------------------------------------------------------
-// Keyed by the step's sid, so inserting or reordering a step cannot slide an
-// expectation onto the wrong screen (the old key was the 1-based step number).
-// js/instructorExpectations.js reads it through readVersioned and still reads
-// the number-keyed /1 form. Not imported by any route: the answer-key PDF and
-// the author check read it. Generated once from instructorContent.js by
-// tools/migrate-expectations.mjs; edited by hand since.
-// =============================================================================
+// (so inserting a step cannot slide an expectation onto the wrong screen).
+// Read through readVersioned in js/instructorExpectations.js, which still reads
+// the number-keyed /1 form; the answer-key PDF and the author check use it.
 
 import { INSTRUCTOR as MEASUREMENT } from './investigations/depth/measurement-sequence.js';
 import { INSTRUCTOR as SATELLITE } from './investigations/depth/satellite-sequence.js';
