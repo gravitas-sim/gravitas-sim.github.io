@@ -588,7 +588,7 @@ const WEIGHING = {
           return [
             { id: 'ra', label: 'Star A to the balance point', value: off },
             { id: 'rb', label: 'Star B to the balance point', value: off },
-            { id: 'sep', label: 'Star to star (a)', value: off },
+            { id: 'sep', label: 'Star to star', value: off },
           ];
         return [
           ...b.arms.map((arm, i) => ({
@@ -598,7 +598,7 @@ const WEIGHING = {
           })),
           {
             id: 'sep',
-            label: 'Star to star (a)',
+            label: 'Star to star',
             value: `${(b.separation / 100).toFixed(2)} AU`,
           },
         ];

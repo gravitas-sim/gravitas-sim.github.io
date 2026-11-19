@@ -148,6 +148,6 @@ test('a deeper step opens on its anchor scene and the error bar follows the scat
   await expect(page.locator('.inv-check')).toContainText(
     /smaller than the scatter/i
   );
-  await typeIn(page, s, 'sp', '2');
+  await typeIn(page, s, 'sp', '0.5');
   await expect(page.locator('.inv-check')).toContainText(/solar masses/i);
 });

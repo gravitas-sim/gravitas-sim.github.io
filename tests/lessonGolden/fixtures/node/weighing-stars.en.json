@@ -378,33 +378,6 @@
    ]
   },
   {
-   "sid": "which-measurement-limits-you",
-   "type": "question",
-   "kind": "choice",
-   "grades": [
-    [
-     0,
-     false,
-     "incorrect"
-    ],
-    [
-     1,
-     true,
-     "correct"
-    ],
-    [
-     2,
-     false,
-     "incorrect"
-    ],
-    [
-     3,
-     false,
-     "incorrect"
-    ]
-   ]
-  },
-  {
    "sid": "splitting-them-up",
    "type": "question",
    "kind": "choice",
@@ -551,7 +524,6 @@
     "weighing-stars:what-do-you-need-to": 1,
     "weighing-stars:weigh-it-with-an-error-bar": "4",
     "weighing-stars:weigh-it-with-an-error-bar:locale": "en",
-    "weighing-stars:which-measurement-limits-you": 1,
     "weighing-stars:splitting-them-up": 1,
     "weighing-stars:weigh-one-star-with-an-error-bar": "3",
     "weighing-stars:weigh-one-star-with-an-error-bar:locale": "en",
@@ -571,7 +543,6 @@
     "weighing-stars:why-the-heavy-pair-wins": 1,
     "weighing-stars:what-do-you-need-to": 1,
     "weighing-stars:weigh-it-with-an-error-bar": 1,
-    "weighing-stars:which-measurement-limits-you": 1,
     "weighing-stars:splitting-them-up": 1,
     "weighing-stars:weigh-one-star-with-an-error-bar": 1,
     "weighing-stars:and-which-one-is-heavier": 1
@@ -638,7 +609,6 @@
     "weighing-stars:what-do-you-need-to": 1,
     "weighing-stars:weigh-it-with-an-error-bar": "4",
     "weighing-stars:weigh-it-with-an-error-bar:locale": "en",
-    "weighing-stars:which-measurement-limits-you": 1,
     "weighing-stars:splitting-them-up": 1,
     "weighing-stars:weigh-one-star-with-an-error-bar": "3",
     "weighing-stars:weigh-one-star-with-an-error-bar:locale": "en",
@@ -658,7 +628,6 @@
     "weighing-stars:why-the-heavy-pair-wins": 1,
     "weighing-stars:what-do-you-need-to": 1,
     "weighing-stars:weigh-it-with-an-error-bar": 1,
-    "weighing-stars:which-measurement-limits-you": 1,
     "weighing-stars:splitting-them-up": 1,
     "weighing-stars:weigh-one-star-with-an-error-bar": 1,
     "weighing-stars:and-which-one-is-heavier": 1
@@ -785,7 +754,6 @@
      "weighing-stars:what-do-you-need-to": 1,
      "weighing-stars:weigh-it-with-an-error-bar": "4",
      "weighing-stars:weigh-it-with-an-error-bar:locale": "en",
-     "weighing-stars:which-measurement-limits-you": 1,
      "weighing-stars:splitting-them-up": 1,
      "weighing-stars:weigh-one-star-with-an-error-bar": "3",
      "weighing-stars:weigh-one-star-with-an-error-bar:locale": "en",
@@ -805,7 +773,6 @@
      "weighing-stars:why-the-heavy-pair-wins": 1,
      "weighing-stars:what-do-you-need-to": 1,
      "weighing-stars:weigh-it-with-an-error-bar": 1,
-     "weighing-stars:which-measurement-limits-you": 1,
      "weighing-stars:splitting-them-up": 1,
      "weighing-stars:weigh-one-star-with-an-error-bar": 1,
      "weighing-stars:and-which-one-is-heavier": 1
@@ -965,7 +932,7 @@
     {
      "index": 25,
      "sid": "how-sure-is-the-total",
-     "fingerprint": "measure|-|binary|-|t1+t2+t3+t4+n+se+sp+sa+move_a+move_p+m_tot+s_tot|-|-",
+     "fingerprint": "measure|-|binary|-|t1+t2+t3+n+sd+sp+sa+move_a+move_p+m_tot+s_tot|-|-",
      "optionCount": null
     },
     {
@@ -977,8 +944,8 @@
     {
      "index": 27,
      "sid": "which-measurement-limits-you",
-     "fingerprint": "question|choice|-|-|-|4|a=1;c=1",
-     "optionCount": 4
+     "fingerprint": "measure|-|-|-|move_a+move_p+which|-|-",
+     "optionCount": null
     },
     {
      "index": 28,
@@ -1072,7 +1039,6 @@
     "weighing-stars:what-do-you-need-to": 1,
     "weighing-stars:weigh-it-with-an-error-bar": "4",
     "weighing-stars:weigh-it-with-an-error-bar:locale": "en",
-    "weighing-stars:which-measurement-limits-you": 1,
     "weighing-stars:splitting-them-up": 1,
     "weighing-stars:weigh-one-star-with-an-error-bar": "3",
     "weighing-stars:weigh-one-star-with-an-error-bar:locale": "en",
@@ -1092,7 +1058,6 @@
     "weighing-stars:why-the-heavy-pair-wins": 1,
     "weighing-stars:what-do-you-need-to": 1,
     "weighing-stars:weigh-it-with-an-error-bar": 1,
-    "weighing-stars:which-measurement-limits-you": 1,
     "weighing-stars:splitting-them-up": 1,
     "weighing-stars:weigh-one-star-with-an-error-bar": 1,
     "weighing-stars:and-which-one-is-heavier": 1
@@ -1254,11 +1219,6 @@
      "locale": "en"
     },
     {
-     "sid": "which-measurement-limits-you",
-     "value": 1,
-     "locale": "en"
-    },
-    {
      "sid": "splitting-them-up",
      "value": 1,
      "locale": "en"
@@ -1350,11 +1310,6 @@
     {
      "sid": "weigh-it-with-an-error-bar",
      "value": "4",
-     "locale": "en"
-    },
-    {
-     "sid": "which-measurement-limits-you",
-     "value": 1,
      "locale": "en"
     },
     {
@@ -1476,11 +1431,6 @@
      "locale": "en"
     },
     {
-     "sid": "which-measurement-limits-you",
-     "value": 1,
-     "locale": "en"
-    },
-    {
      "sid": "splitting-them-up",
      "value": 1,
      "locale": "en"
@@ -1573,11 +1523,6 @@
     {
      "sid": "weigh-it-with-an-error-bar",
      "value": "4",
-     "locale": "en"
-    },
-    {
-     "sid": "which-measurement-limits-you",
-     "value": 1,
      "locale": "en"
     },
     {

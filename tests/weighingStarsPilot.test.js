@@ -14,6 +14,7 @@ import { INVESTIGATIONS } from '../js/data/investigations.js';
 import depth from '../js/data/investigations/depth/weighing-stars.js';
 import { matchMisconception } from '../js/answerFeedback.js';
 import { cueFindings } from '../tools/authoring/cueRules.mjs';
+import { stageOf } from '../js/lesson/stage.js';
 
 const lesson = INVESTIGATIONS.find(i => i.id === 'weighing-stars');
 const step = sid => lesson.steps.find(s => s.sid === sid);
@@ -179,5 +180,36 @@ describe('the error bar, in the quantitative step', () => {
 
   test('every deeper step names what the student decides', () => {
     for (const d of depth.steps) expect(d.decides).toBeTruthy();
+  });
+});
+
+describe('the stage a deeper step stands on', () => {
+  const stage = { starPair: { m1: 3, m2: 1 } };
+  const core = { sid: 'c1', stage };
+  const deep = { sid: 'd1', depth: 'quantitative' };
+
+  test('a deeper step takes the stage of the step it follows', () => {
+    expect(stageOf([core, deep], deep)).toBe(stage);
+    expect(stageOf([core, { sid: 'c2' }, deep], deep)).toBe(stage);
+    expect(stageOf([core, { sid: 'd0', depth: 'advanced' }, deep], deep)).toBe(
+      stage
+    );
+  });
+
+  test('a core step keeps only its own', () => {
+    expect(stageOf([core, { sid: 'c2' }], { sid: 'c2' })).toBeUndefined();
+    expect(stageOf([core], core)).toBe(stage);
+  });
+
+  test('a deeper step that binds roles itself inherits no stage', () => {
+    const bound = { sid: 'd2', depth: 'quantitative', bind: { star: 'x' } };
+    expect(stageOf([core, bound], bound)).toBeUndefined();
+  });
+
+  test('a bind or a setup between the stage and the deeper step ends it', () => {
+    const bind = { sid: 'c2', bind: { star: 'x' } };
+    const setup = { sid: 'c3', setup: { scenario: 's' } };
+    expect(stageOf([core, bind, deep], deep)).toBeUndefined();
+    expect(stageOf([core, setup, deep], deep)).toBeUndefined();
   });
 });

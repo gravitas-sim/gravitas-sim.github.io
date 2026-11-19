@@ -3,8 +3,8 @@
  "calls": 134,
  "reached": 98,
  "unreached": [
-  "js/binaryWidgets.js:1106:52",
-  "js/binaryWidgets.js:1106:79",
+  "js/binaryWidgets.js:1107:52",
+  "js/binaryWidgets.js:1107:79",
   "js/gwWidgets.js:1913:67",
   "js/gwWidgets.js:561:27",
   "js/gwWidgets.js:964:25",

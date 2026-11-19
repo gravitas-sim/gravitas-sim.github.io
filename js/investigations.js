@@ -170,6 +170,7 @@ import {
   stageContext,
   stageLoaded,
   stageMemo,
+  stageOf,
   stageScale,
   stagePresence,
   stagedStars,
@@ -584,13 +585,6 @@ function applySetup(setup) {
   }
 }
 
-/** The stage a step stands on: its own, or its anchor's for a deeper step (those carry none). */
-const stageOf = step => {
-  if (step?.stage || !step?.depth || step.depth === 'core') return step?.stage;
-  const before = active.steps.slice(0, active.steps.indexOf(step)).reverse();
-  return before.find(s => s.stage || s.setup)?.stage;
-};
-
 /**
  * Hold the simulation still in the ways a lesson depends on: placement is off during a lesson.
  * @param {boolean} [fresh] - The step's own scene was just built: frame it
@@ -619,7 +613,7 @@ function bindStepRoles(force, fresh) {
   canvasMod?.enterCanvas(canvas, force);
   if (quiet) return;
   // A stage declares the whole scene and binds its own roles, so it takes precedence over a bind.
-  const stage = stageOf(step);
+  const stage = stageOf(active.steps, step);
   if (stage) {
     const { problems } = applyStage(stage, { force });
     // Its fit is asked for here and taken on the panel's tick, after layout and
@@ -1677,9 +1671,9 @@ const OBJECT_LIST_MAX = 12;
 function renderObjectList() {
   if (!els.objects || !els.objectsWrap) return;
   const step = currentStep();
-  const wanted = Boolean(step?.bind || stageOf(step));
+  const wanted = Boolean(step?.bind || stageOf(active.steps, step));
   els.objectsWrap.hidden = !wanted;
-  if (els.stageTools) els.stageTools.hidden = !stageOf(step);
+  if (els.stageTools) els.stageTools.hidden = !stageOf(active.steps, step);
   if (!wanted) {
     lastObjectsKey = '';
     els.objects.replaceChildren();
@@ -1772,7 +1766,7 @@ function renderProbe() {
   canvasMod?.keepQuiet();
   // A stage owns the scene: if something replaced it wholesale (a cold load into a staged step) it puts
   // itself back; never when the reader only experimented (deleted a body, merged two).
-  const stage = stageOf(step);
+  const stage = stageOf(active.steps, step);
   if (stage) {
     const presence = stagePresence();
     if (presence.allGone) {
@@ -1939,7 +1933,7 @@ function goToStep(index, { rebuild = false, open = false } = {}) {
   slots.runs?.release();
   const at = Math.max(0, Math.min(active.steps.length - 1, index));
   // A step that stages waits for the stage code; opening rejects on failure.
-  const declared = active.steps[at]?.stage;
+  const declared = stageOf(active.steps, active.steps[at]);
   if (declared && !stageLoaded(declared)) {
     const turn = openGeneration;
     els.panel.setAttribute('aria-busy', 'true');
@@ -2553,7 +2547,7 @@ function resetStepScene() {
   for (const k in responses)
     if (k.startsWith(`${stepId(stepIndex)}:tool:`)) delete responses[k];
   goToStep(stepIndex, { rebuild: true });
-  const scene = step.stage || setupInForceAt(stepIndex);
+  const scene = stageOf(active.steps, step) || setupInForceAt(stepIndex);
   const which = +!!step.tool + 2 * !!scene + 4 * (getLocale() === 'es');
   toast(els.resetScenario.dataset.said.split('|')[which]);
 }

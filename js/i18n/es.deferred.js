@@ -408,7 +408,6 @@ export const ES_DEFERRED = {
   'reliability.agrees': 'sin cambio dentro de {tolerance}',
   'reliability.moved': 'cambio {change}',
   'reliability.noValue': 'no medido',
-  // --- The A/B experiment bench ---------------------------------------------
   'bench.title': 'Experimento A/B',
   'bench.untitled': 'Experimento sin título',
   'bench.copyOf': 'Copia de {name}',
@@ -673,7 +672,6 @@ export const ES_DEFERRED = {
     'Esta actividad se creó con {pinned}, del que este Gravitas ya no toma la investigación. Se abre con la investigación tal como es ahora.',
   'assign.error.badPackage': 'Ese enlace de actividad nombra mal su paquete.',
 
-  // --- El planificador de maniobras --------------------------------------------
   'burn.title': 'Planificador de maniobras',
   'burn.close': 'Ocultar el planificador de maniobras',
   'burn.body': 'Cuerpo',
@@ -1112,7 +1110,6 @@ export const ES_DEFERRED = {
   'hzW.planetC': 'Planeta C',
   'hzW.threePlanetsSimilarStarlight': 'Tres planetas, luz estelar parecida',
   'hzW.showing': 'Mostrando',
-  // --- El análisis de incertidumbre ---------------------------------------------
   'rvfit.mc.title': 'Análisis de incertidumbre (opcional)',
   'rvfit.mc.hint':
     'Simula esta campaña de observación una y otra vez —las mismas épocas, las mismas incertidumbres declaradas, un sorteo de ruido nuevo cada vez— y reajusta cada una con la búsqueda que acabas de hacer. Donde caen los reajustes indica con qué precisión tus datos fijan el período.',
@@ -1721,7 +1718,6 @@ export const ES_DEFERRED = {
     'El análisis tomó el valor como exacto: no se estimó nada.',
   'nb.report.notRecorded': 'no registrado',
 
-  // --- Búsqueda y filtros del catálogo ----------------------------------------
   'inv.filter.search.placeholder': 'Buscar por título, tema o materia',
   'inv.filter.query': 'Búsqueda',
   'inv.filter.subject': 'Materia',
@@ -2281,7 +2277,6 @@ export const ES_DEFERRED = {
     'Esta respuesta se comprueba con tus propias medidas. Regístralas en los pasos anteriores y se podrá comprobar.',
   'inv.answer.check': 'Comprobar',
 
-  // --- El modo didactico del problema restringido de tres cuerpos --------------
   'cr3bp.title': 'Modo de tres cuerpos restringido',
   'cr3bp.close': 'Ocultar la superposicion de tres cuerpos',
   'cr3bp.convention':
@@ -2456,7 +2451,6 @@ export const ES_DEFERRED = {
   'exoW.excessScatterIsNotAPlanet':
     'Una dispersión mayor significa que la velocidad no es constante. No identifica un planeta, ni un periodo, ni una masa.',
 
-  // --- Calendarios de observacion, y la comparacion de dos ---------------------
   'rvsched.shape': 'Calendario',
   'rvsched.shape.regular': 'Cadencia regular',
   'rvsched.shape.irregular': 'Irregular',
@@ -2551,7 +2545,6 @@ export const ES_DEFERRED = {
   'rv.survey.coarse':
     'La simulación va demasiado rápido para esta cadencia: algunas medidas se leyeron entre fotogramas muy separados y sus extremos pueden quedar achatados. Reduce la velocidad y reinicia la campaña.',
 
-  // --- El barrido de la leccion binaria ---------------------------------------
   'binarySweep.title': 'Barrer el radio inicial',
   'binarySweep.hint':
     'La misma ejecucion que has hecho a mano, con cinco radios iniciales y todo lo demas fijo. Cada ensayo informa de lo que le paso al planeta, no de un promedio de donde estuvo.',
@@ -3897,6 +3890,15 @@ export const ES_DEFERRED = {
   'nb.stellar.limit.fitted':
     'La comparación se dibujó con cada estrella ajustada a su recuadro, así que los tamaños aparentes no son comparables.',
   // --- Words a lesson computes ----------------------------------------------
+  'lessonFn.yourErrorBarForThePeriod129':
+    'Tu barra de error del periodo es menor que la dispersión de uno de tus propios tiempos: afirma más de lo que mediste. Ensánchala.',
+  'lessonFn.thatErrorBarIsMoreThan140':
+    'Esa barra de error es más de la mitad de la masa: no dice casi nada. Mira otra vez la dispersión de tus tiempos y la precisión del panel.',
+  'lessonFn.answerWithAOrP19': 'Responde con a o P.',
+  'lessonFn.yesTheReadingThatMovesThe118':
+    'Sí: la lectura que más mueve la masa es la que la limita, así que mejorar la otra primero cambiaría poco.',
+  'lessonFn.lookAgainAtTheTwoChanges96':
+    'Mira otra vez los dos cambios de arriba: el mayor corresponde a la lectura que limita la masa.',
   'lessonFn.theseReadingsDoNotFitTogether109':
     'Estas lecturas no encajan: los dos brazos deberían sumar la distancia de estrella a estrella. Vuelve a tomarlas.',
   'lessonFn.theTwoArmsAddUpTo106':
@@ -3918,8 +3920,6 @@ export const ES_DEFERRED = {
     'Tres masas solares entre las dos.',
   'lessonFn.takeAtLeastTwoTimingsOne70':
     'Toma al menos dos tiempos: un solo tiempo no puede mostrarte su propia dispersión.',
-  'lessonFn.yourErrorBarForThePeriod144':
-    'Tu barra de error del periodo es menor que la dispersión de tus propios tiempos: afirma más de lo que mediste. Ensánchala, o toma más tiempos.',
   'lessonFn.distancesHaveToBePositiveNumbers38':
     'Las distancias tienen que ser números positivos.',
   'lessonFn.closestApproachIsLargerThanFurthest70':
