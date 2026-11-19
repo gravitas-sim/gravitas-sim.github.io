@@ -3,11 +3,14 @@
  "static": {
   "en": {
    "units": [
-    ["steps.scale-from-the-disc.fields.0.unit","px"],
-    ["steps.scale-from-the-disc.fields.1.unit",""],
+    ["steps.mark-the-disc-width.fields.0.unit","px"],
+    ["steps.mark-the-disc-width.fields.1.unit",""],
+    ["steps.a-pair-that-stops-short.fields.0.unit",""],
+    ["steps.a-pair-that-stops-short.fields.1.unit","km"],
     ["steps.measure-the-plain.fields.0.unit","km"],
+    ["steps.squeezed-at-the-plain.fields.0.unit","%"],
     ["steps.a-pixel-at-each-end.unit","km"],
-    ["steps.a-diameter-with-an-error-bar.unit","km"],
+    ["steps.a-diameter-with-the-squeeze.unit","km"],
     ["steps.near-the-limb.fields.0.unit",""],
     ["steps.near-the-limb.fields.1.unit","%"]
    ],
@@ -27,9 +30,9 @@
     "unit": "km"
    },
    {
-    "sid": "a-diameter-with-an-error-bar",
-    "answer": "634",
-    "tolerance": "40",
+    "sid": "a-diameter-with-the-squeeze",
+    "answer": "660",
+    "tolerance": "4",
     "unit": "km"
    }
   ],
@@ -38,11 +41,17 @@
  "precision": [],
  "steps": {
   "en": {
-   "scale-from-the-disc": {
-    "validate": {"calls":232,"distinct":2,"digest":"642af0f4a05c8cbb","samples":[null,{"level":"error","message":"Set the left end to 3 and the right end to 496, then read “Length of the pair” and “Scale from the pair”."}]}
+   "mark-the-disc-width": {
+    "validate": {"calls":232,"distinct":2,"digest":"8f7853fb0aad8fee","samples":[null,{"level":"error","message":"The scale is the Moon’s width divided by the length of the pair. Take both readings from the instrument."}]}
+   },
+   "a-pair-that-stops-short": {
+    "validate": {"calls":232,"distinct":3,"digest":"8878097002cd41da","samples":[null,{"level":"error","message":"The scale and the diameter must come from the same pair. Take both again once the pair is where you want it."},{"level":"error","message":"That pair is still close to the edge, within what the tool already states. Move the right end in by 30 pixels or more, then take both readings again."}]}
    },
    "measure-the-plain": {
-    "validate": {"calls":97,"distinct":2,"digest":"08ef077068e1ccf5","samples":[null,{"level":"error","message":"Fit the circle to the edge of the dark plain, then read “Diameter of the circle in kilometers”."}]}
+    "validate": {"calls":97,"distinct":2,"digest":"56cbb441cca83363","samples":[null,{"level":"error","message":"Fit the circle to the edge of the dark plain, then take the diameter of the circle in kilometers."}]}
+   },
+   "squeezed-at-the-plain": {
+    "validate": {"calls":97,"distinct":2,"digest":"b4fe8a6bd1dbb55a","samples":[null,{"level":"error","message":"Put the circle back on the plain (center near x = 289, y = 306), then take the width along the line to the center."}]}
    },
    "near-the-limb": {
     "validate": {"calls":232,"distinct":2,"digest":"ea5298e07cfca8ce","samples":[null,{"level":"error","message":"Set the circle’s center to x = 470, y = 245, then read the distance in disc radii and the width along that direction."}]}

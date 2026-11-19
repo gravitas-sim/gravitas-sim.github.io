@@ -201,9 +201,9 @@ export const PILOTS = {
     },
   },
   'measuring-the-moon': {
-    measureSid: 'scale-from-the-disc',
-    // The step names the two end positions; the instrument reports the length
-    // and the scale they give.
+    measureSid: 'mark-the-disc-width',
+    // The reader places the two ends on the disc's edges; the instrument
+    // reports the length and the scale they give.
     async readings(page) {
       await setTool(page, 'x1', 3);
       await setTool(page, 'x2', 496);

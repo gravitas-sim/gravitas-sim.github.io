@@ -117,9 +117,16 @@ describe('the detector grades the fields the opening readouts fill', () => {
   });
 
   test('Measuring the Moon: the opening state is rejected, so it is neutral', () => {
-    const r = judge('measuring-the-moon', 'scale-from-the-disc');
+    const r = judge('measuring-the-moon', 'mark-the-disc-width');
     expect(r.verdict).toBe('neutral');
     expect(r.fields.pair).toBe(380);
+    // The slant step opens with the circle at the disc's center, not on the plain.
+    for (const sid of [
+      'a-pair-that-stops-short',
+      'measure-the-plain',
+      'squeezed-at-the-plain',
+    ])
+      expect(judge('measuring-the-moon', sid).verdict).toBe('neutral');
   });
 
   test('a field and a control that share a name: the slider number is what is typed', () => {
@@ -189,7 +196,7 @@ describe('the rule and the three lists', () => {
       ).filter(f => f.rule === 'leak/opens-at-answer' && f.sid === sid).length;
     };
     expect(find('ios-fire', 'heating-at-the-maximum')).toBe(1);
-    expect(find('measuring-the-moon', 'scale-from-the-disc')).toBe(0);
+    expect(find('measuring-the-moon', 'mark-the-disc-width')).toBe(0);
   });
 
   test('the catalog sorts into opens-at-answer, neutral, unmapped and prepared', () => {
@@ -198,7 +205,10 @@ describe('the rule and the three lists', () => {
       'heating-at-the-maximum',
     ]);
     expect(lists.neutral['measuring-the-moon']).toEqual([
-      'scale-from-the-disc',
+      'mark-the-disc-width',
+      'a-pair-that-stops-short',
+      'measure-the-plain',
+      'squeezed-at-the-plain',
     ]);
     const unmapped = Object.values(lists.unmapped).flat();
     expect(unmapped.length).toBeGreaterThan(100);

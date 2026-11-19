@@ -7,8 +7,9 @@
 //
 //   - the key is a well-formed sid the lesson does not have (a retired id is
 //     never reused);
-//   - `to` is a step the lesson has now, or null (removed); never another
-//     retired id, so a reader looks it up directly;
+//   - `to` is a step the lesson has now, or null (removed), the lesson's deeper
+//     steps (js/data/investigations/depth) included; never another retired id,
+//     so a reader looks it up directly;
 //   - `release` is a version such as 3.1 or 3.1.2;
 //   - `was` says what the step asked, in both languages.
 // =============================================================================
@@ -19,14 +20,15 @@ import { isValidSid } from '../../js/investigations/progressSchema.js';
  * What is wrong with a lesson's retired map.
  *
  * @param {object} lesson - A lesson
+ * @param {Iterable<string>} [deeper] - The sids of the lesson's deeper steps
  * @returns {Array<string>} One message per problem
  */
-export function retiredFindings(lesson) {
+export function retiredFindings(lesson, deeper = []) {
   const r = lesson?.retired;
   if (r === undefined) return [];
   if (!r || typeof r !== 'object' || Array.isArray(r))
     return ['`retired` must be an object keyed by the old step id'];
-  const live = new Set((lesson.steps || []).map(s => s?.sid));
+  const live = new Set([...(lesson.steps || []).map(s => s?.sid), ...deeper]);
   const out = [];
   for (const [id, e] of Object.entries(r)) {
     const at = `retired "${id}"`;

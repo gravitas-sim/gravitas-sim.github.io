@@ -5,9 +5,19 @@
       "power": "Heating",
       "orbit": "Energy in one orbit (period)"
     },
-    "measuring-the-moon/scale-from-the-disc": {
-      "pair": "Length of the pair",
-      "scale": "Scale from the pair"
+    "measuring-the-moon/mark-the-disc-width": {
+      "pair": "pair",
+      "scale": "scale"
+    },
+    "measuring-the-moon/a-pair-that-stops-short": {
+      "scale": "scale",
+      "km": "diameterKm"
+    },
+    "measuring-the-moon/measure-the-plain": {
+      "km": "diameterKm"
+    },
+    "measuring-the-moon/squeezed-at-the-plain": {
+      "share": "foreshort"
     },
     "phases-and-albedo/full-phase-albedo": {
       "ag": "Geometric albedo of a Lambert sphere that fits",

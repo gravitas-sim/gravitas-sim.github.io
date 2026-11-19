@@ -224,7 +224,8 @@ describe('the digest the derived closure produces', () => {
     // 304 after How Many Earths? (Prompt 229, D-R10-229-06) over v3 ad72f039 (closure 303 after Prompt 230): one file, occurrence-sequence.js, which holds the lesson, its Spanish, its guide and the deeper steps of one lesson; the cap raised by one, delegated to the coordinator (pending its approval).
     // 305 after the exoplanet closeout investigations (Prompt 231, D-R10-231-01) over v3 92e5279d (closure 304): one file, exoplanet-sequence.js, which holds the four lessons, their Spanish, their guides and their deeper steps; the one new closure file per sequence, the cap raise delegated to the coordinator (figures sent before the push).
     // 306 after How far, and how sure? and What Gaia does not see (Prompt 233, D-R10-233-08) over v3 a9c654a2 (closure 305): one file, gaia-sequence.js, which holds the two lessons, their Spanish, their guides and their deeper steps; the one new closure file per sequence, the cap raise delegated to the coordinator (figures sent before the push).
-    expect(current.length).toBeLessThan(307);
+    // 308 after the Moon lesson and its deeper steps moved into their own files (Prompt 330, D-R4-330-10), over v4 6852131e (closure 306): the two shared measurement files had passed their line ceilings, and splitting them adds measuring-the-moon.js and depth/measuring-the-moon.js to the closure.
+    expect(current.length).toBeLessThan(309);
     // 230 after the four variable-star investigations (Prompt 96): their shadows, deeper shadows and depth files;
     // 246 after the four cosmology investigations (Prompt 91).
     // 258 after the three calibration investigations (Prompt 86).

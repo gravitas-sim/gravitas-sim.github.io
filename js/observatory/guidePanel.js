@@ -35,6 +35,7 @@ import {
   answerMatches,
   correctOption,
   evaluateCheck,
+  fitValue,
   stepsOn,
 } from './guides/core.js';
 import { installedPack } from '../catalog/installed.js';
@@ -235,9 +236,10 @@ export function mountGuidePanel(root, ctx) {
       );
     const fit = e.results?.fit;
     return Object.fromEntries(
-      [...(fit?.parameters || []), ...(fit?.derived || [])].map(p => [
-        p.name,
-        p.value,
+      [...(fit?.parameters || []), ...(fit?.derived || [])].flatMap(p => [
+        [p.name, p.value],
+        // The uncertainty to quote, which a later answer may compare.
+        [`${p.name}Sigma`, fitValue(e, `${p.name}Sigma`)],
       ])
     );
   }

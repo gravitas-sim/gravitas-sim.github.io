@@ -129,7 +129,7 @@ export const LESSON_PILOTS = [
     id: 'moon-image',
     label: 'Moon image',
     lesson: 'measuring-the-moon',
-    sid: 'scale-from-the-disc',
+    sid: 'mark-the-disc-width',
     subject: 'instrument',
     scenario: 'a staged star beside the moon-marks image instrument at 3.0',
   },
