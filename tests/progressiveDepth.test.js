@@ -109,7 +109,16 @@ describe('the rules refuse what would change the science', () => {
   };
 
   test('a depth-specific expectation that disagrees with the core one', () => {
-    expect(run(d => (d[2].answer = 9))).toContain('depth/expectation');
+    // A deeper step that restates a core one: Kepler's Laws no longer has one
+    // (its period question is now each student's own), so another lesson does.
+    const lesson = 'missing-mass';
+    const c = core(lesson);
+    const deeper = clone(DEEPER[lesson]);
+    const at = deeper.findIndex(x => x.restates);
+    deeper[at].answer = deeper[at].answer + 9;
+    expect(
+      checkDepth(c, layDepth(c, deeper), deeper, null).map(f => f.rule)
+    ).toContain('depth/expectation');
   });
   test('a deeper step that opens a scenario of its own', () => {
     expect(run(d => (d[0].setup = { scenario: 'Solar System' }))).toContain(

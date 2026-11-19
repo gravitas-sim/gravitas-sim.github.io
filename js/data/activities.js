@@ -179,7 +179,6 @@ export const ACTIVITIES = Object.freeze([
           'change-the-shape',
           'where-does-it-move-fastest',
           'watch-it-happen',
-          'equal-areas-however-you-slice',
           'fast-and-slow-in-numbers',
           'why-the-speed-changes',
         ]),
@@ -199,9 +198,8 @@ export const ACTIVITIES = Object.freeze([
          * The whole first-and-second-law arc, plus the transfer step at the
          * end of the lesson that asks where this reasoning stops working.
          *
-         * `measure-the-two-orbits` is the controlled comparison: the circular
-         * and the eccentric orbiter go round the same star at the same
-         * semi-major axis, so eccentricity is the one thing that differs.
+         * `find-the-foci` takes the eccentric orbiter's two distances and finds
+         * its empty focus with the orbit geometry panel.
          * `where-kepler-s-version-breaks` is the transfer - a comparable-mass
          * pair, where "the planet orbits the star" stops being the right
          * description - and it brings its own setup with it, which the
@@ -211,7 +209,7 @@ export const ACTIVITIES = Object.freeze([
           'where-is-the-star',
           'change-the-shape',
           'what-sits-at-the-other',
-          'measure-the-two-orbits',
+          'find-the-foci',
           'where-does-it-move-fastest',
           'watch-it-happen',
           'equal-areas-however-you-slice',

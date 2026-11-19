@@ -243,7 +243,7 @@ describe('what each format is required to contain', () => {
   test('the lab has a controlled comparison and a transfer task', () => {
     const steps = stepsOf('lab');
     // Both orbiters go round the same star, so eccentricity is what differs.
-    expect(steps.map(s => s.sid)).toContain('measure-the-two-orbits');
+    expect(steps.map(s => s.sid)).toContain('find-the-foci');
     // The last step is the transfer: where "the planet orbits the star" stops
     // being the right description.
     expect(steps.at(-1).sid).toBe('where-kepler-s-version-breaks');
