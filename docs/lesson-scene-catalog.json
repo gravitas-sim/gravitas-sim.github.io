@@ -11628,7 +11628,7 @@
     {
      "sid": "measurement-one-how-big-is",
      "index": 23,
-     "type": "explore",
+     "type": "measure",
      "title": "Measurement one: how big is the orbit?",
      "declares": {
       "stage": {
@@ -11646,9 +11646,11 @@
      },
      "kinds": [
       "scene-declared",
-      "engine-measurement"
+      "engine-measurement",
+      "captured-evidence"
      ],
      "actions": [
+      "record-values",
       "watch-the-balance-point",
       "tick-a-checklist"
      ],
@@ -11659,7 +11661,7 @@
       "numeric": false,
       "short": false,
       "rubric": false,
-      "validated": false
+      "validated": true
      },
      "worldRunning": "inherited",
      "affordances": {
@@ -11668,10 +11670,11 @@
       "areaSweep": "whole lesson"
      },
      "loop": {
-      "declared": "experiment",
+      "declared": "measure",
       "actual": [
        "experiment",
-       "measure"
+       "measure",
+       "interpret"
       ],
       "handTranscribed": false,
       "mismatch": null
@@ -11687,19 +11690,23 @@
       "eventWatch": null
      },
      "instrument": null,
-     "evidence": [],
+     "evidence": [
+      "notebook-fields"
+     ],
      "reset": [
       "lesson locks: placement, inspector"
      ],
      "recovery": [
       "wrong body: the object list names what the step staged",
-      "null result: the probe names what is missing"
+      "missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand",
+      "null result: the probe names what is missing",
+      "ambiguous result: the check says in words how close is close enough"
      ]
     },
     {
      "sid": "measurement-two-how-long-does",
      "index": 24,
-     "type": "explore",
+     "type": "measure",
      "title": "Measurement two: how long does a lap take?",
      "declares": {
       "stage": {
@@ -11723,6 +11730,7 @@
       "captured-evidence"
      ],
      "actions": [
+      "record-values",
       "change-a-scene-object",
       "move-an-instrument-control",
       "press-an-instrument-button",
@@ -11736,7 +11744,7 @@
       "numeric": false,
       "short": false,
       "rubric": false,
-      "validated": false
+      "validated": true
      },
      "worldRunning": "inherited",
      "affordances": {
@@ -11745,10 +11753,11 @@
       "areaSweep": "whole lesson"
      },
      "loop": {
-      "declared": "experiment",
+      "declared": "measure",
       "actual": [
        "experiment",
-       "measure"
+       "measure",
+       "interpret"
       ],
       "handTranscribed": false,
       "mismatch": null
@@ -11766,13 +11775,15 @@
       "capture": true
      },
      "evidence": [
+      "notebook-fields",
       "instrument-capture"
      ],
      "reset": [
       "lesson locks: placement, inspector"
      ],
      "recovery": [
-      "wrong body: the object list names what the step staged"
+      "wrong body: the object list names what the step staged",
+      "ambiguous result: the check says in words how close is close enough"
      ]
     },
     {
@@ -11917,7 +11928,7 @@
     {
      "sid": "back-to-the-balance-point",
      "index": 27,
-     "type": "explore",
+     "type": "measure",
      "title": "Back to the balance point",
      "declares": {
       "stage": {
@@ -11935,9 +11946,11 @@
      },
      "kinds": [
       "scene-declared",
-      "engine-measurement"
+      "engine-measurement",
+      "captured-evidence"
      ],
      "actions": [
+      "record-values",
       "watch-the-balance-point",
       "tick-a-checklist"
      ],
@@ -11957,7 +11970,7 @@
       "areaSweep": "whole lesson"
      },
      "loop": {
-      "declared": "experiment",
+      "declared": "measure",
       "actual": [
        "experiment",
        "measure"
@@ -11976,13 +11989,17 @@
       "eventWatch": null
      },
      "instrument": null,
-     "evidence": [],
+     "evidence": [
+      "notebook-fields"
+     ],
      "reset": [
       "lesson locks: placement, inspector"
      ],
      "recovery": [
       "wrong body: the object list names what the step staged",
-      "null result: the probe names what is missing"
+      "missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand",
+      "null result: the probe names what is missing",
+      "ambiguous result: nothing marks these, they are a record"
      ]
     },
     {
@@ -12081,7 +12098,8 @@
       "press-an-instrument-preset"
      ],
      "requires": [
-      "weigh-the-pair"
+      "weigh-the-pair",
+      "back-to-the-balance-point"
      ],
      "reveal": null,
      "asks": {
@@ -12669,8 +12687,10 @@
      ],
      "evidence": [
       "a-practice-run",
+      "measurement-one-how-big-is",
       "measurement-two-how-long-does",
       "weigh-the-pair",
+      "back-to-the-balance-point",
       "now-weigh-each-one",
       "one-on-your-own"
      ],
@@ -12690,7 +12710,7 @@
     "model": 7,
     "data": 0,
     "diagram": 4,
-    "evidence": 5,
+    "evidence": 7,
     "computation": 0,
     "declaredButInert": 31,
     "prose": 1,
@@ -119983,7 +120003,7 @@
   "model": 1012,
   "data": 161,
   "diagram": 881,
-  "evidence": 389,
+  "evidence": 391,
   "computation": 14,
   "declaredButInert": 1262,
   "prose": 58,

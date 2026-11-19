@@ -472,34 +472,39 @@ test.describe('the central experiment of each investigation', () => {
     const predict = await walkToSid(page, plan, entry.loop[0]);
     await commitPredictionHeld(page, predict);
 
+    // The weighed total and the taken ratio are the student's own: the step
+    // that shares the total out reads them back.
+    await walkToSid(page, plan, 'weigh-the-pair');
+    await recordFields(page, id, 'weigh-the-pair', { a: '4.00', p: '4.00' });
+    await walkToSid(page, plan, 'back-to-the-balance-point');
+    await page.locator('#investigationBody [data-take="ratio"]').click();
+
     await walkToSid(page, plan, measureSid);
     const seen = [];
-    for (const d1 of [1, 2]) {
+    for (const d1 of [1, 1.5]) {
       const { before, after } = await setControl(page, control, d1);
       if (d1 !== 1) expect(after).not.toEqual(before);
       seen.push({
         aArm: reading(after, /star a is this far/i),
         bArm: reading(after, /star b is this far/i),
-        // "Star A, by 3 times" - the ratio, at full precision. The split below
-        // it is rounded to whole solar masses for display, so 2.4 and 1.6 both
-        // read as "2" and cannot carry any arithmetic.
+        // "Star A, by 3 times" - the ratio, at full precision.
         ratio: reading(after, /heavier star/i),
-        split: row(after, /splitting/i).numbers,
       });
     }
 
-    for (const { aArm, bArm, ratio, split } of seen) {
+    for (const { aArm, bArm, ratio } of seen) {
       // The center of mass is a lever. The nearer star is the heavier one and
       // the mass ratio is exactly the inverse of the arm ratio, which is what
       // turns one total mass into two separate ones.
       expect(aArm).toBeLessThan(bArm);
       expect(ratio).toBeCloseTo(bArm / aArm, 2);
-      expect(split[0] + split[1]).toBeCloseTo(4, 1);
-      expect(split[0]).toBeGreaterThanOrEqual(split[1]);
     }
     // And the control really swept: the answer is not the same every time.
     expect(Math.abs(seen[0].ratio - seen[1].ratio)).toBeGreaterThan(0.1);
 
+    // The page reads the student's own total back, and the two masses the
+    // student writes share it out.
+    await expectDerived(page, id, measureSid, { tot: 4 }, 0.02);
     const { aArm, bArm } = seen[seen.length - 1];
     const total = 4;
     const ma = (total * bArm) / (aArm + bArm);

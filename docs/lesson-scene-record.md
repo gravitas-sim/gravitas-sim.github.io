@@ -15,7 +15,7 @@ Across 124 investigations and 1521 steps: 1429 steps
 declare a scene, 167 let a reader change one, 177 read the
 running integration, 1012 show a prescribed model result, 161 draw
 on a stored dataset, 881 put a self-contained panel beside the text,
-389 keep something, and 58 are prose.
+391 keep something, and 58 are prose.
 Of 195 prediction loops, 195 are returned to,
 195 produce a measurement before they are answered, and
 0 end in an explanation in the reader's own words.
@@ -88,7 +88,7 @@ The canvas behind a step is stated as scene on 0, portrait on 0, quiet on 0; 152
 - **Stored data:** none.
 - **Evidence kept:** notebook-fields, instrument-capture.
 - **Prediction loops:** two-stars-side-by-side → watch-them, what-are-they-going-round → watch-them; make-one-of-them-heavier → try-it, put-them-on-a-see → try-it; which-pair-is-quicker → run-them-together, a-practice-run, measurement-one-how-big-is, measurement-two-how-long-does, weigh-the-pair, back-to-the-balance-point, now-weigh-each-one, somebody-really-did-this, and-stars-are-not-the, one-on-your-own → run-them-together.
-- **Recovery:** wrong body: the object list names what the step staged; null result: the probe names what is missing; null result: guarded, but the fallback is not spelled out; missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand; ambiguous result: the check says in words how close is close enough.
+- **Recovery:** wrong body: the object list names what the step staged; null result: the probe names what is missing; null result: guarded, but the fallback is not spelled out; missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand; ambiguous result: the check says in words how close is close enough; ambiguous result: nothing marks these, they are a record.
 - **Scene rebuilds:** none.
 - **Accepted central experiment** (reviewed 2026-09-11): object `a`, control balance/d1, measures two arm lengths and one period, giving both masses, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 
