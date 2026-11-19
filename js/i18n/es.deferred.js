@@ -1138,12 +1138,10 @@ export const ES_DEFERRED = {
   'rvfit.mc.refused.badBounds':
     'El rango de períodos no es un rango. Revisa los límites de búsqueda de arriba.',
   'rvfit.mc.refused.badTrials': 'Elige entre {min} y {max} pruebas.',
-
   'rvfit.mc.failed.noSearch':
     'la búsqueda de período no encontró nada que ajustar',
   'rvfit.mc.failed.notFinite':
     'el cálculo devolvió un valor que no era un número',
-
   'rvfit.mc.assume.model':
     'Una órbita circular con un solo acompañante. Todos los intervalos de abajo están condicionados a que ese modelo sea el correcto.',
   'rvfit.mc.assume.gaussian':
@@ -1155,7 +1153,6 @@ export const ES_DEFERRED = {
   'rvfit.mc.assume.precision':
     'Esto mide precisión, no corrección. Un modelo equivocado puede dar un intervalo muy estrecho.',
   'rvfit.mc.assumptions': 'Estos intervalos están condicionados a:',
-
   'rvfit.mc.result.single':
     'Período {median} d, de {p16} a {p84} ({pct}% de las pruebas). Amplitud {kMedian} m/s, de {kP16} a {kP84}.',
   'rvfit.mc.result.multimodal': {
@@ -1171,7 +1168,6 @@ export const ES_DEFERRED = {
   'rvfit.mc.result.failures': '{n} pruebas no dieron ajuste: {why}.',
   'rvfit.mc.result.epochs':
     '{n} épocas, línea de base de {baseline} d, {samples} puntos de rejilla por prueba, semilla {seed}.',
-
   'rvfit.mc.families': 'Familias de alias',
   'rvfit.mc.col.share': 'Proporción',
   'rvfit.mc.col.period': 'Período (d)',
@@ -3982,20 +3978,6 @@ export const ES_DEFERRED = {
   'lessonFn.completeTransitsRecorded26': 'Tránsitos completos registrados',
   'lessonFn.waitingForACompleteTransit30': 'Esperando un tránsito completo',
   'lessonFn.clock5': 'Reloj',
-  'lessonFn.theInTransitMeanSitsBelow154':
-    'La media dentro del tránsito queda <em>por debajo</em> de la media fuera del tránsito, así que la profundidad tiene que salir positiva. Comprueba que no hayas intercambiado los dos tramos.',
-  'lessonFn.yourOutOfTransitStretchAverages164':
-    'Tu tramo fuera del tránsito promedia parte de una caída: su media queda por debajo del nivel que mantiene la estrella entre tránsitos. Muévelo a un tramo plano, lejos de toda caída.',
-  'lessonFn.theTwoStretchesHaveAlmostThe174':
-    'Los dos tramos tienen casi la misma media, así que no hay profundidad entre ellos. Pon el tramo dentro del tránsito en el fondo de una caída y el otro en un tramo plano entre caídas.',
-  'lessonFn.yourInTransitStretchIncludesThe232':
-    'Tu tramo dentro del tránsito incluye los flancos inclinados de la caída, o se sale de ella, donde el planeta solo cubre en parte la estrella. Elige un tramo del fondo, entre los dos flancos, y la profundidad será la sombra completa del planeta.',
-  'lessonFn.thatIsDeeperThanTheFloor138':
-    'Eso es más profundo que el fondo de cualquier caída de esta curva. Comprueba que los dos tramos estén sobre la curva que muestra ahora el gráfico y en las casillas correctas.',
-  'lessonFn.twoStretchesOneDepthKeepIt131':
-    'Dos tramos, una profundidad. Guárdala: las pantallas siguientes la ponen junto a tu estimación y explican por qué el radio que da no es del todo correcto.',
-  'lessonFn.twoStretchesOneDepthForThe89':
-    'Dos tramos, una profundidad para el segundo sistema. La pantalla siguiente la pone junto a la primera.',
   'lessonFn.theStarRadiusGoesInSolar93':
     'El radio de la estrella va en radios solares, no en kilómetros ni en júpiteres. HD 209458 es 1,155 R☉.',
   'lessonFn.theDepthIsAFractionNot65':
@@ -4028,16 +4010,6 @@ export const ES_DEFERRED = {
     'Unas 0,047 UA: una octava parte de la distancia de Mercurio al Sol, y a unos nueve radios estelares. A 1450 K el lado diurno del planeta está lo bastante caliente para brillar con un rojo apagado por sí mismo. Nada de la teoría de formación planetaria anterior a 1995 ponía allí un gigante gaseoso, y averiguar cómo llegó sigue siendo una discusión activa entre la migración por el disco y la dispersión por otros planetas.',
   'lessonFn.expectedRoughly0047AuCheck84':
     'Se esperaban unas 0,047 UA. Comprueba que el periodo esté en días y la masa en masas solares.',
-  'lessonFn.bothDepthsAreFractionsNotPercentages66':
-    'Ambas profundidades son fracciones, no porcentajes: 1,1 % se introduce como 0,011.',
-  'lessonFn.theBlendedDepthHasToBe110':
-    'La profundidad mezclada tiene que ser la <em>menos</em> profunda de las dos. Comprueba que no las hayas puesto en las casillas equivocadas.',
-  'lessonFn.thatIsTheResultTheBlended291':
-    'Ese es el resultado. La curva mezclada dice unos 12 radios terrestres; la corrección de aproximadamente ×1,28 lo devuelve a unos 15,5, que son los 1,38 radios de Júpiter que mediste antes de que estuviera la compañera. El contraste implicado debería caer cerca de Δm = 0,5, que es lo que la compañera es en realidad.',
-  'lessonFn.theRatioIsLargerThanThis135':
-    'El cociente es mayor de lo que esta compañera puede producir. Vuelve a leer la profundidad mezclada: debería estar cerca de 0,011, no cerca de la mitad del valor limpio.',
-  'lessonFn.expectedARatioNear163135':
-    'Se esperaba un cociente cercano a 1,63 y un radio corregido cercano a 15,5 R⊕. Comprueba que ambas profundidades vinieron del fondo de una caída y no de un hombro.',
   'lessonFn.clickABodyInTheSimulation30': 'Pulsa un cuerpo en la simulación',
   'lessonFn.nothingToOrbit16': 'nada que orbitar',
   'lessonFn.distanceFromTheStar22': 'Distancia a la estrella',
@@ -4251,4 +4223,28 @@ export const ES_DEFERRED = {
     'Cuanto más frío el cuerpo negro, mayor el índice de color. Un color es un termómetro y, a diferencia de la longitud de onda del máximo, solo necesita dos medidas ordinarias de brillo.',
   'lessonFn.setTheBandsToBV94':
     'Pon las bandas en B − V y lee la fila del índice de color. Lo más frío es más rojo, es decir, mayor.',
+  'lessonFn.theInTransitMeanSitsBelow154':
+    'La media en tránsito queda <em>por debajo</em> de la media fuera de tránsito, así que la profundidad tiene que salir positiva. Comprueba que no has intercambiado los dos tramos.',
+  'lessonFn.yourOutOfTransitStretchAverages164':
+    'Tu tramo fuera de tránsito promedia parte de una caída: su media está por debajo del nivel que la estrella mantiene entre tránsitos. Muévelo a un tramo plano, lejos de toda caída.',
+  'lessonFn.theTwoStretchesHaveAlmostThe174':
+    'Los dos tramos tienen casi la misma media, así que no hay profundidad entre ellos. Pon el tramo en tránsito sobre el fondo de una caída y el otro en un tramo plano entre caídas.',
+  'lessonFn.yourInTransitStretchIncludesThe232':
+    'Tu tramo en tránsito incluye los lados inclinados de la caída, o sale de ella, donde el planeta solo está en parte sobre la estrella. Elige un tramo del fondo, entre los dos lados, y la profundidad será la sombra completa del planeta.',
+  'lessonFn.thatIsDeeperThanTheFloor138':
+    'Eso es más profundo que el fondo de cualquier caída de esta curva. Comprueba que ambos tramos están en la curva que hay ahora en el gráfico y en las casillas correctas.',
+  'lessonFn.twoStretchesOneDepthKeepIt131':
+    'Dos tramos, una profundidad. Consérvala: las pantallas siguientes la ponen junto a tu estimación y explican por qué el radio que da no es del todo correcto.',
+  'lessonFn.twoStretchesOneDepthForThe89':
+    'Dos tramos, una profundidad para el segundo sistema. La pantalla siguiente la pone junto a la primera.',
+  'lessonFn.theBlendedDepthHasToBe120':
+    'La profundidad mezclada tiene que ser la <em>menos</em> profunda de las dos. Comprueba que ambas profundidades se midieron en las curvas correctas.',
+  'lessonFn.theRatioOnlyMeasuresTheCompanion166':
+    'El cociente solo mide la compañera si ambas profundidades salen de la misma parte de sus fondos. Toma el medio de cada fondo, mide otra vez y el cociente seguirá.',
+  'lessonFn.thatIsTheResultTheBlended270':
+    'Ese es el resultado. La curva mezclada por sí sola dice un planeta más pequeño; la corrección lo devuelve al radio que encontraste sin la compañera. La compañera de esta escena es media magnitud más tenue que su estrella, y el contraste que dedujiste debería quedar cerca de eso.',
+  'lessonFn.checkTheContrastTheRatioIs116':
+    'Comprueba el contraste. El cociente es 1 + F₂/F₁, así que resta uno antes de tomar el logaritmo: Δm = −2,5 log₁₀(cociente − 1).',
+  'lessonFn.checkTheRadiusTheCorrectionMultiplies120':
+    'Comprueba el radio. La corrección multiplica el radio mezclado por la raíz cuadrada del cociente, no por el cociente mismo.',
 };
