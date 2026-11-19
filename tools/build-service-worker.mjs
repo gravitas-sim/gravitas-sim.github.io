@@ -446,6 +446,11 @@ export const NEVER_PRECACHED = [
   // standing approval does not cover).
   /^(js\/habitabilityLimitsWidgets\.js|js\/i18n\/(en|es)\.habitablezone\.js)$/,
   /^js\/data\/investigations\/depth\/(es\/)?goldilocks-question\.js$/,
+  // The Transit Photometry deeper steps and their Spanish: fetched when a reader
+  // opens a deeper depth of that lesson and kept by the service worker after
+  // that, not installed (the first-visit tier is at its data-budget ceiling and
+  // the standing approval does not cover it). D-R4-329-05.
+  /^js\/data\/investigations\/depth\/(es\/)?transit-photometry\.js$/,
   // The atmospheres kernel and pack (Prompt 200, ATMOSPHERES.md): imported by no
   // page until the instrument family and its lessons are built. D-R10-80.
   /^js\/kernels\/atmospheres\//,

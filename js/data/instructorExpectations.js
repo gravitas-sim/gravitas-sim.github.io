@@ -204,15 +204,17 @@ export default {
     },
     'transit-photometry': {
       'choose-the-two-stretches':
-        'The student sets two stretches of the recorded curve: out of transit (mean near 1.0000) and from the floor of the dip. A floor stretch gives a depth near 1.7 to 1.8%, so a naive radius ratio near 0.13, about ten percent larger than the true value; the next step explains why. A stretch that includes the sloping sides gives a shallower depth, and one that includes part of a dip pulls the out-of-transit mean below 1: both get a message. The standard errors are the scatter of the model’s own points inside the stretch (the curve has no noise), not a measurement uncertainty.',
+        'Out of transit the mean is near 1.0000; a stretch on the floor gives a depth near 1.8%, so a naive radius ratio of about 0.13, ten percent too large. Sloping sides or part of a dip get a message.',
       'correct-it-and-get-a':
         'With the limb-darkening correction and a stellar radius of 1.155 solar radii, the recovered planet radius lands near 1.38 Jupiter radii, the published value for HD 209458 b.',
       'time-two-transits':
         'Two successive transits are about 3.52 days apart. Students who miss a transit will get a multiple of that; the validator catches the doubled value and says so.',
       'from-a-period-to-an':
         'A 3.52-day period around a 1.148 solar mass star gives a semi-major axis near 0.047 AU and an equilibrium temperature of order 1400 K.',
+      'compare-the-two-curves':
+        'With a companion half a magnitude fainter in the aperture, the depth is near 1.1%, with the same period and shape.',
       'find-the-hidden-companion':
-        'The blended depth is shallower than the clean one, with the same period and shape. The ratio of the two depths gives a contrast near half a magnitude, and the corrected radius is consistent with the unblended measurement. The scene’s companion is half a magnitude fainter than its star.',
+        'The blended depth is shallower; the ratio of the depths gives a contrast near half a magnitude and the corrected radius matches the clean one.',
     },
     'orbital-energy': {
       'fire-it':
