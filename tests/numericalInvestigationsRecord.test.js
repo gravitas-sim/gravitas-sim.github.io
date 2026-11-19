@@ -50,8 +50,8 @@ describe('what was not built', () => {
   });
 
   test('the instructor closure is under its cap and the record names a file with a line ceiling', () => {
-    // 307 after Io's Fire and Tides That Move the Moon (Prompt 331): depth/ios-fire.js, see tests/instructorDigest.test.js.
-    expect(sourcePathsFor(REPO).length).toBeLessThan(308);
+    // 309 after the Moon lesson's two new files and Io's Fire's depth/ios-fire.js, see tests/instructorDigest.test.js.
+    expect(sourcePathsFor(REPO).length).toBeLessThan(310);
     const ceilings = JSON.parse(
       read('tools/module-size-ceilings.json')
     ).ceilings;
