@@ -41,7 +41,7 @@ export default {
           'Toma k y su incertidumbre del paso del ajuste ponderado. Eleva 4 UA al cubo, multiplica por k y extrae la raíz cuadrada; luego propaga la incertidumbre con la fórmula de arriba. Escribe tu respuesta como valor ± incertidumbre.',
       },
       because:
-        'La ley, ajustada con pesos, da unos 8 años con una incertidumbre de unas centésimas de año, que se solapa con los 8 años que da la ley sin pesos.',
+        'La ley, ajustada con pesos, da unos 8 años con una incertidumbre de unas milésimas de año, que se solapa con los 8 años que da la ley sin pesos.',
     },
     {
       title: 'Pesa la estrella de un planeta real',

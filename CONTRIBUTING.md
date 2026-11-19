@@ -174,10 +174,10 @@ their ceilings:
 | `js/i18n/es.deferred.js` | 4,250 | 4,250 |
 | `js/i18n/en.deferred.js` | 3,998 | 3,998 |
 | `js/data/investigations/observing-sequence.js` | 3,341 | 3,341 |
-| `js/data/investigations/measurement-sequence.js` | 3,270 | 3,270 |
 | `js/investigations.js` | 3,052 | 3,052 |
-| `js/data/investigations/depth/measurement-sequence.js` | 2,840 | 2,840 |
+| `js/data/investigations/measurement-sequence.js` | 3,041 | 3,041 |
 | `js/render.js` | 2,785 | 2,785 |
+| `js/data/investigations/stellar-sequence.js` | 2,733 | 2,733 |
 <!--/fact-block-->
 
 | Layer | What lives there | Examples |

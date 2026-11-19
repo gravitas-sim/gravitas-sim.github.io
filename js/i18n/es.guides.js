@@ -11,6 +11,7 @@ export const ES_GUIDES = {
   'gd.suite.populations':
     'Las estrellas y sus poblaciones: espectros, cúmulos y variables',
   'gd.loading': 'Cargando las investigaciones…',
+  'gd.offline': 'Disponible tras una visita con conexión.',
   'gd.intro':
     'Investigaciones guiadas con observaciones reales, hechas con las herramientas de esta página. Elige una serie, luego una investigación y un itinerario: el introductorio es el núcleo y el avanzado le añade pasos. Cada número que comprueba un paso sale de los datos o de una fuente citada que el paso nombra.',
   'gd.pick': 'Investigación',
@@ -57,6 +58,10 @@ export const ES_GUIDES = {
     'El espacio de trabajo todavía no tiene ese cambio: el paso dice qué hacer.',
   'gd.check.fitSettings':
     'Hay un ajuste, pero no con los ajustes que pide este paso.',
+  'gd.check.fitTooFew':
+    'El ajuste mantiene fijos demasiados parámetros: al menos cuatro deben estar libres, y entre ellos la época y el cociente de radios k.',
+  'gd.check.fitWindow':
+    'Los datos que usaste abarcan menos de una semana. Recorta a un tramo más largo, o deshaz el recorte, para que haya al menos dos tránsitos.',
   'gd.check.unknown': 'Este paso no se puede comprobar.',
   'gd.check.notANumber': 'Escribe un número, como 0,5 o 3,52.',
   'gd.check.notYet':

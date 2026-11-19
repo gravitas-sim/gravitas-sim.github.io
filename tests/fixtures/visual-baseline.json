@@ -3096,36 +3096,41 @@
       "language": "en",
       "record": {
         "route": "/#investigation=ios-fire",
-        "stepSid": "heating-at-the-maximum",
-        "simTime": 1.897499999999991,
+        "stepSid": "heating-at-two-eccentricities",
+        "simTime": 0,
         "bodies": [
           {
-            "role": "star",
-            "x": 0,
-            "y": 0,
-            "kind": "StarObject"
+            "role": "io",
+            "x": 28.074317,
+            "y": -0.007132,
+            "kind": "Planet"
+          },
+          {
+            "role": "europa",
+            "x": -44.450075,
+            "y": -0.007132,
+            "kind": "Planet"
+          },
+          {
+            "role": "ganymede",
+            "x": 71.471597,
+            "y": -0.007132,
+            "kind": "Planet"
+          },
+          {
+            "role": "callisto",
+            "x": -1.868682,
+            "y": 125.867496,
+            "kind": "Planet"
           }
         ]
       },
-      "canvasSha": "bc6e6b2bbdb1d41b",
-      "viewportSha": "bc6e6b2bbdb1d41b",
-      "focusSha": "deadea9a0c2764bc",
+      "canvasSha": "4c3c20b9f2d816fb",
+      "viewportSha": "4c3c20b9f2d816fb",
+      "focusSha": "3fa369689078374a",
       "focus": {
         "selector": "#investigationNext",
         "focused": true
-      },
-      "repeat": {
-        "canvas": false,
-        "viewport": false,
-        "focus": false,
-        "differing": 3442,
-        "box": [
-          0,
-          1,
-          374,
-          811
-        ],
-        "confinedToTimelineBar": false
       }
     },
     {
@@ -3138,36 +3143,41 @@
       "language": "es",
       "record": {
         "route": "/#investigation=ios-fire",
-        "stepSid": "heating-at-the-maximum",
-        "simTime": 5.750499999999996,
+        "stepSid": "heating-at-two-eccentricities",
+        "simTime": 0,
         "bodies": [
           {
-            "role": "star",
-            "x": 0,
-            "y": 0,
-            "kind": "StarObject"
+            "role": "io",
+            "x": 28.074317,
+            "y": -0.007132,
+            "kind": "Planet"
+          },
+          {
+            "role": "europa",
+            "x": -44.450075,
+            "y": -0.007132,
+            "kind": "Planet"
+          },
+          {
+            "role": "ganymede",
+            "x": 71.471597,
+            "y": -0.007132,
+            "kind": "Planet"
+          },
+          {
+            "role": "callisto",
+            "x": -1.868682,
+            "y": 125.867496,
+            "kind": "Planet"
           }
         ]
       },
-      "canvasSha": "2b23b9e415bb29c3",
-      "viewportSha": "2b23b9e415bb29c3",
-      "focusSha": "bbbc737465d77324",
+      "canvasSha": "3bb6d37e7f993fd5",
+      "viewportSha": "3bb6d37e7f993fd5",
+      "focusSha": "2e1e46de67ab3523",
       "focus": {
         "selector": "#investigationNext",
         "focused": true
-      },
-      "repeat": {
-        "canvas": false,
-        "viewport": false,
-        "focus": false,
-        "differing": 3393,
-        "box": [
-          0,
-          0,
-          374,
-          811
-        ],
-        "confinedToTimelineBar": false
       }
     },
     {
@@ -3180,36 +3190,41 @@
       "language": "en",
       "record": {
         "route": "/#investigation=ios-fire",
-        "stepSid": "heating-at-the-maximum",
-        "simTime": 2.957500000000001,
+        "stepSid": "heating-at-two-eccentricities",
+        "simTime": 0,
         "bodies": [
           {
-            "role": "star",
-            "x": 0,
-            "y": 0,
-            "kind": "StarObject"
+            "role": "io",
+            "x": 28.074317,
+            "y": -0.007132,
+            "kind": "Planet"
+          },
+          {
+            "role": "europa",
+            "x": -44.450075,
+            "y": -0.007132,
+            "kind": "Planet"
+          },
+          {
+            "role": "ganymede",
+            "x": 71.471597,
+            "y": -0.007132,
+            "kind": "Planet"
+          },
+          {
+            "role": "callisto",
+            "x": -1.868682,
+            "y": 125.867496,
+            "kind": "Planet"
           }
         ]
       },
-      "canvasSha": "8b6c5a01c82670e2",
-      "viewportSha": "8b6c5a01c82670e2",
-      "focusSha": "d327a9dd10128bfb",
+      "canvasSha": "5688153a1bbfdc54",
+      "viewportSha": "5688153a1bbfdc54",
+      "focusSha": "c5029f685b9d6698",
       "focus": {
         "selector": "#investigationNext",
         "focused": true
-      },
-      "repeat": {
-        "canvas": false,
-        "viewport": false,
-        "focus": false,
-        "differing": 3447,
-        "box": [
-          0,
-          0,
-          374,
-          811
-        ],
-        "confinedToTimelineBar": false
       }
     },
     {
@@ -3222,36 +3237,41 @@
       "language": "es",
       "record": {
         "route": "/#investigation=ios-fire",
-        "stepSid": "heating-at-the-maximum",
-        "simTime": 6.3325,
+        "stepSid": "heating-at-two-eccentricities",
+        "simTime": 0,
         "bodies": [
           {
-            "role": "star",
-            "x": 0,
-            "y": 0,
-            "kind": "StarObject"
+            "role": "io",
+            "x": 28.074317,
+            "y": -0.007132,
+            "kind": "Planet"
+          },
+          {
+            "role": "europa",
+            "x": -44.450075,
+            "y": -0.007132,
+            "kind": "Planet"
+          },
+          {
+            "role": "ganymede",
+            "x": 71.471597,
+            "y": -0.007132,
+            "kind": "Planet"
+          },
+          {
+            "role": "callisto",
+            "x": -1.868682,
+            "y": 125.867496,
+            "kind": "Planet"
           }
         ]
       },
-      "canvasSha": "dbe40faf1b84d8e9",
-      "viewportSha": "dbe40faf1b84d8e9",
-      "focusSha": "a5eda054ca48f220",
+      "canvasSha": "491e6fa7adbaa4c4",
+      "viewportSha": "491e6fa7adbaa4c4",
+      "focusSha": "a51510c534fb8e08",
       "focus": {
         "selector": "#investigationNext",
         "focused": true
-      },
-      "repeat": {
-        "canvas": false,
-        "viewport": false,
-        "focus": false,
-        "differing": 3328,
-        "box": [
-          0,
-          0,
-          374,
-          811
-        ],
-        "confinedToTimelineBar": false
       }
     },
     {
@@ -3264,36 +3284,41 @@
       "language": "en",
       "record": {
         "route": "/#investigation=ios-fire",
-        "stepSid": "heating-at-the-maximum",
-        "simTime": 0.7514999999999992,
+        "stepSid": "heating-at-two-eccentricities",
+        "simTime": 0,
         "bodies": [
           {
-            "role": "star",
-            "x": 0,
-            "y": 0,
-            "kind": "StarObject"
+            "role": "io",
+            "x": 28.074317,
+            "y": -0.007132,
+            "kind": "Planet"
+          },
+          {
+            "role": "europa",
+            "x": -44.450075,
+            "y": -0.007132,
+            "kind": "Planet"
+          },
+          {
+            "role": "ganymede",
+            "x": 71.471597,
+            "y": -0.007132,
+            "kind": "Planet"
+          },
+          {
+            "role": "callisto",
+            "x": -1.868682,
+            "y": 125.867496,
+            "kind": "Planet"
           }
         ]
       },
-      "canvasSha": "de2afe4f4248d380",
-      "viewportSha": "de2afe4f4248d380",
-      "focusSha": "9240396b13f25210",
+      "canvasSha": "be665bd087763cb0",
+      "viewportSha": "be665bd087763cb0",
+      "focusSha": "79080e35396c5a34",
       "focus": {
         "selector": "#investigationNext",
         "focused": true
-      },
-      "repeat": {
-        "canvas": false,
-        "viewport": false,
-        "focus": false,
-        "differing": 8994,
-        "box": [
-          0,
-          0,
-          767,
-          1023
-        ],
-        "confinedToTimelineBar": false
       }
     },
     {
@@ -3306,36 +3331,41 @@
       "language": "es",
       "record": {
         "route": "/#investigation=ios-fire",
-        "stepSid": "heating-at-the-maximum",
-        "simTime": -4.620000000000002,
+        "stepSid": "heating-at-two-eccentricities",
+        "simTime": 0,
         "bodies": [
           {
-            "role": "star",
-            "x": 0,
-            "y": 0,
-            "kind": "StarObject"
+            "role": "io",
+            "x": 28.074317,
+            "y": -0.007132,
+            "kind": "Planet"
+          },
+          {
+            "role": "europa",
+            "x": -44.450075,
+            "y": -0.007132,
+            "kind": "Planet"
+          },
+          {
+            "role": "ganymede",
+            "x": 71.471597,
+            "y": -0.007132,
+            "kind": "Planet"
+          },
+          {
+            "role": "callisto",
+            "x": -1.868682,
+            "y": 125.867496,
+            "kind": "Planet"
           }
         ]
       },
-      "canvasSha": "b24d1db89c946c3b",
-      "viewportSha": "b24d1db89c946c3b",
-      "focusSha": "195477dfba500e5e",
+      "canvasSha": "a4dcfabf350df5d6",
+      "viewportSha": "a4dcfabf350df5d6",
+      "focusSha": "660ea14688b52cbf",
       "focus": {
         "selector": "#investigationNext",
         "focused": true
-      },
-      "repeat": {
-        "canvas": false,
-        "viewport": false,
-        "focus": false,
-        "differing": 8470,
-        "box": [
-          0,
-          0,
-          767,
-          1023
-        ],
-        "confinedToTimelineBar": false
       }
     },
     {
@@ -3348,36 +3378,41 @@
       "language": "en",
       "record": {
         "route": "/#investigation=ios-fire",
-        "stepSid": "heating-at-the-maximum",
-        "simTime": 0.09849999999999959,
+        "stepSid": "heating-at-two-eccentricities",
+        "simTime": 0,
         "bodies": [
           {
-            "role": "star",
-            "x": 0,
-            "y": 0,
-            "kind": "StarObject"
+            "role": "io",
+            "x": 28.074317,
+            "y": -0.007132,
+            "kind": "Planet"
+          },
+          {
+            "role": "europa",
+            "x": -44.450075,
+            "y": -0.007132,
+            "kind": "Planet"
+          },
+          {
+            "role": "ganymede",
+            "x": 71.471597,
+            "y": -0.007132,
+            "kind": "Planet"
+          },
+          {
+            "role": "callisto",
+            "x": -1.868682,
+            "y": 125.867496,
+            "kind": "Planet"
           }
         ]
       },
-      "canvasSha": "a8e24824edd128af",
-      "viewportSha": "a8e24824edd128af",
-      "focusSha": "f968b535dbd1d638",
+      "canvasSha": "206c60f4996dc50e",
+      "viewportSha": "206c60f4996dc50e",
+      "focusSha": "bbd5fb40fc45d411",
       "focus": {
         "selector": "#investigationNext",
         "focused": true
-      },
-      "repeat": {
-        "canvas": false,
-        "viewport": false,
-        "focus": false,
-        "differing": 9037,
-        "box": [
-          0,
-          0,
-          767,
-          1023
-        ],
-        "confinedToTimelineBar": false
       }
     },
     {
@@ -3390,36 +3425,41 @@
       "language": "es",
       "record": {
         "route": "/#investigation=ios-fire",
-        "stepSid": "heating-at-the-maximum",
-        "simTime": -2.6445,
+        "stepSid": "heating-at-two-eccentricities",
+        "simTime": 0,
         "bodies": [
           {
-            "role": "star",
-            "x": 0,
-            "y": 0,
-            "kind": "StarObject"
+            "role": "io",
+            "x": 28.074317,
+            "y": -0.007132,
+            "kind": "Planet"
+          },
+          {
+            "role": "europa",
+            "x": -44.450075,
+            "y": -0.007132,
+            "kind": "Planet"
+          },
+          {
+            "role": "ganymede",
+            "x": 71.471597,
+            "y": -0.007132,
+            "kind": "Planet"
+          },
+          {
+            "role": "callisto",
+            "x": -1.868682,
+            "y": 125.867496,
+            "kind": "Planet"
           }
         ]
       },
-      "canvasSha": "b358fbc97edba186",
-      "viewportSha": "b358fbc97edba186",
-      "focusSha": "876375f2333f0da9",
+      "canvasSha": "3e4be3f982ac3ab6",
+      "viewportSha": "3e4be3f982ac3ab6",
+      "focusSha": "754a52773db69c96",
       "focus": {
         "selector": "#investigationNext",
         "focused": true
-      },
-      "repeat": {
-        "canvas": false,
-        "viewport": false,
-        "focus": false,
-        "differing": 8504,
-        "box": [
-          0,
-          0,
-          767,
-          1023
-        ],
-        "confinedToTimelineBar": false
       }
     },
     {
@@ -3432,36 +3472,41 @@
       "language": "en",
       "record": {
         "route": "/#investigation=ios-fire",
-        "stepSid": "heating-at-the-maximum",
-        "simTime": 7.915499999999999,
+        "stepSid": "heating-at-two-eccentricities",
+        "simTime": 0,
         "bodies": [
           {
-            "role": "star",
-            "x": 0,
-            "y": 0,
-            "kind": "StarObject"
+            "role": "io",
+            "x": 28.074317,
+            "y": -0.007132,
+            "kind": "Planet"
+          },
+          {
+            "role": "europa",
+            "x": -44.450075,
+            "y": -0.007132,
+            "kind": "Planet"
+          },
+          {
+            "role": "ganymede",
+            "x": 71.471597,
+            "y": -0.007132,
+            "kind": "Planet"
+          },
+          {
+            "role": "callisto",
+            "x": -1.868682,
+            "y": 125.867496,
+            "kind": "Planet"
           }
         ]
       },
-      "canvasSha": "b951642ea6a088c9",
-      "viewportSha": "b951642ea6a088c9",
-      "focusSha": "bc89abfff97f3aa5",
+      "canvasSha": "ec79c23838f6f5a1",
+      "viewportSha": "ec79c23838f6f5a1",
+      "focusSha": "2603ea6a2976f938",
       "focus": {
         "selector": "#investigationNext",
         "focused": true
-      },
-      "repeat": {
-        "canvas": false,
-        "viewport": false,
-        "focus": false,
-        "differing": 8594,
-        "box": [
-          0,
-          0,
-          1365,
-          799
-        ],
-        "confinedToTimelineBar": false
       }
     },
     {
@@ -3474,36 +3519,41 @@
       "language": "es",
       "record": {
         "route": "/#investigation=ios-fire",
-        "stepSid": "heating-at-the-maximum",
-        "simTime": -4.987000000000002,
+        "stepSid": "heating-at-two-eccentricities",
+        "simTime": 0,
         "bodies": [
           {
-            "role": "star",
-            "x": 0,
-            "y": 0,
-            "kind": "StarObject"
+            "role": "io",
+            "x": 28.074317,
+            "y": -0.007132,
+            "kind": "Planet"
+          },
+          {
+            "role": "europa",
+            "x": -44.450075,
+            "y": -0.007132,
+            "kind": "Planet"
+          },
+          {
+            "role": "ganymede",
+            "x": 71.471597,
+            "y": -0.007132,
+            "kind": "Planet"
+          },
+          {
+            "role": "callisto",
+            "x": -1.868682,
+            "y": 125.867496,
+            "kind": "Planet"
           }
         ]
       },
-      "canvasSha": "a015a02dbf7f1068",
-      "viewportSha": "a015a02dbf7f1068",
-      "focusSha": "64a47855508c7e51",
+      "canvasSha": "2d8e187b87bb96e7",
+      "viewportSha": "2d8e187b87bb96e7",
+      "focusSha": "e90886aaf922ecc1",
       "focus": {
         "selector": "#investigationNext",
         "focused": true
-      },
-      "repeat": {
-        "canvas": false,
-        "viewport": false,
-        "focus": false,
-        "differing": 8670,
-        "box": [
-          0,
-          0,
-          1365,
-          799
-        ],
-        "confinedToTimelineBar": false
       }
     },
     {
@@ -3516,36 +3566,41 @@
       "language": "en",
       "record": {
         "route": "/#investigation=ios-fire",
-        "stepSid": "heating-at-the-maximum",
-        "simTime": -6.765500000000003,
+        "stepSid": "heating-at-two-eccentricities",
+        "simTime": 0,
         "bodies": [
           {
-            "role": "star",
-            "x": 0,
-            "y": 0,
-            "kind": "StarObject"
+            "role": "io",
+            "x": 28.074317,
+            "y": -0.007132,
+            "kind": "Planet"
+          },
+          {
+            "role": "europa",
+            "x": -44.450075,
+            "y": -0.007132,
+            "kind": "Planet"
+          },
+          {
+            "role": "ganymede",
+            "x": 71.471597,
+            "y": -0.007132,
+            "kind": "Planet"
+          },
+          {
+            "role": "callisto",
+            "x": -1.868682,
+            "y": 125.867496,
+            "kind": "Planet"
           }
         ]
       },
-      "canvasSha": "712caa56e0ee814d",
-      "viewportSha": "712caa56e0ee814d",
-      "focusSha": "5dbd3f1bc726fc40",
+      "canvasSha": "acd2439f245430cf",
+      "viewportSha": "acd2439f245430cf",
+      "focusSha": "418d3743ed21ce7e",
       "focus": {
         "selector": "#investigationNext",
         "focused": true
-      },
-      "repeat": {
-        "canvas": false,
-        "viewport": false,
-        "focus": false,
-        "differing": 8810,
-        "box": [
-          0,
-          0,
-          1365,
-          799
-        ],
-        "confinedToTimelineBar": false
       }
     },
     {
@@ -3558,36 +3613,41 @@
       "language": "es",
       "record": {
         "route": "/#investigation=ios-fire",
-        "stepSid": "heating-at-the-maximum",
-        "simTime": 6.500000000000001,
+        "stepSid": "heating-at-two-eccentricities",
+        "simTime": 0,
         "bodies": [
           {
-            "role": "star",
-            "x": 0,
-            "y": 0,
-            "kind": "StarObject"
+            "role": "io",
+            "x": 28.074317,
+            "y": -0.007132,
+            "kind": "Planet"
+          },
+          {
+            "role": "europa",
+            "x": -44.450075,
+            "y": -0.007132,
+            "kind": "Planet"
+          },
+          {
+            "role": "ganymede",
+            "x": 71.471597,
+            "y": -0.007132,
+            "kind": "Planet"
+          },
+          {
+            "role": "callisto",
+            "x": -1.868682,
+            "y": 125.867496,
+            "kind": "Planet"
           }
         ]
       },
-      "canvasSha": "efd117c7d715f0bc",
-      "viewportSha": "efd117c7d715f0bc",
-      "focusSha": "6b11fc6244f36639",
+      "canvasSha": "60887c84a22bc75e",
+      "viewportSha": "60887c84a22bc75e",
+      "focusSha": "4d58ece2116c01d4",
       "focus": {
         "selector": "#investigationNext",
         "focused": true
-      },
-      "repeat": {
-        "canvas": false,
-        "viewport": false,
-        "focus": false,
-        "differing": 9727,
-        "box": [
-          0,
-          0,
-          1365,
-          799
-        ],
-        "confinedToTimelineBar": false
       }
     },
     {

@@ -8,6 +8,7 @@ import { jest } from '@jest/globals';
 // picture of the Moon and the Earth's position are handed in or absent, and
 // the readouts that need neither are what is checked here).
 import { INVESTIGATIONS } from '../js/data/investigations.js';
+import { checkAnswer } from '../js/answerCheck.js';
 import { withAllDepths } from '../js/investigations/depthAll.js';
 import { createEphemeris } from '../js/mission/ephemeris.js';
 import { PACK, DATA } from '../js/data/ephemeris/solarSystem2025.js';
@@ -220,11 +221,19 @@ describe('every validator accepts what the instrument reads and refuses a wrong 
   };
   test('Measuring the Moon', () => {
     const f = W.moonView({ x1: 3, x2: 496, cx: 289, cy: 306, r: 45 });
-    ok('measuring-the-moon', 'scale-from-the-disc', {
+    ok('measuring-the-moon', 'mark-the-disc-width', {
       pair: W.moonView({ x1: 3, x2: 496, cx: 289, cy: 306, r: 20 }).pairPx,
       scale: f.scale.value,
     });
+    const short = W.moonView({ x1: 3, x2: 440, cx: 289, cy: 306, r: 25 });
+    ok('measuring-the-moon', 'a-pair-that-stops-short', {
+      scale: short.scale.value,
+      km: short.diameterKm,
+    });
     ok('measuring-the-moon', 'measure-the-plain', { km: f.diameterKm });
+    ok('measuring-the-moon', 'squeezed-at-the-plain', {
+      share: 100 * f.foreshorten,
+    });
     const l = W.moonView({ x1: 3, x2: 496, cx: 470, cy: 245, r: 20 });
     ok('measuring-the-moon', 'near-the-limb', {
       off: l.offset,
@@ -291,9 +300,9 @@ describe('every validator accepts what the instrument reads and refuses a wrong 
       0.4
     );
     near(
-      deeper('measuring-the-moon', 'a-diameter-with-an-error-bar').answer,
-      f.diameterKm,
-      40
+      deeper('measuring-the-moon', 'a-diameter-with-the-squeeze').answer,
+      f.diameterKm / f.foreshorten,
+      4
     );
     const j = W.parallaxView({ fit: 2, n: 14 }, earth).res;
     near(
@@ -311,5 +320,26 @@ describe('every validator accepts what the instrument reads and refuses a wrong 
         x => x.kind === 'choice' || x.type === 'predict'
       ))
         expect(s.answer).toBeLessThan(s.options.length);
+  });
+  test('the diameter with the squeeze takes a value the plain allows and an error bar that is not too narrow or too wide', () => {
+    const step = deeper('measuring-the-moon', 'a-diameter-with-the-squeeze');
+    const grade = v => checkAnswer(step, v);
+    for (const ok of [
+      '634 ± 30',
+      '650 ± 25',
+      '660 ± 30',
+      '664 ± 60',
+      '645 ± 40',
+    ])
+      expect([ok, grade(ok)]).toEqual([ok, true]);
+    for (const bad of [
+      '720 ± 60', // a value the plain does not allow, saved by a wide bar
+      '660 ± 1', // an error bar the soft edge alone exceeds
+      '634 ± 21', // the soft edge without the slant
+      '650 ± 70', // wider than a defensible bar
+      '600 ± 40', // below what the plain allows
+      '700 ± 50',
+    ])
+      expect([bad, grade(bad)]).toEqual([bad, false]);
   });
 });

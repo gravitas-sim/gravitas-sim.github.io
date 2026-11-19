@@ -1061,20 +1061,21 @@ const KEPLER = {
               'The period does not belong to the planet whose distance you took. Select one planet and take both readings from it.',
           };
         }
-        // The planet nearest in log distance to the student's chosen orbit.
-        const A = [0.387, 0.723, 1, 1.524, 5.203, 9.537, 19.19, 30.07];
-        const N = Object.values(SOLAR)
-          .slice(1)
-          .map(b => b.name);
+        // The planet nearest the chosen orbit in plain distance, from the world.
+        const P = Object.values(SOLAR).slice(1);
+        const A = P.map(({ name }) => {
+          const b = ctx.bodies?.find(x => x.name === name);
+          return (b && ctx.elements(b)?.a * 0.01) || NaN;
+        });
         const near = x =>
-          A.map((y, i) => [Math.abs(Math.log(x / y)), i]).sort(
-            (p, q) => p[0] - q[0]
-          )[0][1];
+          A.map((y, i) => [Math.abs(x - y), i])
+            .filter(p => p[0] === p[0])
+            .sort((p, q) => p[0] - q[0])[0]?.[1];
         const nearest = near(v.ratio * v.near_a);
-        if (near(v.near_a) !== nearest) {
+        if (nearest !== undefined && near(v.near_a) !== nearest) {
           return {
             level: 'warn',
-            message: `${N[nearest]} is the planet whose orbit is nearest the one you chose, and it is not the one you took. Select ${N[nearest]} and take both readings again.`,
+            message: `${P[nearest].name} is the planet whose orbit is nearest the one you chose, and it is not the one you took. Select ${P[nearest].name} and take both readings again.`,
           };
         }
         if (v.ratio > 2 || v.ratio < 0.5) {
@@ -1085,7 +1086,6 @@ const KEPLER = {
           };
         }
         if (!Number.isFinite(v.P_calc) || v.P_calc <= 0) return null;
-        // The period at the student's own distance, in the law's units.
         const a = v.ratio * v.near_a;
         const want = v.near_P * v.ratio ** 1.5;
         const at = x => Math.abs(v.P_calc - x) / x <= 0.06;

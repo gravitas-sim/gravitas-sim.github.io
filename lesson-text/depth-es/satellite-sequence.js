@@ -214,11 +214,13 @@ export const TIDES_DEEPER = {
 export const IOS_DEEPER = {
   steps: {
     'how-far-from-the-maximum': {
+      decides:
+        'qué k2/Q dividir entre el máximo del modelo: el que necesita el valor medio observado',
       title: 'A qué distancia del k2/Q máximo',
-      body: 'El modelo admite k2/Q hasta 0,3 (k2 = 1,5 entre Q = 5). El k2/Q que necesita el valor medio del calor observado es el número que leíste.',
+      body: 'La fila <strong>k2/Q que necesita el valor medio observado</strong> da el cociente que pide la mitad del calor observado. El modelo admite k2/Q hasta 0,3 (k2 = 1,5 entre Q = 5).',
       prompt:
-        '¿Cuántas veces menor es el k2/Q necesario que el máximo del modelo?',
-      hints: ['Divide 0,3 entre el k2/Q que leíste.'],
+        '¿Cuántas veces menor es el k2/Q que necesita el valor medio observado que el máximo del modelo?',
+      hints: ['Divide 0,3 entre el k2/Q de esa fila.'],
       worked:
         '0,3 / 0,01768 = 17,0: el calor observado necesita un k2/Q diecisiete veces por debajo del máximo del modelo, con holgura dentro del intervalo.',
       feedback: {
@@ -228,7 +230,56 @@ export const IOS_DEEPER = {
         off: '0,3 dividido entre el k2/Q necesario.',
       },
     },
+    'how-wide-is-the-bound': {
+      decides:
+        'qué dos valores observados fijan los extremos del intervalo, y a qué es proporcional el calentamiento',
+      title: 'Qué tan ancha es la respuesta',
+      body: 'Con una excentricidad dada el calentamiento es proporcional a k2/<em>Q</em>. El flujo de calor observado no es un solo número: va de 6 &times; 10<sup>13</sup> W a 1,6 &times; 10<sup>14</sup> W, las dos líneas de la gráfica, así que el k2/<em>Q</em> que ajusta también es un intervalo.',
+      prompt:
+        '¿En qué factor difiere el k2/Q que ajusta entre el calor observado más alto y el más bajo?',
+      hints: [
+        'El calentamiento es proporcional a k2/Q, así que compara entre sí los dos valores observados.',
+      ],
+      worked:
+        'El calentamiento es proporcional a k2/Q, así que el factor es 1,6 × 10¹⁴ / 6 × 10¹³ = 2,67: por más pares que halles, la observación fija k2/Q solo con un factor de unos dos y medio.',
+      feedback: {
+        close: 'Casi. El valor observado mayor va arriba.',
+        'wrong-order-of-magnitude':
+          'Se pasa una potencia de diez: los dos valores observados no están tan lejos.',
+        off: 'Compara el calor observado más alto y el más bajo.',
+      },
+    },
+    'what-would-separate-them': {
+      decides: 'qué medida depende solo de k2 o de Q, y no de su cociente',
+      title: 'Qué los separaría',
+      body: 'El calor observado fija k2/<em>Q</em> y nada más. Supón que una nave pudiera hacer una medida más de Ío.',
+      prompt: '¿Qué medida te permitiría hallar k2 y Q por separado?',
+      options: [
+        'El flujo de calor otra vez, medido con una precisión de unos pocos por ciento',
+        'Cuánto sube la marea en Ío al recorrer su órbita, que depende solo de k2',
+        'El período orbital de Ío, medido con más cifras',
+        'La temperatura de la lava en la superficie',
+      ],
+      misconceptions: [
+        {
+          say: 'Un flujo de calor mejor estrecha k2/Q, pero sigue siendo el cociente. Muchos pares comparten un cociente, así que un cociente más preciso no los separa.',
+        },
+        {
+          say: 'El período ya se conoce mucho mejor que cualquier otra cosa de aquí, y entra en la fórmula igual para todo interior, así que no puede distinguir k2 de Q.',
+        },
+        {
+          say: 'La temperatura de la lava dice algo de la fusión, pero no de cuán grande es la marea ni cuánta se pierde, que es lo que son k2 y Q.',
+        },
+      ],
+      hints: [
+        'El calor depende de un cociente. Quieres una medida que dependa de uno de los dos números, no de su cociente.',
+      ],
+      because:
+        'La altura de la marea la fija k2 solo, mientras que el calor lo fija k2 dividido entre Q. Una nave que mida cuánto se flexionan la forma y la gravedad de Ío al recorrer Júpiter obtiene k2, y luego el calor da Q.',
+    },
     'what-the-formula-leaves-out': {
+      decides:
+        'qué toma como dado la fórmula y qué mantiene excéntrica la órbita',
       rubric:
         'Crédito completo por decir que la fórmula toma k2 y Q como números dados para todo el cuerpo mientras el interior de Ío es por capas y puede estar parcialmente fundido, así que k2 y Q no se conocen y el calor es una cota; que es de primer orden en la excentricidad; y que necesita una razón para que la órbita siga excéntrica (la resonancia con Europa y Ganímedes), porque el calentamiento de marea también circulariza la órbita. Crédito parcial por dos.',
       title: 'Lo que la fórmula deja fuera',

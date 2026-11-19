@@ -713,7 +713,11 @@ surfaces: the lesson panel (`#investigationMore`: help, depth switching, the
 progress backup and Restart), an instrument panel (`#investigationToolMore`:
 sliders and presets the step does not ask about), the settings dialog (the
 `.settings-advanced` section: the simulation, black holes, compact objects,
-numerical accuracy and performance), and the lesson plot's options.
+numerical accuracy and performance), and the lesson plot's options. A fifth,
+`stage`, holds the sandbox's control rail and playback bar on a lesson step that
+declares a quiet canvas (`js/lessonCanvas.js`): they move into one More, shut
+until opened, so the instrument takes the width they stood in, and go back where
+they were on any other step.
 
 ```html
 <details class="more" data-more="lesson">

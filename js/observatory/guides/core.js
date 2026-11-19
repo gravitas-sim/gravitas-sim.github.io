@@ -50,13 +50,57 @@ const within = (v, [lo, hi]) =>
 const at = (o, path) =>
   path.split('.').reduce((v, k) => (v == null ? undefined : v[k]), o);
 
-/** A fit document's value of a fitted or derived quantity. */
+/** The parameters a fit document left free: those not held fixed. */
+const freeOf = doc =>
+  Object.entries(doc?.parameters || {})
+    .filter(([, p]) => p?.mode !== 'fixed')
+    .map(([name]) => name);
+
+/**
+ * Why a fit document is not what a `fitted` check asks for, or null when it
+ * is: its `settings` (one object, or a list of objects any one of which may
+ * hold), the parameters it left `free` (those it `has` to, and at least
+ * `min`: fewer is `fitTooFew`), and the `data` it used (dotted paths into the
+ * document's own `data`: how many rows, what span).
+ */
+function fitWhy(doc, check) {
+  const sets = Array.isArray(check.settings)
+    ? check.settings
+    : [check.settings || {}];
+  if (
+    !sets.some(set =>
+      Object.entries(set).every(([path, range]) =>
+        within(at(doc.settings || {}, path), range)
+      )
+    )
+  )
+    return 'fitSettings';
+  const free = freeOf(doc);
+  const need = check.free;
+  if (
+    need &&
+    (!need.has.every(n => free.includes(n)) || free.length < need.min)
+  )
+    return 'fitTooFew';
+  const window = Object.entries(check.data || {});
+  if (window.some(([path, range]) => !within(at(doc.data || {}, path), range)))
+    return 'fitWindow';
+  return null;
+}
+
+/**
+ * A fit document's value of a fitted or derived quantity; `kSigma` is the
+ * uncertainty to quote for `k`: with the correlated noise allowed for.
+ */
 export function fitValue(doc, name) {
   const fit = doc?.results?.fit;
+  const sigma = name.endsWith('Sigma');
+  const id = sigma ? name.slice(0, -5) : name;
   const p =
-    fit?.parameters?.find(q => q.name === name) ??
-    fit?.derived?.find(q => q.name === name);
-  return p && Number.isFinite(p.value) ? p.value : null;
+    fit?.parameters?.find(q => q.name === id) ??
+    fit?.derived?.find(q => q.name === id);
+  const v = sigma ? (p?.sigmaRed ?? p?.sigmaScaled ?? p?.sigma) : p?.value;
+  return p && Number.isFinite(v) ? v : null;
 }
 
 /**
@@ -67,8 +111,9 @@ export function fitValue(doc, name) {
  *   measured  a current measurement node of the tool, with the params asked
  *             for, on the target, gives a quantity in range
  *   fitted    a fit of the target, with each setting (a dotted path into the
- *             fit's settings) in range, gives a parameter or derived value in
- *             range
+ *             fit's settings) in range, the parameters it left free and the
+ *             data it used as the step allows (fitWhy), gives a parameter or
+ *             derived value in range
  *   changed   the target is open with a change of the kind asked for: a
  *             derived column made of the columns named, a derived distance
  *             on the sky, or a crop of the column named whose ends are each
@@ -121,12 +166,8 @@ export function evaluateCheck(check, w, targets) {
         (!check.model || d.model?.id === check.model)
     );
     if (!mine.length) return { ok: false, why: 'noFit' };
-    const settled = mine.filter(d =>
-      Object.entries(check.settings || {}).every(([path, range]) =>
-        within(at(d.settings || {}, path), range)
-      )
-    );
-    if (!settled.length) return { ok: false, why: 'fitSettings' };
+    const settled = mine.filter(d => !fitWhy(d, check));
+    if (!settled.length) return { ok: false, why: fitWhy(mine.at(-1), check) };
     const d = settled.at(-1);
     const v = fitValue(d, check.parameter);
     return within(v, check.within)

@@ -293,7 +293,7 @@ export const EXOPLANET_KEY = [
   {
     guide: 'exo-fit',
     path: 'intro',
-    step: 'fit',
+    step: 'choose-fit',
     kind: 'do',
     passes: true,
     expected: 0.119262,
@@ -310,7 +310,7 @@ export const EXOPLANET_KEY = [
   {
     guide: 'exo-fit',
     path: 'intro',
-    step: 'radius',
+    step: 'star-radius',
     kind: 'do',
     passes: true,
     expected: 1.38106,
@@ -322,6 +322,14 @@ export const EXOPLANET_KEY = [
     kind: 'answer',
     expected: 1.38106,
     tolerance: 0.01,
+    passes: null,
+  },
+  {
+    guide: 'exo-fit',
+    path: 'intro',
+    step: 'whose-star',
+    kind: 'choose',
+    expected: 'equal',
     passes: null,
   },
   {
@@ -343,7 +351,7 @@ export const EXOPLANET_KEY = [
   {
     guide: 'exo-fit',
     path: 'advanced',
-    step: 'fit',
+    step: 'choose-fit',
     kind: 'do',
     passes: true,
     expected: 0.119262,
@@ -377,7 +385,7 @@ export const EXOPLANET_KEY = [
   {
     guide: 'exo-fit',
     path: 'advanced',
-    step: 'radius',
+    step: 'star-radius',
     kind: 'do',
     passes: true,
     expected: 1.38106,
@@ -394,10 +402,9 @@ export const EXOPLANET_KEY = [
   {
     guide: 'exo-fit',
     path: 'advanced',
-    step: 'torres',
-    kind: 'answer',
-    expected: 1.34044,
-    tolerance: 0.01,
+    step: 'whose-star',
+    kind: 'choose',
+    expected: 'equal',
     passes: null,
   },
   {

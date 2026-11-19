@@ -15,7 +15,13 @@ export const ES_EXOPLANET = {
   'gd.show.crowdK13': 'Kepler-13: CROWDSAP',
   'gd.show.shareA':
     'La parte de Kepler-13A en la luz del par, según el catálogo',
-  'gd.show.adoptedRadius': 'El radio de HD 209458, adoptado',
+  'gd.show.radiusA': 'Un radio publicado de HD 209458',
+  'gd.show.radiusB': 'Otro radio publicado de HD 209458',
+  'gd.show.myK': 'Tu ajuste: k, su incertidumbre',
+  'gd.show.notFitted': 'todavía sin ajustar',
+  'gd.show.myRp': 'El radio del planeta que derivaste',
+  'gd.show.rpEach': 'El radio que da tu k con cada estrella publicada',
+  'gd.show.starsApart': 'Cuánto difieren los dos radios estelares publicados',
   'gd.show.depthOf': '{target}: profundidad',
   'gd.show.ppm': '{value} ± {error} partes por millón',
   'gd.show.period': 'Periodo usado',
@@ -36,7 +42,9 @@ export const ES_EXOPLANET = {
   'gd.show.how.crowding':
     'El valor de HD 209458 viene de la cabecera del archivo de SPOC del que se hizo su conjunto de datos; el de Kepler-13, de su conjunto de datos; la parte de A, de las magnitudes del TESS Input Catalog.',
   'gd.show.how.stellarRadius':
-    'Adoptado, no medido aquí: una curva de luz da k, y el radio tiene que venir de la estrella.',
+    'Publicado, no medido aquí: una curva de luz da k, y el radio tiene que venir de la estrella.',
+  'gd.show.how.myFit':
+    'Leído de tu propio ajuste; aquí no se escribe nada. El radio del planeta es k veces el de la estrella, así que cada radio es k veces uno publicado.',
   'gd.show.vA': 'Planeta A (rasante)',
   'gd.show.vB': 'Planeta B (rasante, un 40 por ciento mayor)',
   'gd.show.vPlanet': 'k {k}, b {b}, a/R* {aRs}',
@@ -183,10 +191,10 @@ export const ES_EXOPLANET = {
   'gd.exo-fit.intro.title': 'Un modelo de un tránsito',
   'gd.exo-fit.intro.text':
     'El modelo de tránsito del panel de ajuste es un disco oscuro que cruza una estrella más brillante en el centro que en el borde (oscurecimiento hacia el limbo), en una órbita circular. Sus parámetros son el periodo y la época, el cociente k entre el radio del planeta y el de la estrella, el tamaño de la órbita en radios estelares (a/R*), a qué distancia del centro de la estrella pasa el planeta (el parámetro de impacto, b) y dos parámetros de oscurecimiento hacia el limbo.\n\nEl ajuste encuentra los valores que acercan más el modelo a los datos, ponderados por los errores de los datos, y sus incertidumbres.',
-  'gd.exo-fit.fit.title': 'Ajusta el tránsito de HD 209458',
-  'gd.exo-fit.fit.text':
-    'Abre el panel de ajuste sobre la curva de luz de HD 209458, sin plegar. Elige el modelo de tránsito, deja en 0 la parte de la luz que viene de otras estrellas y ajusta.',
-  'gd.exo-fit.fit.ok': 'Ajustado: k = {value}.',
+  'gd.exo-fit.choose-fit.title': 'Elige qué deja libre el ajuste',
+  'gd.exo-fit.choose-fit.text':
+    'Abre el panel de ajuste sobre la curva de luz de HD 209458, sin plegar. Su tabla lista los parámetros del modelo de tránsito, y cada uno puede ajustarse o mantenerse fijo en un valor que tú das. Decide cuáles dejas libres: la época y el cociente de radios k tienen que serlo, y el resto lo eliges tú. También puedes recortar antes la curva de luz, con el cambio Recortar del espacio de trabajo, al tramo de datos que usará el ajuste; conserva al menos una semana. Deja en 0 la parte de la luz que viene de otras estrellas y ajusta. El panel dice entonces cuáles de los parámetros dejó enredados tu elección.',
+  'gd.exo-fit.choose-fit.ok': 'Ajustado: k = {value}.',
   'gd.exo-fit.ratio.title': 'El cociente de radios',
   'gd.exo-fit.ratio.text':
     '¿Qué cociente de radios k encontró tu ajuste? Cópialo de la tabla de resultados.',
@@ -213,24 +221,31 @@ export const ES_EXOPLANET = {
     'Beta = {value}. La columna «También por el ruido correlacionado» de la tabla de resultados lo tiene en cuenta: esas son las incertidumbres que hay que citar.',
   'gd.exo-fit.residuals.no':
     'Copia beta de la lista de estadísticos bajo la tabla de resultados.',
-  'gd.exo-fit.radius.title': 'De un cociente a un radio',
-  'gd.exo-fit.radius.text':
-    'k es un cociente: el radio del planeta es k veces el de la estrella, y el radio de la estrella no está en la curva de luz. Esta investigación adopta R* = 1,19 ± 0,02 radios solares (Stassun et al. 2017). Escríbelo, con su incertidumbre, en los campos del radio de la estrella del panel de ajuste, y ajusta de nuevo.',
-  'gd.exo-fit.radius.ok':
+  'gd.exo-fit.star-radius.title': 'De un cociente a un radio',
+  'gd.exo-fit.star-radius.text':
+    'k es un cociente: el radio del planeta es k veces el de la estrella, y el radio de la estrella no está en la curva de luz. Los valores publicados difieren. La tabla da dos, cada uno con su incertidumbre y su fuente. Elige uno, escríbelo, con su incertidumbre, en los campos del radio de la estrella del panel de ajuste, y ajusta de nuevo.',
+  'gd.exo-fit.star-radius.ok':
     'Ajustado con el radio de la estrella: el ajuste deriva ahora el radio del planeta, Rp = {value} radios de Júpiter, con la incertidumbre de la estrella sumada a la del ajuste.',
   'gd.exo-fit.planet-radius.title': 'El radio del planeta',
   'gd.exo-fit.planet-radius.text':
     '¿Qué radio del planeta Rp derivó el ajuste, en radios de Júpiter?',
   'gd.exo-fit.planet-radius.ok':
-    '{value} radios de Júpiter. Stassun et al. (2017) dan 1,39 ± 0,02.',
+    '{value} radios de Júpiter. Stassun et al. (2017) dan 1,39 ± 0,02, y Torres, Winn y Holman (2008) 1,359.',
   'gd.exo-fit.planet-radius.no':
     'Copia Rp de las filas derivadas de la tabla de resultados.',
-  'gd.exo-fit.torres.title': '¿Qué estrella?',
-  'gd.exo-fit.torres.text':
-    'Torres, Winn y Holman (2008) dan en cambio 1,155 radios solares como radio de la estrella. Con tu k, ¿cuál sería el radio del planeta con su estrella? Rp = k × R*, y un radio solar son 9,7312 radios de Júpiter.',
-  'gd.exo-fit.torres.ok':
-    '{value} radios de Júpiter: una estrella un 3 por ciento menor da un planeta un 3 por ciento menor. El radio de un planeta es tan bueno como el de su estrella, y ninguna curva de luz puede comprobar el de la estrella.',
-  'gd.exo-fit.torres.no': 'Multiplica tu k por 1,155 y por 9,7312.',
+  'gd.exo-fit.whose-star.title': '¿Qué limita el radio del planeta?',
+  'gd.exo-fit.whose-star.text':
+    'Tu propio ajuste, junto a la estrella. La tabla da tu k con su incertidumbre, el radio del planeta que derivaste, el radio que da tu k con cada estrella publicada y cuánto difieren los dos radios publicados de la estrella. ¿Cuál de estas cosas limita lo bien que se conoce el radio del planeta?',
+  'gd.exo-fit.whose-star.opt.fit':
+    'El ajuste: k es menos segura que el radio de la estrella, por más de un factor de dos',
+  'gd.exo-fit.whose-star.opt.star':
+    'La estrella: su radio es menos seguro que k, por más de un factor de dos',
+  'gd.exo-fit.whose-star.opt.equal':
+    'Ninguna: las dos están a menos de un factor de dos una de otra',
+  'gd.exo-fit.whose-star.ok':
+    'El radio del planeta es k veces el de la estrella, así que su incertidumbre relativa la fija la mayor de las dos proporciones. Cuando una es más del doble de la otra, limita el radio y reducir la otra cambia poco; si están a menos de un factor de dos, importan las dos. Ninguna curva de luz puede comprobar el radio de la estrella.',
+  'gd.exo-fit.whose-star.no':
+    'Compara dos proporciones de la tabla: la incertidumbre del ajuste en k como parte de k, y cuánto difieren los dos radios publicados de la estrella. Un radio que es un producto lo limita la proporción mayor.',
   'gd.exo-fit.density.title': 'La densidad de la estrella',
   'gd.exo-fit.density.text':
     'La órbita sola da la densidad media de la estrella: la tercera ley de Kepler con el período y el tamaño de la órbita en radios estelares, ρ = 3π (a/R*)³ / (G P²). La tabla de resultados la muestra entre los valores derivados, para una órbita circular y sin contar la masa del planeta. ¿Qué densidad media, en g/cm³, derivó tu ajuste?',
@@ -244,7 +259,7 @@ export const ES_EXOPLANET = {
   'gd.exo-fit.eccentric.ok':
     '{value}. Un tránsito por sí solo no distingue una órbita circular de una excéntrica, así que la densidad que da solo es una densidad si la órbita es circular; por eso el ajuste lo dice y ofrece la corrección como un supuesto, nunca como un resultado.',
   'gd.exo-fit.eccentric.no':
-    'Calcula (1 + 0,2 × sen 90°) / √(1 − 0,2²) y elévalo al cubo.',
+    'No exactamente. Pon e = 0,2 y ω = 90° en la corrección del paso, y ten en cuenta que el cubo se aplica a toda la fracción.',
   'gd.exo-fit.ellipse.title': 'La elipse de k y b',
   'gd.exo-fit.ellipse.text':
     'Bajo los resultados el panel dibuja la elipse de covarianza del cociente de radios k frente al parámetro de impacto b, con una tabla. Una elipse larga, delgada e inclinada es una degeneración; una redonda son dos parámetros que los datos fijan por separado. ¿Cuál es la correlación entre k y b en la tabla de la elipse?',
@@ -267,7 +282,7 @@ export const ES_EXOPLANET = {
     'Compara la diferencia de chi-cuadrado de la tabla con 4: por debajo, los datos no pueden elegir.',
   'gd.exo-fit.wrap.title': 'Lo que decidió el ajuste, y lo que supuso',
   'gd.exo-fit.wrap.text':
-    'La curva de luz decidió k y la forma del tránsito, y decidió a/R* y b solo juntos. El radio del planeta necesitó un número más, el de la estrella, adoptado de la bibliografía y arrastrado con su incertidumbre. El panel de ajuste nombra cada parámetro como ajustado, fijo o derivado: esa lista es la declaración honesta de lo que decidieron los datos.',
+    'La curva de luz decidió k y la forma del tránsito, y decidió a/R* y b solo juntos; lo que dejaste libre y el tramo de datos que usaste fueron elecciones tuyas, y el ajuste las registra. El radio del planeta necesitó un número más, el de la estrella, de una fuente publicada que elegiste y arrastrado con su incertidumbre. El panel de ajuste nombra cada parámetro como ajustado, fijo o derivado: esa lista es la declaración honesta de lo que decidieron los datos.',
   'gd.exo-dilution.title': '4. Una estrella que no está sola',
   'gd.exo-dilution.summary':
     'Kepler-13: la luz de una compañera oculta buena parte del tránsito, y la curva de luz no puede decir de quién es el planeta.',

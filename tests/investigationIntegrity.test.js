@@ -429,9 +429,13 @@ describe('scenario references', () => {
     // setup. A Universe of Stars stands its own stars on the canvas instead,
     // through `stage`, which is a stronger statement about the scene rather
     // than a weaker one: it declares every object on screen rather than
-    // inheriting a scenario built for something else.
+    // inheriting a scenario built for something else. A lesson on a quiet
+    // canvas (js/lesson/canvasKind.js) shows no scene at all: its steps may
+    // not declare a stage, bind or setup, so it is the one exemption.
     const bad = INVESTIGATIONS.filter(
-      inv => !inv.steps.some(st => st.setup?.scenario || st.stage)
+      inv =>
+        inv.canvas !== 'quiet' &&
+        !inv.steps.some(st => st.setup?.scenario || st.stage)
     ).map(inv => `${inv.id} never names a scenario and never stages a scene`);
     expect(bad).toEqual([]);
   });

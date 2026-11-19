@@ -622,7 +622,9 @@
         "js/data/investigations/a-binary-stars-orbit.js",
         "js/data/investigations/depth/a-binary-stars-orbit.js",
         "js/data/investigations/depth/measurement-sequence.js",
-        "js/data/investigations/measurement-sequence.js"
+        "js/data/investigations/depth/measuring-the-moon.js",
+        "js/data/investigations/measurement-sequence.js",
+        "js/data/investigations/measuring-the-moon.js"
       ],
       "shadows": [
         "js/data/investigations/depth/es/a-binary-stars-orbit.js",
@@ -1349,7 +1351,9 @@
         "js/data/investigations/craters-by-size.js",
         "js/data/investigations/depth/craters-by-size.js",
         "js/data/investigations/depth/measurement-sequence.js",
-        "js/data/investigations/measurement-sequence.js"
+        "js/data/investigations/depth/measuring-the-moon.js",
+        "js/data/investigations/measurement-sequence.js",
+        "js/data/investigations/measuring-the-moon.js"
       ],
       "shadows": [
         "js/data/investigations/depth/es/craters-by-size.js",
@@ -1656,23 +1660,70 @@
       "audit": "STRONG",
       "scene_class": null,
       "limits": null,
-      "open_items": [],
-      "questions": { "Q1": "", "Q2": "", "Q3": "", "Q4": "", "Q5": "" },
+      "open_items": [
+        {
+          "ref": "D-R4-330-08",
+          "owner": 330,
+          "note": "ratio and planet-radius still ask for retyped values; guide capture is not in K1's form."
+        },
+        {
+          "ref": "D-R4-330-08",
+          "owner": 330,
+          "note": "'Too many free parameters' was measured and dropped: fits converge from 7 d windows up."
+        },
+        {
+          "ref": "D-R4-330-08",
+          "owner": 330,
+          "note": "Release label '3.1' on the retired map is a placeholder."
+        },
+        {
+          "ref": "D-R4-330-08",
+          "owner": 330,
+          "note": "The guide is loaded on first use and not installed; it needs one online visit offline (data-budget ceiling)."
+        }
+      ],
+      "questions": {
+        "Q1": "The reader decides what the fit leaves free and which published stellar radius to use, sees the planet radius move with that choice and finds which uncertainty limits it: a result a paragraph could state but not let the reader move.",
+        "Q2": "choose-fit names what can be changed (the free parameters, the window), star-radius names the two published radii, and whose-star says what the radius comparison answers.",
+        "Q3": "The checked values read the saved fit document (parameters, data span, k and its sigma) and the answer key is generated from the same reference run; the radii shown are the ones the check accepts.",
+        "Q4": "The reader chooses the free parameters, the window (a span under 7 d is refused with the reason) and the stellar radius; a fit with too few free parameters or too short a window is refused in words (gd.check.fitTooFew, gd.check.fitWindow).",
+        "Q5": "whose-star asks which of the two uncertainties limits the planet radius (factor-of-two rule); ratio and planet-radius still ask for retyped values (a guide field has no capture of the K1 form)."
+      },
       "leak": {
         "L1": "HOLDS: its steps carry no field hint or step placeholder, and its panels print no expected value in an empty box (source searched).",
-        "L2": "",
-        "L3": "",
-        "L4": "",
-        "L5": ""
+        "L2": "HOLDS: the fit panel opens with the reference defaults, not the state choose-fit asks for; the check reads what the reader changed.",
+        "L3": "HOLDS: choose-fit and star-radius come before any text states which free parameters or which radius is right; the two radii are both listed as published.",
+        "L4": "HOLDS: no step states the planet radius or which radius limits it before ratio, planet-radius and whose-star; the show text for stellar radius gives both published radii.",
+        "L5": "HOLDS: the answer key is an instructor document built from the reference run; no string visible to students holds it."
       },
-      "task_rule_items": [],
-      "editorial": "OPEN",
-      "redesign": "OPEN",
-      "reason": "",
-      "step_revisions": [],
-      "walk": "NOT RUN",
-      "pr": null,
-      "hash": null
+      "task_rule_items": [
+        "T1: the fit is the reader's own fit document, checked from its settings, parameters and data.",
+        "T3: free parameters and the stellar radius are changed one choice at a time and the check says which.",
+        "T5: authored refusals for too few free parameters and for a window under 7 days."
+      ],
+      "editorial": "REVISED",
+      "redesign": "REVISED",
+      "reason": "The task changed (retired steps with successors): the reader now chooses the fit and the radius, and the check reads what was chosen.",
+      "step_revisions": [
+        {
+          "sid": "choose-fit",
+          "from": "fit",
+          "change": "REVISED: the reader chooses the free parameters and window; refusals in words."
+        },
+        {
+          "sid": "star-radius",
+          "from": "radius",
+          "change": "REVISED: either published stellar radius is accepted, both shown."
+        },
+        {
+          "sid": "whose-star",
+          "from": "torres",
+          "change": "REVISED: which radius limits the planet radius, by a factor-of-two rule."
+        }
+      ],
+      "walk": "NOT VERIFIED",
+      "pr": 675,
+      "hash": "98af80135dd1aa0dec1d49d3849077706420f2b25ad0fd9d9cbeeb3b1e4ec03e"
     },
     {
       "id": "investigation:exo-planet",
@@ -2126,8 +2177,10 @@
       "source": [
         "js/data/investigations/depth/how-far-is-that-star.js",
         "js/data/investigations/depth/measurement-sequence.js",
+        "js/data/investigations/depth/measuring-the-moon.js",
         "js/data/investigations/how-far-is-that-star.js",
-        "js/data/investigations/measurement-sequence.js"
+        "js/data/investigations/measurement-sequence.js",
+        "js/data/investigations/measuring-the-moon.js"
       ],
       "shadows": [
         "js/data/investigations/depth/es/how-far-is-that-star.js",
@@ -2174,6 +2227,7 @@
       "title": "How Fast Does It Spin?",
       "source": [
         "js/data/investigations/depth/how-fast-does-it-spin.js",
+        "js/data/investigations/depth/ios-fire.js",
         "js/data/investigations/depth/satellite-sequence.js",
         "js/data/investigations/how-fast-does-it-spin.js",
         "js/data/investigations/satellite-sequence.js"
@@ -2511,7 +2565,6 @@
       "title": "Io’s Fire",
       "source": [
         "js/data/investigations/depth/ios-fire.js",
-        "js/data/investigations/depth/satellite-sequence.js",
         "js/data/investigations/ios-fire.js",
         "js/data/investigations/satellite-sequence.js"
       ],
@@ -2522,8 +2575,8 @@
         "js/data/investigations/es/satellite-sequence.js"
       ],
       "instrument_files": ["js/tidesWidgets.js"],
-      "depths": { "core": 6, "quantitative": 1, "advanced": 1 },
-      "spanish_steps": { "core": 6, "deeper": 2 },
+      "depths": { "core": 7, "quantitative": 2, "advanced": 2 },
+      "spanish_steps": { "core": 7, "deeper": 4 },
       "languages": ["en", "es"],
       "sequences": [
         { "id": "planets-and-exoplanets", "position": 13 },
@@ -2535,22 +2588,54 @@
       "scene_class": "portrait or backdrop",
       "limits": null,
       "open_items": [],
-      "questions": { "Q1": "", "Q2": "", "Q3": "", "Q4": "", "Q5": "" },
+      "questions": {
+        "Q1": "Yes: the student predicts what doubling the eccentricity does to Io's heating, then reads the heating from the instrument at two eccentricities, and then searches the (k2, Q) plane for two different interiors that both give the observed heat; a paragraph could show neither the surprise of the factor nor the ambiguity of the interiors.",
+        "Q2": "The canvas shows Jupiter and its four large moons with Io named, held still, as a portrait; the instrument names the three things that can be changed, k2, Q and e; each step says which row to watch and how the reading answers the question, and the reading buttons say where a number comes from.",
+        "Q3": "The Heating row, the readings taken, the `compare` sentence at the reveal and the check on the hunt use one quantity (tidal power at Io, in watts, at the stated k2, Q and e); the instrument's constant is recomputed from the kernel in tests/tidesLessons.test.js, and the observed range 0.6 to 1.6 x 10^14 W is the one the instrument's Heating row and the hunt's check both use.",
+        "Q4": "The student decides which eccentricity to read first, whether the second reading is a fair comparison with k2 and Q held, and which two interiors to offer; a wrong decision is refused in words (too much heat, too little heat, one interior given twice, a slider out of its range), and a wrong deeper decision (what would separate the interiors) is answered by an authored misconception.",
+        "Q5": "The deeper steps ask how far a given interior is from the heating maximum, how wide the band of acceptable Q is at fixed k2 (a model-limit test on the instrument's formula) and what observation could separate the two interiors; none is arithmetic on a supplied number, and the closing deeper step names what the formula leaves out."
+      },
       "leak": {
-        "L1": "HOLDS: no field cue or step placeholder holds a numeral at any depth, in either language, and the panel renders none that does (tests/fieldCue.test.js); the expected value is the field's `want`, which no page reads.",
-        "L2": "",
-        "L3": "",
-        "L4": "",
-        "L5": ""
+        "L1": "HOLDS: no field cue or step placeholder holds a numeral at any depth, in either language (tests/fieldCue.test.js); the expected values are the fields' `want`, which no page reads, and the readings are taken by buttons from the instrument rather than typed from a cue.",
+        "L2": "HOLDS: `heating-at-two-eccentricities` opens at e = 0.001 and k2 = 0.8, Q = 250 through `tool.start`, away from both accepted readings; `find-the-interiors` opens at k2 = 0.8 and Q = 250, below the observed range; tools/neutral-start-map.json no longer lists the lesson.",
+        "L3": "HOLDS: `double-predict` precedes every measurement and its rule; the e-squared sentence is gone from its body, hint and every earlier text, and the scene is a portrait of Jupiter and its moons with no heating shown.",
+        "L4": "HOLDS: no step before `heating-at-two-eccentricities` states 1.99 or 7.96, and the hunt's observed range appears only in its own step; the step offers no pair and no hint that names one.",
+        "L5": "HOLDS: the accessible instrument description, the readout rows, the reading buttons and the answer-key rows print the held values only after the student's own reading; docs/lesson-acceptance.json records leakFree for the lesson."
       },
       "task_rule_items": [],
-      "editorial": "OPEN",
-      "redesign": "OPEN",
+      "editorial": "REVISED",
+      "redesign": "REVISED",
       "reason": "",
-      "step_revisions": [],
-      "walk": "NOT RUN",
-      "pr": null,
-      "hash": null
+      "step_revisions": [
+        {
+          "step": "a-moon-that-melts",
+          "change": "Reworded; Jupiter and Io shown as a held portrait; no instrument."
+        },
+        {
+          "step": "double-predict",
+          "change": "Moved before any reading; the e-squared rule removed from its body and hint; reveal set to what-doubling-did."
+        },
+        {
+          "step": "heating-at-two-eccentricities",
+          "change": "Replaces heating-at-the-maximum and double-the-eccentricity; two readings taken by buttons at e = 0.0041 and 0.0082 from a neutral start."
+        },
+        {
+          "step": "what-doubling-did",
+          "change": "New read step; the reveal with the student's two readings as evidence and one compare sentence."
+        },
+        {
+          "step": "find-the-interiors",
+          "change": "Replaces the-bound; the student searches for two interiors that both give the observed heat; wrong answers refused in words."
+        },
+        { "step": "how-wide-is-the-bound", "change": "New deeper step." },
+        {
+          "step": "what-would-separate-them",
+          "change": "New deeper step with three authored misconceptions."
+        }
+      ],
+      "walk": "VERIFIED",
+      "pr": 676,
+      "hash": "6b0d88f1023101468539e12e6caf9f4d353fabfc5ec43386c2fea3831c0c68e5"
     },
     {
       "id": "investigation:keplers-laws",
@@ -3237,9 +3322,7 @@
       "format": "lesson",
       "title": "Measuring the Moon",
       "source": [
-        "js/data/investigations/depth/measurement-sequence.js",
         "js/data/investigations/depth/measuring-the-moon.js",
-        "js/data/investigations/measurement-sequence.js",
         "js/data/investigations/measuring-the-moon.js"
       ],
       "shadows": [
@@ -3249,8 +3332,8 @@
         "js/data/investigations/es/measuring-the-moon.js"
       ],
       "instrument_files": ["js/imagingWidgets.js"],
-      "depths": { "core": 8, "quantitative": 2, "advanced": 2 },
-      "spanish_steps": { "core": 8, "deeper": 4 },
+      "depths": { "core": 10, "quantitative": 2, "advanced": 2 },
+      "spanish_steps": { "core": 10, "deeper": 4 },
       "languages": ["en", "es"],
       "sequences": [{ "id": "observing-and-measuring", "position": 11 }],
       "courses": [],
@@ -3258,23 +3341,85 @@
       "audit": "STRONG",
       "scene_class": "portrait or backdrop",
       "limits": null,
-      "open_items": [],
-      "questions": { "Q1": "", "Q2": "", "Q3": "", "Q4": "", "Q5": "" },
-      "leak": {
-        "L1": "HOLDS: no field cue or step placeholder holds a numeral at any depth, in either language, and the panel renders none that does (tests/fieldCue.test.js); the expected value is the field's `want`, which no page reads.",
-        "L2": "",
-        "L3": "",
-        "L4": "",
-        "L5": ""
+      "open_items": [
+        {
+          "ref": "D-R4-330-08",
+          "owner": 330,
+          "note": "Interpolated validate messages have no Spanish translation (English literals, as at 3.0)."
+        },
+        {
+          "ref": "D-R4-330-08",
+          "owner": 330,
+          "note": "The readout lists the foreshortening and offset rows on every step."
+        },
+        {
+          "ref": "D-R4-330-08",
+          "owner": 330,
+          "note": "Release label '3.1' on the retired map is a placeholder until the release is named."
+        },
+        {
+          "ref": "D-R4-330-08",
+          "owner": 330,
+          "note": "T4 transfer: not added; no honest second case in this lesson (recorded, not a failure)."
+        }
+      ],
+      "questions": {
+        "Q1": "The student finds the Moon's diameter by placing a pair on the photograph themselves, sees a too-short pair refused with the scale it implies, then finds that the plain they measure is squeezed along the line of sight (about 96 percent): none of that is a paragraph's job.",
+        "Q2": "The quiet canvas leaves the photograph and one instrument; each step says which two marks to place and what the readout rows (pair, scale, diameter, foreshortening) mean at that moment, and the held predictions return at the reveal step.",
+        "Q3": "The pair, scale, diameter and share the fields capture are the instrument's own readout rows (ids pair, scale, diameterKm, foreshort); the 3474.8 km figure, the 4.45 percent foreshortening and the plain's offset were re-derived from the image.",
+        "Q4": "The student decides where the two marks go (the instrument opens at a short pair on purpose), when a pair is long enough, which plain to measure and where to centre the squeeze; a short pair, a wrong plain and an unsqueezed diameter each get authored feedback (e2e/imageLessons.spec.js).",
+        "Q5": "The quantitative step asks for the diameter with the squeeze and the uncertainty the student produced (660 +/- up to 60); the advanced steps keep the limb and the slant as reasoning about a model limit."
       },
-      "task_rule_items": [],
-      "editorial": "OPEN",
-      "redesign": "OPEN",
-      "reason": "",
-      "step_revisions": [],
-      "walk": "NOT RUN",
-      "pr": null,
-      "hash": null
+      "leak": {
+        "L1": "HOLDS: no field cue or step placeholder holds a numeral at any depth, in either language (tests/fieldCue.test.js, which now names a-diameter-with-the-squeeze); the expected value is the field's `want`, which no page reads.",
+        "L2": "HOLDS: the pair instrument opens at 60 and 440, which the validator refuses, and the squeeze instrument opens at the disc centre, not at the plain (`tool.start`); tests/neutralStart.test.js.",
+        "L3": "HOLDS: the predictions predict-the-scale and predict-the-plain come before any body states the scale, the foreshortening or the plain's diameter; the first hint of predict-the-plain only locates the control.",
+        "L4": "HOLDS: no body states 634 km, the 96 percent or the 660 km before its measuring step; the first rung of each hint never hands over a value.",
+        "L5": "HOLDS: the readout rows and the instructor text visible to students carry no held answer; the instructor expectations name the answers only in the instructor guide."
+      },
+      "task_rule_items": [
+        "T1: the scale, the pair and the share are captured from the readout with their provenance (K1); the km fields are the student's own measurement.",
+        "T2: the held prediction of the scale and of the plain return at the reveal step beside the measurement.",
+        "T5: authored feedback for a short pair, a scale under 7.4, a diameter that does not match the pair, and a pair that is too long."
+      ],
+      "editorial": "REVISED",
+      "redesign": "REVISED",
+      "reason": "The task changed (retired steps with successors): the student now places and decides, and the answers leave the page.",
+      "step_revisions": [
+        {
+          "sid": "mark-the-disc-width",
+          "from": "scale-from-the-disc",
+          "change": "REVISED: the student places the pair and captures the scale; the instrument opens at a short pair that is refused in words."
+        },
+        {
+          "sid": "a-pair-that-stops-short",
+          "change": "NEW: a short pair's diameter follows from its scale (km within 3 of 50 times the scale)."
+        },
+        {
+          "sid": "predict-the-scale",
+          "change": "NEW: a held prediction before the first mark, revealed at mark-the-disc-width."
+        },
+        {
+          "sid": "predict-the-plain",
+          "change": "NEW: a held prediction of the plain's width before measuring it."
+        },
+        {
+          "sid": "measure-the-plain",
+          "change": "REVISED: the diameter is the student's own, 634 within 45, captured."
+        },
+        {
+          "sid": "squeezed-at-the-plain",
+          "change": "NEW: the share along the line of sight is captured from the foreshort row (96 within 3); the instrument opens at the disc centre."
+        },
+        {
+          "sid": "a-diameter-with-the-squeeze",
+          "from": "a-diameter-with-an-error-bar",
+          "change": "REVISED: quantitative, answer 660, tolerance 4, uncertainty up to 60."
+        }
+      ],
+      "walk": "NOT VERIFIED",
+      "pr": 675,
+      "hash": "d650eb53277bb362da2e35347c2e52a1af4a567c8273c4d37c6e628f436e6521"
     },
     {
       "id": "investigation:missing-mass",
@@ -4838,6 +4983,7 @@
       "format": "lesson",
       "title": "The Gaps in the Belt",
       "source": [
+        "js/data/investigations/depth/ios-fire.js",
         "js/data/investigations/depth/satellite-sequence.js",
         "js/data/investigations/depth/the-gaps-in-the-belt.js",
         "js/data/investigations/satellite-sequence.js",
@@ -5519,6 +5665,7 @@
       "format": "lesson",
       "title": "Tides That Move the Moon",
       "source": [
+        "js/data/investigations/depth/ios-fire.js",
         "js/data/investigations/depth/satellite-sequence.js",
         "js/data/investigations/depth/tides-that-move-the-moon.js",
         "js/data/investigations/satellite-sequence.js",
@@ -5544,22 +5691,45 @@
       "scene_class": "portrait or backdrop",
       "limits": null,
       "open_items": [],
-      "questions": { "Q1": "", "Q2": "", "Q3": "", "Q4": "", "Q5": "" },
+      "questions": {
+        "Q1": "Yes: the student sets the dissipation Q on the instrument until the Moon's recession matches laser ranging, then runs the same model forward and backward; the match is a search that a paragraph could not do for them, and the run backward finds the model's own contradiction.",
+        "Q2": "The canvas is quiet; the instrument is the one scene and its readout says what is measured (the Moon's recession now, the day's lengthening) and which row is laser ranging; the step says what to change (Q), what to watch, and that the slider moves in whole numbers.",
+        "Q3": "The recession row, the day row, the captured readings and the check use one quantity in cm per year and hours; the measured 3.82 +/- 0.07 appears in the readout row only, and the closing step no longer introduces it.",
+        "Q4": "The student decides which Q to adopt and whether the day's lengthening agrees; a Q that is too high or too low is refused in words (slower or faster than laser ranging), and the forward and backward runs use the student's Q.",
+        "Q5": "The deeper steps test the model's limit (what the constant-Q model leaves out and why the backward run reaches a contradiction) rather than doing more arithmetic on supplied numbers."
+      },
       "leak": {
-        "L1": "HOLDS: no field cue or step placeholder holds a numeral at any depth, in either language, and the panel renders none that does (tests/fieldCue.test.js); the expected value is the field's `want`, which no page reads.",
-        "L2": "",
-        "L3": "",
-        "L4": "",
-        "L5": ""
+        "L1": "HOLDS: no field cue or step placeholder holds a numeral at any depth, in either language (tests/fieldCue.test.js); the expected values are the fields' `want`, which no page reads, and the readings are taken by buttons from the instrument rather than typed from a cue.",
+        "L2": "HOLDS: `match-the-recession` opens at Q = 40, which recedes more slowly than laser ranging; `forward-one-billion` and `the-model-run-backward` open at time 0; `forward-predict` has no instrument.",
+        "L3": "HOLDS: `forward-predict` lost its hint arithmetic and its sentence that the recession slows.",
+        "L4": "HOLDS: the measured 3.82 appears in the instrument's row and in no earlier body, hint or the closing step.",
+        "L5": "HOLDS: the readout rows and the answer-key rows print the held answers only as the student's own reading; docs/lesson-acceptance.json records the quiet canvas and the decision text."
       },
       "task_rule_items": [],
-      "editorial": "OPEN",
-      "redesign": "OPEN",
+      "editorial": "REVISED",
+      "redesign": "REVISED",
       "reason": "",
-      "step_revisions": [],
-      "walk": "NOT RUN",
-      "pr": null,
-      "hash": null
+      "step_revisions": [
+        {
+          "step": "match-the-recession",
+          "change": "Replaces the-moons-recession; the student finds the Q that matches laser ranging from a neutral start at Q = 40 and takes the day's lengthening from the row."
+        },
+        {
+          "step": "forward-predict",
+          "change": "Instrument removed; hint arithmetic and the sentence that the recession slows removed."
+        },
+        {
+          "step": "the-model-run-backward",
+          "change": "Opens at time 0; the run-back half of the tune."
+        },
+        {
+          "step": "what-the-model-leaves-out",
+          "change": "No longer introduces the measured 3.82."
+        }
+      ],
+      "walk": "VERIFIED",
+      "pr": 676,
+      "hash": "c198085665d636a803dbd14df100eb51824328302b4a06709eec7eeee82d6ef9"
     },
     {
       "id": "investigation:transit-photometry",
@@ -5922,6 +6092,7 @@
       "format": "lesson",
       "title": "Weighing Jupiter From Its Moons",
       "source": [
+        "js/data/investigations/depth/ios-fire.js",
         "js/data/investigations/depth/satellite-sequence.js",
         "js/data/investigations/depth/weighing-jupiter.js",
         "js/data/investigations/satellite-sequence.js",
@@ -6125,8 +6296,10 @@
       "title": "What a Crater Diameter Is Worth",
       "source": [
         "js/data/investigations/depth/measurement-sequence.js",
+        "js/data/investigations/depth/measuring-the-moon.js",
         "js/data/investigations/depth/what-a-crater-diameter-is-worth.js",
         "js/data/investigations/measurement-sequence.js",
+        "js/data/investigations/measuring-the-moon.js",
         "js/data/investigations/what-a-crater-diameter-is-worth.js"
       ],
       "shadows": [
@@ -6280,8 +6453,10 @@
       "title": "What Does ± Claim?",
       "source": [
         "js/data/investigations/depth/measurement-sequence.js",
+        "js/data/investigations/depth/measuring-the-moon.js",
         "js/data/investigations/depth/what-does-plus-minus-claim.js",
         "js/data/investigations/measurement-sequence.js",
+        "js/data/investigations/measuring-the-moon.js",
         "js/data/investigations/what-does-plus-minus-claim.js"
       ],
       "shadows": [
@@ -6413,8 +6588,10 @@
       "title": "What Is a Measurement?",
       "source": [
         "js/data/investigations/depth/measurement-sequence.js",
+        "js/data/investigations/depth/measuring-the-moon.js",
         "js/data/investigations/depth/what-is-a-measurement.js",
         "js/data/investigations/measurement-sequence.js",
+        "js/data/investigations/measuring-the-moon.js",
         "js/data/investigations/what-is-a-measurement.js"
       ],
       "shadows": [
@@ -6468,8 +6645,10 @@
       "title": "What Is in This Field?",
       "source": [
         "js/data/investigations/depth/measurement-sequence.js",
+        "js/data/investigations/depth/measuring-the-moon.js",
         "js/data/investigations/depth/what-is-in-this-field.js",
         "js/data/investigations/measurement-sequence.js",
+        "js/data/investigations/measuring-the-moon.js",
         "js/data/investigations/what-is-in-this-field.js"
       ],
       "shadows": [
@@ -6723,8 +6902,10 @@
       "title": "When the Method Must Refuse",
       "source": [
         "js/data/investigations/depth/measurement-sequence.js",
+        "js/data/investigations/depth/measuring-the-moon.js",
         "js/data/investigations/depth/when-the-method-must-refuse.js",
         "js/data/investigations/measurement-sequence.js",
+        "js/data/investigations/measuring-the-moon.js",
         "js/data/investigations/when-the-method-must-refuse.js"
       ],
       "shadows": [
@@ -6916,8 +7097,10 @@
       "title": "Which Surface Is Older?",
       "source": [
         "js/data/investigations/depth/measurement-sequence.js",
+        "js/data/investigations/depth/measuring-the-moon.js",
         "js/data/investigations/depth/which-surface-is-older.js",
         "js/data/investigations/measurement-sequence.js",
+        "js/data/investigations/measuring-the-moon.js",
         "js/data/investigations/which-surface-is-older.js"
       ],
       "shadows": [
@@ -7022,6 +7205,7 @@
       "format": "lesson",
       "title": "Why Rings?",
       "source": [
+        "js/data/investigations/depth/ios-fire.js",
         "js/data/investigations/depth/satellite-sequence.js",
         "js/data/investigations/depth/why-rings.js",
         "js/data/investigations/satellite-sequence.js",

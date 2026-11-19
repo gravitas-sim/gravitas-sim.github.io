@@ -7,6 +7,7 @@
     "what-is-a-gravitational-wave",
     "binary-star-planets",
     "butterfly-effect",
+    "measuring-the-moon",
     "black-holes",
     "propose-an-observation",
     "weighing-stars",
@@ -15,7 +16,6 @@
     "counts-to-magnitudes",
     "detect-this-planet",
     "extending-an-experiment",
-    "measuring-the-moon",
     "missing-mass",
     "power-law-gravity",
     "radial-velocity",
@@ -186,6 +186,11 @@
       "key:predict.requires",
       "lock:null"
     ],
+    "measuring-the-moon": [
+      "key:question.maxUncertainty",
+      "key:question.minUncertainty",
+      "key:question.valueWithin"
+    ],
     "black-holes": [
       "key:question.checklist",
       "key:read.explainView"
@@ -212,9 +217,6 @@
     ],
     "extending-an-experiment": [
       "key:measure.compute"
-    ],
-    "measuring-the-moon": [
-      "key:question.maxUncertainty"
     ],
     "missing-mass": [
       "key:question.restates"
@@ -298,16 +300,16 @@
   ],
   "totals": {
     "investigations": 124,
-    "steps": 1984,
+    "steps": 1989,
     "activityCuts": 6,
-    "lessonTokens": 166,
+    "lessonTokens": 168,
     "activityTokens": 29,
     "stepTypes": {
-      "read": 376,
+      "read": 377,
       "predict": 199,
-      "measure": 514,
+      "measure": 515,
       "ellipse": 1,
-      "question": 748,
+      "question": 751,
       "explore": 145,
       "wedges": 1
     }

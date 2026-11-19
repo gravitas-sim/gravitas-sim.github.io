@@ -87,15 +87,15 @@ The browser half takes about seven minutes on the private port.
 | 5 | `what-is-a-gravitational-wave` | 5: `audience:beginner`, `key:predict.tip`, `key:read.checklist`, `lock:{"placement":true,"inspector":false,"areaSweep":false}`, `math:arithmetic` |
 | 6 | `binary-star-planets` | 3: `key:explore.requires`, `key:read.motion`, `lock:{"placement":true}` |
 | 7 | `butterfly-effect` | 3: `key:explore.rubric`, `key:predict.requires`, `lock:null` |
-| 8 | `black-holes` | 2: `key:question.checklist`, `key:read.explainView` |
-| 9 | `propose-an-observation` | 2: `key:measure.plan`, `key:question.rubricCriteria` |
-| 10 | `weighing-stars` | 2: `key:explore.showBarycenter`, `key:read.showBarycenter` |
-| 11 | `a-night-at-the-telescope` | 1: `key:question.reflect` |
-| 12 | `a-universe-of-stars` | 1: `key:measure.checklist` |
-| 13 | `counts-to-magnitudes` | 1: `depth-step:quantitative/predict` |
-| 14 | `detect-this-planet` | 1: `key:read.allowInspector` |
-| 15 | `extending-an-experiment` | 1: `key:measure.compute` |
-| 16 | `measuring-the-moon` | 1: `key:question.maxUncertainty` |
+| 8 | `measuring-the-moon` | 3: `key:question.maxUncertainty`, `key:question.minUncertainty`, `key:question.valueWithin` |
+| 9 | `black-holes` | 2: `key:question.checklist`, `key:read.explainView` |
+| 10 | `propose-an-observation` | 2: `key:measure.plan`, `key:question.rubricCriteria` |
+| 11 | `weighing-stars` | 2: `key:explore.showBarycenter`, `key:read.showBarycenter` |
+| 12 | `a-night-at-the-telescope` | 1: `key:question.reflect` |
+| 13 | `a-universe-of-stars` | 1: `key:measure.checklist` |
+| 14 | `counts-to-magnitudes` | 1: `depth-step:quantitative/predict` |
+| 15 | `detect-this-planet` | 1: `key:read.allowInspector` |
+| 16 | `extending-an-experiment` | 1: `key:measure.compute` |
 | 17 | `missing-mass` | 1: `key:question.restates` |
 | 18 | `power-law-gravity` | 1: `key:question.explain` |
 | 19 | `radial-velocity` | 1: `key:measure.setup` |
