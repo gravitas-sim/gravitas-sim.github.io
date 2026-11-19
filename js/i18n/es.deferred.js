@@ -602,7 +602,6 @@ export const ES_DEFERRED = {
   'sweep.guide.after':
     'Fijate donde la medida deja de comportarse suavemente: ese es el limite que tiene este escenario, con esta duracion. Una pasada mas larga solo puede moverlo hacia dentro: una orbita que sobrevivio 20 periodos binarios no ha demostrado sobrevivir 200.',
   'sweep.guide.run': 'Ejecutar el barrido guiado',
-
   // --- Tareas para clase --- shown from lazy chunks (the builder, the link bridge, a lesson panel with an assignment open), never a first visit; ensureDeferredMessages() registers them.
   'assign.title': 'Crear una actividad',
   'assign.hint':
@@ -677,7 +676,6 @@ export const ES_DEFERRED = {
   'assign.notice.moved':
     'Esta actividad se creó con {pinned}, del que este Gravitas ya no toma la investigación. Se abre con la investigación tal como es ahora.',
   'assign.error.badPackage': 'Ese enlace de actividad nombra mal su paquete.',
-
   // --- El planificador de maniobras --------------------------------------------
   'burn.title': 'Planificador de maniobras',
   'burn.close': 'Ocultar el planificador de maniobras',
@@ -2343,8 +2341,7 @@ export const ES_DEFERRED = {
     'Estable: una tercera cuestion distinta. Significa que un trazador desplazado ligeramente de un equilibrio vuelve en lugar de irse, y aqui solo es cierto de L4 y L5, y solo por debajo de la razon de masas de Routh. Nada en una curva de velocidad cero lo implica.',
 
   // --- The exoplanet lesson widgets ---------------------------------------------
-  // js/exoplanetWidgets.js is reached only through the lazy js/widgets.js and
-  // js/investigations.js; nobody sees these until a lesson opens.
+  // js/exoplanetWidgets.js is reached only through the lazy js/widgets.js and js/investigations.js; nobody sees these until a lesson opens.
   'exoW.whoIsActuallyMoving': '¿Quién se mueve de verdad?',
   'exoW.theStarAndThePlanet':
     'La estrella y el planeta giran ambos alrededor del mismo punto. Sube el aumento para ver hacerlo a la estrella.',
@@ -2538,8 +2535,7 @@ export const ES_DEFERRED = {
   'rvsched.compare.oneDraw':
     'Un solo sorteo de ruido en cada brazo: esto dice lo que hicieron estos dos calendarios en esta campana, no que calendario es mejor.',
   // --- The synthetic observing run's own controls ------------------------------
-  // The section is opt-in and hidden until switched on, which is when the panel
-  // registers this catalog, so no one who never records downloads its prose.
+  // The section is opt-in and hidden until switched on, which is when the panel registers this catalog, so no one who never records downloads its prose.
   'rv.survey.hint':
     'Conserva solo las medidas que un calendario concreto habría producido realmente, cada una con su incertidumbre. Entre ellas no se registra nada.',
   'rv.survey.cadence': 'Cadencia',
@@ -3968,20 +3964,34 @@ export const ES_DEFERRED = {
   'lessonFn.completeTransitsRecorded26': 'Tránsitos completos registrados',
   'lessonFn.waitingForACompleteTransit30': 'Esperando un tránsito completo',
   'lessonFn.clock5': 'Reloj',
-  'lessonFn.theBottomOfATransitSits137':
-    'El fondo de un tránsito queda <em>por debajo</em> de la línea de base, así que la profundidad tiene que salir positiva. Comprueba que no los hayas intercambiado.',
-  'lessonFn.a20DipWouldBeA153':
-    'Una caída del 20 % sería un eclipse estelar, no un planeta. Si has introducido números como 98,2 y 100, introduce el brillo en sí y no un porcentaje de él.',
-  'lessonFn.thatIsShallowerThanThisSystem156':
-    'Eso es menos profundo de lo que este sistema puede producir. Asegúrate de que el valor del fondo viene de verdad del punto más bajo de una caída y no del hombro de entrada.',
-  'lessonFn.goodAbout18GivingA152':
-    'Bien: alrededor del 1,8 %, lo que da un cociente de radios cercano a 0,135. Quédate con ese número, porque el paso siguiente va a decirte que es un 10 % demasiado grande, y por qué.',
-  'lessonFn.expectedSomewhereNear0018For153':
-    'Se esperaba algo cercano a 0,018 para este sistema. Lee la línea de base en un tramo plano bien alejado de cualquier caída, y el fondo en el punto más bajo de una.',
   'lessonFn.theStarRadiusGoesInSolar93':
     'El radio de la estrella va en radios solares, no en kilómetros ni en júpiteres. HD 209458 es 1,155 R☉.',
   'lessonFn.theDepthIsAFractionNot65':
     'La profundidad es una fracción, no un porcentaje: 1,8 % se introduce como 0,018.',
+  'lessonFn.theInTransitMeanSitsBelow154':
+    'La media en tránsito queda <em>por debajo</em> de la media fuera de tránsito, así que la profundidad tiene que salir positiva. Comprueba que no has intercambiado los dos tramos.',
+  'lessonFn.yourOutOfTransitStretchAverages164':
+    'Tu tramo fuera de tránsito promedia parte de una caída: su media está por debajo del nivel que la estrella mantiene entre tránsitos. Muévelo a un tramo plano, lejos de toda caída.',
+  'lessonFn.theTwoStretchesHaveAlmostThe174':
+    'Los dos tramos tienen casi la misma media, así que no hay profundidad entre ellos. Pon el tramo en tránsito sobre el fondo de una caída y el otro en un tramo plano entre caídas.',
+  'lessonFn.yourInTransitStretchIncludesThe232':
+    'Tu tramo en tránsito incluye los lados inclinados de la caída, o sale de ella, donde el planeta solo está en parte sobre la estrella. Elige un tramo del fondo, entre los dos lados, y la profundidad será la sombra completa del planeta.',
+  'lessonFn.thatIsDeeperThanTheFloor138':
+    'Eso es más profundo que el fondo de cualquier caída de esta curva. Comprueba que ambos tramos están en la curva que hay ahora en el gráfico y en las casillas correctas.',
+  'lessonFn.twoStretchesOneDepthKeepIt131':
+    'Dos tramos, una profundidad. Consérvala: las pantallas siguientes la ponen junto a tu estimación y explican por qué el radio que da no es del todo correcto.',
+  'lessonFn.twoStretchesOneDepthForThe89':
+    'Dos tramos, una profundidad para el segundo sistema. La pantalla siguiente la pone junto a la primera.',
+  'lessonFn.theBlendedDepthHasToBe120':
+    'La profundidad mezclada tiene que ser la <em>menos</em> profunda de las dos. Comprueba que ambas profundidades se midieron en las curvas correctas.',
+  'lessonFn.theRatioOnlyMeasuresTheCompanion166':
+    'El cociente solo mide la compañera si ambas profundidades salen de la misma parte de sus fondos. Toma el medio de cada fondo, mide otra vez y el cociente seguirá.',
+  'lessonFn.thatIsTheResultTheBlended270':
+    'Ese es el resultado. La curva mezclada por sí sola dice un planeta más pequeño; la corrección lo devuelve al radio que encontraste sin la compañera. La compañera de esta escena es media magnitud más tenue que su estrella, y el contraste que dedujiste debería quedar cerca de eso.',
+  'lessonFn.checkTheContrastTheRatioIs116':
+    'Comprueba el contraste. El cociente es 1 + F₂/F₁, así que resta uno antes de tomar el logaritmo: Δm = −2,5 log₁₀(cociente − 1).',
+  'lessonFn.checkTheRadiusTheCorrectionMultiplies120':
+    'Comprueba el radio. La corrección multiplica el radio mezclado por la raíz cuadrada del cociente, no por el cociente mismo.',
   'lessonFn.thatIsItAbout138218':
     'Eso es: unos 1,38 radios de Júpiter, o 15,5 radios terrestres. El valor publicado tras una década de tránsitos del Hubble es 1,38 R_Júpiter. Acabas de medir un planeta a 160 años luz observando cómo una estrella se atenuaba levemente.',
   'lessonFn.tooLargeCheckThatYouDivided170':
@@ -4010,16 +4020,6 @@ export const ES_DEFERRED = {
     'Unas 0,047 UA: una octava parte de la distancia de Mercurio al Sol, y a unos nueve radios estelares. A 1450 K el lado diurno del planeta está lo bastante caliente para brillar con un rojo apagado por sí mismo. Nada de la teoría de formación planetaria anterior a 1995 ponía allí un gigante gaseoso, y averiguar cómo llegó sigue siendo una discusión activa entre la migración por el disco y la dispersión por otros planetas.',
   'lessonFn.expectedRoughly0047AuCheck84':
     'Se esperaban unas 0,047 UA. Comprueba que el periodo esté en días y la masa en masas solares.',
-  'lessonFn.bothDepthsAreFractionsNotPercentages66':
-    'Ambas profundidades son fracciones, no porcentajes: 1,1 % se introduce como 0,011.',
-  'lessonFn.theBlendedDepthHasToBe110':
-    'La profundidad mezclada tiene que ser la <em>menos</em> profunda de las dos. Comprueba que no las hayas puesto en las casillas equivocadas.',
-  'lessonFn.thatIsTheResultTheBlended291':
-    'Ese es el resultado. La curva mezclada dice unos 12 radios terrestres; la corrección de aproximadamente ×1,28 lo devuelve a unos 15,5, que son los 1,38 radios de Júpiter que mediste antes de que estuviera la compañera. El contraste implicado debería caer cerca de Δm = 0,5, que es lo que la compañera es en realidad.',
-  'lessonFn.theRatioIsLargerThanThis135':
-    'El cociente es mayor de lo que esta compañera puede producir. Vuelve a leer la profundidad mezclada: debería estar cerca de 0,011, no cerca de la mitad del valor limpio.',
-  'lessonFn.expectedARatioNear163135':
-    'Se esperaba un cociente cercano a 1,63 y un radio corregido cercano a 15,5 R⊕. Comprueba que ambas profundidades vinieron del fondo de una caída y no de un hombro.',
   'lessonFn.clickABodyInTheSimulation30': 'Pulsa un cuerpo en la simulación',
   'lessonFn.nothingToOrbit16': 'nada que orbitar',
   'lessonFn.distanceFromTheStar22': 'Distancia a la estrella',
