@@ -12,17 +12,17 @@
         "requests": 109
       },
       "kepler": {
-        "kb": 2658.7,
+        "kb": 2658.8,
         "requests": 142
       },
       "transit": {
-        "kb": 2670.1,
+        "kb": 2670.2,
         "requests": 142,
-        "toolKb": 2775.1,
+        "toolKb": 2775.2,
         "toolRequests": 149
       },
       "power-law": {
-        "kb": 2634.8,
+        "kb": 2634.9,
         "requests": 142,
         "toolKb": 2688.1,
         "toolRequests": 145
@@ -144,7 +144,7 @@
       "transit": {
         "kb": 936.2,
         "requests": 77,
-        "toolKb": 993.0,
+        "toolKb": 993.1,
         "toolRequests": 84
       },
       "power-law": {
