@@ -202,7 +202,7 @@ export default {
     },
     'transit-photometry': {
       'choose-the-two-stretches':
-        'Out of transit the mean is near 1.0000; a stretch on the floor gives a depth near 1.8%, so a naive radius ratio of about 0.13, ten percent too large. Sloping sides or part of a dip get a message.',
+        'Out of transit the mean is near 1.0000. The floor is curved, so √δ overshoots the radius ratio by 6 to 10%, by where the stretch sits.',
       'correct-it-and-get-a':
         'With the limb-darkening correction and a stellar radius of 1.155 solar radii, the recovered planet radius lands near 1.38 Jupiter radii, the published value for HD 209458 b.',
       'time-two-transits':
@@ -210,7 +210,7 @@ export default {
       'from-a-period-to-an':
         'A 3.52-day period around a 1.148 solar mass star gives a semi-major axis near 0.047 AU and an equilibrium temperature of order 1400 K.',
       'compare-the-two-curves':
-        'With a companion half a magnitude fainter in the aperture, the depth is near 1.1%, with the same period and shape.',
+        'With a companion half a magnitude fainter, the depth is near 1.1%; period and shape do not change.',
       'find-the-hidden-companion':
         'The blended depth is shallower; the ratio of the depths gives a contrast near half a magnitude and the corrected radius matches the clean one.',
     },

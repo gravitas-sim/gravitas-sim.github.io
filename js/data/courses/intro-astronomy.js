@@ -306,9 +306,9 @@ export const INTRO_ASTRONOMY = {
             esOf: '8989162e',
           },
           teacherNote: {
-            en: 'A thirty-minute cut of a seventy-minute investigation. It goes on to limb darkening, the period and a blended binary; set it instead for a longer class.',
-            es: 'Un recorte de treinta minutos de una investigación de setenta. Sigue con el oscurecimiento del limbo, el período y una binaria mezclada; asígnenla completa en una clase más larga.',
-            esOf: '0e66eebc',
+            en: 'A thirty-minute cut of a seventy-minute investigation. It ends at why the square root of the depth is not the radius ratio; the period, the angle and a blended binary are in the full investigation, which is the one to set for a longer class.',
+            es: 'Un recorte de treinta minutos de una investigación de setenta. Termina en por qué la raíz cuadrada de la profundidad no es el cociente de radios; el período, el ángulo y una binaria mezclada están en la investigación completa, que es la que conviene asignar en una clase más larga.',
+            esOf: '4448a7cb',
           },
           minutes: 30,
           assignment: {
