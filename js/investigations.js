@@ -660,7 +660,7 @@ function applyLocks() {
   setInspectorSuppressed(lock.inspector !== false && !allowInspector);
   // A lesson that borrows a scenario built for a different lesson can refuse
   // the overlay that scenario switches on for itself.
-  setAreaSweepSuppressed(lock.areaSweep === false);
+  setAreaSweepSuppressed(lock.areaSweep === false && !step?.wedgeOf);
 }
 
 /**

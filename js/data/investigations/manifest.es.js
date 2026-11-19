@@ -22,8 +22,8 @@ export const MANIFEST = [
     level: 'Astronomía introductoria',
     thumbnail: 'images/scenarios/keplers-2nd-law.webp',
     depths: 3,
-    stepCount: 23,
-    gradedCount: 13,
+    stepCount: 26,
+    gradedCount: 15,
     objectiveCount: 4,
   },
   {

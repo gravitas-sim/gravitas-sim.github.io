@@ -14,7 +14,7 @@
 export const BROWSE_META = {
   'keplers-laws': {
     tags: ['orbits', 'solar-system'],
-    numericCount: 2,
+    numericCount: 1,
   },
   'retrograde-motion': {
     tags: ['observing', 'orbits', 'solar-system'],

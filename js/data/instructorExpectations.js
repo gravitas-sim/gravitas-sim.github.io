@@ -173,12 +173,14 @@ export default {
         'B − V (Vega system) of about 1.69 at 3,000 K, 0.60 at 6,000 K and 0.15 at 10,000 K. Within 0.05 is accepted; a student who reads the g − r row instead will be a little off at every temperature.',
     },
     'keplers-laws': {
-      'measure-the-two-orbits':
-        'The Circular Orbiter comes out at e near 0.02; the Eccentric Orbiter at roughly e = 0.6–0.7. The derived semi-major axis is the mean of the periapsis and apoapsis distances, and the validator warns if the two are entered the wrong way round.',
+      'find-the-foci':
+        'Closest approach about 0.5 AU and furthest about 2.36 AU for the Eccentric Orbiter, taken by Take reading. The panel’s distance between the star’s point and the Empty focus is about 1.86 AU, which is the difference of the two. About 0.93 AU is the star-to-center distance, and about 0.5 or 2.36 AU is a wrong pair of points; each gets its own feedback.',
       'fast-and-slow-in-numbers':
         'Speed at periapsis should exceed speed at apoapsis by roughly the inverse ratio of the distances. The validator warns if the two are swapped, which is the common error.',
       'measure-four-planets':
-        'Any two or more Solar System planets. P²/a³ should come out near 1 for every row when a is in AU and P in years; the validator flags a spread greater than 50%, which almost always means a period entered in days.',
+        'At least five Solar System planets, spread over a range of distances of a factor of four or more. P²/a³ should come out near 1 for every row when a is in AU and P in years; the validator names the row that disagrees when the spread is above 50%, which almost always means a period entered in days.',
+      'check-the-estimate':
+        'The period at the distance the student chose, scaled from the nearest measured planet by the law, is that distance raised to the power three halves in years; the estimate they committed is shown beside it. The validator asks for a planet within a factor of two of the chosen distance.',
       'work-the-law-out-step':
         'P² ÷ a³ = 1 within reading error. The star in this scenario is exactly one solar mass, so the constant is exactly 1 by construction, and the validator says so.',
       'weigh-trappist-1-yourself':

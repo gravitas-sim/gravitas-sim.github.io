@@ -626,6 +626,7 @@ function judgeReadings(taken) {
 }
 
 const setAreaSweepWedges = command('setAreaSweepWedges');
+const showAreaSweepFor = command('showAreaSweepFor');
 
 /**
  * Wire the step's answer controls: choices, written and numeric answers, hints,
@@ -766,6 +767,10 @@ export function bindStepInputs(h) {
     const apply = () => {
       const n = wedgeSlider.valueAsNumber;
       out.textContent = String(n);
+      // A lesson that keeps the wedges off until this step names the body.
+      const of = h.currentStep().wedgeOf;
+      if (of && !state.areaSweepOverlay.active)
+        showAreaSweepFor(h.probeContext().find(of));
       setAreaSweepWedges(n);
       const ov = state.areaSweepOverlay;
       if (readout && ov?.wedgeTime) {

@@ -66,7 +66,35 @@ const KEPLER = {
   // shared across the catalog rather than free text, so a filter can offer
   // the whole set without a second list to keep in step.
   tags: ['orbits', 'solar-system'],
-  lock: { placement: true, inspector: true },
+  // The equal-area wedges stay off until the step that is about them.
+  lock: { placement: true, inspector: true, areaSweep: false },
+  retired: {
+    'measure-the-two-orbits': {
+      to: 'find-the-foci',
+      release: '3.1',
+      was: {
+        en: 'Read the eccentricity, closest and furthest distance of two orbits off the readout and type them in.',
+        es: 'Leer la excentricidad y las distancias mínima y máxima de dos órbitas en el panel y escribirlas.',
+      },
+    },
+    // Deeper step; its replacement is `time-it-until-sure` in depth/.
+    'repeat-the-timing': {
+      to: null,
+      release: '3.1',
+      was: {
+        en: 'Read a period three times, seconds apart, and take the mean and its uncertainty.',
+        es: 'Leer un periodo tres veces, con segundos de diferencia, y tomar la media y su incertidumbre.',
+      },
+    },
+    'use-the-law': {
+      to: 'check-the-estimate',
+      release: '3.1',
+      was: {
+        en: 'Work out the period of a planet at 4 AU by cubing the distance and taking the square root, following the steps in the text.',
+        es: 'Calcular el periodo de un planeta a 4 UA elevando la distancia al cubo y sacando la raíz cuadrada, siguiendo los pasos del texto.',
+      },
+    },
+  },
   objectives: [
     'State where the primary sits in an elliptical orbit, and support it with a measurement',
     'Explain why an orbiting body moves fastest at periapsis, in terms of angular momentum',
@@ -92,7 +120,7 @@ const KEPLER = {
              that observational error and moved on. Instead he trusted Tycho's
              measurements over two thousand years of assumption, and spent years
              working out what curve would fit.
-             \n\nThe answer was an ellipse, with the Sun not at its center.`,
+             \n\nThe answer was an ellipse. Where the Sun sits in it is the first thing to find out.`,
       quote: {
         text: 'Because these eight minutes could not be ignored, they alone have led the way toward reforming the whole of astronomy.',
         by: 'Johannes Kepler, Astronomia Nova, 1609',
@@ -102,14 +130,15 @@ const KEPLER = {
         scenario: "Kepler's 2nd Law",
         seed: 'kepler-lab',
         camera: { zoom: 1.5, pan: { x: 0, y: 0 } },
-        paused: false,
+        // Paused: no orbit goes by while the first screens are read.
+        paused: true,
       },
     },
     {
       sid: 'what-you-are-looking-at',
       bind: KEPLER_PAIR,
       type: 'read',
-      motion: true,
+      point: 'star',
       title: 'What you are looking at',
       body: `A single star of one solar mass sits at the center of the view with
              two bodies orbiting it.
@@ -119,24 +148,23 @@ const KEPLER = {
              closer to the star and back out much further. Nearly circular
              orbits are what most Solar System planets are on, which is exactly
              why the ellipse went unnoticed for so long.
-             \n\nThe colored wedges fanning out behind the orange body are all
-             equal in area. Watch them for a moment: near the star they are
-             narrow and long, far away they are broad and short. That is
-             Kepler's second law drawing itself, before you have measured
-             anything.`,
-      tip: 'Nothing needs selecting yet. If the wedges are not showing, press the reset button beside the progress bar to rebuild the system.',
+             \n\nThe scene is paused, and the ring marks the star. Nothing is
+             measured yet: the next step asks you to say where that star sits
+             in the orange body's path before you look any closer.`,
+      tip: 'Nothing needs selecting yet. If the scene looks wrong, press the reset button beside the progress bar to rebuild the system.',
     },
     {
       sid: 'where-is-the-star',
       bind: KEPLER_PAIR,
       type: 'predict',
-      reveal: 'measure-the-two-orbits',
+      reveal: 'the-first-law-and-the',
+      time: { paused: true },
       title: 'Where is the star?',
-      body: `An ellipse has a center and two foci. For a circle all three
-             coincide; the more elongated the ellipse, the further the foci sit
-             from the center.
+      body: `An ellipse has a center, halfway along its long diameter, and two
+             special points called foci, one on each side of the center.
              \n\nLook at the orange body's path and where the star sits inside
-             it. Commit to an answer before measuring anything.`,
+             it. Commit to an answer before measuring anything: the next step
+             gives you a way to check it.`,
       prompt: 'The star sits at…',
       options: [
         'the center of the ellipse',
@@ -149,9 +177,164 @@ const KEPLER = {
         'The star sits at one focus, and the other focus is empty: there is nothing there at all. This is not a coincidence of the Solar System: any inverse-square attraction produces a conic section with the source at a focus, which Newton proved sixty years after Kepler measured it. For a circle the two foci merge at the center, which is why a low-eccentricity orbit looks centered.',
     },
     {
+      sid: 'find-the-foci',
+      bind: KEPLER_PAIR,
+      type: 'measure',
+      allowInspector: true,
+      time: { paused: true },
+      title: 'Find the empty focus',
+      body: `The simulation can draw the ellipse a planet follows, with both
+             foci marked. Use it to check your prediction against two things you
+             read yourself.
+             \\n\\nFirst take the distances. Select the <strong>Eccentric
+             Orbiter</strong> from the object list, then press <strong>Take
+             reading</strong> beside <em>closest approach</em> and again beside
+             <em>furthest distance</em>.
+             \\n\\nThen switch on <strong>Orbit geometry</strong> in the planet's
+             card. A panel lists the points you can measure. Choose the star's
+             point (<em>Focus at Kepler Star</em>) and the <em>Empty focus</em>,
+             by pointer, or with Left and Right and Enter in the list. The panel
+             gives the distance between the two you chose: type it in. The last
+             box works out what your two distances say that separation must be.`,
+      tip: 'The panel can be closed with its X once you have the number. The two points are chosen one after the other; choosing a third replaces the oldest.',
+      fields: [
+        {
+          id: 'f_peri',
+          label: 'Eccentric Orbiter: closest approach to the star',
+          unit: 'AU',
+          want: '0.50',
+          source: { probe: 'peri' },
+          misconceptions: [
+            {
+              id: 'wrongBody',
+              when: { role: 'circular' },
+              say: 'That reading is from the Circular Orbiter. This step is about the Eccentric Orbiter: select it in the object list and take the reading again.',
+            },
+          ],
+        },
+        {
+          id: 'f_apo',
+          label: 'Eccentric Orbiter: furthest distance from the star',
+          unit: 'AU',
+          want: '2.36',
+          source: { probe: 'apo' },
+          misconceptions: [
+            {
+              id: 'wrongBody',
+              when: { role: 'circular' },
+              say: 'That reading is from the Circular Orbiter. This step is about the Eccentric Orbiter: select it in the object list and take the reading again.',
+            },
+          ],
+        },
+        {
+          id: 'f_sep',
+          label:
+            'Distance between the star and the empty focus, from the panel',
+          unit: 'AU',
+          want: '1.86',
+          misconceptions: [
+            {
+              id: 'secondFocusAtTheCenter',
+              equals: 0.93,
+              say: 'That is the distance from the star to the center of the ellipse, which is only half of the way to the empty focus. The empty focus is as far past the center as the star is short of it.',
+            },
+            {
+              id: 'wrongTwoMarkers',
+              equals: 0.5,
+              say: 'That is the distance between the star and the nearest point of the orbit, or between the empty focus and the far point. Choose the star’s point and the Empty focus, and read the distance between those two.',
+            },
+            {
+              id: 'wrongTwoMarkersFar',
+              equals: 2.36,
+              say: 'That is the distance between the star and the far point of the orbit, or between the empty focus and the near point. Choose the star’s point and the Empty focus, and read the distance between those two.',
+            },
+          ],
+        },
+        {
+          id: 'f_implied',
+          label: 'What your two distances say the foci are apart',
+          unit: 'AU',
+          compute: v => v.f_apo - v.f_peri,
+          decimals: 2,
+        },
+      ],
+      validate: (v, ctx) => {
+        if (![v.f_peri, v.f_apo].every(Number.isFinite)) return null;
+        if (v.f_peri <= 0 || v.f_apo <= 0) {
+          return {
+            level: 'error',
+            message: 'Distances have to be positive numbers.',
+          };
+        }
+        if (v.f_peri > v.f_apo) {
+          return {
+            level: 'warn',
+            message:
+              'Closest approach is larger than furthest distance: these look swapped.',
+          };
+        }
+        const body = ctx.find('Eccentric');
+        const el = body && ctx.elements(body);
+        if (el) {
+          const trueA = el.a * 0.01;
+          if (Math.abs((v.f_peri + v.f_apo) / 2 - trueA) / trueA > 0.1) {
+            return {
+              level: 'warn',
+              message:
+                'Your two distances do not belong to the same orbit as the Eccentric Orbiter’s. Select it in the object list and take both readings again.',
+            };
+          }
+        }
+        if (!Number.isFinite(v.f_sep)) return null;
+        const implied = v.f_apo - v.f_peri;
+        if (Math.abs(v.f_sep - implied) / implied <= 0.07) {
+          return {
+            level: 'ok',
+            message:
+              'The panel’s separation agrees with what your two distances say. The star is as far from the near end of the orbit as the empty focus is from the far end, so the foci are the difference of the two distances apart, and the center of the ellipse lies halfway between them.',
+          };
+        }
+        return {
+          level: 'warn',
+          message: `The separation you read from the panel and the one your two distances say (${implied.toFixed(2)} AU) do not agree. Check which two points are chosen, and that both distances were taken from the Eccentric Orbiter.`,
+        };
+      },
+      probe: ctx => {
+        const b = ctx.selected;
+        const el = b && ctx.elements(b);
+        if (!el) {
+          return [
+            { label: 'Select the Eccentric Orbiter', value: '-' },
+            { id: 'peri', label: 'Closest (periapsis)', value: '-' },
+            { id: 'apo', label: 'Furthest (apoapsis)', value: '-' },
+          ];
+        }
+        return [
+          { label: 'Selected', value: b.name || 'Body', emphasis: true },
+          { label: 'Eccentricity e', value: fixed(el.e, 3) },
+          {
+            id: 'peri',
+            label: 'Closest (periapsis)',
+            value: ctx.distance(el.periapsis),
+          },
+          {
+            id: 'apo',
+            label: 'Furthest (apoapsis)',
+            value: ctx.distance(el.apoapsis),
+          },
+        ];
+      },
+    },
+    {
       sid: 'the-first-law-and-the',
       bind: KEPLER_PAIR,
       type: 'read',
+      evidence: [
+        { step: 'find-the-foci', field: 'f_sep' },
+        { step: 'find-the-foci', field: 'f_implied' },
+      ],
+      compare:
+        'The star sits at one focus and the other focus is empty. The panel’s separation and the one your two distances give are the same number because the foci mirror each other about the center.',
       title: 'The First Law, and the anatomy of an ellipse',
       body: `Kepler's <strong>first law</strong>: every planet moves on an
              ellipse, with the star at one focus.
@@ -255,96 +438,15 @@ const KEPLER = {
         'Nothing at all. The empty focus is a geometric feature of the ellipse, not a physical location, and there is no object or force there. The center of mass sits very close to the star, not at the far focus, and the planet moves slowest at apoapsis, which is a point on the orbit rather than inside it.',
     },
     {
-      sid: 'measure-the-two-orbits',
-      bind: KEPLER_PAIR,
-      type: 'measure',
-      title: 'Measure the two orbits',
-      body: `Click the <strong>Circular Orbiter</strong> and read its values from
-             the live readout, then click the <strong>Eccentric Orbiter</strong>
-             and read its.
-             \n\nEccentricity <em>e</em> runs from 0 for a perfect circle to
-             just under 1 for a very elongated ellipse. For comparison: Earth is
-             0.017, Mars is 0.093, Pluto is 0.249, and Halley's Comet is 0.967.`,
-      fields: [
-        { id: 'circ_e', label: 'Circular Orbiter: eccentricity e', unit: '' },
-        { id: 'ecc_e', label: 'Eccentric Orbiter: eccentricity e', unit: '' },
-        {
-          id: 'ecc_peri',
-          label: 'Eccentric Orbiter: closest approach',
-          unit: 'AU',
-        },
-        {
-          id: 'ecc_apo',
-          label: 'Eccentric Orbiter: furthest distance',
-          unit: 'AU',
-        },
-        {
-          id: 'ecc_a',
-          label: 'Semi-major axis from your two distances',
-          unit: 'AU',
-          compute: v => (v.ecc_peri + v.ecc_apo) / 2,
-          decimals: 2,
-        },
-      ],
-      validate: (v, ctx) => {
-        if (!Number.isFinite(v.ecc_peri) || !Number.isFinite(v.ecc_apo)) {
-          return null;
-        }
-        if (v.ecc_peri <= 0 || v.ecc_apo <= 0) {
-          return {
-            level: 'error',
-            message: 'Distances have to be positive numbers.',
-          };
-        }
-        if (v.ecc_peri > v.ecc_apo) {
-          return {
-            level: 'warn',
-            message:
-              'Closest approach is larger than furthest distance: these look swapped.',
-          };
-        }
-        // The semi-major axis is the mean of the two extremes, so it is a free
-        // check that the student read both off the same orbit.
-        const body = ctx.find('Eccentric');
-        const el = body && ctx.elements(body);
-        if (!el) return null;
-        const trueA = el.a * 0.01;
-        const err = Math.abs((v.ecc_peri + v.ecc_apo) / 2 - trueA) / trueA;
-        if (err < 0.1) {
-          return {
-            level: 'ok',
-            message: `That averages to ${((v.ecc_peri + v.ecc_apo) / 2).toFixed(2)} AU, which matches the semi-major axis the simulation reports. The mean of the two extremes <em>is</em> a: that is what "semi-major axis" means.`,
-          };
-        }
-        return {
-          level: 'warn',
-          message: `Your two distances average to ${((v.ecc_peri + v.ecc_apo) / 2).toFixed(2)} AU, but this orbit's semi-major axis is about ${trueA.toFixed(2)} AU. Check you read both values from the same body.`,
-        };
-      },
-      probe: ctx => {
-        const b = ctx.selected;
-        if (!b) return [{ label: 'Click a planet to select it', value: '-' }];
-        const el = ctx.elements(b);
-        if (!el) return [{ label: b.name || 'Body', value: 'no orbit found' }];
-        return [
-          { label: 'Selected', value: b.name || 'Body', emphasis: true },
-          { label: 'Eccentricity e', value: fixed(el.e, 3) },
-          { label: 'Semi-major axis a', value: ctx.distance(el.a) },
-          { label: 'Closest (periapsis)', value: ctx.distance(el.periapsis) },
-          { label: 'Furthest (apoapsis)', value: ctx.distance(el.apoapsis) },
-          { label: 'Current speed', value: ctx.speed(el.v) },
-        ];
-      },
-    },
-    {
       sid: 'where-does-it-move-fastest',
       bind: KEPLER_PAIR,
       type: 'predict',
-      reveal: 'watch-it-happen',
+      reveal: 'why-the-speed-changes',
       title: 'Where does it move fastest?',
-      body: `Kepler's second law says a line drawn from the star to the planet
-             sweeps out equal areas in equal times. Think about what that forces
-             the speed to do at different points on the orbit.`,
+      body: `The eccentric planet's distance from its star changes all the way
+             round its orbit: it swings in close and out far. Think about what
+             that does to its speed, then commit to an answer before you measure
+             anything.`,
       prompt: 'The eccentric planet moves fastest…',
       options: [
         'at its closest approach to the star',
@@ -360,6 +462,7 @@ const KEPLER = {
       sid: 'watch-it-happen',
       bind: KEPLER_PAIR,
       type: 'explore',
+      time: { paused: false },
       title: 'Watch it happen',
       body: `Let the simulation run and keep the eccentric planet selected. The
              live speed below changes continuously as it goes round, while the
@@ -368,7 +471,6 @@ const KEPLER = {
         'Watch the speed reading as the planet swings past the star',
         'Watch it again at the far end of the orbit',
         'Note that the semi-major axis and eccentricity barely move: the orbit is fixed, only the position on it changes',
-        'Notice the wedges: thin and long near the star, wide and short far away, but equal in area',
       ],
       probe: ctx => {
         const b = ctx.selected;
@@ -384,63 +486,85 @@ const KEPLER = {
       },
     },
     {
-      sid: 'equal-areas-however-you-slice',
-      bind: KEPLER_PAIR,
-      type: 'wedges',
-      title: 'Equal areas, however you slice it',
-      body: `The orbit on screen is cut into equal-time slices, and every slice
-             is labeled with its share of the total area. Change how many slices
-             there are and watch what happens to those numbers.
-             \n\nWith 5 slices each is 20%. With 12 each is 8.3%. The count is
-             arbitrary; what is not arbitrary is that they are always equal. The
-             planet takes exactly the same time to travel along each slice's
-             stretch of orbit, whether that stretch is a short fast dash past the
-             star or a long slow crawl across the far side.`,
-      tip: 'The wedge time below is the real answer to "equal areas in equal times": it is the same number for every wedge because they all represent the same interval.',
-    },
-    {
       sid: 'fast-and-slow-in-numbers',
       bind: KEPLER_PAIR,
       type: 'measure',
       title: 'Fast and slow, in numbers',
-      body: `Now put numbers on it — and let the simulation find the two
+      body: `Now put numbers on it, and let the simulation find the two
              moments for you, because catching them by hand measures your
              reflexes rather than the orbit.
-             \n\nThe <strong>Pause at Event</strong> tool has opened below
-             with the <strong>Eccentric Orbiter</strong> and its star already
-             chosen. Set the event to <strong>[[periapsis|periapsis]]</strong> and press
-             <strong>Arm</strong>. The simulation runs until the planet reaches
-             its closest point and stops there. Select the planet and record
-             the speed. Then arm it again for <strong>[[apoapsis|apoapsis]]</strong> and do
-             the same at the far end.
-             \n\nBoth numbers are measured <strong>relative to the star</strong>
-             — the readout subtracts the star's own motion, so the distance and
+             \n\nThe <strong>Pause at Event</strong> tool below has the
+             <strong>Eccentric Orbiter</strong> and its star chosen, and with
+             your prediction committed it is armed for
+             <strong>[[periapsis|periapsis]]</strong>: the simulation runs until
+             the planet reaches its closest point and stops there. Select the
+             planet in the object list and press <strong>Take reading</strong>
+             beside the speed and beside the distance. Then set the event to
+             <strong>[[apoapsis|apoapsis]]</strong>, press <strong>Arm</strong>,
+             and take the same two readings at the far end.
+             \n\nBoth numbers are measured <strong>relative to the star</strong>:
+             the readout subtracts the star's own motion, so the distance and
              the speed describe the orbit rather than the pair's drift through
              the frame. The ratio is worked out for you.
-             \n\n<strong>Read the two numbers the tool gives you.</strong> It
-             reports when the event <em>was</em>, and how far past it the
-             simulation actually <em>stopped</em>. Those are different things:
-             the world is integrated in steps, and the event falls between two
-             of them. The tool brackets it and interpolates the time, then stops
-             at the first step after it — it does not wind the world back onto
-             the event, because the clock is not the only thing indexed by the
-             clock. So the speed you read is the speed at the paused state, a
-             short way past the extreme, and the event time is an estimate of
-             when the extreme happened. For this orbit the difference is small,
-             and the honest thing is to know it is there.`,
-      // Opens the tool with these two bodies chosen and arms nothing: the
-      // reader presses Arm, which is the interaction being asked for. See
-      // js/investigations/eventWatch.js.
+             \n\nThe tool reports when the event <em>was</em>, and how far past
+             it the simulation actually <em>stopped</em>. Those are different
+             things: the world is integrated in steps, and the event falls
+             between two of them, so the speed you read is a short way past the
+             extreme. For this orbit the difference is small, and the honest
+             thing is to know it is there.`,
+      // Opens the tool with these two bodies chosen. With `auto` it arms the
+      // periapsis watch once the prediction is committed; the reader arms the
+      // second event, apoapsis, which is the interaction being asked for.
+      // See js/investigations/eventWatch.js.
       pauseAt: {
         kind: 'periapsis',
         body: 'Eccentric Orbiter',
         primary: 'Kepler Star',
+        auto: true,
       },
       fields: [
-        { id: 'v_peri', label: 'Speed at closest approach', unit: 'km/s' },
-        { id: 'r_peri', label: 'Distance from star there', unit: 'AU' },
-        { id: 'v_apo', label: 'Speed at furthest point', unit: 'km/s' },
-        { id: 'r_apo', label: 'Distance from star there', unit: 'AU' },
+        {
+          id: 'v_peri',
+          label: 'Speed at closest approach',
+          unit: 'km/s',
+          want: '34',
+          source: { probe: 'speed' },
+          misconceptions: [
+            {
+              id: 'wrongBody',
+              when: { role: 'circular' },
+              say: 'That reading is from the Circular Orbiter. This step is about the Eccentric Orbiter: select it in the object list and take the reading again.',
+            },
+          ],
+        },
+        {
+          id: 'r_peri',
+          label: 'Distance from star there',
+          unit: 'AU',
+          want: '0.50',
+          source: { probe: 'dist' },
+        },
+        {
+          id: 'v_apo',
+          label: 'Speed at furthest point',
+          unit: 'km/s',
+          want: '7',
+          source: { probe: 'speed' },
+          misconceptions: [
+            {
+              id: 'wrongBody',
+              when: { role: 'circular' },
+              say: 'That reading is from the Circular Orbiter. This step is about the Eccentric Orbiter: select it in the object list and take the reading again.',
+            },
+          ],
+        },
+        {
+          id: 'r_apo',
+          label: 'Distance from star there',
+          unit: 'AU',
+          want: '2.36',
+          source: { probe: 'dist' },
+        },
         {
           id: 'v_ratio',
           label: 'Ratio (fast ÷ slow)',
@@ -515,18 +639,29 @@ const KEPLER = {
       tip: 'If the tool refuses to arm and says the orbit is circular, that is not a fault. On a perfectly round orbit there is no closest point: the radial rate is zero everywhere and its sign is decided by rounding error, so a watch would fire on the first step and every step after it. The tool declines and says so. The Eccentric Orbiter is eccentric enough; the Circular Orbiter is not, and it is worth arming it once to see the refusal.',
       probe: ctx => {
         const b = ctx.selected;
-        if (!b) return [{ label: 'Select a planet', value: '-' }];
-        const el = ctx.elements(b);
-        if (!el) return [{ label: b.name || 'Body', value: 'no orbit found' }];
+        const el = b && ctx.elements(b);
+        if (!el) {
+          return [
+            { id: 'dist', label: 'Distance from star', value: '-' },
+            { id: 'speed', label: 'Speed now', value: '-' },
+            { label: 'Select the Eccentric Orbiter', value: '-' },
+          ];
+        }
         const nearPeri = Math.abs(el.r - el.periapsis) / el.periapsis < 0.03;
         const nearApo = Math.abs(el.r - el.apoapsis) / el.apoapsis < 0.03;
         return [
           {
+            id: 'dist',
             label: 'Distance from star',
             value: ctx.distance(el.r),
             emphasis: nearPeri || nearApo,
           },
-          { label: 'Speed now', value: ctx.speed(el.v), emphasis: true },
+          {
+            id: 'speed',
+            label: 'Speed now',
+            value: ctx.speed(el.v),
+            emphasis: true,
+          },
           {
             label: 'At an extreme?',
             value: nearPeri
@@ -544,6 +679,12 @@ const KEPLER = {
       sid: 'why-the-speed-changes',
       bind: KEPLER_PAIR,
       type: 'question',
+      evidence: [
+        { step: 'fast-and-slow-in-numbers', field: 'v_peri' },
+        { step: 'fast-and-slow-in-numbers', field: 'v_apo' },
+      ],
+      compare:
+        'The planet is fastest at its closest approach and slowest at its furthest point. Your two speeds are the evidence the explanation below has to account for.',
       title: 'Why the speed changes',
       kind: 'short',
       body: `You have just measured a planet speeding up and slowing down on a
@@ -553,6 +694,22 @@ const KEPLER = {
         'In one or two sentences, explain why the planet speeds up as it approaches the star. What quantity stays constant, and why does gravity not change it?',
       rubric:
         'Angular momentum L = m·v·r·sin(angle) is conserved because gravity is a central force: it acts along the line joining the two bodies and so exerts no torque about the star. As r falls, v must rise to keep the product constant. (Energy is also conserved, with potential converting to kinetic; either argument earns credit, but angular momentum is the one that gives the equal-areas rule directly.)',
+    },
+    {
+      sid: 'equal-areas-however-you-slice',
+      bind: KEPLER_PAIR,
+      type: 'wedges',
+      wedgeOf: 'Eccentric',
+      title: 'Equal areas, however you slice it',
+      body: `The orbit on screen is cut into equal-time slices, and every slice
+             is labeled with its share of the total area. Change how many slices
+             there are and watch what happens to those numbers.
+             \n\nWith 5 slices each is 20%. With 12 each is 8.3%. The count is
+             arbitrary; what is not arbitrary is that they are always equal. The
+             planet takes exactly the same time to travel along each slice's
+             stretch of orbit, whether that stretch is a short fast dash past the
+             star or a long slow crawl across the far side.`,
+      tip: 'The wedge time below is the real answer to "equal areas in equal times": it is the same number for every wedge because they all represent the same interval.',
     },
     {
       sid: 'kepler-s-third-law',
@@ -598,21 +755,25 @@ const KEPLER = {
       sid: 'measure-four-planets',
       bind: SOLAR,
       type: 'measure',
-      title: 'Measure four planets',
-      body: `Click each planet in turn and record its semi-major axis and
-             period. Choose four that are well spread out, because a narrow range
-             of <em>a</em> cannot tell a power law apart from a straight line.
+      title: 'Measure the planets',
+      body: `Select a planet and press <strong>Add reading</strong> to record
+             its semi-major axis and period together, with the name of the
+             planet they came from. Choose at least five, and choose them so
+             that they are well spread out, because a narrow range of <em>a</em>
+             cannot tell a power law apart from a straight line.
              \n\nThere is room for all eight planets, and the fitted line gets
              visibly better as you add them. Mercury, Earth, Jupiter and Saturn
              are reachable at the starting zoom; scroll out for Uranus and
-             Neptune.
+             Neptune. Select a point on the plot, or a row of the table, to ring
+             the planet it came from.
              \n\nIf the outer planets squash the inner ones into the corner of
              the plot, press <strong>Log axes</strong>. On a log-log plot a power
              law is a straight line whatever its exponent, and every planet gets
              the same amount of room.
-             \n\nYour points appear on the plot as you type. Record what the
+             \n\nYour points appear on the plot as you add them. Record what the
              simulation reports, not what you remember about the real Solar
              System.`,
+      importLabel: 'Add reading',
       fields: [
         { id: 'p1_name', label: 'Planet 1: name', unit: '', kind: 'text' },
         { id: 'p1_a', label: 'Planet 1: a', unit: 'AU' },
@@ -681,7 +842,12 @@ const KEPLER = {
       },
       validate: v => {
         const rows = [1, 2, 3, 4, 5, 6, 7, 8]
-          .map(i => ({ a: v[`p${i}_a`], P: v[`p${i}_P`] }))
+          .map(i => ({
+            i,
+            name: String(v[`p${i}_name_text`] || `row ${i}`),
+            a: v[`p${i}_a`],
+            P: v[`p${i}_P`],
+          }))
           .filter(r => Number.isFinite(r.a) && Number.isFinite(r.P));
         if (rows.length < 2) return null;
         if (rows.some(r => r.a <= 0 || r.P <= 0)) {
@@ -691,22 +857,38 @@ const KEPLER = {
           };
         }
         const ks = rows.map(r => (r.P * r.P) / (r.a * r.a * r.a));
-        const spread =
-          (Math.max(...ks) - Math.min(...ks)) /
-          (ks.reduce((x, y) => x + y, 0) / ks.length);
+        const mean = ks.reduce((x, y) => x + y, 0) / ks.length;
+        const spread = (Math.max(...ks) - Math.min(...ks)) / mean;
         if (rows.length >= 3 && spread > 0.5) {
+          // Name the row that disagrees with the others: the one furthest
+          // from the middle value.
+          const mid = [...ks].sort((x, y) => x - y)[Math.floor(ks.length / 2)];
+          const off = rows
+            .map((r, j) => ({ r, d: Math.abs(ks[j] - mid) / mid }))
+            .sort((x, y) => y.d - x.d)[0].r;
           return {
             level: 'warn',
-            message: `Your <em>P</em>²/<em>a</em>³ values range from ${Math.min(...ks).toFixed(2)} to ${Math.max(...ks).toFixed(2)}. For planets around the same star they should all be close to each other. Check whether a period was read in days rather than years, or a distance mixed up between two planets.`,
+            message: `Your <em>P</em>²/<em>a</em>³ values range from ${Math.min(...ks).toFixed(2)} to ${Math.max(...ks).toFixed(2)}. For planets around the same star they should all be close to each other, and ${off.name} (row ${off.i}) is the one that disagrees. Check whether its period was read in days rather than years, or its distance from another planet.`,
           };
         }
-        if (rows.length >= 3) {
+        const range =
+          Math.max(...rows.map(r => r.a)) / Math.min(...rows.map(r => r.a));
+        if (rows.length >= 3 && range < 4) {
+          return {
+            level: 'warn',
+            message: `Your planets span only a factor of ${range.toFixed(1)} in distance. A narrow range cannot tell a power law from a straight line: add a planet much nearer or much farther than the others.`,
+          };
+        }
+        if (rows.length >= 5) {
           return {
             level: 'ok',
-            message: `All ${rows.length} of your <em>P</em>²/<em>a</em>³ values agree to within ${(spread * 100).toFixed(0)}%. That constancy across planets of wildly different sizes is Kepler's third law. Add more planets and watch the fitted line tighten.`,
+            message: `All ${rows.length} of your <em>P</em>²/<em>a</em>³ values agree to within ${(spread * 100).toFixed(0)}%, across a factor of ${range.toFixed(0)} in distance. That constancy across planets of wildly different sizes is Kepler's third law.`,
           };
         }
-        return null;
+        return {
+          level: 'warn',
+          message: `${rows.length} planets so far. Add more, spread out: at least five are needed before the pattern can be told from a straight line.`,
+        };
       },
       probe: ctx => {
         const b = ctx.selected;
@@ -801,84 +983,232 @@ const KEPLER = {
       },
     },
     {
-      sid: 'use-the-law',
+      sid: 'pick-a-distance',
       bind: SOLAR,
-      type: 'question',
-      title: 'Use the law',
-      kind: 'numeric',
+      requires: ['measure-four-planets'],
+      type: 'measure',
+      title: 'Pick an orbit nobody has measured',
       body: `The real test of a law is whether it predicts something you have
-             not measured.
-             \n\nSuppose a ninth planet orbited this same star at a semi-major
-             axis of exactly 4 AU, out between Mars and Jupiter. Nobody has
-             measured its period, because it does not exist. Work it out anyway.
-             \n\n<strong>Step 1.</strong> You know <em>P</em>² = <em>a</em>³, and you know
-             <em>a</em> = 4 AU.
-             \n\n<strong>Step 2.</strong> Cube the distance:
-             <em>a</em>³ = 4 × 4 × 4 = 64. So <em>P</em>² = 64.
-             \n\n<strong>Step 3.</strong> You have <em>P</em> squared, but the question
-             asks for <em>P</em>. Undo the square by taking the square root: <em>P</em> = √64.
-             \n\nWhat is that?`,
-      prompt: 'Orbital period of a planet at <em>a</em> = 4 AU',
-      unit: 'years',
-      answer: 8,
-      tolerance: 0.4,
-      // Years is the unit the law is stated in here, but a student who worked
-      // the period out in days has done the same physics.
-      expect: {
-        dimension: 'time',
-        unit: 'yr',
-        accept: ['yr', 'years', 'd', 'days'],
-      },
-      // Two specific slips this question invites, both authored rather than
-      // inferred: cubing and stopping, and taking the square root of a instead
-      // of of a³.
-      misconceptions: [
+             not measured. Choose a distance from the star, in AU, for a ninth
+             planet that does not exist. Pick one that falls in a gap between
+             two of the planets you measured, not on top of one of them, so that
+             the prediction means something.
+             \\n\\nNobody has measured its period. The next two steps ask you
+             to estimate it from your plot, and then to check the estimate.`,
+      fields: [
         {
-          id: 'cubedNotRooted',
-          equals: 64,
-          say: `That is <em>a</em>³. The law says <em>P</em>² = <em>a</em>³, so the period is the square
-                root of 64, not 64 itself.`,
-        },
-        {
-          id: 'rootedTheAxis',
-          equals: 2,
-          say: `That is √<em>a</em>. The cube comes first: work out <em>a</em>³ = 64, then take
-                its square root.`,
+          id: 'a_new',
+          label: 'Distance of the ninth planet from the star',
+          unit: 'AU',
         },
       ],
-      hints: {
-        concept: `Kepler's third law ties the size of an orbit to how long it
-                  takes, and to nothing else. In these units - years and AU,
-                  around this star - the relation is as simple as it ever gets.`,
-        method: `<em>P</em>² = <em>a</em>³. Put <em>a</em> = 4 in, work out the right-hand side, then undo
-                 the square.`,
-      },
-      worked: `<em>a</em> = 4, so <em>a</em>³ = 64. <em>P</em>² = 64, so <em>P</em> = √64 = 8 years. The check that
-               it is really a law: Jupiter sits at 5.204 AU, giving <em>a</em>³ = 141.0
-               and <em>P</em> = 11.87 years, against a measured 11.86.`,
-      because:
-        "<em>P</em> = 8 years. Now try it on a planet you did measure: Jupiter sits at 5.204 AU, so <em>a</em>³ = 141.0 and <em>P</em> = √141.0 = 11.87 years. The table says 11.86. You have just predicted a real planet's year from nothing but its distance.",
-      feedback: {
-        close:
-          'Close, but outside the tolerance. Re-check the cube and the square root separately.',
-        'wrong-unit':
-          'That looks like days. With the distance in AU the law gives years, so convert before you answer.',
-        'wrong-order-of-magnitude':
-          'Out by a power of ten. Cube the distance first, then take the square root.',
-        off: 'Check the order of operations: cube <em>a</em> to get <em>P</em> squared, and only then undo the square.',
-        correct:
-          'To test a law like this, apply it to a planet whose year you know and see that it agrees.',
+      validate: (v, ctx) => {
+        if (!Number.isFinite(v.a_new)) return null;
+        if (v.a_new < 0.3 || v.a_new > 25) {
+          return {
+            level: 'warn',
+            message:
+              'That is outside the range of the planets in this view. Pick a distance between about 0.3 and 25 AU, in a gap between two planets you measured.',
+          };
+        }
+        const near = ['mercury', 'earth', 'jupiter', 'saturn']
+          .map(r => ctx.role(r))
+          .filter(Boolean)
+          .map(b => ({ b, el: ctx.elements(b) }))
+          .filter(x => x.el)
+          .find(
+            x => Math.abs(x.el.a * 0.01 - v.a_new) / (x.el.a * 0.01) < 0.12
+          );
+        if (near) {
+          return {
+            level: 'warn',
+            message: `That is almost exactly ${near.b.name}'s distance, so its period would just be ${near.b.name}'s. Pick a distance in a gap between two planets.`,
+          };
+        }
+        return {
+          level: 'ok',
+          message:
+            'That distance is in a gap, so the prediction has to come from the pattern in your plot rather than from one planet.',
+        };
       },
     },
     {
-      sid: 'what-the-constant-depends-on',
+      sid: 'estimate-the-year',
       bind: SOLAR,
+      type: 'predict',
+      kind: 'estimate',
+      unit: 'yr',
+      reveal: 'compare-the-estimate',
+      title: 'Estimate its year',
+      body: `Look at your plot and your table. Estimate the orbital period of
+             the planet at the distance you chose, in years. Do not work out a
+             formula yet: read it off the pattern, then commit to a number. It
+             stays unmarked until the next step.`,
+      prompt: 'Period of the ninth planet',
+    },
+    {
+      sid: 'check-the-estimate',
+      bind: SOLAR,
+      requires: ['pick-a-distance'],
+      type: 'measure',
+      title: 'Check it against a real planet',
+      body: `Check the estimate against the planet whose orbit is nearest the
+             one you chose. Select that planet and press <strong>Take
+             reading</strong> beside its distance and beside its period.
+             \\n\\nThe last box scales that planet's period to your distance with
+             Kepler's third law: a period grows as the distance raised to the
+             power three halves. Does it land near your estimate?`,
+      fields: [
+        {
+          id: 'near_a',
+          label: 'Nearest measured planet: distance',
+          unit: 'AU',
+          source: { probe: 'a' },
+        },
+        {
+          id: 'near_P',
+          label: 'Nearest measured planet: period',
+          unit: 'yr',
+          source: { probe: 'P' },
+        },
+        {
+          id: 'ratio',
+          label: 'Your distance as a multiple of that planet’s',
+          unit: '',
+          compute: (v, earlier) =>
+            earlier('pick-a-distance', 'a_new') / v.near_a,
+          decimals: 2,
+        },
+        {
+          id: 'P_scaled',
+          label: 'Period at your distance, from the law',
+          unit: 'yr',
+          compute: (v, earlier) =>
+            v.near_P * (earlier('pick-a-distance', 'a_new') / v.near_a) ** 1.5,
+          decimals: 2,
+        },
+      ],
+      validate: (v, ctx) => {
+        if (![v.near_a, v.near_P, v.ratio, v.P_scaled].every(Number.isFinite))
+          return null;
+        // One planet's two readings, not two planets'.
+        const body = ctx.selected;
+        const el = body && ctx.elements(body);
+        if (el && Math.abs(ctx.years(el.period) - v.near_P) / v.near_P > 0.2) {
+          return {
+            level: 'warn',
+            message:
+              'The period does not belong to the planet whose distance you took. Select one planet and take both readings from it.',
+          };
+        }
+        if (v.ratio > 2 || v.ratio < 0.5) {
+          return {
+            level: 'warn',
+            message:
+              'That planet is more than twice as far from the star as your orbit, or less than half. The law still scales, but a nearer planet is a closer check on the estimate. Select a nearer one and take both readings again.',
+          };
+        }
+        return {
+          level: 'ok',
+          message: `Scaled from this planet, the period at your distance is ${v.P_scaled.toFixed(2)} yr. Compare it with your estimate: the law gives the same number whichever planet you scale from, which is what your table showed.`,
+        };
+      },
+      probe: ctx => {
+        const b = ctx.selected;
+        const el = b && ctx.elements(b);
+        if (!el) {
+          return [
+            { label: 'Click a planet to read it', value: '-' },
+            { id: 'a', label: 'Semi-major axis a', value: '-' },
+            { id: 'P', label: 'Period P', value: '-' },
+          ];
+        }
+        return [
+          { label: 'Selected', value: b.name || 'Body', emphasis: true },
+          {
+            id: 'a',
+            label: 'Semi-major axis a',
+            value: `${fixed(el.a * 0.01, 3)} AU`,
+          },
+          {
+            id: 'P',
+            label: 'Period P',
+            value: `${fixed(ctx.years(el.period), 3)} yr`,
+            emphasis: true,
+          },
+        ];
+      },
+    },
+    {
+      sid: 'compare-the-estimate',
+      bind: SOLAR,
+      type: 'read',
+      evidence: [
+        { step: 'check-the-estimate', field: 'P_scaled' },
+        { step: 'check-the-estimate', field: 'near_P' },
+      ],
+      compare:
+        'The law gives a period from a distance alone. Where your estimate and the law’s number differ, the curve you read the estimate from was the less exact of the two.',
+      title: 'Your estimate and the law',
+      body: `Above are your estimate, the period the law gives at your distance,
+             and the planet you scaled it from. A law is more than a curve
+             through your points: it says what the period has to be at a
+             distance nobody has measured, and a planet put there would be
+             held to it.
+             \n\nIf your estimate was off, notice what it came from: reading
+             a curved plot by eye. Straightening the plot, or using the
+             exponent, is what the law is for.`,
+    },
+    {
+      sid: 'what-the-constant-depends-on',
       type: 'question',
-      title: 'What the constant depends on',
       kind: 'choice',
-      body: `Your four planets had wildly different masses: from a small rocky
-             world to a gas giant hundreds of times heavier, and all gave the
-             same <em>P</em>²/<em>a</em>³.`,
+      // One planet on a circular orbit at 1 AU, around a star whose mass the
+      // controlled run changes: the same planet, the same orbit, one thing
+      // different.
+      stage: {
+        system: {
+          starName: 'Test star',
+          planets: [{ name: 'Test planet', role: 'world', aAU: 1, ecc: 0 }],
+          fit: true,
+        },
+      },
+      variation: {
+        param: 'starMassSun',
+        values: [1, 2],
+        runFor: 30,
+        read: ['P'],
+        label: 'star mass',
+      },
+      time: { paused: true },
+      title: 'What the constant depends on',
+      body: `Your planets had wildly different masses, from a small rocky world to
+             a gas giant hundreds of times heavier, and all gave the same
+             <em>P</em>²/<em>a</em>³. So what does that constant depend on?
+             \n\nHere is one planet on a circular orbit at 1 AU. Press
+             <strong>Run A</strong> and read its period, then
+             <strong>Change star mass</strong> and press <strong>Run B</strong>:
+             the same planet at the same distance, around a star of twice the
+             mass. The two runs are kept in the table.`,
+      probe: ctx => {
+        const b = ctx.role('world');
+        const el = b && ctx.elements(b);
+        if (!el) {
+          return [
+            { label: 'Planet', value: '-' },
+            { id: 'P', label: 'Period P', value: '-' },
+          ];
+        }
+        return [
+          { label: 'Planet', value: b.name },
+          {
+            id: 'P',
+            label: 'Period P',
+            value: `${fixed(ctx.years(el.period), 3)} yr`,
+            emphasis: true,
+          },
+        ];
+      },
       prompt:
         'The constant in <em>P</em>² = <em>k</em>·<em>a</em>³ depends on…',
       options: [
