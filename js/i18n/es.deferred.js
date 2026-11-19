@@ -3921,7 +3921,6 @@ export const ES_DEFERRED = {
   'lessonFn.closestApproachIsLargerThanFurthest70':
     'El máximo acercamiento es mayor que la distancia máxima: parecen intercambiados.',
   'lessonFn.eccentric9': 'Excéntrico',
-  'lessonFn.clickAPlanetToSelectIt27': 'Pulsa un planeta para seleccionarlo',
   'lessonFn.body4': 'Cuerpo',
   'lessonFn.noOrbitFound14': 'no se encontró órbita',
   'lessonFn.selected8': 'Seleccionado',
@@ -3974,7 +3973,6 @@ export const ES_DEFERRED = {
   'lessonFn.aBody6': 'Un cuerpo',
   'lessonFn.sunDistanceFromEarth24': 'Sol: distancia a la Tierra',
   'lessonFn.sunDirectionFromEarth25': 'Sol: dirección desde la Tierra',
-  'lessonFn.baselineOutOfTransit24': 'Línea de base, fuera del tránsito',
   'lessonFn.completeTransitsRecorded26': 'Tránsitos completos registrados',
   'lessonFn.waitingForACompleteTransit30': 'Esperando un tránsito completo',
   'lessonFn.clock5': 'Reloj',
