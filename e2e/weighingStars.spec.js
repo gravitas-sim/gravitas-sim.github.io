@@ -53,7 +53,7 @@ test('the arm lengths are taken, not typed, and a later lap gives the same readi
   expect(JSON.parse(first[`${ID}:${sid}:ra:src`])).toMatchObject({ k: 'c' });
   // The pair is circular: after a lap of watching, the same reading is the same
   // number, so it is refused as already recorded rather than found different.
-  await page.waitForTimeout(3000);
+  await app.waitForFrames(180);
   await take(page, 'sep');
   const again = (await progressOf(page, ID)).responses;
   expect(again[`${ID}:${sid}:sep`]).toBe(first[`${ID}:${sid}:sep`]);
@@ -70,7 +70,7 @@ test('a wrong star, a period of half a lap and a unit slip are named; the right 
   // The stopwatch is taken, and the page divides by the laps the student timed.
   await walkToSid(page, plan, 'measurement-two-how-long-does');
   await toolAction(page, 'mark');
-  await page.waitForTimeout(4000);
+  await app.waitForFrames(240);
   await toolAction(page, 'stop');
   await typeIn(page, 'measurement-two-how-long-does', 'laps', 1);
   await take(page, 't');
@@ -135,11 +135,11 @@ test('a deeper step opens on its anchor scene and the error bar follows the scat
 
   const s = 'how-sure-is-the-total';
   await toolAction(page, 'mark');
-  await page.waitForTimeout(1500);
+  await app.waitForFrames(90);
   await toolAction(page, 'stop');
   await take(page, 't1');
   await toolAction(page, 'mark');
-  await page.waitForTimeout(3500);
+  await app.waitForFrames(210);
   await toolAction(page, 'stop');
   await take(page, 't2');
   await expect(box(page, s, 'n')).toHaveValue('2');

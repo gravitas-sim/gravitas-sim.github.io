@@ -243,6 +243,8 @@ export default {
         'One lap takes about 4 years. Students say how many laps they timed and take the stopwatch reading; the page divides. Capture this orbit records the separation, both arms and the timing as student-timed. Expect the half-lap slip and a reading not divided by the laps.',
       'weigh-the-pair':
         'a³ = 64, P² = 16, so the total is 4 solar masses. Students choose which reading is a. One star’s arm, an arm added to the separation, all three readings added, half a lap, a reading not divided by the laps and months each get a named slip.',
+      'back-to-the-balance-point':
+        'Star B swings about three times as far out as Star A (the panel prints the ratio and the student takes it); the nearer star is the heavier one.',
       'now-weigh-each-one':
         'The 3:1 distance ratio splits the 4 solar masses into 3 and 1; the page checks the split against the student’s own total and ratio.',
       'one-on-your-own':
