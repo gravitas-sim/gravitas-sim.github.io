@@ -261,6 +261,13 @@ test.describe('the Exoplanet Observatory guides', () => {
     page,
     errors,
   }) => {
+    // The production build has no service worker and bundles the suite into a
+    // hashed chunk, so there is no path to block: this is a property of the
+    // sources, where the precache lists the files by name.
+    test.skip(
+      process.env.GRAVITAS_E2E_TARGET === 'dist',
+      'the production build names its chunks by hash, so the suite cannot be blocked by path'
+    );
     // The suite and its words are kept by the service worker after first use,
     // not installed: block them as a first offline visit would.
     await page.route(/\/js\/observatory\/guides\/exoplanet\.js/, r =>
