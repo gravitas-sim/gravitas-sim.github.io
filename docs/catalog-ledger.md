@@ -18,7 +18,7 @@ Rows by kind: activity 6, course 6, experiment 4, investigation 146, sequence 11
 
 Baseline (measured at f9277ff8): 146 investigations (124 lessons, 10 Observatory, 9 3-D, 3 mission), 6 activity entries, 4 bench labs, 7 courses (6 rows and 1 out of scope), 11 sequences, 69 scenarios (61 sandbox, 8 3-D lab), 16 datasets.
 
-Editorial: OPEN 171, REVISED 2. Redesign: OPEN 171, REVISED 2. Scenario dispositions: OPEN 69.
+Editorial: OPEN 169, REVISED 4. Redesign: OPEN 169, REVISED 4. Scenario dispositions: OPEN 69.
 
 Scene class of the lessons: portrait or backdrop 94, setup scenario 26, engine-integrated stage 2, model-owned stage 2.
 
@@ -73,7 +73,7 @@ Scene class of the lessons: portrait or backdrop 94, setup scenario 26, engine-i
 | `investigation:how-old-is-this-white-dwarf`          | lesson      |   380 | STRONG   | portrait or backdrop    | OPEN      | OPEN     | NOT RUN      | -                                     |          0 |
 | `investigation:inside-a-star`                        | lesson      |   379 | FOCUSED  | portrait or backdrop    | OPEN      | OPEN     | NOT RUN      | -                                     |          0 |
 | `investigation:integrators-in-practice`              | lesson      |   362 | REDESIGN | setup scenario          | OPEN      | OPEN     | NOT RUN      | leg A8 left failing                   |          0 |
-| `investigation:ios-fire`                             | lesson      |   331 | REDESIGN | portrait or backdrop    | OPEN      | OPEN     | NOT RUN      | -                                     |          0 |
+| `investigation:ios-fire`                             | lesson      |   331 | REDESIGN | portrait or backdrop    | REVISED   | REVISED  | VERIFIED     | -                                     |          0 |
 | `investigation:keplers-laws`                         | lesson      |   328 | STRONG   | setup scenario          | OPEN      | OPEN     | NOT RUN      | -                                     |          0 |
 | `investigation:l3-eclipse`                           | lab3d       |   418 | STRONG   | -                       | OPEN      | OPEN     | NOT RUN      | -                                     |          1 |
 | `investigation:l3-elements`                          | lab3d       |   417 | FOCUSED  | -                       | OPEN      | OPEN     | NOT RUN      | -                                     |          1 |
@@ -140,7 +140,7 @@ Scene class of the lessons: portrait or backdrop 94, setup scenario 26, engine-i
 | `investigation:the-turning-sky`                      | lesson      |   376 | FOCUSED  | portrait or backdrop    | OPEN      | OPEN     | NOT RUN      | -                                     |          0 |
 | `investigation:the-turning-sun`                      | lesson      |   388 | STRONG   | portrait or backdrop    | OPEN      | OPEN     | NOT RUN      | -                                     |          1 |
 | `investigation:tides`                                | lesson      |   348 | FOCUSED  | setup scenario          | OPEN      | OPEN     | NOT RUN      | -                                     |          0 |
-| `investigation:tides-that-move-the-moon`             | lesson      |   331 | FOCUSED  | portrait or backdrop    | OPEN      | OPEN     | NOT RUN      | -                                     |          0 |
+| `investigation:tides-that-move-the-moon`             | lesson      |   331 | FOCUSED  | portrait or backdrop    | REVISED   | REVISED  | VERIFIED     | -                                     |          0 |
 | `investigation:transit-photometry`                   | lesson      |   329 | FOCUSED  | setup scenario          | OPEN      | OPEN     | NOT RUN      | -                                     |          0 |
 | `investigation:twelve-nights`                        | lesson      |   355 | STRONG   | setup scenario          | OPEN      | OPEN     | NOT RUN      | -                                     |          0 |
 | `investigation:two-clusters-two-ages`                | lesson      |   381 | FOCUSED  | portrait or backdrop    | OPEN      | OPEN     | NOT RUN      | synthetic clusters (+1)               |          0 |
