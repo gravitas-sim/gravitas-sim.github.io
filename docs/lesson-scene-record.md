@@ -11,16 +11,16 @@ The hand-written, human-reviewed acceptance map is
 [`lesson-acceptance.json`](lesson-acceptance.json); `npm run
 audit:scene:check` fails if it disagrees with what is generated here.
 
-Across 124 investigations and 1524 steps: 1416 steps
-declare a scene, 167 let a reader change one, 177 read the
+Across 124 investigations and 1525 steps: 1417 steps
+declare a scene, 165 let a reader change one, 177 read the
 running integration, 1009 show a prescribed model result, 161 draw
 on a stored dataset, 878 put a self-contained panel beside the text,
-390 keep something, and 59 are prose.
-Of 195 prediction loops, 195 are returned to,
-195 produce a measurement before they are answered, and
+391 keep something, and 59 are prose.
+Of 196 prediction loops, 196 are returned to,
+196 produce a measurement before they are answered, and
 0 end in an explanation in the reader's own words.
 195 hold their marking until the experiment settles them.
-The canvas behind a step is stated as scene on 0, portrait on 7, quiet on 16; 1501 state none.
+The canvas behind a step is stated as scene on 0, portrait on 7, quiet on 16; 1502 state none.
 
 ## Kepler's Laws (`keplers-laws`)
 
@@ -52,17 +52,17 @@ The canvas behind a step is stated as scene on 0, portrait on 7, quiet on 16; 15
 
 ## Finding Planets by Their Shadows (`transit-photometry`)
 
-- **Steps:** 29. Scene declared on 29; a reader can change something on 5; 24 declare a scene nobody on that step can touch.
+- **Steps:** 30. Scene declared on 30; a reader can change something on 3; 27 declare a scene nobody on that step can touch.
 - **Where the numbers come from:** 6 live engine, 5 prescribed model, 0 stored dataset, 5 self-contained panel.
-- **What students do:** read, commit-a-prediction, open-a-body-inspector, select-a-body, run-the-simulation, record-a-light-curve, view-from-a-set-angle, tick-a-checklist, move-an-instrument-control, press-an-instrument-preset, record-values, import-from-the-selection, run-to-an-armed-event, choose-an-option, answer-in-words.
+- **What students do:** read, read-a-prediction-prompt-that-collects-nothing, open-a-body-inspector, select-a-body, run-the-simulation, run-to-an-armed-event, record-a-light-curve, view-from-a-set-angle, tick-a-checklist, move-an-instrument-control, press-an-instrument-preset, record-values, choose-an-option, answer-in-words, commit-a-prediction, import-from-the-selection.
 - **Objects the steps declare:** star, planet.
 - **Instruments:** depth-size, geometry, spectrum, dilution, resolve.
 - **Stored data:** none.
 - **Evidence kept:** notebook-fields, imported-from-scene.
-- **Prediction loops:** what-will-the-brightness-do → your-first-transit, try-it-on-some-real, measure-the-dip, correct-it-and-get-a, the-shape-of-the-dip, the-angle-you-happen-to → your-first-transit; getting-the-period → time-two-transits, from-a-period-to-an, read-an-atmosphere, a-star-you-did-not, go-and-look, now-measure-it, recover-the-real-planet → time-two-transits.
-- **Recovery:** wrong body: the step binds the object by name, so there is none; reset: rebuilds the scenario on arrival; null result: the probe names what is missing; wrong body: select another and import again, which overwrites; missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand; ambiguous result: the check says in words how close is close enough; missed moment: an event watch stops the run at transit.
-- **Scene rebuilds:** 2 step(s) on arrival (a-firefly-beside-a-lighthouse, now-measure-it).
-- **Accepted central experiment** (reviewed 2026-09-11): object `planet`, control depth-size/rp, measures transit depth, and the planet radius it implies, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+- **Prediction loops:** estimate-the-dip → your-first-transit, try-it-on-some-real, choose-the-two-stretches, correct-it-and-get-a, the-shape-of-the-dip, the-angle-you-happen-to → from-a-depth-to-a; getting-the-period → time-two-transits, from-a-period-to-an, read-an-atmosphere, a-star-you-did-not, go-and-look → time-two-transits; will-the-dip-look-the-same → compare-the-two-curves, find-the-hidden-companion → find-the-hidden-companion.
+- **Recovery:** wrong body: the step binds the object by name, so there is none; reset: rebuilds the scenario on arrival; missed moment: an event watch stops the run at transit; null result: the probe names what is missing; missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand; null result: guarded, but the fallback is not spelled out; ambiguous result: the check refuses without saying why; ambiguous result: the check says in words how close is close enough; wrong body: select another and import again, which overwrites.
+- **Scene rebuilds:** 2 step(s) on arrival (a-firefly-beside-a-lighthouse, compare-the-two-curves).
+- **Accepted central experiment** (reviewed 2026-09-11): object `planet`, control depth-size/rp, measures transit depth, from the mean of a stretch out of transit and a stretch from the floor of the dip, and the planet radius it implies, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 
 ## Bound, Unbound and Escape (`orbital-energy`)
 
