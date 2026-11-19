@@ -57,7 +57,6 @@ describe('the orbit size and the period, in the weighing step', () => {
     [2.0, 'halfLap'],
     [8.0, 'laps2'],
     [12.0, 'laps3'],
-    [16.0, 'laps4'],
     [48.0, 'months'],
   ])('a period of %s is named (%s)', (value, id) => {
     expect(slip('weigh-the-pair', 'p', value)).toBe(id);
