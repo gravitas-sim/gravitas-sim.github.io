@@ -34,6 +34,7 @@
       "key:ellipse.presets",
       "key:ellipse.start",
       "key:ellipse.type",
+      "key:explore.allowInspector",
       "key:explore.bind",
       "key:explore.checklist",
       "key:explore.probe",
@@ -125,7 +126,6 @@
     ],
     "transit-photometry": [
       "check:numeric/number+tolerance",
-      "key:explore.allowInspector",
       "key:explore.lightCurve",
       "key:explore.observerAngle",
       "key:explore.pauseAt",

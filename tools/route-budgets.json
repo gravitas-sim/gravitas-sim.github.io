@@ -16,9 +16,9 @@
         "requests": 142
       },
       "transit": {
-        "kb": 2677.0,
+        "kb": 2677.5,
         "requests": 142,
-        "toolKb": 2839.6,
+        "toolKb": 2840.0,
         "toolRequests": 158
       },
       "power-law": {
@@ -76,7 +76,7 @@
         "requests": 31
       },
       "course-builder": {
-        "kb": 1164.5,
+        "kb": 1165.2,
         "requests": 48
       },
       "course-home": {
@@ -138,13 +138,13 @@
         "requests": 58
       },
       "kepler": {
-        "kb": 933.2,
+        "kb": 933.3,
         "requests": 77
       },
       "transit": {
-        "kb": 941.2,
+        "kb": 941.6,
         "requests": 77,
-        "toolKb": 1026.2,
+        "toolKb": 1026.5,
         "toolRequests": 93
       },
       "power-law": {
@@ -202,11 +202,11 @@
         "requests": 16
       },
       "course-builder": {
-        "kb": 711.3,
+        "kb": 712.0,
         "requests": 13
       },
       "course-home": {
-        "kb": 117.8,
+        "kb": 118.0,
         "requests": 4
       },
       "lab3d": {
