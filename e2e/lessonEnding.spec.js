@@ -62,6 +62,20 @@ for (const [width, height] of SIZES)
       }) => {
         await page.setViewportSize({ width, height });
         await openLessonStep(page, { lesson, sid, language });
+        // The object list and the probes arrive after the step's text and
+        // shrink the panel: measure only once its bottom has held still.
+        let [last, still] = [NaN, 0];
+        for (let i = 0; i < 40 && still < 4; i++) {
+          const bottom = await page.evaluate(
+            () =>
+              document
+                .getElementById('investigationBody')
+                .getBoundingClientRect().bottom
+          );
+          still = bottom === last ? still + 1 : 0;
+          last = bottom;
+          await page.waitForTimeout(300);
+        }
         const m = await page.evaluate(opening);
         const question = await page.evaluate(
           async ([id, lang]) => {
