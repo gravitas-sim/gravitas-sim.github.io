@@ -175,7 +175,10 @@ const FILES = [
   { path: 'cosmology/coma-cluster-quoted.json', core: false },
   { path: 'favicon.ico', core: false },
   { path: 'favicon.png', core: false },
-  { path: 'images/transit-of-venus-2012.jpg', core: false },
+  // images/transit-of-venus-2012.jpg (56 KB gzipped) is not installed: the figure on
+  // one read step of Transit Photometry is fetched with that step and kept by the
+  // service worker after that (the first-visit tier is at its data-budget ceiling,
+  // D-R4-329-05); the step's caption and alt text stand without it.
 ];
 
 /**
@@ -446,11 +449,6 @@ export const NEVER_PRECACHED = [
   // standing approval does not cover).
   /^(js\/habitabilityLimitsWidgets\.js|js\/i18n\/(en|es)\.habitablezone\.js)$/,
   /^js\/data\/investigations\/depth\/(es\/)?goldilocks-question\.js$/,
-  // The Transit Photometry deeper steps and their Spanish: fetched when a reader
-  // opens a deeper depth of that lesson and kept by the service worker after
-  // that, not installed (the first-visit tier is at its data-budget ceiling and
-  // the standing approval does not cover it). D-R4-329-05.
-  /^js\/data\/investigations\/depth\/(es\/)?transit-photometry\.js$/,
   // The atmospheres kernel and pack (Prompt 200, ATMOSPHERES.md): imported by no
   // page until the instrument family and its lessons are built. D-R10-80.
   /^js\/kernels\/atmospheres\//,
@@ -668,10 +666,6 @@ export const NEVER_PRECACHED = [
   /^js\/lab3d\/libration\.js$/,
   // Its addendum's step-budget rule, in the same position: only the validator and the tests import it.
   /^js\/lab3d\/stepBudget\.js$/,
-  // An estimate and the box where a prediction meets the student's readings: fetched when a lesson declares
-  // them (none yet), so an install has no use for the module or its words (the first-visit tier has little room).
-  /^js\/investigations\/(reveal|evidence)\.js$/,
-  /^js\/i18n\/(en|es)\.reveal\.js$/,
   // The orbit geometry overlay and the Sizes statement (D-R4-447-08): the two lazy modules, the
   // size facts the canvas description fetches on its first rebuild, the geometry, the two-body
   // model and its settings reader only the overlay imports, and their words. Kept by the service
