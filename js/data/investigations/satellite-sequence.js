@@ -628,7 +628,7 @@ export const TIDES_THAT_MOVE_THE_MOON = {
       ],
       answer: 1,
       hints: [
-        'Start from the rate you matched, and ask whether the same rate would still hold once the Moon is farther away.',
+        'Start from the rate you matched, and ask what that rate depends on besides Q.',
       ],
       because:
         'The model puts the Moon at 414.6 thousand km in a billion years, about 65 Earth radii: the rate of 3.75 cm per year slows as the Moon recedes, so it gains less than the 37,500 km a constant rate would give.',
@@ -816,7 +816,7 @@ export const IOS_FIRE = {
       ],
       answer: 1,
       hints: [
-        'Two things change when the orbit departs further from a circle. Name them before you choose.',
+        'Think about what the eccentricity changes in Io’s tide before you choose.',
       ],
       because:
         'The heating goes as <em>e</em> squared, so doubling the eccentricity gives four times the heat: the bulge’s rise and fall is proportional to <em>e</em>, and so is the friction in it, whatever k2 and <em>Q</em> are.',
@@ -927,7 +927,7 @@ export const IOS_FIRE = {
               'Too little: one of your pairs gives less heat than Io is observed to radiate. Read the row Heating against the observed range, and change k2 or Q to bring it inside.',
           };
         }
-        if (Math.abs(v.k2a - v.k2b) < 0.2) {
+        if (Math.abs(v.k2a - v.k2b) < 0.2 - 1e-9) {
           return {
             level: 'error',
             message:
@@ -948,13 +948,13 @@ export const IOS_FIRE = {
       type: 'question',
       kind: 'short',
       rubric:
-        'Full credit for saying that the heating depends on k2 and Q only through their ratio, so any pair with the same ratio gives the same heat; that the observed heat therefore fixes that ratio and does not identify the interior; and that a formula whose two unknowns can be chosen to match the observation gives a bound, a result that is consistent with the heat, not a prediction of it, until k2 or Q is known independently. Partial credit for one or two.',
-      title: 'Two interiors, one heat',
-      body: `You found two interiors with different k2 and <em>Q</em> that make the same heat.`,
+        'Full credit for saying that the heating depends on k2 and Q only through their ratio, so many different pairs give a heat inside the observed range; that the observed heat therefore fixes that ratio only to a range and does not identify the interior; and that a formula whose two unknowns can be chosen to match the observation gives a bound, a result that is consistent with the heat, not a prediction of it, until k2 or Q is known independently. Partial credit for one or two.',
+      title: 'Two interiors, one observation',
+      body: `You found two interiors, with different k2 and <em>Q</em>, whose heating lies inside the observed range.`,
       prompt:
-        'In two or three sentences: why can two different interiors give the same heat, and what does that mean for calling the formula’s answer a prediction?',
+        'In two or three sentences: why can two different interiors both give a heat inside the observed range, and what does that mean for calling the formula’s answer a prediction?',
       hints: [
-        'Compare the two pairs you wrote down: what stayed the same between them?',
+        'Compare the two pairs you wrote down: what differs between them, and what do both satisfy?',
       ],
     },
     {
@@ -964,9 +964,9 @@ export const IOS_FIRE = {
       title: 'What you worked out',
       body: `Io&rsquo;s heat is the friction of a tide that rises and falls once an orbit, and it
              grew as the square of the eccentricity. Io, Europa and Ganymede pull on each other in
-             a [[resonance|resonance]] that keeps that orbit from becoming circular, which the picture shows. For
-             the interior, the observed heat fixed only k2 divided by <em>Q</em>: you found two
-             different pairs that match it, so the formula gives a bound and the observation picks
+             a [[resonance|resonance]] that keeps that orbit from becoming circular. For
+             the interior, the observed heat fixed only k2 divided by <em>Q</em>, and only to a range:
+             you found two different pairs inside it, so the formula gives a bound and the observation picks
              a point inside it. What the model leaves out is the interior: a partly molten layer
              changes how Io flexes. A measurement that depends on k2 alone would be needed to
              separate the two, and the deeper steps ask which.`,

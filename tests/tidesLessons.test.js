@@ -308,13 +308,38 @@ describe('Io’s Fire: every stated number from the kernel', () => {
       let accepted = 0;
       for (let i = 0; i < inside.length; i += 7)
         for (let j = 0; j < inside.length; j += 11) {
-          const ok = Math.abs(inside[i][0] - inside[j][0]) >= 0.2;
+          const ok =
+            Math.round(Math.abs(inside[i][0] - inside[j][0]) * 100) >= 20;
           const r = s.validate(pair(inside[i], inside[j]));
           expect(r.level).toBe(ok ? 'ok' : 'error');
           if (ok) accepted++;
           else expect(r.message).toMatch(/nearly the same interior/);
         }
       expect(accepted).toBeGreaterThan(50);
+    });
+    test('a k2 difference of exactly 0.2 passes whatever the float error (0.7 - 0.5, 1.0 - 0.8, 0.3 - 0.1)', () => {
+      const { low, high } = range();
+      for (const [a, b] of [
+        [
+          [0.5, 30],
+          [0.7, 42],
+        ],
+        [
+          [0.8, 50],
+          [1.0, 60],
+        ],
+        [
+          [0.1, 8],
+          [0.3, 18],
+        ],
+      ]) {
+        for (const p of [a, b]) {
+          expect(power(...p)).toBeGreaterThanOrEqual(low);
+          expect(power(...p)).toBeLessThanOrEqual(high);
+        }
+        expect(s.validate(pair(a, b)).level).toBe('ok');
+        expect(s.validate(pair(b, a)).level).toBe('ok');
+      }
     });
     test('a pair outside the range fails with the authored message for the side it is on', () => {
       const { low, high } = range();

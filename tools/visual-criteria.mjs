@@ -121,9 +121,10 @@ export const LESSON_PILOTS = [
     id: 'galilean-resonance',
     label: 'Galilean Resonance (Io)',
     lesson: 'ios-fire',
-    sid: 'heating-at-the-maximum',
+    sid: 'heating-at-two-eccentricities',
     subject: 'instrument',
-    scenario: 'a staged star beside the tides-heating instrument at 3.0',
+    scenario:
+      'the Galilean Resonance portrait beside the tides-heating instrument at e = 0.001',
   },
   {
     id: 'moon-image',

@@ -181,7 +181,7 @@ export const TIDES_THAT_MOVE_THE_MOON = {
         '100 radios terrestres',
       ],
       hints: [
-        'Parte del ritmo que ajustaste y pregúntate si ese mismo ritmo seguiría igual cuando la Luna esté más lejos.',
+        'Parte del ritmo que ajustaste y pregúntate de qué depende ese ritmo además de Q.',
       ],
       because:
         'El modelo pone a la Luna a 414,6 mil km dentro de mil millones de años, unos 65 radios terrestres: el ritmo de 3,75 cm por año baja al alejarse la Luna, así que gana menos que los 37 500 km de un ritmo constante.',
@@ -236,7 +236,7 @@ export const IOS_FIRE = {
         'el mismo',
       ],
       hints: [
-        'Dos cosas cambian cuando la órbita se aparta más de un círculo. Nómbralas antes de elegir.',
+        'Piensa qué cambia la excentricidad en la marea de Ío antes de elegir.',
       ],
       because:
         'El calentamiento va como <em>e</em> al cuadrado, así que duplicar la excentricidad da cuatro veces el calor: la subida y bajada del abultamiento es proporcional a <em>e</em>, y también el rozamiento en ella, sean cuales sean k2 y <em>Q</em>.',
@@ -273,18 +273,18 @@ export const IOS_FIRE = {
     },
     'two-interiors-one-heat': {
       rubric:
-        'Crédito completo por decir que el calentamiento depende de k2 y Q solo por su cociente, así que cualquier par con el mismo cociente da el mismo calor; que el calor observado fija por tanto ese cociente y no identifica el interior; y que una fórmula cuyas dos incógnitas se pueden elegir para ajustar la observación da una cota, un resultado compatible con el calor y no una predicción de él, mientras k2 o Q no se conozcan por otro camino. Crédito parcial por una o dos.',
-      title: 'Dos interiores, un calor',
-      body: 'Has hallado dos interiores, con k2 y <em>Q</em> distintos, que dan el mismo calor.',
+        'Crédito completo por decir que el calentamiento depende de k2 y Q solo por su cociente, así que muchos pares distintos dan un calor dentro del intervalo observado; que el calor observado fija por tanto ese cociente solo dentro de un intervalo y no identifica el interior; y que una fórmula cuyas dos incógnitas se pueden elegir para ajustar la observación da una cota, un resultado compatible con el calor y no una predicción de él, mientras k2 o Q no se conozcan por otro camino. Crédito parcial por una o dos.',
+      title: 'Dos interiores, una observación',
+      body: 'Has hallado dos interiores, con k2 y <em>Q</em> distintos, cuyo calentamiento queda dentro del intervalo observado.',
       prompt:
-        'En dos o tres frases: ¿por qué dos interiores distintos pueden dar el mismo calor, y qué significa eso para llamar predicción a la respuesta de la fórmula?',
+        'En dos o tres frases: ¿por qué dos interiores distintos pueden dar los dos un calor dentro del intervalo observado, y qué significa eso para llamar predicción a la respuesta de la fórmula?',
       hints: [
-        'Compara los dos pares que anotaste: ¿qué se mantuvo igual entre ellos?',
+        'Compara los dos pares que anotaste: ¿en qué se diferencian, y qué cumplen los dos?',
       ],
     },
     'what-heat-is': {
       title: 'Lo que has deducido',
-      body: 'El calor de Ío es el rozamiento de una marea que sube y baja una vez por órbita, y creció como el cuadrado de la excentricidad. Ío, Europa y Ganímedes tiran unas de otras en una [[resonance|resonancia]] que impide que esa órbita se haga circular, como muestra la imagen. En cuanto al interior, el calor observado fijó solo k2 dividido entre <em>Q</em>: hallaste dos pares distintos que lo dan, así que la fórmula da una cota y la observación elige un punto dentro de ella. Lo que el modelo deja fuera es el interior: una capa parcialmente fundida cambia cómo se flexiona Ío. Haría falta una medida que dependa solo de k2 para separarlos, y los pasos más profundos preguntan cuál.',
+      body: 'El calor de Ío es el rozamiento de una marea que sube y baja una vez por órbita, y creció como el cuadrado de la excentricidad. Ío, Europa y Ganímedes tiran unas de otras en una [[resonance|resonancia]] que impide que esa órbita se haga circular. En cuanto al interior, el calor observado fijó solo k2 dividido entre <em>Q</em>, y solo dentro de un intervalo: hallaste dos pares distintos dentro de él, así que la fórmula da una cota y la observación elige un punto dentro de ella. Lo que el modelo deja fuera es el interior: una capa parcialmente fundida cambia cómo se flexiona Ío. Haría falta una medida que dependa solo de k2 para separarlos, y los pasos más profundos preguntan cuál.',
     },
   },
 };

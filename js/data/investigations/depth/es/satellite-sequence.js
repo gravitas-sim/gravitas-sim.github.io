@@ -215,11 +215,11 @@ export const IOS_DEEPER = {
   steps: [
     {
       decides:
-        'qué k2/Q dividir entre el máximo del modelo: el que necesita el calor observado, que comparten los dos pares',
+        'qué k2/Q dividir entre el máximo del modelo: el que necesita el valor medio observado',
       title: 'A qué distancia del k2/Q máximo',
-      body: 'Tus dos pares están cerca del mismo k2/Q: la fila <strong>k2/Q que necesita el valor medio observado</strong> lo da. El modelo admite k2/Q hasta 0,3 (k2 = 1,5 entre Q = 5).',
+      body: 'La fila <strong>k2/Q que necesita el valor medio observado</strong> da el cociente que pide la mitad del calor observado. El modelo admite k2/Q hasta 0,3 (k2 = 1,5 entre Q = 5).',
       prompt:
-        '¿Cuántas veces menor es el k2/Q que comparten los dos pares que el máximo del modelo?',
+        '¿Cuántas veces menor es el k2/Q que necesita el valor medio observado que el máximo del modelo?',
       hints: ['Divide 0,3 entre el k2/Q de esa fila.'],
       worked:
         '0,3 / 0,01768 = 17,0: el calor observado necesita un k2/Q diecisiete veces por debajo del máximo del modelo, con holgura dentro del intervalo.',
