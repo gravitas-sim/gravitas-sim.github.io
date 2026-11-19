@@ -1415,20 +1415,22 @@
     align-items: center;
     justify-content: space-between;
     gap: var(--space-2);
-    padding: var(--space-1) var(--space-3);
+    padding: 0 var(--space-3);
     font-size: var(--text-xs);
     color: var(--text-secondary);
   }
 
+  /* 3px above and below the text, not 4: the Tools group is two rows taller
+     for the barycenter marker, and the rail must still end without scrolling. */
   .rail-field select {
     flex: 1;
     min-width: 0;
-    padding: var(--space-1) var(--space-2);
+    padding: 3px var(--space-2);
     font-size: var(--text-xs);
   }
 
   .rail-toggle {
-    margin: var(--space-1) var(--space-3) 0;
+    margin: 2px var(--space-3) 0;
     width: calc(100% - var(--space-6));
   }
 

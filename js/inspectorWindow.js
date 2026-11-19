@@ -31,14 +31,7 @@ import {
   updateEnergyChart,
   releaseEnergyChart,
 } from './inspectorPanel.js';
-import {
-  bh_list,
-  stars,
-  gas_giants,
-  neutron_stars,
-  white_dwarfs,
-  clearObjectEnergyHistory,
-} from './physics.js';
+import { clearObjectEnergyHistory } from './physics.js';
 import { debugLog } from './utils.js';
 import {
   objectInfoFor,
@@ -48,7 +41,7 @@ import {
   setupMassSliderListeners,
   isObjectStillInSimulation,
 } from './inspectorView.js';
-import { state, SETTINGS } from './appState.js';
+import { state } from './appState.js';
 import { EV_MANEUVER_REQUESTED } from './names.js';
 
 /**
@@ -100,82 +93,9 @@ export const showObjectInspector = (object, type) => {
   // Store the current object for auto-updating
   state.selectedObject = { object, type };
 
-  // If object appears in a near-circular, bound orbit around the dominant body, enable blue orbit overlay
-  try {
-    const centerCandidates = [
-      ...bh_list,
-      ...stars,
-      ...neutron_stars,
-      ...white_dwarfs,
-      ...gas_giants,
-    ];
-    const G = SETTINGS.gravitational_constant;
-    const obj = object;
-    let primary = null;
-    let maxInfluence = -Infinity;
-    for (const b of centerCandidates) {
-      if (!b || !b.alive || b === obj) continue;
-      const dx = obj.pos.x - b.pos.x;
-      const dy = obj.pos.y - b.pos.y;
-      const r2 = Math.max(1e-6, dx * dx + dy * dy);
-      const influence = (G * b.mass) / r2;
-      if (influence > maxInfluence) {
-        maxInfluence = influence;
-        primary = b;
-      }
-    }
-    if (primary) {
-      const rx = obj.pos.x - primary.pos.x;
-      const ry = obj.pos.y - primary.pos.y;
-      const r = Math.max(1e-6, Math.hypot(rx, ry));
-      const vCirc = Math.sqrt((G * primary.mass) / r);
-      const vMag = Math.hypot(obj.vel.x, obj.vel.y);
-      const dirTan = Math.atan2(ry, rx) + Math.PI / 2;
-      const vIdeal = {
-        x: vCirc * Math.cos(dirTan),
-        y: vCirc * Math.sin(dirTan),
-      };
-      const dot = obj.vel.x * vIdeal.x + obj.vel.y * vIdeal.y;
-      const denom = Math.max(1e-6, vMag * vCirc);
-      const cosTheta = Math.max(-1, Math.min(1, dot / denom));
-      const angErr = Math.acos(cosTheta);
-      const speedRatio = vMag / vCirc;
-      const angleTol =
-        ((SETTINGS.sticky_dir_only_angle_deg || 15) * Math.PI) / 180;
-      const speedTol = 0.2; // allow ~20% speed deviation
-      const isBound = 0.5 * vMag * vMag - (G * primary.mass) / r < 0;
-      if (
-        isBound &&
-        angErr <= angleTol &&
-        speedRatio > 1 - speedTol &&
-        speedRatio < 1 + speedTol
-      ) {
-        // Build one-loop circular path for overlay
-        const samples = 240;
-        const theta0 = Math.atan2(ry, rx);
-        const loop = [];
-        for (let i = 0; i <= samples; i++) {
-          const t = i / samples;
-          const th = theta0 + 2 * Math.PI * t;
-          loop.push({
-            x: primary.pos.x + r * Math.cos(th),
-            y: primary.pos.y + r * Math.sin(th),
-          });
-        }
-        state.inspectorOrbitOverlay.active = true;
-        state.inspectorOrbitOverlay.points = loop;
-      } else {
-        state.inspectorOrbitOverlay.active = false;
-        state.inspectorOrbitOverlay.points = [];
-      }
-    } else {
-      state.inspectorOrbitOverlay.active = false;
-      state.inspectorOrbitOverlay.points = [];
-    }
-  } catch {
-    state.inspectorOrbitOverlay.active = false;
-    state.inspectorOrbitOverlay.points = [];
-  }
+  // The orbit is drawn on request now, from live elements, by the Orbit
+  // geometry toggle (js/orbitGeometryOverlay.js); the circle this built once
+  // at selection and froze is gone.
 
   // A guided lesson does its own reporting in its own panel, and the inspector
   // is a large floating card that lands squarely over the orbit the student has
@@ -388,9 +308,6 @@ export const hideObjectInspector = () => {
   objectInspector.classList.remove('visible');
   objectInspector.classList.remove('dragging');
   state.inspector_open = false;
-  // turn off orbit overlay when inspector closes
-  state.inspectorOrbitOverlay.active = false;
-  state.inspectorOrbitOverlay.points = [];
   // The equal-area overlay deliberately survives: it is a thing the user turned
   // on to look at, and closing the panel that switched it on is not a request
   // to stop looking. It clears itself instead when the orbit it describes stops

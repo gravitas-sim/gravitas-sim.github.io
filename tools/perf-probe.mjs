@@ -20,6 +20,9 @@
 //                                    simulated time (tools/scene-capture.mjs), then run
 //                                    live; the viewport is the record's unless --viewport
 //                                    is given, and --tier overrides the record's tier
+//   npm run perf -- --orbit-geometry Earth   switch the orbit geometry overlay on
+//                                    for the named body before each sample, to compare
+//                                    a scene's frame time with the overlay off and on
 //
 // --trace (Prompt 112) records a Chromium trace and the Performance API's
 // long-animation-frame entries over each sample and reports, in milliseconds
@@ -148,8 +151,10 @@ async function main() {
     throw new Error(`--viewport ${args[vi + 1]} is not WIDTHxHEIGHT`);
   }
   const trace = args.includes('--trace');
+  const oi = args.indexOf('--orbit-geometry');
+  const orbitBody = oi >= 0 ? String(args[oi + 1]) : null;
   const valueIndexes = new Set(
-    [si, ti, ji, di, ci, vi, ...sceneIndexes]
+    [si, ti, ji, di, ci, vi, oi, ...sceneIndexes]
       .filter(i => i >= 0)
       .map(i => i + 1)
   );
@@ -258,6 +263,20 @@ async function main() {
         },
         { key, tier }
       );
+    if (orbitBody) {
+      const found = await page.evaluate(async name => {
+        const physics = await import('/js/physics.js');
+        const body = physics
+          .barycenterBodies()
+          .find(b => b.name === name && b.alive !== false);
+        if (!body) return false;
+        const og = await import('/js/orbitGeometryOverlay.js');
+        await og.setOrbitGeometry(true, body);
+        return true;
+      }, orbitBody);
+      if (!found)
+        throw new Error(`--orbit-geometry: no body named ${orbitBody}`);
+    }
     // Observers go in after the build, so the entries are the sample's.
     await page.evaluate(() => {
       window.__loaf = [];

@@ -61,6 +61,7 @@ import {
   activeIntegrator,
   setWorkerFailed,
   isBarnesHutActive,
+  sourceLists,
 } from './state.js';
 import {
   ENERGY_SAMPLE_RATE,
@@ -283,24 +284,20 @@ const updateCachedArrays = () => {
     lastMutualGravityState !== physicsSettings.mutual_gravity ||
     lastStarOnlyGravityState !== physicsSettings.star_only_gravity
   ) {
-    const starOnlyGravity = physicsSettings.star_only_gravity === true;
-
-    // Update major sources
+    // The sources, by the one rule the scene statement also reads.
+    const lists = {
+      bh_list,
+      stars,
+      galaxies,
+      gas_giants,
+      neutron_stars,
+      white_dwarfs,
+      planets,
+      asteroids,
+    };
     cachedMajorSources.length = 0;
-    cachedMajorSources.push(...bh_list, ...stars);
-
-    // Galaxies are always sources. A cluster whose members did not attract
-    // each other would not be a cluster, and star_only_gravity is a
-    // simplification aimed at planetary systems.
-    cachedMajorSources.push(...galaxies);
-
-    if (!starOnlyGravity) {
-      cachedMajorSources.push(...gas_giants, ...neutron_stars, ...white_dwarfs);
-    }
-
-    if (physicsSettings.mutual_gravity && !starOnlyGravity) {
-      cachedMajorSources.push(...planets, ...asteroids);
-    }
+    for (const name of sourceLists(physicsSettings))
+      cachedMajorSources.push(...lists[name]);
 
     // Update all physics objects - include neutron stars and white dwarfs
     cachedAllPhysicsObjects.length = 0;

@@ -1,29 +1,23 @@
 // =============================================================================
 // The point two stars are both going round
 // -----------------------------------------------------------------------------
-// A binary's barycenter is the one thing "Weighing the Stars" is about, and
-// until now the lesson could only show it in a panel diagram - so a student
-// read about a balance point in one place and watched two stars circle
-// something invisible in another. This is the arithmetic that lets the main
-// scene draw it.
+// A binary's barycenter is what "Weighing the Stars" is about; this is the
+// arithmetic that lets the main scene draw it rather than a panel diagram.
 //
-// Pure, so it imports nothing and a test can check it with object literals.
-// The half that knows about PhysicsObject and the canvas is js/lessonStage.js
-// and js/render.js.
+// Pure, so it imports nothing and a test can use object literals. The half that
+// knows PhysicsObject and the canvas is js/lessonStage.js and js/render.js.
 //
 // What is and is not asserted here
 // -----------------------------------------------------------------------------
 // `barycenterOf` is a definition, not a model: the mass-weighted mean position
-// of whatever bodies it is handed. It is exact for any number of bodies in any
-// arrangement, and it says nothing about whether they are bound.
+// of any bodies, exact for any number and arrangement, silent on whether they
+// are bound.
 //
-// `circularBinary` is a model, and a restricted one. It returns the initial
-// conditions for two point masses on circular orbits about their common
-// center, which is the case the lesson teaches and the case Newton's form of
-// Kepler's third law is quoted for. It is not general: a real binary is
-// eccentric, and the separation an observer measures is a projection of a
-// three-dimensional orbit. The lesson says so where it matters; this file
-// simply refuses to pretend otherwise by keeping the restriction in its name.
+// `circularBinary` is a restricted model: initial conditions for two point
+// masses on circular orbits about their common center, the case the lesson
+// teaches and Newton's form of Kepler's third law is quoted for. A real binary
+// is eccentric and its observed separation is a projection of a 3-D orbit; the
+// lesson says so where it matters and the restriction is kept in the name.
 // =============================================================================
 
 /**
@@ -55,9 +49,8 @@ export function barycenterOf(bodies) {
 /**
  * How far each body is from the barycenter of the set.
  *
- * The two distances are the measurement the lesson is built on: their ratio is
- * the inverse of the mass ratio, and that is true whatever the masses are and
- * whatever units the distances are in.
+ * The lesson is built on these two distances: their ratio is the inverse of the
+ * mass ratio, in any masses and any units.
  *
  * @param {Array<object>} bodies - Bodies with `mass` and `pos`
  * @returns {Array<{body: object, r: number}>} One entry per body, in order
@@ -76,10 +69,9 @@ export function distancesFromBarycenter(bodies) {
 /**
  * Initial conditions for two masses on circular orbits about their barycenter.
  *
- * Laid out along x, moving along y, with the heavier one nearer the center and
- * the total momentum zero - so the pair circles a point that stays put rather
- * than drifting across the view, which is what makes the balance point
- * watchable at all.
+ * Laid out along x, moving along y, the heavier one nearer the center, total
+ * momentum zero: the pair circles a fixed point instead of drifting across the
+ * view, which makes the balance point watchable.
  *
  * @param {object} spec - The pair
  * @param {number} spec.m1 - First mass, in engine units
@@ -103,7 +95,7 @@ export function circularBinary({ m1, m2, separation, G }) {
     return null;
   }
   // Each body's distance from the center is the *other* one's share of the
-  // total, which is the whole see-saw rule in one line.
+  // total: the see-saw rule.
   const r1 = separation * (m2 / total);
   const r2 = separation * (m1 / total);
   const vRel = Math.sqrt((G * total) / separation);
@@ -118,9 +110,8 @@ export function circularBinary({ m1, m2, separation, G }) {
       { x: 0, y: vRel * (m2 / total) },
       { x: 0, y: -vRel * (m1 / total) },
     ],
-    // Newton's form of Kepler's third law, in the engine's own units. The
-    // lesson has students measure this rather than read it, so it is here to
-    // check an answer against and not to display in place of one.
+    // Newton's form of Kepler's third law, in engine units: students measure
+    // this, so it checks an answer and is never shown in place of one.
     period: 2 * Math.PI * Math.sqrt(separation ** 3 / (G * total)),
     total,
   };
@@ -129,8 +120,8 @@ export function circularBinary({ m1, m2, separation, G }) {
 /**
  * The total mass a measured orbit implies.
  *
- * The inverse of the period above, and the actual point of the lesson: given a
- * separation and a period, this is the only mass that fits.
+ * The inverse of the period above, and the point of the lesson: a separation
+ * and a period fit exactly one mass.
  *
  * @param {number} separation - Distance between the two, in world units
  * @param {number} period - One full orbit, in engine time
@@ -157,4 +148,28 @@ export function splitByArms(total, r1, r2) {
   const span = r1 + r2;
   if (!(total > 0) || !(r1 >= 0) || !(r2 >= 0) || !(span > 0)) return null;
   return { m1: total * (r2 / span), m2: total * (r1 / span) };
+}
+
+/** A cross with dashed arms to at most eight bodies, in screen space: nothing is there. */
+export function drawBarycenterCross(ctx, c, ends) {
+  ctx.save();
+  ctx.lineWidth = 1.25;
+  ctx.strokeStyle = 'rgba(255, 235, 150, 0.85)';
+  ctx.setLineDash([4, 4]);
+  if (ends.length <= 8)
+    for (const p2 of ends) {
+      ctx.beginPath();
+      ctx.moveTo(c.x, c.y);
+      ctx.lineTo(p2.x, p2.y);
+      ctx.stroke();
+    }
+  ctx.setLineDash([]);
+  const ARM = 7;
+  ctx.beginPath();
+  ctx.moveTo(c.x - ARM, c.y);
+  ctx.lineTo(c.x + ARM, c.y);
+  ctx.moveTo(c.x, c.y - ARM);
+  ctx.lineTo(c.x, c.y + ARM);
+  ctx.stroke();
+  ctx.restore();
 }

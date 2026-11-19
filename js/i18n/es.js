@@ -1202,13 +1202,13 @@ export const ES = {
     '¿Con poco tiempo? Las actividades de clase son formatos de enseñanza preparados —una demostración de cinco minutos, una actividad de veinte, una práctica completa— recortados de estas mismas investigaciones.',
   'inv.browser.activities.link': 'Ver las actividades de clase',
   'canvas.sizeDisclosure':
-    'Cuerpos ampliados, sin escala común (radios: inspector)',
+    'Cuerpos ampliados, no a escala: detalles en Tamaños',
   'canvas.reducedPopulation':
     'Población reducida en este dispositivo: {n} de {total} cuerpos',
   'canvas.crowdTrails':
     'Estelas: el cuerpo seleccionado y los {n} más masivos de {total} cuerpos',
   'canvas.sizeDisclosure.detail':
-    'Los diámetros del lienzo son ilustrativos. Cada tipo de cuerpo se amplía con un factor distinto, así que los tamaños no siguen una misma escala y sus proporciones no son físicas. Usa el inspector y las mediciones de las investigaciones para los radios.',
+    'Las distancias se dibujan a una sola escala, la que muestra la barra de escala. Los tamaños de los cuerpos no siguen una misma escala: cada tipo de cuerpo se amplía con su propio factor, así que ni un tamaño ni la proporción entre dos tamaños se pueden leer en el lienzo. El botón Tamaños de la lectura dice cuánto, y el inspector da cada radio.',
   'capture.screenshotFailed': 'No se pudo guardar la captura',
   'chart.notReady': 'El gráfico aún no está listo',
   'chart.exportFailed': 'No se pudo exportar el gráfico',
@@ -1327,6 +1327,8 @@ export const ES = {
   'rv.survey.measurementsLabel': 'Medidas',
   'astrometry.keepObserving': 'Sigue observando…',
   'lightCurve.relativeBrightness': 'Brillo relativo',
+  'rail.barycenterMarker.failed':
+    'Marcador del baricentro no disponible sin conexión.',
   'frame.barycenter': 'Baricentro',
   'chrome.canvas.label': 'Simulación gravitatoria',
   'summary.scenario': 'Escenario: {name}.',

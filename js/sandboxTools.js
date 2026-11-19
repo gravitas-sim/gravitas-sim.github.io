@@ -62,6 +62,7 @@ import {
 } from './instruments.js';
 import { formatNumber } from './format.js';
 import { t } from './i18n/index.js';
+import { sceneWords } from './canvasSummary.js';
 
 /** Meters in one simulation length unit. */
 const METERS_PER_UNIT = AU_METERS / SIM_UNITS_PER_AU;
@@ -705,11 +706,14 @@ export function drawInstrumentation(
     ctx.restore();
   }
 
+  const frame = sceneWords()?.frameLine() || '';
+
   // What the tier or a crowd left out, above the scale line.
   let legendBottom = barY - 20;
   ctx.font = `11px ${INSTRUMENT_MONO}`;
   ctx.fillStyle = 'rgb(200, 214, 235)';
-  const wrapped = wrapNotes(ctx, crowdNotes(), W - 2 * pad);
+  const notes = frame ? [...crowdNotes(), frame] : crowdNotes();
+  const wrapped = wrapNotes(ctx, notes, W - 2 * pad);
   keptW = wrapped.width;
   for (const group of wrapped.groups)
     for (let i = group.length - 1; i >= 0; i--) {
