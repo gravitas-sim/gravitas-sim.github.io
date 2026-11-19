@@ -188,13 +188,13 @@ describe('computed fields use the numbers already measured', () => {
       'measure-four-planets:p1_P': 1,
       'measure-four-planets:p2_a': 5.204,
       'measure-four-planets:p2_P': 11.86,
-      'repeat-the-timing:frac': 0.0003,
+      'time-it-until-sure:frac': 0.0003,
     };
     const e = (s, f) => Number(t[`${s}:${f}`]);
     const fit = DEEPER['keplers-laws'][1].fields;
     const by = id => fit.find(f => f.id === id).compute({}, e);
     expect(by('k_w')).toBeCloseTo(1, 2);
-    expect(by('p4')).toBeCloseTo(8, 1);
+    expect(Math.sqrt(by('k_w') * 64)).toBeCloseTo(8, 1);
     expect(by('s_k')).toBeGreaterThan(0);
   });
   test('the mass of the pair carries its uncertainty from the entered a and P', () => {

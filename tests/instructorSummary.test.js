@@ -130,8 +130,8 @@ describe('the counts', () => {
       incorrect: 1,
       incomplete: 2,
     });
-    // use-the-law answers are 8, 8, 5, 8, 8, 8: five right, one wrong.
-    expect(step(summary, 'use-the-law')).toMatchObject({
+    // where-does-it-move-fastest answers are 0, 0, 1, 0, 0, 0: five right, one wrong.
+    expect(step(summary, 'where-does-it-move-fastest')).toMatchObject({
       answered: 6,
       correct: 5,
       incorrect: 1,
@@ -169,17 +169,24 @@ describe('the wrong answers', () => {
   });
 
   test('a number the author named a misconception for says so, in plain text', () => {
-    // use-the-law's right answer is 8; 64 is its cubed-not-rooted slip.
+    // weighing-another-star's right answer is 0.91; a period taken in days
+    // is its named slip.
     const records = recordsOf([
-      submission({ name: 'a', responses: { 'use-the-law': '64' } }),
-      submission({ name: 'b', responses: { 'use-the-law': '64.0' } }),
-      submission({ name: 'c', responses: { 'use-the-law': '5' } }),
+      submission({
+        name: 'a',
+        responses: { 'weighing-another-star': '6.8e-6' },
+      }),
+      submission({
+        name: 'b',
+        responses: { 'weighing-another-star': '0.0000068' },
+      }),
+      submission({ name: 'c', responses: { 'weighing-another-star': '5' } }),
     ]);
     const rows = keplerSummary(records).lessons[0].wrong.filter(
-      w => w.sid === 'use-the-law'
+      w => w.sid === 'weighing-another-star'
     );
-    expect(rows[0]).toMatchObject({ kind: 'number', value: 64, count: 2 });
-    expect(rows[0].misconception).toMatch(/^That is a³\. The law says P² = a³/);
+    expect(rows[0]).toMatchObject({ kind: 'number', count: 2 });
+    expect(rows[0].misconception).toMatch(/^The period has to be in years/);
     expect(rows[0].misconception).not.toMatch(/<|\n/);
     // a wrong number nobody named is not explained
     expect(rows[1]).toMatchObject({ value: 5, count: 1, misconception: null });
@@ -187,11 +194,14 @@ describe('the wrong answers', () => {
 
   test('a number that cannot be read is its own kind of answer', () => {
     const records = recordsOf([
-      submission({ name: 'a', responses: { 'use-the-law': 'eight' } }),
-      submission({ name: 'b', responses: { 'use-the-law': 'nine' } }),
+      submission({
+        name: 'a',
+        responses: { 'weighing-another-star': 'eight' },
+      }),
+      submission({ name: 'b', responses: { 'weighing-another-star': 'nine' } }),
     ]);
     const rows = keplerSummary(records).lessons[0].wrong.filter(
-      w => w.sid === 'use-the-law'
+      w => w.sid === 'weighing-another-star'
     );
     expect(rows).toHaveLength(1);
     expect(rows[0]).toMatchObject({ kind: 'unreadable', count: 2 });
@@ -199,12 +209,12 @@ describe('the wrong answers', () => {
 
   test('no more than three are kept for a step, and written answers are never listed', () => {
     const records = recordsOf(
-      ['1', '2', '3', '4', '5', '6'].map(v =>
-        submission({ name: v, responses: { 'use-the-law': v } })
+      ['2', '3', '4', '5', '6', '7'].map(v =>
+        submission({ name: v, responses: { 'weighing-another-star': v } })
       )
     );
     const wrong = keplerSummary(records).lessons[0].wrong.filter(
-      w => w.sid === 'use-the-law'
+      w => w.sid === 'weighing-another-star'
     );
     expect(wrong).toHaveLength(3);
     const written = recordsOf([
@@ -513,7 +523,9 @@ describe('the CSV', () => {
           (item === '' || r[at.item_id] === item)
       );
     expect(find('overview', 'reports')[at.value]).toBe('6');
-    expect(find('step', 'correct', 'use-the-law')[at.value]).toBe('5');
+    expect(
+      find('step', 'correct', 'where-does-it-move-fastest')[at.value]
+    ).toBe('5');
     expect(find('step', 'answered_share', 'where-is-the-star')[at.value]).toBe(
       String(Math.round((4 / 6) * 10000) / 10000)
     );

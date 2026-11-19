@@ -133,32 +133,7 @@ describe('the radial-velocity questions', () => {
 });
 
 describe("Kepler's questions", () => {
-  const period = stepBySid(KEPLER, 'use-the-law');
   const starMass = stepBySid(KEPLER, 'weighing-another-star');
-
-  test('the period takes years or days', () => {
-    expect(checkAnswer(period, '8')).toBe(true);
-    expect(checkAnswer(period, '8 years')).toBe(true);
-    expect(checkAnswer(period, '2922 days')).toBe(true);
-  });
-
-  test('cubing and stopping is named', () => {
-    const out = gradeAnswer(period, '64');
-    expect(out.correct).toBe(false);
-    const missed = matchMisconception(period, out.value, toleranceFor(period));
-    expect(missed.id).toBe('cubedNotRooted');
-    expect(flat(missed.message)).toMatch(/square root of 64/);
-  });
-
-  test('rooting the axis instead of its cube is named', () => {
-    const missed = matchMisconception(period, 2, toleranceFor(period));
-    expect(missed.id).toBe('rootedTheAxis');
-  });
-
-  test('a plainly wrong period gets no invented explanation', () => {
-    expect(matchMisconception(period, 5, toleranceFor(period))).toBeNull();
-    expect(matchMisconception(period, 30, toleranceFor(period))).toBeNull();
-  });
 
   test('the stellar mass takes solar masses or kilograms', () => {
     expect(checkAnswer(starMass, '0.91')).toBe(true);
@@ -170,11 +145,17 @@ describe("Kepler's questions", () => {
     const wrong = 0.91 / 365.25 ** 2;
     const missed = matchMisconception(starMass, wrong, toleranceFor(starMass));
     expect(missed.id).toBe('periodInDays');
+    expect(flat(missed.message)).toMatch(/period has to be in years/);
+  });
+
+  test('a plainly wrong mass gets no invented explanation', () => {
+    expect(matchMisconception(starMass, 5, toleranceFor(starMass))).toBeNull();
+    expect(matchMisconception(starMass, 30, toleranceFor(starMass))).toBeNull();
   });
 
   test('malformed input is refused rather than graded', () => {
-    for (const raw of ['about 8', '8 or 9', '1.2.3', 'eight']) {
-      const out = gradeAnswer(period, raw);
+    for (const raw of ['about 0.9', '0.9 or 1', '1.2.3', 'ninety-one']) {
+      const out = gradeAnswer(starMass, raw);
       expect(out.status).toBe('unreadable');
       expect(out.correct).toBe(false);
     }

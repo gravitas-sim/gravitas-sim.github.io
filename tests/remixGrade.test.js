@@ -48,13 +48,13 @@ async function report(id, { drop = [], extra = [], responses }) {
 const RIGHT = {
   'where-is-the-star': '1',
   'what-sits-at-the-other': '2',
-  'use-the-law': '8',
+  'where-does-it-move-fastest': '0',
 };
 
 describe('grading a remix against its original', () => {
   test('uses the original’s own expected values', async () => {
     const { backup, submission, lesson } = await report('keplers-laws', {
-      responses: { ...RIGHT, 'use-the-law': '5' },
+      responses: { ...RIGHT, 'where-does-it-move-fastest': '1' },
     });
     expect(backup.lesson.pack.from.id).toBe('keplers-laws');
     const view = await remixLesson(backup, await raw('keplers-laws'));
@@ -67,15 +67,15 @@ describe('grading a remix against its original', () => {
     const v = sid => r.questions.find(q => q.sid === sid).verdict;
     expect(v('where-is-the-star')).toBe('correct');
     expect(v('what-sits-at-the-other')).toBe('correct');
-    expect(v('use-the-law')).toBe('incorrect');
+    expect(v('where-does-it-move-fastest')).toBe('incorrect');
     expect(r.lessonTitle).toContain('keplers-laws');
     // The questions are the original's, at every depth the report lists.
-    expect(r.scorable).toBe(18);
+    expect(r.scorable).toBe(21);
   });
 
   test('grades only the questions the student was asked, and lists what the instructor added', async () => {
     const { backup, submission } = await report('keplers-laws', {
-      drop: ['use-the-law'],
+      drop: ['where-does-it-move-fastest'],
       extra: ['instructor-extra'],
       responses: {
         'where-is-the-star': '1',
@@ -85,13 +85,17 @@ describe('grading a remix against its original', () => {
     const view = await remixLesson(backup, await raw('keplers-laws'));
     expect(view.ok).toBe(true);
     expect(view.added).toEqual(['instructor-extra']);
-    expect(view.lesson.steps.some(s => s.sid === 'use-the-law')).toBe(false);
+    expect(
+      view.lesson.steps.some(s => s.sid === 'where-does-it-move-fastest')
+    ).toBe(false);
     const r = gradeSubmission(submission, view.lesson, {
       kind: 'backup',
       label: 'x',
     });
-    expect(r.scorable).toBe(17);
-    expect(r.questions.some(q => q.sid === 'use-the-law')).toBe(false);
+    expect(r.scorable).toBe(20);
+    expect(r.questions.some(q => q.sid === 'where-does-it-move-fastest')).toBe(
+      false
+    );
   });
 
   test('survives the submission token', async () => {

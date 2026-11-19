@@ -5,8 +5,8 @@
     "the-saturated-star",
     "transit-photometry",
     "what-is-a-gravitational-wave",
-    "butterfly-effect",
     "binary-star-planets",
+    "butterfly-effect",
     "black-holes",
     "propose-an-observation",
     "weighing-stars",
@@ -16,6 +16,7 @@
     "detect-this-planet",
     "extending-an-experiment",
     "measuring-the-moon",
+    "missing-mass",
     "power-law-gravity",
     "radial-velocity",
     "retrograde-motion"
@@ -40,9 +41,12 @@
       "key:explore.checklist",
       "key:explore.probe",
       "key:explore.showAreaSweep",
+      "key:explore.time",
       "key:explore.type",
       "key:measure.after",
+      "key:measure.allowInspector",
       "key:measure.bind",
+      "key:measure.decides",
       "key:measure.depth",
       "key:measure.fields",
       "key:measure.importFromSelection",
@@ -52,21 +56,28 @@
       "key:measure.plot",
       "key:measure.probe",
       "key:measure.requires",
+      "key:measure.time",
       "key:measure.tip",
       "key:measure.type",
       "key:measure.validate",
       "key:predict.answer",
       "key:predict.because",
       "key:predict.bind",
+      "key:predict.kind",
       "key:predict.options",
       "key:predict.prompt",
       "key:predict.reveal",
+      "key:predict.time",
       "key:predict.type",
+      "key:predict.unit",
       "key:question.after",
       "key:question.answer",
       "key:question.because",
       "key:question.bind",
+      "key:question.compare",
+      "key:question.decides",
       "key:question.depth",
+      "key:question.evidence",
       "key:question.expect",
       "key:question.feedback",
       "key:question.hints",
@@ -74,16 +85,21 @@
       "key:question.misconceptions",
       "key:question.options",
       "key:question.placeholder",
+      "key:question.probe",
       "key:question.prompt",
-      "key:question.restates",
       "key:question.rubric",
+      "key:question.stage",
+      "key:question.time",
       "key:question.tolerance",
       "key:question.type",
       "key:question.uncertainty",
       "key:question.unit",
+      "key:question.variation",
       "key:question.worked",
       "key:read.bind",
-      "key:read.motion",
+      "key:read.compare",
+      "key:read.evidence",
+      "key:read.point",
       "key:read.quote",
       "key:read.setup",
       "key:read.tip",
@@ -91,12 +107,14 @@
       "key:wedges.bind",
       "key:wedges.tip",
       "key:wedges.type",
+      "key:wedges.wedgeOf",
+      "kind:predict/estimate",
       "kind:question/choice",
       "kind:question/numeric",
       "kind:question/short",
       "locale:en",
       "locale:es",
-      "lock:{\"placement\":true,\"inspector\":true}",
+      "lock:{\"placement\":true,\"inspector\":true,\"areaSweep\":false}",
       "math:logarithms",
       "prereq:no",
       "setup:scenario",
@@ -117,18 +135,14 @@
       "key:explore.stage",
       "key:explore.tip",
       "key:explore.tool",
-      "key:measure.allowInspector",
       "key:measure.tool",
       "key:predict.setup",
-      "key:question.probe",
       "key:question.requires",
-      "key:question.stage",
       "key:question.tip",
       "key:question.tool",
       "key:read.after",
       "key:read.depth",
       "key:read.tool",
-      "lock:{\"placement\":true,\"inspector\":true,\"areaSweep\":false}",
       "math:algebra",
       "prereq:yes"
     ],
@@ -141,7 +155,8 @@
       "key:predict.hints",
       "key:predict.stage",
       "key:predict.tool",
-      "key:read.stage"
+      "key:read.stage",
+      "lock:{\"placement\":true,\"inspector\":true}"
     ],
     "transit-photometry": [
       "check:numeric/number+tolerance",
@@ -161,14 +176,15 @@
       "lock:{\"placement\":true,\"inspector\":false,\"areaSweep\":false}",
       "math:arithmetic"
     ],
+    "binary-star-planets": [
+      "key:explore.requires",
+      "key:read.motion",
+      "lock:{\"placement\":true}"
+    ],
     "butterfly-effect": [
       "key:explore.rubric",
       "key:predict.requires",
       "lock:null"
-    ],
-    "binary-star-planets": [
-      "key:explore.requires",
-      "lock:{\"placement\":true}"
     ],
     "black-holes": [
       "key:question.checklist",
@@ -199,6 +215,9 @@
     ],
     "measuring-the-moon": [
       "key:question.maxUncertainty"
+    ],
+    "missing-mass": [
+      "key:question.restates"
     ],
     "power-law-gravity": [
       "key:question.explain"
@@ -236,7 +255,7 @@
       "cut-type:wedges",
       "format:lab",
       "lecture:no",
-      "lesson-lock:{\"placement\":true,\"inspector\":true}"
+      "lesson-lock:{\"placement\":true,\"inspector\":true,\"areaSweep\":false}"
     ],
     "binary-planets/route": [
       "context:individual",
@@ -279,16 +298,16 @@
   ],
   "totals": {
     "investigations": 124,
-    "steps": 1980,
+    "steps": 1984,
     "activityCuts": 6,
-    "lessonTokens": 150,
+    "lessonTokens": 166,
     "activityTokens": 29,
     "stepTypes": {
-      "read": 375,
-      "predict": 198,
+      "read": 376,
+      "predict": 199,
+      "measure": 514,
       "ellipse": 1,
       "question": 748,
-      "measure": 512,
       "explore": 145,
       "wedges": 1
     }

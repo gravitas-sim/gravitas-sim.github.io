@@ -13,7 +13,7 @@ export async function submissionFor(load, { evidence = false } = {}) {
     lesson,
     responses: {
       [key('where-is-the-star')]: '1',
-      [key('use-the-law')]: '8',
+      [key('where-does-it-move-fastest')]: '0',
       // A taken reading: the printed text, its convention and how it was taken.
       [`${key('measure-four-planets')}:p1_a`]: '1.772',
       [`${key('measure-four-planets')}:p1_a:locale`]: 'en',

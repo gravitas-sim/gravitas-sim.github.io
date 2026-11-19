@@ -55,21 +55,21 @@ function backup(lesson, { name, responses, minutes = 40 }) {
   return b;
 }
 
-// Right on where-is-the-star is option 1, on use-the-law it is 8.
+// Right on where-is-the-star is option 1, on weighing-another-star it is 0.91.
 const ada = backup(kepler, {
   name: 'Ada Lovelace',
   minutes: 40,
-  responses: { 'where-is-the-star': '1', 'use-the-law': '8' },
+  responses: { 'where-is-the-star': '1', 'weighing-another-star': '0.91' },
 });
 const ben = backup(kepler, {
   name: 'Benedict Zzyzx',
   minutes: 90,
-  responses: { 'where-is-the-star': '0', 'use-the-law': '64' },
+  responses: { 'where-is-the-star': '0', 'weighing-another-star': '0.0000068' },
 });
 const cleo = backup(kepler, {
   name: 'Cleopatra Zzyzx',
   minutes: 25,
-  responses: { 'where-is-the-star': '0', 'use-the-law': '5' },
+  responses: { 'where-is-the-star': '0', 'weighing-another-star': '5' },
 });
 const NAMES = ['Lovelace', 'Benedict', 'Cleopatra', 'Zzyzx', 'S-77', 'wk-9'];
 
@@ -102,7 +102,7 @@ async function tokenWith(name, rows) {
     buildSubmission({
       backup: backup(kepler, {
         name,
-        responses: { 'use-the-law': '8' },
+        responses: { 'weighing-another-star': '0.91' },
         minutes: 30,
       }),
       rosterId: 'S-77',
@@ -165,25 +165,25 @@ test.describe('the class summary', () => {
     await expect(summary.locator('h3').first()).toHaveText(
       "Kepler's Laws: 3 reports"
     );
-    // where-is-the-star: Ada right, Ben and Cleo wrong. use-the-law: 8 right,
-    // 64 and 5 wrong. Of the three, every one answered both.
+    // where-is-the-star: Ada right, Ben and Cleo wrong. weighing-another-star: 0.91 right,
+    // the period in days and 5 wrong. Of the three, every one answered both.
     const steps = summary.locator(
       'table:has(caption:text-is("Steps, in order")) tbody tr'
     );
     const star = steps.filter({ hasText: 'Where is the star?' });
     await expect(star.locator('td').nth(0)).toHaveText('3 of 3');
     await expect(star.locator('td').nth(1)).toContainText('33% (1/3)');
-    const law = steps.filter({ hasText: 'Use the law' });
+    const law = steps.filter({ hasText: 'Weighing another star' });
     await expect(law.locator('td').nth(1)).toContainText('33% (1/3)');
     // Wrong answers: the choice in words, the named slip in the author's words.
     const wrong = summary.locator(
       'table:has(caption:text-is("Most frequent wrong answers")) tbody tr'
     );
     await expect(wrong.filter({ hasText: 'A: ' })).toHaveCount(1);
-    await expect(wrong.filter({ hasText: '64' })).toContainText(
-      'That is a³. The law says P² = a³'
+    await expect(wrong.filter({ hasText: '6.8e-6' })).toContainText(
+      'The period has to be in years'
     );
-    await expect(wrong.filter({ hasText: '5 years' })).toContainText(
+    await expect(wrong.filter({ hasText: '5 M_sun' })).toContainText(
       'none named'
     );
     // Time: 25, 40 and 90 minutes from the first opening to the last save.

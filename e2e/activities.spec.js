@@ -76,14 +76,14 @@ test.describe('each format opens what it says it opens', () => {
     expect(s.scenario).toBe('keplers-2nd-law');
   });
 
-  test('the full lab: twelve steps, ending on the transfer', async ({
+  test('the full lab: thirteen steps, ending on the transfer', async ({
     page,
     app,
   }) => {
     await launch(page, app, 'lab');
     const s = await state(page);
-    expect(s.steps).toHaveLength(12);
-    expect(s.steps).toContain('measure-the-two-orbits');
+    expect(s.steps).toHaveLength(13);
+    expect(s.steps).toContain('find-the-foci');
     expect(s.steps.at(-1)).toBe('where-kepler-s-version-breaks');
   });
 

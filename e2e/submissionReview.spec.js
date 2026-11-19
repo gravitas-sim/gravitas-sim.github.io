@@ -61,17 +61,20 @@ const ada = backup({
   name: 'Ada',
   responses: {
     'where-is-the-star': '1',
-    'use-the-law': '8',
+    'weighing-another-star': '0.91',
     'why-the-speed-changes': 'Closer to the star, so it moves faster.',
   },
 });
 const ben = backup({
   name: '=HYPERLINK("http://example.invalid","x")',
-  responses: { 'where-is-the-star': '0', 'use-the-law': '5' },
+  responses: { 'where-is-the-star': '0', 'weighing-another-star': '5' },
 });
 const { token } = await encodeSubmission(
   buildSubmission({
-    backup: backup({ name: 'Cleo', responses: { 'use-the-law': '8' } }),
+    backup: backup({
+      name: 'Cleo',
+      responses: { 'weighing-another-star': '0.91' },
+    }),
     rosterId: 'S-3',
     assignmentId: 'week-3',
   })
@@ -394,8 +397,8 @@ test.describe('the submission review page', () => {
     page,
     app,
   }) => {
-    // Kepler's first seven steps: two readings, a prediction, a reading, the
-    // ellipse, a choice and a measurement. Between them the engine stores an
+    // Kepler's first seven steps: two readings, a prediction, a measurement, a
+    // reveal, the ellipse and a choice. Between them the engine stores an
     // option index twice, where the ellipse slider was left, and a key per
     // measure field, the derived one included.
     await app.boot();
@@ -405,10 +408,9 @@ test.describe('the submission review page', () => {
     const body = page.locator('#investigationBody');
     const progress = page.locator('#investigationProgressText');
     const typed = {
-      circ_e: '0',
-      ecc_e: '0.6',
-      ecc_peri: '0.4',
-      ecc_apo: '1.6',
+      f_peri: '0.4',
+      f_apo: '1.6',
+      f_sep: '1.2',
     };
     const walk = kepler.steps.slice(0, 7);
     for (const [i, step] of walk.entries()) {
@@ -424,8 +426,10 @@ test.describe('the submission review page', () => {
         }
         // Worked out as the others are typed, and stored like them.
         await expect(
-          body.locator(`[data-field="${stepKey(kepler.id, step.sid)}:ecc_a"]`)
-        ).toHaveValue(/^1(\.0+)?$/);
+          body.locator(
+            `[data-field="${stepKey(kepler.id, step.sid)}:f_implied"]`
+          )
+        ).toHaveValue(/^1\.2(0+)?$/);
       }
       if (i < walk.length - 1) await page.locator('#investigationNext').click();
     }
@@ -441,7 +445,7 @@ test.describe('the submission review page', () => {
     // What this test is for: keys the engine wrote, sub-keys and all.
     expect(keys.every(k => k.startsWith(`${kepler.id}:`))).toBe(true);
     expect(keys).toContain(`${kepler.id}:change-the-shape:e`);
-    expect(keys).toContain(`${kepler.id}:measure-the-two-orbits:ecc_a`);
+    expect(keys).toContain(`${kepler.id}:find-the-foci:f_implied`);
 
     await open(page);
     await page.locator('#includeWritten').check();
@@ -450,15 +454,15 @@ test.describe('the submission review page', () => {
     const doc = JSON.parse((await take(page, 'exportJson')).text);
     const [sub] = doc.submissions;
     expect(sub.counts).toEqual({
-      scorable: 13,
+      scorable: 15,
       correct: 2,
       incorrect: 0,
       unmarked: 1,
-      incomplete: 10,
+      incomplete: 12,
       stale: 0,
       // A point a question: two earned, and the written answer's one waiting.
       points: 2,
-      pointsPossible: 13,
+      pointsPossible: 15,
       pointsUnmarked: 1,
       // What the scaffolding records as facts, not marks.
       hintsTaken: 0,
@@ -472,9 +476,9 @@ test.describe('the submission review page', () => {
       response: '1',
     });
     expect(q('what-sits-at-the-other').verdict).toBe('correct');
-    expect(q('measure-the-two-orbits')).toMatchObject({ verdict: 'unmarked' });
-    expect(q('measure-the-two-orbits').response).toMatch(
-      /^circ_e=0; ecc_e=0\.6; ecc_peri=0\.4; ecc_apo=1\.6; ecc_a=1(\.0+)?$/
+    expect(q('find-the-foci')).toMatchObject({ verdict: 'unmarked' });
+    expect(q('find-the-foci').response).toMatch(
+      /^f_peri=0\.4; f_apo=1\.6; f_sep=1\.2; f_implied=1\.2(0+)?$/
     );
   });
 
@@ -492,7 +496,10 @@ test.describe('the submission review page', () => {
     const record = { ids: ['e1'], rows: [['e1', 'slope', 10]], total: 1 };
     const stated = await encodeSubmission(
       buildSubmission({
-        backup: backup({ name: 'Eve', responses: { 'use-the-law': '8' } }),
+        backup: backup({
+          name: 'Eve',
+          responses: { 'weighing-another-star': '0.91' },
+        }),
         record: {
           ...record,
           cr: { d: report.digest, n: report.sections.length },

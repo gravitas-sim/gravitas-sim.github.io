@@ -259,16 +259,16 @@ test.describe('the instructor flow', () => {
         )
       ).token;
     };
-    const measure = 'circ_e=1.5; ecc_e=0.7';
+    const measure = 'f_peri=0.5; f_apo=1.5';
     const tokens = [
       await token('ada01', {
         'where-is-the-star': '1',
-        'measure-the-two-orbits': measure,
+        'find-the-foci': measure,
         'why-the-speed-changes': 'It speeds up near the star.',
       }),
       await token('ben02', {
         'where-is-the-star': '0',
-        'measure-the-two-orbits': measure,
+        'find-the-foci': measure,
       }),
       await token('cy03', {
         'where-is-the-star': '1',

@@ -39,7 +39,7 @@ const key = sid => stepKey(kepler.id, sid);
 
 function submission(help) {
   const responses = {
-    [key('use-the-law')]: '8',
+    [key('what-the-constant-depends-on')]: '1',
     [key('weighing-another-star')]: '0.91',
     ...help,
   };
@@ -64,7 +64,8 @@ describe('the token carries hint counts', () => {
   beforeAll(async () => {
     read = await tokenRoundTrip(
       submission({
-        [`${key('use-the-law')}:help`]: 'concept,method,reveal',
+        [`${key('what-the-constant-depends-on')}:help`]:
+          'concept,method,reveal',
         [`${key('weighing-another-star')}:help`]: 'concept',
       })
     );
@@ -73,7 +74,10 @@ describe('the token carries hint counts', () => {
 
   test('read back from the token, per step, as facts', () => {
     const help = helpOf(read);
-    expect(help.get('use-the-law')).toEqual({ hints: 2, revealed: true });
+    expect(help.get('what-the-constant-depends-on')).toEqual({
+      hints: 2,
+      revealed: true,
+    });
     expect(help.get('weighing-another-star')).toEqual({
       hints: 1,
       revealed: false,
@@ -87,9 +91,11 @@ describe('the token carries hint counts', () => {
 
   test('the ladder’s own ids count the same way', async () => {
     const s = await tokenRoundTrip(
-      submission({ [`${key('use-the-law')}:help`]: 'h1,h2,h3' })
+      submission({
+        [`${key('what-the-constant-depends-on')}:help`]: 'h1,h2,h3',
+      })
     );
-    expect(helpOf(s).get('use-the-law').hints).toBe(3);
+    expect(helpOf(s).get('what-the-constant-depends-on').hints).toBe(3);
   });
 });
 
@@ -101,7 +107,8 @@ describe('the review page counts them and does not mark them', () => {
     graded = gradeSubmission(
       await tokenRoundTrip(
         submission({
-          [`${key('use-the-law')}:help`]: 'concept,method,reveal',
+          [`${key('what-the-constant-depends-on')}:help`]:
+            'concept,method,reveal',
           [`${key('weighing-another-star')}:help`]: 'concept',
         })
       ),
@@ -113,7 +120,10 @@ describe('the review page counts them and does not mark them', () => {
 
   test('per question and in total', () => {
     const q = id => graded.questions.find(x => x.sid === id);
-    expect(q('use-the-law')).toMatchObject({ hints: 2, workedShown: true });
+    expect(q('what-the-constant-depends-on')).toMatchObject({
+      hints: 2,
+      workedShown: true,
+    });
     expect(q('weighing-another-star')).toMatchObject({
       hints: 1,
       workedShown: false,
@@ -131,7 +141,9 @@ describe('the review page counts them and does not mark them', () => {
     const records = annotate([graded]);
     const q = fromCsv(questionCsv(records));
     const col = q[0].indexOf('hints_taken');
-    const row = q.find(r => r[q[0].indexOf('step_id')] === 'use-the-law');
+    const row = q.find(
+      r => r[q[0].indexOf('step_id')] === 'what-the-constant-depends-on'
+    );
     expect(row[col]).toBe('2');
     expect(row[q[0].indexOf('worked_shown')]).toBe('yes');
     const s = fromCsv(summaryCsv(records));
@@ -139,8 +151,9 @@ describe('the review page counts them and does not mark them', () => {
     const json = JSON.parse(resultsJson(records, { now: new Date(0) }));
     expect(json.submissions[0].counts.hintsTaken).toBe(3);
     expect(
-      json.submissions[0].questions.find(x => x.stepId === 'use-the-law')
-        .hintsTaken
+      json.submissions[0].questions.find(
+        x => x.stepId === 'what-the-constant-depends-on'
+      ).hintsTaken
     ).toBe(2);
   });
 });
@@ -150,7 +163,7 @@ describe('the student’s report prints help taken', () => {
     buildLabReport({
       investigation: kepler,
       name: 'Ada',
-      responses: { [key('use-the-law')]: '8' },
+      responses: { [key('what-the-constant-depends-on')]: '1' },
       attempts: {},
       visited: new Set(kepler.steps.slice(0, 20).map(s => s.sid)),
       startedAt: '2026-09-01T10:00:00.000Z',
@@ -166,7 +179,11 @@ describe('the student’s report prints help taken', () => {
   const text = bytes => Buffer.from(bytes).toString('latin1');
   const taken = id =>
     helpTaken(
-      helpStages(id === key('use-the-law') ? 'concept,method,reveal' : '')
+      helpStages(
+        id === key('what-the-constant-depends-on')
+          ? 'concept,method,reveal'
+          : ''
+      )
     );
 
   test('in English, with the number and the worked answer', () => {

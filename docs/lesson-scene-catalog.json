@@ -3805,7 +3805,7 @@
      ],
      "recovery": [
       "wrong body: the object list names what the step staged",
-      "null result: the probe prints a dash and does not say why"
+      "null result: the probe names what is missing"
      ]
     },
     {

@@ -250,6 +250,16 @@ describe('a period without the square root is refused', () => {
     ).toBe('warn');
   });
 
+  test('the nearest planet is named when another was taken, whichever is closer in ratio', () => {
+    // 2.5 AU is nearer Mars than Jupiter; Venus is within a factor of four
+    // but is not the nearest.
+    const venus = { near_a: 0.723, near_P: 0.615, ratio: 2.5 / 0.723 };
+    const out = val({ ...venus, P_calc: 4 }, sel);
+    expect(out.level).toBe('warn');
+    expect(out.message).toMatch(/Mars is the planet whose orbit is nearest/);
+    expect(val({ ...base, P_calc: 3.95 }, sel).level).toBe('ok');
+  });
+
   test('none of the feedback states a number the student could copy', () => {
     for (const p of [15.625, 1.58, 3.09, 99]) {
       const m = val({ ...base, P_calc: p }, sel).message;
@@ -356,5 +366,34 @@ describe('the deeper steps keep their decisions', () => {
     const twice = matchMisconception(s, ratio * 1e6, s.tolerance, {});
     expect(twice?.id).toBe('forgotTheHalf');
     expect(matchMisconception(s, s.answer, s.tolerance, {})).toBeNull();
+  });
+});
+
+describe('what the app reads, and where the wedges show', () => {
+  test('the speeds an answer key quotes are vis-viva for 1 solar mass, 0.5 AU, e 0.65', () => {
+    // v = 29.78 km/s * sqrt(2/r - 1/a), with a = r / (1 - e).
+    const r = 0.5;
+    const a = r / (1 - 0.65);
+    const vAt = d => 29.78 * Math.sqrt(2 / d - 1 / a);
+    const f = id => Number(field('fast-and-slow-in-numbers', id).want);
+    expect(f('v_peri')).toBeCloseTo(vAt(r), -0.3);
+    expect(f('v_apo')).toBeCloseTo(vAt(r * (1.65 / 0.35)), 0);
+  });
+
+  test('the step that says wedges are drawn asks for them', () => {
+    expect(KEPLER.lock.areaSweep).toBe(false);
+    expect(step('the-same-laws-forty-light').showAreaSweep).toBe(true);
+    expect(step('equal-areas-however-you-slice').wedgeOf).toBeTruthy();
+  });
+
+  test('a remix of the lesson checks clean, estimate prediction included', async () => {
+    const { remixBuiltin } = await import('../js/composer/remixApi.js');
+    const { checkInvestigationPack } = await import('../js/composer/api.js');
+    const { pack } = await remixBuiltin('keplers-laws', { id: 'my-kepler' });
+    const { errors, compiled } = await checkInvestigationPack(pack);
+    expect(errors).toEqual([]);
+    const est = compiled.lesson.steps.find(x => x.sid === 'estimate-the-year');
+    expect(est).toMatchObject({ kind: 'estimate', unit: 'yr' });
+    expect(est.options).toBeUndefined();
   });
 });

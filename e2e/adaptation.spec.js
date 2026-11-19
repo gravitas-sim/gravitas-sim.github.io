@@ -84,24 +84,18 @@ test.describe('in the builder', () => {
   }) => {
     await openBuilder(page, app);
     await tick(page, 'where-is-the-star');
-    await tick(page, 'measure-the-two-orbits');
-    expect(await order(page)).toEqual([
+    await tick(page, 'the-first-law-and-the');
+    const ordered = [
       'eight-minutes-of-arc',
       'where-is-the-star',
-      'measure-the-two-orbits',
-    ]);
-    // The prediction's answer arrives at the measurement: it cannot go first.
-    await row(page, 'measure-the-two-orbits')
-      .locator('[data-act="up"]')
-      .click();
-    expect(await order(page)).toEqual([
-      'eight-minutes-of-arc',
-      'where-is-the-star',
-      'measure-the-two-orbits',
-    ]);
-    await expect(page.locator('#adaptStatus')).toContainText(
-      /Not changed.*Where is the star\?.*Measure the two orbits/
-    );
+      'find-the-foci',
+      'the-first-law-and-the',
+    ];
+    expect(await order(page)).toEqual(ordered);
+    // The reveal reads the readings taken before it: it cannot go above them.
+    await row(page, 'the-first-law-and-the').locator('[data-act="up"]').click();
+    expect(await order(page)).toEqual(ordered);
+    await expect(page.locator('#adaptStatus')).toContainText(/Not changed/);
   });
 
   test('a step another reads cannot be removed, and one that is free can', async ({
@@ -110,12 +104,12 @@ test.describe('in the builder', () => {
   }) => {
     await openBuilder(page, app);
     await tick(page, 'work-the-law-out-step');
-    await tick(page, 'use-the-law');
+    await tick(page, 'pick-a-distance');
     expect(await order(page)).toEqual([
       'kepler-s-third-law',
       'measure-four-planets',
       'work-the-law-out-step',
-      'use-the-law',
+      'pick-a-distance',
     ]);
     await row(page, 'measure-four-planets')
       .locator('[data-act="remove"]')
@@ -130,7 +124,10 @@ test.describe('in the builder', () => {
       .click();
     await expect(page.locator('#adaptStatus')).toContainText(/Removed/);
     // What it needed goes with it, as nothing else needs that.
-    expect(await order(page)).toEqual(['kepler-s-third-law', 'use-the-law']);
+    expect(await order(page)).toEqual([
+      'kepler-s-third-law',
+      'pick-a-distance',
+    ]);
   });
 
   test('every control of the order list is named and large enough', async ({
@@ -257,8 +254,8 @@ for (const language of LANGUAGES) {
       await seed(page, language, theme);
       await openBuilder(page, app);
       await tick(page, 'where-is-the-star');
-      await tick(page, 'measure-the-two-orbits');
-      await row(page, 'measure-the-two-orbits')
+      await tick(page, 'the-first-law-and-the');
+      await row(page, 'the-first-law-and-the')
         .locator('[data-act="up"]')
         .click();
       await expect(page.locator('#adaptStatus')).not.toBeEmpty();
@@ -280,7 +277,7 @@ test.describe('opening an activity the lesson has moved under', () => {
         await import('/js/investigations/progressBackup.js');
       const a = buildAssignment({
         lesson,
-        chosen: ['where-is-the-star', 'measure-the-two-orbits'],
+        chosen: ['where-is-the-star', 'find-the-foci'],
         title: 'Old week',
         fingerprint: stepFingerprint,
       });

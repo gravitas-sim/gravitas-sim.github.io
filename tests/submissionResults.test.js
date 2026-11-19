@@ -178,7 +178,9 @@ describe('grading one submission', () => {
       'an-older-text';
     const r = grade(sub);
     expect(r.changedSteps).toBe(1);
-    expect(r.questions.find(q => q.sid === 'weighing-another-star').changed).toBe(true);
+    expect(
+      r.questions.find(q => q.sid === 'weighing-another-star').changed
+    ).toBe(true);
   });
 
   test('records what it was graded against, and what it was handed', () => {
@@ -363,9 +365,9 @@ describe('what the lesson engine actually stores', () => {
     expect(
       r.questions.find(q => q.sid === 'why-the-speed-changes').verdict
     ).toBe('incomplete');
-    expect(r.questions.find(q => q.sid === 'weighing-another-star').verdict).toBe(
-      'incomplete'
-    );
+    expect(
+      r.questions.find(q => q.sid === 'weighing-another-star').verdict
+    ).toBe('incomplete');
     // Nor is it a stale answer when the step has gone: which sub-keys were
     // answers, the lesson no longer says.
     expect(r.stale).toBe(0);
@@ -416,7 +418,9 @@ describe('a pile of submissions', () => {
   test('without a roster id nothing is grouped, whatever the typed name says', () => {
     const rows = annotate([
       grade(submission({ name: 'Ada' })),
-      grade(submission({ name: 'Ada', responses: { 'weighing-another-star': '5' } })),
+      grade(
+        submission({ name: 'Ada', responses: { 'weighing-another-star': '5' } })
+      ),
     ]);
     expect(rows.map(r => r.attemptGroup)).toEqual([null, null]);
     for (const r of rows) expect(r.warnings).toContain('noRosterId');
@@ -496,7 +500,9 @@ describe('the CSV exports', () => {
       'withheld'
     );
     expect(col(plain, 'weighing-another-star', 'response')).toBe('0.91');
-    expect(col(plain, 'weighing-another-star', 'response_status')).toBe('checked');
+    expect(col(plain, 'weighing-another-star', 'response_status')).toBe(
+      'checked'
+    );
     expect(col(plain, 'fast-and-slow-in-numbers', 'response_status')).toBe(
       'none'
     );
@@ -725,7 +731,9 @@ describe('the JSON export', () => {
     expect(row('where-is-the-star')[col]).toBe('');
     const json = JSON.parse(resultsJson(records, { now }));
     expect(
-      json.submissions[0].questions.find(x => x.stepId === 'weighing-another-star').unit
+      json.submissions[0].questions.find(
+        x => x.stepId === 'weighing-another-star'
+      ).unit
     ).toBe('M_sun');
     // A version 2 file written before the column reads as it was.
     for (const sub of json.submissions)
