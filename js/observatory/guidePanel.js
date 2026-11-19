@@ -364,6 +364,7 @@ export function mountGuidePanel(root, ctx) {
   }
 
   function start(id, path) {
+    if (!run.suite) return;
     const g = run.suite.GUIDES.find(x => x.id === id) ?? run.suite.GUIDES[0];
     if (!g) return;
     const kept = saved[g.id];
@@ -456,6 +457,9 @@ export function mountGuidePanel(root, ctx) {
   // --- Drawing --------------------------------------------------------------------
 
   let ui = null;
+  // A suite that could not be fetched (offline, and not yet kept by the
+  // service worker): the chooser says so in words and the page carries on.
+  let unavailable = false;
   function build() {
     const intro = el('p', { class: 'ui-hint', text: t('gd.intro') });
     const suite = el('select', { id: 'gdSuite', class: 'ui-select' });
@@ -485,7 +489,7 @@ export function mountGuidePanel(root, ctx) {
     };
     const update = () => {
       if (!run.suite) {
-        suiteIntro.textContent = t('gd.loading');
+        suiteIntro.textContent = t(unavailable ? 'gd.offline' : 'gd.loading');
         summary.textContent = '';
         return;
       }
@@ -500,10 +504,16 @@ export function mountGuidePanel(root, ctx) {
     };
     suite.addEventListener('change', async () => {
       startBtn.disabled = true;
-      run.suite = await loadSuite(suite.value);
+      try {
+        run.suite = await loadSuite(suite.value);
+        unavailable = false;
+      } catch {
+        unavailable = true;
+        run.suite = null;
+      }
       fillGuides();
       update();
-      startBtn.disabled = false;
+      startBtn.disabled = !run.suite;
     });
     pick.addEventListener('change', update);
     path.addEventListener('change', update);
@@ -859,12 +869,19 @@ export function mountGuidePanel(root, ctx) {
   const params = new URLSearchParams(location.search);
   const asked = params.get('guide');
   const first = suiteOf(asked) ?? SUITES[0];
-  const ready = loadSuite(first.id).then(suite => {
-    run.suite = suite;
-    if (asked && suite.GUIDES.some(g => g.id === asked))
-      start(asked, params.get('path'));
-    else render();
-  });
+  const ready = loadSuite(first.id).then(
+    suite => {
+      run.suite = suite;
+      if (asked && suite.GUIDES.some(g => g.id === asked))
+        start(asked, params.get('path'));
+      else render();
+    },
+    () => {
+      unavailable = true;
+      ui.suite.value = first.id;
+      ui.update();
+    }
+  );
   root.addEventListener('toggle', () => {
     ui.back.hidden = ui.visible || !run.guide || !root.open;
   });

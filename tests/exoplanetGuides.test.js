@@ -264,6 +264,31 @@ describe('the guides as data', () => {
     }
   });
 
+  test('whose-star: each outcome of the factor-of-two rule, and no one outcome in the words', () => {
+    // The star's relative uncertainty is the full gap between the two published
+    // radii (2.99 percent), though each source quotes about 1.3 to 1.7 percent.
+    const at = (k, sigma) => ({
+      quantity: (_step, name) => (name === 'k' ? k : sigma),
+    });
+    const k = 0.1207;
+    expect(G.CORRECT.limitsRadius(at(k, 0.001))).toBe('star'); // 0.8 percent
+    expect(G.CORRECT.limitsRadius(at(k, 0.0025))).toBe('equal'); // 2.1 percent
+    expect(G.CORRECT.limitsRadius(at(k, 0.005))).toBe('equal'); // 4.1 percent
+    expect(G.CORRECT.limitsRadius(at(k, 0.01))).toBe('fit'); // 8.3 percent
+    expect(G.CORRECT.limitsRadius(at(k, null))).toBe(null);
+    // One .ok serves every right pick, so it names no single outcome; the
+    // options state the rule, not a number the reference fit happens to give.
+    for (const words of [EN_GUIDES, ES_GUIDES]) {
+      expect(words['gd.exo-fit.whose-star.ok']).not.toMatch(
+        /differ(en)? más que|differ by more than|published radii/
+      );
+      for (const o of ['fit', 'star', 'equal'])
+        expect(words[`gd.exo-fit.whose-star.opt.${o}`]).toMatch(
+          /factor of two|factor de dos/
+        );
+    }
+  });
+
   test('the two grazing planets of the V-shape step cannot be told apart, and the constants are the closest curve a search finds', () => {
     const v = vshape();
     expect(v.chi2All).toBeLessThan(G.VSHAPE.chi2Limit);

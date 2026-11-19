@@ -230,7 +230,7 @@ export const MEASURING_THE_MOON_DEEPER = {
     },
     'a-diameter-with-the-squeeze': {
       title: 'El diámetro con su barra de error',
-      body: 'Informa el diámetro de la llanura oscura como un valor, luego &plusmn;, luego una incertidumbre que puedas defender. Dos cosas no están en la cifra de la herramienta. Una persona cuidadosa coloca el borde suave con unos tres píxeles de margen a cada lado, que son 21 km. Y si la llanura es redonda, la inclinación que mediste la hace más ancha que tu círculo redondo en esa proporción, en una sola dirección. Cuenta como correcto cuando el intervalo que das alcanza el diámetro que permite la llanura, y no es más ancho que 60 km.',
+      body: 'Informa el diámetro de la llanura oscura como un valor, luego &plusmn;, luego una incertidumbre que puedas defender. Dos cosas no están en la cifra de la herramienta. Una persona cuidadosa coloca el borde suave con unos tres píxeles de margen a cada lado, que son 21 km. Y si la llanura es redonda, la inclinación que mediste la hace más ancha que tu círculo redondo en esa proporción, en una sola dirección. Cuenta como correcto cuando tu valor es uno que la llanura permite y el intervalo que das no es más estrecho de lo que ambas cosas hacen defendible ni más ancho que 60 km.',
       prompt: 'El diámetro, con su incertidumbre',
       placeholder: 'un valor y, luego, ± su incertidumbre',
       hints: [

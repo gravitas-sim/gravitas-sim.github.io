@@ -236,12 +236,14 @@ export const ES_EXOPLANET = {
   'gd.exo-fit.whose-star.title': '¿Qué limita el radio del planeta?',
   'gd.exo-fit.whose-star.text':
     'Tu propio ajuste, junto a la estrella. La tabla da tu k con su incertidumbre, el radio del planeta que derivaste, el radio que da tu k con cada estrella publicada y cuánto difieren los dos radios publicados de la estrella. ¿Cuál de estas cosas limita lo bien que se conoce el radio del planeta?',
-  'gd.exo-fit.whose-star.opt.fit': 'El ajuste: k es la menos segura de las dos',
+  'gd.exo-fit.whose-star.opt.fit':
+    'El ajuste: k es menos segura que el radio de la estrella, por más de un factor de dos',
   'gd.exo-fit.whose-star.opt.star':
-    'La estrella: sus dos radios publicados difieren más que la incertidumbre del ajuste en k',
-  'gd.exo-fit.whose-star.opt.equal': 'Ninguna más que la otra: casi iguales',
+    'La estrella: su radio es menos seguro que k, por más de un factor de dos',
+  'gd.exo-fit.whose-star.opt.equal':
+    'Ninguna: las dos están a menos de un factor de dos una de otra',
   'gd.exo-fit.whose-star.ok':
-    'El radio del planeta es k veces el de la estrella, así que lo limita la incertidumbre relativa que sea mayor. Aquí los dos radios publicados de la estrella difieren más que la incertidumbre de tu ajuste en k, así que una barra de error menor en k sola no haría que se conociera mejor el radio del planeta, y ninguna curva de luz puede comprobar el de la estrella.',
+    'El radio del planeta es k veces el de la estrella, así que su incertidumbre relativa la fija la mayor de las dos proporciones. Cuando una es más del doble de la otra, limita el radio y reducir la otra cambia poco; si están a menos de un factor de dos, importan las dos. Ninguna curva de luz puede comprobar el radio de la estrella.',
   'gd.exo-fit.whose-star.no':
     'Compara dos proporciones de la tabla: la incertidumbre del ajuste en k como parte de k, y cuánto difieren los dos radios publicados de la estrella. Un radio que es un producto lo limita la proporción mayor.',
   'gd.exo-fit.density.title': 'La densidad de la estrella',

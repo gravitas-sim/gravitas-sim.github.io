@@ -1723,7 +1723,7 @@
       ],
       "walk": "NOT VERIFIED",
       "pr": 675,
-      "hash": "69d3e958c1e2fccafb3cfec3f6128d7449c9079f98af9438106394cd2a029bfc"
+      "hash": "98af80135dd1aa0dec1d49d3849077706420f2b25ad0fd9d9cbeeb3b1e4ec03e"
     },
     {
       "id": "investigation:exo-planet",
@@ -3355,7 +3355,7 @@
       ],
       "walk": "NOT VERIFIED",
       "pr": 675,
-      "hash": "1a83aa9a4c72435bf90119fdb6370287db8c70ffa3bc7b198dadbcb82213885a"
+      "hash": "d650eb53277bb362da2e35347c2e52a1af4a567c8273c4d37c6e628f436e6521"
     },
     {
       "id": "investigation:missing-mass",

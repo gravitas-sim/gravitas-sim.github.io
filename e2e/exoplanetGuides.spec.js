@@ -256,4 +256,41 @@ test.describe('the Exoplanet Observatory guides', () => {
     );
     expect(await axe()).toEqual([]);
   });
+
+  test('offline on a first visit: the exoplanet suite is not installed, so the panel says so and the other suite still opens', async ({
+    page,
+    errors,
+  }) => {
+    // The suite and its words are kept by the service worker after first use,
+    // not installed: block them as a first offline visit would.
+    await page.route(/\/js\/observatory\/guides\/exoplanet\.js/, r =>
+      r.abort('failed')
+    );
+    await page.route(/\/js\/i18n\/(en|es)\.exoplanet\.js/, r =>
+      r.abort('failed')
+    );
+    await page.goto('/observatory/', { waitUntil: 'domcontentloaded' });
+    await expect(page.locator('html')).toHaveAttribute('data-ready', 'true', {
+      timeout: 30_000,
+    });
+    await page.locator('#obsGuidePanel > summary').click();
+    await expect(page.locator('#gdSuiteIntro')).toHaveText(
+      'Available after one online visit.'
+    );
+    // The reader can still choose the suite that is installed.
+    await page
+      .locator('#obsGuidePanel select')
+      .first()
+      .selectOption('populations');
+    await expect(page.locator('#gdSuiteIntro')).not.toHaveText(
+      'Available after one online visit.'
+    );
+    await expect(page.locator('#gdStart')).toBeEnabled();
+    // The blocked fetches are the only console errors, and they are expected.
+    expect(errors.pageErrors).toEqual([]);
+    expect(
+      errors.consoleErrors.every(m => /ERR_FAILED|exoplanet/.test(m))
+    ).toBe(true);
+    errors.consoleErrors.length = 0;
+  });
 });

@@ -50,13 +50,19 @@ export const MEASURING_THE_MOON_DEEPER = {
              you can defend. Two things are not in the tool&rsquo;s own figure. A careful person
              places the soft edge to within about three pixels either way, which is 21 km. And if
              the plain is round, the slant you measured makes it wider than your round circle by
-             that share, along one direction only. It counts as right when the range you give
-             reaches the plain&rsquo;s allowed diameter, and is no wider than 60 km.`,
+             that share, along one direction only. It counts as right when your value is one the plain
+             allows and the range you give is neither narrower than what both of these
+             make defensible nor wider than 60 km.`,
       prompt: 'The diameter, with its uncertainty',
       unit: 'km',
       placeholder: 'a value, then ± its uncertainty',
+      // The plain is 634 km if it is as it looks and about 660 if it is round; the
+      // value is held to that span and the uncertainty to what the soft edge and
+      // the slant together make defensible.
       answer: 660,
       tolerance: 4,
+      valueWithin: [634, 664],
+      minUncertainty: 25,
       maxUncertainty: 60,
       hints: [
         'Write the diameter, then ±, then an uncertainty that includes how well the edge can be placed and the slant.',

@@ -8,6 +8,7 @@ import { jest } from '@jest/globals';
 // picture of the Moon and the Earth's position are handed in or absent, and
 // the readouts that need neither are what is checked here).
 import { INVESTIGATIONS } from '../js/data/investigations.js';
+import { checkAnswer } from '../js/answerCheck.js';
 import { withAllDepths } from '../js/investigations/depthAll.js';
 import { createEphemeris } from '../js/mission/ephemeris.js';
 import { PACK, DATA } from '../js/data/ephemeris/solarSystem2025.js';
@@ -319,5 +320,26 @@ describe('every validator accepts what the instrument reads and refuses a wrong 
         x => x.kind === 'choice' || x.type === 'predict'
       ))
         expect(s.answer).toBeLessThan(s.options.length);
+  });
+  test('the diameter with the squeeze takes a value the plain allows and an error bar that is not too narrow or too wide', () => {
+    const step = deeper('measuring-the-moon', 'a-diameter-with-the-squeeze');
+    const grade = v => checkAnswer(step, v);
+    for (const ok of [
+      '634 ± 30',
+      '650 ± 25',
+      '660 ± 30',
+      '664 ± 60',
+      '645 ± 40',
+    ])
+      expect([ok, grade(ok)]).toEqual([ok, true]);
+    for (const bad of [
+      '720 ± 60', // a value the plain does not allow, saved by a wide bar
+      '660 ± 1', // an error bar the soft edge alone exceeds
+      '634 ± 21', // the soft edge without the slant
+      '650 ± 70', // wider than a defensible bar
+      '600 ± 40', // below what the plain allows
+      '700 ± 50',
+    ])
+      expect([bad, grade(bad)]).toEqual([bad, false]);
   });
 });

@@ -71,6 +71,8 @@ Gzipped, as Pages serves it, the whole is about 6 MB.
 | 3 Mbps | ~17 s |
 | 1.5 Mbps | ~34 s |
 <!--/fact-block-->
+The Exoplanet Observatory's guide suite (`js/observatory/guides/exoplanet.js`, its words in `js/i18n/en.exoplanet.js` and `js/i18n/es.exoplanet.js`, and `js/data/exoplanetAnswerKey.js`) is in no tier: the first-visit tier is at its `tools/data-budget.json` ceiling, and the suite is fetched only when a reader opens that guide, then kept by the worker. A first visit made offline therefore shows "Available after one online visit." in the guided investigations panel for that suite, and the populations suite beside it still opens. One online visit that opens the guide makes it work offline from then on (`e2e/exoplanetGuides.spec.js` blocks the suite and checks the message).
+
 ### What each page promises offline, and the rule for a new pack
 
 Three tiers, and a page promises offline only what its tier delivers. The

@@ -235,12 +235,14 @@ export const EN_EXOPLANET = {
   'gd.exo-fit.whose-star.title': 'What limits the planet’s radius?',
   'gd.exo-fit.whose-star.text':
     'Your own fit, beside the star. The table gives your k with its uncertainty, the planet radius you derived, the radius your k gives with each published star, and how far apart the two published radii of the star are. Which of these limits how well the planet’s radius is known?',
-  'gd.exo-fit.whose-star.opt.fit': 'The fit: k is the less certain of the two',
+  'gd.exo-fit.whose-star.opt.fit':
+    'The fit: k is less certain than the star’s radius, by more than a factor of two',
   'gd.exo-fit.whose-star.opt.star':
-    'The star: its two published radii differ by more than the fit’s uncertainty on k',
-  'gd.exo-fit.whose-star.opt.equal': 'Neither more than the other: about equal',
+    'The star: its radius is less certain than k, by more than a factor of two',
+  'gd.exo-fit.whose-star.opt.equal':
+    'Neither: the two are within a factor of two of each other',
   'gd.exo-fit.whose-star.ok':
-    'The planet’s radius is k times the star’s, so it is limited by whichever relative uncertainty is larger. Here the star’s two published radii differ by more than your fit’s uncertainty on k, so a smaller error bar on k alone would not make the planet’s radius better known, and no light curve can check the star’s.',
+    'The planet’s radius is k times the star’s, so its relative uncertainty is set by the larger of the two shares. When one is more than twice the other it limits the radius, and a smaller error bar on the other changes little; when they are within a factor of two, both matter. No light curve can check the star’s radius.',
   'gd.exo-fit.whose-star.no':
     'Compare two shares in the table: the fit’s uncertainty on k as a share of k, and how far apart the star’s two published radii are. A radius that is a product is limited by the larger share.',
   'gd.exo-fit.density.title': 'The star’s density',

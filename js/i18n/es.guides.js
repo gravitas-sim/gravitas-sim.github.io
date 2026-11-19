@@ -11,6 +11,7 @@ export const ES_GUIDES = {
   'gd.suite.populations':
     'Las estrellas y sus poblaciones: espectros, cúmulos y variables',
   'gd.loading': 'Cargando las investigaciones…',
+  'gd.offline': 'Disponible tras una visita con conexión.',
   'gd.intro':
     'Investigaciones guiadas con observaciones reales, hechas con las herramientas de esta página. Elige una serie, luego una investigación y un itinerario: el introductorio es el núcleo y el avanzado le añade pasos. Cada número que comprueba un paso sale de los datos o de una fuente citada que el paso nombra.',
   'gd.pick': 'Investigación',
