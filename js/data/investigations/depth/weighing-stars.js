@@ -9,6 +9,15 @@
 import { fixed } from '../../../format.js';
 
 const mass = (a, p) => a ** 3 / p ** 2;
+/** The timings a student took, in order, those that are numbers. */
+const timings = v => [v.t1, v.t2, v.t3, v.t4].filter(Number.isFinite);
+/** Standard error of the mean of the timings (0 when there are fewer than two). */
+const scatter = ts => {
+  if (ts.length < 2) return 0;
+  const mean = ts.reduce((s, x) => s + x, 0) / ts.length;
+  const ss = ts.reduce((s, x) => s + (x - mean) ** 2, 0);
+  return Math.sqrt(ss / (ts.length - 1) / ts.length);
+};
 const fraction = (a, sa, p, sp) =>
   Math.sqrt(((3 * sa) / a) ** 2 + ((2 * sp) / p) ** 2);
 
@@ -19,38 +28,108 @@ export default {
       sid: 'how-sure-is-the-total',
       after: 'weigh-the-pair',
       depth: 'quantitative',
+      decides:
+        'How many timings to take, and how wide an error bar to draw for the period and the orbit size from them.',
       type: 'measure',
       requires: ['weigh-the-pair'],
       title: 'How sure is the total?',
-      body: `Your two measurements were readings, not exact values: the rings
- are a little wider than a line, and a stopwatch is started and
- stopped by a person. Say how far off each could be.
- \n\nThe mass is a³ / P², so a fractional error in a counts three
- times and one in P counts twice, and independent errors add in
- quadrature: σ<sub>M</sub>/M = √((3σ<sub>a</sub>/a)² +
- (2σ<sub>P</sub>/P)²). The orbit size and the period are the ones
- you entered in the weighing step.`,
+      body: `Your period came from a stopwatch started and stopped by a person,
+ so it is a reading, not an exact value. Time a lap again, as many
+ times as you choose (at least two), and take each timing. The scatter
+ of your own timings is what sets the error bar of the period.
+ \n\nThe orbit size is read from the panel, so its uncertainty is how
+ finely the panel prints it. Say how far off each could be.
+ \n\nThen the page moves one reading at a time, on the readings you
+ already took, and recomputes the mass: <em>a</em> by its error bar,
+ then <em>P</em> by its. This is worked on your numbers, not by running
+ the scene again. The mass is <em>a</em>³ / <em>P</em>², so a
+ fractional error in <em>a</em> counts three times and one in
+ <em>P</em> twice; independent errors add in quadrature.`,
+      tool: {
+        id: 'binary',
+        mystery: true,
+        grid: false,
+        barycenter: true,
+        timer: true,
+        hide: ['m1', 'm2'],
+        presets: false,
+        rows: ['timer'],
+        title: 'Time a lap again',
+        note: 'Press Mark, wait for Star A to come back to the dotted line, then press Stop.',
+      },
       fields: [
-        { id: 'sa', label: 'How far off a could be', unit: 'AU', want: '0.1' },
+        {
+          id: 't1',
+          label: 'Timing 1, one lap',
+          unit: 'years',
+          source: { tool: 'timer' },
+        },
+        {
+          id: 't2',
+          label: 'Timing 2, one lap',
+          unit: 'years',
+          source: { tool: 'timer' },
+        },
+        {
+          id: 't3',
+          label: 'Timing 3, one lap',
+          unit: 'years',
+          source: { tool: 'timer' },
+        },
+        {
+          id: 't4',
+          label: 'Timing 4, one lap',
+          unit: 'years',
+          source: { tool: 'timer' },
+        },
+        {
+          id: 'n',
+          label: 'Timings taken',
+          compute: v => timings(v).length,
+          decimals: 0,
+        },
+        {
+          id: 'se',
+          label: 'Scatter of the mean of your timings',
+          unit: 'years',
+          compute: v => scatter(timings(v)),
+          decimals: 3,
+        },
         {
           id: 'sp',
           label: 'How far off P could be',
           unit: 'years',
-          want: '0.2',
+          hint: 'set by your own timings',
+          want: '0.1',
         },
         {
-          id: 'a_in',
-          label: 'Orbit size a',
+          id: 'sa',
+          label: 'How far off a could be',
           unit: 'AU',
-          compute: (v, e) => e('weigh-the-pair', 'a'),
-          decimals: 2,
+          hint: 'set by how finely the panel prints it',
+          want: '0.01',
         },
         {
-          id: 'p_in',
-          label: 'Period P',
-          unit: 'years',
-          compute: (v, e) => e('weigh-the-pair', 'p'),
-          decimals: 2,
+          id: 'move_a',
+          label: 'The mass moves by this if only a is off by its error bar',
+          unit: 'M☉',
+          compute: (v, e) => {
+            const a = e('weigh-the-pair', 'a');
+            const p = e('weigh-the-pair', 'p');
+            return Math.abs(mass(a + v.sa, p) - mass(a, p));
+          },
+          decimals: 3,
+        },
+        {
+          id: 'move_p',
+          label: 'The mass moves by this if only P is off by its error bar',
+          unit: 'M☉',
+          compute: (v, e) => {
+            const a = e('weigh-the-pair', 'a');
+            const p = e('weigh-the-pair', 'p');
+            return Math.abs(mass(a, p + v.sp) - mass(a, p));
+          },
+          decimals: 3,
         },
         {
           id: 'm_tot',
@@ -75,9 +154,23 @@ export default {
       validate: v => {
         if (!(v.sa > 0) || !(v.sp > 0) || !Number.isFinite(v.s_tot))
           return null;
+        if (v.n < 2) {
+          return {
+            level: 'warn',
+            message:
+              'Take at least two timings: one timing cannot show you its own scatter.',
+          };
+        }
+        if (v.sp < v.se) {
+          return {
+            level: 'warn',
+            message:
+              'Your error bar for the period is smaller than the scatter of your own timings. A bar narrower than your scatter claims more than you measured: widen it, or take more timings.',
+          };
+        }
         return {
           level: 'ok',
-          message: `The pair weighs ${fixed(v.m_tot, 2)} ± ${fixed(v.s_tot, 2)} solar masses. Quote both: a mass without its uncertainty cannot be compared with anyone else's.`,
+          message: `The pair weighs ${fixed(v.m_tot, 2)} ± ${fixed(v.s_tot, 2)} solar masses. Compare the two lines above: the reading that moves the mass more is the one that limits it. Quote both the mass and its uncertainty.`,
         };
       },
     },
@@ -85,6 +178,8 @@ export default {
       sid: 'weigh-it-with-an-error-bar',
       after: 'how-sure-is-the-total',
       depth: 'quantitative',
+      decides:
+        'How to quote the mass with the uncertainty the previous step supports.',
       type: 'question',
       kind: 'numeric',
       uncertainty: true,
@@ -109,27 +204,31 @@ export default {
       sid: 'which-measurement-limits-you',
       after: 'weigh-it-with-an-error-bar',
       depth: 'advanced',
+      decides:
+        'Which reading to improve first, from how far each one moved the mass.',
       type: 'question',
       kind: 'choice',
       title: 'Which measurement limits you?',
-      body: `Say a = 4.0 ± 0.1 AU and P = 4.0 ± 0.2 years. The first is
- uncertain by 2.5% and the second by 5%. The mass goes as
- a³ / P².`,
-      prompt: 'Which one contributes more to the uncertainty of the mass?',
+      body: `In the step before, you moved one reading at a time by its
+ error bar and saw how far each move shifted your mass. The mass goes
+ as a³ / P².`,
+      prompt: 'Which of your two readings moved your mass more?',
       options: [
         'the orbit size, because it is cubed',
-        'the period, because it is squared and is the less certain of the two',
-        'they contribute equally, because both are measured',
+        'the period, because it is squared and is the less well known of the two',
+        'they moved it equally, because both are measured',
         'neither: the mass is exact if the law is exact',
       ],
       answer: 1,
       because:
-        'The orbit size contributes 3 × 2.5% = 7.5% and the period 2 × 5% = 10%. The power matters, but so does how well each is known; here the period wins, so a more careful stopwatch measurement, such as timing several laps and dividing, improves the mass more than a more careful ruler.',
+        'The power matters, but so does how well each reading is known. The orbit size is printed to a hundredth of an AU, while a stopwatch is stopped by a hand, so the period carried most of the uncertainty; a more careful stopwatch measurement, such as timing several laps and dividing, improves the mass more than a finer ruler.',
     },
     {
       sid: 'weigh-one-star-with-an-error-bar',
       after: 'now-weigh-each-one',
       depth: 'advanced',
+      decides:
+        'How the uncertainty of the total and of the split combine into the uncertainty of one star.',
       type: 'question',
       kind: 'numeric',
       uncertainty: true,

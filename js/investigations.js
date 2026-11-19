@@ -584,9 +584,15 @@ function applySetup(setup) {
   }
 }
 
+/** The stage a step stands on: its own, or its anchor's for a deeper step (those carry none). */
+const stageOf = step => {
+  if (step?.stage || !step?.depth || step.depth === 'core') return step?.stage;
+  const before = active.steps.slice(0, active.steps.indexOf(step)).reverse();
+  return before.find(s => s.stage || s.setup)?.stage;
+};
+
 /**
- * Hold the simulation still in the ways a lesson depends on. Placement is off by default during a lesson (a
- * click on a planet and a drag that places a new body are one gesture a few pixels apart), and can be turned back on.
+ * Hold the simulation still in the ways a lesson depends on: placement is off during a lesson.
  * @param {boolean} [fresh] - The step's own scene was just built: frame it
  */
 function bindStepRoles(force, fresh) {
@@ -596,12 +602,9 @@ function bindStepRoles(force, fresh) {
   holdClock(canvasMod?.clockStep(step, canvas?.kind) ?? step, appliedSetup);
   if (running && state.paused) announce(t('readout.status.paused'));
   timeline.setParkedPause(state.paused);
-  // Whatever the last step illustrated is not this step's business; a widget
-  // re-asserts its own on its first tick, one frame later.
+  // What the last step illustrated is not this step's; a widget re-asserts its own a frame later.
   clearEvolutionScene();
-  // Frozen copies belong to the screen that froze them, and two consecutive
-  // steps can share a stage - in which case applyStage does nothing and the
-  // copies would otherwise still be standing there under a different question.
+  // Frozen copies belong to the screen that froze them (steps can share a stage, which applyStage leaves alone).
   clearSnapshots();
   const warn = (problems, what) => {
     for (const [role, why] of Object.entries(problems))
@@ -615,11 +618,10 @@ function bindStepRoles(force, fresh) {
   }
   canvasMod?.enterCanvas(canvas, force);
   if (quiet) return;
-  // A stage declares the whole scene and binds its own roles, so it takes
-  // precedence: a step cannot both stand its own stars on the canvas and bind
-  // roles to somebody else's.
-  if (step?.stage) {
-    const { problems } = applyStage(step.stage, { force });
+  // A stage declares the whole scene and binds its own roles, so it takes precedence over a bind.
+  const stage = stageOf(step);
+  if (stage) {
+    const { problems } = applyStage(stage, { force });
     // Its fit is asked for here and taken on the panel's tick, after layout and
     // after the boot has finished with the camera.
     warn(problems, 'staged star');
@@ -1675,9 +1677,9 @@ const OBJECT_LIST_MAX = 12;
 function renderObjectList() {
   if (!els.objects || !els.objectsWrap) return;
   const step = currentStep();
-  const wanted = Boolean(step?.bind || step?.stage);
+  const wanted = Boolean(step?.bind || stageOf(step));
   els.objectsWrap.hidden = !wanted;
-  if (els.stageTools) els.stageTools.hidden = !step?.stage;
+  if (els.stageTools) els.stageTools.hidden = !stageOf(step);
   if (!wanted) {
     lastObjectsKey = '';
     els.objects.replaceChildren();
@@ -1768,15 +1770,13 @@ let lastProbeSelection = null;
 function renderProbe() {
   const step = currentStep();
   canvasMod?.keepQuiet();
-  // A stage owns the scene: if something else replaced it (a cold load into a
-  // staged step, where the app rebuilds its world after the lesson opened) the
-  // stage puts itself back. Cheap: it rebuilds only when the stars have gone.
-  if (step?.stage) {
-    // Only when the scene was *replaced*, never when the reader experimented
-    // (deleted a body, merged two): a wholesale swap leaves nothing of the stage.
+  // A stage owns the scene: if something replaced it wholesale (a cold load into a staged step) it puts
+  // itself back; never when the reader only experimented (deleted a body, merged two).
+  const stage = stageOf(step);
+  if (stage) {
     const presence = stagePresence();
     if (presence.allGone) {
-      applyStage(step.stage, { force: true });
+      applyStage(stage, { force: true });
       // The instrument is what places a model-driven stage - the binary's
       // separation and phase come from the waveform, not from the declaration
       // - so a rebuilt stage needs one repaint to be put where it belongs.

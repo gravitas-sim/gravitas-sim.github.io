@@ -3,14 +3,38 @@ export default {
   steps: [
     {
       title: '¿Qué tan seguro es el total?',
-      body: 'Tus dos medidas fueron lecturas, no valores exactos: los anillos son algo más anchos que una línea, y un cronómetro lo arranca y lo para una persona. Di cuánto podría desviarse cada una.\n\nLa masa es a³ / P², así que un error fraccionario en a cuenta tres veces y uno en P dos, y los errores independientes se suman en cuadratura: σ<sub>M</sub>/M = √((3σ<sub>a</sub>/a)² + (2σ<sub>P</sub>/P)²). El tamaño de la órbita y el periodo son los que anotaste en el paso de pesar.',
+      body: 'Tu periodo salió de un cronómetro que arranca y para una persona, así que es una lectura, no un valor exacto. Cronometra una vuelta otra vez, las veces que decidas (al menos dos), y toma cada tiempo. La dispersión de tus propios tiempos es lo que fija la barra de error del periodo.\n\nEl tamaño de la órbita se lee del panel, así que su incertidumbre es la finura con que lo imprime. Di cuánto podría desviarse cada una.\n\nLuego la página mueve una lectura cada vez, con las lecturas que ya tomaste, y recalcula la masa: <em>a</em> por su barra de error, después <em>P</em> por la suya. Esto se hace con tus números, no volviendo a ejecutar la escena. La masa es <em>a</em>³ / <em>P</em>², así que un error fraccionario en <em>a</em> cuenta tres veces y uno en <em>P</em> dos; los errores independientes se suman en cuadratura.',
+      tool: {
+        title: 'Cronometra una vuelta otra vez',
+        note: 'Pulsa Marcar, espera a que la Estrella A vuelva a la línea de puntos, y pulsa Parar.',
+      },
       fields: [
-        { label: 'Cuánto podría desviarse a' },
-        { label: 'Cuánto podría desviarse P' },
-        { label: 'Tamaño de la órbita a' },
-        { label: 'Periodo P' },
-        { label: 'Masa total' },
-        { label: 'Su incertidumbre' },
+        { label: 'Tiempo 1, una vuelta', unit: 'años' },
+        { label: 'Tiempo 2, una vuelta', unit: 'años' },
+        { label: 'Tiempo 3, una vuelta', unit: 'años' },
+        { label: 'Tiempo 4, una vuelta', unit: 'años' },
+        { label: 'Tiempos tomados' },
+        { label: 'Dispersión de la media de tus tiempos', unit: 'años' },
+        {
+          label: 'Cuánto podría desviarse P',
+          unit: 'años',
+          hint: 'fijado por tus propios tiempos',
+        },
+        {
+          label: 'Cuánto podría desviarse a',
+          unit: 'UA',
+          hint: 'fijado por la finura con que lo imprime el panel',
+        },
+        {
+          label: 'La masa se mueve esto si solo a se desvía su barra de error',
+          unit: 'M☉',
+        },
+        {
+          label: 'La masa se mueve esto si solo P se desvía su barra de error',
+          unit: 'M☉',
+        },
+        { label: 'Masa total', unit: 'M☉' },
+        { label: 'Su incertidumbre', unit: 'M☉' },
       ],
     },
     {
@@ -26,16 +50,16 @@ export default {
     },
     {
       title: '¿Qué medida te limita?',
-      body: 'Di que a = 4,0 ± 0,1 UA y P = 4,0 ± 0,2 años. La primera es incierta en un 2,5 % y la segunda en un 5 %. La masa va como a³ / P².',
-      prompt: '¿Cuál contribuye más a la incertidumbre de la masa?',
+      body: 'En el paso anterior moviste una lectura cada vez por su barra de error y viste cuánto desplazaba cada movimiento tu masa. La masa va como a³ / P².',
+      prompt: '¿Cuál de tus dos lecturas movió más tu masa?',
       options: [
         'el tamaño de la órbita, porque se eleva al cubo',
-        'el periodo, porque se eleva al cuadrado y es el menos seguro de los dos',
+        'el periodo, porque se eleva al cuadrado y es el menos bien conocido de los dos',
         'contribuyen igual, porque las dos están medidas',
         'ninguna: la masa es exacta si la ley es exacta',
       ],
       because:
-        'El tamaño de la órbita contribuye 3 × 2,5 % = 7,5 % y el periodo 2 × 5 % = 10 %. La potencia importa, pero también lo bien que se conoce cada una; aquí gana el periodo, así que medir con más cuidado el cronómetro, por ejemplo cronometrando varias vueltas y dividiendo, mejora más la masa que medir con más cuidado la regla.',
+        'La potencia importa, pero también lo bien que se conoce cada lectura. El tamaño de la órbita se imprime con una centésima de UA, mientras que un cronómetro lo para una mano, así que el periodo cargó con la mayor parte de la incertidumbre; una medida más cuidadosa del cronómetro, por ejemplo cronometrando varias vueltas y dividiendo, mejora más la masa que una regla más fina.',
     },
     {
       title: 'Pesa una estrella, con barra de error',

@@ -460,6 +460,7 @@ const BINARY = {
           ? null
           : (bin.stoppedAt ?? bin.years) - bin.markedAt;
       rows.push({
+        id: 'timer',
         get label() {
           return t('binW.stopwatch');
         },

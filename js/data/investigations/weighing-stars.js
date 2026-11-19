@@ -473,7 +473,6 @@ const WEIGHING = {
         'Keep going until the right-hand pair has done two laps',
         'Confirm the left-hand pair has done exactly one',
       ],
-      tip: 'Four times the mass turns out to give exactly half the period. You do not need to know why that particular factor comes out; the point is only that more mass means a quicker orbit.',
     },
     {
       sid: 'why-the-heavy-pair-wins',
@@ -517,7 +516,7 @@ const WEIGHING = {
              <em>r</em><sub>A</sub> + <em>r</em><sub>B</sub>, which is simply the distance from one
              star across to the other.
              \n\nSo when you measure a, measure star to star.`,
-      tip: 'If you take only one star’s distance from the barycenter by mistake, you will get a mass far too small: for two equal stars, an eighth of the mass. Measuring star to star is the fix, and it is easier to do anyway.',
+      tip: 'The slip to avoid is taking one star’s distance from the balance point for a. In the weighing step you can see how far that slip moves the mass, from your own numbers.',
     },
     {
       sid: 'a-practice-run',
@@ -586,7 +585,7 @@ const WEIGHING = {
              real astronomer is in.
              \n\nYou already have everything you need. Take it one measurement at
              a time.`,
-      tip: 'There is no trick and no hidden difficulty. The numbers have been chosen to come out cleanly, so if your answer is not close to a whole number, check the measurement rather than the arithmetic.',
+      tip: 'There is no trick and no hidden difficulty. If your answer looks odd, check the measurement before the arithmetic.',
     },
     {
       sid: 'what-do-you-need-to',
@@ -610,58 +609,109 @@ const WEIGHING = {
     {
       sid: 'measurement-one-how-big-is',
       stage: MYSTERY_PAIR,
-      type: 'explore',
+      type: 'measure',
       title: 'Measurement one: how big is the orbit?',
       body: `The pair on the canvas is a different one now: two stars whose
              masses you have not been told. The balance point is marked, with a
-             dashed line out to each star, and the panel measures those two
-             lines for you as the pair goes round.
-             \n\nPause the sandbox and read them. Then remember what the last
-             step said: the orbit size <strong>a</strong> is the distance from
-             one star <em>across to the other</em>, so it is the two added
-             together - which the panel also gives you, so you can check.`,
+             dashed line out to each star, and the panel measures those lines
+             for you as the pair goes round.
+             \n\nPause the sandbox if you want a steady look, and take the
+             readings you will need. Remember what the last step said: the orbit
+             size <strong>a</strong> is the distance from one star <em>across to
+             the other</em>. Which of your readings is that one is for you to
+             say in the weighing step.`,
       showBarycenter: true,
       allowInspector: false,
       probe: ctx => {
         const b = ctx.barycenter();
-        if (!b) return [{ label: 'The pair', value: 'not on the canvas' }];
+        const off = 'not on the canvas';
+        if (!b)
+          return [
+            { id: 'ra', label: 'Star A to the balance point', value: off },
+            { id: 'rb', label: 'Star B to the balance point', value: off },
+            { id: 'sep', label: 'Star to star (a)', value: off },
+          ];
         return [
-          ...b.arms.map(arm => ({
+          ...b.arms.map((arm, i) => ({
+            id: i ? 'rb' : 'ra',
             label: `${arm.name} to the balance point`,
             value: `${(arm.r / 100).toFixed(2)} AU`,
           })),
           {
+            id: 'sep',
             label: 'Star to star (a)',
             value: `${(b.separation / 100).toFixed(2)} AU`,
           },
         ];
       },
-      checklist: [
-        'Pause the sandbox and look at the two dashed lines',
-        'Read Star A’s distance from the balance point',
-        'Read Star B’s distance from the balance point',
-        'Add the two together, and check it against the star-to-star figure',
-        'Start it running again and check your reading still holds a lap later',
+      fields: [
+        {
+          id: 'ra',
+          label: 'Star A to the balance point',
+          unit: 'AU',
+          want: '1',
+          source: { probe: 'ra' },
+        },
+        {
+          id: 'rb',
+          label: 'Star B to the balance point',
+          unit: 'AU',
+          want: '3',
+          source: { probe: 'rb' },
+        },
+        {
+          id: 'sep',
+          label: 'Star to star',
+          unit: 'AU',
+          want: '4',
+          source: { probe: 'sep' },
+        },
       ],
-      tip: 'Star A is about 1 AU from the balance point and Star B about 3 AU, so the two stars are 4 AU apart. Write that down: <em>a</em> = 4 AU. The masses are still hidden - the inspector is closed on this screen on purpose.',
+      validate: v => {
+        if (![v.ra, v.rb, v.sep].every(Number.isFinite)) return null;
+        if (Math.abs(v.ra + v.rb - v.sep) > 0.05) {
+          return {
+            level: 'warn',
+            message:
+              'These readings do not fit together: the two arms should add up to the star-to-star distance. Take them again from the same screen.',
+          };
+        }
+        return {
+          level: 'ok',
+          message:
+            'The two arms add up to the star-to-star distance, as they must. Keep these readings for the weighing step.',
+        };
+      },
+      checklist: [
+        'Pause the sandbox if you want a steady look at the two dashed lines',
+        'Take Star A’s distance from the balance point',
+        'Take Star B’s distance from the balance point',
+        'Take the star-to-star distance',
+        'Check that the two arms add up to the star-to-star distance',
+        'Start it running again and check that a reading still holds a lap later',
+      ],
     },
     {
       sid: 'measurement-two-how-long-does',
       stage: MYSTERY_PAIR,
-      type: 'explore',
+      type: 'measure',
       title: 'Measurement two: how long does a lap take?',
       body: `Now time it. The panel has a stopwatch and a clock counting
              simulated years, and the pair it is timing is the one on the
              canvas.
              \n\nPress <strong>Mark</strong> when Star A is somewhere easy to
              recognize. A dotted line appears through that position. Then wait,
-             watch Star A come all the way round, and press <strong>Stop</strong>
+             watch Star A come back to the line, and press <strong>Stop</strong>
              the moment it crosses the line again.
-             \n\nWhen you are happy with the timing, press <strong>Capture this
-             orbit</strong>. That records the separation you just measured, both
-             arm lengths, and your timing, into your notebook - and it marks the
-             period as timed by you rather than taken from the model, which is
-             the difference between a measurement and a prediction.`,
+             \n\nYou decide how many laps to time before you press Stop: your
+             reaction time is the same however long you wait, so it matters
+             less over a longer timing. Say how many laps you timed, take the
+             stopwatch reading, and the period of one lap is worked out for you.
+             \n\nWhen you are happy, press <strong>Capture this orbit</strong>
+             to record the separation, both arm lengths and your timing in your
+             notebook. It marks the period as timed by you rather than taken from
+             the model, which is the difference between a measurement and a
+             prediction.`,
       showBarycenter: true,
       tool: {
         id: 'binary',
@@ -673,18 +723,53 @@ const WEIGHING = {
         hide: ['m1', 'm2'],
         presets: false,
         rows: ['timer', 'clock'],
-        title: 'Time one lap',
+        title: 'Time the laps',
         note: 'Press Mark, wait for Star A to come back to the dotted line, then press Stop. The clock runs in simulated years.',
+      },
+      fields: [
+        {
+          id: 'laps',
+          label: 'Laps you timed',
+          unit: '',
+          hint: 'a whole number of laps',
+        },
+        {
+          id: 't',
+          label: 'Stopwatch reading',
+          unit: 'years',
+          source: { tool: 'timer' },
+        },
+        {
+          id: 'p',
+          label: 'Period P, one lap',
+          unit: 'years',
+          want: '4',
+          decimals: 2,
+          compute: v => v.t / v.laps,
+        },
+      ],
+      validate: v => {
+        if (!Number.isFinite(v.laps) || !Number.isFinite(v.t)) return null;
+        if (v.laps < 1 || v.laps !== Math.round(v.laps)) {
+          return {
+            level: 'error',
+            message: 'Count whole laps, and time at least one.',
+          };
+        }
+        return {
+          level: 'ok',
+          message:
+            'The period of one lap is your stopwatch reading divided by the number of laps. Keep it for the weighing step.',
+        };
       },
       checklist: [
         'Press Mark and note the dotted line that appears',
-        'Watch Star A go all the way round once',
-        'Press Stop as it crosses the line again',
-        'Read the stopwatch: it should be close to a whole number of years',
+        'Decide how many laps to time, and watch Star A go round that many times',
+        'Press Stop as Star A crosses the line again',
+        'Say how many laps you timed, and take the stopwatch reading',
         'If you missed it, press Mark again and have another go',
         'Press Capture this orbit to put the measurement in your notebook',
       ],
-      tip: 'It does not have to be perfect. Anything between about 3.5 and 4.5 years will get you to the right answer, because the answer is a whole number.',
     },
     {
       sid: 'weigh-the-pair',
@@ -694,23 +779,79 @@ const WEIGHING = {
       requires: ['measurement-one-how-big-is', 'measurement-two-how-long-does'],
       type: 'measure',
       title: 'Weigh the pair',
-      body: `Put your two measurements in. The arithmetic is done for you, line
-             by line.
-             \n\nIf your stopwatch reading was a little off, round it to the
-             nearest whole year first: real measurements get rounded all the
-             time, and this one is meant to.`,
+      body: `Choose, from the readings you took, the two numbers the formula
+             needs, and put them in. The arithmetic is done for you, line by
+             line.
+             \n\nReal measurements get rounded all the time, and this one is
+             meant to be: give each number to the precision you trust.`,
       fields: [
         {
           id: 'a',
           label: 'Orbit size a, star to star',
           unit: 'AU',
-          hint: 'from the rings',
+          hint: 'from your readings',
+          want: '4',
+          misconceptions: [
+            {
+              id: 'armA',
+              factor: 0.25,
+              say: 'That matches Star A’s distance from the balance point: one star’s share of the orbit, not the whole of it. The orbit size runs from one star across to the other. Because a is cubed, this slip changes the mass by a large factor; work out how large from your own arm readings.',
+            },
+            {
+              id: 'armB',
+              factor: 0.75,
+              say: 'That matches Star B’s distance from the balance point: one star’s share of the orbit, not the whole of it. The orbit size runs from one star across to the other. Because a is cubed, this slip changes the mass by a large factor; work out how large from your own arm readings.',
+            },
+            {
+              id: 'armPlusSeparation',
+              factor: 1.25,
+              say: 'It looks as if one arm was added to the star-to-star distance. The two arms are the two pieces of that distance, so adding one on counts a piece twice.',
+            },
+            {
+              id: 'armPlusSeparationB',
+              factor: 1.75,
+              say: 'It looks as if one arm was added to the star-to-star distance. The two arms are the two pieces of that distance, so adding one on counts a piece twice.',
+            },
+            {
+              id: 'allThree',
+              factor: 2,
+              say: 'It looks as if all three readings were added. The two arms already make up the star-to-star distance, so the sum counts the orbit twice.',
+            },
+          ],
         },
         {
           id: 'p',
           label: 'Period P, one full lap',
           unit: 'years',
-          hint: 'from the stopwatch',
+          hint: 'from your stopwatch',
+          want: '4',
+          misconceptions: [
+            {
+              id: 'halfLap',
+              factor: 0.5,
+              say: 'That is about half a lap. Halfway round, Star B is where Star A started. Stop the watch when Star A itself is back at its line.',
+            },
+            {
+              id: 'laps2',
+              factor: 2,
+              say: 'That looks like the time for more than one lap. Divide your stopwatch reading by the number of laps you timed.',
+            },
+            {
+              id: 'laps3',
+              factor: 3,
+              say: 'That looks like the time for more than one lap. Divide your stopwatch reading by the number of laps you timed.',
+            },
+            {
+              id: 'laps4',
+              factor: 4,
+              say: 'That looks like the time for more than one lap. Divide your stopwatch reading by the number of laps you timed.',
+            },
+            {
+              id: 'months',
+              factor: 12,
+              say: 'That looks like a number of months. The formula wants the period in years.',
+            },
+          ],
         },
         {
           id: 'a3',
@@ -742,34 +883,26 @@ const WEIGHING = {
             message: 'Both measurements have to be positive numbers.',
           };
         }
-        if (v.a > 1.4 && v.a < 2.6) {
-          return {
-            level: 'warn',
-            message:
-              'That looks like one star’s distance from the balance point rather than the whole orbit. The orbit size is measured from one star <em>across to the other</em>: add both distances together.',
-          };
-        }
         if (v.a < 3.4 || v.a > 4.6) {
           return {
             level: 'warn',
             message:
-              'Check the orbit size against the rings. Star A sits on one ring and Star B on another, and the number you want is the two added together.',
+              'Check the orbit size against your readings: it is the star-to-star distance, the two arms together.',
           };
         }
         if (v.p < 3.3 || v.p > 4.7) {
           return {
             level: 'warn',
             message:
-              'Check the period. Time Star A from the dotted line all the way round until it crosses the same line again.',
+              'Check the period against your stopwatch: one lap of Star A, from the dotted line to the same line again.',
           };
         }
         const total = v.a ** 3 / v.p ** 2;
         return {
           level: 'ok',
-          message: `64 divided by 16 is 4. The two stars weigh <strong>${total.toFixed(1)} solar masses</strong> between them. You measured that by watching, and by nothing else.`,
+          message: `Your numbers give <strong>${total.toFixed(1)} solar masses</strong> between the two stars. You measured that by watching, and by nothing else.`,
         };
       },
-      tip: 'If you measured <em>a</em> = 4 and <em>P</em> = 4, then <em>a</em>³ = 4 × 4 × 4 = 64 and <em>P</em>² = 4 × 4 = 16.',
     },
     {
       sid: 'stop-and-look-at-what',
@@ -791,33 +924,57 @@ const WEIGHING = {
     {
       sid: 'back-to-the-balance-point',
       stage: MYSTERY_PAIR,
-      type: 'explore',
+      type: 'measure',
       title: 'Back to the balance point',
       body: `The balance point is on the canvas again. This time read the two
              dashed lines the other way: not to add the distances up, but to
              compare them.
-             \n\nWhich star stays closer to the balance point?`,
+             \n\nTake how many times further out one star swings than the
+             other, and decide which star must be the heavier.`,
       showBarycenter: true,
       probe: ctx => {
         const b = ctx.barycenter();
-        if (!b) return [{ label: 'The pair', value: 'not on the canvas' }];
+        if (!b)
+          return [
+            {
+              id: 'ratio',
+              label: 'How many times further out B is',
+              value: 'not on the canvas',
+            },
+          ];
         const [a, bb] = b.arms;
         return [
-          { label: `${a.name} arm`, value: `${(a.r / 100).toFixed(2)} AU` },
-          { label: `${bb.name} arm`, value: `${(bb.r / 100).toFixed(2)} AU` },
           {
+            id: 'ra',
+            label: `${a.name} arm`,
+            value: `${(a.r / 100).toFixed(2)} AU`,
+          },
+          {
+            id: 'rb',
+            label: `${bb.name} arm`,
+            value: `${(bb.r / 100).toFixed(2)} AU`,
+          },
+          {
+            id: 'ratio',
             label: 'How many times further out B is',
             value: a.r > 0 ? (bb.r / a.r).toFixed(2) : '—',
           },
         ];
       },
+      fields: [
+        {
+          id: 'ratio',
+          label: 'How many times further out Star B is',
+          unit: '',
+          want: '3',
+          source: { probe: 'ratio' },
+        },
+      ],
       checklist: [
-        'Read Star A’s distance from the balance point',
-        'Read Star B’s distance from the balance point',
-        'Work out how many times further out Star B is',
+        'Compare the two distances from the balance point',
+        'Take how many times further out Star B is',
         'Decide which of the two must be the heavier star',
       ],
-      tip: 'Star A is about 1 AU out. Star B is about 3 AU out. Star B travels three times as far, so Star A must be three times the heavier.',
     },
     {
       sid: 'splitting-them-up',
@@ -825,8 +982,8 @@ const WEIGHING = {
       type: 'question',
       title: 'Splitting them up',
       kind: 'choice',
-      body: `Star A stays <strong>1 AU</strong> from the balance point. Star B
-             swings out to <strong>3 AU</strong>.`,
+      body: `In the last step you took how many times further from the balance
+             point Star B swings than Star A.`,
       prompt: 'So how do the two masses compare?',
       options: [
         'Star B is three times as heavy as Star A',
@@ -841,35 +998,53 @@ const WEIGHING = {
     {
       sid: 'now-weigh-each-one',
       stage: MYSTERY_PAIR,
-      // The four solar masses being shared out are the total weighed there.
-      requires: ['weigh-the-pair'],
+      // The total being shared out is the one weighed there, and the ratio is
+      // the one taken from the arms.
+      requires: ['weigh-the-pair', 'back-to-the-balance-point'],
       type: 'measure',
       title: 'Now weigh each one',
-      body: `You have four solar masses to share out, and you know the split has
-             to be three to one.
-             \n\nThe panel shows it as blocks. Set Star A at 1 AU and Star B at 3
-             AU and count them: three blocks on one side, one on the other, four
-             blocks in total. Then write the two masses in below.`,
+      body: `You know the total mass of the pair from the weighing step, and
+             you know how much further out one star swings than the other.
+             Share the total out between the two stars.
+             \n\nThe panel is the see-saw again: set the two distances to match
+             your readings and see what it says about the masses. Then write the
+             two masses in below.`,
       tool: {
         id: 'balance',
         values: { d1: 1, d2: 3 },
-        total: 4,
+        start: { d1: 2, d2: 2 },
         presets: false,
-        title: 'Share out four solar masses',
-        note: 'Each block is one solar mass. The see-saw decides how they are shared.',
+        title: 'Share out the mass',
+        note: 'The see-saw decides how the total is shared: the star that sits closer in is the heavier.',
       },
       fields: [
+        {
+          id: 'tot',
+          label: 'Total mass you weighed',
+          unit: 'M☉',
+          decimals: 2,
+          compute: (v, e) => e('weigh-the-pair', 'total'),
+        },
+        {
+          id: 'rat',
+          label: 'How many times further out Star B is',
+          unit: '',
+          decimals: 2,
+          compute: (v, e) => e('back-to-the-balance-point', 'ratio'),
+        },
         {
           id: 'ma',
           label: 'Mass of Star A',
           unit: 'M☉',
           hint: 'the heavier one',
+          want: '3',
         },
         {
           id: 'mb',
           label: 'Mass of Star B',
           unit: 'M☉',
           hint: 'the lighter one',
+          want: '1',
         },
         {
           id: 'sum',
@@ -882,10 +1057,11 @@ const WEIGHING = {
       validate: v => {
         if (!Number.isFinite(v.ma) || !Number.isFinite(v.mb)) return null;
         const sum = v.ma + v.mb;
-        if (Math.abs(sum - 4) > 0.6) {
+        const tot = Number.isFinite(v.tot) ? v.tot : 4;
+        if (Math.abs(sum - tot) > 0.15 * tot) {
           return {
             level: 'warn',
-            message: `Those two add up to ${sum.toFixed(1)}, and the pair weighs 4 solar masses in total. The two numbers have to add up to the total you measured.`,
+            message: `Those two add up to ${sum.toFixed(1)}, and the pair you weighed has ${tot.toFixed(1)} solar masses in total. The two numbers have to add up to the total you measured.`,
           };
         }
         if (v.mb > v.ma) {
@@ -895,17 +1071,19 @@ const WEIGHING = {
               'You have them the wrong way round. Star A is the one that stays close to the balance point, which makes it the heavier of the two.',
           };
         }
-        if (Math.abs(v.ma - 3) < 0.35 && Math.abs(v.mb - 1) < 0.35) {
+        if (
+          Number.isFinite(v.rat) &&
+          Math.abs(v.ma / v.mb - v.rat) > 0.15 * v.rat
+        ) {
           return {
-            level: 'ok',
+            level: 'warn',
             message:
-              'Three solar masses and one solar mass. You have just weighed two individual stars, separately, using a ruler and a stopwatch.',
+              'The two add up correctly, but not in the ratio your arm readings give. The star that swings further out is lighter by the same factor.',
           };
         }
         return {
-          level: 'warn',
-          message:
-            'The two add up correctly, but not in a three to one ratio. Count the blocks: three on Star A’s side for every one on Star B’s.',
+          level: 'ok',
+          message: `${v.ma.toFixed(1)} solar masses and ${v.mb.toFixed(1)}. You have just weighed two individual stars, separately, using a ruler and a stopwatch.`,
         };
       },
     },
@@ -997,44 +1175,25 @@ const WEIGHING = {
              <strong>3 AU</strong> apart and take <strong>3 years</strong> to go
              round each other.
              \n\nWork out what they weigh between them.`,
-      fields: [
-        { id: 'a', label: 'Orbit size a', unit: 'AU', want: '3' },
-        { id: 'p', label: 'Period P', unit: 'years', want: '3' },
-        {
-          id: 'a3',
-          label: '<em>a</em>³',
-          unit: '',
-          decimals: 0,
-          compute: v => v.a ** 3,
-        },
-        {
-          id: 'p2',
-          label: '<em>P</em>²',
-          unit: '',
-          decimals: 0,
-          compute: v => v.p ** 2,
-        },
-        {
-          id: 'total',
-          label: 'Total mass',
-          unit: 'M☉',
-          decimals: 2,
-          compute: v => v.a ** 3 / v.p ** 2,
-        },
-      ],
+      fields: [{ id: 'total', label: 'Total mass', unit: 'M☉', want: '3' }],
       validate: v => {
-        if (!Number.isFinite(v.a) || !Number.isFinite(v.p)) return null;
-        if (v.a !== 3 || v.p !== 3) {
+        if (!Number.isFinite(v.total)) return null;
+        if (v.total <= 0) {
+          return {
+            level: 'error',
+            message: 'A mass has to be a positive number.',
+          };
+        }
+        if (Math.abs(v.total - 3) > 0.15) {
           return {
             level: 'warn',
             message:
-              'Put 3 in both boxes: the pair is 3 AU apart with a 3 year period.',
+              'Not quite. The formula is the orbit size cubed, divided by the period squared, with the orbit size in AU and the period in years.',
           };
         }
         return {
           level: 'ok',
-          message:
-            '3 × 3 × 3 is 27, and 3 × 3 is 9, and 27 divided by 9 is 3. Three solar masses between the two of them.',
+          message: 'Three solar masses between the two of them.',
         };
       },
     },

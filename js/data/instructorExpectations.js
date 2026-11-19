@@ -238,15 +238,15 @@ export default {
       'a-practice-run':
         'Practice pair: a = 2 AU, P = 2 years, giving a total of 2 solar masses.',
       'measurement-one-how-big-is':
-        'The mystery pair is 4 AU apart: Star A about 1 AU from the balance point, Star B about 3 AU. Both are read off the canvas, and the inspector is deliberately closed on this screen so the masses cannot simply be looked up.',
+        'The mystery pair is 4 AU apart: Star A about 1 AU from the balance point, Star B about 3 AU. Students take the three readings from the panel with the reading buttons; any phase of the orbit gives the same arms and separation, because the pair is circular, and a reading taken a lap later is accepted. The inspector is closed so the masses cannot simply be looked up.',
       'measurement-two-how-long-does':
-        'One lap takes about 4 years. Capture this orbit records the separation, both arm lengths and the timing into the notebook, and marks the period as student-timed - a period taken from the model instead is recorded as a prediction, which is the distinction that entry exists to keep.',
+        'One lap takes about 4 years. Students say how many laps they timed, take the stopwatch reading and the page divides. Capture this orbit still records the separation, both arm lengths and the timing into the notebook and marks the period as student-timed. Expect the half-lap slip (stopping when Star B is where Star A started) and a reading not divided by the laps timed.',
       'weigh-the-pair':
-        'a³ = 64, P² = 16, so the total is 4 solar masses. A student who uses one star’s barycenter distance instead of the separation gets 0.5 and is told so.',
+        'a³ = 64, P² = 16, so the total is 4 solar masses. Students choose which of their readings is a. One star’s arm (about 1 or 3 AU), an arm added to the separation, all three readings added, a period of half a lap, a stopwatch reading not divided by the laps, and a period in months each get a named slip and another attempt; no value is stated.',
       'now-weigh-each-one':
-        'The 3:1 distance ratio splits 4 solar masses into 3 and 1. Star A, on the smaller circle, is the heavier one.',
+        'The 3:1 distance ratio splits the 4 solar masses the student weighed into 3 and 1; the page checks the split against the student’s own total and ratio. Star A, on the smaller circle, is the heavier one.',
       'one-on-your-own':
-        'The independent pair is a = 3 AU, P = 3 years, giving 3 solar masses.',
+        'The independent pair is a = 3 AU, P = 3 years, giving 3 solar masses; the student enters one number.',
     },
     'black-holes': {
       'the-event-horizon':

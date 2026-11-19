@@ -85,7 +85,6 @@ export const ES_DEFERRED = {
     'La velocidad respecto del planeta cambió un {residual}% en este encuentro, y en la versión aislada no cambia nada en absoluto. Ese residuo es la aproximación: el planeta acelera, así que su sistema no es inercial, y la estrella también tira de la nave. Las lecturas se tomaron a {gate} AU, frente a un radio de Hill de {hill} AU: la distancia más allá de la cual lo que la nave orbita de verdad es la estrella y no el planeta. Esto es la aproximación de cónicas empalmadas, y es la que usan de verdad quienes diseñan misiones.',
   'assist.hint':
     'Las dos columnas describen el mismo encuentro en los mismos dos instantes. La de la izquierda no puede cambiar, porque en el sistema del propio planeta este no realiza trabajo sobre la nave. La de la derecha cambia porque se ha rotado un vector de longitud fija y luego se ha sumado a la velocidad del planeta. No se crea nada: el planeta se frena exactamente en el momento lineal que gana la nave.',
-  // --- La comparacion guardada y el barrido opcional -----------------------
   'assist.exp.cancel': 'Detener',
   'assist.exp.keep': 'Guardar en el cuaderno',
   'assist.exp.running': 'Paso {done} de {total}\u2026',
@@ -151,7 +150,6 @@ export const ES_DEFERRED = {
     'Ninguna de las dos respuestas es una regla. Girar la velocidad relativa solo ayuda mientras se la lleva hacia la direccion en que se mueve el planeta; girala mas alla y la ganancia vuelve a caer. En este laboratorio ese giro optimo ronda los 131\u00b0 y el paso mas cercano que el planeta sobrevive alcanza unos 97\u00b0, asi que el barrido nunca llega al otro lado de la loma.',
   'assist.sweep.caveat.held':
     'Fijo en todos los pasos: velocidad de aproximacion {vinf} km/s, paso de integracion {step}, semilla {seed}. Solo cambio el parametro de impacto.',
-  // --- El par controlado de la leccion del caos ----------------------------
   'bench.chaos.title': 'El par controlado de la investigación',
   'bench.chaos.hint':
     'Prepara la comparacion y ejecuta los dos brazos sobre el mismo tramo de tiempo simulado: capturar, Ejecucion A, volver al inicio, el empujon, Ejecucion B. Todo lo que hace es lo que habrias hecho a mano, en el mismo orden.',
@@ -195,7 +193,6 @@ export const ES_DEFERRED = {
     'NO RESUELTO: los tiempos de e-plegado abarcan un {spread}%, mas de lo que el refinamiento deberia mover una respuesta fisica. El informe honesto es que esta medida no esta resuelta numericamente.',
   'bench.chaos.canceled':
     'Esto se detuvo antes de terminar, asi que al menos un brazo es mas corto de lo que se le pidio.',
-  // --- El par controlado de la leccion de Lagrange -------------------------
   'cr3bp.pair.title': 'Dos direcciones, una misma region accesible',
   'cr3bp.pair.hint':
     'El mismo trazador, en el mismo sitio, a la misma rapidez en el sistema rotante, lanzado en dos direcciones. Misma constante de Jacobi, mismo cuello abierto, todo lo demas fijo. Dos periodos binarios cada uno.',
@@ -339,7 +336,6 @@ export const ES_DEFERRED = {
   'exoW.preset.earthTwin': 'Gemela de la Tierra, TESS',
   'exoW.preset.earthTwin.note':
     'Una Tierra alrededor de un Sol, vista por TESS: 84 ppm, un tránsito de trece horas, un tránsito al año. El tránsito más largo de aquí y el planeta menos detectable, lo que merece una pausa.',
-  // --- La comprobacion de fiabilidad numerica --------------------------------
   'reliability.title': 'Fiabilidad numerica',
   'reliability.hint':
     'Repite este experimento dos veces durante el mismo tiempo simulado - una con el paso que usa el motor y otra con la mitad - e indica que conclusiones se mantienen.',
@@ -529,7 +525,6 @@ export const ES_DEFERRED = {
   'bench.driftWithdrawn':
     'Una versión anterior grabó mal la deriva de energía y de momento angular de este experimento, como los totales multiplicados por cien. Esos valores se han quitado. Vuelve a grabar las ejecuciones para medir la deriva.',
   'bench.error.import': 'No se pudo leer ese archivo ({reason}).',
-  // --- El barrido de parametros -----------------------------------------------
   'sweep.title': 'Barrido de parámetros',
   'sweep.hint':
     'Repite el mismo escenario varias veces cambiando un solo parametro, y muestra como se mueve la medida con el.',
@@ -604,7 +599,6 @@ export const ES_DEFERRED = {
   'sweep.guide.run': 'Ejecutar el barrido guiado',
 
   // --- Tareas para clase --------------------------------------------------
-  // Shown from lazy chunks (the builder, the link bridge, a lesson panel with an assignment open), never a first visit; ensureDeferredMessages() registers them.
   'assign.title': 'Crear una actividad',
   'assign.hint':
     'Elige los pasos que quieres asignar. Los pasos que construyen el mundo del que trata otro paso se añaden solos, y se indican donde corresponden.',
@@ -756,6 +750,7 @@ export const ES_DEFERRED = {
   'inv.run.running': 'Ejecutando {run}. La escena vuelve después.',
   'inv.run.done': 'Ejecución {run} terminada: {readings}.',
   'inv.run.canceled': 'Ejecución cancelada. La escena está como estaba.',
+  'inv.run.none': 'No hay escena que ejecutar. Vuelve un paso y regresa.',
   'inv.run.same': 'Cambia {param} antes de la siguiente ejecución.',
   'inv.run.all': 'Ya están todas. Bórralas para empezar.',
   'inv.run.clear': 'Borrar ejecuciones',
@@ -2343,8 +2338,6 @@ export const ES_DEFERRED = {
     'Estable: una tercera cuestion distinta. Significa que un trazador desplazado ligeramente de un equilibrio vuelve en lugar de irse, y aqui solo es cierto de L4 y L5, y solo por debajo de la razon de masas de Routh. Nada en una curva de velocidad cero lo implica.',
 
   // --- The exoplanet lesson widgets ---------------------------------------------
-  // js/exoplanetWidgets.js is reached only through the lazy js/widgets.js and
-  // js/investigations.js; nobody sees these until a lesson opens.
   'exoW.whoIsActuallyMoving': '¿Quién se mueve de verdad?',
   'exoW.theStarAndThePlanet':
     'La estrella y el planeta giran ambos alrededor del mismo punto. Sube el aumento para ver hacerlo a la estrella.',
@@ -2538,8 +2531,6 @@ export const ES_DEFERRED = {
   'rvsched.compare.oneDraw':
     'Un solo sorteo de ruido en cada brazo: esto dice lo que hicieron estos dos calendarios en esta campana, no que calendario es mejor.',
   // --- The synthetic observing run's own controls ------------------------------
-  // The section is opt-in and hidden until switched on, which is when the panel
-  // registers this catalog, so no one who never records downloads its prose.
   'rv.survey.hint':
     'Conserva solo las medidas que un calendario concreto habría producido realmente, cada una con su incertidumbre. Entre ellas no se registra nada.',
   'rv.survey.cadence': 'Cadencia',
@@ -3906,6 +3897,29 @@ export const ES_DEFERRED = {
   'nb.stellar.limit.fitted':
     'La comparación se dibujó con cada estrella ajustada a su recuadro, así que los tamaños aparentes no son comparables.',
   // --- Words a lesson computes ----------------------------------------------
+  'lessonFn.theseReadingsDoNotFitTogether130':
+    'Estas lecturas no encajan: los dos brazos deberían sumar la distancia de estrella a estrella. Vuelve a tomarlas desde la misma pantalla.',
+  'lessonFn.theTwoArmsAddUpTo106':
+    'Los dos brazos suman la distancia de estrella a estrella, como debe ser. Guarda estas lecturas para el paso de pesar.',
+  'lessonFn.countWholeLapsAndTimeAt40':
+    'Cuenta vueltas enteras, y cronometra al menos una.',
+  'lessonFn.thePeriodOfOneLapIs109':
+    'El periodo de una vuelta es la lectura de tu cronómetro dividida entre el número de vueltas. Guárdalo para el paso de pesar.',
+  'lessonFn.checkTheOrbitSizeAgainstYour99':
+    'Revisa el tamaño de la órbita con tus lecturas: es la distancia de estrella a estrella, los dos brazos juntos.',
+  'lessonFn.checkThePeriodAgainstYourStopwatch104':
+    'Revisa el periodo con tu cronómetro: una vuelta de la Estrella A, desde la línea de puntos hasta la misma línea otra vez.',
+  'lessonFn.theTwoAddUpCorrectlyBut134':
+    'Suman bien, pero no en la razón que dan tus lecturas de los brazos. La estrella que se aleja más es más ligera en el mismo factor.',
+  'lessonFn.aMassHasToBeA35': 'Una masa tiene que ser un número positivo.',
+  'lessonFn.notQuiteTheFormulaIsThe129':
+    'No del todo. La fórmula es el tamaño de la órbita al cubo, dividido entre el periodo al cuadrado, con el tamaño en UA y el periodo en años.',
+  'lessonFn.threeSolarMassesBetweenTheTwo43':
+    'Tres masas solares entre las dos.',
+  'lessonFn.takeAtLeastTwoTimingsOne70':
+    'Toma al menos dos tiempos: un solo tiempo no puede mostrarte su propia dispersión.',
+  'lessonFn.yourErrorBarForThePeriod174':
+    'Tu barra de error del periodo es menor que la dispersión de tus propios tiempos. Una barra más estrecha que tu dispersión afirma más de lo que mediste: ensánchala, o toma más tiempos.',
   'lessonFn.distancesHaveToBePositiveNumbers38':
     'Las distancias tienen que ser números positivos.',
   'lessonFn.closestApproachIsLargerThanFurthest70':
@@ -4037,22 +4051,8 @@ export const ES_DEFERRED = {
     '2 × 2 × 2 es 8, y 2 × 2 es 4, y 8 dividido entre 4 es 2. El par pesa <strong>2 masas solares</strong> entre los dos. Nadie fue hasta allí. Nadie pesó nada. Dos medidas de una órbita bastaron.',
   'lessonFn.bothMeasurementsHaveToBePositive46':
     'Ambas medidas tienen que ser números positivos.',
-  'lessonFn.thatLooksLikeOneStarS187':
-    'Eso parece la distancia de una estrella al punto de equilibrio y no la órbita entera. El tamaño de la órbita se mide de una estrella <em>a la otra</em>: suma ambas distancias.',
-  'lessonFn.checkTheOrbitSizeAgainstThe137':
-    'Comprueba el tamaño de la órbita con los anillos. La Estrella A está en un anillo y la Estrella B en otro, y el número que quieres es la suma de los dos.',
-  'lessonFn.checkThePeriodTimeStarA106':
-    'Comprueba el periodo. Cronometra la Estrella A desde la línea de puntos hasta que vuelva a cruzar la misma línea.',
   'lessonFn.youHaveThemTheWrongWay130':
     'Los tienes al revés. La Estrella A es la que se queda cerca del punto de equilibrio, lo que la convierte en la más pesada de las dos.',
-  'lessonFn.threeSolarMassesAndOneSolar125':
-    'Tres masas solares y una masa solar. Acabas de pesar dos estrellas individuales, por separado, usando una regla y un cronómetro.',
-  'lessonFn.theTwoAddUpCorrectlyBut126':
-    'Los dos suman correctamente, pero no en una proporción de tres a uno. Cuenta los bloques: tres del lado de la Estrella A por cada uno del lado de la Estrella B.',
-  'lessonFn.put3InBothBoxesThe65':
-    'Pon 3 en ambas casillas: el par está a 3 UA con un periodo de 3 años.',
-  'lessonFn.333Is27And102':
-    '3 × 3 × 3 es 27, y 3 × 3 es 9, y 27 dividido entre 9 es 3. Tres masas solares entre las dos.',
   'lessonFn.whatEarthGets15': 'lo que recibe la Tierra',
   'lessonFn.distancesAndStarlightAreBothPositive50':
     'Las distancias y la luz estelar son ambas números positivos.',
