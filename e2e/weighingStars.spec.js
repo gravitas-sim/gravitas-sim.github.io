@@ -135,19 +135,25 @@ test('a deeper step opens on its anchor scene and the error bar follows the scat
 
   const s = 'how-sure-is-the-total';
   await toolAction(page, 'mark');
-  await app.waitForFrames(90);
+  await app.waitForFrames(120);
   await toolAction(page, 'stop');
   await take(page, 't1');
   await toolAction(page, 'mark');
-  await app.waitForFrames(210);
+  await app.waitForFrames(150);
   await toolAction(page, 'stop');
   await take(page, 't2');
   await expect(box(page, s, 'n')).toHaveValue('2');
+  // The timer counts simulated time, so how long two waits of a few frames read
+  // depends on the frame rate. The error bar is therefore set from the scatter the
+  // panel itself shows, not from a number that suits one machine.
+  const sd = Number(await box(page, s, 'sd').inputValue());
+  expect(sd).toBeGreaterThan(0);
+  expect(sd).toBeLessThan(0.5);
   await typeIn(page, s, 'sa', '0.01');
-  await typeIn(page, s, 'sp', '0.001');
+  await typeIn(page, s, 'sp', (sd / 2).toFixed(4));
   await expect(page.locator('.inv-check')).toContainText(
     /smaller than the scatter/i
   );
-  await typeIn(page, s, 'sp', '0.5');
+  await typeIn(page, s, 'sp', (sd * 1.5 + 0.05).toFixed(3));
   await expect(page.locator('.inv-check')).toContainText(/solar masses/i);
 });
