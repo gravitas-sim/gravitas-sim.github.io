@@ -260,3 +260,13 @@ export const BINARY_SCALE = Object.freeze({
   unitsPerSchwarzschildRadius: UNITS_PER_RS,
   componentMarkerUnits: COMPONENT_MARKER,
 });
+
+/** A step's stage: its own, or a deeper step's anchor's (none past a bind or setup, or if it binds itself). */
+export function stageOf(steps, step) {
+  if (step?.stage || step?.bind || !step?.depth || step.depth === 'core')
+    return step?.stage;
+  for (let i = steps.indexOf(step) - 1; i >= 0; i--) {
+    const s = steps[i];
+    if (s.stage || s.setup || s.bind) return s.stage;
+  }
+}

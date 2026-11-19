@@ -99,6 +99,8 @@ const letter = n => String.fromCharCode(65 + n);
 
 /** The run in flight: {id, memo, host, over}. */
 let run = null;
+/** Whether the last start was refused because the scene it reads is not on the canvas. */
+let refused = false;
 /** The value index each step has selected, by response-key prefix. */
 const chosen = new Map();
 /** The frame source; tests replace it. */
@@ -203,8 +205,10 @@ export async function start(h, index) {
   const v = step.variation;
   const scene = sceneIn(h.steps(), step);
   const loc = locate(scene, v.param);
+  refused = false;
   if (run || !loc || !usable(v, scene)) return null;
-  if (loc.kind === 'stage' && !h.runs.stageUp()) return null;
+  if (loc.kind === 'stage' && !h.runs.stageUp())
+    return ((refused = true), null);
   const id = h.stepId();
   const r = {
     id,
@@ -384,7 +388,16 @@ export function mount(h) {
       );
       // Canceled, or the student left the step: nothing to record or announce.
       if (h.stepId() !== id) return;
-      if (!record) return paint();
+      if (!record) {
+        paint();
+        if (refused) {
+          const m = t('inv.run.none');
+          const el = secEl()?.querySelector('[data-runs-status]');
+          if (el) el.textContent = m;
+          announce(m);
+        }
+        return;
+      }
       h.responses()[`${id}${KEY}${n + 1}`] = JSON.stringify(record);
       h.save();
       chosen.delete(id);

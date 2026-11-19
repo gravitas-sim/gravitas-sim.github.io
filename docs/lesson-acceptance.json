@@ -83,7 +83,7 @@
       ],
       "evidenceFrom": "engine",
       "decision": "unreviewed",
-      "leakFree": false
+      "leakFree": true
     },
     "black-holes": {
       "centralExperimentId": "ce.black-holes",

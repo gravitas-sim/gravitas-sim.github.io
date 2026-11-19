@@ -335,7 +335,6 @@ export const EN_DEFERRED = {
     'An Earth around a Sun, seen by TESS: 84 ppm, a thirteen-hour transit, one transit a year. The longest transit here and the least detectable planet, which is worth sitting with.',
   // --- The numerical reliability check ---------------------------------------
   // Careful wording: no string says a result is accurate, because a convergence
-  // check only supports that halving the step did not move the answer.
   'reliability.title': 'Numerical reliability',
   'reliability.hint':
     'Runs this experiment twice over the same simulated time - once at the step the engine is taking and once at half of it - and reports which conclusions survive.',
@@ -751,6 +750,7 @@ export const EN_DEFERRED = {
   'inv.run.running': 'Running {run}. The scene comes back after.',
   'inv.run.done': 'Run {run} finished: {readings}.',
   'inv.run.canceled': 'Run canceled. The scene is back as it was.',
+  'inv.run.none': 'There is no scene to run. Go back a step, then return.',
   'inv.run.same': 'Change {param} before the next run.',
   'inv.run.all': 'Every run is made. Clear them to start again.',
   'inv.run.clear': 'Clear runs',

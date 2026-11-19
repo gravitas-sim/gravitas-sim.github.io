@@ -72,7 +72,7 @@ export const MANIFEST = [
     thumbnail: 'images/investigations/weighing-stars.webp',
     depths: 3,
     stepCount: 36,
-    gradedCount: 18,
+    gradedCount: 21,
     objectiveCount: 6,
   },
   {

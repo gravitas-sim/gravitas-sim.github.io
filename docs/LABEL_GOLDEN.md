@@ -61,7 +61,7 @@ says `same` (a difference would be recorded in full the day one appears).
 
 - a different number of decimals, and a true minus sign where the hyphen was,
   are different recordings;
-- every `toFixed` and `toPrecision` call in the family ran: 101 of 101, by
+- every `toFixed` and `toPrecision` call in the family ran: 99 of 99, by
   line and column, which is the number the ratchet counts. A call the
   recording cannot reach is listed in `coverage.json` and fails the test;
 - a naive swap of every `toFixed` for `js/format.js`'s `fixed()` is not
@@ -95,7 +95,7 @@ literals (`answer`, `tolerance` and the key line) were kept as they were.
 
 Nothing in the lesson-data family could be migrated by this PR; see D-R10-24.
 
-- All 101 `toFixed`/`toPrecision` calls are in 15 files under
+- All 99 `toFixed`/`toPrecision` calls are in 15 files under
   `js/data/investigations/`, and every one of them is a source of the
   instructor bundle (`tools/instructor-freshness.mjs`): editing it makes the
   committed ciphertext stale, and rebuilding needs the passphrase a session

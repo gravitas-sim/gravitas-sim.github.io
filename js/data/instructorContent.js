@@ -2685,15 +2685,15 @@ export const INSTRUCTOR_CONTENT = {
       },
       {
         name: 'Stopwatch (steps 24–25)',
-        text: 'Mark and Stop time one lap. The orbits are computed analytically rather than integrated, so a lap reads exactly 4.00 years and the arithmetic on the following screen lands cleanly.',
+        text: 'Mark and Stop time one or more laps; the student says how many and the page divides. A lap in the panel reads 4.00 years, apart from reaction time.',
       },
       {
-        name: 'AU rings (step 23)',
-        text: 'Concentric rings at whole astronomical units, so a separation is read off rather than estimated. Students are told not to judge distances from pixels and this is how that promise is kept.',
+        name: 'Reading buttons (step 23)',
+        text: 'Each button copies one printed distance into the notebook with how it was taken, so no one judges distances from pixels.',
       },
       {
         name: 'See-saw panel (steps 11–12, 29)',
-        text: 'Turns the mass ratio into a picture, and on the weighing step into countable mass blocks.',
+        text: 'Turns the mass ratio into a picture; on the last weighing step the student sets the distances from their own readings.',
       },
       {
         name: 'Sirius panel (step 31)',

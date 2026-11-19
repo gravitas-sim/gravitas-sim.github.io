@@ -21,9 +21,9 @@
 // fails the same way and offers a reload.
 // =============================================================================
 
-import { BINARY_SCALE, SCALE } from './stage.js';
+import { BINARY_SCALE, SCALE, stageOf } from './stage.js';
 
-export { BINARY_SCALE, SCALE };
+export { BINARY_SCALE, SCALE, stageOf };
 
 let stage = null;
 let pending = null;

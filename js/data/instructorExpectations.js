@@ -238,13 +238,15 @@ export default {
       'a-practice-run':
         'Practice pair: a = 2 AU, P = 2 years, giving a total of 2 solar masses.',
       'measurement-one-how-big-is':
-        'The mystery pair is 4 AU apart: Star A about 1 AU from the balance point, Star B about 3 AU. Both are read off the canvas, and the inspector is deliberately closed on this screen so the masses cannot simply be looked up.',
+        'The mystery pair is 4 AU apart: Star A about 1 AU from the balance point, Star B about 3 AU. Students take both arms and the separation from the panel; any phase gives the same readings.',
       'measurement-two-how-long-does':
-        'One lap takes about 4 years. Capture this orbit records the separation, both arm lengths and the timing into the notebook, and marks the period as student-timed - a period taken from the model instead is recorded as a prediction, which is the distinction that entry exists to keep.',
+        'One lap takes about 4 years. Students say how many laps they timed and take the stopwatch reading; the page divides. Expect the half-lap slip.',
       'weigh-the-pair':
-        'a³ = 64, P² = 16, so the total is 4 solar masses. A student who uses one star’s barycenter distance instead of the separation gets 0.5 and is told so.',
+        'a³ = 64, P² = 16, so the total is 4 solar masses. Students choose which reading is a; each wrong choice, half a lap and months get a named slip.',
+      'back-to-the-balance-point':
+        'Star B swings about three times as far out as Star A; the nearer star is the heavier.',
       'now-weigh-each-one':
-        'The 3:1 distance ratio splits 4 solar masses into 3 and 1. Star A, on the smaller circle, is the heavier one.',
+        'The 3:1 distance ratio splits the 4 solar masses into 3 and 1.',
       'one-on-your-own':
         'The independent pair is a = 3 AU, P = 3 years, giving 3 solar masses.',
     },
