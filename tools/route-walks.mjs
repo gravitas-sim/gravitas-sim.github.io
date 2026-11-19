@@ -132,8 +132,8 @@ async function setTool(page, id, value) {
 export const PILOTS = {
   'keplers-laws': {
     measureSid: 'find-the-foci',
-    // The readout of the eccentric orbiter: its two distances, in AU
-    // as the lesson's units are (scene units are hundredths of an AU).
+    // The readout of the eccentric orbiter: its two distances and the gap
+    // between them (the empty focus), in AU as the lesson's units are (scene units are hundredths of an AU).
     async readings(page) {
       return page.evaluate(async () => {
         const ls = await import('/js/lessonScene.js');
@@ -162,6 +162,7 @@ export const PILOTS = {
         return {
           f_peri: (e.periapsis * 0.01).toFixed(2),
           f_apo: (e.apoapsis * 0.01).toFixed(2),
+          f_sep: ((e.apoapsis - e.periapsis) * 0.01).toFixed(2),
         };
       });
     },
