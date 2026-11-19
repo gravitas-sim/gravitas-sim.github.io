@@ -88,11 +88,10 @@ test.describe('in the builder', () => {
     const ordered = [
       'eight-minutes-of-arc',
       'where-is-the-star',
-      'find-the-foci',
       'the-first-law-and-the',
     ];
     expect(await order(page)).toEqual(ordered);
-    // The reveal reads the readings taken before it: it cannot go above them.
+    // The prediction's answer arrives at the reveal: the reveal cannot go first.
     await row(page, 'the-first-law-and-the').locator('[data-act="up"]').click();
     expect(await order(page)).toEqual(ordered);
     await expect(page.locator('#adaptStatus')).toContainText(/Not changed/);
@@ -115,7 +114,7 @@ test.describe('in the builder', () => {
       .locator('[data-act="remove"]')
       .click();
     await expect(page.locator('#adaptStatus')).toContainText(
-      /Not changed.*Work the law out, step by step.*Measure four planets/
+      /Not changed.*Work the law out, step by step.*Measure the planets/
     );
     expect(await order(page)).toHaveLength(4);
     // Nothing reads the last one, and nothing is under it.
@@ -123,9 +122,10 @@ test.describe('in the builder', () => {
       .locator('[data-act="remove"]')
       .click();
     await expect(page.locator('#adaptStatus')).toContainText(/Removed/);
-    // What it needed goes with it, as nothing else needs that.
+    // The step goes; the planets stay, because the distance step still reads them.
     expect(await order(page)).toEqual([
       'kepler-s-third-law',
+      'measure-four-planets',
       'pick-a-distance',
     ]);
   });

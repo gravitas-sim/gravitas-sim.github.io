@@ -207,7 +207,7 @@ test.describe('the submission review page', () => {
     const qrows = fromCsv(questions.text);
     expect(qrows[0]).toEqual([...QUESTION_COLUMNS]);
     // Every graded step of every report, duplicate included.
-    expect(qrows.length - 1).toBe(4 * 13);
+    expect(qrows.length - 1).toBe(4 * 15);
 
     const json = await take(page, 'exportJson');
     expect(json.name).toMatch(/^gravitas-results-\d{4}-\d{2}-\d{2}\.json$/);

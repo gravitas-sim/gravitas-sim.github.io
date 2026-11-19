@@ -180,7 +180,7 @@ test.describe('the class summary', () => {
       'table:has(caption:text-is("Most frequent wrong answers")) tbody tr'
     );
     await expect(wrong.filter({ hasText: 'A: ' })).toHaveCount(1);
-    await expect(wrong.filter({ hasText: '6.8e-6' })).toContainText(
+    await expect(wrong.filter({ hasText: '0.0000068' })).toContainText(
       'The period has to be in years'
     );
     await expect(wrong.filter({ hasText: '5 M_sun' })).toContainText(

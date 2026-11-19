@@ -63,7 +63,7 @@ test.describe('each format opens what it says it opens', () => {
     );
   });
 
-  test('the guided activity: seven steps, ending on the explanation', async ({
+  test('the guided activity: seven steps, the explanation before the areas', async ({
     page,
     app,
   }) => {
@@ -72,7 +72,10 @@ test.describe('each format opens what it says it opens', () => {
     expect(s.steps).toHaveLength(7);
     expect(s.steps[0]).toBe('eight-minutes-of-arc');
     expect(s.steps).toContain('fast-and-slow-in-numbers');
-    expect(s.steps.at(-1)).toBe('why-the-speed-changes');
+    expect(s.steps.slice(-2)).toEqual([
+      'why-the-speed-changes',
+      'equal-areas-however-you-slice',
+    ]);
     expect(s.scenario).toBe('keplers-2nd-law');
   });
 
@@ -96,7 +99,7 @@ test.describe('each format opens what it says it opens', () => {
     expect(text).toContain('why do planets change speed');
     // Honest about being a cut: seven of twenty-three.
     expect(text).toMatch(/7 steps of/);
-    expect(text).toMatch(/23/);
+    expect(text).toMatch(/26/);
   });
 
   test('the measuring tool the guided activity needs is there', async ({
@@ -206,7 +209,7 @@ test.describe('two formats are two different pieces of work', () => {
       const inv = await import('/js/investigations.js');
       return inv.activeAssignmentBinding()?.steps?.length ?? null;
     });
-    expect(labState).toBe(12);
+    expect(labState).toBe(13);
 
     // Whatever was stored belongs to the demonstration's own namespace.
     const allKeys = await keys();

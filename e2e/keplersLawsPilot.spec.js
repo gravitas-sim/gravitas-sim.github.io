@@ -201,12 +201,12 @@ test.describe("Kepler's Laws, reworked", () => {
 
     await walkToSid(page, plan, 'what-the-constant-depends-on');
     await page.getByRole('button', { name: 'Run A' }).click();
-    await expect(page.locator('body')).toContainText(/Run A finished/, {
+    await expect(page.locator('body')).toContainText('1.000 yr', {
       timeout: 120_000,
     });
     await page.getByRole('button', { name: /Change star mass/ }).click();
     await page.getByRole('button', { name: 'Run B' }).click();
-    await expect(page.locator('body')).toContainText(/Run B finished/, {
+    await expect(page.locator('body')).toContainText('0.707 yr', {
       timeout: 120_000,
     });
   });
