@@ -122,7 +122,7 @@ const BUDGETS = [
   {
     id: 'deferred',
     label: 'Deferred JavaScript (lazy chunks, gzipped)',
-    limit: 3206.9,
+    limit: 3210.2,
     reason:
       'Jumped from 1369 KB to 2105 KB when three.js and Chart.js stopped being ' +
       'CDN requests and became bundled chunks. That is the point of the change ' +
@@ -726,7 +726,8 @@ const BUDGETS = [
       '\n\nOverlay, Library, lesson type, instrument start, reading feedback and lesson layout changes taken together (D-R4-TRAIN-03): the limit is raised from 3184.3 to 3188.7 KB, the exact overrun of a Node 22 build over v4 5c9942253 (3,265,116 bytes gzipped, 3188.59 KB) rounded up to 0.1 KB plus 0.1 KB because the margin is under 50 bytes, under the standing approval of 2026-10-10.' +
       '\n\nOrbit geometry and sizes (D-R4-447-07): the limit is raised from 3188.7 to 3199.6 KB, the exact overrun of a Node 22 build over v4 6852131e7 (3,276,315 bytes gzipped, 3199.53 KB) rounded up to 0.1 KB, under the standing approval of 2026-10-10.' +
       '\n\nBarycenter marker, frame and source statement (D-R4-TRAIN-04): raised from 3199.6 to 3202.2 KB, a Node 22 build over v4 6852131e7 with the orbit geometry change measuring 3,278,935 bytes gzipped (3202.08 KB), rounded up to 0.1 KB plus 0.1 KB because the margin is under 50 bytes, under the standing approval of 2026-10-10.' +
-      '\n\nLesson figures drawn from the model (D-R4-TRAIN-04, D-R4-457-03), listed separately for the maintainer: raised from 3202.2 to 3206.9 KB, the measurement by CI of the combined branch (run 44415955830) at 3,283,804 bytes gzipped (3206.84 KB) rounded up to 0.1 KB. The change was asked to raise no ceiling; the raise was adopted as a maintainer decision of 2026-11-18 (D-R4-457-03).',
+      '\n\nLesson figures drawn from the model (D-R4-TRAIN-04, D-R4-457-03), listed separately for the maintainer: raised from 3202.2 to 3206.9 KB, the measurement by CI of the combined branch (run 44415955830) at 3,283,804 bytes gzipped (3206.84 KB) rounded up to 0.1 KB. The change was asked to raise no ceiling; the raise was adopted as a maintainer decision of 2026-11-18 (D-R4-457-03).' +
+      '\n\nTransit Photometry reading and estimate steps (D-R4-329-05): raised from 3206.9 to 3210.2 KB, the exact overrun of a Node 22 build over v4 37007b6d1 (3,287,174 bytes gzipped, 3210.13 KB) rounded up to 0.1 KB, under the standing approvals of 2026-10-06 and 2026-10-10.',
   },
 ];
 
