@@ -48,7 +48,7 @@ export default {
       options: [
         'el tamaño de la órbita, porque se eleva al cubo',
         'el periodo, porque se eleva al cuadrado y es el menos bien conocido de los dos',
-        'contribuyen igual, porque las dos están medidas',
+        'la movieron por igual, porque las dos están medidas',
         'ninguna: la masa es exacta si la ley es exacta',
       ],
       because:
