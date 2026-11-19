@@ -351,11 +351,6 @@ export const state = {
     centralId: null,
     snappedVel: null,
   },
-  // Overlay for showing stable orbit when inspector is open
-  inspectorOrbitOverlay: {
-    active: false,
-    points: [],
-  },
   // The balance point two staged stars are both going round, drawn on the main
   // scene when a lesson step asks for it. World coordinates, recomputed each
   // frame from the live bodies rather than stored, so it is a measurement of

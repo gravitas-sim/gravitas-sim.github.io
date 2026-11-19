@@ -1,0 +1,56 @@
+{
+  "schema": "gravitas.model-figure-tolerances/1",
+  "about": "Fixed before any figure code exists (js/lessonFigures.js). A figure's numbers are compared with numbers derived from the integrator's own state by a path that shares no code with the figure. A criterion that fails is reported with its numbers; no bound here is moved, widened or made conditional after a result.",
+  "world": {
+    "settings": "G read from the world after the lab is built (twoBodySettings), never from the constants handed to a figure; the lab's integrator is Velocity Verlet with mutual gravity off, a star of mass 1 and a body of mass 0.1 (orbit) or 1e-6 (transit)",
+    "step": 0.1
+  },
+  "orbit": {
+    "fromState": {
+      "what": "a figure drawn from a recorded state: a, e, periapsis and apoapsis distances, the focal separation, and the world position of each apsis and of the empty focus, against vis-viva (1/a = 2/r - v^2/mu), the angular momentum (e = sqrt(1 - h^2/(mu a))) and the eccentricity vector ((v x h)/mu - r/|r|), all from the body's position and velocity relative to the primary",
+      "relativeToA": 1e-9,
+      "reason": "closed forms in double precision on the same state; an error above 1e-9 of a is a bug, not round-off (the bound of the orbit geometry overlay's own first check)"
+    },
+    "fromConstants": {
+      "what": "a figure drawn from the lesson's constants (a, e, periapsis along +x, counter-clockwise) against the same derivation applied to the integrator's state after the recorded fraction of one period",
+      "cases": [
+        { "a": 100, "e": 0.5 },
+        { "a": 80, "e": 0.2 }
+      ],
+      "periodFractions": [0.25, 0.5],
+      "bound": "2 (w_p dt)^2 for a, e, the apsis distances and the focal separation (relative to a for the lengths, absolute for e), and the same value times a for the three marker positions",
+      "reason": "w_p is the angular rate at periapsis, sqrt((1 + e) / (a (1 - e))) / (a (1 - e)) with G M = 1. Velocity Verlet is second order, and its error in the osculating elements is a multiple of (w_p dt)^2; the orbit geometry overlay's circular check bounds the radius by the same form (tests/fixtures/orbit-geometry-tolerances.json, d). Probed on the unmodified integrator at the stated step before this file was written: the largest error over the four cases was 0.43 of the bound (tests/modelFigureReference.test.js prints each ratio)",
+      "stop": "if the integrator misses the bound, report an integrator finding; never widen"
+    },
+    "negativeControl": "a figure given e + 0.05, or a G that is not the world's, must miss the bound by at least a factor of 1000; a figure that cannot fail proves nothing"
+  },
+  "transit": {
+    "fromState": {
+      "what": "a figure drawn from a recorded state (star and planet positions and radii, observer position angle and inclination): the radius ratio, the impact parameter and both contact lengths, against the planet's sky-plane separation from the vector projection of its position on the observer's two sky axes and the bodies' radii",
+      "absolute": 1e-12,
+      "reason": "the same arithmetic in double precision on the same state; unit-scale quantities (radii and the impact parameter are in stellar radii)"
+    },
+    "fromConstants": {
+      "what": "a figure drawn from the lesson's constants (k, b) against the integrator: k from the two body radii, b from the smallest sky separation the planet reaches in front of the star over the transit, the contact length (first to fourth contact) from the path the planet's centre takes in the sky plane between the first and last step it is within Rs + Rp of the star's centre",
+      "cases": [
+        { "starRadius": 10, "planetRadius": 1.2, "k": 0.12, "b": 0.4 },
+        { "starRadius": 10, "planetRadius": 1.2, "k": 0.12, "b": 0.8 }
+      ],
+      "orbitRadius": 100,
+      "positionAnglesDeg": [0, 37],
+      "k": {
+        "absolute": 1e-12,
+        "reason": "the radius ratio is the ratio of two constants the scene was built with"
+      },
+      "b": {
+        "absolute": 1e-5,
+        "reason": "the recorded state is the step of least separation, which falls within half a step of mid-transit; the separation there exceeds b Rs by (d w dt / 2)^2 / (2 b Rs^2), 3e-6 stellar radii at the stated step for b = 0.4, plus the integrator's second-order radius error; probed at 1.6e-10 at most and bounded here by three times the sampling term"
+      },
+      "contactLength": {
+        "absolute": 0.01,
+        "reason": "in stellar radii. Quantizing the two contacts to the step costs at most 2 v dt / Rs = 0.002; the figure draws a straight chord, while the real track bows by d cos(i) (1 - cos(theta)) = 0.05 Rs at b = 0.8, which shortens the contact length by about 0.005. Probed on the unmodified integrator at 0.0047 at most; 0.01 is twice that, the least round number above the two terms' sum"
+      }
+    },
+    "negativeControl": "a figure given b + 0.05 or k + 0.01 must miss the bound by at least a factor of 10; a figure that cannot fail proves nothing"
+  }
+}

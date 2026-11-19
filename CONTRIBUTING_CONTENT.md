@@ -155,6 +155,33 @@ A step's fingerprint does not cover its prompt: the corpus
 (`tests/compat/revisions.test.js`) found no silent misread that a prompt digest
 would catch, because a changed meaning is a revision and so a new id.
 
+## A figure drawn from the model
+
+A step can show a picture that is drawn from the numbers the task uses, so it
+cannot disagree with what the student measures. Beside the photograph form of
+`step.figure` (`src`, `alt`, `caption`, credit), a step may declare
+`figure: { from, params, lengthUnit?, withhold? }`, where `from` is `orbit` (the
+ellipse with its foci and apsides) or `transit` (two discs and the impact
+parameter). `params` are the lesson's own constants (`{a, e}` or `{k, b}`) or a
+recorded state with the `scenarioId` it came from; the state is what the
+integrator held at one moment (positions and velocities and the G in force for
+an orbit; the bodies' positions and radii and the observer's two angles for a
+transit). The picture, its text alternative and its caption come from the same
+numbers, in English and Spanish, and say what is modelled, what is schematic
+and that the drawing is an illustration; do not write them yourself.
+
+`withhold` lists the quantities a step asks the student to find. The words then
+name at most one number of the figure (any two fix the rest), but the shape is
+still drawn, so choose a figure that does not hand over the answer. `npm run
+author:check` rule `ref/figure` names an unknown figure, a missing or out-of-range
+parameter, a state with no scenario and a withheld name the figure lacks.
+`tests/modelFigures.test.js` compares a figure's numbers with values derived
+from the integrator at the bounds in `tests/fixtures/model-figure-tolerances.json`;
+a lesson that adopts a figure adds its own case to that test. A lesson that
+adopts one also adds `from`, `scenarioId` and `withhold` to `STRUCTURAL` in
+`js/data/investigations/i18n.js`, so the Spanish coverage count does not treat
+them as words.
+
 ## The review checklist
 
 `sdk review` runs the first six and prints the rest. The same function runs in

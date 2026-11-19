@@ -176,15 +176,10 @@ try {
         data-i18n-aria-label="chrome.canvas.label"
         aria-describedby="canvasSummary"
       ></canvas>
-      <!-- The textual equivalent of the canvas: which scenario is loaded,
-           whether it is running, what is in it and what is selected. Kept
-           up to date by js/canvasSummary.js.
-
-           Deliberately not a live region. The simulation changes sixty times a
-           second and announcing that would be unusable; this is a description,
-           read when a reader moves to the canvas. Discrete events - a scenario
-           loading, a pause, a selection - go to #srStatus instead, which is
-           polite and only written when something actually happened. -->
+      <!-- The textual equivalent of the canvas (scenario, running or not, contents,
+           selection), kept up to date by js/canvasSummary.js. Deliberately not
+           a live region: the simulation changes sixty times a second and announcing
+           that would be unusable. Discrete events go to #srStatus instead. -->
       <p id="canvasSummary" class="visually-hidden"></p>
     </main>
 
@@ -303,14 +298,9 @@ try {
           <span id="rvCurrent" class="rv-readout-value numeric">—</span>
           <span id="rvDirection" class="rv-direction"></span>
         </div>
-        <!-- Half-range, not "semi-amplitude K". The panel measures
-             (max - min) / 2 of the samples it has taken. For a single Keplerian
-             component that equals K at any eccentricity - the e*cos(omega) term
-             shifts the curve without changing its range - so the gap between
-             this number and K is about sampling, noise and how many things are
-             moving the star, not about the shape of one orbit. The label is
-             written by js/radialVelocity.js and says whether the curve has yet
-             been seen to turn around at both ends. -->
+        <!-- Half-range, not "semi-amplitude K": (max - min) / 2 of the samples taken,
+             which equals K for one Keplerian component at any eccentricity. The
+             label is written by js/radialVelocity.js. -->
         <div class="rv-readout-cell" id="rvAmplitudeCell">
           <span class="rv-readout-label" id="rvAmplitudeLabel"
             >Half-range observed so far</span
@@ -1293,6 +1283,7 @@ try {
         </div>
       </div>
       <div id="overlayStats" class="overlay-stats"></div>
+      <button id="readoutSizes" type="button" class="readout-sizes-btn" aria-haspopup="dialog" hidden></button>
       <!-- Closed until the reader opens it; the scenario's title and summary
            are written by js/world.js. -->
       <details id="scenarioInfoBox" class="scenario-about" hidden>
@@ -1776,6 +1767,8 @@ try {
             </select>
           </div>
           <p class="rail-field-note" id="referenceFrameNote" hidden=""></p>
+          <div class="rail-field"><label class="rail-field-label" for="barycenterMarkerSelect" data-scene-i18n="rail.barycenterMarker">Barycenter</label><select id="barycenterMarkerSelect" class="rail-select" aria-describedby="barycenterMarkerNote"><option value="off" data-scene-i18n="rail.barycenterMarker.off">Off</option><option value="system" data-scene-i18n="rail.barycenterMarker.system">Whole system</option><option value="pair" data-scene-i18n="rail.barycenterMarker.pair">Selected body and its primary</option></select></div>
+          <p class="rail-field-note" id="barycenterMarkerNote" hidden="" data-scene-i18n="rail.barycenterMarker.hint">The mass-weighted mean position of these bodies. Nothing is there.</p>
           <p class="rail-subhead" data-i18n="rail.sub.share">Capture</p>
           <!--
             Two ways of taking the same picture, side by side: a still and a
@@ -2111,15 +2104,10 @@ try {
     <template data-host="scenario-list"></template>
 
     <!--
-      Investigations: the lesson browser. A sibling of the scenario gallery
-      above, on purpose - same shell, same borrowed thumbnails, same count line
-      - but the cards are wide landscape ones because a lesson is an hour of
-      work, not a tile you click on a whim. Every card, the count line and the
-      level note are written by js/investigations.js from the manifest in
-      js/data/investigations/manifest.js: no lesson title, duration, step count
-      or total is spelled out here, so nothing in this file can go stale. The
-      lessons themselves are a file each in that directory, and only the one a
-      student opens is fetched.
+      Investigations: the lesson browser, a sibling of the scenario gallery
+      with wide cards. Every card, the count line and the level note are written
+      by js/investigations.js from js/data/investigations/manifest.js, so
+      nothing here can go stale.
     -->
     <div id="investigationBrowser" class="hidden" hidden inert>
       <div

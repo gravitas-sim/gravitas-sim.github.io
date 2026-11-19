@@ -128,6 +128,29 @@
       color var(--duration) var(--ease);
   }
 
+  /* The Sizes button: a readout row, like "About this scenario". */
+  .readout-sizes-btn {
+    display: block;
+    width: 100%;
+    padding: var(--space-2) var(--space-4);
+    border: 0;
+    border-top: 1px solid var(--hud-border);
+    background: none;
+    color: var(--hud-text-strong);
+    font: inherit;
+    font-size: var(--text-xs);
+    text-align: start;
+    cursor: pointer;
+  }
+  @media (pointer: coarse) {
+    .readout-sizes-btn {
+      min-height: 44px;
+    }
+  }
+  #overlay.minimized .readout-sizes-btn {
+    display: none;
+  }
+
   .readout-icon-btn:hover,
   .readout-icon-btn:focus-visible {
     background: var(--surface-2);
@@ -499,7 +522,7 @@
      header, because the section header is the thing that opens and shuts and
      these are only signposts within it. */
   .rail-subhead {
-    margin: var(--space-2) 0 2px;
+    margin: 6px 0 2px;
     padding: 0 var(--space-3);
     font-size: 9px;
     font-weight: var(--weight-semibold);

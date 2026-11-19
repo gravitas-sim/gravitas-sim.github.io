@@ -476,6 +476,34 @@
       }
     },
     {
+      "id": "sandbox.orbitGeometry",
+      "name": "The sandbox: orbit geometry markers and the distance between two",
+      "source": "js/orbitGeometryOverlay.js",
+      "primaryTask": "Choose two points of an orbit (a focus, periapsis, apoapsis) and read the distance between them.",
+      "keys": [
+        { "key": "ArrowLeft", "action": "along" },
+        { "key": "ArrowRight", "action": "along" },
+        { "key": "Enter", "action": "confirm" },
+        { "key": " ", "action": "confirm" },
+        { "key": "Escape", "action": "cancel" }
+      ],
+      "drags": [],
+      "tests": {
+        "keyboard": {
+          "file": "e2e/orbitGeometry.spec.js",
+          "title": "orbit points are chosen from the keyboard list"
+        },
+        "singlePointer": {
+          "file": "e2e/orbitGeometry.spec.js",
+          "title": "one press on a marker chooses it and places nothing"
+        },
+        "announcement": {
+          "file": "e2e/orbitGeometry.spec.js",
+          "title": "the distance is announced when the second point is chosen"
+        }
+      }
+    },
+    {
       "id": "sandbox.spacetime",
       "name": "The sandbox: the spacetime view's camera",
       "source": "js/view3d.js",

@@ -1,4 +1,4 @@
-import { describe, test, expect, beforeEach } from '@jest/globals';
+import { describe, test, expect, beforeEach, beforeAll } from '@jest/globals';
 import {
   drawInstrumentation,
   setCaptureMode,
@@ -358,16 +358,25 @@ describe('the canvas instrumentation', () => {
     setCaptureMode(false);
   });
 
+  // The frame line comes from js/sceneStatement.js, which loads on first use.
+  beforeAll(async () => {
+    (await import('../js/canvasSummary.js')).sceneWords(true);
+    await import('../js/sceneStatement.js');
+    await new Promise(r => setTimeout(r, 0));
+  });
+
   test('draws a scale bar and its disclosure, and nothing else', () => {
     const ctx = recordingContext();
     drawInstrumentation(ctx, canvas, settings, 1, 0, []);
-    // Two lines. The bar labels itself with a distance, and underneath it the
-    // canvas admits that the bodies are not drawn to the same scale the bar
-    // measures. The second line is here rather than in the interface so that
-    // it is inside every screenshot and every recording.
-    expect(ctx.text.length).toBe(2);
-    expect(ctx.text[0]).toMatch(/AU|km|m\b/);
-    expect(ctx.text[1].toLowerCase()).toContain('not to one scale');
+    // Three texts. The bar labels itself with a distance, and underneath it
+    // the canvas admits that the bodies are not drawn to the same scale the
+    // bar measures, and names the frame the picture is drawn in. Both are
+    // here rather than in the interface so that they are inside every
+    // screenshot and every recording.
+    expect(ctx.text.length).toBe(3);
+    expect(ctx.text[0]).toBe('Frame: World');
+    expect(ctx.text[1]).toMatch(/AU|km|m\b/);
+    expect(ctx.text[2].toLowerCase()).toContain('not to scale');
     // No panel: nothing rounded was filled behind anything.
     expect(ctx.calls.some(c => c[0] === 'roundRect')).toBe(false);
   });
@@ -411,9 +420,11 @@ describe('the canvas instrumentation', () => {
     );
     // The bar goes, the statement about body sizes does not: it is about the
     // bodies, and a figure without a bar still shows them enlarged.
-    expect(ctx.text).toHaveLength(1);
-    expect(ctx.text[0].toLowerCase()).toContain('not to one scale');
-    expect(ctx.text[0].toLowerCase()).toContain('inspector');
+    expect(ctx.text).toHaveLength(2);
+    expect(ctx.text[0]).toBe('Frame: World');
+    expect(ctx.text[1].toLowerCase()).toContain('not to scale');
+    // And it points to where the figures are: the readout's Sizes button.
+    expect(ctx.text[1]).toContain('Sizes');
   });
 
   test('a scale or trail note in the key is text without a swatch, and wraps rather than drops', () => {

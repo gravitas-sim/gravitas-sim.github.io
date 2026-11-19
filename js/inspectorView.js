@@ -78,9 +78,15 @@ import {
   resolveFrameOrigin,
   frameState,
 } from './referenceFrame.js';
-import { t } from './i18n/index.js';
+import { t, registerMessages } from './i18n/index.js';
+import { EN_ORBITGEOMETRYROW } from './i18n/en.orbitGeometryRow.js';
+import { ES_ORBITGEOMETRYROW } from './i18n/es.orbitGeometryRow.js';
 import { formatSpeed, formatDistance } from './units.js';
 import { state, SETTINGS, current_scenario_name, command } from './appState.js';
+
+// The orbit geometry row's words, so it is named offline; quiet, so a lesson step is not repainted.
+registerMessages('en', EN_ORBITGEOMETRYROW, true);
+registerMessages('es', ES_ORBITGEOMETRYROW, true);
 
 const markWorldTouched = command('markWorldTouched');
 const computeAreaSweep = command('computeAreaSweep');
@@ -232,6 +238,27 @@ export const wireInspectorOverlayToggles = () => {
     };
   }
 
+  const orbitBtn = document.getElementById('orbitGeometryToggleBtn');
+  if (orbitBtn) {
+    orbitBtn.onclick = event => {
+      event.preventDefault();
+      event.stopPropagation();
+      const obj = state.selectedObject?.object;
+      if (!obj) return;
+      const on = !(
+        state.orbitGeometry?.active && state.orbitGeometry.objectId === obj.id
+      );
+      orbitBtn.setAttribute('data-state', on ? 'on' : 'off');
+      orbitBtn.setAttribute('aria-checked', on ? 'true' : 'false');
+      orbitBtn.textContent = on
+        ? t('settings.toggle.on')
+        : t('settings.toggle.off');
+      import('./orbitGeometryOverlay.js').then(m =>
+        m.setOrbitGeometry(on, obj)
+      );
+    };
+  }
+
   const sweepBtn = document.getElementById('sweepToggleBtn');
   if (sweepBtn) {
     sweepBtn.onclick = event => {
@@ -377,6 +404,14 @@ export const buildInspectorView = (object, type, info) => {
     label: t('overlay.referenceFrame'),
     on: frameState().mode === OBJECT && frameState().objectId === object.id,
     help: 'Re-express every position, and every trail, as this body would see them. Unlike Follow Mode, which only moves the camera, this redraws the recorded paths: put the Solar System into Earth\u2019s frame and Mars traces a loop that doubles back on itself.',
+  });
+
+  overlays.push({
+    id: 'orbitGeometryToggleBtn',
+    label: t('overlay.orbitGeometry'),
+    on:
+      state.orbitGeometry?.active && state.orbitGeometry.objectId === object.id,
+    help: t('overlay.orbitGeometry.help'),
   });
 
   const sweepScenarios = [

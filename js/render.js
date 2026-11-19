@@ -69,9 +69,9 @@ import {
 } from './bodyLabels.js';
 import { getWorldSeed } from './rng.js';
 import { state, SETTINGS, registerCommands } from './appState.js';
-import { barycenterOf } from './lesson/barycenter.js';
+import { barycenterOf, drawBarycenterCross } from './lesson/barycenter.js';
 import { sceneFor } from './lesson/evolutionScene.js';
-import { updateCanvasSummary } from './canvasSummary.js';
+import { updateCanvasSummary, sceneWords } from './canvasSummary.js';
 
 /**
  * Draw the crests a wave source has emitted.
@@ -1482,52 +1482,6 @@ const drawScene = () => {
     // ignore preview rendering errors
   }
 
-  // If inspector orbit overlay is active, draw it as a blue dashed loop
-  // Skip when area sweep is active to avoid visual overlap
-  if (
-    state.inspectorOrbitOverlay &&
-    state.inspectorOrbitOverlay.active &&
-    !(state.areaSweepOverlay && state.areaSweepOverlay.active)
-  ) {
-    const pts = state.inspectorOrbitOverlay.points || [];
-    if (pts.length > 1) {
-      ctx.save();
-      ctx.setLineDash([12, 8]);
-      ctx.lineWidth = 3;
-      ctx.strokeStyle = 'rgba(90, 160, 255, 0.95)';
-      ctx.beginPath();
-      const p0 = world_to_screen(pts[0]);
-      ctx.moveTo(p0.x, p0.y);
-      for (let i = 1; i < pts.length; i++) {
-        const ps = world_to_screen(pts[i]);
-        ctx.lineTo(ps.x, ps.y);
-      }
-      ctx.stroke();
-      ctx.setLineDash([]);
-      ctx.restore();
-
-      // Label for inspector stable orbit
-      let top = null;
-      for (let i = 0; i < pts.length; i++) {
-        const s = world_to_screen(pts[i]);
-        if (!top || s.y < top.y) top = s;
-      }
-      if (top) {
-        ctx.save();
-        ctx.font = labelFont(14, 'sans-serif', 'bold');
-        ctx.fillStyle = 'rgba(90, 160, 255, 0.95)';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'bottom';
-        ctx.shadowColor = 'rgba(0,0,0,0.35)';
-        ctx.shadowBlur = 4;
-        ctx.shadowOffsetX = 0;
-        ctx.shadowOffsetY = 1;
-        ctx.fillText(t('overlay.stableOrbit'), top.x, top.y - 8);
-        ctx.restore();
-      }
-    }
-  }
-
   // The balance point, when a lesson step has asked for it.
   if (state.evolutionOverlay?.active) {
     drawEvolutionScene(ctx);
@@ -1543,11 +1497,10 @@ const drawScene = () => {
 
   // The overlay carries only body ids; the point is recomputed from those
   // bodies every frame, so a student watches it stay still while two stars
-  // swing round it (not a value pushed in by the panel). Drawn in screen-space
-  // widths as an instrument: nothing is at a binary's barycenter, so no disc.
+  // swing round it (not a value pushed in by the panel). Any bodies.
   if (state.barycenterOverlay?.active) {
     const ids = state.barycenterOverlay.ids || [];
-    const members = stars.filter(o => ids.includes(o.id));
+    const members = barycenterBodies().filter(o => ids.includes(o.id));
     const center = members.length >= 2 ? barycenterOf(members) : null;
     if (center) {
       state.barycenterOverlay.x = center.x;
@@ -1564,30 +1517,14 @@ const drawScene = () => {
               members[0].pos.y - members[1].pos.y
             )
           : 0;
-      const c = world_to_screen(center);
-      ctx.save();
-      ctx.lineWidth = 1.25;
-      ctx.strokeStyle = 'rgba(255, 235, 150, 0.85)';
-      ctx.setLineDash([4, 4]);
-      for (const body of members) {
-        const p2 = world_to_screen(body.pos);
-        ctx.beginPath();
-        ctx.moveTo(c.x, c.y);
-        ctx.lineTo(p2.x, p2.y);
-        ctx.stroke();
-      }
-      ctx.setLineDash([]);
-      // A cross, not a marker: an aiming point rather than a body.
-      const ARM = 7;
-      ctx.beginPath();
-      ctx.moveTo(c.x - ARM, c.y);
-      ctx.lineTo(c.x + ARM, c.y);
-      ctx.moveTo(c.x, c.y - ARM);
-      ctx.lineTo(c.x, c.y + ARM);
-      ctx.stroke();
-      ctx.restore();
+      drawBarycenterCross(
+        ctx,
+        world_to_screen(center),
+        members.map(o => world_to_screen(o.pos))
+      );
     }
   }
+  sceneWords()?.drawMarker(ctx);
 
   // Kepler's 2nd Law area sweep overlay. Checked here rather than on a timer
   // so a stale overlay is never drawn even once.
@@ -1941,6 +1878,7 @@ function readoutHtml(drawn) {
     [t('readout.elapsed'), formatTime(getSimulationTime())],
     [t('readout.zoom'), `${state.zoom.toFixed(2)}\u00d7`],
     [t('readout.speed'), `${SETTINGS.sim_speed.toFixed(1)}\u00d7`],
+    ...(sceneWords()?.frameMetric() || []),
   ];
   sections.push(
     `<dl class="readout-metrics">${metrics
@@ -1985,8 +1923,9 @@ function readoutHtml(drawn) {
     );
   }
 
-  for (const note of crowdNotes())
-    sections.push(`<p class="readout-caveat">${escapeHtml(note)}</p>`);
+  for (const note of [sceneWords()?.sourcesStatement(), ...crowdNotes()])
+    if (note)
+      sections.push(`<p class="readout-caveat">${escapeHtml(note)}</p>`);
 
   // --- Measurements in progress -------------------------------------------
   // The stopwatch and the vector key used to be painted on the canvas in a
