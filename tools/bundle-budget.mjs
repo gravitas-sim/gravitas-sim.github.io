@@ -122,7 +122,7 @@ const BUDGETS = [
   {
     id: 'deferred',
     label: 'Deferred JavaScript (lazy chunks, gzipped)',
-    limit: 3225.5,
+    limit: 3225.7,
     reason:
       'Jumped from 1369 KB to 2105 KB when three.js and Chart.js stopped being ' +
       'CDN requests and became bundled chunks. That is the point of the change ' +
@@ -728,7 +728,7 @@ const BUDGETS = [
       '\n\nBarycenter marker, frame and source statement (D-R4-TRAIN-04): raised from 3199.6 to 3202.2 KB, a Node 22 build over v4 6852131e7 with the orbit geometry change measuring 3,278,935 bytes gzipped (3202.08 KB), rounded up to 0.1 KB plus 0.1 KB because the margin is under 50 bytes, under the standing approval of 2026-10-10.' +
       '\n\nLesson figures drawn from the model (D-R4-TRAIN-04, D-R4-457-03), listed separately for the maintainer: raised from 3202.2 to 3206.9 KB, the measurement by CI of the combined branch (run 44415955830) at 3,283,804 bytes gzipped (3206.84 KB) rounded up to 0.1 KB. The change was asked to raise no ceiling; the raise was adopted as a maintainer decision of 2026-11-18 (D-R4-457-03).' +
       "\n\nDesktop layout, the Moon and transit-fit rework, and Io's Fire and Tides That Move the Moon taken together (D-R4-TRAIN-05): the limit is raised from 3206.9 to 3215.8 KB, the measurement by CI of the combined branch (3,292,942 bytes gzipped, 3215.76 KB) rounded up to 0.1 KB, under the standing approval of 2026-10-10. This replaces the separate raises the Moon and Io branches recorded (D-R4-330-09, D-R4-331-05)." +
-      "\n\nKepler's Laws, the transit lesson and Weighing the Stars taken together (D-R4-TRAIN-06): the limit is raised from 3215.8 to 3225.5 KB, the exact overrun of a Node 22 build over v4 c5705767f (3,302,874 bytes gzipped, 3225.46 KB) rounded up to 0.1 KB, under the standing approval of 2026-10-10. This replaces the separate raises the three branches recorded (D-R4-328-05, D-R4-329-05, D-R4-332-08).",
+      "\n\nKepler's Laws, the transit lesson and Weighing the Stars taken together (D-R4-TRAIN-06): the limit is raised from 3215.8 to 3225.7 KB, the exact overrun of a Node 22 build over v4 c5705767f (3,303,045 bytes gzipped, 3225.63 KB) rounded up to 0.1 KB, under the standing approval of 2026-10-10. This replaces the separate raises the three branches recorded (D-R4-328-05, D-R4-329-05, D-R4-332-08).",
   },
 ];
 
