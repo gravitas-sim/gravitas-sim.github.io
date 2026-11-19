@@ -109,13 +109,13 @@ describe('the steps a student reached', () => {
     });
     expect(text(bytes, 'what-sits-at-the-other')).toMatch(/not answered/);
     // A measurement reached and left blank shows its empty fields.
-    const blank = section(bytes, 'measure-the-two-orbits');
+    const blank = section(bytes, 'find-the-foci');
     expect(blank).not.toBeNull();
     expect(blank.filter(l => l === '-')).toHaveLength(
-      kepler.steps.find(st => st.sid === 'measure-the-two-orbits').fields.length
+      kepler.steps.find(st => st.sid === 'find-the-foci').fields.length
     );
     // And a step never reached, and never answered, is still left out.
-    expect(section(bytes, 'use-the-law')).toBeNull();
+    expect(section(bytes, 'check-the-estimate')).toBeNull();
     // As is one reached that asks for nothing, like the ellipse: a heading
     // with nothing under it says nothing the step count does not.
     expect(section(bytes, 'change-the-shape')).toBeNull();
@@ -124,7 +124,7 @@ describe('the steps a student reached', () => {
 
   test('include an explore checklist, with how much of it was done', () => {
     const responses = {};
-    for (const i of [0, 1, 2]) {
+    for (const i of [0, 1]) {
       responses[`${key('watch-it-happen')}:check:${i}`] = true;
     }
     const says = text(
@@ -132,7 +132,7 @@ describe('the steps a student reached', () => {
       'watch-it-happen'
     );
     expect(says).toMatch(/Exploration checklist/);
-    expect(says).toMatch(/3 of 4 completed/);
+    expect(says).toMatch(/2 of 3 completed/);
   });
 
   test('are covered by the completion code, checklist included', () => {
@@ -147,8 +147,8 @@ describe('the steps a student reached', () => {
       }
       return code(report({ responses, visited: reachedNine() }));
     };
-    expect(tick(3)).toMatch(/^[0-9A-Z]{4}-[0-9A-Z]+$/);
-    expect(tick(3)).not.toBe(tick(4));
+    expect(tick(2)).toMatch(/^[0-9A-Z]{4}-[0-9A-Z]+$/);
+    expect(tick(2)).not.toBe(tick(3));
   });
 });
 
