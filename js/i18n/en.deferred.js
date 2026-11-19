@@ -758,6 +758,7 @@ export const EN_DEFERRED = {
   'inv.run.empty': 'No runs yet.',
   'inv.run.caption': 'Runs: {param}, and what each run read',
   'inv.run.col': 'Run',
+  'inv.span.for': 'Interval for: {what}',
   'inv.span.title': 'Interval reading',
   'inv.span.from': 'From',
   'inv.span.to': 'To',

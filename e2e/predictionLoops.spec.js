@@ -60,7 +60,7 @@ const LOOPS = [
   },
   {
     id: 'transit-photometry',
-    predict: 'what-will-the-brightness-do',
+    predict: 'getting-the-period',
     family: 'transit widgets',
   },
   {

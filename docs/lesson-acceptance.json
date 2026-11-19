@@ -39,16 +39,16 @@
       "centralExperimentId": "ce.transit-photometry",
       "object": "planet",
       "control": "depth-size/rp",
-      "quantity": "transit depth, and the planet radius it implies",
+      "quantity": "transit depth, from the mean of a stretch out of transit and a stretch from the floor of the dip, and the planet radius it implies",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": [
-        "what-will-the-brightness-do",
-        "measure-the-dip",
+        "estimate-the-dip",
+        "choose-the-two-stretches",
         "what-the-method-misses"
       ],
       "evidenceFrom": "engine",
-      "decision": "unreviewed",
+      "decision": "Which stretch of the recorded light curve stands for out of transit and which for in transit, on a curve held still after one transit; a stretch that includes part of a dip or the sloping sides of one gives a different depth and is told so.",
       "leakFree": true
     },
     "orbital-energy": {

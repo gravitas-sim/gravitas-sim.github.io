@@ -288,11 +288,11 @@ export const INTRO_ASTRONOMY = {
           objectives: ['exoplanets'],
           steps: [
             'a-firefly-beside-a-lighthouse',
-            'what-will-the-brightness-do',
+            'estimate-the-dip',
             'your-first-transit',
             'where-the-depth-comes-from',
             'from-a-depth-to-a',
-            'measure-the-dip',
+            'choose-the-two-stretches',
           ],
           title: {
             en: 'A first transit',

@@ -763,6 +763,7 @@ export const ES_DEFERRED = {
   'inv.run.empty': 'Aún no hay ejecuciones.',
   'inv.run.caption': 'Ejecuciones: {param}, y lo que leyó cada una',
   'inv.run.col': 'Ejecución',
+  'inv.span.for': 'Intervalo para: {what}',
   'inv.span.title': 'Lectura de un intervalo',
   'inv.span.from': 'Desde',
   'inv.span.to': 'Hasta',
