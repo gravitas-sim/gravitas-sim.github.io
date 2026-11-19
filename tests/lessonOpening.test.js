@@ -2,14 +2,14 @@
 // pilots in both languages, their stated media, and the ending's rows, which
 // carry the student's own answers and readings and never a key.
 
+import { describe, test, expect } from '@jest/globals';
 import { mergeTranslation } from '../js/data/investigations/i18n.js';
+import { endingRows, plain } from '../js/lesson/opening.js';
 import {
-  endingRows,
   openingProblems,
   sentences,
-  plain,
   MEDIA,
-} from '../js/lesson/opening.js';
+} from '../tools/authoring/openingRule.mjs';
 import { rowText } from '../js/investigations/ending.js';
 
 const PILOTS = {

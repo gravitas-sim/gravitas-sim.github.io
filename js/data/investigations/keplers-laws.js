@@ -312,13 +312,11 @@ const KEPLER = {
         by: 'Johannes Kepler, Astronomia Nova, 1609',
       },
       title: 'The First Law, and the anatomy of an ellipse',
-      body: `For most of recorded history orbits were circles. Tycho Brahe
-             spent two decades measuring planetary positions to about one
-             arcminute, the limit of what is possible without a telescope, and
-             when Johannes Kepler fitted Tycho's observations of Mars to a
-             circular orbit, the best fit was off by eight arcminutes. He
-             trusted the measurements over two thousand years of circles, and
-             spent years working out what curve would fit.
+      body: `Tycho Brahe measured planetary positions to about one arcminute,
+             the limit without a telescope. When Johannes Kepler fitted Tycho's
+             observations of Mars to a circle, the best fit was off by eight
+             arcminutes, and he trusted the measurements over two thousand
+             years of circles.
              \n\nKepler's <strong>first law</strong>: every planet moves on an
              ellipse, with the star at one focus.
              \n\nAn ellipse has two foci. Their defining property is that for
