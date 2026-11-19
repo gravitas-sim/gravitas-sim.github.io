@@ -132,7 +132,6 @@ const KEPLER = {
       sid: 'what-you-are-looking-at',
       bind: KEPLER_PAIR,
       type: 'read',
-      point: 'star',
       title: 'What you are looking at',
       body: `A single star of one solar mass sits at the center of the view with
              two bodies orbiting it.

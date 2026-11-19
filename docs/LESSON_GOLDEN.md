@@ -80,7 +80,7 @@ The browser half takes about seven minutes on the private port.
 
 | # | Investigation | Tokens it adds |
 |---|---|---|
-| 1 | `keplers-laws` | 103: `audience:intro`, `check:choice/number`, `check:numeric/number+tolerance+unit`, `check:short/undefined`, `depth-step:advanced/question`, `depth-step:quantitative/measure`, … |
+| 1 | `keplers-laws` | 102: `audience:intro`, `check:choice/number`, `check:numeric/number+tolerance+unit`, `check:short/undefined`, `depth-step:advanced/question`, `depth-step:quantitative/measure`, … |
 | 2 | `the-saturated-star` | 18: `depth-step:advanced/measure`, `depth-step:advanced/predict`, `depth-step:advanced/read`, `depth-step:quantitative/read`, `key:measure.stage`, `key:measure.tool`, … |
 | 3 | `transit-photometry` | 12: `check:numeric/number+tolerance`, `key:explore.clearLightCurve`, `key:explore.lightCurve`, `key:explore.observerAngle`, `key:explore.setup`, `key:explore.tip`, … |
 | 4 | `binary-star-planets` | 7: `key:explore.requires`, `key:predict.tip`, `key:question.requires`, `key:question.tip`, `key:read.motion`, `lock:{"placement":true}`, … |
