@@ -81,8 +81,8 @@ The browser half takes about seven minutes on the private port.
 | # | Investigation | Tokens it adds |
 |---|---|---|
 | 1 | `keplers-laws` | 85: `audience:intro`, `check:choice/number`, `check:numeric/number+tolerance+unit`, `check:short/undefined`, `depth-step:advanced/question`, `depth-step:quantitative/measure`, … |
-| 2 | `goldilocks-question` | 22: `depth-step:advanced/measure`, `depth-step:advanced/read`, `key:explore.allowInspector`, `key:explore.pauseAt`, `key:explore.setup`, `key:explore.stage`, … |
-| 3 | `weighing-stars` | 12: `key:explore.showBarycenter`, `key:measure.checklist`, `key:measure.decides`, `key:measure.showBarycenter`, `key:measure.stage`, `key:predict.stage`, … |
+| 2 | `weighing-stars` | 23: `depth-step:advanced/measure`, `key:explore.allowInspector`, `key:explore.showBarycenter`, `key:explore.stage`, `key:explore.tip`, `key:explore.tool`, … |
+| 3 | `goldilocks-question` | 11: `depth-step:advanced/read`, `key:explore.pauseAt`, `key:explore.setup`, `key:predict.setup`, `key:question.probe`, `key:question.tip`, … |
 | 4 | `transit-photometry` | 7: `check:numeric/number+tolerance`, `key:explore.clearLightCurve`, `key:explore.lightCurve`, `key:explore.observerAngle`, `key:measure.lightCurve`, `key:read.figure`, … |
 | 5 | `the-saturated-star` | 6: `depth-step:advanced/predict`, `depth-step:quantitative/read`, `key:predict.after`, `key:predict.depth`, `key:predict.hints`, `key:predict.tool` |
 | 6 | `lagrange-points` | 4: `key:explore.requires`, `key:explore.rubric`, `key:predict.tip`, `lock:{"placement":true}` |

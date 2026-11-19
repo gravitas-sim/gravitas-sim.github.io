@@ -1,4 +1,5 @@
-// Weighing the stars: content only, no imports. A live number comes from the `ctx` the engine hands a step.
+// Weighing the stars: content only. A live number comes from the `ctx` the engine hands a step.
+import { fixed } from '../../format.js';
 
 // One AU is 100 world units; both pairs are binaries the engine integrates.
 const AU = 100;
@@ -845,7 +846,7 @@ const WEIGHING = {
         const total = v.a ** 3 / v.p ** 2;
         return {
           level: 'ok',
-          message: `Your numbers give <strong>${total.toFixed(1)} solar masses</strong> between the two stars. You measured that by watching, and by nothing else.`,
+          message: `Your numbers give <strong>${fixed(total, 1)} solar masses</strong> between the two stars. You measured that by watching, and by nothing else.`,
         };
       },
     },
@@ -1005,7 +1006,7 @@ const WEIGHING = {
         if (Math.abs(sum - tot) > 0.15 * tot) {
           return {
             level: 'warn',
-            message: `Those two add up to ${sum.toFixed(1)}, and the pair you weighed has ${tot.toFixed(1)} solar masses in total. The two numbers have to add up to the total you measured.`,
+            message: `Those two add up to ${fixed(sum, 1)}, and the pair you weighed has ${fixed(tot, 1)} solar masses in total. The two numbers have to add up to the total you measured.`,
           };
         }
         if (v.mb > v.ma) {
@@ -1025,7 +1026,7 @@ const WEIGHING = {
         }
         return {
           level: 'ok',
-          message: `${v.ma.toFixed(1)} solar masses and ${v.mb.toFixed(1)}. You have just weighed two individual stars, separately, using a ruler and a stopwatch.`,
+          message: `${fixed(v.ma, 1)} solar masses and ${fixed(v.mb, 1)}. You have just weighed two individual stars, separately, using a ruler and a stopwatch.`,
         };
       },
     },

@@ -148,12 +148,12 @@ describe('the error bar, in the quantitative step', () => {
 
   const timings = { t1: 4.1, t2: 3.9, t3: 4.2 };
 
-  test('the scatter of the mean is the sample standard deviation over the root of n', () => {
+  test('the scatter of one timing is the sample standard deviation', () => {
     const v = values({ ...timings, sa: 0.01, sp: 0.2 });
     expect(v.n).toBe(3);
     const mean = (4.1 + 3.9 + 4.2) / 3;
     const ss = [4.1, 3.9, 4.2].reduce((a, x) => a + (x - mean) ** 2, 0);
-    expect(v.se).toBeCloseTo(Math.sqrt(ss / 2 / 3), 9);
+    expect(v.sd).toBeCloseTo(Math.sqrt(ss / 2), 9);
   });
 
   test('one timing cannot show its own scatter', () => {
@@ -163,7 +163,7 @@ describe('the error bar, in the quantitative step', () => {
 
   test('an error bar narrower than the scatter of the timings is refused, a wider one is quoted', () => {
     const narrow = values({ ...timings, sa: 0.01, sp: 0.01 });
-    expect(narrow.se).toBeGreaterThan(0.01);
+    expect(narrow.sd).toBeGreaterThan(0.01);
     expect(s.validate(narrow).level).toBe('warn');
     expect(s.validate(narrow).message).toMatch(/smaller than the scatter/);
     const wide = values({ ...timings, sa: 0.01, sp: 0.2 });
