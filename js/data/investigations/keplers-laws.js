@@ -180,11 +180,11 @@ const KEPLER = {
       body: `The simulation can draw the ellipse a planet follows, with both
              foci marked. Use it to check your prediction against two things you
              read yourself.
-             \\n\\nFirst take the distances. Select the <strong>Eccentric
+             \n\nFirst take the distances. Select the <strong>Eccentric
              Orbiter</strong> from the object list, then press <strong>Take
-             reading</strong> beside <em>closest approach</em> and again beside
+             reading</strong> beside <em>[[closest-approach|closest approach]]</em> and again beside
              <em>furthest distance</em>.
-             \\n\\nThen switch on <strong>Orbit geometry</strong> in the planet's
+             \n\nThen switch on <strong>Orbit geometry</strong> in the planet's
              card. A panel lists the points you can measure. Choose the star's
              point (<em>Focus at Kepler Star</em>) and the <em>Empty focus</em>,
              by pointer, or with Left and Right and Enter in the list. The panel
@@ -948,7 +948,7 @@ const KEPLER = {
              planet that does not exist. Pick one that falls in a gap between
              two of the planets you measured, not on top of one of them, so that
              the prediction means something.
-             \\n\\nNobody has measured its period. The next two steps ask you
+             \n\nNobody has measured its period. The next two steps ask you
              to estimate it from your plot, and then to check the estimate.`,
       fields: [
         {
@@ -1040,7 +1040,7 @@ const KEPLER = {
           label: 'Your distance as a multiple of that planet’s',
           unit: '',
           compute: (v, earlier) =>
-            earlier('pick-a-distance', 'a_new') / v.near_a,
+            (earlier?.('pick-a-distance', 'a_new') ?? NaN) / v.near_a,
           decimals: 2,
         },
         {

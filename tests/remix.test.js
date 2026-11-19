@@ -199,9 +199,8 @@ describe('what a remix may change', () => {
     const p = clone(pack);
     p.steps[2].body = { en: `${p.steps[2].body.en} Add this.` };
     p.title = { en: 'Kepler, my way', es: 'Kepler, a mi manera' };
-    const j = p.steps.findIndex(
-      (s, k) => k > 2 && s.type === 'read' && !s.setup && k < p.steps.length - 1
-    );
+    // A reading step nothing is marked at and no later step reads from.
+    const j = p.steps.findIndex(s => s.sid === 'what-newton-added');
     p.steps.splice(j, 1);
     const v = await checkInvestigationPack(p);
     expect(v.errors).toEqual([]);

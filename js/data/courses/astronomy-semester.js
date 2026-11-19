@@ -252,8 +252,8 @@ export const ASTRONOMY_SEMESTER = {
           lesson: 'keplers-laws',
           objectives: ['gravity'],
           pin: {
-            fp: '475986c2',
-            n: 23,
+            fp: '66f9a162',
+            n: 26,
           },
         },
         {

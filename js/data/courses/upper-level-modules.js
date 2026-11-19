@@ -152,8 +152,8 @@ export const UPPER_LEVEL_MODULES = {
           depth: 'advanced',
           objectives: ['mechanics'],
           pin: {
-            fp: '475986c2',
-            n: 23,
+            fp: '66f9a162',
+            n: 26,
           },
         },
         {
