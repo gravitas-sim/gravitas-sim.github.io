@@ -89,6 +89,26 @@ export function runsModule(m) {
   return (slots.runs = m);
 }
 
+/** Fetch the run and reveal code with the step that needs it: offline, the lesson opens. */
+export function fetchSeams(step, again) {
+  const get = (needed, load, use) =>
+    needed &&
+    load().then(
+      m => (use(m), again()),
+      () => {}
+    );
+  get(
+    step.variation && !slots.runs,
+    () => import('../lesson/runs.js'),
+    runsModule
+  );
+  get(
+    (step.evidence || step.kind === 'estimate') && !slots.reveal,
+    () => import('./reveal.js'),
+    revealModule
+  );
+}
+
 /** Install the field slot's module with the engine functions it needs. */
 export function fieldModule(m) {
   m.setKit({

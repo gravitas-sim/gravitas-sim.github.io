@@ -15,8 +15,7 @@ import {
   parseFieldNumber,
   progressFor,
   fieldModule,
-  runsModule,
-  revealModule,
+  fetchSeams,
   renderProgressNotice,
   renderSaveStatus,
   roleEchoesName,
@@ -842,7 +841,7 @@ let figures = null;
 let canvasMod = null;
 const canvasNow = (i = stepIndex) => canvasMod?.canvasAt(active, i) ?? null;
 
-/** Fetch the plot, ellipse, import, reveal, canvas and controlled-run code a lesson needs. */
+/** Fetch the plot, ellipse, import and canvas code a lesson needs. */
 const loadSeams = async ({ steps, canvas }) => {
   if (!canvasMod && (canvas || steps.some(s => s.canvas)))
     canvasMod = await import('./lessonCanvas.js');
@@ -858,10 +857,6 @@ const loadSeams = async ({ steps, canvas }) => {
     )
   )
     fieldModule((figures = await import('./investigations/figures.js')));
-  if (!slots.runs && steps.some(s => s.variation))
-    runsModule(await import('./lesson/runs.js'));
-  if (!slots.reveal && steps.some(s => s.evidence || s.kind === 'estimate'))
-    revealModule(await import('./investigations/reveal.js'));
 };
 
 /** Draw the step's scatter plot from the lesson's current state. */
@@ -882,6 +877,11 @@ function renderStep() {
   if (!step || !els.body) return;
   const id = stepId(stepIndex);
   const saved = responses[id];
+
+  // The code for a controlled run, or for an estimate and the box where a
+  // prediction meets its readings, comes with the step that shows it, not with
+  // the lesson, so a lesson nobody opened before the network dropped still opens.
+  fetchSeams(step, () => currentStep() === step && renderStep());
 
   const parts = stepMarkup(step, {
     id,
