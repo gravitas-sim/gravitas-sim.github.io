@@ -3433,7 +3433,6 @@ export const ES_DEFERRED = {
   'stellar.phase.neutron-star': 'Estrella de neutrones',
   'stellar.phase.black-hole': 'Agujero negro',
   'stellar.phase.unknown': 'Sin modelar',
-  // ---------------------------------------------------------------------------
   'stelE.title': 'Una estrella, de principio a fin',
   'stelE.note':
     'Una traza evolutiva publicada, reproducida. La edad manda sobre todo lo demás: temperatura, radio, luminosidad, color, masa actual y fase salen del mismo punto de la misma traza. La nube del principio y el remanente del final son ilustraciones a ambos lados de lo que el modelo cubre de verdad, y las dos lo dicen.',

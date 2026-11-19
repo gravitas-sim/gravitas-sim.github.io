@@ -3801,8 +3801,7 @@ export const EN_DEFERRED = {
     'Five events, chosen because their chirps are visible. Not a sample of the catalog, and nothing here is a detection, a significance or a parameter estimate.',
 
   // -- Four observed spectra (js/stellarSpectraWidgets.js) --------------------
-  // Two instruments over four real SDSS spectra: every label says these are
-  // observations, beside an instrument that draws models.
+  // Two instruments over four real SDSS spectra: every label says these are observations.
   'specW.compare.title': 'Four spectra',
   'specW.compare.note':
     'Four stars, observed by SDSS in 2008 and drawn without a fit of any kind. The curves are not drawn in their stars’ colors — that would answer the question being asked — so tell them apart by the dash pattern, the label, or the numbers underneath.',
