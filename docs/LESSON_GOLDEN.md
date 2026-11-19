@@ -87,16 +87,16 @@ The browser half takes about seven minutes on the private port.
 | 5 | `what-is-a-gravitational-wave` | 5: `audience:beginner`, `key:predict.tip`, `key:read.checklist`, `lock:{"placement":true,"inspector":false,"areaSweep":false}`, `math:arithmetic` |
 | 6 | `butterfly-effect` | 3: `key:explore.rubric`, `key:predict.requires`, `lock:null` |
 | 7 | `ios-fire` | 3: `key:question.decides`, `key:read.compare`, `key:read.evidence` |
-| 8 | `binary-star-planets` | 2: `key:explore.requires`, `lock:{"placement":true}` |
-| 9 | `black-holes` | 2: `key:question.checklist`, `key:read.explainView` |
-| 10 | `propose-an-observation` | 2: `key:measure.plan`, `key:question.rubricCriteria` |
-| 11 | `weighing-stars` | 2: `key:explore.showBarycenter`, `key:read.showBarycenter` |
-| 12 | `a-night-at-the-telescope` | 1: `key:question.reflect` |
-| 13 | `a-universe-of-stars` | 1: `key:measure.checklist` |
-| 14 | `counts-to-magnitudes` | 1: `depth-step:quantitative/predict` |
-| 15 | `detect-this-planet` | 1: `key:read.allowInspector` |
-| 16 | `extending-an-experiment` | 1: `key:measure.compute` |
-| 17 | `measuring-the-moon` | 1: `key:question.maxUncertainty` |
+| 8 | `measuring-the-moon` | 3: `key:question.maxUncertainty`, `key:question.minUncertainty`, `key:question.valueWithin` |
+| 9 | `binary-star-planets` | 2: `key:explore.requires`, `lock:{"placement":true}` |
+| 10 | `black-holes` | 2: `key:question.checklist`, `key:read.explainView` |
+| 11 | `propose-an-observation` | 2: `key:measure.plan`, `key:question.rubricCriteria` |
+| 12 | `weighing-stars` | 2: `key:explore.showBarycenter`, `key:read.showBarycenter` |
+| 13 | `a-night-at-the-telescope` | 1: `key:question.reflect` |
+| 14 | `a-universe-of-stars` | 1: `key:measure.checklist` |
+| 15 | `counts-to-magnitudes` | 1: `depth-step:quantitative/predict` |
+| 16 | `detect-this-planet` | 1: `key:read.allowInspector` |
+| 17 | `extending-an-experiment` | 1: `key:measure.compute` |
 | 18 | `power-law-gravity` | 1: `key:question.explain` |
 | 19 | `radial-velocity` | 1: `key:measure.setup` |
 | 20 | `retrograde-motion` | 1: `lock:{"placement":true,"inspector":false}` |

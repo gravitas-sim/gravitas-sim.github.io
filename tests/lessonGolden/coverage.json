@@ -7,6 +7,7 @@
     "what-is-a-gravitational-wave",
     "butterfly-effect",
     "ios-fire",
+    "measuring-the-moon",
     "binary-star-planets",
     "black-holes",
     "propose-an-observation",
@@ -16,7 +17,6 @@
     "counts-to-magnitudes",
     "detect-this-planet",
     "extending-an-experiment",
-    "measuring-the-moon",
     "power-law-gravity",
     "radial-velocity",
     "retrograde-motion"
@@ -172,6 +172,11 @@
       "key:read.compare",
       "key:read.evidence"
     ],
+    "measuring-the-moon": [
+      "key:question.maxUncertainty",
+      "key:question.minUncertainty",
+      "key:question.valueWithin"
+    ],
     "binary-star-planets": [
       "key:explore.requires",
       "lock:{\"placement\":true}"
@@ -202,9 +207,6 @@
     ],
     "extending-an-experiment": [
       "key:measure.compute"
-    ],
-    "measuring-the-moon": [
-      "key:question.maxUncertainty"
     ],
     "power-law-gravity": [
       "key:question.explain"
@@ -287,7 +289,7 @@
     "investigations": 124,
     "steps": 1985,
     "activityCuts": 6,
-    "lessonTokens": 153,
+    "lessonTokens": 155,
     "activityTokens": 29,
     "stepTypes": {
       "read": 376,
