@@ -3982,16 +3982,20 @@ export const ES_DEFERRED = {
   'lessonFn.completeTransitsRecorded26': 'Tránsitos completos registrados',
   'lessonFn.waitingForACompleteTransit30': 'Esperando un tránsito completo',
   'lessonFn.clock5': 'Reloj',
-  'lessonFn.theBottomOfATransitSits137':
-    'El fondo de un tránsito queda <em>por debajo</em> de la línea de base, así que la profundidad tiene que salir positiva. Comprueba que no los hayas intercambiado.',
-  'lessonFn.a20DipWouldBeA153':
-    'Una caída del 20 % sería un eclipse estelar, no un planeta. Si has introducido números como 98,2 y 100, introduce el brillo en sí y no un porcentaje de él.',
-  'lessonFn.thatIsShallowerThanThisSystem156':
-    'Eso es menos profundo de lo que este sistema puede producir. Asegúrate de que el valor del fondo viene de verdad del punto más bajo de una caída y no del hombro de entrada.',
-  'lessonFn.goodAbout18GivingA152':
-    'Bien: alrededor del 1,8 %, lo que da un cociente de radios cercano a 0,135. Quédate con ese número, porque el paso siguiente va a decirte que es un 10 % demasiado grande, y por qué.',
-  'lessonFn.expectedSomewhereNear0018For153':
-    'Se esperaba algo cercano a 0,018 para este sistema. Lee la línea de base en un tramo plano bien alejado de cualquier caída, y el fondo en el punto más bajo de una.',
+  'lessonFn.theInTransitMeanSitsBelow154':
+    'La media dentro del tránsito queda <em>por debajo</em> de la media fuera del tránsito, así que la profundidad tiene que salir positiva. Comprueba que no hayas intercambiado los dos tramos.',
+  'lessonFn.yourOutOfTransitStretchAverages164':
+    'Tu tramo fuera del tránsito promedia parte de una caída: su media queda por debajo del nivel que mantiene la estrella entre tránsitos. Muévelo a un tramo plano, lejos de toda caída.',
+  'lessonFn.theTwoStretchesHaveAlmostThe174':
+    'Los dos tramos tienen casi la misma media, así que no hay profundidad entre ellos. Pon el tramo dentro del tránsito en el fondo de una caída y el otro en un tramo plano entre caídas.',
+  'lessonFn.yourInTransitStretchIncludesThe232':
+    'Tu tramo dentro del tránsito incluye los flancos inclinados de la caída, o se sale de ella, donde el planeta solo cubre en parte la estrella. Elige un tramo del fondo, entre los dos flancos, y la profundidad será la sombra completa del planeta.',
+  'lessonFn.thatIsDeeperThanTheFloor138':
+    'Eso es más profundo que el fondo de cualquier caída de esta curva. Comprueba que los dos tramos estén sobre la curva que muestra ahora el gráfico y en las casillas correctas.',
+  'lessonFn.twoStretchesOneDepthKeepIt131':
+    'Dos tramos, una profundidad. Guárdala: las pantallas siguientes la ponen junto a tu estimación y explican por qué el radio que da no es del todo correcto.',
+  'lessonFn.twoStretchesOneDepthForThe89':
+    'Dos tramos, una profundidad para el segundo sistema. La pantalla siguiente la pone junto a la primera.',
   'lessonFn.theStarRadiusGoesInSolar93':
     'El radio de la estrella va en radios solares, no en kilómetros ni en júpiteres. HD 209458 es 1,155 R☉.',
   'lessonFn.theDepthIsAFractionNot65':

@@ -288,6 +288,8 @@ export const ES_COMPOSER = {
   'composer.key.shuffled': 'Opciones barajadas',
   'composer.key.none': 'Todavía no hay nada con nota.',
   'composer.key.rubric': 'Se corrige con rúbrica: {rubric}',
+  'composer.key.estimate':
+    'Estimación propia en {unit}, junto a la lectura del paso {n}; no se corrige',
   'composer.key.prediction': 'Predicción, corregida en el paso {n}',
   'composer.report.heading': 'Evidencia del informe',
   'composer.report.hint':
