@@ -6849,7 +6849,6 @@
       "readsSelection": false,
       "importsFromSelection": false,
       "engineReads": [
-       "days",
        "photometry"
       ],
       "mutates": [],
@@ -6865,7 +6864,7 @@
      "recovery": [
       "wrong body: the step binds the object by name, so there is none",
       "missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand",
-      "null result: the probe names what is missing",
+      "null result: guarded, but the fallback is not spelled out",
       "ambiguous result: the check refuses without saying why"
      ]
     },
@@ -8128,7 +8127,6 @@
       "readsSelection": false,
       "importsFromSelection": false,
       "engineReads": [
-       "days",
        "photometry"
       ],
       "mutates": [],
@@ -8146,7 +8144,7 @@
       "wrong body: the step binds the object by name, so there is none",
       "missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand",
       "reset: rebuilds the scenario on arrival",
-      "null result: the probe names what is missing",
+      "null result: guarded, but the fallback is not spelled out",
       "ambiguous result: the check refuses without saying why"
      ]
     },
