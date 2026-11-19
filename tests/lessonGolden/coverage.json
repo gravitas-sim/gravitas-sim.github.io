@@ -97,7 +97,6 @@
       "key:read.bind",
       "key:read.compare",
       "key:read.evidence",
-      "key:read.point",
       "key:read.quote",
       "key:read.setup",
       "key:read.tip",
@@ -297,7 +296,7 @@
     "investigations": 124,
     "steps": 1991,
     "activityCuts": 6,
-    "lessonTokens": 172,
+    "lessonTokens": 171,
     "activityTokens": 29,
     "stepTypes": {
       "read": 377,
