@@ -174,7 +174,7 @@ export default {
     },
     'keplers-laws': {
       'find-the-foci':
-        'Closest approach about 0.5 AU, furthest about 2.36 AU; the star-to-empty-focus distance is their difference, about 1.86 AU.',
+        'Closest about 0.5 AU, furthest about 2.36 AU; the foci lie about 1.86 AU apart.',
       'fast-and-slow-in-numbers':
         'Speed at periapsis should exceed speed at apoapsis by roughly the inverse ratio of the distances. The validator warns if the two are swapped, which is the common error.',
       'measure-four-planets':
@@ -182,7 +182,7 @@ export default {
       'pick-a-distance':
         'Any distance from 0.3 to 25 AU in a gap between planets.',
       'check-the-estimate':
-        'The period at the chosen distance, scaled from the nearest planet by the power three halves, shown beside the estimate.',
+        'The period at the chosen distance, scaled from the nearest planet by the power three halves.',
       'work-the-law-out-step':
         'P² ÷ a³ = 1 within reading error. The star in this scenario is exactly one solar mass, so the constant is exactly 1 by construction, and the validator says so.',
       'weigh-trappist-1-yourself':

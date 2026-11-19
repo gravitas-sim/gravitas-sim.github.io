@@ -3903,6 +3903,7 @@
       "engine-measurement"
      ],
      "actions": [
+      "open-a-body-inspector",
       "select-a-body",
       "run-the-simulation",
       "watch-the-area-sweep",
@@ -3919,7 +3920,7 @@
      },
      "worldRunning": true,
      "affordances": {
-      "inspector": "locked",
+      "inspector": "this step",
       "placement": "locked",
       "areaSweep": "whole lesson"
      },

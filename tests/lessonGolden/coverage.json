@@ -1,14 +1,14 @@
 {
   "lessons": [
     "keplers-laws",
-    "goldilocks-question",
     "the-saturated-star",
     "transit-photometry",
-    "what-is-a-gravitational-wave",
     "binary-star-planets",
+    "what-is-a-gravitational-wave",
     "butterfly-effect",
     "measuring-the-moon",
     "black-holes",
+    "goldilocks-question",
     "propose-an-observation",
     "weighing-stars",
     "a-night-at-the-telescope",
@@ -37,6 +37,7 @@
       "key:ellipse.presets",
       "key:ellipse.start",
       "key:ellipse.type",
+      "key:explore.allowInspector",
       "key:explore.bind",
       "key:explore.checklist",
       "key:explore.probe",
@@ -126,60 +127,55 @@
       "type:read",
       "type:wedges"
     ],
-    "goldilocks-question": [
-      "depth-step:advanced/measure",
-      "depth-step:advanced/read",
-      "key:explore.allowInspector",
-      "key:explore.pauseAt",
-      "key:explore.setup",
-      "key:explore.stage",
-      "key:explore.tip",
-      "key:explore.tool",
-      "key:measure.tool",
-      "key:predict.setup",
-      "key:question.requires",
-      "key:question.tip",
-      "key:question.tool",
-      "key:read.after",
-      "key:read.depth",
-      "key:read.tool",
-      "math:algebra",
-      "prereq:yes"
-    ],
     "the-saturated-star": [
+      "depth-step:advanced/measure",
       "depth-step:advanced/predict",
+      "depth-step:advanced/read",
       "depth-step:quantitative/read",
       "key:measure.stage",
+      "key:measure.tool",
       "key:predict.after",
       "key:predict.depth",
       "key:predict.hints",
       "key:predict.stage",
       "key:predict.tool",
+      "key:question.tool",
+      "key:read.after",
+      "key:read.depth",
       "key:read.stage",
-      "lock:{\"placement\":true,\"inspector\":true}"
+      "key:read.tool",
+      "lock:{\"placement\":true,\"inspector\":true}",
+      "math:algebra"
     ],
     "transit-photometry": [
       "check:numeric/number+tolerance",
       "key:explore.clearLightCurve",
       "key:explore.lightCurve",
       "key:explore.observerAngle",
+      "key:explore.setup",
+      "key:explore.tip",
+      "key:explore.tool",
       "key:measure.lightCurve",
       "key:question.agrees",
       "key:read.figure",
       "key:read.pauseAt",
       "key:read.probe"
     ],
+    "binary-star-planets": [
+      "key:explore.requires",
+      "key:predict.tip",
+      "key:question.requires",
+      "key:question.tip",
+      "key:read.motion",
+      "lock:{\"placement\":true}",
+      "prereq:yes"
+    ],
     "what-is-a-gravitational-wave": [
       "audience:beginner",
-      "key:predict.tip",
+      "key:explore.stage",
       "key:read.checklist",
       "lock:{\"placement\":true,\"inspector\":false,\"areaSweep\":false}",
       "math:arithmetic"
-    ],
-    "binary-star-planets": [
-      "key:explore.requires",
-      "key:read.motion",
-      "lock:{\"placement\":true}"
     ],
     "butterfly-effect": [
       "key:explore.rubric",
@@ -194,6 +190,10 @@
     "black-holes": [
       "key:question.checklist",
       "key:read.explainView"
+    ],
+    "goldilocks-question": [
+      "key:explore.pauseAt",
+      "key:predict.setup"
     ],
     "propose-an-observation": [
       "key:measure.plan",
