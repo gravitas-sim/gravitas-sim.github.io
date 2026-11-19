@@ -122,7 +122,7 @@
    "sid": "how-wide-is-the-bound",
    "type": "question",
    "kind": "numeric",
-   "tolerance": 0.1,
+   "tolerance": 0.2,
    "grades": [
     [
      "2.67",
@@ -134,19 +134,19 @@
      null
     ],
     [
-     "2.72",
+     "2.77",
      true,
      "correct",
-     2.72,
+     2.77,
      null,
      false,
      null
     ],
     [
-     "2.97",
+     "3.27",
      false,
      "incorrect",
-     2.97,
+     3.27,
      null,
      false,
      null
@@ -388,7 +388,7 @@
     {
      "index": 7,
      "sid": "how-wide-is-the-bound",
-     "fingerprint": "question|numeric|tides-heating|-|-|-|a=2.67;t=0.1",
+     "fingerprint": "question|numeric|tides-heating|-|-|-|a=2.67;t=0.2",
      "optionCount": null
     },
     {

@@ -198,6 +198,12 @@ export const STRUCTURAL = new Set([
   'listen',
   // Which preset a step opens the instrument on, by id.
   'preset',
+  'to',
+  'release',
+  'step',
+  'field',
+  'en',
+  'es',
   'pinStaged',
   'tags',
   'canvas',

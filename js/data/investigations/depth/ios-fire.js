@@ -18,15 +18,15 @@ export const IOS_DEEPER = {
       after: 'two-interiors-one-heat',
       depth: 'quantitative',
       decides:
-        'which k2/Q to divide into the model’s largest: the one the observed heat needs, which both pairs share',
+        'which k2/Q to divide into the model’s largest: the one the observed middle value needs',
       type: 'question',
       kind: 'numeric',
       title: 'How far from the largest k2/Q',
-      body: `Both of your pairs sit near the same k2/Q: the row <strong>k2/Q the observed middle
-             value needs</strong> gives it. The model allows k2/Q up to 0.3 (k2 = 1.5 over
-             Q = 5).`,
+      body: `The row <strong>k2/Q the observed middle value needs</strong> gives the ratio
+             that the middle of the observed heat requires. The model allows k2/Q up to 0.3
+             (k2 = 1.5 over Q = 5).`,
       prompt:
-        'How many times smaller is the k2/Q both pairs share than the model’s largest?',
+        'How many times smaller is the k2/Q the observed middle value needs than the model’s largest?',
       unit: '',
       answer: 17,
       tolerance: 0.5,
@@ -59,7 +59,7 @@ export const IOS_DEEPER = {
         'By what factor does the k2/Q that fits differ between the highest and the lowest observed heat?',
       unit: '',
       answer: 2.67,
-      tolerance: 0.1,
+      tolerance: 0.2,
       hints: [
         'Heating is proportional to k2/Q, so compare the two observed values with each other.',
       ],
