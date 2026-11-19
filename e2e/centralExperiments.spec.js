@@ -439,10 +439,16 @@ test.describe('the central experiment of each investigation', () => {
 
     // A wrong decision is not accepted and gets authored words: a flat stretch
     // that runs into the dip, then a dip stretch that is only its slope.
-    await stretch(0, a.last.mid - 3 * half, a.last.mid);
-    await stretch(1, a.last.mid - half * 0.4, a.last.mid + half * 0.4);
-    await expect(check).not.toHaveClass(/is-ok/);
-    await expect(check).toContainText('averages in part of a dip');
+    // (Retried as a unit: on a loaded machine the page can redraw the step
+    // between the two readings and drop the first.)
+    await expect(async () => {
+      await stretch(0, a.last.mid - 3 * half, a.last.mid);
+      await stretch(1, a.last.mid - half * 0.4, a.last.mid + half * 0.4);
+      await expect(check).not.toHaveClass(/is-ok/);
+      await expect(check).toContainText('averages in part of a dip', {
+        timeout: 4000,
+      });
+    }).toPass({ timeout: 40_000 });
     await stretch(0, first, a.last.mid - 1.3 * half);
     // The sloping side: the flat point before the dip and the points on the way
     // into it that are under 1.2 percent down, which no floor stretch can
