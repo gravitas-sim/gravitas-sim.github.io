@@ -48,10 +48,7 @@ const table = earlier =>
 
 /** How uncertain each period is, as a fraction, from the repeated readings. */
 const fraction = earlier => {
-  // A report saved before the step was reworked kept it under its old name.
-  const f =
-    earlier('time-it-until-sure', 'frac') ||
-    earlier('repeat-the-timing', 'frac');
+  const f = earlier('time-it-until-sure', 'frac');
   return f > 0 ? f : 0.001;
 };
 
@@ -261,7 +258,7 @@ export default {
  with the formula above. Write your answer as value ± uncertainty.`,
       },
       because:
-        'The law, fitted with weights, gives about 8 years with an uncertainty of a few hundredths of a year, which overlaps the 8 years the unweighted law gives.',
+        'The law, fitted with weights, gives about 8 years with an uncertainty of a few thousandths of a year, which overlaps the 8 years the unweighted law gives.',
     },
     {
       sid: 'weigh-the-host-star',

@@ -210,4 +210,23 @@ test.describe("Kepler's Laws, reworked", () => {
       timeout: 120_000,
     });
   });
+  test('a planet clicked in TRAPPIST-1 draws its equal-area wedges', async ({
+    page,
+    app,
+  }) => {
+    test.slow();
+    await openInvestigation(page, app, ID);
+    const plan = await lessonPlan(page, ID);
+    await walkToSid(page, plan, 'the-same-laws-forty-light');
+    await choose(page, 'TRAPPIST-1e');
+    await expect
+      .poll(() =>
+        page.evaluate(async () => {
+          const ui = await import('/js/ui.js');
+          const o = ui.state.areaSweepOverlay;
+          return o.active && o.wedges.length;
+        })
+      )
+      .toBeGreaterThan(0);
+  });
 });

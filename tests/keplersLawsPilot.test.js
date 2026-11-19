@@ -226,7 +226,21 @@ describe('a period without the square root is refused', () => {
   const val = step('check-the-estimate').validate;
   // The student chose 2.5 AU and scaled from Mars (1.524 AU, 1.881 yr).
   const base = { near_a: 1.524, near_P: 1.881, ratio: 2.5 / 1.524 };
-  const sel = ctxOf();
+  // The eight planets as the scenario places them (a, in simulation units).
+  const AXES = {
+    Mercury: 0.387,
+    Venus: 0.723,
+    Earth: 1,
+    Mars: 1.524,
+    Jupiter: 5.203,
+    Saturn: 9.537,
+    Uranus: 19.19,
+    Neptune: 30.07,
+  };
+  const sel = ctxOf({
+    bodies: Object.keys(AXES).map(name => ({ name })),
+    elements: b => (AXES[b?.name] ? { a: AXES[b.name] * 100 } : null),
+  });
 
   test('the law’s period is accepted', () => {
     expect(val({ ...base, P_calc: 3.95 }, sel).level).toBe('ok');
@@ -250,14 +264,28 @@ describe('a period without the square root is refused', () => {
     ).toBe('warn');
   });
 
-  test('the nearest planet is named when another was taken, whichever is closer in ratio', () => {
+  test('the nearest planet is named when another was taken, nearest in plain distance', () => {
     // 2.5 AU is nearer Mars than Jupiter; Venus is within a factor of four
-    // but is not the nearest.
+    // but is not the nearest. At 2.9 AU Mars is still the nearest (1.4 AU away,
+    // Jupiter is 2.3 AU away), so Mars is accepted although Jupiter is nearer
+    // in ratio.
+    const far = { near_a: 1.524, near_P: 1.881, ratio: 2.9 / 1.524 };
+    expect(val({ ...far, P_calc: 5 }, sel).message).not.toMatch(/Jupiter/);
     const venus = { near_a: 0.723, near_P: 0.615, ratio: 2.5 / 0.723 };
     const out = val({ ...venus, P_calc: 4 }, sel);
     expect(out.level).toBe('warn');
     expect(out.message).toMatch(/Mars is the planet whose orbit is nearest/);
     expect(val({ ...base, P_calc: 3.95 }, sel).level).toBe('ok');
+  });
+
+  test('a planet more than twice as far as the chosen orbit is not the check', () => {
+    // 3.3 AU: Mars is the nearest (1.8 AU away) but 3.3 / 1.524 is above two.
+    const out = val(
+      { near_a: 1.524, near_P: 1.881, ratio: 3.3 / 1.524, P_calc: 6 },
+      sel
+    );
+    expect(out.level).toBe('warn');
+    expect(out.message).toMatch(/more than twice/);
   });
 
   test('none of the feedback states a number the student could copy', () => {
@@ -370,19 +398,63 @@ describe('the deeper steps keep their decisions', () => {
 });
 
 describe('what the app reads, and where the wedges show', () => {
-  test('the speeds an answer key quotes are vis-viva for 1 solar mass, 0.5 AU, e 0.65', () => {
-    // v = 29.78 km/s * sqrt(2/r - 1/a), with a = r / (1 - e).
-    const r = 0.5;
-    const a = r / (1 - 0.65);
-    const vAt = d => 29.78 * Math.sqrt(2 / d - 1 / a);
-    const f = id => Number(field('fast-and-slow-in-numbers', id).want);
-    expect(f('v_peri')).toBeCloseTo(vAt(r), -0.3);
-    expect(f('v_apo')).toBeCloseTo(vAt(r * (1.65 / 0.35)), 0);
+  test('the distances and speed an answer key quotes are what the built scenario reads', async () => {
+    // The world as the page builds it, read the way the lesson's own probe does.
+    const find = globalThis.document.getElementById.bind(globalThis.document);
+    globalThis.document.getElementById = id => {
+      let el = find(id);
+      if (!el) {
+        el = globalThis.document.createElement(
+          /canvas/i.test(id) ? 'canvas' : 'div'
+        );
+        el.id = id;
+        globalThis.document.body.appendChild(el);
+      }
+      return el;
+    };
+    const ctx2d = new Proxy(
+      {},
+      {
+        get: (t, k) => (k in t ? t[k] : () => ({ addColorStop() {} })),
+        set: (t, k, v) => ((t[k] = v), true),
+      }
+    );
+    globalThis.HTMLCanvasElement.prototype.getContext = () => ctx2d;
+    const world = await import('../js/world.js');
+    const physics = await import('../js/physics.js');
+    const app = await import('../js/appState.js');
+    const { orbitalElements } = await import('../js/orbital.js');
+    const { formatSpeed } = await import('../js/units.js');
+    app.SETTINGS.preset_scenario = 'keplers-2nd-law';
+    world.initialize_simulation({ seed: 'keplers-laws-speeds' });
+    const orbiter = physics.planets.find(b => b.name === 'Eccentric Orbiter');
+    const star = physics.stars[0];
+    const el = orbitalElements(
+      orbiter,
+      star,
+      app.SETTINGS.gravitational_constant
+    );
+    // Distances in AU (100 simulation units to the AU): 0.50 closest, 2.36 furthest.
+    expect(el.a * (1 - el.e) * 0.01).toBeCloseTo(0.5, 2);
+    expect(el.a * (1 + el.e) * 0.01).toBeCloseTo(2.36, 2);
+    // The speed the card shows at the start, and the one at the far point from
+    // the same orbit (vis-viva, G M = 4 pi^2 AU^3/yr^2 in the app's units).
+    expect(parseFloat(formatSpeed(el.v))).toBeCloseTo(54.1, 1);
+    const vApo = (parseFloat(formatSpeed(el.v)) * (1 - el.e)) / (1 + el.e);
+    expect(vApo).toBeCloseTo(11.48, 1);
+    expect(
+      Number(field('fast-and-slow-in-numbers', 'v_peri').want)
+    ).toBeCloseTo(54, 0);
+    expect(Number(field('fast-and-slow-in-numbers', 'v_apo').want)).toBeCloseTo(
+      11.5,
+      1
+    );
   });
 
   test('the step that says wedges are drawn asks for them', () => {
     expect(KEPLER.lock.areaSweep).toBe(false);
     expect(step('the-same-laws-forty-light').showAreaSweep).toBe(true);
+    expect(step('the-same-laws-forty-light').allowInspector).toBe(true);
     expect(step('equal-areas-however-you-slice').wedgeOf).toBeTruthy();
   });
 
