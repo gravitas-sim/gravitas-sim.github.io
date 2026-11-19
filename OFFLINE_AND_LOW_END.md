@@ -52,16 +52,16 @@ Measured from the committed `sw-manifest.js` and the files it lists, by
 <!--fact-block:precache-->
 | | Files | Raw |
 | --- | ---: | ---: |
-| JavaScript | 1006 | 16.3 MB |
+| JavaScript | 1002 | 16.1 MB |
 | Images | 121 | 870 KB |
 | Stylesheets | 10 | 500 KB |
 | Fonts | 9 | 140 KB |
 | Panel markup | 10 | 70 KB |
 | Pages | 12 | 330 KB |
 | Other | 16 | 900 KB |
-| **Total** | **1184** | **19.0 MB** |
+| **Total** | **1180** | **18.9 MB** |
 
-Of those, 845 are core (the install fails without them), 129 optional (installed with them; a missing one is reported and costs nothing) and 210 idle (installed after activation, when the browser is idle; a missing one costs that page its offline copy and is fetched again on the next open). The first-visit install is the core and the optional files: 974 files.
+Of those, 841 are core (the install fails without them), 129 optional (installed with them; a missing one is reported and costs nothing) and 210 idle (installed after activation, when the browser is idle; a missing one costs that page its offline copy and is fetched again on the next open). The first-visit install is the core and the optional files: 970 files.
 
 Gzipped, as Pages serves it, the whole is about 6 MB.
 
@@ -71,6 +71,8 @@ Gzipped, as Pages serves it, the whole is about 6 MB.
 | 3 Mbps | ~17 s |
 | 1.5 Mbps | ~34 s |
 <!--/fact-block-->
+The Exoplanet Observatory's guide suite (`js/observatory/guides/exoplanet.js`, its words in `js/i18n/en.exoplanet.js` and `js/i18n/es.exoplanet.js`, and `js/data/exoplanetAnswerKey.js`) is in no tier: the first-visit tier is at its `tools/data-budget.json` ceiling, and the suite is fetched only when a reader opens that guide, then kept by the worker. A first visit made offline therefore shows "Available after one online visit." in the guided investigations panel for that suite, and the populations suite beside it still opens. One online visit that opens the guide makes it work offline from then on (`e2e/exoplanetGuides.spec.js` blocks the suite and checks the message).
+
 ### What each page promises offline, and the rule for a new pack
 
 Three tiers, and a page promises offline only what its tier delivers. The

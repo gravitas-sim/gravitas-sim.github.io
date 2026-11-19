@@ -3,22 +3,29 @@
  "static": {
   "en": {
    "units": [
-    ["steps.heating-at-the-maximum.fields.0.unit","1e13 W"],
-    ["steps.heating-at-the-maximum.fields.1.unit",""],
-    ["steps.double-the-eccentricity.fields.0.unit","1e14 W"],
-    ["steps.the-bound.fields.0.unit",""],
-    ["steps.how-far-from-the-maximum.unit",""]
+    ["steps.heating-at-two-eccentricities.fields.0.unit",""],
+    ["steps.heating-at-two-eccentricities.fields.1.unit",""],
+    ["steps.find-the-interiors.fields.0.unit",""],
+    ["steps.find-the-interiors.fields.1.unit",""],
+    ["steps.find-the-interiors.fields.2.unit",""],
+    ["steps.find-the-interiors.fields.3.unit",""],
+    ["steps.how-far-from-the-maximum.unit",""],
+    ["steps.how-wide-is-the-bound.unit",""]
    ],
    "numbered": [
-    ["steps.heating-at-the-maximum.fields.1.label","Energy in one orbit (10¹⁹ J)"],
-    ["steps.the-bound.fields.0.label","k2/Q the observed middle value needs"]
+    ["steps.heating-at-two-eccentricities.fields.0.label","Heating at Io’s eccentricity (10¹³ W)"],
+    ["steps.heating-at-two-eccentricities.fields.1.label","Heating at twice that eccentricity (10¹³ W)"],
+    ["steps.find-the-interiors.fields.0.label","First pair: k2"],
+    ["steps.find-the-interiors.fields.2.label","Second pair: k2"]
    ]
   },
   "es": {
    "units": [],
    "numbered": [
-    ["steps.heating-at-the-maximum.fields.1.label","Energía en una órbita (10¹⁹ J)"],
-    ["steps.the-bound.fields.0.label","k2/Q que necesita el valor medio observado"]
+    ["steps.heating-at-two-eccentricities.fields.0.label","Calentamiento con la excentricidad de Ío (10¹³ W)"],
+    ["steps.heating-at-two-eccentricities.fields.1.label","Calentamiento con el doble de esa excentricidad (10¹³ W)"],
+    ["steps.find-the-interiors.fields.0.label","Primer par: k2"],
+    ["steps.find-the-interiors.fields.2.label","Segundo par: k2"]
    ]
   }
  },
@@ -29,6 +36,12 @@
     "answer": "17",
     "tolerance": "0.5",
     "unit": ""
+   },
+   {
+    "sid": "how-wide-is-the-bound",
+    "answer": "2.67",
+    "tolerance": "0.2",
+    "unit": ""
    }
   ],
   "decimals": []
@@ -36,14 +49,11 @@
  "precision": [],
  "steps": {
   "en": {
-   "heating-at-the-maximum": {
-    "validate": {"calls":232,"distinct":2,"digest":"543b5e3f50e3295c","samples":[null,{"level":"error","message":"Set k2 = 1.5, <em>Q</em> = 100, <em>e</em> = 0.0041, then read “Heating” and “Energy in one orbit”."}]}
+   "heating-at-two-eccentricities": {
+    "validate": {"calls":232,"distinct":2,"digest":"eb51fa3623c193d2","samples":[null,{"level":"error","message":"Leave k2 and Q as the instrument opens, change only the eccentricity, and take the Heating at 0.0041 and then at twice that."}]}
    },
-   "double-the-eccentricity": {
-    "validate": {"calls":97,"distinct":2,"digest":"c9985a84c97fd163","samples":[null,{"level":"error","message":"Keep k2 = 1.5 and <em>Q</em> = 100, set <em>e</em> = 0.0082, and read “Heating”."}]}
-   },
-   "the-bound": {
-    "validate": {"calls":97,"distinct":2,"digest":"d52744a57448474e","samples":[null,{"level":"error","message":"Set <em>e</em> = 0.0041 and read “k2/Q the observed middle value needs”."}]}
+   "find-the-interiors": {
+    "validate": {"calls":242,"distinct":3,"digest":"cd196e78fe041b2b","samples":[null,{"level":"error","message":"Both pairs must be ones the sliders can set: k2 from 0.1 to 1.5 and Q from 5 to 500."},{"level":"error","message":"Too much: one of your pairs gives more heat than Io is observed to radiate. Read the row Heating against the observed range, and change k2 or Q to bring it inside."}]}
    }
   },
   "es": "same"

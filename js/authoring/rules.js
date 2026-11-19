@@ -6,7 +6,7 @@
 // or a `warn` (odd, a human should look; a checker that cries wolf gets bypassed).
 
 import { checkAnswer, toleranceFor } from '../answerCheck.js';
-import { verifyKey } from '../answerKey.js';
+import { asGiven, verifyKey } from '../answerKey.js';
 import { isValidSid } from '../investigations/progressSchema.js';
 import { parseNumber } from '../answerParse.js';
 import {
@@ -18,10 +18,6 @@ import {
   mergeTranslation,
   translationCoverage,
 } from '../data/investigations/i18n.js';
-
-// A number as a student gives it: with an uncertainty if the step asks for one.
-const asGiven = (step, n, u = toleranceFor(step) / 2) =>
-  step.uncertainty ? `${n} ± ${u}` : n;
 
 /** Step types the engine renders. The last two (ellipse, wedges) are Kepler's, not a pattern to copy: reach for a widget. */
 export const STEP_TYPES = new Set([

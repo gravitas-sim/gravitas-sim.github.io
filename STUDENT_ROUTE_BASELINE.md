@@ -240,7 +240,7 @@ accepts it. The time is from the start of the navigation, on the page's clock.
 |---|---|---|
 | `keplers-laws` | `measure-the-two-orbits` (step 7) | the two orbiters' eccentricities and distances, from the scene's orbital elements |
 | `transit-photometry` | `measure-the-dip` (step 8) | the step's own "Copy the last transit" button, pressed again after each transit until the step accepts the copy; the time includes the wait for a transit |
-| `measuring-the-moon` | `scale-from-the-disc` (step 3) | the instrument's end positions set to those the step names, then its length and scale rows |
+| `measuring-the-moon` | `scale-from-the-disc` (step 3, at 3.0; `mark-the-disc-width` since) | the instrument's end positions set to the disc's edges, then its length and scale rows |
 | `ios-fire` | `heating-at-the-maximum` (step 2) | the instrument's heating and energy rows |
 | `tides-that-move-the-moon` | `the-moons-recession` (step 2) | the instrument's recession and day-length rows |
 | `weighing-stars` | `a-practice-run` (step 20) | none: the 3.0 step is a practice run and tells the two numbers (2 and 2) |

@@ -14,6 +14,7 @@ import { test, expect } from './fixtures.js';
 import {
   lessonPlan,
   openInvestigation,
+  readout,
   settled,
   walkToSid,
 } from './centralExperiment.js';
@@ -141,3 +142,58 @@ for (const c of CASES) {
     });
   }
 }
+
+// The pair is the reader's decision (Measuring the Moon): the instrument opens
+// with a pair that stops short of the edges, the tool takes whatever the pair
+// spans as the Moon's width, and the readings are taken from the instrument.
+test('measuring-the-moon: a short pair is refused in words, the pair on the edges is accepted, and the readings are the instrument’s', async ({
+  page,
+  app,
+}) => {
+  test.slow();
+  await open(page, app, 'measuring-the-moon', null);
+  const plan = await lessonPlan(page, 'measuring-the-moon');
+  await walkToSid(page, plan, 'mark-the-disc-width');
+  // The canvas is quiet: nothing is staged behind the picture.
+  await expect(page.locator('body')).toHaveAttribute(
+    'data-lesson-canvas',
+    'quiet'
+  );
+  const slot = page.locator('#investigationBody [data-check-slot]');
+  const field = id =>
+    page.locator(`#investigationBody input[data-field$=":${id}"]`);
+  const take = async () => {
+    for (const id of ['pair', 'scale'])
+      await page.locator(`#investigationBody [data-take="${id}"]`).click();
+  };
+  const place = async (id, value) => {
+    const box = page.locator(`#invTool-${id}`);
+    await box.fill(String(value));
+    await box.dispatchEvent('change');
+  };
+  // The opening pair is not the answer: taken as it stands, it is refused.
+  await take();
+  await expect(slot).toContainText(/stops short/);
+  // Both ends on the edges: accepted, and what the fields hold is what the readout prints.
+  await place('x1', 3);
+  await place('x2', 496);
+  await take();
+  await expect(slot).toContainText(/reaches both edges/);
+  const rows = await readout(page);
+  expect(Number(await field('pair').inputValue())).toBe(
+    Number(rows['Length of the pair'].match(/\d+/)[0])
+  );
+  expect(await field('scale').inputValue()).toBe(
+    rows['Scale from the pair'].match(/\d+\.\d+/)[0]
+  );
+  // The next step makes the mistake on purpose and is refused until the pair is short.
+  await walkToSid(page, plan, 'a-pair-that-stops-short');
+  const km = page.locator('#investigationBody [data-take="km"]');
+  await page.locator('#investigationBody [data-take="scale"]').click();
+  await km.click();
+  await expect(slot).toContainText(/still close to the edge/);
+  await place('x2', 430);
+  await page.locator('#investigationBody [data-take="scale"]').click();
+  await km.click();
+  await expect(slot).toContainText(/did not change/);
+});

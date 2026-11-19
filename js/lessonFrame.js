@@ -27,10 +27,11 @@ const SHEET_PARTS = [
   '.gs-shell',
 ];
 
-function boxesOf(selectors) {
+function boxesOf(selectors, early = false) {
   const out = [];
   for (const el of document.querySelectorAll(selectors.join(','))) {
-    if (el.hidden || getComputedStyle(el).visibility === 'hidden') continue;
+    if (el.hidden || (!early && getComputedStyle(el).visibility === 'hidden'))
+      continue;
     const b = el.getBoundingClientRect();
     if (b.width > 8 && b.height > 8) out.push(b);
   }
@@ -44,16 +45,24 @@ export function lessonInset() {
     return insetFromBoxes(boxesOf(SHEET_PARTS), view);
   let left = 0;
   let right = 0;
-  for (const b of boxesOf([
-    '#investigationPanel',
-    '#investigationTool',
-    '#mainControls',
-  ])) {
+  for (const b of boxesOf(
+    ['#investigationPanel', '#investigationTool', '#mainControls'],
+    true
+  )) {
     if (b.bottom < view.height * 0.5) continue;
     if (b.left < view.width * 0.5) left = Math.max(left, b.right);
     else right = Math.max(right, view.width - b.left);
   }
-  return { left, right, top: 0, bottom: 0 };
+  let top = 0;
+  let bottom = 0;
+  const free = view.width - left - right;
+  for (const b of boxesOf(SHEET_PARTS)) {
+    if (b.right <= left || b.left >= view.width - right || b.width < free * 0.6)
+      continue;
+    if (b.top + b.bottom < view.height) top = Math.max(top, b.bottom);
+    else bottom = Math.max(bottom, view.height - b.top);
+  }
+  return { left, right, top, bottom };
 }
 
 /** The bounding box of the ellipse a body sweeps about its primary, as points. */
@@ -192,7 +201,7 @@ export function takeFit() {
 }
 
 export function frameScene() {
-  if (window.innerWidth <= SHEET_MAX_WIDTH) requestFit();
+  requestFit();
 }
 
 export function refit() {

@@ -2,19 +2,19 @@
  "id": "measuring-the-moon",
  "locale": "es",
  "title": "Medir la Luna",
- "steps": 12,
+ "steps": 14,
  "depths": [
   [
    "core",
-   8
-  ],
-  [
-   "quantitative",
    10
   ],
   [
-   "advanced",
+   "quantitative",
    12
+  ],
+  [
+   "advanced",
+   14
   ]
  ],
  "grading": [
@@ -173,13 +173,13 @@
    ]
   },
   {
-   "sid": "a-diameter-with-an-error-bar",
+   "sid": "a-diameter-with-the-squeeze",
    "type": "question",
    "kind": "numeric",
-   "tolerance": 40,
+   "tolerance": 4,
    "grades": [
     [
-     "634",
+     "660",
      false,
      "unreadable",
      null,
@@ -188,7 +188,7 @@
      "needsUncertainty"
     ],
     [
-     "654",
+     "662",
      false,
      "unreadable",
      null,
@@ -197,7 +197,7 @@
      "needsUncertainty"
     ],
     [
-     "754",
+     "672",
      false,
      "unreadable",
      null,
@@ -206,7 +206,7 @@
      "needsUncertainty"
     ],
     [
-     "634 km",
+     "660 km",
      false,
      "unreadable",
      null,
@@ -274,8 +274,8 @@
     "measuring-the-moon:what-would-change-it": "A fixed sentence for the golden.",
     "measuring-the-moon:a-pixel-at-each-end": "14,1",
     "measuring-the-moon:a-pixel-at-each-end:locale": "es",
-    "measuring-the-moon:a-diameter-with-an-error-bar": "634",
-    "measuring-the-moon:a-diameter-with-an-error-bar:locale": "es",
+    "measuring-the-moon:a-diameter-with-the-squeeze": "660",
+    "measuring-the-moon:a-diameter-with-the-squeeze:locale": "es",
     "measuring-the-moon:a-gray-level-is-not-light": 1
    },
    "attempts": {
@@ -283,19 +283,21 @@
     "measuring-the-moon:why-a-pair": 1,
     "measuring-the-moon:predict-the-plain": 1,
     "measuring-the-moon:a-pixel-at-each-end": 1,
-    "measuring-the-moon:a-diameter-with-an-error-bar": 1,
+    "measuring-the-moon:a-diameter-with-the-squeeze": 1,
     "measuring-the-moon:a-gray-level-is-not-light": 1
    },
    "visited": [
     "a-picture-of-the-moon",
     "predict-the-scale",
-    "scale-from-the-disc",
+    "mark-the-disc-width",
+    "a-pair-that-stops-short",
     "why-a-pair",
     "predict-the-plain",
     "measure-the-plain",
+    "squeezed-at-the-plain",
     "what-would-change-it",
     "a-pixel-at-each-end",
-    "a-diameter-with-an-error-bar",
+    "a-diameter-with-the-squeeze",
     "near-the-limb",
     "a-gray-level-is-not-light",
     "what-you-worked-out"
@@ -313,8 +315,8 @@
     "measuring-the-moon:what-would-change-it": "A fixed sentence for the golden.",
     "measuring-the-moon:a-pixel-at-each-end": "14,1",
     "measuring-the-moon:a-pixel-at-each-end:locale": "es",
-    "measuring-the-moon:a-diameter-with-an-error-bar": "634",
-    "measuring-the-moon:a-diameter-with-an-error-bar:locale": "es",
+    "measuring-the-moon:a-diameter-with-the-squeeze": "660",
+    "measuring-the-moon:a-diameter-with-the-squeeze:locale": "es",
     "measuring-the-moon:a-gray-level-is-not-light": 1
    },
    "attempts": {
@@ -322,19 +324,21 @@
     "measuring-the-moon:why-a-pair": 1,
     "measuring-the-moon:predict-the-plain": 1,
     "measuring-the-moon:a-pixel-at-each-end": 1,
-    "measuring-the-moon:a-diameter-with-an-error-bar": 1,
+    "measuring-the-moon:a-diameter-with-the-squeeze": 1,
     "measuring-the-moon:a-gray-level-is-not-light": 1
    },
    "visited": [
-    "a-diameter-with-an-error-bar",
+    "a-diameter-with-the-squeeze",
     "a-gray-level-is-not-light",
+    "a-pair-that-stops-short",
     "a-picture-of-the-moon",
     "a-pixel-at-each-end",
+    "mark-the-disc-width",
     "measure-the-plain",
     "near-the-limb",
     "predict-the-plain",
     "predict-the-scale",
-    "scale-from-the-disc",
+    "squeezed-at-the-plain",
     "what-would-change-it",
     "what-you-worked-out",
     "why-a-pair"
@@ -357,7 +361,7 @@
    "lesson": {
     "id": "measuring-the-moon",
     "title": "Medir la Luna",
-    "stepCount": 12
+    "stepCount": 14
    },
    "student": null,
    "progress": {
@@ -366,13 +370,15 @@
     "visited": [
      "a-picture-of-the-moon",
      "predict-the-scale",
-     "scale-from-the-disc",
+     "mark-the-disc-width",
+     "a-pair-that-stops-short",
      "why-a-pair",
      "predict-the-plain",
      "measure-the-plain",
+     "squeezed-at-the-plain",
      "what-would-change-it",
      "a-pixel-at-each-end",
-     "a-diameter-with-an-error-bar",
+     "a-diameter-with-the-squeeze",
      "near-the-limb",
      "a-gray-level-is-not-light",
      "what-you-worked-out"
@@ -384,8 +390,8 @@
      "measuring-the-moon:what-would-change-it": "A fixed sentence for the golden.",
      "measuring-the-moon:a-pixel-at-each-end": "14,1",
      "measuring-the-moon:a-pixel-at-each-end:locale": "es",
-     "measuring-the-moon:a-diameter-with-an-error-bar": "634",
-     "measuring-the-moon:a-diameter-with-an-error-bar:locale": "es",
+     "measuring-the-moon:a-diameter-with-the-squeeze": "660",
+     "measuring-the-moon:a-diameter-with-the-squeeze:locale": "es",
      "measuring-the-moon:a-gray-level-is-not-light": 1
     },
     "attempts": {
@@ -393,7 +399,7 @@
      "measuring-the-moon:why-a-pair": 1,
      "measuring-the-moon:predict-the-plain": 1,
      "measuring-the-moon:a-pixel-at-each-end": 1,
-     "measuring-the-moon:a-diameter-with-an-error-bar": 1,
+     "measuring-the-moon:a-diameter-with-the-squeeze": 1,
      "measuring-the-moon:a-gray-level-is-not-light": 1
     }
    },
@@ -412,60 +418,72 @@
     },
     {
      "index": 2,
-     "sid": "scale-from-the-disc",
+     "sid": "mark-the-disc-width",
      "fingerprint": "measure|-|moon-marks|-|pair+scale|-|-",
      "optionCount": null
     },
     {
      "index": 3,
+     "sid": "a-pair-that-stops-short",
+     "fingerprint": "measure|-|moon-marks|-|scale+km|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 4,
      "sid": "why-a-pair",
      "fingerprint": "question|choice|moon-marks|-|-|4|a=1;c=1",
      "optionCount": 4
     },
     {
-     "index": 4,
+     "index": 5,
      "sid": "predict-the-plain",
      "fingerprint": "predict|-|moon-marks|-|-|4|a=2;c=2",
      "optionCount": 4
     },
     {
-     "index": 5,
+     "index": 6,
      "sid": "measure-the-plain",
      "fingerprint": "measure|-|moon-marks|-|km|-|-",
      "optionCount": null
     },
     {
-     "index": 6,
+     "index": 7,
+     "sid": "squeezed-at-the-plain",
+     "fingerprint": "measure|-|moon-marks|-|share|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 8,
      "sid": "what-would-change-it",
      "fingerprint": "question|short|moon-marks|-|-|-|-",
      "optionCount": null
     },
     {
-     "index": 7,
+     "index": 9,
      "sid": "a-pixel-at-each-end",
      "fingerprint": "question|numeric|moon-marks|-|-|-|a=14.1;t=0.4;u=km",
      "optionCount": null
     },
     {
-     "index": 8,
-     "sid": "a-diameter-with-an-error-bar",
-     "fingerprint": "question|numeric|moon-marks|-|-|-|a=634;t=40;u=km",
+     "index": 10,
+     "sid": "a-diameter-with-the-squeeze",
+     "fingerprint": "question|numeric|moon-marks|-|-|-|a=660;t=4;u=km",
      "optionCount": null
     },
     {
-     "index": 9,
+     "index": 11,
      "sid": "near-the-limb",
      "fingerprint": "measure|-|moon-marks|-|off+share|-|-",
      "optionCount": null
     },
     {
-     "index": 10,
+     "index": 12,
      "sid": "a-gray-level-is-not-light",
      "fingerprint": "question|choice|moon-marks|-|-|4|a=1;c=1",
      "optionCount": 4
     },
     {
-     "index": 11,
+     "index": 13,
      "sid": "what-you-worked-out",
      "fingerprint": "read|-|moon-marks|-|-|-|-",
      "optionCount": null
@@ -483,8 +501,8 @@
     "measuring-the-moon:what-would-change-it": "A fixed sentence for the golden.",
     "measuring-the-moon:a-pixel-at-each-end": "14,1",
     "measuring-the-moon:a-pixel-at-each-end:locale": "es",
-    "measuring-the-moon:a-diameter-with-an-error-bar": "634",
-    "measuring-the-moon:a-diameter-with-an-error-bar:locale": "es",
+    "measuring-the-moon:a-diameter-with-the-squeeze": "660",
+    "measuring-the-moon:a-diameter-with-the-squeeze:locale": "es",
     "measuring-the-moon:a-gray-level-is-not-light": 1
    },
    "attempts": {
@@ -492,24 +510,26 @@
     "measuring-the-moon:why-a-pair": 1,
     "measuring-the-moon:predict-the-plain": 1,
     "measuring-the-moon:a-pixel-at-each-end": 1,
-    "measuring-the-moon:a-diameter-with-an-error-bar": 1,
+    "measuring-the-moon:a-diameter-with-the-squeeze": 1,
     "measuring-the-moon:a-gray-level-is-not-light": 1
    },
    "visited": [
-    "a-diameter-with-an-error-bar",
+    "a-diameter-with-the-squeeze",
     "a-gray-level-is-not-light",
+    "a-pair-that-stops-short",
     "a-picture-of-the-moon",
     "a-pixel-at-each-end",
+    "mark-the-disc-width",
     "measure-the-plain",
     "near-the-limb",
     "predict-the-plain",
     "predict-the-scale",
-    "scale-from-the-disc",
+    "squeezed-at-the-plain",
     "what-would-change-it",
     "what-you-worked-out",
     "why-a-pair"
    ],
-   "stepIndex": 11,
+   "stepIndex": 13,
    "startedAt": "2026-01-02T03:04:05.000Z",
    "moved": [],
    "dropped": [],
@@ -589,8 +609,8 @@
      "locale": "es"
     },
     {
-     "sid": "a-diameter-with-an-error-bar",
-     "value": "634",
+     "sid": "a-diameter-with-the-squeeze",
+     "value": "660",
      "locale": "es"
     },
     {
@@ -638,8 +658,8 @@
      "locale": "es"
     },
     {
-     "sid": "a-diameter-with-an-error-bar",
-     "value": "634",
+     "sid": "a-diameter-with-the-squeeze",
+     "value": "660",
      "locale": "es"
     },
     {
@@ -711,8 +731,8 @@
      "locale": "es"
     },
     {
-     "sid": "a-diameter-with-an-error-bar",
-     "value": "634",
+     "sid": "a-diameter-with-the-squeeze",
+     "value": "660",
      "locale": "es"
     },
     {
@@ -761,8 +781,8 @@
      "locale": "es"
     },
     {
-     "sid": "a-diameter-with-an-error-bar",
-     "value": "634",
+     "sid": "a-diameter-with-the-squeeze",
+     "value": "660",
      "locale": "es"
     },
     {

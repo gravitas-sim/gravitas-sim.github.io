@@ -60,6 +60,7 @@ const SHOWS = [
   'count',
   'simulation',
   'vshape',
+  'myFit',
 ];
 
 /** A seeded uniform stream (mulberry32), and normal deviates from it. */
@@ -204,7 +205,7 @@ describe('the guides as data', () => {
     }
   });
 
-  test('Fit the transit gained an upper depth in Prompt 225 and no lower step changed (tests/fixtures/transit-delta/exo-fit-steps-v3.json)', () => {
+  test('Fit the transit after its revision: each step the 3.0 guide had is kept as it was or retired with a successor (tests/fixtures/transit-delta/exo-fit-steps-v3.json)', () => {
     const gold = JSON.parse(
       readFileSync(
         path.join(REPO, 'tests/fixtures/transit-delta/exo-fit-steps-v3.json'),
@@ -212,21 +213,80 @@ describe('the guides as data', () => {
       )
     );
     const g = G.GUIDES.find(x => x.id === 'exo-fit');
-    // Every step it had is as it was, in the same order.
-    const kept = g.steps.filter(s => gold.steps.some(o => o.id === s.id));
-    expect(kept).toEqual(gold.steps);
-    // The introductory path is exactly what it was, and so are its minutes.
-    expect(G.stepsOn(g, 'intro')).toEqual(
-      gold.steps.filter(s => s.path === 'both')
-    );
-    expect(g.minutes.intro).toBe(gold.minutes.intro);
-    // What was added is advanced only, and the answers and choices the old
-    // steps use are all still there.
-    const added = g.steps.filter(s => !gold.steps.some(o => o.id === s.id));
-    expect(added.length).toBeGreaterThanOrEqual(5);
-    for (const s of added) expect(s.path).toBe('advanced');
-    for (const name of gold.answers) expect(G.ANSWERS).toHaveProperty(name);
+    const live = new Map(g.steps.map(s => [s.id, s]));
+    const retired = g.retired;
+    // A step the guide kept is the step it was: only where it reads from moved.
+    const bare = ({ from, ...rest }) => rest;
+    const gone = [];
+    for (const o of gold.steps) {
+      if (!live.has(o.id)) gone.push(o.id);
+      else if (!(o.id in retired))
+        expect(bare(live.get(o.id))).toEqual(bare(o));
+    }
+    // What was revised is retired with a step the guide has, and says in both
+    // languages what it asked; nothing retired is still a step.
+    expect(gone.sort()).toEqual(['fit', 'radius', 'torres']);
+    for (const id of gone) {
+      expect(live.has(retired[id].to)).toBe(true);
+      expect(retired[id].release).toMatch(/^\d+\.\d+$/);
+      expect(retired[id].was.en.length).toBeGreaterThan(10);
+      expect(retired[id].was.es.length).toBeGreaterThan(10);
+    }
+    expect(Object.keys(retired).sort()).toEqual(gone);
+    // The upper depth only added steps, and every one of them is still there.
+    for (const id of ['density', 'eccentric', 'ellipse', 'laws', 'vshape'])
+      expect(live.get(id).path).toBe('advanced');
+    // The answers and choices the unrevised steps use are all still there; the
+    // arithmetic of the retired Torres step went with it.
+    for (const name of gold.answers.filter(n => n !== 'radiusIfTorres'))
+      expect(G.ANSWERS).toHaveProperty(name);
+    expect(G.ANSWERS).not.toHaveProperty('radiusIfTorres');
     for (const name of gold.correct) expect(G.CORRECT).toHaveProperty(name);
+    // The introductory path ends on the interpretation of the reader's own fit.
+    const intro = G.stepsOn(g, 'intro').map(s => s.id);
+    expect(intro).toEqual([
+      'intro',
+      'choose-fit',
+      'ratio',
+      'star-radius',
+      'planet-radius',
+      'whose-star',
+      'wrap',
+    ]);
+    // Neither the arithmetic nor the radius to enter is in the words.
+    for (const words of [EN_GUIDES, ES_GUIDES]) {
+      for (const k of [
+        'gd.exo-fit.whose-star.no',
+        'gd.exo-fit.eccentric.no',
+        'gd.exo-fit.star-radius.text',
+      ])
+        expect(words[k]).not.toMatch(/9[.,]7312|1[.,]19\b|1[.,]155|0[.,]2 ×/);
+    }
+  });
+
+  test('whose-star: each outcome of the factor-of-two rule, and no one outcome in the words', () => {
+    // The star's relative uncertainty is the full gap between the two published
+    // radii (2.99 percent), though each source quotes about 1.3 to 1.7 percent.
+    const at = (k, sigma) => ({
+      quantity: (_step, name) => (name === 'k' ? k : sigma),
+    });
+    const k = 0.1207;
+    expect(G.CORRECT.limitsRadius(at(k, 0.001))).toBe('star'); // 0.8 percent
+    expect(G.CORRECT.limitsRadius(at(k, 0.0025))).toBe('equal'); // 2.1 percent
+    expect(G.CORRECT.limitsRadius(at(k, 0.005))).toBe('equal'); // 4.1 percent
+    expect(G.CORRECT.limitsRadius(at(k, 0.01))).toBe('fit'); // 8.3 percent
+    expect(G.CORRECT.limitsRadius(at(k, null))).toBe(null);
+    // One .ok serves every right pick, so it names no single outcome; the
+    // options state the rule, not a number the reference fit happens to give.
+    for (const words of [EN_GUIDES, ES_GUIDES]) {
+      expect(words['gd.exo-fit.whose-star.ok']).not.toMatch(
+        /differ(en)? más que|differ by more than|published radii/
+      );
+      for (const o of ['fit', 'star', 'equal'])
+        expect(words[`gd.exo-fit.whose-star.opt.${o}`]).toMatch(
+          /factor of two|factor de dos/
+        );
+    }
   });
 
   test('the two grazing planets of the V-shape step cannot be told apart, and the constants are the closest curve a search finds', () => {
@@ -322,6 +382,8 @@ describe('the guides as data', () => {
       'outside',
       'noFit',
       'fitSettings',
+      'fitTooFew',
+      'fitWindow',
       'unknown',
     ])
       expect(EN_GUIDES).toHaveProperty([`gd.check.${why}`]);
@@ -670,34 +732,138 @@ describe('the runner', () => {
     ).toBe('outside');
   });
 
-  test('fitted: the settings a step asks for, then the value', () => {
-    const check = G.GUIDES[2].steps.find(s => s.id === 'radius').check;
-    const doc = settings => ({
-      data: { observation: hd.id },
+  test('fitted: the settings, what it left free and the data it used, then the value', () => {
+    const guide = G.GUIDES.find(x => x.id === 'exo-fit');
+    const choose = guide.steps.find(s => s.id === 'choose-fit').check;
+    const radius = guide.steps.find(s => s.id === 'star-radius').check;
+    const names = ['t0', 'P', 'k', 'aRs', 'b', 'q1', 'q2'];
+    const doc = (settings, { fixed = [], span = 27.9, k = 0.119 } = {}) => ({
+      data: { observation: hd.id, rows: 1882, used: 1882, span },
       settings,
+      parameters: Object.fromEntries(
+        names.map(n => [
+          n,
+          fixed.includes(n)
+            ? { mode: 'fixed', value: 0.3 }
+            : { mode: 'fitted' },
+        ])
+      ),
       results: {
-        fit: { parameters: [], derived: [{ name: 'Rp', value: 1.38 }] },
+        fit: {
+          parameters: [{ name: 'k', value: k }],
+          derived: [{ name: 'Rp', value: 1.38 }],
+        },
       },
     });
-    expect(evaluate(check, { fits: [] }).why).toBe('noFit');
-    expect(evaluate(check, { fits: [doc({ dilution: 0 })] }).why).toBe(
-      'fitSettings'
+    const why = (check, ...fits) => evaluate(check, { fits });
+    expect(why(choose).why).toBe('noFit');
+    expect(why(choose, doc({ dilution: 0.1 })).why).toBe('fitSettings');
+    // Any defensible choice passes: every parameter free, or the limb darkening held.
+    expect(why(choose, doc({ dilution: 0 })).ok).toBe(true);
+    expect(why(choose, doc({ dilution: 0 }, { fixed: ['q1', 'q2'] })).ok).toBe(
+      true
     );
+    expect(why(choose, doc({ dilution: 0 }, { fixed: ['b'] })).ok).toBe(true);
+    // Too few free: the radius ratio or the epoch held, or fewer than four left.
+    for (const fixed of [['k'], ['t0'], ['q1', 'q2', 'b', 'aRs']])
+      expect(why(choose, doc({ dilution: 0 }, { fixed })).why).toBe(
+        'fitTooFew'
+      );
+    // A window of less than two orbits, and a value outside the range.
+    expect(why(choose, doc({ dilution: 0 }, { span: 3.4 })).why).toBe(
+      'fitWindow'
+    );
+    expect(why(choose, doc({ dilution: 0 }, { k: 0.2 })).why).toBe('outside');
+    // A later fit that passes counts, whatever an earlier one was.
     expect(
-      evaluate(check, {
-        fits: [
-          doc({ dilution: 0, stellarRadius: { value: 1.19, sigma: 0.02 } }),
-        ],
-      }).ok
+      why(choose, doc({ dilution: 0 }, { span: 3.4 }), doc({ dilution: 0 })).ok
     ).toBe(true);
-    expect(
-      evaluate(check, {
-        fits: [
-          doc({ dilution: 0, stellarRadius: { value: 1.155, sigma: 0.02 } }),
-        ],
-      }).why
-    ).toBe('fitSettings');
+    // The star's radius: either published radius, with that source's own sigma.
+    const star = (value, sigma) =>
+      doc({ dilution: 0, stellarRadius: { value, sigma } });
+    expect(why(radius, star(1.19, 0.02)).ok).toBe(true);
+    expect(why(radius, star(1.155, 0.015)).ok).toBe(true);
+    expect(why(radius, star(1.155, 0.02)).why).toBe('fitSettings');
+    expect(why(radius, star(1.3, 0.02)).why).toBe('fitSettings');
+    expect(why(radius, doc({ dilution: 0 })).why).toBe('fitSettings');
   });
+
+  test('a record made before the revision: the answers to retired steps stay, with their old meaning', async () => {
+    const { KEY_GUIDES } = await import('../js/names.js');
+    const old = {
+      'exo-fit': {
+        v: '1.0.0',
+        path: 'advanced',
+        at: 0,
+        record: {
+          fit: { passed: true, value: 0.11926 },
+          ratio: { value: 0.119, ok: true, shown: false },
+          radius: { passed: true, value: 1.38 },
+          torres: { value: 1.34, ok: true, shown: false },
+          density: { value: 1.3, ok: true, shown: false },
+        },
+      },
+    };
+    globalThis.localStorage.setItem(KEY_GUIDES, JSON.stringify(old));
+    const root = globalThis.document.createElement('details');
+    root.open = true;
+    const main = globalThis.document.createElement('main');
+    main.append(root);
+    globalThis.document.body.append(main);
+    const messages = {};
+    const run = { observations: await R.openTargets(G.TARGETS) };
+    const panel = P.mountGuidePanel(root, {
+      t: (id, vars) =>
+        (messages[id] ?? id).replace(/\{(\w+)\}/g, (w, k) =>
+          vars && k in vars ? vars[k] : w
+        ),
+      number: v => String(v),
+      registerMessages: parts => Object.assign(messages, parts.en),
+      language: () => 'en',
+      open: () => {},
+      status: () => {},
+      state: {
+        source: run.observations.hd209458,
+        history: { changes: () => [] },
+        fits: [],
+      },
+      openFixture: async () => run.observations.hd209458,
+      lightCurveObservation: async () => null,
+      nodes: async () => [],
+      showPanel: async () => true,
+    });
+    await panel.ready;
+    root.querySelector('#gdGuide').value = 'exo-fit';
+    root.querySelector('#gdPath').value = 'advanced';
+    root.querySelector('#gdStart').click();
+    const snap = panel.snapshot();
+    // The steps the guide still has keep their answers, as they were.
+    expect(snap.record.ratio).toEqual(old['exo-fit'].record.ratio);
+    expect(snap.record.density).toEqual(old['exo-fit'].record.density);
+    // The retired steps' answers are kept apart, never read as an answer to a successor.
+    expect(Object.keys(snap.earlier).sort()).toEqual([
+      'fit',
+      'radius',
+      'torres',
+    ]);
+    for (const id of ['choose-fit', 'star-radius', 'whose-star'])
+      expect(snap.record[id]).toBeUndefined();
+    const saved = JSON.parse(globalThis.localStorage.getItem(KEY_GUIDES));
+    expect(saved['exo-fit'].earlier.torres).toEqual(
+      old['exo-fit'].record.torres
+    );
+    // Each retired step names its successor and what it asked, in both languages.
+    for (const [id, r] of Object.entries(
+      G.GUIDES.find(x => x.id === 'exo-fit').retired
+    ))
+      expect({ id, to: typeof r.to, es: typeof r.was.es }).toEqual({
+        id,
+        to: 'string',
+        es: 'string',
+      });
+    main.remove();
+    globalThis.localStorage.removeItem(KEY_GUIDES);
+  }, 30_000);
 
   test('a guide walked in the page: an answer checked, a prediction kept', async () => {
     const root = globalThis.document.createElement('details');

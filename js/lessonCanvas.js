@@ -3,11 +3,18 @@
 // lesson that declares a canvas, so every other lesson is exactly as it was.
 //   portrait  the picture is held still and described as a picture
 //   quiet     the world is emptied, the rail and the playback bar fold behind
-//             their toggles, and nothing on the page asks for the scene
+//             one More, and nothing on the page asks for the scene
 
 import { canvasAt } from './lesson/canvasKind.js';
 import { command } from './appState.js';
-import { onLocaleChange, registerMessages, t } from './i18n/index.js';
+import {
+  getLocale,
+  onLocaleChange,
+  registerMessages,
+  t,
+} from './i18n/index.js';
+import { announce } from './notify.js';
+import { wireMore } from './settingsSchema.js';
 import { EN_CANVAS } from './i18n/en.canvas.js';
 import { ES_CANVAS } from './i18n/es.canvas.js';
 import {
@@ -34,13 +41,13 @@ registerMessages('es', ES_CANVAS);
 
 const $ = id => document.getElementById(id);
 const hideObjectInspector = command('hideObjectInspector');
-const TOGGLES = '.rail-section-toggle[aria-expanded="true"]';
 
 let now = null;
 let was = null;
 let owns = false;
-let railWas = null;
-let fold = null;
+let more = null;
+/** The rail and the bar while they are in the More: element to its place. */
+const marks = new Map();
 let seen = 0;
 
 /** A portrait is a picture, so its step holds the clock as a reading step does. */
@@ -114,56 +121,38 @@ function words() {
   const name = said ? t(`inv.canvas.reset.${kind}`) : null;
   put(reset, 'aria-label', name ?? was.reset);
   put(reset, 'title', name ?? was.title);
-  if (fold) paintFold();
+  const label = more?.firstChild;
+  if (label) label.textContent = t('rail.mainControls.label');
 }
 
-/** Close the open rail section the way a reader would; leaving opens it again. */
-function railFold(on) {
-  if (on) {
-    const open = document.querySelector(TOGGLES);
-    if (!open || railWas) return;
-    railWas = open.id;
-    open.click();
-  } else if (railWas) {
-    if (!document.querySelector(TOGGLES)) $(railWas)?.click();
-    railWas = null;
-  }
-}
-
-/** The playback toggle: its name, a triangle for the state, and the state. */
-function paintFold() {
-  const open = !$('timelineBar').classList.contains('is-folded');
-  const mark = document.createElement('span');
-  mark.setAttribute('aria-hidden', 'true');
-  mark.textContent = open ? ' ▾' : ' ▸';
-  fold.replaceChildren(t('inv.canvas.playback'), mark);
-  fold.title = t('inv.canvas.playback.hint');
-  fold.setAttribute('aria-expanded', String(open));
-}
-
-/** Tuck the playback bar behind a toggle of its own: it has none. */
-function barFold(on) {
-  const bar = $('timelineBar');
-  if (!bar) return;
+/** Tuck the rail and playback bar behind one More (wireMore, surface 'stage'); put them back after. */
+function chromeFold(on) {
   if (!on) {
-    fold?.remove();
-    fold = null;
-    bar.classList.remove('is-folded');
+    for (const [el, mark] of marks) mark.replaceWith(el);
+    marks.clear();
+    more?.remove();
+    more = null;
     return;
   }
-  if (fold) return;
-  fold = document.createElement('button');
-  fold.type = 'button';
-  fold.id = 'timelineFold';
-  fold.className = 'timeline-btn timeline-fold';
-  fold.addEventListener('click', () => {
-    bar.classList.toggle('is-folded');
-    paintFold();
-  });
-  bar.prepend(fold);
-  if (bar.contains(document.activeElement)) fold.focus();
-  bar.classList.add('is-folded');
-  paintFold();
+  if (more) return;
+  more = document.createElement('details');
+  more.id = 'stageMore';
+  more.className = 'more stage-more';
+  more.append(document.createElement('summary'));
+  const body = document.createElement('div');
+  more.append(body);
+  const held = document.activeElement;
+  for (const id of ['mainControls', 'timelineBar']) {
+    const el = $(id);
+    if (!el) continue;
+    const mark = document.createComment(id);
+    el.replaceWith(mark);
+    marks.set(el, mark);
+    body.append(el);
+  }
+  document.body.append(more);
+  wireMore(more, 'stage', { say: announce, locale: getLocale });
+  if (body.contains(held)) more.firstChild.focus();
 }
 
 /**
@@ -178,8 +167,7 @@ export function enterCanvas(c, force = false) {
   if (c) document.body.dataset.lessonCanvas = c.kind;
   else delete document.body.dataset.lessonCanvas;
   if (quiet && (force || !wasQuiet)) emptyWorld();
-  railFold(quiet);
-  barFold(quiet);
+  chromeFold(quiet);
   words();
 }
 

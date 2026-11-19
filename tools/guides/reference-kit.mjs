@@ -112,7 +112,7 @@ export function periodDefaults(t) {
  * (js/observatory/fitPanel.js defaults() and spacing()), and the settings a
  * step asks for.
  */
-export function fitRequest(data, settings = {}) {
+export function fitRequest(data, settings = {}, held = {}) {
   const x0 = data.x[0];
   const span = data.x.at(-1) - x0;
   const Phi = Math.min(10, Math.max(1.2, span / 2));
@@ -121,7 +121,17 @@ export function fitRequest(data, settings = {}) {
   d.sort((a, b) => a - b);
   return {
     model: { id: 'transit-quadratic' },
-    parameters: { t0: { lo: x0, hi: x0 + Phi }, P: { lo: 1, hi: Phi } },
+    parameters: {
+      t0: { lo: x0, hi: x0 + Phi },
+      P: { lo: 1, hi: Phi },
+      // What the reader holds fixed, as the panel's table writes it.
+      ...Object.fromEntries(
+        Object.entries(held).map(([name, value]) => [
+          name,
+          { mode: 'fixed', value },
+        ])
+      ),
+    },
     settings: {
       exposure: Number((d[d.length >> 1] || 0).toPrecision(6)),
       supersample: 5,
@@ -132,14 +142,29 @@ export function fitRequest(data, settings = {}) {
   };
 }
 
-/** A transit fit as the fit panel records it: enough of its export. */
-export function fitDocument(o, settings) {
+/**
+ * A transit fit as the fit panel records it: enough of its export. `held` is
+ * what the reader holds fixed and the value it is held at; every other
+ * parameter is fitted. The document says which, and how much data it used.
+ */
+export function fitDocument(o, settings, held = {}) {
   const data = dataFrom(o);
-  const request = fitRequest(data, settings);
+  const request = fitRequest(data, settings, held);
   const fit = fitOnce(request, data);
   return {
-    data: { observation: o.id },
+    data: {
+      observation: o.id,
+      rows: data.counts.total,
+      used: data.counts.used,
+      span: data.x.length ? data.x.at(-1) - data.x[0] : 0,
+    },
     model: { id: 'transit-quadratic' },
+    parameters: Object.fromEntries(
+      ['t0', 'P', 'k', 'aRs', 'b', 'q1', 'q2'].map(name => [
+        name,
+        request.parameters[name] ?? { mode: 'fitted' },
+      ])
+    ),
     settings: request.settings,
     results: { fit },
   };

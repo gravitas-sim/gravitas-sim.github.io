@@ -43,7 +43,7 @@ const CUE_ROLE = {
   'keplers-wedges': 'eccentric',
   'transit-lab': 'planet',
   'weighing-stars-binary': 'a',
-  'galilean-resonance': 'star',
+  'galilean-resonance': 'io',
 };
 
 /** Let the canvas draw a few whole frames. */

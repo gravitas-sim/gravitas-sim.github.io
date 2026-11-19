@@ -1,0 +1,182 @@
+[
+ {
+  "depth": "core",
+  "role": "first",
+  "sid": "a-moon-that-melts",
+  "position": [
+   1,
+   7
+  ],
+  "title": "Io’s Fire",
+  "subtitle": "Tidal heating as energy per orbit, bounded by what nobody knows about Io’s interior",
+  "body": "<p class=\"inv-step-count\">Step 1 of 7 <span class=\"inv-step-kind\">read</span></p><h3 class=\"inv-step-title\">The most volcanic body we know</h3><div class=\"inv-step-body\"><p>Io is the most volcanically active body in the Solar System, and the Sun does not heat it. Jupiter does: it raises a bulge on Io, and because Io’s orbit is not quite circular the bulge rises and falls once an orbit, so Io’s rock flexes and the friction in that flexing is heat. The picture behind this activity is Jupiter with Io, the innermost of its four large moons, held still. You will predict how the heat depends on the orbit, measure it on an instrument, and then search for what Io’s interior must be like to give the heat that is observed.</p></div>",
+  "previousDisabled": true,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "graded",
+  "sid": "double-predict",
+  "position": [
+   2,
+   7
+  ],
+  "title": "Io’s Fire",
+  "subtitle": "Tidal heating as energy per orbit, bounded by what nobody knows about Io’s interior",
+  "body": "<p class=\"inv-step-count\">Step 2 of 7 <span class=\"inv-step-kind\">predict</span></p><h3 class=\"inv-step-title\">A more eccentric orbit</h3><div class=\"inv-step-body\"><p>Io’s orbit departs from a circle by an eccentricity of 0.0041, a small amount. Picture the same moon, with the same interior, on an orbit that departs twice as far.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">If Io’s eccentricity were doubled, the heating would be…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">A</span><span>twice as large</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">B</span><span>four times as large</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">C</span><span>eight times as large</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">D</span><span>unchanged</span></button></div><div class=\"inv-hints\"><div class=\"inv-hint-row\"><button type=\"button\" class=\"ui-button subtle inv-hint-btn\" data-hint=\"h1\"> I could use a hint </button></div></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "marked",
+  "sid": "double-predict",
+  "position": [
+   2,
+   7
+  ],
+  "title": "Io’s Fire",
+  "subtitle": "Tidal heating as energy per orbit, bounded by what nobody knows about Io’s interior",
+  "body": "<p class=\"inv-step-count\">Step 2 of 7 <span class=\"inv-step-kind\">predict</span></p><h3 class=\"inv-step-title\">A more eccentric orbit</h3><div class=\"inv-step-body\"><p>Io’s orbit departs from a circle by an eccentricity of 0.0041, a small amount. Picture the same moon, with the same interior, on an orbit that departs twice as far.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">If Io’s eccentricity were doubled, the heating would be…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">A</span><span>twice as large</span></button><button type=\"button\" class=\"inv-option is-chosen is-held\" data-option=\"1\" role=\"radio\" aria-checked=\"true\" disabled=\"\"><span class=\"inv-option-mark\">B</span><span>four times as large</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">C</span><span>eight times as large</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">D</span><span>unchanged</span></button></div><p class=\"inv-held\">Your answer is recorded. It stays unmarked until you reach “Your prediction and your readings”, so the experiment settles it rather than the answer key.</p><button type=\"button\" class=\"ui-button subtle\" data-change=\"\">Change answer</button><div class=\"inv-hints\"><div class=\"inv-hint-row\"><button type=\"button\" class=\"ui-button subtle inv-hint-btn\" data-hint=\"h1\"> I could use a hint </button></div></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "last",
+  "sid": "what-heat-is",
+  "position": [
+   7,
+   7
+  ],
+  "title": "Io’s Fire",
+  "subtitle": "Tidal heating as energy per orbit, bounded by what nobody knows about Io’s interior",
+  "body": "<p class=\"inv-step-count\">Step 7 of 7 <span class=\"inv-step-kind\">read</span></p><h3 class=\"inv-step-title\">What you worked out</h3><div class=\"inv-step-body\"><p>Io’s heat is the friction of a tide that rises and falls once an orbit, and it grew as the square of the eccentricity. Io, Europa and Ganymede pull on each other in a <button type=\"button\" class=\"gl-term\" data-term=\"resonance\" aria-expanded=\"false\">resonance</button> that keeps that orbit from becoming circular. For the interior, the observed heat fixed only k2&nbsp;divided by <em>Q</em>, and only to a range: you found two different pairs inside it, so the formula gives a bound and the observation picks a point inside it. What the model leaves out is the interior: a partly molten layer changes how Io flexes. A measurement that depends on k2&nbsp;alone would be needed to separate the two, and the deeper steps ask which.</p></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "quantitative",
+  "role": "first",
+  "sid": "a-moon-that-melts",
+  "position": [
+   1,
+   9
+  ],
+  "title": "Io’s Fire",
+  "subtitle": "Tidal heating as energy per orbit, bounded by what nobody knows about Io’s interior",
+  "body": "<p class=\"inv-step-count\">Step 1 of 9 <span class=\"inv-step-kind\">read</span></p><h3 class=\"inv-step-title\">The most volcanic body we know</h3><div class=\"inv-step-body\"><p>Io is the most volcanically active body in the Solar System, and the Sun does not heat it. Jupiter does: it raises a bulge on Io, and because Io’s orbit is not quite circular the bulge rises and falls once an orbit, so Io’s rock flexes and the friction in that flexing is heat. The picture behind this activity is Jupiter with Io, the innermost of its four large moons, held still. You will predict how the heat depends on the orbit, measure it on an instrument, and then search for what Io’s interior must be like to give the heat that is observed.</p></div>",
+  "previousDisabled": true,
+  "nextDisabled": false,
+  "depthState": "Depth: Quantitative"
+ },
+ {
+  "depth": "quantitative",
+  "role": "graded",
+  "sid": "double-predict",
+  "position": [
+   2,
+   9
+  ],
+  "title": "Io’s Fire",
+  "subtitle": "Tidal heating as energy per orbit, bounded by what nobody knows about Io’s interior",
+  "body": "<p class=\"inv-step-count\">Step 2 of 9 <span class=\"inv-step-kind\">predict</span></p><h3 class=\"inv-step-title\">A more eccentric orbit</h3><div class=\"inv-step-body\"><p>Io’s orbit departs from a circle by an eccentricity of 0.0041, a small amount. Picture the same moon, with the same interior, on an orbit that departs twice as far.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">If Io’s eccentricity were doubled, the heating would be…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">A</span><span>twice as large</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">B</span><span>four times as large</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">C</span><span>eight times as large</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">D</span><span>unchanged</span></button></div><div class=\"inv-hints\"><div class=\"inv-hint-row\"><button type=\"button\" class=\"ui-button subtle inv-hint-btn\" data-hint=\"h1\"> I could use a hint </button></div></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Depth: Quantitative"
+ },
+ {
+  "depth": "quantitative",
+  "role": "marked",
+  "sid": "double-predict",
+  "position": [
+   2,
+   9
+  ],
+  "title": "Io’s Fire",
+  "subtitle": "Tidal heating as energy per orbit, bounded by what nobody knows about Io’s interior",
+  "body": "<p class=\"inv-step-count\">Step 2 of 9 <span class=\"inv-step-kind\">predict</span></p><h3 class=\"inv-step-title\">A more eccentric orbit</h3><div class=\"inv-step-body\"><p>Io’s orbit departs from a circle by an eccentricity of 0.0041, a small amount. Picture the same moon, with the same interior, on an orbit that departs twice as far.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">If Io’s eccentricity were doubled, the heating would be…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">A</span><span>twice as large</span></button><button type=\"button\" class=\"inv-option is-chosen is-held\" data-option=\"1\" role=\"radio\" aria-checked=\"true\" disabled=\"\"><span class=\"inv-option-mark\">B</span><span>four times as large</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">C</span><span>eight times as large</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">D</span><span>unchanged</span></button></div><p class=\"inv-held\">Your answer is recorded. It stays unmarked until you reach “Your prediction and your readings”, so the experiment settles it rather than the answer key.</p><button type=\"button\" class=\"ui-button subtle\" data-change=\"\">Change answer</button><div class=\"inv-hints\"><div class=\"inv-hint-row\"><button type=\"button\" class=\"ui-button subtle inv-hint-btn\" data-hint=\"h1\"> I could use a hint </button></div></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Depth: Quantitative"
+ },
+ {
+  "depth": "quantitative",
+  "role": "last",
+  "sid": "what-heat-is",
+  "position": [
+   9,
+   9
+  ],
+  "title": "Io’s Fire",
+  "subtitle": "Tidal heating as energy per orbit, bounded by what nobody knows about Io’s interior",
+  "body": "<p class=\"inv-step-count\">Step 9 of 9 <span class=\"inv-step-kind\">read</span></p><h3 class=\"inv-step-title\">What you worked out</h3><div class=\"inv-step-body\"><p>Io’s heat is the friction of a tide that rises and falls once an orbit, and it grew as the square of the eccentricity. Io, Europa and Ganymede pull on each other in a <button type=\"button\" class=\"gl-term\" data-term=\"resonance\" aria-expanded=\"false\">resonance</button> that keeps that orbit from becoming circular. For the interior, the observed heat fixed only k2&nbsp;divided by <em>Q</em>, and only to a range: you found two different pairs inside it, so the formula gives a bound and the observation picks a point inside it. What the model leaves out is the interior: a partly molten layer changes how Io flexes. A measurement that depends on k2&nbsp;alone would be needed to separate the two, and the deeper steps ask which.</p></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Depth: Quantitative"
+ },
+ {
+  "depth": "advanced",
+  "role": "first",
+  "sid": "a-moon-that-melts",
+  "position": [
+   1,
+   11
+  ],
+  "title": "Io’s Fire",
+  "subtitle": "Tidal heating as energy per orbit, bounded by what nobody knows about Io’s interior",
+  "body": "<p class=\"inv-step-count\">Step 1 of 11 <span class=\"inv-step-kind\">read</span></p><h3 class=\"inv-step-title\">The most volcanic body we know</h3><div class=\"inv-step-body\"><p>Io is the most volcanically active body in the Solar System, and the Sun does not heat it. Jupiter does: it raises a bulge on Io, and because Io’s orbit is not quite circular the bulge rises and falls once an orbit, so Io’s rock flexes and the friction in that flexing is heat. The picture behind this activity is Jupiter with Io, the innermost of its four large moons, held still. You will predict how the heat depends on the orbit, measure it on an instrument, and then search for what Io’s interior must be like to give the heat that is observed.</p></div>",
+  "previousDisabled": true,
+  "nextDisabled": false,
+  "depthState": "Depth: Advanced"
+ },
+ {
+  "depth": "advanced",
+  "role": "graded",
+  "sid": "double-predict",
+  "position": [
+   2,
+   11
+  ],
+  "title": "Io’s Fire",
+  "subtitle": "Tidal heating as energy per orbit, bounded by what nobody knows about Io’s interior",
+  "body": "<p class=\"inv-step-count\">Step 2 of 11 <span class=\"inv-step-kind\">predict</span></p><h3 class=\"inv-step-title\">A more eccentric orbit</h3><div class=\"inv-step-body\"><p>Io’s orbit departs from a circle by an eccentricity of 0.0041, a small amount. Picture the same moon, with the same interior, on an orbit that departs twice as far.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">If Io’s eccentricity were doubled, the heating would be…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">A</span><span>twice as large</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">B</span><span>four times as large</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">C</span><span>eight times as large</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">D</span><span>unchanged</span></button></div><div class=\"inv-hints\"><div class=\"inv-hint-row\"><button type=\"button\" class=\"ui-button subtle inv-hint-btn\" data-hint=\"h1\"> I could use a hint </button></div></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Depth: Advanced"
+ },
+ {
+  "depth": "advanced",
+  "role": "marked",
+  "sid": "double-predict",
+  "position": [
+   2,
+   11
+  ],
+  "title": "Io’s Fire",
+  "subtitle": "Tidal heating as energy per orbit, bounded by what nobody knows about Io’s interior",
+  "body": "<p class=\"inv-step-count\">Step 2 of 11 <span class=\"inv-step-kind\">predict</span></p><h3 class=\"inv-step-title\">A more eccentric orbit</h3><div class=\"inv-step-body\"><p>Io’s orbit departs from a circle by an eccentricity of 0.0041, a small amount. Picture the same moon, with the same interior, on an orbit that departs twice as far.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">If Io’s eccentricity were doubled, the heating would be…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">A</span><span>twice as large</span></button><button type=\"button\" class=\"inv-option is-chosen is-held\" data-option=\"1\" role=\"radio\" aria-checked=\"true\" disabled=\"\"><span class=\"inv-option-mark\">B</span><span>four times as large</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">C</span><span>eight times as large</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">D</span><span>unchanged</span></button></div><p class=\"inv-held\">Your answer is recorded. It stays unmarked until you reach “Your prediction and your readings”, so the experiment settles it rather than the answer key.</p><button type=\"button\" class=\"ui-button subtle\" data-change=\"\">Change answer</button><div class=\"inv-hints\"><div class=\"inv-hint-row\"><button type=\"button\" class=\"ui-button subtle inv-hint-btn\" data-hint=\"h1\"> I could use a hint </button></div></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Depth: Advanced"
+ },
+ {
+  "depth": "advanced",
+  "role": "last",
+  "sid": "what-heat-is",
+  "position": [
+   11,
+   11
+  ],
+  "title": "Io’s Fire",
+  "subtitle": "Tidal heating as energy per orbit, bounded by what nobody knows about Io’s interior",
+  "body": "<p class=\"inv-step-count\">Step 11 of 11 <span class=\"inv-step-kind\">read</span></p><h3 class=\"inv-step-title\">What you worked out</h3><div class=\"inv-step-body\"><p>Io’s heat is the friction of a tide that rises and falls once an orbit, and it grew as the square of the eccentricity. Io, Europa and Ganymede pull on each other in a <button type=\"button\" class=\"gl-term\" data-term=\"resonance\" aria-expanded=\"false\">resonance</button> that keeps that orbit from becoming circular. For the interior, the observed heat fixed only k2&nbsp;divided by <em>Q</em>, and only to a range: you found two different pairs inside it, so the formula gives a bound and the observation picks a point inside it. What the model leaves out is the interior: a partly molten layer changes how Io flexes. A measurement that depends on k2&nbsp;alone would be needed to separate the two, and the deeper steps ask which.</p></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": "Depth: Advanced"
+ }
+]
