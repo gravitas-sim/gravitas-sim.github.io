@@ -1,5 +1,5 @@
 // Weighing the stars: content only. A live number comes from the `ctx` the engine hands a step.
-import { fixed } from '../../format.js';
+const fixed = (v, n) => (Number.isFinite(v) ? v.toFixed(n) : '');
 
 // One AU is 100 world units; both pairs are binaries the engine integrates.
 const AU = 100;
