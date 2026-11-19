@@ -146,15 +146,14 @@ describe('the error bar, in the quantitative step', () => {
     return v;
   }
 
-  const timings = { t1: 4.1, t2: 3.9, t3: 4.2, t4: 3.8 };
+  const timings = { t1: 4.1, t2: 3.9, t3: 4.2 };
 
   test('the scatter of the mean is the sample standard deviation over the root of n', () => {
     const v = values({ ...timings, sa: 0.01, sp: 0.2 });
-    expect(v.n).toBe(4);
-    const mean = 4;
-    const ss = 0.1 ** 2 + 0.1 ** 2 + 0.2 ** 2 + 0.2 ** 2;
-    expect(v.se).toBeCloseTo(Math.sqrt(ss / 3 / 4), 9);
-    expect(mean).toBe(4);
+    expect(v.n).toBe(3);
+    const mean = (4.1 + 3.9 + 4.2) / 3;
+    const ss = [4.1, 3.9, 4.2].reduce((a, x) => a + (x - mean) ** 2, 0);
+    expect(v.se).toBeCloseTo(Math.sqrt(ss / 2 / 3), 9);
   });
 
   test('one timing cannot show its own scatter', () => {

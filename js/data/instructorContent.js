@@ -2685,15 +2685,15 @@ export const INSTRUCTOR_CONTENT = {
       },
       {
         name: 'Stopwatch (steps 24–25)',
-        text: 'Mark and Stop time one or more laps; the student says how many, takes the reading and the page divides. The orbit in the stopwatch panel is computed analytically, so a lap reads 4.00 years apart from the student’s reaction time.',
+        text: 'Mark and Stop time one or more laps; the student says how many and the page divides. A lap in the panel reads 4.00 years, apart from reaction time.',
       },
       {
         name: 'Reading buttons (step 23)',
-        text: 'The panel prints both arm lengths and the star-to-star distance, and each reading button copies one into the student’s notebook with how it was taken. Students are told not to judge distances from pixels and this is how that promise is kept.',
+        text: 'Each button copies one printed distance into the notebook with how it was taken, so no one judges distances from pixels.',
       },
       {
         name: 'See-saw panel (steps 11–12, 29)',
-        text: 'Turns the mass ratio into a picture; on the last weighing step it opens with both stars equally far out and the student sets the distances from their own readings.',
+        text: 'Turns the mass ratio into a picture; on the last weighing step the student sets the distances from their own readings.',
       },
       {
         name: 'Sirius panel (step 31)',

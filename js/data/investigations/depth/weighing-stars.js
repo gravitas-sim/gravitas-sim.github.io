@@ -1,17 +1,9 @@
-// =============================================================================
-// Weighing the Stars, deeper (Prompt 72)
-// -----------------------------------------------------------------------------
-// The same pair and the same two measurements (`weigh-the-pair`): the orbit
-// size and the period the student already recorded, now with the uncertainty of
-// each carried into the mass, and the split of that mass into two.
-// =============================================================================
+// Weighing the Stars, deeper: the error bar from the student's own timings, and the split of the mass.
 
 import { fixed } from '../../../format.js';
 
 const mass = (a, p) => a ** 3 / p ** 2;
-/** The timings a student took, in order, those that are numbers. */
-const timings = v => [v.t1, v.t2, v.t3, v.t4].filter(Number.isFinite);
-/** Standard error of the mean of the timings (0 when there are fewer than two). */
+const timings = v => [v.t1, v.t2, v.t3].filter(Number.isFinite);
 const scatter = ts => {
   if (ts.length < 2) return 0;
   const mean = ts.reduce((s, x) => s + x, 0) / ts.length;
@@ -28,23 +20,19 @@ export default {
       sid: 'how-sure-is-the-total',
       after: 'weigh-the-pair',
       depth: 'quantitative',
-      decides:
-        'How many timings to take, and how wide an error bar to draw for the period and the orbit size from them.',
+      decides: 'How many timings to take, and how wide an error bar to draw.',
       type: 'measure',
       requires: ['weigh-the-pair'],
       title: 'How sure is the total?',
-      body: `Your period came from a stopwatch started and stopped by a person,
- so it is a reading, not an exact value. Time a lap again, as many
- times as you choose (at least two), and take each timing. The scatter
- of your own timings is what sets the error bar of the period.
- \n\nThe orbit size is read from the panel, so its uncertainty is how
- finely the panel prints it. Say how far off each could be.
- \n\nThen the page moves one reading at a time, on the readings you
- already took, and recomputes the mass: <em>a</em> by its error bar,
- then <em>P</em> by its. This is worked on your numbers, not by running
- the scene again. The mass is <em>a</em>³ / <em>P</em>², so a
- fractional error in <em>a</em> counts three times and one in
- <em>P</em> twice; independent errors add in quadrature.`,
+      body: `Your period came from a stopwatch started and stopped by a
+ person. Time a lap again as often as you choose (at least twice) and
+ take each timing: the scatter of your own timings sets the error bar
+ of the period. The orbit size is read from the panel, so its error bar
+ is how finely the panel prints it. Say how far off each could be.
+ \n\nThen the page moves one reading at a time on the readings you
+ already took, <em>a</em> by its error bar and <em>P</em> by its, and
+ recomputes the mass <em>a</em>³ / <em>P</em>²: a worked comparison,
+ not a new run of the scene.`,
       tool: {
         id: 'binary',
         mystery: true,
@@ -77,12 +65,6 @@ export default {
           source: { tool: 'timer' },
         },
         {
-          id: 't4',
-          label: 'Timing 4, one lap',
-          unit: 'years',
-          source: { tool: 'timer' },
-        },
-        {
           id: 'n',
           label: 'Timings taken',
           compute: v => timings(v).length,
@@ -90,7 +72,7 @@ export default {
         },
         {
           id: 'se',
-          label: 'Scatter of the mean of your timings',
+          label: 'Scatter of their mean',
           unit: 'years',
           compute: v => scatter(timings(v)),
           decimals: 3,
@@ -99,19 +81,19 @@ export default {
           id: 'sp',
           label: 'How far off P could be',
           unit: 'years',
-          hint: 'set by your own timings',
+          hint: 'from your own timings',
           want: '0.1',
         },
         {
           id: 'sa',
           label: 'How far off a could be',
           unit: 'AU',
-          hint: 'set by how finely the panel prints it',
+          hint: 'from the panel’s precision',
           want: '0.01',
         },
         {
           id: 'move_a',
-          label: 'The mass moves by this if only a is off by its error bar',
+          label: 'Mass change from a alone',
           unit: 'M☉',
           compute: (v, e) => {
             const a = e('weigh-the-pair', 'a');
@@ -122,7 +104,7 @@ export default {
         },
         {
           id: 'move_p',
-          label: 'The mass moves by this if only P is off by its error bar',
+          label: 'Mass change from P alone',
           unit: 'M☉',
           compute: (v, e) => {
             const a = e('weigh-the-pair', 'a');
@@ -165,12 +147,12 @@ export default {
           return {
             level: 'warn',
             message:
-              'Your error bar for the period is smaller than the scatter of your own timings. A bar narrower than your scatter claims more than you measured: widen it, or take more timings.',
+              'Your error bar for the period is smaller than the scatter of your own timings: it claims more than you measured. Widen it, or take more timings.',
           };
         }
         return {
           level: 'ok',
-          message: `The pair weighs ${fixed(v.m_tot, 2)} ± ${fixed(v.s_tot, 2)} solar masses. Compare the two lines above: the reading that moves the mass more is the one that limits it. Quote both the mass and its uncertainty.`,
+          message: `The pair weighs ${fixed(v.m_tot, 2)} ± ${fixed(v.s_tot, 2)} solar masses. The reading that moves the mass more is the one that limits it. Quote both numbers.`,
         };
       },
     },
@@ -178,8 +160,7 @@ export default {
       sid: 'weigh-it-with-an-error-bar',
       after: 'how-sure-is-the-total',
       depth: 'quantitative',
-      decides:
-        'How to quote the mass with the uncertainty the previous step supports.',
+      decides: 'How to quote the mass with its uncertainty.',
       type: 'question',
       kind: 'numeric',
       uncertainty: true,
@@ -204,8 +185,7 @@ export default {
       sid: 'which-measurement-limits-you',
       after: 'weigh-it-with-an-error-bar',
       depth: 'advanced',
-      decides:
-        'Which reading to improve first, from how far each one moved the mass.',
+      decides: 'Which reading to improve first.',
       type: 'question',
       kind: 'choice',
       title: 'Which measurement limits you?',
@@ -221,14 +201,13 @@ export default {
       ],
       answer: 1,
       because:
-        'The power matters, but so does how well each reading is known. The orbit size is printed to a hundredth of an AU, while a stopwatch is stopped by a hand, so the period carried most of the uncertainty; a more careful stopwatch measurement, such as timing several laps and dividing, improves the mass more than a finer ruler.',
+        'The power matters, but so does how well each reading is known. The orbit size is printed to a hundredth of an AU while a stopwatch is stopped by a hand, so the period carried most of the uncertainty; timing several laps and dividing improves the mass more than a finer ruler.',
     },
     {
       sid: 'weigh-one-star-with-an-error-bar',
       after: 'now-weigh-each-one',
       depth: 'advanced',
-      decides:
-        'How the uncertainty of the total and of the split combine into the uncertainty of one star.',
+      decides: 'How the two uncertainties combine for one star.',
       type: 'question',
       kind: 'numeric',
       uncertainty: true,

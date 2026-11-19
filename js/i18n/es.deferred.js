@@ -3897,8 +3897,8 @@ export const ES_DEFERRED = {
   'nb.stellar.limit.fitted':
     'La comparación se dibujó con cada estrella ajustada a su recuadro, así que los tamaños aparentes no son comparables.',
   // --- Words a lesson computes ----------------------------------------------
-  'lessonFn.theseReadingsDoNotFitTogether130':
-    'Estas lecturas no encajan: los dos brazos deberían sumar la distancia de estrella a estrella. Vuelve a tomarlas desde la misma pantalla.',
+  'lessonFn.theseReadingsDoNotFitTogether109':
+    'Estas lecturas no encajan: los dos brazos deberían sumar la distancia de estrella a estrella. Vuelve a tomarlas.',
   'lessonFn.theTwoArmsAddUpTo106':
     'Los dos brazos suman la distancia de estrella a estrella, como debe ser. Guarda estas lecturas para el paso de pesar.',
   'lessonFn.countWholeLapsAndTimeAt40':
@@ -3918,8 +3918,8 @@ export const ES_DEFERRED = {
     'Tres masas solares entre las dos.',
   'lessonFn.takeAtLeastTwoTimingsOne70':
     'Toma al menos dos tiempos: un solo tiempo no puede mostrarte su propia dispersión.',
-  'lessonFn.yourErrorBarForThePeriod174':
-    'Tu barra de error del periodo es menor que la dispersión de tus propios tiempos. Una barra más estrecha que tu dispersión afirma más de lo que mediste: ensánchala, o toma más tiempos.',
+  'lessonFn.yourErrorBarForThePeriod144':
+    'Tu barra de error del periodo es menor que la dispersión de tus propios tiempos: afirma más de lo que mediste. Ensánchala, o toma más tiempos.',
   'lessonFn.distancesHaveToBePositiveNumbers38':
     'Las distancias tienen que ser números positivos.',
   'lessonFn.closestApproachIsLargerThanFurthest70':

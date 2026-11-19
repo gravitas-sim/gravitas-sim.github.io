@@ -1,54 +1,18 @@
-// =============================================================================
-// Weighing the stars
-// -----------------------------------------------------------------------------
-// One lesson, lifted verbatim out of the single 8,460-line module these ten
-// used to share. Content only, no imports: every step that needs a live number
-// is handed a `ctx` by the engine, so a lesson stays a description of what is
-// being taught rather than a piece of the simulation.
-//
-// The registry in ./registry.js imports this file on demand, so opening one
-// lesson no longer pulls in the other nine. See ../investigations.js for the
-// synchronous barrel the answer-key generator, the instructor materials build
-// and the tests use.
-// =============================================================================
+// Weighing the stars: content only, no imports. A live number comes from the `ctx` the engine hands a step.
 
-// --- 4. Weighing the stars ----------------------------------------------------
-
-// -----------------------------------------------------------------------------
-// The pair on the main canvas
-// -----------------------------------------------------------------------------
-// Two stars the engine really integrates, not a diagram of two stars. That
-// distinction is the whole reason this lesson can claim to be a measurement:
-// the period a student times and the separation they read are produced by the
-// same integrator the rest of the sandbox runs on, so putting them into
-// Newton's form of Kepler's third law tests the law rather than restating a
-// number the lesson wrote down for itself.
-//
-// One AU is 100 world units here, which is the sandbox's own convention, so
-// the four-AU pair the lesson has always used is 400 units across.
+// One AU is 100 world units; both pairs are binaries the engine integrates.
 const AU = 100;
 
-/** The equal pair the first half watches: nothing to infer, everything to see. */
 const EQUAL_PAIR = {
   starPair: { m1: 2, m2: 2, separation: 4 * AU, fit: true },
 };
 
-/**
- * The unequal pair the second half weighs.
- *
- * Three solar masses and one, four AU apart - the same numbers the panel
- * instrument has always used for its mystery pair, so a student who worked
- * through the old version of this lesson gets the same answer. The masses are
- * not shown anywhere: the point is to arrive at them from the orbit.
- */
 const MYSTERY_PAIR = {
   starPair: { m1: 3, m2: 1, separation: 4 * AU, fit: true },
 };
 
 const WEIGHING = {
   id: 'weighing-stars',
-  // Its own card: the lesson stands its own pair on the canvas and opens in
-  // no scenario, so there is no scenario capture it could honestly borrow.
   thumbnail: 'images/investigations/weighing-stars.webp',
   title: 'Weighing the Stars',
   subtitle: 'Use an orbit to measure something you cannot put on a scale',
@@ -60,9 +24,6 @@ const WEIGHING = {
   depths: ['core', 'quantitative', 'advanced'],
   mathematics: 'arithmetic',
   prerequisites: [],
-  // Subject tags, for the browser's filters. A fixed vocabulary
-  // shared across the catalog rather than free text, so a filter can offer
-  // the whole set without a second list to keep in step.
   tags: ['stars', 'gravity', 'orbits'],
   lock: { placement: true, inspector: true, areaSweep: false },
   objectives: [
@@ -282,8 +243,6 @@ const WEIGHING = {
       tool: {
         id: 'binary',
         values: { m1: 2, m2: 2 },
-        // The sliders drive the pair on the canvas rather than a second pair
-        // drawn in the panel: same two stars, one set of masses.
         scene: true,
         barycenter: true,
         rows: ['masses', 'distances', 'which'],
@@ -673,7 +632,7 @@ const WEIGHING = {
           return {
             level: 'warn',
             message:
-              'These readings do not fit together: the two arms should add up to the star-to-star distance. Take them again from the same screen.',
+              'These readings do not fit together: the two arms should add up to the star-to-star distance. Take them again.',
           };
         }
         return {
@@ -696,22 +655,17 @@ const WEIGHING = {
       stage: MYSTERY_PAIR,
       type: 'measure',
       title: 'Measurement two: how long does a lap take?',
-      body: `Now time it. The panel has a stopwatch and a clock counting
-             simulated years, and the pair it is timing is the one on the
-             canvas.
-             \n\nPress <strong>Mark</strong> when Star A is somewhere easy to
-             recognize. A dotted line appears through that position. Then wait,
-             watch Star A come back to the line, and press <strong>Stop</strong>
-             the moment it crosses the line again.
-             \n\nYou decide how many laps to time before you press Stop: your
-             reaction time is the same however long you wait, so it matters
-             less over a longer timing. Say how many laps you timed, take the
-             stopwatch reading, and the period of one lap is worked out for you.
-             \n\nWhen you are happy, press <strong>Capture this orbit</strong>
-             to record the separation, both arm lengths and your timing in your
-             notebook. It marks the period as timed by you rather than taken from
-             the model, which is the difference between a measurement and a
-             prediction.`,
+      body: `Now time it. Press <strong>Mark</strong> when Star A is
+             somewhere easy to recognize: a dotted line appears through that
+             position. Watch Star A come back to the line and press
+             <strong>Stop</strong> the moment it crosses again.
+             \n\nYou decide how many laps to time. Your reaction time is the
+             same however long you wait, so it matters less over a longer
+             timing. Say how many laps you timed, take the stopwatch reading,
+             and the page works out the period of one lap.
+             \n\nPress <strong>Capture this orbit</strong> to record the
+             separation, both arms and your timing in your notebook, marked as
+             timed by you rather than taken from the model.`,
       showBarycenter: true,
       tool: {
         id: 'binary',
@@ -774,16 +728,12 @@ const WEIGHING = {
     {
       sid: 'weigh-the-pair',
       stage: MYSTERY_PAIR,
-      // "Put your two measurements in" - the separation and the period, one
-      // from each of those two screens.
       requires: ['measurement-one-how-big-is', 'measurement-two-how-long-does'],
       type: 'measure',
       title: 'Weigh the pair',
-      body: `Choose, from the readings you took, the two numbers the formula
-             needs, and put them in. The arithmetic is done for you, line by
-             line.
-             \n\nReal measurements get rounded all the time, and this one is
-             meant to be: give each number to the precision you trust.`,
+      body: `Choose, from the readings you took, the two numbers the
+             formula needs, and put them in. The arithmetic is done for you,
+             line by line.`,
       fields: [
         {
           id: 'a',
@@ -795,12 +745,12 @@ const WEIGHING = {
             {
               id: 'armA',
               factor: 0.25,
-              say: 'That matches Star A’s distance from the balance point: one star’s share of the orbit, not the whole of it. The orbit size runs from one star across to the other. Because a is cubed, this slip changes the mass by a large factor; work out how large from your own arm readings.',
+              say: 'That matches one star’s distance from the balance point, not the whole orbit. The orbit size runs from one star across to the other, and a is cubed: work out how far this slip moves the mass from your own arm readings.',
             },
             {
               id: 'armB',
               factor: 0.75,
-              say: 'That matches Star B’s distance from the balance point: one star’s share of the orbit, not the whole of it. The orbit size runs from one star across to the other. Because a is cubed, this slip changes the mass by a large factor; work out how large from your own arm readings.',
+              say: 'That matches one star’s distance from the balance point, not the whole orbit. The orbit size runs from one star across to the other, and a is cubed: work out how far this slip moves the mass from your own arm readings.',
             },
             {
               id: 'armPlusSeparation',
@@ -839,11 +789,6 @@ const WEIGHING = {
             {
               id: 'laps3',
               factor: 3,
-              say: 'That looks like the time for more than one lap. Divide your stopwatch reading by the number of laps you timed.',
-            },
-            {
-              id: 'laps4',
-              factor: 4,
               say: 'That looks like the time for more than one lap. Divide your stopwatch reading by the number of laps you timed.',
             },
             {
@@ -998,8 +943,6 @@ const WEIGHING = {
     {
       sid: 'now-weigh-each-one',
       stage: MYSTERY_PAIR,
-      // The total being shared out is the one weighed there, and the ratio is
-      // the one taken from the arms.
       requires: ['weigh-the-pair', 'back-to-the-balance-point'],
       type: 'measure',
       title: 'Now weigh each one',
@@ -1072,10 +1015,8 @@ const WEIGHING = {
               'You have them the wrong way round. Star A is the one that stays close to the balance point, which makes it the heavier of the two.',
           };
         }
-        if (
-          Number.isFinite(v.rat) &&
-          Math.abs(v.ma / v.mb - v.rat) > 0.15 * v.rat
-        ) {
+        const rat = Number.isFinite(v.rat) ? v.rat : 3;
+        if (Math.abs(v.ma / v.mb - rat) > 0.15 * rat) {
           return {
             level: 'warn',
             message:
@@ -1219,11 +1160,6 @@ const WEIGHING = {
     },
     {
       sid: 'say-how-the-weighing-worked',
-      // The lesson's central measurement is two distances and one time, and
-      // until this step nothing asked the reader to say why those three
-      // numbers are enough. A rubric is the only part of an activity that can
-      // tell the difference between a number copied off a panel and an
-      // argument.
       requires: ['now-weigh-each-one'],
       type: 'question',
       kind: 'short',

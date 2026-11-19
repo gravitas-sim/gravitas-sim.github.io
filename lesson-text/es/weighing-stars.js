@@ -280,7 +280,7 @@ export default {
     },
     'measurement-two-how-long-does': {
       title: 'Medida dos: ¿cuánto dura una vuelta?',
-      body: 'Ahora cronométralo. El panel tiene un cronómetro y un reloj que cuenta años simulados, y el par que cronometra es el del lienzo.\n\nPulsa <strong>Marcar</strong> cuando la Estrella A esté en un sitio fácil de reconocer. Aparecerá una línea de puntos por esa posición. Luego espera, mira a la Estrella A volver a la línea, y pulsa <strong>Parar</strong> en el momento en que la cruce otra vez.\n\nTú decides cuántas vueltas cronometras antes de pulsar Parar: tu tiempo de reacción es el mismo esperes lo que esperes, así que pesa menos en una medida más larga. Di cuántas vueltas cronometraste, toma la lectura del cronómetro, y el periodo de una vuelta se calcula por ti.\n\nCuando estés conforme, pulsa <strong>Capturar esta órbita</strong> para registrar la separación, las dos longitudes de brazo y tu cronometraje en tu cuaderno. Marca el periodo como cronometrado por ti y no tomado del modelo, que es la diferencia entre una medida y una predicción.',
+      body: 'Ahora cronométralo. Pulsa <strong>Marcar</strong> cuando la Estrella A esté en un sitio fácil de reconocer: aparece una línea de puntos por esa posición. Mira a la Estrella A volver a la línea y pulsa <strong>Parar</strong> en el momento en que la cruce otra vez.\n\nTú decides cuántas vueltas cronometras. Tu tiempo de reacción es el mismo esperes lo que esperes, así que pesa menos en una medida más larga. Di cuántas vueltas cronometraste, toma la lectura del cronómetro, y la página calcula el periodo de una vuelta.\n\nPulsa <strong>Capturar esta órbita</strong> para registrar la separación, los dos brazos y tu cronometraje en tu cuaderno, marcado como cronometrado por ti y no tomado del modelo.',
       tool: {
         title: 'Cronometra las vueltas',
         note: 'Pulsa Marcar, espera a que la Estrella A vuelva a la línea de puntos, y pulsa Parar. El reloj corre en años simulados.',
@@ -305,7 +305,7 @@ export default {
     },
     'weigh-the-pair': {
       title: 'Pesa el par',
-      body: 'Elige, entre las lecturas que tomaste, los dos números que necesita la fórmula, y escríbelos. La aritmética se hace por ti, línea a línea.\n\nLas medidas reales se redondean constantemente, y esta está pensada para eso: da cada número con la precisión en la que confías.',
+      body: 'Elige, entre las lecturas que tomaste, los dos números que necesita la fórmula, y escríbelos. La aritmética se hace por ti, línea a línea.',
       fields: [
         {
           label: 'Tamaño de la órbita a, de estrella a estrella',
@@ -313,10 +313,10 @@ export default {
           hint: 'de tus lecturas',
           misconceptions: [
             {
-              say: 'Eso coincide con la distancia de la Estrella A al punto de equilibrio: la parte de una estrella de la órbita, no la órbita entera. El tamaño de la órbita va de una estrella hasta la otra. Como a se eleva al cubo, este error cambia la masa en un factor grande; calcula cuánto con tus propias lecturas de los brazos.',
+              say: 'Eso coincide con la distancia de una estrella al punto de equilibrio, no con la órbita entera. El tamaño de la órbita va de una estrella hasta la otra, y a se eleva al cubo: calcula cuánto mueve la masa este error con tus propias lecturas de los brazos.',
             },
             {
-              say: 'Eso coincide con la distancia de la Estrella B al punto de equilibrio: la parte de una estrella de la órbita, no la órbita entera. El tamaño de la órbita va de una estrella hasta la otra. Como a se eleva al cubo, este error cambia la masa en un factor grande; calcula cuánto con tus propias lecturas de los brazos.',
+              say: 'Eso coincide con la distancia de una estrella al punto de equilibrio, no con la órbita entera. El tamaño de la órbita va de una estrella hasta la otra, y a se eleva al cubo: calcula cuánto mueve la masa este error con tus propias lecturas de los brazos.',
             },
             {
               say: 'Parece que se sumó un brazo a la distancia de estrella a estrella. Los dos brazos son las dos partes de esa distancia, así que sumar uno cuenta una parte dos veces.',
@@ -336,9 +336,6 @@ export default {
           misconceptions: [
             {
               say: 'Eso es más o menos media vuelta. A mitad de camino, la Estrella B está donde empezó la Estrella A. Para el cronómetro cuando la propia Estrella A vuelva a su línea.',
-            },
-            {
-              say: 'Eso parece el tiempo de más de una vuelta. Divide la lectura de tu cronómetro entre el número de vueltas que cronometraste.',
             },
             {
               say: 'Eso parece el tiempo de más de una vuelta. Divide la lectura de tu cronómetro entre el número de vueltas que cronometraste.',
