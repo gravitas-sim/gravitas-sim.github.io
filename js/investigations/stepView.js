@@ -643,6 +643,13 @@ export function bindStepInputs(h) {
   bound = h;
 
   slots.reveal?.bind(h, els.body);
+  // The orbit geometry panel belongs to the step that has the object card:
+  // where a lesson withholds the card again, the panel goes with it.
+  if (
+    state.orbitGeometry?.active &&
+    document.getElementById('objectInspector')?.style.display === 'none'
+  )
+    import('../orbitGeometryOverlay.js').then(m => m.setOrbitGeometry(false));
   els.body.querySelector('[data-change]')?.addEventListener('click', () => {
     delete h.responses()[id];
     h.save();

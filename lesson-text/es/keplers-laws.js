@@ -269,7 +269,7 @@ export default {
     },
     'check-the-estimate': {
       title: 'Compruébala con un planeta real',
-      body: 'Comprueba la estimación con el planeta cuya órbita esté más cerca de la que elegiste. Selecciona ese planeta y pulsa <strong>Tomar la lectura</strong> junto a su distancia y junto a su periodo.\n\nLa última casilla escala el periodo de ese planeta a tu distancia con la tercera ley de Kepler: un periodo crece como la distancia elevada a tres medios. ¿Cae cerca de tu estimación?',
+      body: 'Comprueba la estimación con el planeta cuya órbita esté más cerca de la que elegiste. Selecciona ese planeta y pulsa <strong>Tomar la lectura</strong> junto a su distancia y junto a su periodo.\n\nDespués usa la tercera ley de Kepler para calcular el periodo a tu distancia, escalando desde ese planeta, y ponlo en la última casilla. ¿Cae cerca de tu estimación?',
       fields: [
         { label: 'Planeta medido más cercano: distancia', unit: 'UA' },
         { label: 'Planeta medido más cercano: periodo', unit: 'años' },

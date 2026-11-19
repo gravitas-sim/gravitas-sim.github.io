@@ -26,9 +26,13 @@ const TRAPPIST_1 = {
 const SOLAR = {
   sun: { name: 'Sun' },
   mercury: { name: 'Mercury' },
+  venus: { name: 'Venus' },
   earth: { name: 'Earth' },
+  mars: { name: 'Mars' },
   jupiter: { name: 'Jupiter' },
   saturn: { name: 'Saturn' },
+  uranus: { name: 'Uranus' },
+  neptune: { name: 'Neptune' },
 };
 
 /** The readout shows four decimals of a year; half a unit is its resolution. */

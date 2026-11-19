@@ -36,9 +36,13 @@ const KEPLER_PAIR = {
 const SOLAR = {
   sun: { name: 'Sun' },
   mercury: { name: 'Mercury' },
+  venus: { name: 'Venus' },
   earth: { name: 'Earth' },
+  mars: { name: 'Mars' },
   jupiter: { name: 'Jupiter' },
   saturn: { name: 'Saturn' },
+  uranus: { name: 'Uranus' },
+  neptune: { name: 'Neptune' },
 };
 
 /** TRAPPIST-1 and the three planets the weighing step uses. */
@@ -442,6 +446,7 @@ const KEPLER = {
       bind: KEPLER_PAIR,
       type: 'predict',
       reveal: 'why-the-speed-changes',
+      time: { paused: true },
       title: 'Where does it move fastest?',
       body: `The eccentric planet's distance from its star changes all the way
              round its orbit: it swings in close and out far. Think about what
@@ -1011,7 +1016,16 @@ const KEPLER = {
               'That is outside the range of the planets in this view. Pick a distance between about 0.3 and 25 AU, in a gap between two planets you measured.',
           };
         }
-        const near = ['mercury', 'earth', 'jupiter', 'saturn']
+        const near = [
+          'mercury',
+          'venus',
+          'earth',
+          'mars',
+          'jupiter',
+          'saturn',
+          'uranus',
+          'neptune',
+        ]
           .map(r => ctx.role(r))
           .filter(Boolean)
           .map(b => ({ b, el: ctx.elements(b) }))
@@ -1055,9 +1069,9 @@ const KEPLER = {
       body: `Check the estimate against the planet whose orbit is nearest the
              one you chose. Select that planet and press <strong>Take
              reading</strong> beside its distance and beside its period.
-             \\n\\nThe last box scales that planet's period to your distance with
-             Kepler's third law: a period grows as the distance raised to the
-             power three halves. Does it land near your estimate?`,
+             \n\nThen use Kepler's third law to work out the period at your
+             distance, scaling from that planet, and put it in the last box.
+             Does it land near your estimate?`,
       fields: [
         {
           id: 'near_a',
@@ -1080,17 +1094,13 @@ const KEPLER = {
           decimals: 2,
         },
         {
-          id: 'P_scaled',
+          id: 'P_calc',
           label: 'Period at your distance, from the law',
           unit: 'yr',
-          compute: (v, earlier) =>
-            v.near_P * (earlier('pick-a-distance', 'a_new') / v.near_a) ** 1.5,
-          decimals: 2,
         },
       ],
       validate: (v, ctx) => {
-        if (![v.near_a, v.near_P, v.ratio, v.P_scaled].every(Number.isFinite))
-          return null;
+        if (![v.near_a, v.near_P, v.ratio].every(Number.isFinite)) return null;
         // One planet's two readings, not two planets'.
         const body = ctx.selected;
         const el = body && ctx.elements(body);
@@ -1108,9 +1118,43 @@ const KEPLER = {
               'That planet is more than twice as far from the star as your orbit, or less than half. The law still scales, but a nearer planet is a closer check on the estimate. Select a nearer one and take both readings again.',
           };
         }
+        if (!Number.isFinite(v.P_calc) || v.P_calc <= 0) return null;
+        // The period at the student's own distance, in the law's units.
+        const a = v.ratio * v.near_a;
+        const want = v.near_P * v.ratio ** 1.5;
+        const at = x => Math.abs(v.P_calc - x) / x <= 0.06;
+        if (at(want)) {
+          return {
+            level: 'ok',
+            message:
+              'That agrees with scaling the nearest planet’s period by the law. The law gives the same number whichever planet you scale from, which is what your table showed. Compare it with your estimate.',
+          };
+        }
+        if (at(a ** 3)) {
+          return {
+            level: 'warn',
+            message:
+              'That is the distance cubed, which is the square of the period. The law says P² = a³, so the period is the square root of that.',
+          };
+        }
+        if (at(a ** 0.5)) {
+          return {
+            level: 'warn',
+            message:
+              'That is the square root of the distance. Cube the distance first, then take the square root of the result.',
+          };
+        }
+        if (at(v.near_P * v.ratio)) {
+          return {
+            level: 'warn',
+            message:
+              'That scales the period in proportion to the distance. The law says the period grows faster than the distance: as its power three halves.',
+          };
+        }
         return {
-          level: 'ok',
-          message: `Scaled from this planet, the period at your distance is ${v.P_scaled.toFixed(2)} yr. Compare it with your estimate: the law gives the same number whichever planet you scale from, which is what your table showed.`,
+          level: 'warn',
+          message:
+            'That does not agree with scaling the nearest planet’s period by the law. Check the power the distance is raised to, and the units: the period is in years.',
         };
       },
       probe: ctx => {
@@ -1144,7 +1188,7 @@ const KEPLER = {
       bind: SOLAR,
       type: 'read',
       evidence: [
-        { step: 'check-the-estimate', field: 'P_scaled' },
+        { step: 'check-the-estimate', field: 'P_calc' },
         { step: 'check-the-estimate', field: 'near_P' },
       ],
       compare:
