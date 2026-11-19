@@ -31,6 +31,33 @@ const widgetOf = step => inputs.widgets.find(w => w.id === step.tool.id);
 const judge = (lesson, sid, step = stepOf(lesson, sid)) =>
   judgeOpening(step, widgetOf(step), map[`${lesson}/${sid}`]);
 
+// Io's Fire as 3.0 shipped it: its heating step opened at the values it asked the student to
+// read, so it is the confirmed case of an instrument that opens at the answer. The lesson has
+// since been revised, so the step is kept here as data and judged with the table row it had.
+const near = (x, want, tol) => Number.isFinite(x) && Math.abs(x - want) <= tol;
+const IO_3_0 = {
+  sid: 'heating-at-the-maximum',
+  type: 'measure',
+  fields: [
+    { id: 'power', label: 'Heating', unit: '1e13 W' },
+    { id: 'orbit', label: 'Energy in one orbit (10¹⁹ J)', unit: '' },
+  ],
+  validate: v => {
+    if (![v.power, v.orbit].every(Number.isFinite)) return null;
+    return near(v.power, 9.33, 0.1) && near(v.orbit, 1.43, 0.03)
+      ? { level: 'ok', message: 'ok' }
+      : { level: 'error', message: 'no' };
+  },
+  tool: {
+    id: 'tides-heating',
+    values: { k2: 1.5, Q: 100, e: 0.0041 },
+    hide: [],
+  },
+};
+const IO_MAP = { power: 'Heating', orbit: 'Energy in one orbit (period)' };
+const judgeIo = (step = IO_3_0, entry = IO_MAP) =>
+  judgeOpening(step, widgetOf(step), entry);
+
 describe('where an instrument opens', () => {
   const widget = {
     controls: [
@@ -97,23 +124,37 @@ describe('the way back to the start', () => {
 
 describe('the detector grades the fields the opening readouts fill', () => {
   test('Io: the heating step opens at the answer, and the controls alone say nothing', () => {
-    const step = stepOf('ios-fire', 'heating-at-the-maximum');
+    const step = IO_3_0;
     expect(step.validate(step.tool.values)).toBeNull();
-    const r = judge('ios-fire', 'heating-at-the-maximum');
+    const r = judgeIo();
     expect(r.verdict).toBe('opens-at-answer');
     expect(r.fields.power).toBeCloseTo(9.33, 2);
     expect(r.fields.orbit).toBeCloseTo(1.43, 2);
   });
 
   test('Io again, with a start declared elsewhere on the controls, is neutral', () => {
-    const step = stepOf('ios-fire', 'heating-at-the-maximum');
+    const step = IO_3_0;
     const moved = {
       ...step,
       tool: { ...step.tool, start: { k2: 0.5, Q: 300, e: 0.002 } },
     };
-    expect(judge('ios-fire', 'heating-at-the-maximum', moved).verdict).toBe(
-      'neutral'
-    );
+    expect(judgeIo(moved).verdict).toBe('neutral');
+  });
+
+  test('Io as revised: the heating step opens away from both readings, so it is neutral', () => {
+    const step = stepOf('ios-fire', 'heating-at-two-eccentricities');
+    expect(step.tool.start).toEqual({ k2: 0.8, Q: 250, e: 0.001 });
+    const r = judge('ios-fire', 'heating-at-two-eccentricities');
+    expect(r.verdict).toBe('neutral');
+    // The readout at the opening reads 1.18 x 10^12 W: its number is 1.18, in the wrong exponent.
+    expect(r.fields.p1).toBeCloseTo(1.18, 2);
+    expect(r.fields.p2).toBeCloseTo(1.18, 2);
+  });
+
+  test('Tides That Move the Moon as revised: the Q step opens at a Q that does not fit', () => {
+    const r = judge('tides-that-move-the-moon', 'match-the-recession');
+    expect(r.verdict).toBe('neutral');
+    expect(r.fields.q).toBe(40);
   });
 
   test('Measuring the Moon: the opening state is rejected, so it is neutral', () => {
@@ -141,18 +182,19 @@ describe('the detector grades the fields the opening readouts fill', () => {
   });
 
   test('a step that reads a prepared state says so and is not judged', () => {
-    const step = stepOf('ios-fire', 'heating-at-the-maximum');
+    const step = IO_3_0;
     const prepared = { ...step, prepared: true };
-    expect(judge('ios-fire', 'heating-at-the-maximum', prepared).verdict).toBe(
-      'prepared'
-    );
+    expect(judgeIo(prepared).verdict).toBe('prepared');
     const view = makeView(
       {
         id: 'ios-fire',
         steps: [{ ...prepared, sid: 'heating-at-the-maximum' }],
       },
       {},
-      { widgets: inputs.widgets, map }
+      {
+        widgets: inputs.widgets,
+        map: { 'ios-fire/heating-at-the-maximum': IO_MAP },
+      }
     );
     expect(viewFindings(view).map(f => f.rule)).not.toContain(
       'leak/opens-at-answer'
@@ -160,7 +202,7 @@ describe('the detector grades the fields the opening readouts fill', () => {
   });
 
   test('a step with no reviewed mapping is unmapped, never fine', () => {
-    const step = stepOf('ios-fire', 'heating-at-the-maximum');
+    const step = IO_3_0;
     const r = judgeOpening(step, widgetOf(step), {});
     expect(r.verdict).toBe('unmapped');
     expect(r.reason).toMatch(/power, orbit/);
@@ -171,7 +213,7 @@ describe('the detector grades the fields the opening readouts fill', () => {
   });
 
   test('a field that names a field of its own, source.tool, is read without the table', () => {
-    const step = stepOf('ios-fire', 'heating-at-the-maximum');
+    const step = IO_3_0;
     const declared = {
       ...step,
       fields: step.fields.map(f => ({
@@ -188,21 +230,29 @@ describe('the detector grades the fields the opening readouts fill', () => {
 });
 
 describe('the rule and the three lists', () => {
-  test('the rule finds Io and nothing for Measuring the Moon', () => {
-    const find = (lesson, sid) => {
-      const inv = inputs.investigations.find(i => i.id === lesson);
-      return viewFindings(
-        makeView(inv, {}, { widgets: inputs.widgets, map })
+  test('the rule finds Io as 3.0 shipped it, and nothing for the revised lesson or Measuring the Moon', () => {
+    const find = (inv, sid, table = map) =>
+      viewFindings(
+        makeView(inv, {}, { widgets: inputs.widgets, map: table })
       ).filter(f => f.rule === 'leak/opens-at-answer' && f.sid === sid).length;
-    };
-    expect(find('ios-fire', 'heating-at-the-maximum')).toBe(1);
-    expect(find('measuring-the-moon', 'mark-the-disc-width')).toBe(0);
+    const lesson = id => inputs.investigations.find(i => i.id === id);
+    expect(
+      find({ id: 'ios-fire', steps: [IO_3_0] }, 'heating-at-the-maximum', {
+        'ios-fire/heating-at-the-maximum': IO_MAP,
+      })
+    ).toBe(1);
+    expect(find(lesson('ios-fire'), 'heating-at-two-eccentricities')).toBe(0);
+    expect(find(lesson('measuring-the-moon'), 'mark-the-disc-width')).toBe(0);
   });
 
   test('the catalog sorts into opens-at-answer, neutral, unmapped and prepared', () => {
     const lists = group(judgeCatalog(inputs, map));
-    expect(lists['opens-at-answer']['ios-fire']).toEqual([
-      'heating-at-the-maximum',
+    expect(lists['opens-at-answer']['ios-fire']).toBeUndefined();
+    expect(lists.neutral['ios-fire']).toEqual([
+      'heating-at-two-eccentricities',
+    ]);
+    expect(lists.neutral['tides-that-move-the-moon']).toEqual([
+      'match-the-recession',
     ]);
     expect(lists.neutral['measuring-the-moon']).toEqual([
       'mark-the-disc-width',
@@ -222,7 +272,7 @@ describe('the rule and the three lists', () => {
         : {
             ...inv,
             steps: inv.steps.map(s =>
-              s.sid !== 'heating-at-the-maximum'
+              s.sid !== 'heating-at-two-eccentricities'
                 ? s
                 : { ...s, tool: { ...s.tool, start: { nope: 1, Q: 5000 } } }
             ),

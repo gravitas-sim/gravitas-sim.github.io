@@ -1,10 +1,6 @@
 {
   "about": "Which readout row fills which answer field, for the neutral-start detector (tools/authoring/neutralStart.mjs). Keyed by '<lesson id>/<step sid>'; each field names a row by id or by the label the student reads in English, or null where the field is not read from the instrument. A reviewed table: a step that is not here is reported unmapped, never fine.",
   "steps": {
-    "ios-fire/heating-at-the-maximum": {
-      "power": "Heating",
-      "orbit": "Energy in one orbit (period)"
-    },
     "measuring-the-moon/mark-the-disc-width": {
       "pair": "pair",
       "scale": "scale"
@@ -31,6 +27,11 @@
     "orbital-energy/write-down-the-dividing-speed": {
       "back": null,
       "gone": null
+    },
+    "tides-that-move-the-moon/match-the-recession": {
+      "q": {
+        "control": "Q"
+      }
     }
   }
 }

@@ -215,23 +215,43 @@ export const PILOTS = {
     },
   },
   'ios-fire': {
-    measureSid: 'heating-at-the-maximum',
+    // The first measure step of the revised lesson: the heating at Io's
+    // eccentricity and at twice it, with k2 and Q left where the instrument
+    // opens. The walk moves only the eccentricity, as the step asks, and reads
+    // the Heating row each time; the first option of the prediction on the way
+    // is committed by the walk's nudge.
+    measureSid: 'heating-at-two-eccentricities',
     async readings(page) {
-      const rows = await readout(page);
-      return {
-        power: (rowValue(rows, /^heating/i) / 1e13).toFixed(2),
-        orbit: (rowValue(rows, /energy in one orbit/i) / 1e19).toFixed(2),
+      const take = async e => {
+        await setTool(page, 'e', e);
+        await page.waitForTimeout(400);
+        const rows = await readout(page);
+        return (rowValue(rows, /^heating/i) / 1e13).toFixed(2);
       };
+      const p1 = await take(0.0041);
+      const p2 = await take(0.0082);
+      return { p1, p2 };
     },
   },
   'tides-that-move-the-moon': {
-    measureSid: 'the-moons-recession',
+    // The first measure step of the revised lesson: the Q that brings the
+    // Moon's recession to the measured value. The walk searches as a student
+    // does, scaling Q by the ratio of what the row reads to what it should
+    // (the recession goes as 1/Q) until it is as close as the slider allows,
+    // then takes the day's lengthening.
+    measureSid: 'match-the-recession',
     async readings(page) {
+      let q = 40;
+      for (let i = 0; i < 4; i++) {
+        const rate = rowValue(await readout(page), /recession now/i);
+        const next = Math.max(5, Math.min(200, Math.round((q * rate) / 3.82)));
+        if (next === q) break;
+        q = next;
+        await setTool(page, 'Q', q);
+        await page.waitForTimeout(400);
+      }
       const rows = await readout(page);
-      return {
-        rate: String(rowValue(rows, /recession now/i)),
-        day: String(rowValue(rows, /lengthening now/i)),
-      };
+      return { q: String(q), day: String(rowValue(rows, /lengthening now/i)) };
     },
   },
   'weighing-stars': {

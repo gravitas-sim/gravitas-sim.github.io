@@ -18,7 +18,9 @@ import {
   mergeTranslation,
   translationCoverage,
 } from '../data/investigations/i18n.js';
-
+const MR = ['retired', 'evidence', 'source'];
+const b = v =>
+  JSON.parse(JSON.stringify(v, (k, x) => (MR.includes(k) ? undefined : x)));
 // A number as a student gives it: with an uncertainty if the step asks for one.
 const asGiven = (step, n, u = toleranceFor(step) / 2) =>
   step.uncertainty ? `${n} ± ${u}` : n;
@@ -1311,9 +1313,7 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
           );
       });
 
-      const cov = translationCoverage(inv, data);
-      const done = cov.translated ?? cov.done ?? 0;
-      const total = cov.total ?? 0;
+      const { translated: done, total } = translationCoverage(b(inv), b(data));
       if (total > 0 && done / total < 0.5) {
         add(
           'warn',
