@@ -13,7 +13,7 @@
 export default {
   title: 'Pesar las estrellas',
   subtitle: 'Usa una órbita para medir algo que no puedes poner en una balanza',
-  question: '¿Cómo se puede pesar una estrella que nunca se podrá tocar?',
+  question: '¿Cómo se pesa una estrella que no se puede tocar?',
   medium: { name: 'la vista en directo' },
   duration: '35-45 min',
   level: 'Astronomía introductoria',
@@ -28,7 +28,7 @@ export default {
   steps: {
     'you-cannot-put-a-star': {
       title: 'No puedes poner una estrella en una balanza',
-      body: '¿Cómo se puede pesar una estrella que nunca se podrá tocar? Elegirás una manera de hacerlo, después la probarás en la vista en directo y tomarás tú las medidas.\n\nUna báscula de baño funciona empujando hacia arriba: súbete a ella y mide con cuánta fuerza te está tirando la Tierra hacia abajo. No existe ninguna versión de eso para una estrella, y sin embargo cualquier libro de texto de astronomía da la masa de decenas de estrellas, con dos decimales.',
+      body: '¿Cómo se pesa una estrella que no se puede tocar? Probarás un método en la vista en directo.\n\nUna báscula de baño funciona empujando hacia arriba: súbete a ella y mide con cuánta fuerza te está tirando la Tierra hacia abajo. No existe ninguna versión de eso para una estrella, y sin embargo cualquier libro de texto de astronomía da la masa de decenas de estrellas, con dos decimales.',
       tip: 'Aquí no hace falta álgebra. Leerás dos números de una pantalla y harás una división.',
     },
     'how-would-you-do-it': {

@@ -27,7 +27,7 @@ export default {
   steps: [
     {
       title: 'Tres preguntas sobre una órbita',
-      body: '¿Qué trayectoria sigue un planeta alrededor de su estrella, y qué fija lo rápido que se mueve y lo que dura su año? Lo responderás en la vista de la órbita en directo: primero predices, y después mides distancias, velocidades y años.\n\nJohannes Kepler lo respondió hace cuatrocientos años a partir de posiciones de Marte medidas sin telescopio. Por qué confió en ellas llega después de tu primera predicción.',
+      body: '¿Qué trayectoria sigue un planeta alrededor de su estrella, y qué fija lo rápido que se mueve y lo que dura su año? Lo responderás en la vista de la órbita en directo, prediciendo y midiendo.\n\nJohannes Kepler lo respondió hace cuatrocientos años a partir de posiciones de Marte medidas sin telescopio. Por qué confió en ellas llega después de tu primera predicción.',
       tip: 'Mientras una investigación está en marcha, pulsar selecciona un objeto sin abrir la ficha del inspector, y la colocación de objetos nuevos queda desactivada para que un clic accidental no altere el sistema que estás midiendo.',
     },
     {

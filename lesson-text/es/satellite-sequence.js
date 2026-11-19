@@ -163,7 +163,7 @@ export const TIDES_THAT_MOVE_THE_MOON = {
   steps: {
     'the-bulge-ahead': {
       title: 'Un abultamiento que va por delante',
-      body: '¿Por qué se aleja la Luna de la Tierra, y explica la misma marea todo el pasado de la Luna? Fijarás el único número libre del modelo de marea para que coincida con el alejamiento medido de la Luna, y después lo correrás mil millones de años hacia delante y hacia atrás para ver dónde se sostiene.\n\nLa Luna levanta un abultamiento en la Tierra, y como la Tierra gira más rápido de lo que la Luna orbita, el abultamiento se adelanta un poco a la línea hacia la Luna. Tira de la Luna hacia delante, así que la Luna gana energía y se aleja, y la Luna tira de él hacia atrás, así que el giro de la Tierra se frena. La tabla de abajo es la forma cerrada del modelo, no una simulación.',
+      body: '¿Por qué se aleja la Luna de la Tierra, y explica la misma marea todo el pasado de la Luna? Ajustarás el único número libre del modelo de marea al alejamiento medido de la Luna y lo correrás mil millones de años en cada sentido.\n\nLa Luna levanta un abultamiento en la Tierra, y como la Tierra gira más rápido de lo que la Luna orbita, el abultamiento se adelanta un poco a la línea hacia la Luna. Tira de la Luna hacia delante, así que la Luna gana energía y se aleja, y la Luna tira de él hacia atrás, así que el giro de la Tierra se frena. La tabla de abajo es la forma cerrada del modelo, no una simulación.',
     },
     'match-the-recession': {
       title: 'Elige la Q que ajusta a la Luna',
@@ -228,7 +228,7 @@ export const IOS_FIRE = {
   steps: {
     'a-moon-that-melts': {
       title: 'El cuerpo más volcánico que conocemos',
-      body: '¿De dónde viene el calor de Ío, y qué nos dice sobre el interior de Ío? Predecirás cómo depende el calor de la órbita de Ío, lo medirás en el instrumento de calentamiento de marea y después buscarás interiores que den el calor que emite Ío.\n\nÍo es el cuerpo con más actividad volcánica del sistema solar, y el Sol no lo calienta. Júpiter levanta una marea en Ío, y como la órbita de Ío no es del todo circular la marea sube y baja una vez por órbita. La imagen de fondo de esta actividad es Júpiter con Ío, la más interior de sus cuatro lunas grandes, detenida.',
+      body: '¿De dónde viene el calor de Ío, y qué nos dice sobre el interior de Ío? Lo medirás en el instrumento de calentamiento de marea, tras predecirlo, y buscarás interiores que den ese calor.\n\nÍo es el cuerpo con más actividad volcánica del sistema solar, y el Sol no lo calienta. Júpiter levanta una marea en Ío, y como la órbita de Ío no es del todo circular la marea sube y baja una vez por órbita. La imagen de fondo de esta actividad es Júpiter con Ío, la más interior de sus cuatro lunas grandes, detenida.',
     },
     'double-predict': {
       title: 'Una órbita más excéntrica',

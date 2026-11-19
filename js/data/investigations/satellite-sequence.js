@@ -549,9 +549,8 @@ export const TIDES_THAT_MOVE_THE_MOON = {
       type: 'read',
       title: 'A bulge that runs ahead',
       body: `Why is the Moon moving away from the Earth, and does the same tide explain the
-             Moon&rsquo;s whole past? You will set the one free number of the tide model so that
-             it matches the Moon&rsquo;s measured recession, then run it a billion years forward
-             and back to see where it holds.
+             Moon&rsquo;s whole past? You will fit the one free number of the tide model to the
+             Moon&rsquo;s measured recession, then run it a billion years each way.
              \n\nThe Moon raises a bulge on the Earth, and because the Earth spins faster than
              the Moon orbits, the bulge is carried a little ahead of the line to the Moon. It pulls
              the Moon forward, so the Moon gains energy and recedes, and the Moon pulls it back, so

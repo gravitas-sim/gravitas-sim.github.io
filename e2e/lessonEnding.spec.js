@@ -64,18 +64,19 @@ for (const [width, height] of SIZES)
         await openLessonStep(page, { lesson, sid, language });
         // The object list and the probes arrive after the step's text and
         // shrink the panel: measure only once its bottom has held still.
-        let [last, still] = [NaN, 0];
-        for (let i = 0; i < 40 && still < 4; i++) {
-          const bottom = await page.evaluate(
-            () =>
-              document
-                .getElementById('investigationBody')
-                .getBoundingClientRect().bottom
-          );
-          still = bottom === last ? still + 1 : 0;
-          last = bottom;
-          await page.waitForTimeout(300);
-        }
+        await page.waitForFunction(
+          () => {
+            const b = document
+              .getElementById('investigationBody')
+              .getBoundingClientRect().bottom;
+            const s = (window.__settle ??= { b: NaN, n: 0 });
+            s.n = b === s.b ? s.n + 1 : 0;
+            s.b = b;
+            return s.n >= 4;
+          },
+          null,
+          { polling: 300, timeout: 15_000 }
+        );
         const m = await page.evaluate(opening);
         const question = await page.evaluate(
           async ([id, lang]) => {
