@@ -1219,14 +1219,13 @@ export const EN = {
   'inv.browser.activities':
     'Short on time? Classroom activities are prepared teaching formats — a five-minute demonstration, a twenty-minute activity, a full lab — cut from these same investigations.',
   'inv.browser.activities.link': 'See the classroom activities',
-  'canvas.sizeDisclosure':
-    'Bodies enlarged, not to one scale (radii: inspector)',
+  'canvas.sizeDisclosure': 'Bodies enlarged, not to scale: details under Sizes',
   'canvas.reducedPopulation':
     'Reduced population on this device: {n} of {total} bodies',
   'canvas.crowdTrails':
     'Trails: the selected body and the {n} heaviest of {total} bodies',
   'canvas.sizeDisclosure.detail':
-    'Canvas diameters are illustrative. Each kind of body is enlarged by a different factor, so sizes are not to one scale and their ratios are not physical. Use the inspector and investigation measurements for radii.',
+    'Distances are drawn to one scale, the one the scale bar shows. Body sizes are not to one scale: each kind of body is enlarged by its own factor, so neither a size nor the ratio of two sizes can be read off the canvas. The Sizes button in the readout says by how much, and the inspector gives each radius.',
   'capture.screenshotFailed': 'The screenshot could not be saved',
   'chart.notReady': 'The chart is not ready yet',
   'chart.exportFailed': 'Could not export the chart',
@@ -1342,6 +1341,7 @@ export const EN = {
   'rv.survey.measurementsLabel': 'Measurements',
   'astrometry.keepObserving': 'Keep observing…',
   'lightCurve.relativeBrightness': 'Relative Brightness',
+  'rail.barycenterMarker.failed': 'Barycenter marker unavailable offline.',
   'frame.barycenter': 'Barycenter',
   'chrome.canvas.label': 'Gravitational simulation',
   'summary.scenario': 'Scenario: {name}.',

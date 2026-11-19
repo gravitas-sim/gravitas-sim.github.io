@@ -437,6 +437,75 @@ is cheap, so that the next proposal starts from the right one.
 
 ---
 
+## Orbit geometry
+
+An inspector toggle, **Orbit geometry**, off by default, draws the selected
+body's two-body ellipse about its primary: the curve, both foci, the nearest
+and farthest points, and the distance between any two of them. It replaces the
+"Stable Orbit" circle the inspector used to build once at selection and freeze.
+The primary is the source that pulls hardest on the body, chosen from the
+sources the integrator itself sums over; the ellipse is the orbit about that
+primary **if only it pulled**, and the label says so.
+
+Whether a two-body ellipse is a claim the model can make is decided in one
+place, `twoBodyModel` in `js/twoBodyModel.js`: the pair's class (each pulls the
+other, so mu = G(M+m); only the primary pulls, so mu = G M; or the primary
+does not pull on the body at all) read from the engine's own rule for what is a
+source, and whether the force is inverse-square over the distances the claim
+covers. Inside the softening length, or under MOND, it is not, and no curve is
+drawn.
+
+### Tolerances, fixed before the code
+
+Committed in `tests/fixtures/orbit-geometry-tolerances.json` before the
+module, the overlay or their tests existed. A criterion that fails is reported
+with its numbers and its bound is not moved.
+
+| | What | Bound |
+|---|---|---|
+| (a) | a, e, periapsis direction, apsis points, foci and the 240 curve points against an independent eccentric-anomaly construction, e from 0 to 0.95, four orientations, both senses | 1e-9 of a |
+| (b) | each curve point's distances to the two foci sum to 2a | 1e-9 of a |
+| (c) | `keplers-2nd-law` Eccentric Orbiter (a 143 units, e 0.65), seed 1, stepped as the page steps it at 60 frames a second (about 7,300 steps an orbit), for one period: the largest distance from the ellipse drawn at the start | 0.5 percent of a (first-order step; INFERRED). Other rates reported, not judged. If the unmodified integrator misses, that is an integrator finding and the bound stays |
+| (d) | star 1, planet 0.1, r = 100, v = 0.1, G = 1 (the world's gravitational constant set to 1), mutual gravity off: the overlay's a and e | a = 100 and e = 0 to 1e-9 (the default mu gives a = 91.67, e = 0.0909, and still does) |
+| (d) | the engine's radius over one period, Velocity Verlet at a step of 0.1 | 2 (omega dt)^2 = 2e-8 of r, the circular-start form of the reference cases (R1) |
+| (e) | reciprocal stars 1 and 0.1 at r = 1, softening 5; the same pair at r = 10 with a point-mass periapsis of 1.111; a MOND world | no curve, and the reason in words |
+| sizes | `solar-system` as built: drawn Sun to Earth radius before the marker floor | 8.0, to 1e-12 |
+
+---
+
+## Barycenter, frame and what pulls on what
+
+Three statements a binary needs before anything else can be read from it. A
+Tools toggle, **Show barycenter**, draws the mass-weighted mean position of
+either the whole system (the bodies the barycentric frame averages over,
+`barycenterBodies()` in `js/engine/step.js`) or the selected body and its
+primary (the primary as the orbit geometry overlay chooses it). It is a cross,
+not a body: nothing is there. The frame the picture is drawn in is named in the
+readout and on the canvas, with a line saying the trails are drawn in it while
+a frame other than the world is active. One line says which bodies pull on
+others and which only feel gravity, read from the same function the engine
+calls to decide what is a source, so the two cannot differ. The marker is not
+stored and changes no default, force, scenario or frame.
+
+### Tolerances, fixed before the code
+
+Committed in `tests/fixtures/barycentre-tolerances.json` before the marker,
+the frame line, the statement or their tests existed. Both scenes set the
+world's gravitational constant to 1 (the scenario's own value; the app's
+default world is 2 and the integrator's bare default is 1). The separation is
+the distance between the two stars at the moment judged. A criterion that
+fails is reported with its numbers and its bound is not moved.
+
+| | What | Bound |
+|---|---|---|
+| (a) | the marker's point against an independent mass-weighted mean (plain sums in the test, not `barycenterOf`), at five times in a run (start, then every quarter of the binary period), for the pair (selected star and its primary) and for the system, on `binary-pair` and `circumbinary-planet-lab` | 1e-9 of the separation |
+| (b) | `binary-pair` as built (seed 1), stepped as the page steps it at 60 frames a second (sim speed 4, max step 0.15), for ten periods of the pair: the largest distance of the stars' centre of mass from its starting place | 1e-6 of the initial separation. Pairwise forces from one snapshot conserve momentum to rounding, so a larger drift is an engine or build defect, recorded for the gravity-rule and black-hole work and never absorbed by widening (STOP). Other rates reported, not judged |
+| (c) | positions re-expressed in the barycentric frame (each position minus the frame's origin, over the bodies that frame averages): the length of sum m r' divided by the total mass, at the five times of (a), both scenes | 1e-9 of the separation |
+| identity | the engine's source rule moved into one pure function: every coordinate of every body after 500 steps of each scene, at 60 frames a second, against the same run before the move; `e2e/golden/world-construction.json` | bit for bit; unchanged |
+| statement | the bodies the statement says pull against the kinds in `cachedMajorSources`, under all four combinations of mutual gravity and star-only gravity, with every kind present | exact |
+
+---
+
 ## What is not done
 
 - **The inspector's derived quantities for small bodies** — density, surface

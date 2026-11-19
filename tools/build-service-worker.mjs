@@ -667,6 +667,23 @@ export const NEVER_PRECACHED = [
   // them (none yet), so an install has no use for the module or its words (the first-visit tier has little room).
   /^js\/investigations\/(reveal|evidence)\.js$/,
   /^js\/i18n\/(en|es)\.reveal\.js$/,
+  // The orbit geometry overlay and the Sizes statement (D-R4-447-08): the two lazy modules, the
+  // size facts the canvas description fetches on its first rebuild, the geometry, the two-body
+  // model and its settings reader only the overlay imports, and their words. Kept by the service
+  // worker after their first online use, not installed: the first-visit tier has almost no room
+  // under a data-budget ceiling the standing size approval does not cover.
+  /^js\/(orbitGeometry|orbitGeometryOverlay|sizeStatement|sizeFacts|twoBodyModel|twoBodySettings)\.js$/,
+  /^js\/i18n\/(en|es)\.(orbitGeometry|sizes)\.js$/,
+  // The scene's words and the Tools barycenter marker (D-R4-449-06): fetched by the canvas
+  // description's first rebuild, with the source names and their two word files; kept after
+  // their first online use, not installed, for the same reason.
+  /^js\/(sceneStatement|engine\/sources)\.js$/,
+  /^js\/i18n\/(en|es)\.scene\.js$/,
+  // The figures drawn from the model and their declaration list: fetched when a step declares
+  // one (no shipped lesson does yet), so an install has no use for them. A lesson that adopts
+  // a figure deletes this entry, so its figure works offline from the first visit.
+  /^js\/lessonFigures\.js$/,
+  /^js\/lesson\/figureSpec\.js$/,
 ];
 
 const ON_DEMAND_ONLY = new Set([

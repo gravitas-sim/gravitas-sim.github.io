@@ -53,7 +53,7 @@ const BUDGETS = [
   {
     id: 'initial',
     label: 'Initial download (CSS + eager JS)',
-    limit: 739.9,
+    limit: 741.4,
     reason:
       'Was 743 KB when this budget was first asked for. The application had ' +
       'already grown to 771 KB on its own - the extracted state module, the ' +
@@ -115,12 +115,14 @@ const BUDGETS = [
       'measurement plus 0.5%, rounded up to 0.1 KB (D-R4-311-01).' +
       '\n\nRaised from 735 to 735.3 KB for the lesson canvas, controlled runs and event window changes taken together (D-R4-TRAIN-01): a Node 22 build measures 752,868 bytes, 735.2 KB, and the limit is that figure rounded up to 0.1 KB, under the standing approval of 2026-10-10.' +
       '\n\nCrowded-scene drawing (D-R4-450-07): the trail, detail and label rules, the label choice and the tier note are start-up drawing code; raised from 735.3 to 735.8 KB, the exact overrun of a Node 22 build over v4 dc0112f6b (753,420 bytes, 735.76 KB) rounded up to 0.1 KB, under the standing approval of 2026-10-10.' +
-      '\n\nRaised from 735.8 to 739.9 KB for the overlay, Library, lesson type, instrument start, reading feedback and lesson layout changes taken together (D-R4-TRAIN-03): a Node 22 build over v4 5c9942253 measures 757,604 bytes, 739.85 KB, and the limit is that figure rounded up to 0.1 KB, under the standing approval of 2026-10-10.',
+      '\n\nRaised from 735.8 to 739.9 KB for the overlay, Library, lesson type, instrument start, reading feedback and lesson layout changes taken together (D-R4-TRAIN-03): a Node 22 build over v4 5c9942253 measures 757,604 bytes, 739.85 KB, and the limit is that figure rounded up to 0.1 KB, under the standing approval of 2026-10-10.' +
+      '\n\nOrbit geometry and sizes (D-R4-447-07): raised from 739.9 to 740.2 KB, the exact overrun of a Node 22 build over v4 6852131e7 (757,903 bytes, 740.14 KB) rounded up to 0.1 KB, under the standing approval of 2026-10-10.' +
+      '\n\nBarycenter marker, frame and source statement, and lesson figures drawn from the model, taken together (D-R4-TRAIN-04): raised from 740.2 to 741.4 KB, the measurement by CI of the combined branch (run 44415955830): 759,138 bytes (741.35 KB), rounded up to 0.1 KB. The share of the lesson figures is 69 bytes, the hook that loads them. Under the standing approval of 2026-10-10; that share was adopted as a maintainer decision of 2026-11-18 (D-R4-457-03).',
   },
   {
     id: 'deferred',
     label: 'Deferred JavaScript (lazy chunks, gzipped)',
-    limit: 3190.9,
+    limit: 3206.9,
     reason:
       'Jumped from 1369 KB to 2105 KB when three.js and Chart.js stopped being ' +
       'CDN requests and became bundled chunks. That is the point of the change ' +
@@ -722,7 +724,9 @@ const BUDGETS = [
       '\n\nA world seen close (D-R4-448-06): the limit is raised from 3183.7 to 3184.0 KB, the exact overrun of a Node 22 build over v4 1ed519a17 (3,260,367 bytes gzipped, 3183.95 KB) rounded up to 0.1 KB, under the standing approval of 2026-10-10.' +
       '\n\nCrowded-scene drawing (D-R4-450-07): the limit is raised from 3184.0 to 3184.3 KB, the exact overrun of a Node 22 build over v4 dc0112f6b (3,260,637 bytes gzipped, 3184.22 KB) rounded up to 0.1 KB, under the standing approval of 2026-10-10.' +
       '\n\nOverlay, Library, lesson type, instrument start, reading feedback and lesson layout changes taken together (D-R4-TRAIN-03): the limit is raised from 3184.3 to 3188.7 KB, the exact overrun of a Node 22 build over v4 5c9942253 (3,265,116 bytes gzipped, 3188.59 KB) rounded up to 0.1 KB plus 0.1 KB because the margin is under 50 bytes, under the standing approval of 2026-10-10.' +
-      '\n\nWeighing the Stars reworked around readings the student takes (D-R4-332-08): the limit is raised from 3188.7 to 3190.9 KB, the exact overrun of a Node 22 build over v4 6852131e7 (3,267,405 bytes gzipped, 3190.82 KB) rounded up to 0.1 KB, under the standing approval of 2026-10-10.',
+      '\n\nOrbit geometry and sizes (D-R4-447-07): the limit is raised from 3188.7 to 3199.6 KB, the exact overrun of a Node 22 build over v4 6852131e7 (3,276,315 bytes gzipped, 3199.53 KB) rounded up to 0.1 KB, under the standing approval of 2026-10-10.' +
+      '\n\nBarycenter marker, frame and source statement (D-R4-TRAIN-04): raised from 3199.6 to 3202.2 KB, a Node 22 build over v4 6852131e7 with the orbit geometry change measuring 3,278,935 bytes gzipped (3202.08 KB), rounded up to 0.1 KB plus 0.1 KB because the margin is under 50 bytes, under the standing approval of 2026-10-10.' +
+      '\n\nLesson figures drawn from the model (D-R4-TRAIN-04, D-R4-457-03), listed separately for the maintainer: raised from 3202.2 to 3206.9 KB, the measurement by CI of the combined branch (run 44415955830) at 3,283,804 bytes gzipped (3206.84 KB) rounded up to 0.1 KB. The change was asked to raise no ceiling; the raise was adopted as a maintainer decision of 2026-11-18 (D-R4-457-03).',
   },
 ];
 

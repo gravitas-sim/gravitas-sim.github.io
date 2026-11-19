@@ -149,19 +149,11 @@ export function stepMarkup(step, c) {
   if (step.type === 'wedges') {
     const n = getAreaSweepWedges();
     parts.push(
-      `<div class="inv-wedge-control">
-         <label class="inv-ecc-row" for="invWedgeCount">
-           <span>Slices</span>
-           <input type="range" id="invWedgeCount" data-wedges min="3" max="16"
-                  step="1" value="${n}" />
-           <output data-wedges-out>${n}</output>
-         </label>
-         <p class="inv-wedge-readout" data-wedges-readout></p>
-       </div>`
+      `<div class="inv-wedge-control"><label class="inv-ecc-row" for="invWedgeCount"><span>Slices</span><input type="range" id="invWedgeCount" data-wedges min="3" max="16" step="1" value="${n}" /><output data-wedges-out>${n}</output></label><p class="inv-wedge-readout" data-wedges-readout></p></div>`
     );
   }
 
-  if (step.figure) {
+  if (step.figure && !step.figure.from) {
     const f = step.figure;
     // Credit is part of the block rather than a footnote: these are other
     // people's photographs, used under licenses that require naming them.
@@ -177,22 +169,13 @@ export function stepMarkup(step, c) {
       .filter(Boolean)
       .join(', ');
     parts.push(
-      `<figure class="inv-figure">
-         <img src="${attr(f.src)}" alt="${attr(f.alt)}" loading="lazy" decoding="async" />
-         <figcaption>
-           <span class="inv-figure-caption">${prose(f.caption)}</span>
-           ${credit ? `<span class="inv-figure-credit">${credit}</span>` : ''}
-         </figcaption>
-       </figure>`
+      `<figure class="inv-figure"><img src="${attr(f.src)}" alt="${attr(f.alt)}" loading="lazy" decoding="async" /><figcaption><span class="inv-figure-caption">${prose(f.caption)}</span>${credit ? `<span class="inv-figure-credit">${credit}</span>` : ''}</figcaption></figure>`
     );
   }
 
   if (step.quote) {
     parts.push(
-      `<figure class="inv-quote">
-         <blockquote>${prose(step.quote.text)}</blockquote>
-         <figcaption>${escape(step.quote.by)}</figcaption>
-       </figure>`
+      `<figure class="inv-quote"><blockquote>${prose(step.quote.text)}</blockquote><figcaption>${escape(step.quote.by)}</figcaption></figure>`
     );
   }
 
@@ -285,17 +268,13 @@ export function stepMarkup(step, c) {
   if (boxed) parts.push(boxed);
   else if (predicted) {
     parts.push(
-      `<div class="inv-verdict ${predicted.right ? 'is-right' : 'is-wrong'}">
-         <p class="inv-verdict-head">${prose(
-           t('inv.predict.youSaid', { choice: predicted.chose })
-         )}</p>
-         <p class="inv-verdict-mark">${prose(
-           predicted.right
-             ? t('inv.predict.right')
-             : t('inv.predict.wrong', { answer: predicted.answer })
-         )}</p>
-         ${predicted.because ? `<p class="inv-because">${prose(predicted.because)}</p>` : ''}
-       </div>`
+      `<div class="inv-verdict ${predicted.right ? 'is-right' : 'is-wrong'}"><p class="inv-verdict-head">${prose(
+        t('inv.predict.youSaid', { choice: predicted.chose })
+      )}</p><p class="inv-verdict-mark">${prose(
+        predicted.right
+          ? t('inv.predict.right')
+          : t('inv.predict.wrong', { answer: predicted.answer })
+      )}</p>${predicted.because ? `<p class="inv-because">${prose(predicted.because)}</p>` : ''}</div>`
     );
   }
 
@@ -336,18 +315,7 @@ export function stepMarkup(step, c) {
       const shown = responses[`${id}:shown`] === true;
       const ready = String(saved || '').trim().length >= SHORT_ANSWER_MIN;
       parts.push(
-        `<div class="inv-short-reveal">
-           <button type="button" class="ui-button" data-reveal="${attr(id)}"
-                   ${shown ? 'hidden' : ''} ${ready ? '' : 'disabled'}>
-             ${escape(t('inv.model.compare'))}
-           </button>
-           <span class="inv-short-hint" data-reveal-hint ${shown || ready ? 'hidden' : ''}>
-             ${escape(t('inv.model.writeFirst'))}
-           </span>
-           <div class="inv-because is-model" data-reveal-body ${shown ? '' : 'hidden'}>
-             <strong>${escape(t('inv.answer.oneGood'))}</strong> ${prose(step.because)}
-           </div>
-         </div>`
+        `<div class="inv-short-reveal"><button type="button" class="ui-button" data-reveal="${attr(id)}" ${shown ? 'hidden' : ''} ${ready ? '' : 'disabled'}>${escape(t('inv.model.compare'))}</button><span class="inv-short-hint" data-reveal-hint ${shown || ready ? 'hidden' : ''}>${escape(t('inv.model.writeFirst'))}</span><div class="inv-because is-model" data-reveal-body ${shown ? '' : 'hidden'}><strong>${escape(t('inv.answer.oneGood'))}</strong> ${prose(step.because)}</div></div>`
       );
     }
   }
@@ -363,12 +331,7 @@ export function stepMarkup(step, c) {
     if (step.formula && !Number.isFinite(step.answer))
       parts.push(`<p class="inv-hint">${escape(t('inv.formula.needs'))}</p>`);
     parts.push(
-      `<div class="inv-numeric">
-         <input type="text" inputmode="decimal" class="inv-answer-num" data-numeric="${attr(id)}"
-                value="${attr(typed[id] ?? saved ?? '')}" placeholder="${attr(numericPlaceholder(step))}" />
-         ${step.unit ? `<span class="inv-unit">${escape(step.unit)}</span>` : ''}
-         <button type="button" class="ui-button" data-check-numeric="${attr(id)}">${escape(t('inv.answer.check'))}</button>
-       </div>`
+      `<div class="inv-numeric"><input type="text" inputmode="decimal" class="inv-answer-num" data-numeric="${attr(id)}" value="${attr(typed[id] ?? saved ?? '')}" placeholder="${attr(numericPlaceholder(step))}" />${step.unit ? `<span class="inv-unit">${escape(step.unit)}</span>` : ''}<button type="button" class="ui-button" data-check-numeric="${attr(id)}">${escape(t('inv.answer.check'))}</button></div>`
     );
 
     if (graded?.status === 'unreadable') {
@@ -856,6 +819,14 @@ export function bindStepInputs(h) {
         submit();
       }
     });
+  }
+  const drawn = h.currentStep();
+  if (drawn.figure?.from) {
+    // The text the figure follows, taken now: the panel may re-render or move on before the import resolves.
+    const at = els.body.querySelector('.inv-step-body');
+    import('../lessonFigures.js')
+      .then(m => h.currentStep() === drawn && m.fill(at, drawn))
+      .catch(() => {});
   }
   if (els.body.querySelector('[data-recover]'))
     import('./recovery.js').then(m => m.fill(h, announce, getLocale, hintsFor));
