@@ -2744,7 +2744,7 @@
       ],
       "walk": "NOT RUN",
       "pr": null,
-      "hash": "17916fccd395f91afa48d6797c3c448df2c9e6e6e71e576ef9b40846cb622578"
+      "hash": "c9bc3b420c07d2ed0b1fbdaafef415e93dfe06d034ba57eee429296f5c1d8d99"
     },
     {
       "id": "investigation:l3-eclipse",
@@ -5778,7 +5778,7 @@
       "step_revisions": [],
       "walk": "NOT RUN",
       "pr": null,
-      "hash": null
+      "hash": "6d13496c03891576734f575375251649d3015f0404512e0ead2e05628fa98f51"
     },
     {
       "id": "investigation:twelve-nights",
@@ -6181,7 +6181,7 @@
       "step_revisions": [],
       "walk": "NOT RUN",
       "pr": null,
-      "hash": null
+      "hash": "4ebc920c49ee3ef3e137f613f4722be679c783aa53e68587a4dc88a509e3a279"
     },
     {
       "id": "investigation:weighing-the-stars-for-real",
