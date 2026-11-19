@@ -338,6 +338,8 @@ describe('reading a recorded light curve', () => {
     expect(flat.level).toBe('warn');
     expect(flat.message).toMatch(/almost the same mean/);
     expect(flat.message).not.toMatch(/swapped/);
+    // The same stretch twice on the floor is a baseline inside a dip.
+    expect(judge(0.9831, 0.9831).message).toMatch(/averages in part of a dip/);
   });
 
   test('a depth the stretches check accepts is never refused by the radius step', () => {

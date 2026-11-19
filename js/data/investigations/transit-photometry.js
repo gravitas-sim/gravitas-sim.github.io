@@ -136,12 +136,7 @@ const judgeStretches = (lo, hi, ok) => v => {
   const d = v.base - v.bot;
   const say = (level, message) => ({ level, message });
   if (!Number.isFinite(d)) return null;
-  if (Math.abs(d) < 3e-4)
-    return say(
-      'warn',
-      'The two stretches have almost the same mean, so there is no depth between them. Put the in-transit stretch on the floor of a dip and the other on a flat stretch between dips.'
-    );
-  if (d <= 0)
+  if (d < -3e-4)
     return say(
       'error',
       'The in-transit mean sits <em>below</em> the out-of-transit mean, so the depth has to come out positive. Check that you have not swapped the two stretches.'
@@ -150,6 +145,11 @@ const judgeStretches = (lo, hi, ok) => v => {
     return say(
       'error',
       'Your out-of-transit stretch averages in part of a dip: its mean is below the level the star holds between transits. Move it onto a flat stretch, clear of every dip.'
+    );
+  if (Math.abs(d) < 3e-4)
+    return say(
+      'warn',
+      'The two stretches have almost the same mean, so there is no depth between them. Put the in-transit stretch on the floor of a dip and the other on a flat stretch between dips.'
     );
   if (d < lo)
     return say(

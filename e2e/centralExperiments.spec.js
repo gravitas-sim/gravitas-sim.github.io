@@ -407,20 +407,25 @@ test.describe('the central experiment of each investigation', () => {
       page.evaluate(async () => {
         const m = await import('/js/lightCurve.js');
         const a = m.transitAnalysis();
-        const { x } = a.series();
-        return { a: { last: a.last }, first: x[0], end: x.at(-1) };
+        const { x, y } = a.series();
+        return { a: { last: a.last }, first: x[0], end: x.at(-1), x, y };
       });
     await expect
       .poll(
         async () => {
           const c = await curve();
-          return c.a.last && c.end - c.a.last.mid > 0.5;
+          // A secondary eclipse (the planet behind the star, 0.007 percent)
+          // is also a dip to the recorder when there is no noise: wait for a
+          // transit.
+          return (
+            c.a.last && c.a.last.depth > 0.005 && c.end - c.a.last.mid > 0.5
+          );
         },
         { timeout: 120_000, intervals: [500] }
       )
       .toBeTruthy();
     await page.getByRole('button', { name: /pause simulation/i }).click();
-    const { a, first } = await curve();
+    const { a, first, x, y } = await curve();
     const half = a.last.duration / 2;
     const groups = page.locator('#investigationBody [data-span]');
     const stretch = async (g, from, to) => {
@@ -435,16 +440,22 @@ test.describe('the central experiment of each investigation', () => {
     // A wrong decision is not accepted and gets authored words: a flat stretch
     // that runs into the dip, then a dip stretch that is only its slope.
     await stretch(0, a.last.mid - 3 * half, a.last.mid);
-    await stretch(1, a.last.mid - half * 0.2, a.last.mid + half * 0.2);
+    await stretch(1, a.last.mid - half * 0.4, a.last.mid + half * 0.4);
     await expect(check).not.toHaveClass(/is-ok/);
     await expect(check).toContainText('averages in part of a dip');
     await stretch(0, first, a.last.mid - 1.3 * half);
-    await stretch(1, a.last.mid - half * 0.98, a.last.mid - half * 0.7);
+    // The sloping side: the flat point before the dip and the points on the way
+    // into it that are under 1.2 percent down, which no floor stretch can
+    // average to (a stretch needs two points).
+    const down = i => i >= 0 && x[i] < a.last.mid && 1 - y[i] < 0.012;
+    const on = x.map((t, i) => i).filter(i => down(i) && 1 - y[i] > 0.0005);
+    expect(on.length).toBeGreaterThan(0);
+    await stretch(1, x[on[0] - 1] - 1e-6, x[on.at(-1)] + 1e-6);
     await expect(check).not.toHaveClass(/is-ok/);
     await expect(check).toContainText('sloping sides');
 
     // The decision made well: a flat stretch and a stretch from the floor.
-    await stretch(1, a.last.mid - half * 0.3, a.last.mid + half * 0.3);
+    await stretch(1, a.last.mid - half * 0.4, a.last.mid + half * 0.4);
     await expect(check).toHaveClass(/is-ok/);
     const field = f =>
       `#investigationBody [data-field="${id}:${measureSid}:${f}"]`;
@@ -460,7 +471,7 @@ test.describe('the central experiment of each investigation', () => {
       k_naive: Math.sqrt(base - bot),
     });
     await expectEvidenceRetained(page, id, measureSid, {
-      base: base.toFixed(8),
+      base: String(await page.locator(field('base')).inputValue()),
       bot: String(await page.locator(field('bot')).inputValue()),
     });
 
