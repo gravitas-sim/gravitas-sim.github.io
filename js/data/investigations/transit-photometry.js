@@ -337,7 +337,8 @@ const TRANSITS = {
       // stops the run as soon as one complete transit has been recorded and
       // Replay shows the crossing again, so the event is something to look at
       // rather than something to catch.
-      pauseAt: { kind: 'transit', auto: true, replay: true },
+      // The lesson has its own Replay: no Pause at Event panel over the scene.
+      pauseAt: { kind: 'transit', auto: true, replay: true, quiet: true },
       body: `The <strong>Light Curve</strong> panel has opened on the right. It
              plots the total brightness of everything in view against time,
              exactly what a photometer on a telescope records, and nothing else:
