@@ -72,7 +72,7 @@
         "requests": 52
       },
       "composer": {
-        "kb": 546.5,
+        "kb": 546.7,
         "requests": 31
       },
       "course-builder": {
@@ -198,7 +198,7 @@
         "requests": 3
       },
       "composer": {
-        "kb": 296.5,
+        "kb": 296.6,
         "requests": 16
       },
       "course-builder": {
