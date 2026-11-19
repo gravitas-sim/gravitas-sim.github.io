@@ -433,7 +433,7 @@ test.describe('the central experiment of each investigation', () => {
       await grp.locator('[data-bound="from"]').fill(String(from));
       await grp.locator('[data-bound="to"]').fill(String(to));
       await grp.locator('[data-take-span]').click();
-      await page.waitForTimeout(400);
+      await expect(grp.locator('[data-take-span]')).toBeEnabled();
     };
     const check = page.locator('#investigationBody .inv-check');
 

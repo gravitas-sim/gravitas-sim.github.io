@@ -334,8 +334,7 @@ export const EN_DEFERRED = {
   'exoW.preset.earthTwin.note':
     'An Earth around a Sun, seen by TESS: 84 ppm, a thirteen-hour transit, one transit a year. The longest transit here and the least detectable planet, which is worth sitting with.',
   // --- The numerical reliability check ---------------------------------------
-  // Careful wording: no string says a result is accurate, because a convergence
-  // check only supports that halving the step did not move the answer.
+  // Careful wording: no string says a result is accurate, because a convergence check only supports that halving the step did not move the answer.
   'reliability.title': 'Numerical reliability',
   'reliability.hint':
     'Runs this experiment twice over the same simulated time - once at the step the engine is taking and once at half of it - and reports which conclusions survive.',

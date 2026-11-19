@@ -21,37 +21,6 @@ const TRANSIT_LAB = {
   paused: false,
 };
 
-/**
- * What the recorded light curve says.
- *
- * A transit of this system goes past in half a second of wall clock, so asking
- * a student to read a value off the screen at the right instant measures their
- * reflexes rather than their understanding. The panel finds the transits in the
- * recording instead, which is also how the measurement is really made.
- */
-const photometry = ctx => {
-  const a = ctx.photometry();
-  const rows = [
-    { label: 'Baseline, out of transit', value: a.baseline.toFixed(6) },
-    { label: 'Complete transits recorded', value: String(a.seen) },
-  ];
-  if (a.last) {
-    rows.push({
-      label: `Transit ${a.last.seq}: bottom`,
-      value: a.last.bottom.toFixed(6),
-      emphasis: true,
-    });
-    rows.push({
-      label: `Transit ${a.last.seq}: mid-time`,
-      value: `${a.last.mid.toFixed(4)} days`,
-    });
-  } else {
-    rows.push({ label: 'Waiting for a complete transit', value: '...' });
-  }
-  rows.push({ label: 'Clock', value: `${ctx.days().toFixed(4)} days` });
-  return rows;
-};
-
 /** The last few transit times, for the step that measures a period. */
 const timing = ctx => {
   const a = ctx.photometry();
