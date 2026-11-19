@@ -252,8 +252,10 @@ test.describe('the canvas admits what it is doing', () => {
       const i18n = await import('/js/i18n/index.js');
       return i18n.t('canvas.sizeDisclosure');
     });
-    expect(text.toLowerCase()).toContain('not to one scale');
-    expect(text.toLowerCase()).toContain('inspector');
+    // The note is short, and points to where the figures are: the readout's
+    // Sizes button and its statement.
+    expect(text.toLowerCase()).toContain('not to scale');
+    expect(text).toContain('Sizes');
 
     // Two lines of ink in that corner: the scale bar with its label, and the
     // disclosure underneath it. One line means the disclosure is not there.
@@ -307,7 +309,7 @@ test.describe('the canvas admits what it is doing', () => {
     expect(strings.es.short).not.toBe(strings.en.short);
     expect(strings.es.long).not.toBe(strings.en.long);
     expect(strings.es.radiusTip).not.toBe(strings.en.radiusTip);
-    expect(strings.es.short.toLowerCase()).toContain('escala común');
+    expect(strings.es.short.toLowerCase()).toContain('no a escala');
   });
 
   test('a screenshot carries the disclosure with it', async ({ page, app }) => {

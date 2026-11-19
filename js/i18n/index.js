@@ -188,21 +188,16 @@ export const isLocaleLoaded = id => baseLoaded.has(id);
 /**
  * Merge extra messages into a locale after it has loaded.
  *
- * For strings that belong to a lazily loaded chunk. A single message object
- * cannot be code-split - esbuild follows the static import and the whole
- * catalog lands in the entry graph - so the strings for panels most visitors
- * never open live in their own module and register themselves when that panel
- * arrives.
- *
- * Idempotent, because a bridge may be asked to load twice, and additive: it
- * never removes a key, so a re-registration cannot blank a string that is
- * already on screen.
+ * For strings that belong to a lazily loaded chunk: a message object cannot be
+ * code-split, so a panel's strings live in its own module and register when it
+ * arrives. Idempotent and additive: a re-registration never blanks a string.
  *
  * @param {string} locale - Which catalog to extend
  * @param {object} messages - Ids to strings
+ * @param {boolean} [quiet] - Do not notify listeners
  * @returns {void}
  */
-export function registerMessages(locale, messages) {
+export function registerMessages(locale, messages, quiet) {
   if (!locale || !messages) return;
   registered[locale] = { ...(registered[locale] || {}), ...messages };
   // A string that was asked for before its chunk arrived was recorded as
@@ -210,11 +205,9 @@ export function registerMessages(locale, messages) {
   // genuine gap later is still reported.
   for (const id of Object.keys(messages)) missing.delete(id);
 
-  // Tell everything that shows text, exactly as a language change would.
-  // Whether a panel rendered before or after its own strings arrived is a race
-  // a lesson, a share link or a test can lose by driving a panel directly;
-  // announcing the change removes it. Only for the locale on screen.
-  if (locale === current) notifyLocaleListeners();
+  // Tell everything that shows text, as a language change would, so a panel
+  // that rendered before its strings arrived repaints. Only the locale on screen.
+  if (locale === current && !quiet) notifyLocaleListeners();
 }
 
 let current = DEFAULT_LOCALE;

@@ -212,7 +212,8 @@ describe('every lesson', () => {
     '%s credits every figure it uses',
     (id, inv) => {
       for (const step of inv.steps) {
-        if (!step.figure) continue;
+        // A figure drawn from the model has no photograph to credit.
+        if (!step.figure || step.figure.from) continue;
         const f = step.figure;
         // These are other people's photographs. Shipping one without its
         // author and license is a license breach, not a formatting slip.

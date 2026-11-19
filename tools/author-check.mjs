@@ -49,6 +49,11 @@ import {
   variationFindings,
 } from './authoring/variationRules.mjs';
 import {
+  FIGURE_RULE,
+  FIGURE_RULE_DESCRIPTION,
+  figureFindings,
+} from './authoring/figureRules.mjs';
+import {
   generate as generateLessonText,
   RULE_ID as STEPS_RULE,
   RULE_DESCRIPTION as STEPS_RULE_DESCRIPTION,
@@ -84,6 +89,7 @@ if (has('--rules')) {
     [MODEL_RULE]: MODEL_RULE_DESCRIPTION,
     [STEPS_RULE]: STEPS_RULE_DESCRIPTION,
     [VARIATION_RULE]: VARIATION_RULE_DESCRIPTION,
+    [FIGURE_RULE]: FIGURE_RULE_DESCRIPTION,
     // Node-only and ratcheted: a lesson may not carry more than its record
     ...STANDARD_RULES,
   })) {
@@ -187,6 +193,7 @@ for (const f of (await generateLessonText(undefined, undefined, text => text))
 // --list` names every finding by lesson and step.
 findings.push(...(await ratchetFindings(inputs)));
 findings.push(...variationFindings(inputs));
+findings.push(...figureFindings(inputs));
 
 const only = value('lesson');
 if (only) {

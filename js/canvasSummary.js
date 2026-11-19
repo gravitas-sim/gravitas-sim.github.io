@@ -20,7 +20,7 @@ import {
   bh_list,
   galaxies,
 } from './physics.js';
-import { t } from './i18n/index.js';
+import { t, onLocaleChange } from './i18n/index.js';
 import { lightingNotes } from './bodyDraw.js';
 import { drawnLabels } from './bodyLabels.js';
 import { crowdNotes } from './bodyDrawSky.js';
@@ -28,6 +28,61 @@ import { crowdNotes } from './bodyDrawSky.js';
 // For the inspector's Appearance disclosure, which loads lazily and must not
 // import the drawing modules itself (js/inspectorView.js says why).
 registerCommands({ lightingNotes });
+let sizes = 0;
+let scene = null;
+export function loadSceneWords() {
+  if (typeof scene?.frameLine === 'function') return Promise.resolve(scene);
+  if (!scene)
+    scene = import('./sceneStatement.js').then(
+      m => (scene = m),
+      err => {
+        scene = null;
+        throw err;
+      }
+    );
+  return scene;
+}
+
+export const sceneWords = (load = false) => {
+  if (load) loadSceneWords().catch(() => {});
+  return typeof scene?.frameLine === 'function' ? scene : null;
+};
+
+let deferred = false;
+// Fetched 3 s after the splash, at idle: after the route is usable.
+function deferSceneWords() {
+  if (deferred || !window.splashScreenEnded) return;
+  deferred = true;
+  // Not installed, so not fetched on its own offline: asked again on the next rebuild.
+  const go = () => (navigator.onLine ? sceneWords(true) : (deferred = false));
+  setTimeout(
+    () =>
+      window.requestIdleCallback
+        ? window.requestIdleCallback(go, { timeout: 2000 })
+        : go(),
+    3000
+  );
+}
+const sizeModule = () => {
+  if (!sizes && navigator.onLine)
+    sizes = import('./sizeFacts.js')
+      .then(m => {
+        sizes = m;
+        labelSizesButton();
+        onLocaleChange(labelSizesButton);
+      })
+      .catch(() => {});
+  return typeof sizes.sizeSentence === 'function' ? sizes : null;
+};
+
+// Shown once the size facts' words are here.
+function labelSizesButton() {
+  const btn = document.getElementById('readoutSizes');
+  if (btn) {
+    btn.textContent = t('sizes.button');
+    btn.hidden = false;
+  }
+}
 import { scenarioTitle } from './i18n/scenario.js';
 
 /** A scenario id, as opposed to 'None', the sentinel for a hand-built world. */
@@ -138,6 +193,15 @@ export function summaryText() {
 
   // Where the description stops and the interface takes over. A reader who
   // wants numbers should be told they exist and where.
+  deferSceneWords();
+  const words = sceneWords();
+  if (words)
+    parts.push(
+      `${words.frameLine()}.`,
+      words.markerSentence(),
+      words.sourcesStatement()
+    );
+
   parts.push(t('summary.readoutPointer'));
 
   // And the one thing the drawing is not telling the truth about. The canvas
@@ -145,8 +209,26 @@ export function summaryText() {
   // see the canvas gets the whole explanation, because for them this is the
   // only place it appears.
   parts.push(t('canvas.sizeDisclosure.detail'));
+  const facts = sizeModule()?.sizeSentence(
+    [...stars, ...planets, ...gas_giants, ...asteroids, ...comets],
+    selected
+  );
+  if (facts) parts.push(facts);
 
-  return parts.join(' ');
+  if (state.orbitGeometry?.active && state.orbitGeometry.summary) {
+    parts.push(state.orbitGeometry.summary);
+  }
+
+  return parts.filter(Boolean).join(' ');
+}
+
+function wireSizesButton() {
+  const btn = document.getElementById('readoutSizes');
+  btn?.addEventListener('click', () =>
+    import('./sizeStatement.js')
+      .then(m => m.openSizeStatement(btn))
+      .catch(() => announce(t('sizes.offline')))
+  );
 }
 
 /** The three facts a reader is interrupted for. */
@@ -185,7 +267,10 @@ function announceChanges() {
  * @param {number} [now] - Timestamp, for testing
  */
 export function updateCanvasSummary(now = Date.now()) {
-  if (!el) el = document.getElementById('canvasSummary');
+  if (!el) {
+    el = document.getElementById('canvasSummary');
+    wireSizesButton();
+  }
   if (!el) return;
 
   // The throttle exists to stop the sentence being rebuilt sixty times a

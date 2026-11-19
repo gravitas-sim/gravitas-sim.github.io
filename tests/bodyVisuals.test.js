@@ -13,6 +13,16 @@
 // =============================================================================
 
 import { describe, test, expect, beforeEach } from '@jest/globals';
+import { sizeFacts, familyRows } from '../js/sizeFacts.js';
+import { DISPLAY_FACTOR } from '../js/bodyVisuals.js';
+import { build as buildScenario } from '../tools/tides-scenarios.mjs';
+import * as enginePhysics from '../js/physics.js';
+import {
+  AU_METERS,
+  EARTH_RADIUS_M,
+  SOLAR_RADIUS_M,
+  SIM_UNITS_PER_AU,
+} from '../js/constants.js';
 import {
   LOD,
   LOD_POINT_MAX_PX,
@@ -381,5 +391,81 @@ describe('the sprite cache', () => {
     spriteFor('halo', { r: 1, g: 2, b: 3 }, 12, () => {});
     clearVisualCaches();
     expect(spriteCacheSize()).toBe(0);
+  });
+});
+
+// The Sizes statement (js/sizeFacts.js): every figure read from the body the
+// world built, checked here against the constants it is made of.
+describe('size facts, from the built solar-system', () => {
+  let sol;
+  let earth;
+  let jupiter;
+  beforeEach(() => {
+    buildScenario('solar-system', 1);
+    const all = [
+      ...enginePhysics.stars,
+      ...enginePhysics.planets,
+      ...enginePhysics.gas_giants,
+    ];
+    sol = all.find(b => b.name === 'Sol');
+    earth = all.find(b => b.name === 'Earth');
+    jupiter = all.find(b => b.name === 'Jupiter');
+  });
+
+  test('the drawn Sun is 8.0 Earths across before the marker floor', () => {
+    expect(sol.radius).toBe(15);
+    const s = sizeFacts(sol);
+    const e = sizeFacts(earth);
+    expect(s.drawnUnits).toBe(15 * DISPLAY_FACTOR.Star);
+    expect(e.drawnUnits).toBe(earth.radius * DISPLAY_FACTOR.Planet);
+    expect(Math.abs(s.drawnUnits / e.drawnUnits - 8)).toBeLessThanOrEqual(
+      1e-12
+    );
+  });
+
+  test('how much bigger than real, from the constants', () => {
+    const s = sizeFacts(sol);
+    const e = sizeFacts(earth);
+    const auUnits = SIM_UNITS_PER_AU;
+    // Earth: the inspector's one Earth radius per PLANET_RADIUS of model.
+    const earthReal =
+      (earth.radius / 5) * (EARTH_RADIUS_M / AU_METERS) * auUnits;
+    expect(e.modelOverReal).toBeCloseTo(earth.radius / earthReal, 9);
+    expect(e.drawnOverReal).toBeCloseTo(
+      (earth.radius * DISPLAY_FACTOR.Planet) / earthReal,
+      9
+    );
+    expect(Math.round(e.drawnOverReal)).toBeGreaterThan(430);
+    expect(Math.round(e.drawnOverReal)).toBeLessThan(450);
+    // Sol's photosphere is its stellar description's, about one solar radius.
+    const solReal = (s.realAu * AU_METERS) / SOLAR_RADIUS_M;
+    expect(solReal).toBeGreaterThan(0.9);
+    expect(solReal).toBeLessThan(1.1);
+    expect(s.drawnOverReal).toBeCloseTo(15 / (s.realAu * auUnits), 9);
+    expect(s.drawnOverReal).toBeGreaterThan(29);
+    expect(s.drawnOverReal).toBeLessThan(36);
+    // The collision radius is the model radius.
+    expect(s.collisionRadius).toBe(15);
+    expect(sizeFacts(jupiter).family).toBe('GasGiant');
+  });
+
+  test('one row per family present; holes, galaxies and debris state no size', () => {
+    const rows = familyRows([sol, earth, jupiter, earth]);
+    expect(rows.map(r => [r.family, r.count])).toEqual([
+      ['Star', 1],
+      ['Planet', 2],
+      ['GasGiant', 1],
+    ]);
+    for (const kind of ['BlackHole', 'Galaxy', 'Debris'])
+      expect(sizeFacts({ kind, radius: 3 }).notModelled).toBe(true);
+    expect(sizeFacts({ kind: 'Asteroid', radius: 2 }).realAu).toBe(null);
+  });
+
+  test('the drawn radius in pixels carries the floor; a stage radius replaces the drawing', () => {
+    const e = sizeFacts(earth, undefined, { zoom: 0.01 });
+    expect(e.drawnPx).toBe(2.75);
+    const staged = sizeFacts({ ...earth, kind: 'Planet', stageRadius: 40 });
+    expect(staged.drawnUnits).toBe(40);
+    expect(staged.modelRadius).toBe(earth.radius);
   });
 });
