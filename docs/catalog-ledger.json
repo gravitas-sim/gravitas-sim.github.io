@@ -2566,8 +2566,8 @@
         "js/data/investigations/es/keplers-laws.js"
       ],
       "instrument_files": [],
-      "depths": { "core": 23, "quantitative": 3, "advanced": 2 },
-      "spanish_steps": { "core": 23, "deeper": 5 },
+      "depths": { "core": 26, "quantitative": 3, "advanced": 3 },
+      "spanish_steps": { "core": 26, "deeper": 6 },
       "languages": ["en", "es"],
       "sequences": [{ "id": "gravity-and-orbits", "position": 0 }],
       "courses": [
@@ -2580,22 +2580,86 @@
       "scene_class": "setup scenario",
       "limits": null,
       "open_items": [],
-      "questions": { "Q1": "", "Q2": "", "Q3": "", "Q4": "", "Q5": "" },
-      "leak": {
-        "L1": "HOLDS: no field cue or step placeholder holds a numeral at any depth, in either language, and the panel renders none that does (tests/fieldCue.test.js); the expected value is the field's `want`, which no page reads.",
-        "L2": "",
-        "L3": "",
-        "L4": "",
-        "L5": ""
+      "questions": {
+        "Q1": "The student finds where the star sits (a second focus drawn by the orbit geometry panel, checked against two distances they take), where the planet is fastest (two speeds at the apsides) and how period depends on distance (five or more planets of their own), none of which a paragraph could show.",
+        "Q2": "The scene opens paused with a ring on the star; the step with the panel says which points to choose and which readings to take; the wedges stay off until their step and the first law is named only at its reveal.",
+        "Q3": "Readings are the probe's own printed rows (peri, apo, speed, dist, a, P) taken with provenance; the panel's distance and the implied one are the same number; plot points are the planets by name.",
+        "Q4": "The student decides which two panel points to measure between, when to take each speed, which five or more planets to measure across the range, which distance to predict and which planet to scale from, and when to stop taking repeat readings; each can be made badly and gets authored feedback.",
+        "Q5": "Quantitative: how many repeat timings (3 to 6) and the error bar responding; advanced: the size of the miss of Kepler's form for TRAPPIST-1g in parts per million."
       },
-      "task_rule_items": [],
-      "editorial": "OPEN",
-      "redesign": "OPEN",
-      "reason": "Corrections I reworded steps for factual consistency (register D-R4-300-12); editorial pass still OPEN.",
-      "step_revisions": [],
+      "leak": {
+        "L1": "HOLDS: no field cue or step placeholder holds a numeral; the expected value is the field's `want`, which no page reads.",
+        "L2": "HOLDS: the reading fields start empty, the orbit geometry panel starts off and closes when the step ends.",
+        "L3": "HOLDS: the star, the fastest point and the third-law estimate are predicted before any body states the first law, the second law or the exponent (tests/keplersLawsPilot.test.js); the wedges are refused until their step.",
+        "L4": "HOLDS: no body works the period; hints locate and never compute.",
+        "L5": "HOLDS: the readout, the verdict box and the instructor text visible to students carry no held answer before the reveal step. The one finding left is weighing-another-star, which states its input mass in a body (recorded, not part of this pilot)."
+      },
+      "task_rule_items": [
+        "T1: every printed distance and speed is captured with provenance; the separation of the foci is read from the panel as a decision.",
+        "T2: the star, fastest-point and period predictions return at their reveal steps beside the readings.",
+        "T3: one controlled run of one planet around two star masses.",
+        "T4: an orbit nobody measured is predicted, then checked against the nearest planet.",
+        "T5: authored feedback for the wrong panel points, the centre of the ellipse, a reading from the wrong body, and a period without the square root."
+      ],
+      "editorial": "REVISED",
+      "redesign": "REVISED",
+      "reason": "The task changed (retired steps with successors): the student finds the foci, the fastest point and the exponent from their own readings.",
+      "step_revisions": [
+        {
+          "sid": "find-the-foci",
+          "from": "measure-the-two-orbits",
+          "change": "REVISED: two distances are taken and the second focus is found with the orbit geometry panel."
+        },
+        {
+          "sid": "where-is-the-star",
+          "change": "REWORDED: foci defined without saying where the star is; reveal moves to the first-law step."
+        },
+        {
+          "sid": "where-does-it-move-fastest",
+          "change": "REWORDED: the second law is no longer stated in the question."
+        },
+        {
+          "sid": "fast-and-slow-in-numbers",
+          "change": "REWORDED: readings taken by button; the periapsis watch arms itself."
+        },
+        {
+          "sid": "measure-four-planets",
+          "change": "REWORDED: at least five planets, the row that disagrees is named; every planet is in the object list."
+        },
+        {
+          "sid": "pick-a-distance",
+          "from": "use-the-law",
+          "change": "NEW: the student chooses an orbit nobody measured."
+        },
+        {
+          "sid": "estimate-the-year",
+          "change": "NEW: a held numeric estimate."
+        },
+        {
+          "sid": "check-the-estimate",
+          "change": "NEW: the estimate is checked against the nearest measured planet."
+        },
+        {
+          "sid": "compare-the-estimate",
+          "change": "NEW: the estimate beside the law's period."
+        },
+        {
+          "sid": "what-the-constant-depends-on",
+          "change": "REWORDED: a controlled run replaces the unaided choice."
+        },
+        {
+          "sid": "time-it-until-sure",
+          "from": "repeat-the-timing",
+          "change": "REVISED (deeper): three to six readings, the student decides when to stop."
+        },
+        {
+          "sid": "size-of-the-miss",
+          "change": "NEW (deeper): the size of Kepler's miss for TRAPPIST-1g."
+        }
+      ],
       "walk": "NOT RUN",
       "pr": null,
-      "hash": null
+      "hash": "69d804ba623bd9c88f82799cc2d3a67abb159f188fecf6c895232125be0d1899"
     },
     {
       "id": "investigation:l3-eclipse",

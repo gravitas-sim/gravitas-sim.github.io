@@ -18,7 +18,7 @@ Rows by kind: activity 6, course 6, experiment 4, investigation 146, sequence 11
 
 Baseline (measured at f9277ff8): 146 investigations (124 lessons, 10 Observatory, 9 3-D, 3 mission), 6 activity entries, 4 bench labs, 7 courses (6 rows and 1 out of scope), 11 sequences, 69 scenarios (61 sandbox, 8 3-D lab), 16 datasets.
 
-Editorial: OPEN 173. Redesign: OPEN 173. Scenario dispositions: OPEN 69.
+Editorial: OPEN 172, REVISED 1. Redesign: OPEN 172, REVISED 1. Scenario dispositions: OPEN 69.
 
 Scene class of the lessons: portrait or backdrop 94, setup scenario 26, engine-integrated stage 2, model-owned stage 2.
 
@@ -74,7 +74,7 @@ Scene class of the lessons: portrait or backdrop 94, setup scenario 26, engine-i
 | `investigation:inside-a-star`                        | lesson      |   379 | FOCUSED  | portrait or backdrop    | OPEN      | OPEN     | NOT RUN | -                                     |          0 |
 | `investigation:integrators-in-practice`              | lesson      |   362 | REDESIGN | setup scenario          | OPEN      | OPEN     | NOT RUN | leg A8 left failing                   |          0 |
 | `investigation:ios-fire`                             | lesson      |   331 | REDESIGN | portrait or backdrop    | OPEN      | OPEN     | NOT RUN | -                                     |          0 |
-| `investigation:keplers-laws`                         | lesson      |   328 | STRONG   | setup scenario          | OPEN      | OPEN     | NOT RUN | -                                     |          0 |
+| `investigation:keplers-laws`                         | lesson      |   328 | STRONG   | setup scenario          | REVISED   | REVISED  | NOT RUN | -                                     |          0 |
 | `investigation:l3-eclipse`                           | lab3d       |   418 | STRONG   | -                       | OPEN      | OPEN     | NOT RUN | -                                     |          1 |
 | `investigation:l3-elements`                          | lab3d       |   417 | FOCUSED  | -                       | OPEN      | OPEN     | NOT RUN | -                                     |          1 |
 | `investigation:l3-frames`                            | lab3d       |   417 | FOCUSED  | -                       | OPEN      | OPEN     | NOT RUN | -                                     |          1 |

@@ -2320,7 +2320,8 @@
    "title": "Kepler's Laws",
    "lock": {
     "placement": true,
-    "inspector": true
+    "inspector": true,
+    "areaSweep": false
    },
    "steps": [
     {
@@ -2356,11 +2357,11 @@
       "rubric": false,
       "validated": false
      },
-     "worldRunning": true,
+     "worldRunning": false,
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
-      "areaSweep": "locked"
+      "areaSweep": "whole lesson"
      },
      "loop": {
       "declared": "read",
@@ -2422,11 +2423,11 @@
       "rubric": false,
       "validated": false
      },
-     "worldRunning": true,
+     "worldRunning": false,
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
-      "areaSweep": "locked"
+      "areaSweep": "whole lesson"
      },
      "loop": {
       "declared": "read",
@@ -2478,7 +2479,7 @@
       "commit-a-prediction"
      ],
      "requires": [],
-     "reveal": "measure-the-two-orbits",
+     "reveal": "the-first-law-and-the",
      "asks": {
       "choice": true,
       "numeric": false,
@@ -2486,11 +2487,11 @@
       "rubric": false,
       "validated": false
      },
-     "worldRunning": true,
+     "worldRunning": false,
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
-      "areaSweep": "locked"
+      "areaSweep": "whole lesson"
      },
      "loop": {
       "declared": "predict",
@@ -2519,202 +2520,10 @@
      ]
     },
     {
-     "sid": "the-first-law-and-the",
+     "sid": "find-the-foci",
      "index": 4,
-     "type": "read",
-     "title": "The First Law, and the anatomy of an ellipse",
-     "declares": {
-      "stage": null,
-      "bound": [
-       "star",
-       "circular",
-       "eccentric"
-      ],
-      "roles": [
-       "star",
-       "circular",
-       "eccentric"
-      ]
-     },
-     "kinds": [
-      "scene-declared"
-     ],
-     "actions": [
-      "read"
-     ],
-     "requires": [],
-     "reveal": null,
-     "asks": {
-      "choice": false,
-      "numeric": false,
-      "short": false,
-      "rubric": false,
-      "validated": false
-     },
-     "worldRunning": true,
-     "affordances": {
-      "inspector": "locked",
-      "placement": "locked",
-      "areaSweep": "locked"
-     },
-     "loop": {
-      "declared": "read",
-      "actual": [
-       "read"
-      ],
-      "handTranscribed": false,
-      "mismatch": null
-     },
-     "scene": {
-      "nameMatches": [],
-      "readsSelection": false,
-      "importsFromSelection": false,
-      "engineReads": [],
-      "mutates": [],
-      "eventWatch": null
-     },
-     "instrument": null,
-     "evidence": [],
-     "reset": [
-      "lesson locks: placement, inspector"
-     ],
-     "recovery": [
-      "wrong body: the step binds the object by name, so there is none"
-     ]
-    },
-    {
-     "sid": "change-the-shape",
-     "index": 5,
-     "type": "ellipse",
-     "title": "Change the shape",
-     "declares": {
-      "stage": null,
-      "bound": [
-       "star",
-       "circular",
-       "eccentric"
-      ],
-      "roles": [
-       "star",
-       "circular",
-       "eccentric"
-      ]
-     },
-     "kinds": [
-      "scene-declared"
-     ],
-     "actions": [
-      "read"
-     ],
-     "requires": [],
-     "reveal": null,
-     "asks": {
-      "choice": false,
-      "numeric": false,
-      "short": false,
-      "rubric": false,
-      "validated": false
-     },
-     "worldRunning": true,
-     "affordances": {
-      "inspector": "locked",
-      "placement": "locked",
-      "areaSweep": "locked"
-     },
-     "loop": {
-      "declared": "read",
-      "actual": [
-       "read"
-      ],
-      "handTranscribed": false,
-      "mismatch": null
-     },
-     "scene": {
-      "nameMatches": [],
-      "readsSelection": false,
-      "importsFromSelection": false,
-      "engineReads": [],
-      "mutates": [],
-      "eventWatch": null
-     },
-     "instrument": null,
-     "evidence": [],
-     "reset": [
-      "lesson locks: placement, inspector"
-     ],
-     "recovery": [
-      "wrong body: the step binds the object by name, so there is none"
-     ]
-    },
-    {
-     "sid": "what-sits-at-the-other",
-     "index": 6,
-     "type": "question",
-     "title": "What sits at the other focus?",
-     "declares": {
-      "stage": null,
-      "bound": [
-       "star",
-       "circular",
-       "eccentric"
-      ],
-      "roles": [
-       "star",
-       "circular",
-       "eccentric"
-      ]
-     },
-     "kinds": [
-      "scene-declared"
-     ],
-     "actions": [
-      "choose-an-option"
-     ],
-     "requires": [],
-     "reveal": null,
-     "asks": {
-      "choice": true,
-      "numeric": false,
-      "short": false,
-      "rubric": false,
-      "validated": false
-     },
-     "worldRunning": true,
-     "affordances": {
-      "inspector": "locked",
-      "placement": "locked",
-      "areaSweep": "locked"
-     },
-     "loop": {
-      "declared": "interpret",
-      "actual": [
-       "interpret"
-      ],
-      "handTranscribed": false,
-      "mismatch": null
-     },
-     "scene": {
-      "nameMatches": [],
-      "readsSelection": false,
-      "importsFromSelection": false,
-      "engineReads": [],
-      "mutates": [],
-      "eventWatch": null
-     },
-     "instrument": null,
-     "evidence": [],
-     "reset": [
-      "lesson locks: placement, inspector"
-     ],
-     "recovery": [
-      "wrong body: the step binds the object by name, so there is none"
-     ]
-    },
-    {
-     "sid": "measure-the-two-orbits",
-     "index": 7,
      "type": "measure",
-     "title": "Measure the two orbits",
+     "title": "Find the empty focus",
      "declares": {
       "stage": null,
       "bound": [
@@ -2736,8 +2545,8 @@
      ],
      "actions": [
       "record-values",
-      "select-a-body",
-      "run-the-simulation"
+      "open-a-body-inspector",
+      "select-a-body"
      ],
      "requires": [],
      "reveal": null,
@@ -2748,11 +2557,11 @@
       "rubric": false,
       "validated": true
      },
-     "worldRunning": true,
+     "worldRunning": false,
      "affordances": {
-      "inspector": "locked",
+      "inspector": "this step",
       "placement": "locked",
-      "areaSweep": "locked"
+      "areaSweep": "whole lesson"
      },
      "loop": {
       "declared": "measure",
@@ -2793,6 +2602,198 @@
      ]
     },
     {
+     "sid": "the-first-law-and-the",
+     "index": 5,
+     "type": "read",
+     "title": "The First Law, and the anatomy of an ellipse",
+     "declares": {
+      "stage": null,
+      "bound": [
+       "star",
+       "circular",
+       "eccentric"
+      ],
+      "roles": [
+       "star",
+       "circular",
+       "eccentric"
+      ]
+     },
+     "kinds": [
+      "scene-declared"
+     ],
+     "actions": [
+      "read"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "whole lesson"
+     },
+     "loop": {
+      "declared": "read",
+      "actual": [
+       "read"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the step binds the object by name, so there is none"
+     ]
+    },
+    {
+     "sid": "change-the-shape",
+     "index": 6,
+     "type": "ellipse",
+     "title": "Change the shape",
+     "declares": {
+      "stage": null,
+      "bound": [
+       "star",
+       "circular",
+       "eccentric"
+      ],
+      "roles": [
+       "star",
+       "circular",
+       "eccentric"
+      ]
+     },
+     "kinds": [
+      "scene-declared"
+     ],
+     "actions": [
+      "read"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "whole lesson"
+     },
+     "loop": {
+      "declared": "read",
+      "actual": [
+       "read"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the step binds the object by name, so there is none"
+     ]
+    },
+    {
+     "sid": "what-sits-at-the-other",
+     "index": 7,
+     "type": "question",
+     "title": "What sits at the other focus?",
+     "declares": {
+      "stage": null,
+      "bound": [
+       "star",
+       "circular",
+       "eccentric"
+      ],
+      "roles": [
+       "star",
+       "circular",
+       "eccentric"
+      ]
+     },
+     "kinds": [
+      "scene-declared"
+     ],
+     "actions": [
+      "choose-an-option"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": true,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "whole lesson"
+     },
+     "loop": {
+      "declared": "interpret",
+      "actual": [
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the step binds the object by name, so there is none"
+     ]
+    },
+    {
      "sid": "where-does-it-move-fastest",
      "index": 8,
      "type": "predict",
@@ -2817,7 +2818,7 @@
       "commit-a-prediction"
      ],
      "requires": [],
-     "reveal": "watch-it-happen",
+     "reveal": "why-the-speed-changes",
      "asks": {
       "choice": true,
       "numeric": false,
@@ -2825,11 +2826,11 @@
       "rubric": false,
       "validated": false
      },
-     "worldRunning": true,
+     "worldRunning": false,
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
-      "areaSweep": "locked"
+      "areaSweep": "whole lesson"
      },
      "loop": {
       "declared": "predict",
@@ -2882,7 +2883,6 @@
      ],
      "actions": [
       "select-a-body",
-      "run-the-simulation",
       "tick-a-checklist"
      ],
      "requires": [],
@@ -2894,11 +2894,11 @@
       "rubric": false,
       "validated": false
      },
-     "worldRunning": true,
+     "worldRunning": false,
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
-      "areaSweep": "locked"
+      "areaSweep": "whole lesson"
      },
      "loop": {
       "declared": "experiment",
@@ -2931,72 +2931,8 @@
      ]
     },
     {
-     "sid": "equal-areas-however-you-slice",
-     "index": 10,
-     "type": "wedges",
-     "title": "Equal areas, however you slice it",
-     "declares": {
-      "stage": null,
-      "bound": [
-       "star",
-       "circular",
-       "eccentric"
-      ],
-      "roles": [
-       "star",
-       "circular",
-       "eccentric"
-      ]
-     },
-     "kinds": [
-      "scene-declared"
-     ],
-     "actions": [
-      "read"
-     ],
-     "requires": [],
-     "reveal": null,
-     "asks": {
-      "choice": false,
-      "numeric": false,
-      "short": false,
-      "rubric": false,
-      "validated": false
-     },
-     "worldRunning": true,
-     "affordances": {
-      "inspector": "locked",
-      "placement": "locked",
-      "areaSweep": "locked"
-     },
-     "loop": {
-      "declared": "read",
-      "actual": [
-       "read"
-      ],
-      "handTranscribed": false,
-      "mismatch": null
-     },
-     "scene": {
-      "nameMatches": [],
-      "readsSelection": false,
-      "importsFromSelection": false,
-      "engineReads": [],
-      "mutates": [],
-      "eventWatch": null
-     },
-     "instrument": null,
-     "evidence": [],
-     "reset": [
-      "lesson locks: placement, inspector"
-     ],
-     "recovery": [
-      "wrong body: the step binds the object by name, so there is none"
-     ]
-    },
-    {
      "sid": "fast-and-slow-in-numbers",
-     "index": 11,
+     "index": 10,
      "type": "measure",
      "title": "Fast and slow, in numbers",
      "declares": {
@@ -3037,7 +2973,7 @@
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
-      "areaSweep": "locked"
+      "areaSweep": "whole lesson"
      },
      "loop": {
       "declared": "measure",
@@ -3082,7 +3018,7 @@
     },
     {
      "sid": "why-the-speed-changes",
-     "index": 12,
+     "index": 11,
      "type": "question",
      "title": "Why the speed changes",
      "declares": {
@@ -3117,12 +3053,76 @@
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
-      "areaSweep": "locked"
+      "areaSweep": "whole lesson"
      },
      "loop": {
       "declared": "interpret",
       "actual": [
        "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the step binds the object by name, so there is none"
+     ]
+    },
+    {
+     "sid": "equal-areas-however-you-slice",
+     "index": 12,
+     "type": "wedges",
+     "title": "Equal areas, however you slice it",
+     "declares": {
+      "stage": null,
+      "bound": [
+       "star",
+       "circular",
+       "eccentric"
+      ],
+      "roles": [
+       "star",
+       "circular",
+       "eccentric"
+      ]
+     },
+     "kinds": [
+      "scene-declared"
+     ],
+     "actions": [
+      "read"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": true,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "whole lesson"
+     },
+     "loop": {
+      "declared": "read",
+      "actual": [
+       "read"
       ],
       "handTranscribed": false,
       "mismatch": null
@@ -3154,16 +3154,24 @@
       "bound": [
        "sun",
        "mercury",
+       "venus",
        "earth",
+       "mars",
        "jupiter",
-       "saturn"
+       "saturn",
+       "uranus",
+       "neptune"
       ],
       "roles": [
        "sun",
        "mercury",
+       "venus",
        "earth",
+       "mars",
        "jupiter",
-       "saturn"
+       "saturn",
+       "uranus",
+       "neptune"
       ]
      },
      "kinds": [
@@ -3185,7 +3193,7 @@
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
-      "areaSweep": "locked"
+      "areaSweep": "whole lesson"
      },
      "loop": {
       "declared": "read",
@@ -3218,22 +3226,30 @@
      "sid": "measure-four-planets",
      "index": 14,
      "type": "measure",
-     "title": "Measure four planets",
+     "title": "Measure the planets",
      "declares": {
       "stage": null,
       "bound": [
        "sun",
        "mercury",
+       "venus",
        "earth",
+       "mars",
        "jupiter",
-       "saturn"
+       "saturn",
+       "uranus",
+       "neptune"
       ],
       "roles": [
        "sun",
        "mercury",
+       "venus",
        "earth",
+       "mars",
        "jupiter",
-       "saturn"
+       "saturn",
+       "uranus",
+       "neptune"
       ]
      },
      "kinds": [
@@ -3261,7 +3277,7 @@
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
-      "areaSweep": "locked"
+      "areaSweep": "whole lesson"
      },
      "loop": {
       "declared": "measure",
@@ -3310,16 +3326,24 @@
       "bound": [
        "sun",
        "mercury",
+       "venus",
        "earth",
+       "mars",
        "jupiter",
-       "saturn"
+       "saturn",
+       "uranus",
+       "neptune"
       ],
       "roles": [
        "sun",
        "mercury",
+       "venus",
        "earth",
+       "mars",
        "jupiter",
-       "saturn"
+       "saturn",
+       "uranus",
+       "neptune"
       ]
      },
      "kinds": [
@@ -3347,7 +3371,7 @@
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
-      "areaSweep": "locked"
+      "areaSweep": "whole lesson"
      },
      "loop": {
       "declared": "measure",
@@ -3385,25 +3409,289 @@
      ]
     },
     {
-     "sid": "use-the-law",
+     "sid": "pick-a-distance",
      "index": 16,
-     "type": "question",
-     "title": "Use the law",
+     "type": "measure",
+     "title": "Pick an orbit nobody has measured",
      "declares": {
       "stage": null,
       "bound": [
        "sun",
        "mercury",
+       "venus",
        "earth",
+       "mars",
        "jupiter",
-       "saturn"
+       "saturn",
+       "uranus",
+       "neptune"
       ],
       "roles": [
        "sun",
        "mercury",
+       "venus",
        "earth",
+       "mars",
        "jupiter",
-       "saturn"
+       "saturn",
+       "uranus",
+       "neptune"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "engine-measurement",
+      "captured-evidence"
+     ],
+     "actions": [
+      "record-values"
+     ],
+     "requires": [
+      "measure-four-planets"
+     ],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": true
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "whole lesson"
+     },
+     "loop": {
+      "declared": "measure",
+      "actual": [
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [
+       "elements",
+       "role"
+      ],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [
+      "notebook-fields"
+     ],
+     "reset": [
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the step binds the object by name, so there is none",
+      "missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand",
+      "ambiguous result: the check says in words how close is close enough"
+     ]
+    },
+    {
+     "sid": "estimate-the-year",
+     "index": 17,
+     "type": "predict",
+     "title": "Estimate its year",
+     "declares": {
+      "stage": null,
+      "bound": [
+       "sun",
+       "mercury",
+       "venus",
+       "earth",
+       "mars",
+       "jupiter",
+       "saturn",
+       "uranus",
+       "neptune"
+      ],
+      "roles": [
+       "sun",
+       "mercury",
+       "venus",
+       "earth",
+       "mars",
+       "jupiter",
+       "saturn",
+       "uranus",
+       "neptune"
+      ]
+     },
+     "kinds": [
+      "scene-declared"
+     ],
+     "actions": [
+      "read-a-prediction-prompt-that-collects-nothing"
+     ],
+     "requires": [],
+     "reveal": "compare-the-estimate",
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "whole lesson"
+     },
+     "loop": {
+      "declared": "predict",
+      "actual": [
+       "read"
+      ],
+      "handTranscribed": false,
+      "mismatch": "typed predict but collects no commitment"
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the step binds the object by name, so there is none"
+     ]
+    },
+    {
+     "sid": "check-the-estimate",
+     "index": 18,
+     "type": "measure",
+     "title": "Check it against a real planet",
+     "declares": {
+      "stage": null,
+      "bound": [
+       "sun",
+       "mercury",
+       "venus",
+       "earth",
+       "mars",
+       "jupiter",
+       "saturn",
+       "uranus",
+       "neptune"
+      ],
+      "roles": [
+       "sun",
+       "mercury",
+       "venus",
+       "earth",
+       "mars",
+       "jupiter",
+       "saturn",
+       "uranus",
+       "neptune"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "student-changes-scene",
+      "engine-measurement",
+      "captured-evidence"
+     ],
+     "actions": [
+      "record-values",
+      "select-a-body"
+     ],
+     "requires": [
+      "pick-a-distance"
+     ],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": true
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "whole lesson"
+     },
+     "loop": {
+      "declared": "measure",
+      "actual": [
+       "experiment",
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": true,
+      "importsFromSelection": false,
+      "engineReads": [
+       "elements",
+       "selected"
+      ],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [
+      "notebook-fields"
+     ],
+     "reset": [
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the step binds the object by name, so there is none",
+      "missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand",
+      "null result: the probe names what is missing",
+      "ambiguous result: the check says in words how close is close enough"
+     ]
+    },
+    {
+     "sid": "compare-the-estimate",
+     "index": 19,
+     "type": "read",
+     "title": "Your estimate and the law",
+     "declares": {
+      "stage": null,
+      "bound": [
+       "sun",
+       "mercury",
+       "venus",
+       "earth",
+       "mars",
+       "jupiter",
+       "saturn",
+       "uranus",
+       "neptune"
+      ],
+      "roles": [
+       "sun",
+       "mercury",
+       "venus",
+       "earth",
+       "mars",
+       "jupiter",
+       "saturn",
+       "uranus",
+       "neptune"
       ]
      },
      "kinds": [
@@ -3416,7 +3704,7 @@
      "reveal": null,
      "asks": {
       "choice": false,
-      "numeric": true,
+      "numeric": false,
       "short": false,
       "rubric": false,
       "validated": false
@@ -3425,12 +3713,12 @@
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
-      "areaSweep": "locked"
+      "areaSweep": "whole lesson"
      },
      "loop": {
-      "declared": "interpret",
+      "declared": "read",
       "actual": [
-       "interpret"
+       "read"
       ],
       "handTranscribed": false,
       "mismatch": null
@@ -3454,28 +3742,23 @@
     },
     {
      "sid": "what-the-constant-depends-on",
-     "index": 17,
+     "index": 20,
      "type": "question",
      "title": "What the constant depends on",
      "declares": {
-      "stage": null,
-      "bound": [
-       "sun",
-       "mercury",
-       "earth",
-       "jupiter",
-       "saturn"
-      ],
-      "roles": [
-       "sun",
-       "mercury",
-       "earth",
-       "jupiter",
-       "saturn"
-      ]
+      "stage": {
+       "objects": 0,
+       "kind": "named",
+       "scale": "display",
+       "fits": false,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": []
      },
      "kinds": [
-      "scene-declared"
+      "scene-declared",
+      "engine-measurement"
      ],
      "actions": [
       "choose-an-option"
@@ -3493,11 +3776,12 @@
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
-      "areaSweep": "locked"
+      "areaSweep": "whole lesson"
      },
      "loop": {
       "declared": "interpret",
       "actual": [
+       "measure",
        "interpret"
       ],
       "handTranscribed": false,
@@ -3507,7 +3791,10 @@
       "nameMatches": [],
       "readsSelection": false,
       "importsFromSelection": false,
-      "engineReads": [],
+      "engineReads": [
+       "elements",
+       "role"
+      ],
       "mutates": [],
       "eventWatch": null
      },
@@ -3517,12 +3804,13 @@
       "lesson locks: placement, inspector"
      ],
      "recovery": [
-      "wrong body: the step binds the object by name, so there is none"
+      "wrong body: the object list names what the step staged",
+      "null result: the probe prints a dash and does not say why"
      ]
     },
     {
      "sid": "what-newton-added",
-     "index": 18,
+     "index": 21,
      "type": "read",
      "title": "What Newton added",
      "declares": {
@@ -3559,7 +3847,7 @@
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
-      "areaSweep": "locked"
+      "areaSweep": "whole lesson"
      },
      "loop": {
       "declared": "read",
@@ -3590,7 +3878,7 @@
     },
     {
      "sid": "the-same-laws-forty-light",
-     "index": 19,
+     "index": 22,
      "type": "explore",
      "title": "The same laws, forty light years away",
      "declares": {
@@ -3632,7 +3920,7 @@
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
-      "areaSweep": "locked"
+      "areaSweep": "whole lesson"
      },
      "loop": {
       "declared": "experiment",
@@ -3666,7 +3954,7 @@
     },
     {
      "sid": "weigh-trappist-1-yourself",
-     "index": 20,
+     "index": 23,
      "type": "measure",
      "title": "Weigh TRAPPIST-1 yourself",
      "declares": {
@@ -3708,7 +3996,7 @@
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
-      "areaSweep": "locked"
+      "areaSweep": "whole lesson"
      },
      "loop": {
       "declared": "measure",
@@ -3747,7 +4035,7 @@
     },
     {
      "sid": "weighing-another-star",
-     "index": 21,
+     "index": 24,
      "type": "question",
      "title": "Weighing another star",
      "declares": {
@@ -3784,7 +4072,7 @@
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
-      "areaSweep": "locked"
+      "areaSweep": "whole lesson"
      },
      "loop": {
       "declared": "interpret",
@@ -3813,7 +4101,7 @@
     },
     {
      "sid": "where-kepler-s-version-breaks",
-     "index": 22,
+     "index": 25,
      "type": "question",
      "title": "Where Kepler's version breaks",
      "declares": {
@@ -3850,7 +4138,7 @@
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
-      "areaSweep": "locked"
+      "areaSweep": "whole lesson"
      },
      "loop": {
       "declared": "interpret",
@@ -3879,7 +4167,7 @@
     },
     {
      "sid": "where-this-leaves-you",
-     "index": 23,
+     "index": 26,
      "type": "read",
      "title": "Where this leaves you",
      "declares": {
@@ -3916,7 +4204,7 @@
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
-      "areaSweep": "locked"
+      "areaSweep": "whole lesson"
      },
      "loop": {
       "declared": "read",
@@ -3948,17 +4236,17 @@
     {
      "predict": "where-is-the-star",
      "predictCollects": true,
-     "heldUntil": "measure-the-two-orbits",
+     "heldUntil": "the-first-law-and-the",
      "experiment": [
-      "measure-the-two-orbits"
+      "find-the-foci"
      ],
      "measure": [
-      "measure-the-two-orbits"
+      "find-the-foci"
      ],
      "evidence": [
-      "measure-the-two-orbits"
+      "find-the-foci"
      ],
-     "interpret": "measure-the-two-orbits",
+     "interpret": "the-first-law-and-the",
      "measuredBeforeAnswering": true,
      "explained": false,
      "answeredByTheExperiment": true,
@@ -3968,30 +4256,53 @@
     {
      "predict": "where-does-it-move-fastest",
      "predictCollects": true,
-     "heldUntil": "watch-it-happen",
+     "heldUntil": "why-the-speed-changes",
      "experiment": [
       "watch-it-happen",
       "fast-and-slow-in-numbers",
       "measure-four-planets",
-      "work-the-law-out-step",
-      "the-same-laws-forty-light",
-      "weigh-trappist-1-yourself"
+      "work-the-law-out-step"
      ],
      "measure": [
       "watch-it-happen",
       "fast-and-slow-in-numbers",
       "measure-four-planets",
       "work-the-law-out-step",
-      "the-same-laws-forty-light",
-      "weigh-trappist-1-yourself"
+      "pick-a-distance"
      ],
      "evidence": [
       "fast-and-slow-in-numbers",
       "measure-four-planets",
       "work-the-law-out-step",
+      "pick-a-distance"
+     ],
+     "interpret": "why-the-speed-changes",
+     "measuredBeforeAnswering": true,
+     "explained": true,
+     "answeredByTheExperiment": true,
+     "closed": true,
+     "complete": true
+    },
+    {
+     "predict": "estimate-the-year",
+     "predictCollects": false,
+     "heldUntil": "compare-the-estimate",
+     "experiment": [
+      "check-the-estimate",
+      "the-same-laws-forty-light",
       "weigh-trappist-1-yourself"
      ],
-     "interpret": "watch-it-happen",
+     "measure": [
+      "check-the-estimate",
+      "what-the-constant-depends-on",
+      "the-same-laws-forty-light",
+      "weigh-trappist-1-yourself"
+     ],
+     "evidence": [
+      "check-the-estimate",
+      "weigh-trappist-1-yourself"
+     ],
+     "interpret": "compare-the-estimate",
      "measuredBeforeAnswering": true,
      "explained": false,
      "answeredByTheExperiment": true,
@@ -4000,18 +4311,18 @@
     }
    ],
    "totals": {
-    "steps": 23,
-    "declared": 23,
-    "student": 7,
-    "engine": 7,
+    "steps": 26,
+    "declared": 26,
+    "student": 8,
+    "engine": 10,
     "model": 0,
     "data": 0,
     "diagram": 0,
-    "evidence": 5,
+    "evidence": 7,
     "computation": 0,
-    "declaredButInert": 16,
+    "declaredButInert": 18,
     "prose": 0,
-    "mismatched": 0,
+    "mismatched": 1,
     "rebuilds": 3
    }
   },
@@ -119976,30 +120287,30 @@
   }
  ],
  "totals": {
-  "steps": 1521,
-  "declared": 1429,
-  "student": 167,
-  "engine": 177,
+  "steps": 1524,
+  "declared": 1432,
+  "student": 168,
+  "engine": 180,
   "model": 1012,
   "data": 161,
   "diagram": 881,
-  "evidence": 389,
+  "evidence": 391,
   "computation": 14,
-  "declaredButInert": 1262,
+  "declaredButInert": 1264,
   "prose": 58,
-  "mismatched": 5,
+  "mismatched": 6,
   "rebuilds": 80,
   "canvas": {
    "scene": 0,
    "portrait": 0,
    "quiet": 0,
-   "unstated": 1521
+   "unstated": 1524
   },
   "lessons": 124,
-  "loops": 195,
-  "closedLoops": 195,
-  "explainedLoops": 0,
-  "heldLoops": 195,
-  "completeLoops": 195
+  "loops": 196,
+  "closedLoops": 196,
+  "explainedLoops": 1,
+  "heldLoops": 196,
+  "completeLoops": 196
  }
 }

@@ -11,30 +11,30 @@ The hand-written, human-reviewed acceptance map is
 [`lesson-acceptance.json`](lesson-acceptance.json); `npm run
 audit:scene:check` fails if it disagrees with what is generated here.
 
-Across 124 investigations and 1521 steps: 1429 steps
-declare a scene, 167 let a reader change one, 177 read the
+Across 124 investigations and 1524 steps: 1432 steps
+declare a scene, 168 let a reader change one, 180 read the
 running integration, 1012 show a prescribed model result, 161 draw
 on a stored dataset, 881 put a self-contained panel beside the text,
-389 keep something, and 58 are prose.
-Of 195 prediction loops, 195 are returned to,
-195 produce a measurement before they are answered, and
-0 end in an explanation in the reader's own words.
-195 hold their marking until the experiment settles them.
-The canvas behind a step is stated as scene on 0, portrait on 0, quiet on 0; 1521 state none.
+391 keep something, and 58 are prose.
+Of 196 prediction loops, 196 are returned to,
+196 produce a measurement before they are answered, and
+1 end in an explanation in the reader's own words.
+196 hold their marking until the experiment settles them.
+The canvas behind a step is stated as scene on 0, portrait on 0, quiet on 0; 1524 state none.
 
 ## Kepler's Laws (`keplers-laws`)
 
-- **Steps:** 23. Scene declared on 23; a reader can change something on 7; 16 declare a scene nobody on that step can touch.
-- **Where the numbers come from:** 7 live engine, 0 prescribed model, 0 stored dataset, 0 self-contained panel.
-- **What students do:** read, commit-a-prediction, choose-an-option, record-values, select-a-body, run-the-simulation, tick-a-checklist, run-to-an-armed-event, answer-in-words, import-from-the-selection, build-a-plot, watch-the-area-sweep.
-- **Objects the steps declare:** star, circular, eccentric, sun, mercury, earth, jupiter, saturn, e, f, g.
+- **Steps:** 26. Scene declared on 26; a reader can change something on 8; 18 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 10 live engine, 0 prescribed model, 0 stored dataset, 0 self-contained panel.
+- **What students do:** read, commit-a-prediction, record-values, open-a-body-inspector, select-a-body, choose-an-option, tick-a-checklist, run-the-simulation, run-to-an-armed-event, answer-in-words, import-from-the-selection, build-a-plot, read-a-prediction-prompt-that-collects-nothing, watch-the-area-sweep.
+- **Objects the steps declare:** star, circular, eccentric, sun, mercury, venus, earth, mars, jupiter, saturn, uranus, neptune, e, f, g.
 - **Instruments:** none.
 - **Stored data:** none.
 - **Evidence kept:** notebook-fields, plot, imported-from-scene.
-- **Prediction loops:** where-is-the-star → measure-the-two-orbits → measure-the-two-orbits; where-does-it-move-fastest → watch-it-happen, fast-and-slow-in-numbers, measure-four-planets, work-the-law-out-step, the-same-laws-forty-light, weigh-trappist-1-yourself → watch-it-happen.
-- **Recovery:** wrong body: the step binds the object by name, so there is none; reset: rebuilds the scenario on arrival; missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand; null result: the probe names what is missing; ambiguous result: the check says in words how close is close enough; missed moment: an event watch stops the run at periapsis; wrong body: select another and import again, which overwrites.
+- **Prediction loops:** where-is-the-star → find-the-foci → the-first-law-and-the; where-does-it-move-fastest → watch-it-happen, fast-and-slow-in-numbers, measure-four-planets, work-the-law-out-step, pick-a-distance → why-the-speed-changes; estimate-the-year → check-the-estimate, what-the-constant-depends-on, the-same-laws-forty-light, weigh-trappist-1-yourself → compare-the-estimate.
+- **Recovery:** wrong body: the step binds the object by name, so there is none; reset: rebuilds the scenario on arrival; missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand; null result: the probe names what is missing; ambiguous result: the check says in words how close is close enough; missed moment: an event watch stops the run at periapsis; wrong body: select another and import again, which overwrites; wrong body: the object list names what the step staged; null result: the probe prints a dash and does not say why.
 - **Scene rebuilds:** 3 step(s) on arrival (eight-minutes-of-arc, kepler-s-third-law, what-newton-added).
-- **Accepted central experiment** (reviewed 2026-09-11): object `eccentric`, control the canvas: click a body, then Run and the event watch, measures semi-major axis a and period P for four planets, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+- **Accepted central experiment** (reviewed 2026-09-11): object `eccentric`, control the canvas: click a body, then Run and the event watch, measures the speeds at the nearest and farthest points of an orbit, the distance between the star and the empty focus, and semi-major axis a and period P for five or more planets, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 
 ## Why Mars Goes Backwards (`retrograde-motion`)
 
