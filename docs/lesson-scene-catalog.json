@@ -6454,10 +6454,10 @@
      ]
     },
     {
-     "sid": "what-will-the-brightness-do",
+     "sid": "estimate-the-dip",
      "index": 3,
      "type": "predict",
-     "title": "What will the brightness do?",
+     "title": "How deep will the dip be?",
      "declares": {
       "stage": null,
       "bound": [
@@ -6473,12 +6473,12 @@
       "scene-declared"
      ],
      "actions": [
-      "commit-a-prediction"
+      "read-a-prediction-prompt-that-collects-nothing"
      ],
      "requires": [],
-     "reveal": "your-first-transit",
+     "reveal": "why-that-radius-came-out",
      "asks": {
-      "choice": true,
+      "choice": false,
       "numeric": false,
       "short": false,
       "rubric": false,
@@ -6493,11 +6493,10 @@
      "loop": {
       "declared": "predict",
       "actual": [
-       "predict",
-       "interpret"
+       "read"
       ],
       "handTranscribed": false,
-      "mismatch": null
+      "mismatch": "typed predict but collects no commitment"
      },
      "scene": {
       "nameMatches": [],
@@ -6541,6 +6540,7 @@
       "open-a-body-inspector",
       "select-a-body",
       "run-the-simulation",
+      "run-to-an-armed-event",
       "record-a-light-curve",
       "view-from-a-set-angle",
       "tick-a-checklist"
@@ -6582,7 +6582,10 @@
        "transitGeometry"
       ],
       "mutates": [],
-      "eventWatch": null
+      "eventWatch": {
+       "kind": "transit",
+       "body": null
+      }
      },
      "instrument": null,
      "evidence": [],
@@ -6591,6 +6594,7 @@
      ],
      "recovery": [
       "wrong body: the step binds the object by name, so there is none",
+      "missed moment: an event watch stops the run at transit",
       "null result: the probe names what is missing"
      ]
     },
@@ -6790,10 +6794,10 @@
      ]
     },
     {
-     "sid": "measure-the-dip",
+     "sid": "choose-the-two-stretches",
      "index": 8,
      "type": "measure",
-     "title": "Measure the dip",
+     "title": "Choose the two stretches",
      "declares": {
       "stage": null,
       "bound": [
@@ -6807,13 +6811,11 @@
      },
      "kinds": [
       "scene-declared",
-      "student-changes-scene",
       "engine-measurement",
       "captured-evidence"
      ],
      "actions": [
       "record-values",
-      "import-from-the-selection",
       "run-the-simulation",
       "record-a-light-curve"
      ],
@@ -6845,7 +6847,7 @@
      "scene": {
       "nameMatches": [],
       "readsSelection": false,
-      "importsFromSelection": true,
+      "importsFromSelection": false,
       "engineReads": [
        "days",
        "photometry"
@@ -6855,17 +6857,16 @@
      },
      "instrument": null,
      "evidence": [
-      "notebook-fields",
-      "imported-from-scene"
+      "notebook-fields"
      ],
      "reset": [
       "lesson locks: placement, inspector"
      ],
      "recovery": [
-      "wrong body: select another and import again, which overwrites",
+      "wrong body: the step binds the object by name, so there is none",
       "missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand",
       "null result: the probe names what is missing",
-      "ambiguous result: the check says in words how close is close enough"
+      "ambiguous result: the check refuses without saying why"
      ]
     },
     {
@@ -8008,10 +8009,10 @@
      ]
     },
     {
-     "sid": "now-measure-it",
+     "sid": "will-the-dip-look-the-same",
      "index": 26,
-     "type": "explore",
-     "title": "Now measure it",
+     "type": "predict",
+     "title": "Will the dip look the same?",
      "declares": {
       "stage": null,
       "bound": [
@@ -8024,17 +8025,13 @@
       ]
      },
      "kinds": [
-      "scene-declared",
-      "engine-measurement"
+      "scene-declared"
      ],
      "actions": [
-      "run-the-simulation",
-      "record-a-light-curve",
-      "view-from-a-set-angle",
-      "tick-a-checklist"
+      "read-a-prediction-prompt-that-collects-nothing"
      ],
      "requires": [],
-     "reveal": null,
+     "reveal": "find-the-hidden-companion",
      "asks": {
       "choice": false,
       "numeric": false,
@@ -8049,10 +8046,79 @@
       "areaSweep": "locked"
      },
      "loop": {
-      "declared": "experiment",
+      "declared": "predict",
+      "actual": [
+       "read"
+      ],
+      "handTranscribed": false,
+      "mismatch": "typed predict but collects no commitment"
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the step binds the object by name, so there is none"
+     ]
+    },
+    {
+     "sid": "compare-the-two-curves",
+     "index": 27,
+     "type": "measure",
+     "title": "Compare the two curves",
+     "declares": {
+      "stage": null,
+      "bound": [
+       "star",
+       "planet"
+      ],
+      "roles": [
+       "star",
+       "planet"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "engine-measurement",
+      "captured-evidence"
+     ],
+     "actions": [
+      "record-values",
+      "run-the-simulation",
+      "record-a-light-curve",
+      "view-from-a-set-angle",
+      "tick-a-checklist"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": true
+     },
+     "worldRunning": true,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "measure",
       "actual": [
        "experiment",
-       "measure"
+       "measure",
+       "interpret"
       ],
       "handTranscribed": false,
       "mismatch": null
@@ -8069,23 +8135,26 @@
       "eventWatch": null
      },
      "instrument": null,
-     "evidence": [],
+     "evidence": [
+      "notebook-fields"
+     ],
      "reset": [
       "rebuilds: scenario \"Blended Binary\" seed transit-lab + camera",
-      "clears the recorded light curve",
       "lesson locks: placement, inspector"
      ],
      "recovery": [
       "wrong body: the step binds the object by name, so there is none",
+      "missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand",
       "reset: rebuilds the scenario on arrival",
-      "null result: the probe names what is missing"
+      "null result: the probe names what is missing",
+      "ambiguous result: the check refuses without saying why"
      ]
     },
     {
-     "sid": "recover-the-real-planet",
-     "index": 27,
+     "sid": "find-the-hidden-companion",
+     "index": 28,
      "type": "measure",
-     "title": "Recover the real planet",
+     "title": "Find the hidden companion",
      "declares": {
       "stage": null,
       "bound": [
@@ -8099,19 +8168,17 @@
      },
      "kinds": [
       "scene-declared",
-      "student-changes-scene",
       "engine-measurement",
       "captured-evidence"
      ],
      "actions": [
       "record-values",
-      "import-from-the-selection",
       "run-the-simulation",
       "record-a-light-curve"
      ],
      "requires": [
-      "measure-the-dip",
-      "now-measure-it"
+      "choose-the-two-stretches",
+      "compare-the-two-curves"
      ],
      "reveal": null,
      "asks": {
@@ -8140,32 +8207,27 @@
      "scene": {
       "nameMatches": [],
       "readsSelection": false,
-      "importsFromSelection": true,
-      "engineReads": [
-       "days",
-       "photometry"
-      ],
+      "importsFromSelection": false,
+      "engineReads": [],
       "mutates": [],
       "eventWatch": null
      },
      "instrument": null,
      "evidence": [
-      "notebook-fields",
-      "imported-from-scene"
+      "notebook-fields"
      ],
      "reset": [
       "lesson locks: placement, inspector"
      ],
      "recovery": [
-      "wrong body: select another and import again, which overwrites",
+      "wrong body: the step binds the object by name, so there is none",
       "missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand",
-      "null result: the probe names what is missing",
       "ambiguous result: the check says in words how close is close enough"
      ]
     },
     {
      "sid": "what-it-does-to-a",
-     "index": 28,
+     "index": 29,
      "type": "question",
      "title": "What it does to a survey",
      "declares": {
@@ -8227,7 +8289,7 @@
     },
     {
      "sid": "what-you-did-and-where",
-     "index": 29,
+     "index": 30,
      "type": "read",
      "title": "What you did, and where it goes next",
      "declares": {
@@ -8290,13 +8352,13 @@
    ],
    "loops": [
     {
-     "predict": "what-will-the-brightness-do",
-     "predictCollects": true,
-     "heldUntil": "your-first-transit",
+     "predict": "estimate-the-dip",
+     "predictCollects": false,
+     "heldUntil": "why-that-radius-came-out",
      "experiment": [
       "your-first-transit",
       "try-it-on-some-real",
-      "measure-the-dip",
+      "choose-the-two-stretches",
       "correct-it-and-get-a",
       "the-shape-of-the-dip",
       "the-angle-you-happen-to"
@@ -8304,19 +8366,19 @@
      "measure": [
       "your-first-transit",
       "try-it-on-some-real",
-      "measure-the-dip",
+      "choose-the-two-stretches",
       "correct-it-and-get-a",
       "the-shape-of-the-dip",
       "the-angle-you-happen-to"
      ],
      "evidence": [
-      "measure-the-dip",
+      "choose-the-two-stretches",
       "correct-it-and-get-a"
      ],
-     "interpret": "your-first-transit",
+     "interpret": "from-a-depth-to-a",
      "measuredBeforeAnswering": true,
      "explained": false,
-     "answeredByTheExperiment": true,
+     "answeredByTheExperiment": false,
      "closed": true,
      "complete": true
     },
@@ -8329,25 +8391,43 @@
       "from-a-period-to-an",
       "read-an-atmosphere",
       "a-star-you-did-not",
-      "go-and-look",
-      "now-measure-it",
-      "recover-the-real-planet"
+      "go-and-look"
      ],
      "measure": [
       "time-two-transits",
       "from-a-period-to-an",
       "read-an-atmosphere",
       "a-star-you-did-not",
-      "go-and-look",
-      "now-measure-it",
-      "recover-the-real-planet"
+      "go-and-look"
      ],
      "evidence": [
       "time-two-transits",
-      "from-a-period-to-an",
-      "recover-the-real-planet"
+      "from-a-period-to-an"
      ],
      "interpret": "time-two-transits",
+     "measuredBeforeAnswering": true,
+     "explained": false,
+     "answeredByTheExperiment": true,
+     "closed": true,
+     "complete": true
+    },
+    {
+     "predict": "will-the-dip-look-the-same",
+     "predictCollects": false,
+     "heldUntil": "find-the-hidden-companion",
+     "experiment": [
+      "compare-the-two-curves",
+      "find-the-hidden-companion"
+     ],
+     "measure": [
+      "compare-the-two-curves",
+      "find-the-hidden-companion"
+     ],
+     "evidence": [
+      "compare-the-two-curves",
+      "find-the-hidden-companion"
+     ],
+     "interpret": "find-the-hidden-companion",
      "measuredBeforeAnswering": true,
      "explained": false,
      "answeredByTheExperiment": true,
@@ -8356,18 +8436,18 @@
     }
    ],
    "totals": {
-    "steps": 29,
-    "declared": 29,
-    "student": 5,
+    "steps": 30,
+    "declared": 30,
+    "student": 3,
     "engine": 6,
     "model": 5,
     "data": 0,
     "diagram": 5,
-    "evidence": 5,
+    "evidence": 6,
     "computation": 0,
-    "declaredButInert": 24,
+    "declaredButInert": 27,
     "prose": 0,
-    "mismatched": 0,
+    "mismatched": 2,
     "rebuilds": 2
    }
   },
@@ -119976,30 +120056,30 @@
   }
  ],
  "totals": {
-  "steps": 1521,
-  "declared": 1429,
-  "student": 167,
+  "steps": 1522,
+  "declared": 1430,
+  "student": 165,
   "engine": 177,
   "model": 1012,
   "data": 161,
   "diagram": 881,
-  "evidence": 389,
+  "evidence": 390,
   "computation": 14,
-  "declaredButInert": 1262,
+  "declaredButInert": 1265,
   "prose": 58,
-  "mismatched": 5,
+  "mismatched": 7,
   "rebuilds": 80,
   "canvas": {
    "scene": 0,
    "portrait": 0,
    "quiet": 0,
-   "unstated": 1521
+   "unstated": 1522
   },
   "lessons": 124,
-  "loops": 195,
-  "closedLoops": 195,
+  "loops": 196,
+  "closedLoops": 196,
   "explainedLoops": 0,
   "heldLoops": 195,
-  "completeLoops": 195
+  "completeLoops": 196
  }
 }
