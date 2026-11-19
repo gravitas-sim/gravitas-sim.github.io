@@ -28,7 +28,7 @@ the week they are teaching.
 
 **<!--fact:libraryInvestigations-->146<!--/fact--> guided
 investigations**: <!--fact:investigations-->124<!--/fact--> that run in the
-simulation, <!--fact:investigationSteps-->1521<!--/fact--> steps between them
+simulation, <!--fact:investigationSteps-->1524<!--/fact--> steps between them
 (the table below), and <!--fact:guidedInvestigations-->22<!--/fact--> in the
 Observatory, the 3-D lab and the mission lab (the Library lists all of them):
 
@@ -341,7 +341,7 @@ run directly, so debugging never requires a build step.
 ### Everything else
 
 ```bash
-npm test                  # <!--fact:jestTests-->21734<!--/fact--> tests across <!--fact:jestSuites-->673<!--/fact--> suites
+npm test                  # <!--fact:jestTests-->21762<!--/fact--> tests across <!--fact:jestSuites-->674<!--/fact--> suites
 npm run validate:physics  # the physics validation table
 npm run e2e               # browser smoke tests, against the sources
 npm run lint              # eslint
@@ -489,8 +489,8 @@ npm run e2e:ui                    # the Playwright inspector
 npm run e2e:report                # open the last HTML report
 ```
 
-The suite is <!--fact:e2eTests-->4238<!--/fact--> tests
-in <!--fact:e2eFiles-->264<!--/fact--> files and takes several minutes in
+The suite is <!--fact:e2eTests-->4243<!--/fact--> tests
+in <!--fact:e2eFiles-->265<!--/fact--> files and takes several minutes in
 Chromium.
 
 Some notes on how it is put together, because two of the choices are not
