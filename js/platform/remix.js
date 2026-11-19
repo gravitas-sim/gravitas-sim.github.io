@@ -200,7 +200,7 @@ const CARRIED = {
   read: [],
   explore: ['checklist'],
   measure: ['fields'],
-  predict: ['prompt', 'options', 'answer', 'because', 'reveal'],
+  predict: ['prompt', 'options', 'answer', 'because', 'reveal', 'kind', 'unit'],
   question: [
     'kind',
     'prompt',
@@ -280,8 +280,13 @@ function stepToPack(s, es = {}) {
     });
   } else if (s.type === 'predict') {
     put('prompt', text(s.prompt, es.prompt));
-    out.options = texts(s.options, es.options);
-    out.answer = s.answer;
+    if (s.kind === 'estimate') {
+      out.kind = 'estimate';
+      out.unit = s.unit;
+    } else {
+      out.options = texts(s.options, es.options);
+      out.answer = s.answer;
+    }
     put('because', text(s.because, es.because));
     out.reveal = s.reveal;
   } else if (s.type === 'question') {
