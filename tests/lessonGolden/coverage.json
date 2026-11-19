@@ -2,16 +2,15 @@
   "lessons": [
     "keplers-laws",
     "goldilocks-question",
-    "the-saturated-star",
-    "transit-photometry",
-    "what-is-a-gravitational-wave",
-    "butterfly-effect",
-    "binary-star-planets",
-    "black-holes",
-    "propose-an-observation",
     "weighing-stars",
+    "transit-photometry",
+    "the-saturated-star",
+    "lagrange-points",
+    "black-holes",
+    "butterfly-effect",
+    "propose-an-observation",
+    "what-is-a-gravitational-wave",
     "a-night-at-the-telescope",
-    "a-universe-of-stars",
     "counts-to-magnitudes",
     "detect-this-planet",
     "extending-an-experiment",
@@ -132,16 +131,19 @@
       "math:algebra",
       "prereq:yes"
     ],
-    "the-saturated-star": [
-      "depth-step:advanced/predict",
-      "depth-step:quantitative/read",
+    "weighing-stars": [
+      "key:explore.showBarycenter",
+      "key:measure.checklist",
+      "key:measure.decides",
+      "key:measure.showBarycenter",
       "key:measure.stage",
-      "key:predict.after",
-      "key:predict.depth",
-      "key:predict.hints",
       "key:predict.stage",
-      "key:predict.tool",
-      "key:read.stage"
+      "key:question.agrees",
+      "key:question.decides",
+      "key:read.probe",
+      "key:read.showBarycenter",
+      "key:read.stage",
+      "math:arithmetic"
     ],
     "transit-photometry": [
       "check:numeric/number+tolerance",
@@ -149,44 +151,42 @@
       "key:explore.lightCurve",
       "key:explore.observerAngle",
       "key:measure.lightCurve",
-      "key:question.agrees",
       "key:read.figure",
-      "key:read.pauseAt",
-      "key:read.probe"
+      "key:read.pauseAt"
     ],
-    "what-is-a-gravitational-wave": [
-      "audience:beginner",
-      "key:predict.tip",
-      "key:read.checklist",
-      "lock:{\"placement\":true,\"inspector\":false,\"areaSweep\":false}",
-      "math:arithmetic"
+    "the-saturated-star": [
+      "depth-step:advanced/predict",
+      "depth-step:quantitative/read",
+      "key:predict.after",
+      "key:predict.depth",
+      "key:predict.hints",
+      "key:predict.tool"
     ],
-    "butterfly-effect": [
-      "key:explore.rubric",
-      "key:predict.requires",
-      "lock:null"
-    ],
-    "binary-star-planets": [
+    "lagrange-points": [
       "key:explore.requires",
+      "key:explore.rubric",
+      "key:predict.tip",
       "lock:{\"placement\":true}"
     ],
     "black-holes": [
       "key:question.checklist",
-      "key:read.explainView"
+      "key:read.explainView",
+      "lock:{\"placement\":true,\"inspector\":false,\"areaSweep\":false}"
+    ],
+    "butterfly-effect": [
+      "key:predict.requires",
+      "lock:null"
     ],
     "propose-an-observation": [
       "key:measure.plan",
       "key:question.rubricCriteria"
     ],
-    "weighing-stars": [
-      "key:explore.showBarycenter",
-      "key:read.showBarycenter"
+    "what-is-a-gravitational-wave": [
+      "audience:beginner",
+      "key:read.checklist"
     ],
     "a-night-at-the-telescope": [
       "key:question.reflect"
-    ],
-    "a-universe-of-stars": [
-      "key:measure.checklist"
     ],
     "counts-to-magnitudes": [
       "depth-step:quantitative/predict"
@@ -281,15 +281,15 @@
     "investigations": 124,
     "steps": 1980,
     "activityCuts": 6,
-    "lessonTokens": 150,
+    "lessonTokens": 153,
     "activityTokens": 29,
     "stepTypes": {
       "read": 375,
       "predict": 198,
       "ellipse": 1,
       "question": 748,
-      "measure": 512,
-      "explore": 145,
+      "measure": 515,
+      "explore": 142,
       "wedges": 1
     }
   }

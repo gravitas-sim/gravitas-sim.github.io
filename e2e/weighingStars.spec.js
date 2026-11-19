@@ -98,7 +98,7 @@ test('a wrong star, a period of half a lap and a unit slip are named; the right 
   await expect(slip).toContainText(/months/i);
   await typeIn(page, w, 'p', '4.00');
   await expect(slip).toBeHidden();
-  await expect(page.locator('.inv-check')).toContainText(/4\.0 solar masses/);
+  await expect(page.locator('.inv-check')).toContainText(/4\.0\s+solar masses/);
   await expect(box(page, w, 'total')).toHaveValue('4.00');
 });
 

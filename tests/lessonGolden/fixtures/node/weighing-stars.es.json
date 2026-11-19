@@ -947,13 +947,13 @@
     {
      "index": 22,
      "sid": "measurement-one-how-big-is",
-     "fingerprint": "explore|-|-|-|-|-|-",
+     "fingerprint": "measure|-|-|-|ra+rb+sep|-|-",
      "optionCount": null
     },
     {
      "index": 23,
      "sid": "measurement-two-how-long-does",
-     "fingerprint": "explore|-|binary|-|-|-|-",
+     "fingerprint": "measure|-|binary|-|laps+t+p|-|-",
      "optionCount": null
     },
     {
@@ -965,7 +965,7 @@
     {
      "index": 25,
      "sid": "how-sure-is-the-total",
-     "fingerprint": "measure|-|-|-|sa+sp+a_in+p_in+m_tot+s_tot|-|-",
+     "fingerprint": "measure|-|binary|-|t1+t2+t3+t4+n+se+sp+sa+move_a+move_p+m_tot+s_tot|-|-",
      "optionCount": null
     },
     {
@@ -989,7 +989,7 @@
     {
      "index": 29,
      "sid": "back-to-the-balance-point",
-     "fingerprint": "explore|-|-|-|-|-|-",
+     "fingerprint": "measure|-|-|-|ratio|-|-",
      "optionCount": null
     },
     {
@@ -1001,7 +1001,7 @@
     {
      "index": 31,
      "sid": "now-weigh-each-one",
-     "fingerprint": "measure|-|balance|-|ma+mb+sum|-|-",
+     "fingerprint": "measure|-|balance|-|tot+rat+ma+mb+sum|-|-",
      "optionCount": null
     },
     {
@@ -1031,7 +1031,7 @@
     {
      "index": 36,
      "sid": "one-on-your-own",
-     "fingerprint": "measure|-|-|-|a+p+a3+p2+total|-|-",
+     "fingerprint": "measure|-|-|-|total|-|-",
      "optionCount": null
     },
     {

@@ -82,23 +82,22 @@ The browser half takes about seven minutes on the private port.
 |---|---|---|
 | 1 | `keplers-laws` | 85: `audience:intro`, `check:choice/number`, `check:numeric/number+tolerance+unit`, `check:short/undefined`, `depth-step:advanced/question`, `depth-step:quantitative/measure`, … |
 | 2 | `goldilocks-question` | 22: `depth-step:advanced/measure`, `depth-step:advanced/read`, `key:explore.allowInspector`, `key:explore.pauseAt`, `key:explore.setup`, `key:explore.stage`, … |
-| 3 | `the-saturated-star` | 9: `depth-step:advanced/predict`, `depth-step:quantitative/read`, `key:measure.stage`, `key:predict.after`, `key:predict.depth`, `key:predict.hints`, … |
-| 4 | `transit-photometry` | 9: `check:numeric/number+tolerance`, `key:explore.clearLightCurve`, `key:explore.lightCurve`, `key:explore.observerAngle`, `key:measure.lightCurve`, `key:question.agrees`, … |
-| 5 | `what-is-a-gravitational-wave` | 5: `audience:beginner`, `key:predict.tip`, `key:read.checklist`, `lock:{"placement":true,"inspector":false,"areaSweep":false}`, `math:arithmetic` |
-| 6 | `butterfly-effect` | 3: `key:explore.rubric`, `key:predict.requires`, `lock:null` |
-| 7 | `binary-star-planets` | 2: `key:explore.requires`, `lock:{"placement":true}` |
-| 8 | `black-holes` | 2: `key:question.checklist`, `key:read.explainView` |
+| 3 | `weighing-stars` | 12: `key:explore.showBarycenter`, `key:measure.checklist`, `key:measure.decides`, `key:measure.showBarycenter`, `key:measure.stage`, `key:predict.stage`, … |
+| 4 | `transit-photometry` | 7: `check:numeric/number+tolerance`, `key:explore.clearLightCurve`, `key:explore.lightCurve`, `key:explore.observerAngle`, `key:measure.lightCurve`, `key:read.figure`, … |
+| 5 | `the-saturated-star` | 6: `depth-step:advanced/predict`, `depth-step:quantitative/read`, `key:predict.after`, `key:predict.depth`, `key:predict.hints`, `key:predict.tool` |
+| 6 | `lagrange-points` | 4: `key:explore.requires`, `key:explore.rubric`, `key:predict.tip`, `lock:{"placement":true}` |
+| 7 | `black-holes` | 3: `key:question.checklist`, `key:read.explainView`, `lock:{"placement":true,"inspector":false,"areaSweep":false}` |
+| 8 | `butterfly-effect` | 2: `key:predict.requires`, `lock:null` |
 | 9 | `propose-an-observation` | 2: `key:measure.plan`, `key:question.rubricCriteria` |
-| 10 | `weighing-stars` | 2: `key:explore.showBarycenter`, `key:read.showBarycenter` |
+| 10 | `what-is-a-gravitational-wave` | 2: `audience:beginner`, `key:read.checklist` |
 | 11 | `a-night-at-the-telescope` | 1: `key:question.reflect` |
-| 12 | `a-universe-of-stars` | 1: `key:measure.checklist` |
-| 13 | `counts-to-magnitudes` | 1: `depth-step:quantitative/predict` |
-| 14 | `detect-this-planet` | 1: `key:read.allowInspector` |
-| 15 | `extending-an-experiment` | 1: `key:measure.compute` |
-| 16 | `measuring-the-moon` | 1: `key:question.maxUncertainty` |
-| 17 | `power-law-gravity` | 1: `key:question.explain` |
-| 18 | `radial-velocity` | 1: `key:measure.setup` |
-| 19 | `retrograde-motion` | 1: `lock:{"placement":true,"inspector":false}` |
+| 12 | `counts-to-magnitudes` | 1: `depth-step:quantitative/predict` |
+| 13 | `detect-this-planet` | 1: `key:read.allowInspector` |
+| 14 | `extending-an-experiment` | 1: `key:measure.compute` |
+| 15 | `measuring-the-moon` | 1: `key:question.maxUncertainty` |
+| 16 | `power-law-gravity` | 1: `key:question.explain` |
+| 17 | `radial-velocity` | 1: `key:measure.setup` |
+| 18 | `retrograde-motion` | 1: `lock:{"placement":true,"inspector":false}` |
 
 | # | Activity cut | Tokens it adds |
 |---|---|---|

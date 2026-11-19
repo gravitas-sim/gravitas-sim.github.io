@@ -1023,14 +1023,15 @@ const WEIGHING = {
           label: 'Total mass you weighed',
           unit: 'M☉',
           decimals: 2,
-          compute: (v, e) => e('weigh-the-pair', 'total'),
+          compute: (v, e) => (e ? e('weigh-the-pair', 'total') : NaN),
         },
         {
           id: 'rat',
           label: 'How many times further out Star B is',
           unit: '',
           decimals: 2,
-          compute: (v, e) => e('back-to-the-balance-point', 'ratio'),
+          compute: (v, e) =>
+            e ? e('back-to-the-balance-point', 'ratio') : NaN,
         },
         {
           id: 'ma',

@@ -481,7 +481,9 @@ test.describe('the central experiment of each investigation', () => {
 
     await walkToSid(page, plan, measureSid);
     const seen = [];
-    for (const d1 of [1, 1.5]) {
+    // The see-saw opens with both stars equally far out: the student sets it.
+    await setControl(page, 'd2', 4);
+    for (const d1 of [1, 2]) {
       const { before, after } = await setControl(page, control, d1);
       if (d1 !== 1) expect(after).not.toEqual(before);
       seen.push({
