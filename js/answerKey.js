@@ -25,9 +25,13 @@ import { checkAnswer, toleranceFor } from './answerCheck.js';
 import { FEEDBACK_CLASSES, hintLadder } from './answerFeedback.js';
 import { decodeEntities } from './lessonMarkup.js';
 
-// A number as a student gives it: with an uncertainty if the step asks for one.
-export const asGiven = (step, n, u = toleranceFor(step) / 2) =>
-  step.uncertainty ? `${n} ± ${u}` : n;
+// A number as a student gives it: with an uncertainty if the step asks for one
+// (half the tolerance, or the step's narrowest uncertainty if that is more).
+export const asGiven = (
+  step,
+  n,
+  u = Math.max(toleranceFor(step) / 2, step.minUncertainty ?? 0)
+) => (step.uncertainty ? `${n} ± ${u}` : n);
 
 /**
  * Lesson prose as plain text, for the PDFs: the inline tags stripped, and the
