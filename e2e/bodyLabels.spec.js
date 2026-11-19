@@ -120,7 +120,9 @@ test.describe('names follow the step, the zoom and the setting', () => {
 
   const names = async (page, mutate = () => {}, arg) => {
     await page.evaluate(mutate, arg);
-    await frames(page);
+    // Names fade in and out after a change of view; read them once they have
+    // settled (three frames caught them half way on the lesson's first steps).
+    await frames(page, 60);
     const r = await page.evaluate(readMainCanvasLabels);
     return { r, v: judgeLabels(r.bodyLabels) };
   };
