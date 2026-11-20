@@ -2589,7 +2589,6 @@ export const ES_DEFERRED = {
   'binarySweep.recheck.reason.unreliableRun':
     'una de las ejecuciones no es fiable',
   'binarySweep.recheck.reason.notFinished': 'una de las ejecuciones no termino',
-
   // --- El barrido binario, guardado como prueba --------------------------------
   'nb.binarySweep.title': 'Barrido del radio inicial ({scenario})',
   'nb.binarySweep.trials': 'Ensayos',

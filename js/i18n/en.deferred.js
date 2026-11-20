@@ -407,8 +407,7 @@ export const EN_DEFERRED = {
   'reliability.moved': 'moved by {change}',
   'reliability.noValue': 'not measured',
   // --- The A/B experiment bench ---------------------------------------------
-  // Loaded on first press (js/experimentsBridge.js registers it before the panel
-  // builds); failure.load stays in the base catalog for when that import fails.
+  // Loaded on first press (js/experimentsBridge.js registers it before the panel builds); failure.load stays in the base catalog for when that import fails.
   'bench.title': 'A/B Experiment',
   'bench.untitled': 'Untitled experiment',
   'bench.copyOf': 'Copy of {name}',
