@@ -216,6 +216,18 @@ describe('the note that the scene is rebuilt', () => {
     jest.advanceTimersByTime(3000);
   });
 
+  test('Reset the scene puts the scene back as drawn, and the note goes', () => {
+    syncReset(scene);
+    state.paused = true;
+    jest.advanceTimersByTime(1100);
+    expect(note().hidden).toBe(false);
+    state.paused = false;
+    document.getElementById('investigationResetScenario').click();
+    expect(note().hidden).toBe(true);
+    jest.advanceTimersByTime(3000);
+    expect(note().hidden).toBe(true);
+  });
+
   test('drawn again (an instrument arriving), the same step keeps what was said', () => {
     at = 1;
     visited = new Set(['intro', 'guess']);

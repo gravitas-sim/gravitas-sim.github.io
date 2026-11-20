@@ -12,6 +12,7 @@ import { onLocaleChange, registerMessages, t } from '../i18n/index.js';
 import { EN_RESET } from '../i18n/en.reset.js';
 import { ES_RESET } from '../i18n/es.reset.js';
 import { state } from '../appState.js';
+import { EV_OBJECT_PLACED } from '../names.js';
 import {
   asteroids,
   bh_list,
@@ -71,14 +72,39 @@ export function railLeavesScene(on) {
   bound.clear();
 }
 
-/** What a student changes without a saved control: a pause, the bodies. */
-const mark = () =>
-  `${state.paused}${[stars, planets, gas_giants, asteroids, comets, bh_list, neutron_stars, white_dwarfs].reduce((n, l) => n + l.length, 0)}`;
+/** How many bodies are in the world. */
+const bodies = () =>
+  [
+    stars,
+    planets,
+    gas_giants,
+    asteroids,
+    comets,
+    bh_list,
+    neutron_stars,
+    white_dwarfs,
+  ].reduce((n, l) => n + l.length, 0);
+
+/** The scene as a step drew it: the run paused or not, how many bodies, whether the student placed one. */
+let start = { paused: false, count: 0, at: 0, placed: false };
+/** An instrument settling in puts bodies in the scene for a moment: only later changes are the student's. */
+const SETTLE_MS = 3000;
+window.addEventListener(EV_OBJECT_PLACED, () => (start.placed = true));
+const changed = () =>
+  state.paused !== start.paused ||
+  start.placed ||
+  (Date.now() - start.at > SETTLE_MS && bodies() !== start.count);
+const rebase = () =>
+  (start = {
+    paused: state.paused,
+    count: bodies(),
+    at: Date.now(),
+    placed: false,
+  });
 
 let timer = 0;
 let open = null;
 let at = -1;
-let base = '';
 let has = false;
 let said = '';
 let el = null;
@@ -111,9 +137,10 @@ function tick() {
     clearInterval(timer);
     timer = open = 0;
     say('');
-  } else if (has && !said && mark() !== base) say('saved.scene.leave');
+  } else if (has && !said && changed()) say('saved.scene.leave');
   // The scene is back as it was drawn (a reset): nothing left to warn of.
-  else if (said === 'saved.scene.leave' && mark() === base) say('');
+  else if (said === 'saved.scene.leave' && !changed()) say('');
+  if (Date.now() - start.at <= SETTLE_MS) start.count = bodies();
 }
 
 /**
@@ -129,7 +156,7 @@ function noteScene({ scene }) {
   open = id;
   at = i;
   has = scene;
-  if (!again || !said) base = mark();
+  if (!again || !said) rebase();
   if (!again) say(scene && back ? 'saved.scene.back' : '');
   timer ||= setInterval(tick, 1000);
 }
@@ -152,6 +179,11 @@ function paintReset(step) {
   const button = $('investigationResetScenario');
   const why = $('investigationResetWhy');
   if (!button) return;
+  // Resetting the scene puts it back as drawn: nothing left to warn of.
+  if (!button.dataset.noted) {
+    button.dataset.noted = 1;
+    button.addEventListener('click', () => (rebase(), say('')));
+  }
   const off = !step.scene && !step.tool;
   button.disabled = off;
   const kind = step.kind === 'portrait' || step.kind === 'quiet';
