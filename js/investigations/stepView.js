@@ -119,10 +119,11 @@ export function estimateHolds() {
   if (step?.kind !== 'estimate' || h.responses()[h.stepId()]) return false;
   fetchSeams(step, () => h.currentStep() === step && h.renderStep());
   const body = h.els().body;
-  announce(
-    body.querySelector('[data-est-note],[data-est-wait]')?.textContent ?? ''
-  );
-  body.querySelector('[data-est]')?.focus();
+  const note = body.querySelector('[data-est-note],[data-est-wait]');
+  announce(note?.textContent ?? '');
+  const box = body.querySelector('[data-est]');
+  if (box) box.focus();
+  else note?.scrollIntoView?.({ block: 'nearest' });
   return true;
 }
 
