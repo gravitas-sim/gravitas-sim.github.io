@@ -348,10 +348,9 @@ test.describe('a student comes back to the activity, not the bare investigation'
 
   test('a title kept in one language is shown as it is, not as the other', async ({
     page,
-    app,
   }) => {
     await profile(page, 'returning');
-    await app.boot({ url: '/library/' });
+    await page.goto('/library/');
     await page.evaluate(() =>
       localStorage.setItem(
         'gravitas_resume',
