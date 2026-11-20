@@ -1178,7 +1178,7 @@ const KEPLER = {
       stage: {
         system: {
           starName: 'Test star',
-          planets: [{ name: 'Test planet', role: 'world', aAU: 1, ecc: 0 }],
+          planets: [{ name: 'Test planet', role: 'planet', aAU: 1, ecc: 0 }],
           fit: true,
         },
       },
