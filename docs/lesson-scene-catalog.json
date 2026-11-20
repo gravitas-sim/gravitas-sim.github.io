@@ -12017,7 +12017,7 @@
      ]
     },
     {
-     "sid": "measurement-one-how-big-is",
+     "sid": "take-the-orbit-readings",
      "index": 23,
      "type": "measure",
      "title": "Measurement one: how big is the orbit?",
@@ -12095,7 +12095,7 @@
      ]
     },
     {
-     "sid": "measurement-two-how-long-does",
+     "sid": "time-the-laps",
      "index": 24,
      "type": "measure",
      "title": "Measurement two: how long does a lap take?",
@@ -12204,8 +12204,8 @@
       "record-values"
      ],
      "requires": [
-      "measurement-one-how-big-is",
-      "measurement-two-how-long-does"
+      "take-the-orbit-readings",
+      "time-the-laps"
      ],
      "reveal": null,
      "asks": {
@@ -12317,7 +12317,7 @@
      ]
     },
     {
-     "sid": "back-to-the-balance-point",
+     "sid": "compare-the-two-arms",
      "index": 27,
      "type": "measure",
      "title": "Back to the balance point",
@@ -12459,7 +12459,7 @@
      ]
     },
     {
-     "sid": "now-weigh-each-one",
+     "sid": "share-the-total-out",
      "index": 29,
      "type": "measure",
      "title": "Now weigh each one",
@@ -12490,7 +12490,7 @@
      ],
      "requires": [
       "weigh-the-pair",
-      "back-to-the-balance-point"
+      "compare-the-two-arms"
      ],
      "reveal": null,
      "asks": {
@@ -12755,7 +12755,7 @@
      ]
     },
     {
-     "sid": "one-on-your-own",
+     "sid": "weigh-a-new-pair",
      "index": 33,
      "type": "measure",
      "title": "One on your own",
@@ -12905,7 +12905,7 @@
       "answer-in-words"
      ],
      "requires": [
-      "now-weigh-each-one"
+      "share-the-total-out"
      ],
      "reveal": null,
      "asks": {
@@ -13057,33 +13057,33 @@
      "heldUntil": "run-them-together",
      "experiment": [
       "run-them-together",
-      "measurement-one-how-big-is",
-      "measurement-two-how-long-does",
-      "back-to-the-balance-point",
-      "now-weigh-each-one",
+      "take-the-orbit-readings",
+      "time-the-laps",
+      "compare-the-two-arms",
+      "share-the-total-out",
       "somebody-really-did-this",
       "and-stars-are-not-the"
      ],
      "measure": [
       "run-them-together",
       "a-practice-run",
-      "measurement-one-how-big-is",
-      "measurement-two-how-long-does",
+      "take-the-orbit-readings",
+      "time-the-laps",
       "weigh-the-pair",
-      "back-to-the-balance-point",
-      "now-weigh-each-one",
+      "compare-the-two-arms",
+      "share-the-total-out",
       "somebody-really-did-this",
       "and-stars-are-not-the",
-      "one-on-your-own"
+      "weigh-a-new-pair"
      ],
      "evidence": [
       "a-practice-run",
-      "measurement-one-how-big-is",
-      "measurement-two-how-long-does",
+      "take-the-orbit-readings",
+      "time-the-laps",
       "weigh-the-pair",
-      "back-to-the-balance-point",
-      "now-weigh-each-one",
-      "one-on-your-own"
+      "compare-the-two-arms",
+      "share-the-total-out",
+      "weigh-a-new-pair"
      ],
      "interpret": "run-them-together",
      "measuredBeforeAnswering": true,

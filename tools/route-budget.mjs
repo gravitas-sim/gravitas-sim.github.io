@@ -177,6 +177,12 @@ async function serve(root, port) {
   return child;
 }
 
+/** An estimate's box is fetched with its step, and Next waits for it: wait for the box before pressing Next. */
+const estimateBox = page =>
+  page
+    .locator('#investigationBody [data-est-wait]')
+    .waitFor({ state: 'detached', timeout: 60_000 });
+
 /**
  * Load one route fresh and count its JavaScript.
  * @returns {Promise<{kb: number, requests: number, toolKb: ?number,
@@ -238,6 +244,7 @@ async function measure(browser, base, route) {
   let tool = null;
   if (route.toolStep !== undefined) {
     for (let s = 0; s < route.toolStep; s++) {
+      await estimateBox(page);
       await page.locator('#investigationNext').click();
     }
     await page.waitForFunction(
@@ -391,6 +398,7 @@ async function measureLesson(browser, base, lesson, config, root) {
     // Next until the one-based counter shows this step.
     for (let guard = 0; guard < 80 && (await count()) < step + 1; guard++) {
       const before = await count();
+      await estimateBox(page);
       await page.locator('#investigationNext').click();
       await page
         .waitForFunction(

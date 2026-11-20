@@ -89,13 +89,14 @@ export function runsModule(m) {
   return (slots.runs = m);
 }
 
+let lost = false; // a lazy module failed to load: Next stops waiting for the estimate box
 /** Fetch the run and reveal code with the step that needs it: offline, the lesson opens. */
 export function fetchSeams(step, again) {
   const get = (needed, load, use) =>
     needed &&
     load().then(
       m => (use(m), again()),
-      () => {}
+      () => (lost = true)
     );
   get(
     step.variation && !slots.runs,
@@ -218,7 +219,10 @@ export function stepMarkup(step, c) {
   }
 
   if (step.kind === 'estimate')
-    parts.push(slots.reveal?.estimate(step, c) ?? '');
+    parts.push(
+      slots.reveal?.estimate(step, c) ??
+        `<p class="inv-held" data-est-wait>${escape(t('inv.card.loading'))}</p>`
+    );
   else if (step.type === 'predict' || step.kind === 'choice') {
     const locked = saved !== undefined;
     // A step that names `reveal` holds the marking and the explanation until
@@ -1278,3 +1282,10 @@ export function roleEchoesName(label, name) {
   const b = String(name).trim().toLowerCase();
   return Boolean(a) && (a === b || b.startsWith(`${a} `));
 }
+
+/** Whether Next waits: an estimate's box is fetched with its step, and is never passed unseen. */
+export const estimateHolds = () =>
+  bound?.currentStep()?.kind === 'estimate' &&
+  !slots.reveal &&
+  !lost &&
+  (announce(t('inv.card.loading')), true);
