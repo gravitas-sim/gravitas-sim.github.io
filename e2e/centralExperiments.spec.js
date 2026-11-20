@@ -352,7 +352,9 @@ test.describe('the central experiment of each investigation', () => {
     };
     await recordFields(page, id, measureSid, evidence);
     const check = page.locator('#investigationBody [data-check-slot]');
-    await expect(check).toContainText(/Four distances spanning a factor of 6/);
+    await expect(check).toContainText(
+      /Four distances spread over a factor of four or more/
+    );
     // A swapped near and far is refused in words; the right readings restore it.
     await recordFields(page, id, measureSid, {
       t1: evidence.t4,
@@ -360,7 +362,7 @@ test.describe('the central experiment of each investigation', () => {
     });
     await expect(check).toContainText(/swapped|opposite/);
     await recordFields(page, id, measureSid, evidence);
-    await expect(check).toContainText(/Four distances spanning/);
+    await expect(check).toContainText(/Four distances spread over/);
     await expectEvidenceRetained(page, id, measureSid, evidence);
 
     await expectVerdictRevealed(page, plan, predict);

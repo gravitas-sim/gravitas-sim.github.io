@@ -550,12 +550,12 @@ const TIDES = {
         if (span < 4) {
           return {
             level: 'warn',
-            message: `Your distances span only a factor of ${Math.round(span * 10) / 10}. Spread them wider, so that one is at least four times another and the curve has room to show its shape.`,
+            message: `Your distances span less than a factor of four. Spread them wider, so that one is at least four times another and the curve has room to show its shape.`,
           };
         }
         return {
           level: 'ok',
-          message: `Four distances spanning a factor of ${Math.round(span * 10) / 10}, each stretch read where you said. Look at the graph: press Try 1 ÷ distance³ and see whether your points straighten.`,
+          message: `Four distances spread over a factor of four or more, each stretch read where you said. Look at the shape of the graph: the next step asks what halving the distance does to the stretch.`,
         };
       },
       plot: {
@@ -569,18 +569,9 @@ const TIDES = {
           { x: v.d3, y: v.t3, label: '3' },
           { x: v.d4, y: v.t4, label: '4' },
         ],
-        transform: {
-          label: 'Try 1 ÷ distance³',
-          xLabel: '1 ÷ distance³',
-          yLabel: 'stretch  (× lunar tide)',
-          map: p => ({ x: 1 / (p.x * p.x * p.x), y: p.y, label: p.label }),
-        },
-        note: `Raw, the points climb away from the axis far too steeply for a
-               straight line. Press <strong>Try 1 ÷ distance³</strong>: if the
-               tide really does go as one over the distance cubed, they will
-               drop onto a straight line through the corner. Straightening a
-               curve by choosing the right axes is how a relationship gets
-               identified rather than guessed.`,
+        note: `Raw, the points climb away from the axis as the distance
+               shrinks. Look at how the curve bends: the next question asks
+               what happens to the stretch each time the distance is halved.`,
       },
       tool: {
         id: 'tide-strength',
@@ -679,6 +670,13 @@ const TIDES = {
             level: 'warn',
             message:
               'The slider runs from 0.2 to 2 times the Moon’s distance. Choose a distance in that range.',
+          };
+        }
+        if (Math.abs(v.d5 / 0.05 - Math.round(v.d5 / 0.05)) > 0.001) {
+          return {
+            level: 'warn',
+            message:
+              'The slider moves in steps of 0.05, so choose a distance it can be set to exactly, a multiple of 0.05.',
           };
         }
         if (Number.isFinite(v.gap) && v.gap < 0.05) {
@@ -870,7 +868,7 @@ const TIDES = {
         }
         return {
           level: 'ok',
-          message: `Three masses held at one distance. Stretch ÷ mass comes out ${Math.round((ratios.reduce((a, b) => a + b, 0) / 3) * 100) / 100} for every row: a constant ratio is what a straight line through the corner looks like in a table.`,
+          message: `Three masses held at one distance. Stretch ÷ mass comes out the same for every row: a constant ratio is what a straight line through the corner looks like in a table.`,
         };
       },
       plot: {
@@ -883,9 +881,9 @@ const TIDES = {
           { x: v.m2, y: v.s2, label: '2' },
           { x: v.m3, y: v.s3, label: '3' },
         ],
-        note: `No transformation offered this time, and none needed: if these
-               three land on a straight line through the corner as they are,
-               the relationship is as simple as a relationship gets.`,
+        note: `No transformation is needed: if these three land on a straight
+               line through the corner as they are, the relationship is as
+               simple as a relationship gets.`,
       },
       tool: {
         id: 'tide-strength',
@@ -1206,7 +1204,11 @@ const TIDES = {
              it has a name: the <strong>Roche limit</strong>, after Édouard
              Roche, who worked it out in 1848. This balance gives the
              rigid-body Roche limit, and its textbook formula is the algebra of
-             setting the two bars equal.`,
+             setting the two bars equal.
+             \n\nThe size of the body does not enter the balance, so the iron
+             crossing describes a small iron body. A body as large as the Moon
+             could not get there at all: it would touch the Earth at 1.27 Earth
+             radii, before the bars met at 1.22.`,
       prompt:
         'In one sentence, say how the density of the body moved the distance where the tide catches it, and why.',
       rubric:

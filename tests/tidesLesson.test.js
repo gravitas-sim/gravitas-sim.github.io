@@ -118,6 +118,19 @@ describe('the physics the panel stands on, done independently', () => {
     expect(crossing(3300)).toBeGreaterThan(crossing(6000));
   });
 
+  test('a Moon-sized body would touch the Earth before the iron bars met, and the lesson says so', () => {
+    const R_MOON = 1.7374e6;
+    const touch = 1 + R_MOON / R_EARTH;
+    expect(touch).toBeCloseTo(1.2727, 3);
+    expect(crossing(6000)).toBeLessThan(touch);
+    expect(crossing(600)).toBeGreaterThan(touch);
+    const text = step('how-density-moved-it').body;
+    expect(text).toMatch(/1\.27 Earth\s+radii/);
+    expect(text).toMatch(/1\.22/);
+    const at = LESSON.steps.findIndex(x => x.sid === 'how-density-moved-it');
+    expect(ES.steps[at].body).toMatch(/1,27 radios terrestres/);
+  });
+
   test('the first-order balance is within a few percent of the exact stretch, even for iron at the slider’s inner end', () => {
     const R = 1.7374e6;
     for (const rho of [600, 6000]) {
@@ -180,7 +193,7 @@ describe('the four distances', () => {
   test('a narrow span, a repeated distance and a reading taken elsewhere are refused', () => {
     expect(
       s().validate(fourDistances([1, 1.2, 1.4, 1.6]), {}, {}).message
-    ).toMatch(/span only a factor/);
+    ).toMatch(/span less than a factor of four/);
     expect(s().validate(fourDistances([1, 1, 0.5, 0.25]), {}, {}).level).toBe(
       'warn'
     );
@@ -189,6 +202,22 @@ describe('the four distances', () => {
     expect(s().validate(v, {}, taken).message).toMatch(/slider was/);
     expect(s().validate({ ...v, d2: -1 }, {}, {}).level).toBe('error');
     expect(s().validate({}, {}, {})).toBeNull();
+  });
+
+  test('the messages that say well done carry no number, so each can be translated whole', () => {
+    const a = s().validate(fourDistances([2, 1, 0.5, 0.25]), {}, {});
+    const b = s().validate(fourDistances([2, 1, 0.5, 0.125]), {}, {});
+    expect(a.level).toBe('ok');
+    expect(a.message).toBe(b.message);
+    expect(a.message).not.toMatch(/\d/);
+  });
+
+  test('the cube law is not offered before the halving is asked: no transform on the four-distance graph', () => {
+    expect(s().plot.transform).toBeUndefined();
+    expect(JSON.stringify(s().plot)).not.toMatch(/distance³|distance cubed/);
+    expect(
+      s().validate(fourDistances([2, 1, 0.5, 0.25]), {}, {}).message
+    ).not.toMatch(/1 ÷|cube|³/);
   });
 
   test('no number in the step, hint or tip names the prescribed distances, and no field opens with a value', () => {
@@ -250,6 +279,12 @@ describe('a distance that was not used, estimated and then read', () => {
       'ok'
     );
     expect(pick().validate({ d5: 3, gap: 1 }).level).toBe('warn');
+    // The slider moves in steps of 0.05: a distance it cannot be set to is
+    // refused here, so the reading taken there is never off the estimate.
+    for (const off of [0.73, 1.234, 0.52])
+      expect(pick().validate({ d5: off, gap: 1 }).message).toMatch(/0\.05/);
+    for (const on of [0.2, 0.65, 1.35, 2])
+      expect(pick().validate({ d5: on, gap: 1 }).level).toBe('ok');
     expect(pick().validate({})).toBeNull();
   });
 

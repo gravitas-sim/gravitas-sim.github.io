@@ -35,6 +35,8 @@ export const UNITS = Object.freeze({
   ppm: { dim: 'ratio', factor: 1e-6, symbol: 'ppm' },
   ppt: { dim: 'ratio', factor: 1e-3, symbol: 'ppt' },
   '%': { dim: 'ratio', factor: 1e-2, symbol: '%' },
+  // A multiple of a stated reference (the lunar tide, the Moon's distance).
+  x: { dim: 'ratio', factor: 1, symbol: '×' },
 
   s: { dim: 'time', factor: 1, symbol: 's' },
   min: { dim: 'time', factor: 60, symbol: 'min' },
@@ -208,6 +210,13 @@ export const ALIASES = new Map(
     'r☉': 'Rsun',
     r_jup: 'RJup',
     r_earth: 'Rearth',
+    'earth radii': 'Rearth',
+    'radios terrestres': 'Rearth',
+    '×': 'x',
+    '× lunar tide': 'x',
+    '× moon’s': 'x',
+    '× marea lunar': 'x',
+    '× la de la luna': 'x',
     'r⊕': 'Rearth',
     au: 'AU',
     ua: 'AU',

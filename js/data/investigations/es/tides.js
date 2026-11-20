@@ -186,12 +186,7 @@ export default {
         title: 'Tus cuatro lecturas',
         xLabel: 'distancia  (× la de la Luna)',
         yLabel: 'estiramiento  (× marea lunar)',
-        transform: {
-          label: 'Prueba 1 ÷ distancia³',
-          xLabel: '1 ÷ distancia³',
-          yLabel: 'estiramiento  (× marea lunar)',
-        },
-        note: 'En crudo, los puntos se alejan del eje con demasiada pendiente para ser una recta. Pulsa <strong>Prueba 1 ÷ distancia³</strong>: si la marea va de verdad como uno partido por la distancia al cubo, caerán sobre una recta que pasa por la esquina. Enderezar una curva eligiendo los ejes adecuados es la manera de identificar una relación en lugar de adivinarla.',
+        note: 'En crudo, los puntos se alejan del eje a medida que la distancia disminuye. Fíjate en cómo se curva: la pregunta siguiente es qué pasa con el estiramiento cada vez que la distancia se reduce a la mitad.',
       },
       tool: {
         title: 'Lee aquí cada distancia',
@@ -308,7 +303,7 @@ export default {
         title: 'Tus tres lecturas',
         xLabel: 'masa del compañero  (× la de la Luna)',
         yLabel: 'estiramiento  (× marea lunar)',
-        note: 'Esta vez no se ofrece ninguna transformación, y no hace falta: si estos tres puntos caen sobre una recta que pasa por la esquina tal como están, la relación es todo lo sencilla que puede ser una relación.',
+        note: 'No hace falta ninguna transformación: si estos tres puntos caen sobre una recta que pasa por la esquina tal como están, la relación es todo lo sencilla que puede ser una relación.',
       },
       tool: {
         title: 'Lee aquí cada masa',
@@ -435,7 +430,7 @@ export default {
     },
     {
       title: 'Qué hizo la densidad',
-      body: 'Tus dos cruces están debajo, junto a lo que predijiste.\n\nLa distancia a la que la gravedad propia de un cuerpo iguala a la marea que lo atraviesa tiene nombre: el <strong>límite de Roche</strong>, por Édouard Roche, que lo dedujo en 1848. Este equilibrio da el límite de Roche de un cuerpo rígido, y su fórmula de los libros de texto es el álgebra de igualar las dos barras.',
+      body: 'Tus dos cruces están debajo, junto a lo que predijiste.\n\nLa distancia a la que la gravedad propia de un cuerpo iguala a la marea que lo atraviesa tiene nombre: el <strong>límite de Roche</strong>, por Édouard Roche, que lo dedujo en 1848. Este equilibrio da el límite de Roche de un cuerpo rígido, y su fórmula de los libros de texto es el álgebra de igualar las dos barras.\n\nEl tamaño del cuerpo no entra en el equilibrio, así que el cruce del hierro describe un cuerpo de hierro pequeño. Uno tan grande como la Luna no podría llegar allí: tocaría la Tierra a 1,27 radios terrestres, antes de que las barras se cruzaran en 1,22.',
       prompt:
         'En una frase, di cómo movió la densidad del cuerpo la distancia a la que lo alcanza la marea, y por qué.',
       rubric:

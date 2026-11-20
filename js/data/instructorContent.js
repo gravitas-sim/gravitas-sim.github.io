@@ -3828,19 +3828,19 @@ export const INSTRUCTOR_CONTENT = {
         text: 'The centerpiece. At step 3 it draws the three pulls in true proportion, which makes them look identical on purpose; at step 6 it adds a second row showing what is left after the center is subtracted, and states the magnification factor between the rows on the panel. Students who see only the second row learn a diagram; the pairing is what teaches the mechanism.',
       },
       {
-        name: 'Straighten-the-curve transform (step 10)',
-        text: 'The distance plot offers a "Try 1 ÷ distance³" button. Points that curve away sharply drop onto a straight line through the corner. This is where most classes recognize the inverse cube, and it is worth pausing on as a general method for identifying a power law.',
+        name: 'Reading the exponent (steps 10, 11)',
+        text: 'The plot shows the curve the students’ own points make. The halving question asks for the factor from those readings; Log axes will straighten it. Most classes recognize the inverse cube here.',
       },
       {
-        name: 'The two-bar balance (steps 21, 22)',
+        name: 'The two-bar balance (steps 25, 27)',
         text: 'Green is the body’s own surface gravity, red is the tidal stretch. The distance slider moves only the red bar and the density slider only the green one, so the competition is easy to reason about. The crossing point the student finds is the Roche limit, and it is named only after they have measured it.',
       },
       {
-        name: 'The Saturn Roche panel (steps 23, 24)',
+        name: 'The Saturn Roche panel (steps 29, 30)',
         text: 'Two arcs, one for a body with no strength and one for a body that keeps its shape, against Saturn’s real ring geometry. Changing the density moves both arcs a long way, which is the argument that a Roche limit is not one distance. At high density the inner arc falls inside Saturn and the panel says so in words rather than clipping it.',
       },
       {
-        name: 'Tidal radius against horizon (step 28)',
+        name: 'Tidal radius against horizon (step 34)',
         text: 'A logarithmic drawing of the two lengths as the black hole mass runs from ten to a billion solar masses, with presets for a stellar-mass hole, Sagittarius A*, and a giant where the star is swallowed whole. The crossover near 1.6 × 10⁸ solar masses is stated on the panel.',
       },
     ],
