@@ -18047,7 +18047,7 @@
      "instrument": null,
      "evidence": [],
      "reset": [
-      "rebuilds: scenario \"Solar System\" seed goldilocks + camera",
+      "rebuilds: scenario \"Solar System\" seed goldilocks",
       "lesson locks: placement, inspector"
      ],
      "recovery": [

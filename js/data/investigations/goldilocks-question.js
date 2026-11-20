@@ -17,7 +17,8 @@
 const HZ_LAB = {
   scenario: 'Solar System',
   seed: 'goldilocks',
-  camera: { zoom: 1.5, pan: { x: 0, y: 0 } },
+  // No camera of its own: the scene is fitted to the room the panels leave, so
+  // the Sun is not left under the step text on a narrow window.
   paused: false,
 };
 
