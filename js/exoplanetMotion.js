@@ -10,8 +10,6 @@
 // js/exoplanetWidgets.js, which imports the helpers and lists the instruments.
 // =============================================================================
 
-// Reaches start-up modules; so reaches all of them (js/instrumentStartup.js).
-import './instrumentStartup.js';
 import {
   radialVelocitySemiAmplitude,
   stellarReflexSemimajorAxis,

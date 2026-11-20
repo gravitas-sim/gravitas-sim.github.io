@@ -47,7 +47,7 @@ import {
   TAU,
   drawFrame,
   periodDays,
-} from './exoplanetMotionWidgets.js';
+} from './exoplanetMotion.js';
 
 ensureDeferredMessages().catch(() => {});
 

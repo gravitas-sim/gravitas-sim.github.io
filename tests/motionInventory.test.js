@@ -176,7 +176,7 @@ describe("a step's instrument starts still under reduced motion", () => {
 
 describe('the two exoplanet instruments wait for Run', () => {
   const instruments = async () => {
-    const { MOTION_WIDGETS } = await import('../js/exoplanetMotionWidgets.js');
+    const { MOTION_WIDGETS } = await import('../js/exoplanetMotion.js');
     return MOTION_WIDGETS;
   };
   const engineOpens = (w, v, motion) =>

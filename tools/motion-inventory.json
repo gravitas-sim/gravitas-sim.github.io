@@ -185,7 +185,7 @@
       "test": "tests/motionInventory.test.js"
     },
     {
-      "file": "js/exoplanetMotionWidgets.js",
+      "file": "js/exoplanetMotion.js",
       "kind": "animated-widget",
       "treatment": "follows",
       "what": "Two instruments that advance a planet's phase every frame",
