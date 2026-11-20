@@ -173,6 +173,7 @@ current, and the orchestrator checks it.
 | `label-golden.mjs` | npm run label:golden [-- --regenerate-label-golden] | `npm run label:golden` |
 | `lensing2-validate.mjs` | The enclosed-mass lensing extension against its committed thresholds (Prompt 251) | `npm run lensing2:validate` |
 | `lesson-coverage.mjs` | npm run lesson:coverage | `npm run lesson:coverage` |
+| `lesson-framing-legibility.mjs` | Label size and overlap on each scenario the lessons load and on the stage lessons |  |
 | `lesson-framing-table.mjs` | Measure how every lesson scene is framed, at three sizes, into a table |  |
 | `lesson-framing.mjs` | Which lesson steps use a scene, and whether each one is framed |  |
 | `lesson-golden-dom.mjs` | npm run lesson:golden:dom -- --regenerate-lesson-golden | `npm run lesson:golden:dom` |

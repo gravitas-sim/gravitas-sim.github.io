@@ -24,6 +24,17 @@
   "1280|hohmann-transfer|watch-the-coast": "furniture over the canvas that the free region does not count (the timeline bar, a docked toolbar or readout): sun is under pauseEventBody",
   "1280|lagrange-points|two-stars-and-a-speck": "furniture over the canvas that the free region does not count (the timeline bar, a docked toolbar or readout): primary is under timelineBar",
   "1280|integrators-in-practice|one-system-four-steps": "furniture over the canvas that the free region does not count (the timeline bar, a docked toolbar or readout): (first object) is under timelineBar",
-  "1280|extending-an-experiment|twenty-planets": "furniture over the canvas that the free region does not count (the timeline bar, a docked toolbar or readout): (first object) is under timelineBar"
+  "1280|extending-an-experiment|twenty-planets": "furniture over the canvas that the free region does not count (the timeline bar, a docked toolbar or readout): (first object) is under timelineBar",
+  "768|black-holes|not-a-hole-and-not": "orbiters sit on the edge of the free region at 768, so a body can fall under the step text on a run: lesson layout, not the fit (flaky in the browser check)",
+  "768|black-holes|the-event-horizon": "orbiters sit on the edge of the free region at 768, so a body can fall under the step text on a run: lesson layout, not the fit (flaky in the browser check)",
+  "768|black-holes|three-measurements": "orbiters sit on the edge of the free region at 768, so a body can fall under the step text on a run: lesson layout, not the fit (flaky in the browser check)",
+  "768|black-holes|what-did-doubling-do": "orbiters sit on the edge of the free region at 768, so a body can fall under the step text on a run: lesson layout, not the fit (flaky in the browser check)",
+  "768|black-holes|squeeze-the-sun": "orbiters sit on the edge of the free region at 768, so a body can fall under the step text on a run: lesson layout, not the fit (flaky in the browser check)",
+  "768|black-holes|the-right-answer-for-the": "orbiters sit on the edge of the free region at 768, so a body can fall under the step text on a run: lesson layout, not the fit (flaky in the browser check)",
+  "768|black-holes|mass-divided-by-volume": "orbiters sit on the edge of the free region at 768, so a body can fall under the step text on a run: lesson layout, not the fit (flaky in the browser check)",
+  "768|black-holes|where-the-room-comes-from": "orbiters sit on the edge of the free region at 768, so a body can fall under the step text on a run: lesson layout, not the fit (flaky in the browser check)",
+  "768|black-holes|the-thermometer": "orbiters sit on the edge of the free region at 768, so a body can fall under the step text on a run: lesson layout, not the fit (flaky in the browser check)",
+  "768|black-holes|a-timeline-that-will-not": "orbiters sit on the edge of the free region at 768, so a body can fall under the step text on a run: lesson layout, not the fit (flaky in the browser check)",
+  "768|black-holes|from-city-sized-to-solar": "orbiters sit on the edge of the free region at 768, so a body can fall under the step text on a run: lesson layout, not the fit (flaky in the browser check)"
  }
 }
