@@ -23,6 +23,48 @@ import { threeShadersPlugin } from './tools/three-shaders.mjs';
 import { withoutPreload } from './tools/modulepreload.mjs';
 
 const OUT = 'dist';
+
+/**
+ * Every bundle's entries, with the outputs each one loads and the source
+ * modules those outputs were built from, for tools/route-overlay.mjs: a page
+ * published from the build replaces exactly the sources only it uses, and no
+ * others. Collected from esbuild's own metafile, so it is the import graph the
+ * bundler followed (static and dynamic imports alike), not a guess at it.
+ */
+const ENTRIES = {};
+/** Each output's own source modules, by its path under dist/. */
+const OUTPUTS = {};
+
+/** esbuild.build, recording the entries' closures (above). */
+async function bundle(options) {
+  const result = await esbuild.build({ ...options, metafile: true });
+  const outputs = result.metafile.outputs;
+  const rel = f => path.relative(OUT, f);
+  for (const [file, out] of Object.entries(outputs))
+    if (file.endsWith('.js'))
+      OUTPUTS[rel(file)] = {
+        inputs: Object.keys(out.inputs || {})
+          .filter(i => !i.includes(':'))
+          .sort(),
+        static: (out.imports || [])
+          .filter(i => !i.external && i.kind === 'import-statement')
+          .map(i => rel(i.path)),
+      };
+  for (const [file, out] of Object.entries(outputs)) {
+    if (!out.entryPoint) continue;
+    const seen = new Set();
+    const queue = [file];
+    while (queue.length) {
+      const next = queue.pop();
+      if (seen.has(next) || !outputs[next]) continue;
+      seen.add(next);
+      for (const imp of outputs[next].imports || [])
+        if (!imp.external) queue.push(imp.path);
+    }
+    ENTRIES[out.entryPoint] = [...seen].map(rel).sort();
+  }
+  return result;
+}
 const watch = process.argv.includes('--watch');
 
 // Files copied verbatim. Test harnesses, coverage reports and package metadata
@@ -266,7 +308,7 @@ async function buildCss() {
 }
 
 async function buildJs() {
-  const result = await esbuild.build({
+  const result = await bundle({
     entryPoints: [{ in: 'js/main.js', out: 'app' }],
     bundle: true,
     minify: true,
@@ -306,7 +348,7 @@ async function buildJs() {
 
   // The physics worker is instantiated with `new Worker(new URL(...))`, so it
   // needs its own bundle rather than being inlined into the main graph.
-  await esbuild.build({
+  await bundle({
     // The experiment runner's realm (js/experiments/experimentWorker.js) is
     // the same kind of thing: started with `new Worker(new URL(...))` from its
     // page, and carrying its own copy of the engine. So is the inference
@@ -497,7 +539,7 @@ async function buildDocPages() {
   // The portal's own bundle. Kept out of the app bundle because nothing in the
   // simulation imports it and nothing it imports needs the simulation.
   if (existsSync('js/instructorPortal.js')) {
-    await esbuild.build({
+    await bundle({
       entryPoints: ['js/instructorPortal.js'],
       bundle: true,
       minify: true,
@@ -529,7 +571,7 @@ async function buildDocPages() {
   // Bundled rather than copied: it imports the checks from tools/, which is a
   // development directory and is not part of the deployed site.
   if (existsSync('js/validationWorker.js')) {
-    await esbuild.build({
+    await bundle({
       entryPoints: ['js/validationWorker.js'],
       bundle: true,
       minify: true,
@@ -548,7 +590,7 @@ async function buildDocPages() {
   // shares the lesson manifest with the application and none of the simulation,
   // and a marketing page must not be able to grow the start-up download.
   if (existsSync('js/teachingPage.js')) {
-    await esbuild.build({
+    await bundle({
       entryPoints: ['js/teachingPage.js'],
       bundle: true,
       minify: true,
@@ -569,7 +611,7 @@ async function buildDocPages() {
   // The shared shell's module, for the pages that load it by URL rather
   // than through a bundle of their own (/model/, /validation/).
   if (existsSync('js/shell.js')) {
-    await esbuild.build({
+    await bundle({
       entryPoints: ['js/shell.js'],
       bundle: true,
       minify: true,
@@ -583,7 +625,7 @@ async function buildDocPages() {
   // The filters on /teaching/find/ (ADOPTION.md): a module of its own that the
   // generated page loads by URL, and nothing else imports.
   if (existsSync('js/teach/find.js')) {
-    await esbuild.build({
+    await bundle({
       entryPoints: ['js/teach/find.js'],
       bundle: true,
       minify: true,
@@ -598,7 +640,7 @@ async function buildDocPages() {
   // own, split so the registry it loads to read an activity's step titles, and
   // the QR encoder, arrive only when a link is given, and nothing else imports it.
   if (existsSync('js/teach/kit.js')) {
-    await esbuild.build({
+    await bundle({
       entryPoints: ['js/teach/kit.js'],
       bundle: true,
       minify: true,
@@ -618,7 +660,7 @@ async function buildDocPages() {
   // and judges it, which needs the lesson checker the course builder's route
   // has no room for; nothing else imports it.
   if (existsSync('js/course/packsPage.js')) {
-    await esbuild.build({
+    await bundle({
       entryPoints: ['js/course/packsPage.js'],
       bundle: true,
       minify: true,
@@ -642,7 +684,7 @@ async function buildDocPages() {
   // from the simulation, and a page most visitors never open may not grow the
   // start-up download.
   if (existsSync('js/evaluationKit.js')) {
-    await esbuild.build({
+    await bundle({
       entryPoints: ['js/evaluationKit.js'],
       bundle: true,
       minify: true,
@@ -661,7 +703,7 @@ async function buildDocPages() {
   // catalogs of strings, and a page only an author opens may not grow
   // anybody's start-up download or the application's deferred bundle.
   if (existsSync('js/studioPage.js')) {
-    await esbuild.build({
+    await bundle({
       entryPoints: ['js/studioPage.js'],
       bundle: true,
       minify: true,
@@ -684,7 +726,7 @@ async function buildDocPages() {
   // answer parser and, on request, the lab report; none of that may reach
   // anybody's start-up download.
   if (existsSync('js/composerPage.js')) {
-    await esbuild.build({
+    await bundle({
       entryPoints: ['js/composerPage.js'],
       bundle: true,
       minify: true,
@@ -711,7 +753,7 @@ async function buildDocPages() {
     ['js/courseHome.js', 'course-home-[hash]'],
   ]) {
     if (!existsSync(entry)) continue;
-    await esbuild.build({
+    await bundle({
       entryPoints: [entry],
       bundle: true,
       minify: true,
@@ -733,7 +775,7 @@ async function buildDocPages() {
   // the bodies' constants and the plan file's format, never a solver, which
   // run in the mission Worker (built with the others above).
   if (existsSync('js/missionPage.js')) {
-    await esbuild.build({
+    await bundle({
       entryPoints: ['js/missionPage.js'],
       bundle: true,
       minify: true,
@@ -752,7 +794,7 @@ async function buildDocPages() {
   // The mission lab (/mission/lab/, MISSION_LAB.md): its own entry. The
   // ephemeris pack and the solvers are the lab Worker's (built above).
   if (existsSync('js/missionLabPage.js')) {
-    await esbuild.build({
+    await bundle({
       entryPoints: ['js/missionLabPage.js'],
       bundle: true,
       minify: true,
@@ -781,7 +823,7 @@ async function buildDocPages() {
     'js/mission/lab/address.js',
   ]) {
     if (!existsSync(file)) continue;
-    await esbuild.build({
+    await bundle({
       entryPoints: [file],
       bundle: true,
       minify: true,
@@ -797,7 +839,7 @@ async function buildDocPages() {
   // evidence writer and the constellation figures are lazy chunks; the star
   // table is a JSON file the page fetches (STATIC_FILES), so no bundle holds it.
   if (existsSync('js/skyPage.js')) {
-    await esbuild.build({
+    await bundle({
       entryPoints: ['js/skyPage.js'],
       bundle: true,
       minify: true,
@@ -815,7 +857,7 @@ async function buildDocPages() {
   // only, and kept out of the precache (tools/build-service-worker.mjs). It
   // runs no Python itself; the frame and the runtime are another origin's.
   if (existsSync('js/computePage.js')) {
-    await esbuild.build({
+    await bundle({
       entryPoints: ['js/computePage.js'],
       bundle: true,
       minify: true,
@@ -833,7 +875,7 @@ async function buildDocPages() {
   // 3-D kernel's state checks and reference problems, never the kernel,
   // which runs in its Worker (built with the others above).
   if (existsSync('js/lab3dPage.js')) {
-    await esbuild.build({
+    await bundle({
       entryPoints: ['js/lab3dPage.js'],
       bundle: true,
       minify: true,
@@ -854,7 +896,7 @@ async function buildDocPages() {
   // view and every other page are untouched. Like the diagnostics page it
   // never integrates: its live runs are the same Worker's.
   if (existsSync('js/lab3dLab.js')) {
-    await esbuild.build({
+    await bundle({
       entryPoints: ['js/lab3dLab.js'],
       bundle: true,
       minify: true,
@@ -876,7 +918,7 @@ async function buildDocPages() {
   // what the two share, and every reader of the lab would download those
   // chunks; built apart, it carries its own copy and costs only a guide.
   if (existsSync('js/lab3d/view/guidePanel.js')) {
-    await esbuild.build({
+    await bundle({
       entryPoints: ['js/lab3d/view/guidePanel.js'],
       bundle: true,
       minify: true,
@@ -895,7 +937,7 @@ async function buildDocPages() {
   // guide panel is. It carries the forward models, the notebook writer and the
   // observation exporter, which a reader of the lab never downloads.
   if (existsSync('js/lab3d/view/evidencePanel.js')) {
-    await esbuild.build({
+    await bundle({
       entryPoints: ['js/lab3d/view/evidencePanel.js'],
       bundle: true,
       minify: true,
@@ -918,7 +960,7 @@ async function buildDocPages() {
     'js/lab3d/view/describe.js',
   ]) {
     if (!existsSync(lazy)) continue;
-    await esbuild.build({
+    await bundle({
       entryPoints: [lazy],
       bundle: true,
       minify: true,
@@ -933,7 +975,7 @@ async function buildDocPages() {
   // The 3-D lab's embed (js/lab3d/embed.js, Prompt 105): by URL, only when
   // `embed=1` is asked for.
   if (existsSync('js/lab3d/embed.js')) {
-    await esbuild.build({
+    await bundle({
       entryPoints: ['js/lab3d/embed.js'],
       bundle: true,
       minify: true,
@@ -949,7 +991,7 @@ async function buildDocPages() {
   // have theirs: it reads the scenario catalog and the share encoder, and a
   // page only an author opens may not grow anybody's start-up download.
   if (existsSync('js/figureBuilder.js')) {
-    await esbuild.build({
+    await bundle({
       entryPoints: ['js/figureBuilder.js'],
       bundle: true,
       minify: true,
@@ -967,7 +1009,7 @@ async function buildDocPages() {
   // in the simulation imports it, and it never loads the engine itself - its
   // Workers do, from their own bundle above.
   if (existsSync('js/experimentsPage.js')) {
-    await esbuild.build({
+    await bundle({
       entryPoints: ['js/experimentsPage.js'],
       bundle: true,
       minify: true,
@@ -989,7 +1031,7 @@ async function buildDocPages() {
   // the simulation imports it, and each observation it opens is a chunk of
   // its own, fetched when opened.
   if (existsSync('js/observatoryPage.js')) {
-    await esbuild.build({
+    await bundle({
       entryPoints: ['js/observatoryPage.js'],
       bundle: true,
       minify: true,
@@ -1009,7 +1051,7 @@ async function buildDocPages() {
   // The catalog: its own entry, like the observatory. Nothing in the
   // simulation imports it.
   if (existsSync('js/catalogPage.js')) {
-    await esbuild.build({
+    await bundle({
       entryPoints: ['js/catalogPage.js'],
       bundle: true,
       minify: true,
@@ -1028,7 +1070,7 @@ async function buildDocPages() {
   // The Library: its own entry, like the catalog. Nothing in the simulation
   // imports it, and its index is a JSON file it fetches (LIBRARY.md).
   if (existsSync('js/libraryPage.js')) {
-    await esbuild.build({
+    await bundle({
       entryPoints: ['js/libraryPage.js'],
       bundle: true,
       minify: true,
@@ -1048,7 +1090,7 @@ async function buildDocPages() {
   // My work: its own entry, like the Library. It is the only page that reads
   // the storage module, so that module is this bundle's and nothing else's.
   if (existsSync('js/myWorkPage.js')) {
-    await esbuild.build({
+    await bundle({
       entryPoints: ['js/myWorkPage.js'],
       bundle: true,
       minify: true,
@@ -1063,7 +1105,7 @@ async function buildDocPages() {
   }
 
   if (existsSync('js/submissionReview.js')) {
-    await esbuild.build({
+    await bundle({
       entryPoints: ['js/submissionReview.js'],
       bundle: true,
       minify: true,
@@ -1080,7 +1122,7 @@ async function buildDocPages() {
   }
 
   if (existsSync('js/validationPage.js')) {
-    await esbuild.build({
+    await bundle({
       entryPoints: ['js/validationPage.js'],
       bundle: true,
       minify: true,
@@ -1150,6 +1192,14 @@ async function run() {
   // about what "initial" means - which chunks are eager is a property of the
   // import graph, and summarizeBundle() above is the one place that walks it.
   //
+  // Every bundle's entries, outputs and source modules, as esbuild followed
+  // them, for tools/route-overlay.mjs. Inside dist/, which is not published
+  // from, so that the build job's dist artifact carries it to the deploy.
+  await writeFile(
+    path.join(OUT, 'build-inputs.json'),
+    `${JSON.stringify({ generated: new Date().toISOString(), entries: ENTRIES, outputs: OUTPUTS })}\n`
+  );
+
   // Outside dist/, because dist/ is what gets published and a build report is
   // not part of the site.
   await writeFile(

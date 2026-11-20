@@ -114,6 +114,11 @@ export const ROUTES = [
 const CONFIGS = {
   sources: { root: REPO },
   build: { root: path.join(REPO, 'dist') },
+  // A staged deploy tree (tools/prepare-pages.mjs), measured on request
+  // (--config=staged) and never judged: it has no ceilings of its own.
+  ...(process.env.GRAVITAS_ROUTE_ROOT
+    ? { staged: { root: path.resolve(process.env.GRAVITAS_ROUTE_ROOT) } }
+    : {}),
 };
 
 /** Serve a directory with the repository's own static server. */

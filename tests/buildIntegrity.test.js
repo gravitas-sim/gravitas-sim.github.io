@@ -379,7 +379,10 @@ describe('the deploy sequence keeps its artifacts describing one candidate', () 
     // exercises the whole thing including both guards - and the order is a
     // property of that file.
     const src = tool();
-    const stamp = src.indexOf('for (const page of STAMPED_PAGES) stampPage');
+    // The one stamping call: the tree's stamped pages and any page the deploy
+    // publishes from the build (tools/route-overlay.mjs) go through it.
+    const stamp = src.indexOf('stampPage(path.join(out, page), commit)');
+    expect(src.split('stampPage(path.join(out, page)').length).toBe(2);
     const reseal = src.indexOf('run(process.execPath, [builder]');
     const record = src.indexOf("'deployed-revision.json'),\n      `${JSON");
     const verify = src.indexOf('verifyRelease(out)');

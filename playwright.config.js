@@ -82,7 +82,14 @@ const SHARDED = process.argv.some(
 
 /** 'src' (default) or 'dist'. */
 const target = process.env.GRAVITAS_E2E_TARGET === 'dist' ? 'dist' : 'src';
-const serveRoot = target === 'dist' ? 'dist' : '.';
+/**
+ * What the server serves: the tree, or dist/ for the build target. A staged
+ * deploy tree (tools/prepare-pages.mjs, with or without the routes of
+ * tools/route-overlay.mjs) is served with GRAVITAS_E2E_ROOT and the dist
+ * target, so the build-target skips apply to it as they do to dist/.
+ */
+const serveRoot =
+  process.env.GRAVITAS_E2E_ROOT || (target === 'dist' ? 'dist' : '.');
 
 // The production spec is DOM-only and runs against the bundle alone. Apart from
 // BOTH_TARGETS below, everything else needs module access and can only run
