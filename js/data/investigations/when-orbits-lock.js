@@ -61,10 +61,14 @@ const laplaceRows = ctx => {
 };
 
 // A captured amplitude below these is a bound taken before the instrument had
-// seen the angle turn back (the converged values are about 26, 80 and 24).
-const AMPLITUDE_FLOOR = 22;
-const PLUTO_FLOOR = 60;
+// seen the angle turn back. They sit just under the converged values (about
+// 25.6, 80.1 and 24), because the bounds climb to within a degree of them.
+const AMPLITUDE_FLOOR = 25;
+const PLUTO_FLOOR = 79.8;
 const TADPOLE_FLOOR = 15;
+// Every instrument step re-holds the world under Reduced motion and Step by step.
+const HELD =
+  'Under Reduced motion or Step by step the world starts paused: press Run to start it.';
 
 /** A measure field the student fills from an instrument row (K1) or types. */
 const reading = (id, label, unit, want, tool) => ({
@@ -200,7 +204,7 @@ const WHEN_ORBITS_LOCK = {
         paused: false,
       },
       tool: { id: 'resonance-periods' },
-      body: `Press <strong>Run</strong> and let it run. The instrument below
+      body: `Let it run. The instrument below
              measures each moon's period from its orbit — from the energy and
              the distance, the way an astronomer would — and averages over
              everything it has seen, so the numbers settle within a few Io
@@ -217,7 +221,7 @@ const WHEN_ORBITS_LOCK = {
              closer the measured ratio is to a small whole-number ratio than an
              arbitrary number would have been. That figure is the one this
              investigation is about.`,
-      tip: 'If Motion is set to Reduced or Step by step, the instrument opens paused: press Run to start it, and Pause to hold it again.',
+      tip: HELD,
       checklist: [
         'Let the simulation run for about 150 Io orbits',
         'Read the four periods',
@@ -379,6 +383,7 @@ const WHEN_ORBITS_LOCK = {
       type: 'explore',
       title: 'Watch the line-ups',
       tool: { id: 'resonance-conjunctions', inner: 'Io', outer: 'Europa' },
+      tip: HELD,
       body: `Let it run for a minute or so. Each dot on the left dial is one
              Io–Europa conjunction, plotted by the direction it happened in as
              seen from Jupiter. The right dial plots the same conjunctions by
@@ -528,7 +533,8 @@ const WHEN_ORBITS_LOCK = {
       type: 'explore',
       title: 'Watch the Laplace argument',
       tool: { id: 'resonance-angle', argument: 'laplace' },
-      body: `Press <strong>Run</strong> and <strong>leave it running</strong>.
+      tip: HELD,
+      body: `<strong>Leave it running.</strong>
              At normal speed this one takes about three and a half minutes (the
              Fast button in the transport bar shortens the wait), and the way it
              changes its mind is the point.
@@ -653,7 +659,7 @@ const WHEN_ORBITS_LOCK = {
         return {
           level: 'ok',
           message:
-            'That is what this model gives, and it is worth comparing with the real thing: the observed Laplace libration period is 2,071 days. The amplitude is not comparable — the real one is 0.064°, because the real moons sit far closer to the exact center of the resonance than these starting conditions do.',
+            'That is what this model gives, and it is worth comparing with the real thing: the observed Laplace libration period is 2,071 days. The amplitude is not comparable — the real one is a few hundredths of a degree (0.03 to 0.06 depending on the source), because the real moons sit far closer to the exact center of the resonance than these starting conditions do.',
         };
       },
     },
@@ -740,6 +746,7 @@ const WHEN_ORBITS_LOCK = {
         paused: false,
       },
       tool: { id: 'resonance-angle', argument: 'laplace' },
+      tip: HELD,
       body: `The same system with Europa moved out one percent. Watch the two
              plots.
 
@@ -806,6 +813,7 @@ const WHEN_ORBITS_LOCK = {
         inner: 'Ganymede',
         outer: 'Callisto',
       },
+      tip: HELD,
       body: `Back to the intact system, and now to Callisto — the one with the
              tidiest ratio in the whole system.
 
@@ -921,6 +929,7 @@ const WHEN_ORBITS_LOCK = {
         paused: false,
       },
       tool: { id: 'resonance-angle', argument: 'pluto' },
+      tip: HELD,
       body: `Let it run for a minute and a half. This one reaches its verdict
              quickly — the libration is wide and fast enough in these units that
              the angle turns back twice inside ninety seconds.
@@ -937,7 +946,7 @@ const WHEN_ORBITS_LOCK = {
       ],
       rubric: `Expect LIBRATION about 180° with an amplitude near 80° and a
                period near 19,600 years. The published values are 180°, about
-               82°, and 19,670 years. Full credit for all three plus the
+               82°, and about 20,000 years. Full credit for all three plus the
                observation that the wanderer's angle circulates.`,
     },
     {
@@ -999,7 +1008,7 @@ const WHEN_ORBITS_LOCK = {
         return {
           level: 'ok',
           message:
-            'Those match the published values: 180°, about 82°, and 19,670 years. The model reproduces the libration period to better than one percent, which is the strongest single check in this investigation.',
+            'Those are close to the published values: 180°, about 82°, and a period of about 20,000 years (sources give 19,900 to 20,000). The model’s period is within about 2% of that, and it does it with a two-dimensional model that starts exactly on the 3:2.',
         };
       },
     },
@@ -1013,6 +1022,7 @@ const WHEN_ORBITS_LOCK = {
         inner: 'Neptune',
         outer: 'Pluto',
       },
+      tip: HELD,
       body: `Now the same run, seen as conjunctions. The left dial is where
              Pluto and Neptune line up as seen from the Sun; the right dial is
              where Pluto was on its own orbit when they did.
@@ -1119,6 +1129,7 @@ const WHEN_ORBITS_LOCK = {
         paused: false,
       },
       tool: { id: 'resonance-frame', secondary: 'Jupiter' },
+      tip: HELD,
       body: `Run it for a minute and a half. In this view Jupiter is pinned at
              the right, one unit from the Sun, and the two crosses are L4 and
              L5 — exactly the corners of the equilateral triangles.
@@ -1224,7 +1235,7 @@ const WHEN_ORBITS_LOCK = {
         return {
           level: 'ok',
           message:
-            'That is the tadpole. The measured period sits within a few percent of the 148 years (12.47 Jupiter years) the linear theory predicts, which is about as well as a 24° libration has any right to match a small-amplitude formula.',
+            'That is the tadpole. The measured period is a few percent above the 148 years (12.47 Jupiter years) that the linear theory gives for a vanishingly small swing, and a 24° libration is not one, so the gap is expected. The figure you read moves a little with the length of the run.',
         };
       },
     },
@@ -1289,21 +1300,23 @@ const WHEN_ORBITS_LOCK = {
       body: `The fourth body in this scene is on an ordinary circular orbit a
              quarter again as wide as Jupiter's. The instrument will find the
              nearest ratio of small whole numbers to its period over Jupiter's,
-             build the resonant argument that goes with it and report both.`,
-      prompt:
-        'Is the wide probe in resonance with Jupiter, and how does its ratio compare with Pluto’s?',
+             build the resonant argument that goes with it and report both. The
+             ratio will turn out to be within about half a percent of 7:5, two
+             to five times closer than a number picked at random would be.`,
+      prompt: 'Is the wide probe in resonance with Jupiter?',
       options: [
-        'It is resonant: a ratio that close to a whole-number ratio is the mark of a lock',
-        'It is not resonant, and its ratio is clearly further from a whole-number ratio than Pluto’s is from 3:2',
-        'It is not resonant, and its ratio is as close to a whole-number ratio as Pluto’s, or closer',
-        'It is resonant, but too weakly for the angle to show it',
+        'Yes: a ratio that close to a whole-number ratio is the mark of a lock',
+        'No: its angle will go all the way round, however close the ratio looks',
+        'Yes, but too weakly for the angle to show it',
+        'Not yet: a near-commensurate ratio locks if the run is long enough',
       ],
-      answer: 2,
-      because: `The third. The wide probe sits 0.25% from 7:5, nearer than Pluto
-                is to 3:2 at 0.30%, and its angle circulates: it is in no
-                resonance at all. Being about four and a half times closer than
-                chance is not enough to count as evidence, which is why the
-                angle and not the ratio is the evidence.`,
+      answer: 1,
+      because: `The second. The probe's ratio settles near 1.406, about 0.3 to
+                0.5% from 7:5 and two to five times closer than chance (the
+                figure moves a little as the instrument averages). That is the
+                kind of near-miss the ratio rule would call a resonance, and the
+                angle circulates: it runs through every value, so there is no
+                lock. A ratio is a reason to look; the angle is the evidence.`,
     },
     {
       sid: 'one-last-ratio',
@@ -1315,26 +1328,30 @@ const WHEN_ORBITS_LOCK = {
         inner: 'Jupiter',
         outer: 'Wide orbit probe',
       },
+      tip: HELD,
       body: `The fourth body in this scene is on an ordinary circular orbit a
-             quarter again as wide as Jupiter's. Its period ratio with Jupiter is
-             1.4036.
+             quarter again as wide as Jupiter's. Its period ratio with Jupiter
+             comes out near 1.406.
 
              \n\nThe instrument has found the nearest small ratio to that and
              built the corresponding argument. Look at what it found, and at how
-             close it is.
+             close it is. The offset and the closer-than-chance figure move a
+             little as the run goes on, so read them when the verdict arrives.
 
-             \n\nThen look at the verdict.`,
+             \n\nThen look at the verdict, which takes a couple of minutes.`,
       checklist: [
         'Read the nearest small-integer ratio and the percentage offset',
-        'Compare that offset with Pluto’s 0.30% from 3:2',
-        'Read the verdict for the argument',
+        'Set the closer-than-chance figure beside the moons’ and Pluto’s',
+        'Wait for the verdict on the argument and read it',
       ],
       rubric: `The instrument should report a nearest ratio of 7:5, an offset of
-               about 0.25%, and roughly 4.6 times closer than chance — which is
-               better than Pluto's 3:2. The verdict for the co-orbital angle
-               should be circulation. Full credit for stating the comparison
-               explicitly: this body has a better ratio than Pluto and is in no
-               resonance at all.`,
+               about 0.3 to 0.5% (settling near 0.45%) and a figure of two to
+               five times closer than chance (settling near 2.5). That is as
+               good as the resonant moons' ratios and a little looser than
+               Pluto's 0.30%. The verdict for the argument should be
+               circulation once about twenty conjunction cycles have passed.
+               Full credit for stating the conclusion: a ratio this close to a
+               whole-number ratio, and no resonance at all.`,
     },
 
     // --- Act 7: what counts as evidence --------------------------------------
@@ -1358,13 +1375,14 @@ const WHEN_ORBITS_LOCK = {
              times better than chance. The argument librates about 180° with a
              period of 19,600 years. <em>Resonant.</em>
 
-             \n\n<strong>The wide probe–Jupiter.</strong> Ratio 0.25% from 7:5 —
-             nearly five times better than chance, better than Pluto. The angle
-             circulates. <em>Not resonant.</em>
+             \n\n<strong>The wide probe–Jupiter.</strong> Ratio about 0.3 to
+             0.5% from 7:5 — two to five times better than chance, as good as
+             the moons'. The angle circulates. <em>Not resonant.</em>
 
-             \n\nSort those four by how close the ratio is and you get Callisto,
-             the probe, Pluto, the moons. Sort them by whether they are resonant
-             and you get a completely different order. The ratio does not
+             \n\nSort those four by how close the ratio is and Callisto is far
+             ahead, with the probe level with the moons that are resonant. Sort
+             them by whether they are resonant and you get a completely
+             different order. The ratio does not
              predict the answer, and it was never going to: it is a necessary
              condition, not a sufficient one. A resonance requires a
              near-commensurate ratio the way a fire requires oxygen.

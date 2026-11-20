@@ -49,6 +49,7 @@ import {
 import { recorder, partition } from './resonance/recorder.js';
 import { state } from './appState.js';
 import { fixed } from './format.js';
+import { announce } from './notify.js';
 import { setParkedPause } from './timeline.js';
 import {
   ANGLE_STATE,
@@ -364,10 +365,11 @@ function message(g, w, h, colors, text) {
  * it runs as the step's scene set it.
  */
 const RUN = {
+  // No icon: the button's word changes with the clock, and a glyph that did
+  // not would say "play" beside "Pause".
   actions: [
     {
       id: 'run',
-      icon: 'play',
       get label() {
         return t(state.paused ? 'energyW.run' : 'stelE.action.pause');
       },
@@ -378,6 +380,10 @@ const RUN = {
   },
   act() {
     setParkedPause((state.paused = !state.paused));
+    // The world's clock changed with no other sign for a screen reader.
+    announce(
+      t(state.paused ? 'readout.status.paused' : 'readout.status.running')
+    );
   },
 };
 

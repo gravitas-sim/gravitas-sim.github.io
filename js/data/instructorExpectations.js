@@ -398,7 +398,7 @@ export default {
       'the-awkward-case':
         'Never LIBRATION. The verdict passes through confined, then either "the center is moving" or "it has turned back once", and the reported amplitude grows through the run. The growing amplitude is the specific evidence and is what step 20 asks about.',
       'measure-pluto-s-resonance':
-        'LIBRATION about 180 degrees with an amplitude near 80 and a period near 19,600 years, against published values of 180, 82 and 19,670. This is the closest agreement with a published measurement anywhere in the investigation, and it takes about ninety seconds.',
+        'LIBRATION about 180 degrees with an amplitude near 80 and a period near 19,600 years, against published values of 180, 82 and about 20,000 (within about 2%). It takes about ninety seconds.',
       'capture-pluto-s-libration':
         'The same three numbers, recorded. The validation accepts a center within 15 degrees of 180 and a period between 12,000 and 30,000 years; a value near zero for the center means the sign of the argument was read backwards, and the note says so.',
       'where-the-line-ups-happen':
@@ -406,9 +406,9 @@ export default {
       'the-rotating-frame':
         'Four different behaviors: the L4 probe reported as an equilibrium with an amplitude of 0, Patroclus librating about 296 degrees with an amplitude near 24 and a period near 13 Jupiter years, the L3 probe more than 150 degrees from where it started, and the wide probe circulating. The instrument needs about twenty Jupiter years - roughly forty-five seconds - before it will commit to any of them.',
       'capture-the-tadpole':
-        'A center near 296 degrees, an amplitude near 24 and a period near 154 years (13 Jupiter years) against 148 linearized. The validation catches a student who has read L4 instead of L5, which is the common slip, and one who has recorded Jupiter’s own period instead of the libration period.',
+        'A center near 296 degrees, an amplitude near 24 and a period near 154 years (13 Jupiter years), a few percent above the 148 linearized. The validation catches a student who has read L4 instead of L5, which is the common slip, and one who has recorded Jupiter’s own period instead of the libration period.',
       'one-last-ratio':
-        'A nearest ratio of 7:5, an offset near 0.25%, about 4.6 times closer than chance, and circulation. The prediction before it asks whether it is resonant; the offset beats Pluto’s 0.30%.',
+        'A nearest ratio of 7:5, an offset of 0.3 to 0.5% (two to five times closer than chance), and circulation after about two minutes. The prediction before it asks whether it is resonant.',
     },
     'detect-this-planet': {
       'twelve-nights':

@@ -78,7 +78,7 @@ describe('the revised steps and the ids they retire', () => {
     expect(p.reveal).toBe('one-last-ratio');
     expect(at('predict-the-wide-probe')).toBe(at('one-last-ratio') - 1);
     expect(p.options).toHaveLength(4);
-    expect(p.answer).toBe(2);
+    expect(p.answer).toBe(1);
   });
 
   test('later steps ask for the renamed steps, and the central loop names live steps', () => {
@@ -131,11 +131,43 @@ describe('the reworded steps ask and do not tell', () => {
   });
 
   test('the steps that read the instruments name Run and the speed control', () => {
-    expect(step('measure-the-four-periods').body).toMatch(/Run/);
+    expect(step('measure-the-four-periods').tip).toMatch(/press Run/);
     expect(step('measure-the-four-periods').body).toMatch(/inspector/);
+    expect(step('measure-the-four-periods').body).not.toMatch(/Press/);
     expect(step('watch-the-laplace-argument').body).toMatch(
       /three and a half minutes[\s\S]*Fast button/
     );
+  });
+
+  test('every instrument step says the world starts paused under Reduced motion and Step by step', () => {
+    const tool = LESSON.steps.filter(
+      s => s.tool && s.type === 'explore' && s.sid !== 'predict-the-wide-probe'
+    );
+    expect(tool.length).toBe(9);
+    for (const s of tool)
+      expect([s.sid, s.tip]).toEqual([
+        s.sid,
+        expect.stringMatching(/Reduced motion.*paused.*press Run/),
+      ]);
+  });
+
+  test('the wide probe is never said to beat Pluto, and its figures are the instrument’s settled range', () => {
+    for (const sid of [
+      'predict-the-wide-probe',
+      'one-last-ratio',
+      'what-you-can-and-cannot',
+    ]) {
+      const s = step(sid);
+      const all = JSON.stringify(s);
+      expect([
+        sid,
+        /better than Pluto|beats Pluto|0\.25%|4\.6|1\.4036|four and a half/.test(
+          all
+        ),
+      ]).toEqual([sid, false]);
+    }
+    expect(step('one-last-ratio').body).toMatch(/1\.406/);
+    expect(step('predict-the-wide-probe').because).toMatch(/0\.3 to\s+0\.5%/);
   });
 
   test('the Trojan count is the one the register cites, or no number', () => {
@@ -180,6 +212,7 @@ describe('a reading taken too soon is refused, in words', () => {
   test('an amplitude that is still a bound is refused, a converged one passes', () => {
     expect(laplace({ amplitude: 7.7 }).level).toBe('error');
     expect(laplace({ amplitude: 7.7 }).message).toMatch(/lower bound|growing/);
+    expect(laplace({ amplitude: 24.3 }).level).toBe('error');
     expect(laplace({ amplitude: 25.5 }).level).toBe('ok');
     expect(laplace({ amplitude: 26 }).level).toBe('ok');
   });
@@ -198,6 +231,8 @@ describe('a reading taken too soon is refused, in words', () => {
       });
     expect(p({}).level).toBe('ok');
     expect(p({ plutoAmplitude: 40 }).level).toBe('error');
+    expect(p({ plutoAmplitude: 79.5 }).level).toBe('error');
+    expect(p({ plutoAmplitude: 80.1 }).level).toBe('ok');
     expect(p({ plutoPeriod: 7_160_000 }).level).toBe('warn');
     expect(p({ plutoPeriod: 7_160_000 }).message).toMatch(/365\.25/);
   });

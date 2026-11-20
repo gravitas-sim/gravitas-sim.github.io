@@ -6882,7 +6882,7 @@
       },
       "leak": {
         "L1": "HOLDS: no field cue or step placeholder holds a numeral, and the ranking fields hold ranks (the expected values are each field's `want`, which no page reads).",
-        "L2": "HOLDS: the instruments open without a verdict; under Reduced motion and Step by step they also open held.",
+        "L2": "HOLDS: the instruments open without a verdict; under Reduced motion and Step by step they also open held, and every instrument step says so in one tip.",
         "L3": "HOLDS (349): the Laplace and wide-probe predictions come before their readouts and no earlier body, tip or explanation states the centre, the amplitude or the ratio verdict; the prediction before one-last-ratio is new.",
         "L4": "HOLDS (349): which-is-the-impressive-one and the-best-ratio-in-the no longer state the offsets or which moon is resonant, the Laplace explanation gives no 180 or 26 before the capture step, and what-180-means no longer gives the algebra.",
         "L5": "UNCHANGED (349): the answer-key rubrics are instructor-only; the readout rows added for capture are the instrument's own."
@@ -6954,7 +6954,7 @@
       ],
       "walk": "NOT RUN",
       "pr": null,
-      "hash": "86aedfc6bef9db7697646f651d68ea19f853c4391c79fe77f547d80b1be88f55"
+      "hash": "0a540b597d7363c49b64c00df681fe9d62458859417ca48f0ac2173f1413c13c"
     },
     {
       "id": "investigation:when-the-method-must-refuse",

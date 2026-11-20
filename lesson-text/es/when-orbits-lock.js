@@ -78,7 +78,7 @@ export default {
     },
     'measure-the-four-periods': {
       title: 'Mide los cuatro periodos',
-      body: `Pulsa <strong>Ejecutar</strong> y déjalo correr. El instrumento de
+      body: `Déjalo correr. El instrumento de
              abajo mide el periodo de cada luna a partir de su órbita —de la
              energía y la distancia, como lo haría un astrónomo— y promedia
              sobre todo lo que ha visto, de modo que los números se asientan en
@@ -96,7 +96,7 @@ export default {
              está la razón medida de una razón de enteros pequeños de lo que
              habría estado un número cualquiera. Esa cifra es de lo que trata
              esta investigación.`,
-      tip: 'Si Movimiento está en Reducido o en Paso a paso, el instrumento se abre en pausa: pulsa Ejecutar para ponerlo en marcha y Pausar para detenerlo de nuevo.',
+      tip: 'Con Movimiento en Reducido o en Paso a paso el mundo empieza en pausa: pulsa Ejecutar para ponerlo en marcha.',
       checklist: [
         'Deja correr la simulación unas 150 órbitas de Ío',
         'Lee los cuatro periodos',
@@ -196,6 +196,7 @@ export default {
     },
     'watch-the-line-ups': {
       title: 'Observa las alineaciones',
+      tip: 'Con Movimiento en Reducido o en Paso a paso el mundo empieza en pausa: pulsa Ejecutar para ponerlo en marcha.',
       body: `Déjalo correr un minuto o así. Cada punto del disco de la izquierda
              es una conjunción Ío–Europa, situada según la dirección en la que
              ocurrió vista desde Júpiter. El disco de la derecha sitúa las
@@ -321,7 +322,8 @@ export default {
     },
     'watch-the-laplace-argument': {
       title: 'Observa el argumento de Laplace',
-      body: `Pulsa <strong>Ejecutar</strong> y <strong>déjalo correr</strong>.
+      tip: 'Con Movimiento en Reducido o en Paso a paso el mundo empieza en pausa: pulsa Ejecutar para ponerlo en marcha.',
+      body: `<strong>Déjalo correr.</strong>
              A velocidad normal este tarda unos tres minutos y medio (el botón
              Rápido de la barra de transporte acorta la espera), y la forma en
              que cambia de opinión es lo importante.
@@ -463,6 +465,7 @@ export default {
     },
     'break-it': {
       title: 'Rómpelo',
+      tip: 'Con Movimiento en Reducido o en Paso a paso el mundo empieza en pausa: pulsa Ejecutar para ponerlo en marcha.',
       body: `El mismo sistema con Europa desplazada un uno por ciento hacia
              fuera. Observa los dos gráficos.
 
@@ -511,6 +514,7 @@ export default {
     },
     'the-awkward-case': {
       title: 'El caso incómodo',
+      tip: 'Con Movimiento en Reducido o en Paso a paso el mundo empieza en pausa: pulsa Ejecutar para ponerlo en marcha.',
       body: `De vuelta al sistema intacto, y ahora a Calisto: la de la razón más
              limpia de todo el sistema.
 
@@ -602,6 +606,7 @@ export default {
     },
     'measure-pluto-s-resonance': {
       title: 'Mide la resonancia de Plutón',
+      tip: 'Con Movimiento en Reducido o en Paso a paso el mundo empieza en pausa: pulsa Ejecutar para ponerlo en marcha.',
       body: `Déjalo correr minuto y medio. Este llega a su veredicto deprisa: la
              libración es lo bastante amplia y rápida en estas unidades como para
              que el ángulo se dé la vuelta dos veces en noventa segundos.
@@ -618,7 +623,7 @@ export default {
       ],
       rubric: `Se espera LIBRACIÓN en torno a 180° con una amplitud cercana a 80°
                y un periodo cercano a 19.600 años. Los valores publicados son
-               180°, unos 82° y 19.670 años. Puntuación completa por los tres más
+               180°, unos 82° y unos 20.000 años. Puntuación completa por los tres más
                la observación de que el ángulo del errante circula.`,
     },
     'capture-pluto-s-libration': {
@@ -635,6 +640,7 @@ export default {
     },
     'where-the-line-ups-happen': {
       title: 'Dónde ocurren las alineaciones',
+      tip: 'Con Movimiento en Reducido o en Paso a paso el mundo empieza en pausa: pulsa Ejecutar para ponerlo en marcha.',
       body: `Ahora la misma ejecución, vista como conjunciones. El disco
              izquierdo es dónde se alinean Plutón y Neptuno vistos desde el Sol;
              el derecho es dónde estaba Plutón en su propia órbita cuando lo
@@ -722,6 +728,7 @@ export default {
     },
     'the-rotating-frame': {
       title: 'El marco rotante',
+      tip: 'Con Movimiento en Reducido o en Paso a paso el mundo empieza en pausa: pulsa Ejecutar para ponerlo en marcha.',
       body: `Déjalo correr minuto y medio. En esta vista Júpiter está fijo a la
              derecha, a una unidad del Sol, y las dos cruces son L4 y L5:
              exactamente los vértices de los triángulos equiláteros.
@@ -822,43 +829,52 @@ export default {
              un cuarto más ancha que la de Júpiter. El instrumento hallará la
              razón de enteros pequeños más cercana a su periodo sobre el de
              Júpiter, construirá el argumento resonante correspondiente e
-             informará de ambos.`,
-      prompt:
-        '¿Está la sonda ancha en resonancia con Júpiter, y cómo se compara su razón con la de Plutón?',
+             informará de ambos. La razón resultará estar a menos de un medio
+             por ciento de 7:5, de dos a cinco veces más cerca que un número
+             cualquiera.`,
+      prompt: '¿Está la sonda ancha en resonancia con Júpiter?',
       options: [
-        'Es resonante: una razón tan cercana a una razón de enteros es la marca de un enganche',
-        'No es resonante, y su razón está claramente más lejos de una razón de enteros que la de Plutón de 3:2',
-        'No es resonante, y su razón está tan cerca de una razón de enteros como la de Plutón, o más',
-        'Es resonante, pero demasiado débilmente para que el ángulo lo muestre',
+        'Sí: una razón tan cercana a una razón de enteros es la marca de un enganche',
+        'No: su ángulo dará la vuelta completa, por muy cerca que parezca la razón',
+        'Sí, pero demasiado débilmente para que el ángulo lo muestre',
+        'Todavía no: una razón casi conmensurable acaba enganchándose si la ejecución es lo bastante larga',
       ],
-      because: `La tercera. La sonda ancha está a un 0,25 % de 7:5, más cerca que
-                Plutón de 3:2, que está a un 0,30 %, y su ángulo circula: no está
-                en ninguna resonancia. Estar unas cuatro veces y media más cerca que
-                el azar no basta como prueba, y por eso la prueba es el ángulo y
-                no la razón.`,
+      because: `La segunda. La razón de la sonda se asienta cerca de 1,406, a
+                un 0,3-0,5 % de 7:5 y de dos a cinco veces más cerca que el azar
+                (la cifra se mueve un poco mientras el instrumento promedia). Es
+                el tipo de casi acierto que la regla de la razón llamaría
+                resonancia, y el ángulo circula: recorre todos los valores, así
+                que no hay enganche. Una razón es un motivo para mirar; la
+                prueba es el ángulo.`,
     },
     'one-last-ratio': {
       title: 'Una última razón',
+      tip: 'Con Movimiento en Reducido o en Paso a paso el mundo empieza en pausa: pulsa Ejecutar para ponerlo en marcha.',
       body: `El cuarto cuerpo de esta escena va en una órbita circular corriente
              un cuarto más ancha que la de Júpiter. Su razón de periodos con
-             Júpiter es 1,4036.
+             Júpiter sale cerca de 1,406.
 
              \n\nEl instrumento ha hallado la razón pequeña más cercana a eso y
              ha construido el argumento correspondiente. Mira qué ha encontrado y
-             cómo de cerca está.
+             cómo de cerca está. El desfase y la cifra de «más cerca que el
+             azar» se mueven un poco a medida que avanza la ejecución, así que
+             léelos cuando llegue el veredicto.
 
-             \n\nDespués mira el veredicto.`,
+             \n\nDespués mira el veredicto, que tarda un par de minutos.`,
       checklist: [
         'Lee la razón de enteros pequeños más cercana y el desfase porcentual',
-        'Compara ese desfase con el 0,30 % de Plutón respecto de 3:2',
-        'Lee el veredicto del argumento',
+        'Pon la cifra de «más cerca que el azar» junto a la de las lunas y la de Plutón',
+        'Espera al veredicto del argumento y léelo',
       ],
       rubric: `El instrumento debería informar de una razón más cercana de 7:5, un
-               desfase de un 0,25 % aproximadamente y unas 4,6 veces más cerca
-               que el azar, mejor que la 3:2 de Plutón. El veredicto para el
-               ángulo coorbital debería ser circulación. Puntuación completa por
-               enunciar la comparación explícitamente: este cuerpo tiene mejor
-               razón que Plutón y no está en resonancia alguna.`,
+               desfase de un 0,3-0,5 % (que se asienta cerca de 0,45 %) y una
+               cifra de dos a cinco veces más cerca que el azar (que se asienta
+               cerca de 2,5). Es tan buena como las razones de las lunas
+               resonantes y algo más holgada que el 0,30 % de Plutón. El
+               veredicto para el argumento debería ser circulación una vez
+               pasados unos veinte ciclos de conjunción. Puntuación completa por
+               enunciar la conclusión: una razón tan cercana a una razón de
+               enteros, y ninguna resonancia.`,
     },
     'what-you-can-and-cannot': {
       title: 'Qué puedes y qué no puedes concluir de una razón',
@@ -879,13 +895,14 @@ export default {
              cuatro veces mejor que el azar. El argumento libra en torno a 180°
              con un periodo de 19.600 años. <em>Resonante.</em>
 
-             \n\n<strong>La sonda ancha–Júpiter.</strong> Razón a un 0,25 % de
-             7:5, casi cinco veces mejor que el azar, mejor que Plutón. El ángulo
-             circula. <em>No resonante.</em>
+             \n\n<strong>La sonda ancha–Júpiter.</strong> Razón a un 0,3-0,5 % de
+             7:5, de dos a cinco veces mejor que el azar, tan buena como la de
+             las lunas. El ángulo circula. <em>No resonante.</em>
 
-             \n\nOrdena esos cuatro por lo cerca que está la razón y obtienes
-             Calisto, la sonda, Plutón, las lunas. Ordénalos por si son
-             resonantes y obtienes un orden completamente distinto. La razón no
+             \n\nOrdena esos cuatro por lo cerca que está la razón y Calisto va
+             muy por delante, con la sonda a la par de las lunas que sí son
+             resonantes. Ordénalos por si son resonantes y obtienes un orden
+             completamente distinto. La razón no
              predice la respuesta, y nunca iba a hacerlo: es una condición
              necesaria, no suficiente. Una resonancia requiere una razón casi
              conmensurable igual que un fuego requiere oxígeno.

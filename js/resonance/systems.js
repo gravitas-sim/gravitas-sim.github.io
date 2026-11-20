@@ -448,10 +448,13 @@ export const JUPITER_TROJANS = {
       // it is scattered onto an eccentric orbit within seventy Jupiter years,
       // at 1.25 its eccentricity after the same run is 0.002.
       //
-      // Its period ratio with Jupiter is 1.3975, which is 0.18% from 7:5 -
-      // closer to a small-integer ratio than Pluto is to 3:2 - and its resonant
-      // angle circulates. That is not a coincidence to be tidied away; it is
-      // the lesson.
+      // Its Keplerian period ratio with Jupiter is 1.3975, 0.18% from 7:5. The
+      // instrument measures it from the run and settles near 1.406, about 0.3
+      // to 0.5% from 7:5 and two to five times closer than chance (0.25% and
+      // 4.6 times in the first half minute), which is as close as the moons'
+      // own ratios and a little looser than Pluto's 0.30%. Its resonant angle
+      // circulates. That is not a coincidence to be tidied away; it is the
+      // lesson, so the lesson quotes the range and never claims to beat Pluto.
       name: 'Wide orbit probe',
       offsetDeg: 60,
       axisMultiplier: 1.25,
