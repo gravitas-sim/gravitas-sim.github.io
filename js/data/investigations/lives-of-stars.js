@@ -407,7 +407,15 @@ const LIVES_OF_STARS = {
         }
         const [e, l] = v.ageA <= v.ageB ? ['A', 'B'] : ['B', 'A'];
         const hot = v['teff' + l] / v['teff' + e] - 1;
-        const say = x => String(Number(x.toPrecision(3)));
+        // Three significant figures, written without toPrecision.
+        const say = x => {
+          const k = Math.floor(Math.log10(x)) - 2;
+          return String(
+            k >= 0
+              ? Math.round(x / 10 ** k) * 10 ** k
+              : Math.round(x * 10 ** -k) / 10 ** -k
+          );
+        };
         const up = v['lum' + l] > v['lum' + e];
         const side =
           Math.abs(hot) < 0.05
