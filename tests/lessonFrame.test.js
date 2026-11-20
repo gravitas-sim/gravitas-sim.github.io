@@ -6,7 +6,7 @@
 import { describe, test, expect } from '@jest/globals';
 import { insetFromBoxes } from '../js/lesson/stage.js';
 import { orbitPoints } from '../js/lessonFrame.js';
-import { fitCamera } from '../js/lesson/stage.js';
+import { fitCamera, placedOf } from '../js/lesson/stage.js';
 import {
   readProgress,
   writeProgress,
@@ -72,6 +72,16 @@ describe('what the camera is fitted to', () => {
     const sy = -20 * cam.zoom + cam.pan.y + 400;
     expect(sx).toBeCloseTo(200, 6);
     expect(sy).toBeCloseTo(100 + (800 - 400) / 2, 6);
+  });
+});
+
+describe('the size a staged star is fitted at', () => {
+  test('is the radius it is drawn at when a lesson sets one', () => {
+    const star = (radius, stageRadius) => ({
+      star: { pos: { x: 1, y: 2 }, radius, stageRadius },
+    });
+    expect(placedOf([star(3, 40)])[0].radius).toBe(40);
+    expect(placedOf([star(3, undefined)])[0].radius).toBe(3);
   });
 });
 
