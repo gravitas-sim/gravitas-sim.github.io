@@ -81,7 +81,11 @@ for (const [locale, runWord, pauseWord] of [
         );
         const held = await world(page);
         expect(held.paused, `${tool}: held when it opens`).toBe(true);
-        await page.waitForTimeout(400);
+        // Two dozen painted frames: time a running world would have moved.
+        await page.evaluate(async () => {
+          for (let i = 0; i < 24; i++)
+            await new Promise(r => requestAnimationFrame(r));
+        });
         expect(
           (await world(page)).clock,
           `${tool}: no time passes unpressed`
