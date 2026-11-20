@@ -184,8 +184,8 @@ export const INTRO_ASTRONOMY = {
             esOf: '74113130',
           },
           pin: {
-            fp: 'db2663fb',
-            n: 33,
+            fp: 'c2da053b',
+            n: 32,
           },
         },
       ],
