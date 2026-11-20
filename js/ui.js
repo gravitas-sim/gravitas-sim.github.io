@@ -1152,6 +1152,8 @@ document.addEventListener('DOMContentLoaded', () => {
       state.zoom = 1.0;
       state.pan = { x: 0.0, y: 0.0 };
       resetFollowCamera(state);
+      // The reader chose this view: a lesson's fit leaves it alone.
+      state.cameraTouchedAt = Date.now();
 
       // Hide inspector and scenario info
       hideObjectInspector && hideObjectInspector();

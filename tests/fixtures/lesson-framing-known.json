@@ -1,0 +1,105 @@
+{
+  "note": "Scene steps that are not framed after the change, by width|lesson|step. Each entry has `why` (the cause) and `expect` (the text every reason of the step must contain): a step that fails for any other reason is a new failure and fails e2e/lessonFraming.spec.js, and a listed step that passes is reported as an annotation (a step whose body is mid-orbit can pass on one run) and its entry is removed on review.",
+  "steps": {
+    "375|missing-mass|forty-years-earlier": {
+      "why": "the lesson roster lists no body for this scenario, so the step binds nothing to frame",
+      "expect": "binds no body"
+    },
+    "375|lagrange-points|two-stars-and-a-speck": {
+      "why": "the bottom timeline bar covers the stars of a binary or Lagrange scene: the free region does not count it (lesson layout)",
+      "expect": "is under timeline"
+    },
+    "375|lagrange-points|the-rotating-frame": {
+      "why": "the bottom timeline bar covers the stars of a binary or Lagrange scene: the free region does not count it (lesson layout)",
+      "expect": "is under timeline"
+    },
+    "375|lagrange-points|open-the-neck": {
+      "why": "the bottom timeline bar covers the stars of a binary or Lagrange scene: the free region does not count it (lesson layout)",
+      "expect": "is under timeline"
+    },
+    "375|lagrange-points|watch-it-not-cross": {
+      "why": "the bottom timeline bar covers the stars of a binary or Lagrange scene: the free region does not count it (lesson layout)",
+      "expect": "is under timeline"
+    },
+    "768|missing-mass|now-do-what-the-astronomers": {
+      "why": "the bound bodies sit within a small part of the orbit sweeps the fit holds, so their span at the paused reading is under the floor; passes on some runs and sizes",
+      "expect": "of the free region, under 20%"
+    },
+    "768|missing-mass|forty-years-earlier": {
+      "why": "the lesson roster lists no body for this scenario, so the step binds nothing to frame",
+      "expect": "binds no body"
+    },
+    "768|when-orbits-lock|record-pluto-s-libration": {
+      "why": "a body stands under the progress strip at the paused reading at 768; passes on most runs",
+      "expect": "is under inv-progress"
+    },
+    "768|what-is-a-gravitational-wave|change-the-shape": {
+      "why": "a staged scene stops at the zoom of 3 and its two bodies span under the floor at this width; passes on some runs",
+      "expect": "of the free region, under 20%"
+    },
+    "1280|transit-photometry|compare-the-two-curves": {
+      "why": "the light-curve toolbar docked over the star (instrument dock layout)",
+      "expect": ["is under light-curve-toolbar", "is under obs-control-label"]
+    },
+    "1280|transit-photometry|find-the-hidden-companion": {
+      "why": "the light-curve toolbar docked over the star (instrument dock layout)",
+      "expect": ["is under light-curve-toolbar", "is under obs-control-label"]
+    },
+    "1280|missing-mass|forty-years-earlier": {
+      "why": "the lesson roster lists no body for this scenario, so the step binds nothing to frame",
+      "expect": "binds no body"
+    },
+    "1280|binary-star-planets|two-suns": {
+      "why": "the bottom timeline bar covers the stars of a binary or Lagrange scene: the free region does not count it (lesson layout)",
+      "expect": "is under timeline"
+    },
+    "1280|binary-star-planets|nothing-here-is-random": {
+      "why": "the bottom timeline bar covers the stars of a binary or Lagrange scene: the free region does not count it (lesson layout)",
+      "expect": "is under timeline"
+    },
+    "1280|binary-star-planets|run-the-default": {
+      "why": "the bottom timeline bar covers the stars of a binary or Lagrange scene: the free region does not count it (lesson layout)",
+      "expect": "is under timeline"
+    },
+    "1280|binary-star-planets|around-both": {
+      "why": "the bottom timeline bar covers the stars of a binary or Lagrange scene: the free region does not count it (lesson layout)",
+      "expect": "is under timeline"
+    },
+    "1280|binary-star-planets|run-the-circumbinary": {
+      "why": "the bottom timeline bar covers the stars of a binary or Lagrange scene: the free region does not count it (lesson layout)",
+      "expect": "is under timeline"
+    },
+    "1280|lagrange-points|two-stars-and-a-speck": {
+      "why": "the bottom timeline bar covers the stars of a binary or Lagrange scene: the free region does not count it (lesson layout)",
+      "expect": "is under timeline"
+    },
+    "1280|integrators-in-practice|one-system-four-steps": {
+      "why": "the bottom timeline bar covers the stars of a binary or Lagrange scene: the free region does not count it (lesson layout)",
+      "expect": "is under timeline"
+    },
+    "1280|extending-an-experiment|twenty-planets": {
+      "why": "the bottom timeline bar covers the stars of a binary or Lagrange scene: the free region does not count it (lesson layout)",
+      "expect": "is under timeline"
+    },
+    "768|missing-mass|what-the-halo-is-holding": {
+      "why": "the bound bodies sit within a small part of the orbit sweeps the fit holds, so their span at the paused reading is under the floor; passes on some runs and sizes",
+      "expect": "of the free region, under 20%"
+    },
+    "768|missing-mass|take-the-halo-away-from": {
+      "why": "the bound bodies sit within a small part of the orbit sweeps the fit holds, so their span at the paused reading is under the floor; passes on some runs and sizes",
+      "expect": "of the free region, under 20%"
+    },
+    "1280|missing-mass|now-do-what-the-astronomers": {
+      "why": "the bound bodies sit within a small part of the orbit sweeps the fit holds, so their span at the paused reading is under the floor; passes on some runs and sizes",
+      "expect": "of the free region, under 20%"
+    },
+    "1280|missing-mass|what-the-halo-is-holding": {
+      "why": "the bound bodies sit within a small part of the orbit sweeps the fit holds, so their span at the paused reading is under the floor; passes on some runs and sizes",
+      "expect": "of the free region, under 20%"
+    },
+    "1280|missing-mass|take-the-halo-away-from": {
+      "why": "the bound bodies sit within a small part of the orbit sweeps the fit holds, so their span at the paused reading is under the floor; passes on some runs and sizes",
+      "expect": "of the free region, under 20%"
+    }
+  }
+}
