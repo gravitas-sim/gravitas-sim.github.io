@@ -54,7 +54,8 @@ describe('the allowlist only shrinks', () => {
     // 52 after Plan an Exposure (Prompt 210): two literals, both model-checked.
     // 65 after the five observing closeout investigations (Prompt 216): 13 more, all model-checked.
     // 64 after Kepler's Laws was reworked: its period question is retired.
-    expect(literals).toHaveLength(64);
+    // 63 after Tides: the crossing question became a hunt with no numeric answer.
+    expect(literals).toHaveLength(63);
     for (const l of literals) {
       const homes = [MODELS, SOURCED, UNCHECKED].filter(t => t[l.key]);
       expect({ key: l.key, homes: homes.length }).toEqual({
@@ -70,7 +71,7 @@ describe('the allowlist only shrinks', () => {
     expect(UNCHECKED_CEILING).toBe(34);
     expect(
       Object.keys(MODELS).length + Object.keys(SOURCED).length + UNCHECKED_COUNT
-    ).toBe(64);
+    ).toBe(63);
   });
 
   test('every entry names a real literal and gives a reason', () => {
@@ -230,7 +231,8 @@ describe('the instructor expectations record', () => {
     // 539 after Why We Cannot See Earth From Here and Architectures (Prompt 230): 4 more over 535.
     // 551 after the two Gaia investigations (Prompt 233 Part B): 4 more over 547.
     // 556 over v4's 552: the new steps of Weighing the Stars, Transit Photometry and Kepler's Laws, net of the ones they retire.
-    expect(total).toBe(556);
+    // 557 after Tides: two entries renamed with their steps and one new one for the Roche hunt.
+    expect(total).toBe(557);
     // 542 after How Many Earths? (Prompt 229): 3 more over 539.
     // 547 after the four exoplanet closeout investigations (Prompt 231): 5 more over 542.
   });
