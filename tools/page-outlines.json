@@ -200,9 +200,9 @@
       "path": "/?author=keplers-laws&step=99",
       "scope": "dialog",
       "h1": "",
-      "headings": "3 4",
+      "headings": "3 4+",
       "landmarks": [
-        "region"
+        "region+"
       ]
     },
     "library": {

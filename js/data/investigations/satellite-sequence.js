@@ -510,6 +510,9 @@ export const TIDES_THAT_MOVE_THE_MOON = {
   id: 'tides-that-move-the-moon',
   thumbnail: 'images/investigations/tides-that-move-the-moon.webp',
   title: 'Tides That Move the Moon',
+  question:
+    'Why is the Moon moving away from the Earth, and does the same tide explain the Moon’s whole past?',
+  medium: { kind: 'instrument', name: 'the tide model' },
   subtitle:
     'The Moon’s recession, the lengthening day, and the model that fails when run backward',
   duration: '20-30 min',
@@ -545,13 +548,14 @@ export const TIDES_THAT_MOVE_THE_MOON = {
       sid: 'the-bulge-ahead',
       type: 'read',
       title: 'A bulge that runs ahead',
-      body: `The Moon raises two bulges on the Earth&rsquo;s oceans and body. The Earth spins
-             faster than the Moon orbits, so the bulge is carried a little ahead of the line to
-             the Moon. That bulge pulls the Moon forward, so the Moon gains energy and recedes,
-             and the Moon pulls the bulge back, so the Earth&rsquo;s spin slows. The pair
-             exchanges angular momentum; the sum is conserved. The table below is the
-             model&rsquo;s closed form, not a simulation. In the next step you set the one number
-             it leaves free, so that it agrees with the Moon&rsquo;s measured recession.`,
+      body: `Why is the Moon moving away from the Earth, and does the same tide explain the
+             Moon&rsquo;s whole past? You will fit the one free number of the tide model to the
+             Moon&rsquo;s measured recession, then run it a billion years each way.
+             \n\nThe Moon raises a bulge on the Earth, and because the Earth spins faster than
+             the Moon orbits, the bulge is carried a little ahead of the line to the Moon. It pulls
+             the Moon forward, so the Moon gains energy and recedes, and the Moon pulls it back, so
+             the Earth&rsquo;s spin slows. The table below is the model&rsquo;s closed form, not a
+             simulation.`,
       tool: TM({ k2: 0.3, Q: 40, gyr: 0 }),
     },
     {
@@ -702,14 +706,11 @@ export const TIDES_THAT_MOVE_THE_MOON = {
       sid: 'what-the-model-leaves-out',
       type: 'read',
       title: 'What you worked out',
-      body: `You chose one Q to match the Moon&rsquo;s measured recession, and it gave a day
-             that lengthens by about as much as the eclipse record says. A billion years ahead
-             the same model puts the Moon at 65 Earth radii. Run backward, it puts the Moon in
-             contact with the Earth 1.58 billion years ago, well within the age of the Solar
-             System. So Q was not constant: in a real history it changed with the oceans and the
-             continents. A [[parameter|parameter]] that fits the present is not a law. Io&rsquo;s
-             Fire uses the same kind of tide to heat a moon, and asks the same question of a
-             number nobody knows.`,
+      body: `Run backward, the model that matches today brings the Moon into contact with the
+             Earth well within the age of the Solar System, and that did not happen. So
+             <em>Q</em> was not constant: in a real history it changed with the oceans and the
+             continents, which set how much energy the tide loses. A [[parameter|parameter]]
+             that fits the present is not a law.`,
       tool: TM({ k2: 0.3, Q: 12, gyr: -2 }, [], { k2: 0.3, Q: 12, gyr: 0 }),
     },
   ],
@@ -737,6 +738,9 @@ export const IOS_FIRE = {
   id: 'ios-fire',
   thumbnail: 'images/scenarios/galilean-resonance.webp',
   title: 'Io’s Fire',
+  question:
+    'Where does Io’s heat come from, and what does it tell us about Io’s interior?',
+  medium: { kind: 'instrument', name: 'the tidal heating instrument' },
   subtitle:
     'Tidal heating as energy per orbit, bounded by what nobody knows about Io’s interior',
   duration: '15-25 min',
@@ -790,13 +794,14 @@ export const IOS_FIRE = {
       setup: IO_SETUP,
       type: 'read',
       title: 'The most volcanic body we know',
-      body: `Io is the most volcanically active body in the Solar System, and the Sun does not
-             heat it. Jupiter does: it raises a bulge on Io, and because Io&rsquo;s orbit is not
-             quite circular the bulge rises and falls once an orbit, so Io&rsquo;s rock flexes
-             and the friction in that flexing is heat. The picture behind this activity is Jupiter
-             with Io, the innermost of its four large moons, held still. You will predict how
-             the heat depends on the orbit, measure it on an instrument, and then search for
-             what Io&rsquo;s interior must be like to give the heat that is observed.`,
+      body: `Where does Io&rsquo;s heat come from, and what does it tell us about Io&rsquo;s
+             interior? You will predict how the heat depends on Io&rsquo;s orbit, measure it on
+             the tidal heating instrument, then search for interiors that give the heat Io gives
+             off.
+             \n\nIo is the most volcanically active body in the Solar System, and the Sun does not
+             heat it. Jupiter raises a tide on Io, and because Io&rsquo;s orbit is not quite
+             circular the tide rises and falls once an orbit. The picture behind this activity is
+             Jupiter with Io, the innermost of its four large moons, held still.`,
     },
     {
       sid: 'double-predict',
@@ -962,14 +967,13 @@ export const IOS_FIRE = {
       bind: IO_BIND,
       type: 'read',
       title: 'What you worked out',
-      body: `Io&rsquo;s heat is the friction of a tide that rises and falls once an orbit, and it
-             grew as the square of the eccentricity. Io, Europa and Ganymede pull on each other in
-             a [[resonance|resonance]] that keeps that orbit from becoming circular. For
-             the interior, the observed heat fixed only k2 divided by <em>Q</em>, and only to a range:
-             you found two different pairs inside it, so the formula gives a bound and the observation picks
-             a point inside it. What the model leaves out is the interior: a partly molten layer
-             changes how Io flexes. A measurement that depends on k2 alone would be needed to
-             separate the two, and the deeper steps ask which.`,
+      body: `Io&rsquo;s orbit would have become circular long ago, and the heating would have
+             stopped, if Europa and Ganymede did not keep pulling on it in a
+             [[resonance|resonance]]. The heat fixes only k2 divided by <em>Q</em>, so every
+             interior with the same ratio fits it: the formula gives a bound, not a prediction.
+             What it leaves out is the interior itself, where a partly molten layer changes how
+             Io flexes. A measurement that depends on k2 alone would separate the
+             possibilities, and the deeper steps ask which.`,
     },
   ],
 };
