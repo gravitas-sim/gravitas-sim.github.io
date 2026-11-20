@@ -470,7 +470,7 @@ export async function recordFields(page, lessonId, sid, values) {
       `#investigationBody [data-field="${lessonId}:${sid}:${field}"]`
     );
     await expect(box, `the step offers a box for "${field}"`).toBeVisible();
-    const readonly = await box.evaluate(el => el.readOnly);
+    const readonly = await box.evaluate(el => Boolean(el.readOnly));
     expect(
       readonly,
       `"${field}" is a box the reader fills, not one the lesson works out`
