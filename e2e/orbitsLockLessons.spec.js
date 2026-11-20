@@ -84,7 +84,7 @@ for (const [locale, runWord, pauseWord] of [
         // Two dozen painted frames: time a running world would have moved.
         await page.evaluate(async () => {
           for (let i = 0; i < 24; i++)
-            await new Promise(r => requestAnimationFrame(r));
+            await new Promise(r => window.requestAnimationFrame(r));
         });
         expect(
           (await world(page)).clock,

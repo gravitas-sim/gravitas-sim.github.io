@@ -860,7 +860,9 @@ export default {
              azar» se mueven un poco a medida que avanza la ejecución, así que
              léelos cuando llegue el veredicto.
 
-             \n\nDespués mira el veredicto, que tarda un par de minutos.`,
+             \n\nDespués mira el veredicto. Llega a los dos minutos y medio; una
+             ejecución mucho más larga puede dejar al instrumento sin poder
+             seguir un ángulo que da vueltas tan deprisa.`,
       checklist: [
         'Lee la razón de enteros pequeños más cercana y el desfase porcentual',
         'Pon la cifra de «más cerca que el azar» junto a la de las lunas y la de Plutón',
@@ -872,7 +874,10 @@ export default {
                cerca de 2,5). Es tan buena como las razones de las lunas
                resonantes y algo más holgada que el 0,30 % de Plutón. El
                veredicto para el argumento debería ser circulación una vez
-               pasados unos veinte ciclos de conjunción. Puntuación completa por
+               pasados unos veinte ciclos de conjunción (unos dos minutos y
+               medio); si se deja mucho más, puede decir en cambio que el ángulo
+               se mueve demasiado deprisa entre muestras para seguirlo, que es
+               su límite de muestreo y no una libración. Puntuación completa por
                enunciar la conclusión: una razón tan cercana a una razón de
                enteros, y ninguna resonancia.`,
     },

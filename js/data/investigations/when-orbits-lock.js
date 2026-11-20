@@ -1338,7 +1338,9 @@ const WHEN_ORBITS_LOCK = {
              close it is. The offset and the closer-than-chance figure move a
              little as the run goes on, so read them when the verdict arrives.
 
-             \n\nThen look at the verdict, which takes a couple of minutes.`,
+             \n\nThen look at the verdict. It arrives after about two and a half
+             minutes; a much longer run can leave the instrument unable to
+             follow an angle going round this fast.`,
       checklist: [
         'Read the nearest small-integer ratio and the percentage offset',
         'Set the closer-than-chance figure beside the moons’ and Pluto’s',
@@ -1349,7 +1351,10 @@ const WHEN_ORBITS_LOCK = {
                five times closer than chance (settling near 2.5). That is as
                good as the resonant moons' ratios and a little looser than
                Pluto's 0.30%. The verdict for the argument should be
-               circulation once about twenty conjunction cycles have passed.
+               circulation once about twenty conjunction cycles have passed
+               (about two and a half minutes); left much longer it may instead
+               say the angle moves too fast between samples to follow, which is
+               its sampling limit and not a libration.
                Full credit for stating the conclusion: a ratio this close to a
                whole-number ratio, and no resonance at all.`,
     },
