@@ -1131,14 +1131,21 @@ export function renderSaveStatus() {
   }
   // The button that had focus is gone: keep the reader's place on the line.
   if (focused) ((el.tabIndex = -1), el.focus());
+  // Said a moment later: the step's own announcement (a grade, a hint) is made
+  // in the same turn as the save that failed, and the one region keeps only
+  // the last thing written to it.
+  clearTimeout(saidLater);
   if (
     changed &&
     (status === 'foreign' ||
       refused ||
       (status === 'saved' && ['full', 'unavailable'].includes(was)))
   )
-    announce(text);
+    saidLater = setTimeout(() => {
+      if (el.dataset.state === status) announce(text);
+    }, 1200);
 }
+let saidLater = 0;
 
 /** This tab's copy of every lesson's progress, written on every save. */
 export const sessionProgress = new Map();

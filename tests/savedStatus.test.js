@@ -90,6 +90,7 @@ beforeEach(async () => {
 });
 
 afterEach(() => {
+  jest.useRealTimers();
   jest.restoreAllMocks();
   document.body.innerHTML = '';
 });
@@ -107,6 +108,7 @@ describe('the status line', () => {
   });
 
   test('a full disk and a browser that does not allow saving are told apart, each with the backup', () => {
+    jest.useFakeTimers();
     refuse('QuotaExceededError');
     save();
     expect(status().dataset.state).toBe('full');
@@ -115,6 +117,9 @@ describe('the status line', () => {
     );
     expect(status().textContent).toMatch(/stay on this page while it is open/);
     expect(status().textContent).not.toMatch(/lost when/);
+    // Said a moment later, so the step's own announcement does not replace it.
+    expect(spoken()).toBe('');
+    jest.advanceTimersByTime(1300);
     expect(spoken()).toBe(status().firstChild.textContent);
     expect(status().querySelector('button').textContent).toBe(
       'Download a backup of your answers'
@@ -148,12 +153,14 @@ describe('the status line', () => {
   });
 
   test('recovery is spoken once, the button goes, and focus stays on the line', () => {
+    jest.useFakeTimers();
     refuse('QuotaExceededError');
     save();
     status().querySelector('button').focus();
     jest.restoreAllMocks();
     save();
     expect(status().dataset.state).toBe('saved');
+    jest.advanceTimersByTime(1300);
     expect(spoken()).toMatch(/saved on this device/);
     expect(status().querySelector('button')).toBeNull();
     expect(document.activeElement).toBe(status());
