@@ -358,6 +358,9 @@ export async function openStepInPage(page, lesson, sid) {
         /* the lesson then opens at its first step */
       }
       await inv.openInvestigation(id);
+      // The fit is taken once the panels can be measured; a body must stand
+      // where the fit saw it when the reading comes.
+      (await import('/js/ui.js')).state.paused = true;
     },
     [lesson, sid]
   );
