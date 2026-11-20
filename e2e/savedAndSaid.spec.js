@@ -101,7 +101,8 @@ test.describe('what an investigation keeps', () => {
     page,
     app,
   }) => {
-    test.slow();
+    // A walk through thirty-three steps: 4 to 6.5 minutes on a busy machine.
+    test.setTimeout(600_000);
     await openInvestigation(page, app, ID);
     const plan = await lessonPlan(page, ID);
 
