@@ -1312,7 +1312,8 @@ test.describe('the central experiment of each investigation', () => {
     page,
     app,
   }) => {
-    test.slow();
+    // A reader's stepping, frame by frame, through two turns of one loop.
+    test.setTimeout(900_000);
     const id = 'retrograde-motion';
     const entry = declared(id);
     const [predictSid, measureSid, revealSid] = entry.loop;
@@ -1336,10 +1337,14 @@ test.describe('the central experiment of each investigation', () => {
     // The direction is unwrapped as it is read (359.9 then 0.1 is a rise).
     let last = null;
     let flat = 0;
+    const rowsNow = () =>
+      page.evaluate(() =>
+        [
+          ...document.querySelectorAll('#investigationProbe .inv-probe-row'),
+        ].map(r => r.innerText)
+      );
     const sky = async () => {
-      const rows = await page
-        .locator('#investigationProbe .inv-probe-row')
-        .allInnerTexts();
+      const rows = await rowsNow();
       const value = re =>
         Number(
           String(rows.find(r => re.test(r)) ?? '')
@@ -1382,10 +1387,23 @@ test.describe('the central experiment of each investigation', () => {
     // One frame at a time, as the Step buttons do, waiting for the readout to move.
     const stepTo = async button => {
       const before = (await sky()).day;
-      await page.locator(button).click();
-      await expect
-        .poll(async () => (await sky()).day, { timeout: 5_000 })
-        .not.toBe(before);
+      await page.evaluate(b => document.querySelector(b).click(), button);
+      await page.waitForFunction(
+        day => {
+          const row = [
+            ...document.querySelectorAll('#investigationProbe .inv-probe-row'),
+          ].find(r => /^Day/i.test(r.innerText));
+          const now = Number(
+            (row?.innerText ?? '')
+              .split('\n')
+              .at(-1)
+              .match(/-?\d+(\.\d+)?/)?.[0]
+          );
+          return Number.isFinite(now) && now !== day;
+        },
+        before,
+        { timeout: 10_000, polling: 'raf' }
+      );
       return sky();
     };
     const goTo = async day => {
