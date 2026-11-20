@@ -382,7 +382,7 @@ export async function settlePage(page) {
         const now = { zoom: ui.state.zoom, pan: { ...ui.state.pan } };
         held = last && same(last, now) && !frame.fitWanted() ? held + 1 : 0;
         last = now;
-        if (held >= 8 || performance.now() - t0 > 6000) done();
+        if (held >= 30 || performance.now() - t0 > 8000) done();
         else requestAnimationFrame(tick);
       };
       tick();
