@@ -1200,7 +1200,7 @@ const KEPLER = {
              the same planet at the same distance, around a star of twice the
              mass. The two runs are kept in the table.`,
       probe: ctx => {
-        const b = ctx.role('world');
+        const b = ctx.role('planet');
         const el = b && ctx.elements(b);
         if (!el) {
           return [
