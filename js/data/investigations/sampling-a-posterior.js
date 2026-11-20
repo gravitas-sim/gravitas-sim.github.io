@@ -34,10 +34,10 @@
  * interval's width of Rp/R* and of the impact parameter.
  */
 const DRAWS = {
-  8: { k: 0, kWidth: 0, b: 0, bWidth: 0 },
-  8.5: { k: 0, kWidth: 0, b: 0, bWidth: 0 },
-  9.21: { k: 0.11926, kWidth: 0.00026, b: 0.4301, bWidth: 0.0051 },
-  10: { k: 0, kWidth: 0, b: 0, bWidth: 0 },
+  8: { k: 0.1226, kWidth: 0.0002859, b: 0.6224, bWidth: 0.002874 },
+  8.5: { k: 0.1211, kWidth: 0.0002787, b: 0.5543, bWidth: 0.003543 },
+  9.21: { k: 0.1193, kWidth: 0.0002642, b: 0.4301, bWidth: 0.005138 },
+  10: { k: 0.1175, kWidth: 0.0002607, b: 0.194, bWidth: 0.01346 },
 };
 /** One field's value for each choice, for the answer key. */
 const byRatio = field =>
@@ -342,14 +342,17 @@ const SAMPLING_A_POSTERIOR = {
       type: 'question',
       kind: 'choice',
       title: 'A run that is too short',
-      body: `Set the notebook's <strong>steps</strong> to <strong>1000</strong>, keep the
-             rest, and run it again. It takes about fifteen seconds.`,
-      prompt: 'What does it do?',
+      body: `The notebook accepts any step count from 1000 to 10000. Before you run any,
+             decide which of them it will refuse to report an interval for. Then test your
+             prediction with two runs: set <strong>steps</strong> to a count you expect it
+             to refuse and run it, then to a count you expect it to accept and run it. A
+             refused run is quick; an accepted one takes about a minute.`,
+      prompt: 'Which step counts will the notebook refuse?',
       options: [
-        'It stops with an error and reports no interval, saying which of its convergence limits failed and to raise the number of steps',
-        'It reports narrower intervals, because fewer steps were used',
-        'It reports the same intervals, only faster',
-        'It crashes because 1000 is out of range',
+        'The short runs: a chain that is too short has not forgotten where it started, so it fails a convergence limit and the notebook reports no interval, saying which limit failed',
+        'None: every count in its range gets an interval, and fewer steps give a narrower one',
+        'Only 1000, which is the smallest the setting allows',
+        'The long runs, because more steps give the chains more room to disagree',
       ],
       answer: 0,
       misconceptions: [
@@ -359,16 +362,16 @@ const SAMPLING_A_POSTERIOR = {
           say: 'Fewer steps do not narrow a distribution; they leave the chain not having forgotten where it started, which is what R-hat and the autocorrelation count measure.',
         },
         {
-          id: 'range',
-          option: 3,
-          say: '1000 is the smallest value the setting allows; the notebook refuses on purpose, in its own words, not by failing.',
+          id: 'edge',
+          option: 2,
+          say: 'The limit is not at the edge of the setting: how long a chain must be depends on how long it takes to forget its start, so counts a good deal above 1000 are refused too. Try one.',
         },
       ],
       hints: [
-        'Read the message the page shows after the words "The notebook stopped with an error".',
+        'Read the message the page shows after the words "The notebook stopped with an error": it names the limit that failed.',
       ],
       because:
-        'The notebook holds every run to limits: the ensembles must agree (R-hat under 1.05), there must be at least 400 effective samples, and the chain after its burn-in must be at least 50 autocorrelation times long. A 1000-step run fails the last and often the first, so the notebook returns the diagnostics and no interval, because an interval from a chain that has not converged is a number with nothing behind it.',
+        'The notebook holds every run to limits: the ensembles must agree (R-hat under 1.05), there must be at least 400 effective samples, and the chain after its burn-in must be at least 50 autocorrelation times long. An autocorrelation time here is about 40 steps, so the notebook refuses 1,000, 2,000, 3,000 and 4,000 steps and reports an interval from 5,000: it returns the diagnostics and no interval for a chain that has not converged, because such an interval is a number with nothing behind it.',
     },
     {
       sid: 'what-you-worked-out',

@@ -1164,7 +1164,7 @@ describe('Sampling a Posterior', () => {
       expect(df('bWidth').by[n]).toBe(v.bWidth);
     }
     // 9.21 is the notebook's own setting: its run is the main answer.
-    expect(four(main.k.value)).toBe(0.11926);
+    expect(four(main.k.value)).toBe(0.1193);
     // Every run is one the notebook accepted: its diagnostics pass its limits.
     for (const n of MENU.filter(x => x !== 9.21)) {
       expect(run(n)['rhat.max'].value).toBeLessThan(1.05);
@@ -1256,11 +1256,15 @@ describe('Sampling a Posterior', () => {
     for (const n of refused)
       expect(refusals[n].message).toMatch(/the run is refused/);
     const q = step(SAMPLING, 'refuse-a-short-run');
+    const list = refused.map(n => n.toLocaleString('en-US'));
     expect(q.because).toContain(
-      refused.map(n => n.toLocaleString('en-US')).join(', ')
+      `${list.slice(0, -1).join(', ')} and ${list.at(-1)} steps`
     );
+    // "An autocorrelation time here is about 40 steps": the notebook's own, at the accepted run.
+    expect(refusals[Math.min(...accepted)]['tau.max']).toBeGreaterThan(35);
+    expect(refusals[Math.min(...accepted)]['tau.max']).toBeLessThan(45);
     expect(q.because).toContain(Math.min(...accepted).toLocaleString('en-US'));
-    expect(q.options[q.answer]).toMatch(/^The short ones/);
+    expect(q.options[q.answer]).toMatch(/^The short runs/);
     // The question is asked before the two runs, and does not state its own answer.
     expect(q.body).not.toContain(Math.min(...accepted).toLocaleString('en-US'));
   });

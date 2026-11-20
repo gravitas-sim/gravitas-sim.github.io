@@ -103,27 +103,27 @@ export default {
     },
     {
       title: 'Una ejecución demasiado corta',
-      body: `Pon los <strong>pasos</strong> del cuaderno en <strong>1000</strong>, deja el resto, y ejecútalo de nuevo. Tarda aproximadamente quince segundos.`,
-      prompt: '¿Qué hace?',
+      body: `El cuaderno acepta cualquier número de pasos de 1000 a 10000. Antes de ejecutar ninguno, decide para cuáles se negará a dar un intervalo. Luego comprueba tu predicción con dos ejecuciones: pon los <strong>pasos</strong> en un número que esperes que rechace y ejecútalo, y después en uno que esperes que acepte y ejecútalo. Una ejecución rechazada es rápida; una aceptada tarda aproximadamente un minuto.`,
+      prompt: '¿Para qué números de pasos se negará el cuaderno?',
       options: [
-        'Se detiene con un error y no da ningún intervalo, diciendo cuál de sus límites de convergencia falló y que se aumente el número de pasos',
-        'Da intervalos más estrechos, porque se usaron menos pasos',
-        'Da los mismos intervalos, solo que más rápido',
-        'Falla porque 1000 está fuera de rango',
+        'Las ejecuciones cortas: una cadena demasiado corta no ha olvidado de dónde partió, así que incumple un límite de convergencia y el cuaderno no da ningún intervalo, diciendo qué límite falló',
+        'Ninguno: cualquier número de su intervalo da un intervalo, y menos pasos dan uno más estrecho',
+        'Solo 1000, que es el más pequeño que permite el ajuste',
+        'Las ejecuciones largas, porque más pasos dan más margen a las cadenas para discrepar',
       ],
       misconceptions: [
         {
           say: 'Menos pasos no estrechan una distribución; dejan a la cadena sin haber olvidado de dónde partió, que es lo que miden R-hat y el recuento de autocorrelación.',
         },
         {
-          say: '1000 es el valor más pequeño que permite el ajuste; el cuaderno se niega a propósito, con sus propias palabras, no fallando.',
+          say: 'El límite no está en el borde del ajuste: cuán larga debe ser una cadena depende de lo que tarda en olvidar su inicio, así que también se rechazan números bastante mayores que 1000. Prueba uno.',
         },
       ],
       hints: [
-        'Lee el mensaje que muestra la página tras las palabras sobre que el cuaderno se detuvo con un error.',
+        'Lee el mensaje que muestra la página tras las palabras sobre que el cuaderno se detuvo con un error: nombra el límite que falló.',
       ],
       because:
-        'El cuaderno somete cada ejecución a límites: los conjuntos deben coincidir (R-hat menor que 1,05), debe haber al menos 400 muestras efectivas, y la cadena tras su calentamiento debe tener al menos 50 tiempos de autocorrelación. Una ejecución de 1000 pasos incumple el último y a menudo el primero, así que el cuaderno devuelve los diagnósticos y ningún intervalo, porque un intervalo de una cadena que no ha convergido es un número sin nada detrás.',
+        'El cuaderno somete cada ejecución a límites: los conjuntos deben coincidir (R-hat menor que 1,05), debe haber al menos 400 muestras efectivas, y la cadena tras su calentamiento debe tener al menos 50 tiempos de autocorrelación. Aquí un tiempo de autocorrelación son unos 40 pasos, así que el cuaderno rechaza 1.000, 2.000, 3.000 y 4.000 pasos y da un intervalo desde 5.000: devuelve los diagnósticos y ningún intervalo para una cadena que no ha convergido, porque ese intervalo es un número sin nada detrás.',
     },
     {
       title: 'Lo que has deducido',
