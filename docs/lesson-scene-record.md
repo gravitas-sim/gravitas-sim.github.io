@@ -11,16 +11,16 @@ The hand-written, human-reviewed acceptance map is
 [`lesson-acceptance.json`](lesson-acceptance.json); `npm run
 audit:scene:check` fails if it disagrees with what is generated here.
 
-Across 124 investigations and 1528 steps: 1420 steps
-declare a scene, 166 let a reader change one, 180 read the
-running integration, 1009 show a prescribed model result, 161 draw
-on a stored dataset, 878 put a self-contained panel beside the text,
-395 keep something, and 59 are prose.
+Across 124 investigations and 1529 steps: 1421 steps
+declare a scene, 166 let a reader change one, 181 read the
+running integration, 1010 show a prescribed model result, 161 draw
+on a stored dataset, 879 put a self-contained panel beside the text,
+396 keep something, and 59 are prose.
 Of 197 prediction loops, 197 are returned to,
 197 produce a measurement before they are answered, and
 1 end in an explanation in the reader's own words.
 196 hold their marking until the experiment settles them.
-The canvas behind a step is stated as scene on 0, portrait on 7, quiet on 16; 1505 state none.
+The canvas behind a step is stated as scene on 0, portrait on 7, quiet on 16; 1506 state none.
 
 ## Kepler's Laws (`keplers-laws`)
 
@@ -108,15 +108,15 @@ The canvas behind a step is stated as scene on 0, portrait on 7, quiet on 16; 15
 
 ## Finding Planets by Their Tug (`radial-velocity`)
 
-- **Steps:** 38. Scene declared on 38; a reader can change something on 3; 35 declare a scene nobody on that step can touch.
-- **Where the numbers come from:** 4 live engine, 11 prescribed model, 5 stored dataset, 11 self-contained panel.
-- **What students do:** read, choose-an-option, commit-a-prediction, move-an-instrument-control, press-an-instrument-preset, open-a-body-inspector, run-the-simulation, record-values, run-to-an-armed-event, view-from-a-set-angle, answer-in-words.
+- **Steps:** 39. Scene declared on 39; a reader can change something on 3; 36 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 5 live engine, 12 prescribed model, 5 stored dataset, 12 self-contained panel.
+- **What students do:** read, choose-an-option, commit-a-prediction, move-an-instrument-control, press-an-instrument-preset, press-an-instrument-button, record-values, open-a-body-inspector, run-the-simulation, run-to-an-armed-event, view-from-a-set-angle, answer-in-words.
 - **Objects the steps declare:** star, planet.
 - **Instruments:** reflex-motion, rv-observer, rv-mass, rv-inclination, astrometry-signature, method-comparison, planet-characterization.
 - **Stored data:** Published exoplanet system parameters (observation).
 - **Evidence kept:** notebook-fields.
-- **Prediction loops:** which-one-moves → both-of-them-go-round → both-of-them-go-round; make-the-planet-heavier → watch-it-grow, toward-away-toward-again, open-the-real-instrument, measure-the-period, read-k-off-the-panel → watch-it-grow; what-would-make-k-bigger → one-thing-at-a-time, weigh-hd-209458-b → one-thing-at-a-time; now-tilt-the-whole-system → the-same-planet-four-viewing → the-same-planet-four-viewing; a-face-on-system → tilt-it-again-and-watch, all-three-at-once → tilt-it-again-and-watch; move-the-system-further-away → distance-and-orbit-size, characterize-the-planet, three-candidates → distance-and-orbit-size.
-- **Recovery:** wrong body: the step binds the object by name, so there is none; reset: rebuilds the scenario on arrival; null result: guarded, but the fallback is not spelled out; missed moment: an event watch stops the run at rvMaximum; ambiguous result: nothing marks these, they are a record; missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand.
+- **Prediction loops:** which-one-moves → both-of-them-go-round → both-of-them-go-round; make-the-planet-heavier → read-the-two-wobbles, watch-it-grow, toward-away-toward-again, open-the-real-instrument, measure-the-period, read-k-off-the-panel → watch-it-grow; what-would-make-k-bigger → one-thing-at-a-time, weigh-hd-209458-b → one-thing-at-a-time; now-tilt-the-whole-system → the-same-planet-four-viewing → the-same-planet-four-viewing; a-face-on-system → tilt-it-again-and-watch, all-three-at-once → tilt-it-again-and-watch; move-the-system-further-away → distance-and-orbit-size, characterize-the-planet, three-candidates → distance-and-orbit-size.
+- **Recovery:** wrong body: the step binds the object by name, so there is none; reset: rebuilds the scenario on arrival; ambiguous result: the check says in words how close is close enough; null result: guarded, but the fallback is not spelled out; missed moment: an event watch stops the run at rvMaximum; ambiguous result: nothing marks these, they are a record; missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand.
 - **Scene rebuilds:** 4 step(s) on arrival (the-planet-you-already-measured, which-one-moves, open-the-real-instrument, read-k-off-the-panel).
 - **Accepted central experiment** (reviewed 2026-09-11): object `star`, control rv-inclination/inc, measures the semi-amplitude K, and the minimum mass it gives, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 
