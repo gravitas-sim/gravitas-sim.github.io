@@ -1541,10 +1541,10 @@ test.describe('the central experiment of each investigation', () => {
     await box('a2_day').fill(raw2);
     await box('a2_day').dispatchEvent('change');
     await expect(check).toHaveClass(/is-ok/);
-    // A bracket as wide as a loop holds the turn and says almost nothing: the
+    // A bracket eighty days wide holds the turn and says almost nothing: the
     // check says so in its own words and does not mark the length as found.
-    await box('a1_day').fill('100');
-    await box('a2_day').fill('200');
+    await box('a1_day').fill(String(Number(raw1) - 40));
+    await box('a2_day').fill(String(Number(raw2) + 40));
     await box('a2_day').dispatchEvent('change');
     await expect(check).not.toHaveClass(/is-ok/);
     await expect(check).toContainText('brackets are wide');
