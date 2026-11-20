@@ -823,19 +823,61 @@
       "scene_class": "portrait or backdrop",
       "limits": null,
       "open_items": [],
-      "questions": { "Q1": "", "Q2": "", "Q3": "", "Q4": "", "Q5": "" },
+      "questions": {
+        "Q1": "The student finds that two stars of one temperature differ in size, how steeply light climbs with mass, how a hot faint star is placed on the diagram, and what a brightness cut does to a population: measured on the stage, the diagram and a seeded population, none of which a paragraph could show.",
+        "Q2": "Each stage and instrument is named in its step; the held prediction at the first step returns at the argument, and each later prediction reveals at the step that measures it.",
+        "Q3": "Stage, readout, plot and prose name the same stars, radii in solar radii and luminosities in solar units; the modeled-star and chosen-point modes are named apart.",
+        "Q4": "The student chooses which star to read, where to put the cursor, which three masses to record, which stars to keep or break a rule with, and when a cut is a survey; each can be made badly.",
+        "Q5": "Met by the core's model limits (steps 16, 28 and 36), not by a deeper depth: the lesson has no deeper steps."
+      },
       "leak": {
         "L1": "HOLDS: no field cue or step placeholder holds a numeral at any depth, in either language, and the panel renders none that does (tests/fieldCue.test.js); the expected value is the field's `want`, which no page reads.",
-        "L2": "",
-        "L3": "",
-        "L4": "",
-        "L5": ""
+        "L2": "UNCHANGED (359): no instrument or stage state was edited; not re-audited beyond the steps changed.",
+        "L3": "HOLDS (359): the radius ratio, the mass-luminosity exponent and the bright subset are predicted before any body, tip or earlier step states the area rule, the 3.5 exponent or the nine-million ratio as a rule; each is stated in the because of the prediction, at its reveal.",
+        "L4": "HOLDS (359): no body or tip gives the Sun's radius or the 1.1 trillion years before the step that measures them; the validators are unchanged and speak only after a reading.",
+        "L5": "UNCHANGED (359): readout and instructor text were not edited; the added misconception texts show only with the verdict."
       },
-      "task_rule_items": [],
-      "editorial": "OPEN",
-      "redesign": "OPEN",
-      "reason": "Corrections I reworded steps for factual consistency (register D-R4-300-16); editorial pass still OPEN.",
-      "step_revisions": [],
+      "task_rule_items": [
+        "T2: the first prediction returns at the argument beside the student's own evidence; the radius, exponent, lifetime and bright-subset predictions return at their measuring steps.",
+        "T5: authored feedback added for hotter-is-bigger and ten-in-radius (step 10), a hot star read as main sequence (step 22) and many-means-survive (step 26); the bright-means-close slip at step 28 is a short answer and stays in its rubric."
+      ],
+      "editorial": "REVISED",
+      "redesign": "REVIEWED CLEAR",
+      "reason": "STRONG: polish and leak fixes only. Four sentences that answered a prediction or a measure before it were moved into the reveal; three misconceptions authored where a because already names the wrong turn (register D-R4-359-01).",
+      "step_revisions": [
+        {
+          "sid": "same-temperature-different-light",
+          "change": "REWORDED: the square-meter argument that answered the next prediction moved to that prediction's reveal."
+        },
+        {
+          "sid": "predict-which-is-bigger",
+          "change": "REWORDED: the area-grows-as-the-square sentence removed from the body; the reasoning is in the because."
+        },
+        {
+          "sid": "where-the-sun-sits",
+          "change": "REWORDED: the body no longer says the radius to expect."
+        },
+        {
+          "sid": "predict-mass-and-light",
+          "change": "REWORDED: the nine-million sentence and the tip that worked the exponent removed; both are in the because."
+        },
+        {
+          "sid": "measure-the-lifetimes",
+          "change": "REWORDED: the 1.1 trillion years removed from the body; the model-versus-observation point stays without the figure."
+        },
+        {
+          "sid": "sideways-at-one-luminosity",
+          "change": "REWORDED: two authored misconceptions added (no change of task or answer)."
+        },
+        {
+          "sid": "classify-from-position",
+          "change": "REWORDED: one authored misconception added."
+        },
+        {
+          "sid": "predict-the-bright-subset",
+          "change": "REWORDED: one authored misconception added."
+        }
+      ],
       "walk": "NOT RUN",
       "pr": null,
       "hash": null

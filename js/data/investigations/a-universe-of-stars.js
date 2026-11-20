@@ -394,11 +394,8 @@ const A_UNIVERSE_OF_STARS = {
              nothing else.
              \n\nOne of them puts out about three hundred times as much light
              as the other.
-             \n\nThink about what a fixed temperature means. Every square meter
-             of a 4,300&nbsp;K surface radiates the same amount per second,
-             whichever star it belongs to — that is what a temperature
-             <em>is</em>. So the only way one of these can put out three
-             hundred times the light is to have far more square meters.`,
+             \n\nThe two stars share a temperature, so something else about
+             them differs. The next step asks you to commit to what.`,
       tool: stage({
         pace: 'phase',
         pinStaged: true,
@@ -415,8 +412,7 @@ const A_UNIVERSE_OF_STARS = {
       body: `Same two stars. Same surface temperature. One about three hundred
              times more luminous.
              \n\nCommit before you measure. The reasoning matters more than the
-             number: a star&rsquo;s surface area grows as the <em>square</em>
-             of its radius.`,
+             number.`,
       prompt:
         'Two stars at the same surface temperature, one 300 times more luminous. Its radius is about…',
       options: [
@@ -427,7 +423,7 @@ const A_UNIVERSE_OF_STARS = {
       ],
       answer: 1,
       because:
-        'About seventeen, because area goes as the square of the radius and the square root of 300 is a little over 17. That is the whole of the relationship between the three quantities: the light a star puts out is its surface area times how hard each patch of that surface radiates, and at a fixed temperature the second factor is the same for both. Double the radius and you quadruple the light.',
+        'About seventeen. Every square meter of a 4,300 K surface radiates the same amount per second, whichever star it belongs to - that is what a temperature is - so the only way one star can put out three hundred times the light is to have far more square meters. A star&rsquo;s surface area grows as the square of its radius, and the square root of 300 is a little over 17. That is the whole of the relationship between the three quantities: the light a star puts out is its surface area times how hard each patch of that surface radiates, and at a fixed temperature the second factor is the same for both. Double the radius and you quadruple the light.',
       tool: stage({
         pace: 'phase',
         pinStaged: true,
@@ -577,11 +573,11 @@ const A_UNIVERSE_OF_STARS = {
       body: `The Sun&rsquo;s surface is at 5,772&nbsp;K and its luminosity is,
              by definition, one solar luminosity. Put the cursor there and read
              off the radius.
-             \n\nYou should get about one solar radius. That is not circular:
-             the lab is not looking the Sun up. It is computing a radius from
-             the temperature and the luminosity you placed, with the same
-             relation it uses everywhere else. Getting 1.0 back is a check that
-             the relation is doing its job.`,
+             \n\nThen ask whether it is the radius you would expect for the
+             Sun. That check is not circular: the lab is not looking the Sun
+             up. It is computing a radius from the temperature and the
+             luminosity you placed, with the same relation it uses everywhere
+             else, so the answer tests the relation.`,
       fields: [{ id: 'radius', label: 'Radius the lab reports', unit: 'R☉' }],
       validate: v => {
         if (!Number.isFinite(v.radius)) {
@@ -607,7 +603,7 @@ const A_UNIVERSE_OF_STARS = {
         capture: true,
         compare: false,
       }),
-      tip: 'The Sun is the reference for all three units here — R☉, L☉ and M☉. That is a convenience, not a claim that it is a typical star. Step 24 shows what typical looks like.',
+      tip: 'The Sun is the reference for all three units here — R☉, L☉ and M☉. That is a convenience, not a claim that it is a typical star. The four-hundred-star step shows what typical looks like.',
     },
     {
       sid: 'straight-up-the-diagram',
@@ -672,6 +668,18 @@ const A_UNIVERSE_OF_STARS = {
         'shrinks by a factor of about 10',
       ],
       answer: 2,
+      misconceptions: [
+        {
+          id: 'hotterIsBigger',
+          option: 0,
+          say: 'Hotter does not mean bigger here. The luminosity is held fixed, and a hotter surface radiates far more from each square meter, so ask how many square meters the star needs to give out the same total.',
+        },
+        {
+          id: 'tenInRadius',
+          option: 3,
+          say: 'Ten is the change in temperature, not in radius. The output from each square meter rises as the fourth power of the temperature, so it is the area that has to fall by that much, and the radius goes as the square root of the area.',
+        },
+      ],
       because:
         'It shrinks by about a hundred. Ten times the temperature is ten to the fourth - ten thousand times - the output per square meter, and to hold the total light fixed the area must fall by the same ten thousand, which is a hundred in radius. Check it on the diagram: at 1 L(sun) the cool end is about 3.7 solar radii and the hot end about 0.037. That second number is white-dwarf territory, and step 20 comes back to it.',
       tool: lab({
@@ -829,20 +837,20 @@ const A_UNIVERSE_OF_STARS = {
       body: `You have two points on the main sequence: 0.2 solar masses giving
              about 0.0066 solar luminosities, and 20 solar masses giving about
              59,000.
-             \n\nA hundred times the mass, nine million times the light.
-             Commit to the shape of that relationship before checking the
-             stars in between.`,
+             \n\nThose are the two stars you measured in the last step. Commit
+             to the shape of the relationship between their masses and their
+             light before checking the stars in between.`,
       prompt:
         'Along the main sequence, luminosity rises roughly as mass to the power…',
       options: ['1 — proportional', '2', '3.5', '10'],
       answer: 2,
       because:
-        'Roughly the 3.5th power, and this measurement gives 3.5 almost exactly: nine million is a hundred to the power 3.5. It is not a law of nature - it is a summary of what stellar-structure calculations produce for stars supported the way main-sequence stars are - and the exponent is not really constant, running steeper near a solar mass and shallower at the top end. What matters for the rest of this investigation is that it is very steep. A star with ten times the mass does not put out ten times the light; it puts out thousands of times more.',
+        'Roughly the 3.5th power, and this measurement gives 3.5 almost exactly: nine million is a hundred to the power 3.5, and a hundred to the power 3.5 is ten to the power seven, ten million, near enough to nine million for a relationship this rough. It is not a law of nature - it is a summary of what stellar-structure calculations produce for stars supported the way main-sequence stars are - and the exponent is not really constant, running steeper near a solar mass and shallower at the top end. What matters for the rest of this investigation is that it is very steep. A star with ten times the mass does not put out ten times the light; it puts out thousands of times more.',
       tool: stage({
         pace: 'phase',
         pinStaged: ['m020', 'm100', 'm2000'],
       }),
-      tip: 'A hundred to the power 3.5 is ten to the power seven, which is ten million — near enough to nine million for a relationship this rough.',
+      tip: 'The luminosities are in the list under the picture, and in your notebook if you saved the last step.',
     },
     {
       sid: 'the-whole-sequence',
@@ -1164,6 +1172,13 @@ const A_UNIVERSE_OF_STARS = {
         'impossible — nothing can be that hot and that faint',
       ],
       answer: 1,
+      misconceptions: [
+        {
+          id: 'hotMeansMainSequence',
+          option: 0,
+          say: 'A main-sequence star at that temperature would be tens of thousands of solar luminosities, far brighter than 0.01. Put the cursor there in the free mode and read the radius before you choose.',
+        },
+      ],
       because:
         'A white dwarf. At 30,000 K each square meter is radiating ferociously, so putting out only a hundredth of a solar luminosity takes a very small surface: the radius works out at about 0.0037 solar radii, well under the size of the Earth. A main-sequence star at 30,000 K would be tens of thousands of solar luminosities, six million times brighter than this. Position on the diagram is enough to classify it, because the two axes fix the radius between them - and that is what the diagram is for.',
       tool: lab({ mode: 'free', regions: true, compare: false }),
@@ -1206,13 +1221,11 @@ const A_UNIVERSE_OF_STARS = {
       body: `The readout gives the total main-sequence lifetime for whichever
              model is selected. Step the mass slider across and record three of
              them.
-             \n\nOne of these numbers deserves care. The 0.2 solar-mass model
-             gives a main-sequence lifetime of about 1.1&nbsp;<em>trillion</em>
-             years. The Universe is about 13.8 billion years old — roughly a
-             thousandth of that. So no such star has ever finished its main
-             sequence, anywhere. That figure is a prediction made by
-             integrating a model forward, not an observed lifetime, and it
-             cannot be checked against anything.`,
+             \n\nThese lifetimes come from integrating a model forward, not
+             from watching any star finish. The Universe is about 13.8 billion
+             years old: as you record each lifetime, ask whether a star of that
+             mass could have finished its main sequence yet, and whether
+             anything could check the figure.`,
       fields: [
         { id: 'small', label: '0.2 M☉ main-sequence lifetime', unit: 'Gyr' },
         { id: 'sun', label: '1 M☉', unit: 'Gyr' },
@@ -1324,6 +1337,13 @@ const A_UNIVERSE_OF_STARS = {
         'All of them, because there are so many to begin with',
       ],
       answer: 0,
+      misconceptions: [
+        {
+          id: 'manyMeansSurvive',
+          option: 3,
+          say: 'How many stars there are does not carry them through a brightness cut. The cut asks how much light each star puts out, and a star that gives a thousandth of the Sun’s fails it however many like it there are.',
+        },
+      ],
       because:
         'Almost none — in fact none at all. This is the answer people find hardest to believe before they see it, which is why you are being asked to commit to it first. A brightness cut selects on luminosity, and luminosity spans a far wider range than the numbers of stars do: an M dwarf puts out a thousandth of the Sun&rsquo;s light, so it drops out of the sample long before anything else does, however many of them there are. The next screen is the same population with the cut applied, and you can count.',
       tool: crowd({ values: { view: 0 } }),
