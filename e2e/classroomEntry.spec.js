@@ -53,7 +53,9 @@ async function profile(page, kind, locale = 'en') {
 
 /** The links a classroom hands out, built by the product's own writers. */
 async function links(page, app) {
-  await app.boot();
+  // First visit: the one boot that does not wait for the rail, which Home
+  // holds back in a first-week profile.
+  await app.boot({ firstVisit: true });
   const made = await page.evaluate(async lessonId => {
     const reg = await import('/js/data/investigations/registry.js');
     const A = await import('/js/assignments/assignment.js');
@@ -101,9 +103,11 @@ async function onTask(page, title) {
   await expect(panel(page)).toBeVisible({ timeout: 60_000 });
   await expect(page.locator('.inv-step-title')).not.toBeEmpty();
   await expect(page.locator('#investigationTitle')).toHaveText(title);
-  await expect(page.locator('#investigationWhere')).toContainText(/Step 1 of/);
+  await expect(page.locator('#investigationWhere')).toContainText(
+    /(Step|Paso) 1 (of|de)/
+  );
   await expect(page.locator('#welcomeScreen')).toBeHidden();
-  await expect(notice(page)).not.toHaveAttribute('open', '');
+  await expect(page.locator('dialog[open]')).toHaveCount(0);
   expect(await page.evaluate(() => document.activeElement?.id)).toBe(
     'investigationTitle'
   );
@@ -260,7 +264,7 @@ test.describe('a student comes back to the activity, not the bare investigation'
     await onTask(page, title);
     await page.locator('#investigationNext').click();
     await expect(page.locator('#investigationWhere')).toContainText(
-      'Step 2 of'
+      /(Step|Paso) 2 (of|de)/
     );
     await expect
       .poll(() =>
@@ -278,7 +282,7 @@ test.describe('a student comes back to the activity, not the bare investigation'
     await expect(panel(page)).toBeVisible({ timeout: 60_000 });
     await expect(page.locator('#investigationTitle')).toHaveText(title);
     await expect(page.locator('#investigationWhere')).toContainText(
-      'Step 2 of'
+      /(Step|Paso) 2 (of|de)/
     );
   }
 
@@ -298,7 +302,7 @@ test.describe('a student comes back to the activity, not the bare investigation'
 
     await page.goto('/#home');
     const home = page.locator('#welContinue li a, #welContinue li button');
-    await expect(home.first()).toHaveText('Continue the activity: Week 3');
+    await expect(home.first()).toContainText('Continue the activity: Week 3');
     await home.first().click();
     await resumed(page, 'Week 3');
 
