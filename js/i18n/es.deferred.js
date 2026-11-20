@@ -738,7 +738,7 @@ export const ES_DEFERRED = {
   'inv.take.default': 'Tomar la lectura',
   'inv.take.name': 'Tomar la lectura: {what}',
   'inv.take.predict': 'Haz primero tu predicción.',
-  'inv.est.wait': 'Tu cuadro de estimación se está cargando. Pulsa Siguiente.',
+  'inv.est.wait': 'Tu cuadro de estimación se está cargando. Si falla, sigue.',
   'inv.take.none': '{what} no se muestra, así que no hay nada que leer.',
   'inv.take.done': 'Lectura tomada: {what}, {value}.',
   'inv.take.from': 'Tomado de {what}.',

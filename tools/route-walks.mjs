@@ -288,8 +288,8 @@ const position = async page =>
 /** Answer whatever would hold Next up on this screen (the first thing offered). */
 async function nudge(page) {
   // An estimate's box is fetched with its step (a line says so until it
-  // arrives) and Next holds until the estimate is committed: wait for the box,
-  // as a student does, before looking for it.
+  // arrives) and Next waits for it: wait for the box, as a student does,
+  // before looking for it.
   await page
     .locator('#investigationBody [data-est-wait]')
     .waitFor({ state: 'detached', timeout: 60_000 });

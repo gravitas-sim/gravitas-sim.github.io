@@ -740,7 +740,7 @@ export const EN_DEFERRED = {
   'inv.take.default': 'Take reading',
   'inv.take.name': 'Take reading: {what}',
   'inv.take.predict': 'Make your prediction first.',
-  'inv.est.wait': 'Your estimate box is loading. Press Next to try again.',
+  'inv.est.wait': 'Your estimate box is loading. If it fails, Next goes on.',
   'inv.take.none': '{what} is not showing, so there is nothing to read.',
   'inv.take.done': 'Reading taken: {what}, {value}.',
   'inv.take.from': 'Taken from {what}.',

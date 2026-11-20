@@ -335,7 +335,6 @@ describe('the step on screen, held and revealed', () => {
     paint();
     expect(body.querySelector('[data-est-wait]')).toBeNull();
     expect(body.querySelector('[data-est-commit]')).not.toBeNull();
-    expect(body.textContent).toContain('Commit your estimate to go on.');
   });
 
   test('every box is a labelled text input and the commit is a button', () => {

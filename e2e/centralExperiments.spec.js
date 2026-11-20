@@ -354,6 +354,39 @@ test.describe('the central experiment of each investigation', () => {
     await expectVerdictRevealed(page, plan, predict);
   });
 
+  test('transit-photometry: Next waits for a slow estimate box instead of passing it', async ({
+    page,
+    app,
+  }) => {
+    const id = 'transit-photometry';
+    const [predictSid] = declared(id).loop;
+    await openInvestigation(page, app, id);
+    const plan = await lessonPlan(page, id);
+    // The estimate box's code is held back, as on a slow phone.
+    let release;
+    const held = new Promise(r => (release = r));
+    await page.route(/\/reveal\.js(\?|$)/, async route => {
+      await held;
+      await route.continue();
+    });
+    await walkToSid(page, plan, predictSid);
+    const body = page.locator('#investigationBody');
+    const title = page.locator('.inv-step-title');
+    const here = await title.innerText();
+    await expect(body.locator('[data-est-wait]')).toBeVisible();
+    await expect(body.locator('[data-est]')).toHaveCount(0);
+    await page.locator('#investigationNext').click();
+    await expect(title).toHaveText(here);
+    await expect(page.locator('#srStatus')).toContainText(
+      'estimate box is loading'
+    );
+    release();
+    await expect(body.locator('[data-est]')).toBeVisible();
+    await expect(body.locator('[data-est-wait]')).toHaveCount(0);
+    await page.locator('#investigationNext').click();
+    await expect(title).not.toHaveText(here);
+  });
+
   test('transit-photometry: the dip goes as the square of the planet radius @accepts:ce.transit-photometry', async ({
     page,
     app,
@@ -370,15 +403,6 @@ test.describe('the central experiment of each investigation', () => {
     // The estimate, committed and held: nothing on the screen marks it.
     const predict = await walkToSid(page, plan, predictSid);
     expect(predict.reveal).toBeTruthy();
-    // Next holds at an estimate that is not committed, and says why.
-    await expect(page.locator('#investigationBody [data-est]')).toBeVisible();
-    const where = page.locator('.inv-step-title');
-    const title = await where.innerText();
-    await page.locator('#investigationNext').click();
-    await expect(where).toHaveText(title);
-    await expect(
-      page.locator('#investigationBody [data-est-note]')
-    ).toContainText('Commit your estimate to go on');
     await page.locator('#investigationBody [data-est]').fill('1.5');
     await page.locator('#investigationBody [data-est-commit]').click();
     const body = page.locator('#investigationBody');

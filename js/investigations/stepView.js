@@ -89,14 +89,12 @@ export function runsModule(m) {
   return (slots.runs = m);
 }
 
+let lost = false; // the reveal code could not be fetched: Next goes on without the box
+
 /** Fetch the run and reveal code with the step that needs it: offline, the lesson opens. */
 export function fetchSeams(step, again) {
-  const get = (needed, load, use) =>
-    needed &&
-    load().then(
-      m => (use(m), again()),
-      () => {}
-    );
+  const get = (needed, load, use, fail = () => {}) =>
+    needed && load().then(m => (use(m), again()), fail);
   get(
     step.variation && !slots.runs,
     () => import('../lesson/runs.js'),
@@ -105,25 +103,20 @@ export function fetchSeams(step, again) {
   get(
     (step.evidence || step.kind === 'estimate') && !slots.reveal,
     () => import('./reveal.js'),
-    revealModule
+    revealModule,
+    () => (lost = true)
   );
 }
 
-/**
- * Whether Next must wait: an estimate holds it until committed, so a student is never carried past the prediction
- * the readings are held against. Its box is fetched with the step; a press before it arrives asks again and says why.
- */
+/** Whether Next waits: an estimate's box is fetched with its step, and a student is not carried past one never seen. */
 export function estimateHolds() {
   const h = bound;
   const step = h?.currentStep();
-  if (step?.kind !== 'estimate' || h.responses()[h.stepId()]) return false;
+  if (step?.kind !== 'estimate' || slots.reveal || lost) return false;
   fetchSeams(step, () => h.currentStep() === step && h.renderStep());
-  const body = h.els().body;
-  const note = body.querySelector('[data-est-note],[data-est-wait]');
+  const note = h.els().body.querySelector('[data-est-wait]');
   announce(note?.textContent ?? '');
-  const box = body.querySelector('[data-est]');
-  if (box) box.focus();
-  else note?.scrollIntoView?.({ block: 'nearest' });
+  note?.scrollIntoView?.({ block: 'nearest' });
   return true;
 }
 
@@ -683,6 +676,9 @@ export function bindStepInputs(h) {
   const id = h.stepId();
   bound = h;
 
+  // An estimate's code is fetched while the step before it is read, so its box is there when it opens.
+  const ahead = h.steps()[h.steps().indexOf(h.currentStep()) + 1];
+  if (ahead?.kind === 'estimate') fetchSeams(ahead, () => {});
   slots.reveal?.bind(h, els.body);
   // The orbit geometry panel belongs to the step that has the object card:
   // where a lesson withholds the card again, the panel goes with it.

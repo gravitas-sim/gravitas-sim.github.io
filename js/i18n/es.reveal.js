@@ -8,7 +8,7 @@ export const ES_REVEAL = {
   'reveal.est.commit': 'Confirmar mi estimación',
   'reveal.est.number': 'Escribe un número en cada casilla.',
   'reveal.est.first':
-    'Confirma tu estimación para seguir. No se corrige hasta que llegues a «{title}».',
+    'Cuando la confirmes, tu estimación no se corrige hasta que llegues a «{title}».',
   'reveal.est.held':
     'Tu estimación queda registrada. No se corrige hasta que llegues a «{title}».',
   'reveal.est.said': 'Estimaste: {value}',
