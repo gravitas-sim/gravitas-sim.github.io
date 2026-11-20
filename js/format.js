@@ -156,16 +156,24 @@ export function decimal(value, sig = 3, locale) {
   // on, while "1.00", "0.750" and "80.0" do.
   const exponent = Math.floor(Math.log10(Math.abs(rounded)));
   const decimals = Math.max(0, Math.min(20, digits - 1 - exponent));
-  return typesetMinus(
-    inLocale(
-      rounded.toLocaleString('en-US', {
+  return typesetMinus(inLocale(grouper(decimals).format(rounded), locale));
+}
+
+// One Intl.NumberFormat per decimal count: building one per call was a visible
+// part of a low-end frame, and `toLocaleString` with options does exactly that.
+const groupers = new Map();
+const grouper = decimals => {
+  let f = groupers.get(decimals);
+  if (!f)
+    groupers.set(
+      decimals,
+      (f = new Intl.NumberFormat('en-US', {
         minimumFractionDigits: decimals,
         maximumFractionDigits: decimals,
-      }),
-      locale
-    )
-  );
-}
+      }))
+    );
+  return f;
+};
 
 /**
  * Format a number for display, choosing decimal or scientific notation.

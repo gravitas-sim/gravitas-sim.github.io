@@ -33,6 +33,48 @@ const WEIGHING = {
   prerequisites: [],
   tags: ['stars', 'gravity', 'orbits'],
   lock: { placement: true, inspector: true, areaSweep: false },
+  retired: {
+    'measurement-one-how-big-is': {
+      to: 'take-the-orbit-readings',
+      release: '3.1',
+      was: {
+        en: 'Pause the pair and read the two arm lengths and the star-to-star distance off the panel.',
+        es: 'Pausar el par y leer en el panel las dos longitudes de brazo y la distancia de estrella a estrella.',
+      },
+    },
+    'measurement-two-how-long-does': {
+      to: 'time-the-laps',
+      release: '3.1',
+      was: {
+        en: 'Time one lap of Star A with the stopwatch and capture the orbit.',
+        es: 'Cronometrar una vuelta de la estrella A y registrar la órbita.',
+      },
+    },
+    'back-to-the-balance-point': {
+      to: 'compare-the-two-arms',
+      release: '3.1',
+      was: {
+        en: 'Compare the two arms and say which star stays closer to the balance point.',
+        es: 'Comparar los dos brazos y decir qué estrella queda más cerca del punto de equilibrio.',
+      },
+    },
+    'now-weigh-each-one': {
+      to: 'share-the-total-out',
+      release: '3.1',
+      was: {
+        en: 'Share four solar masses between the two stars in the ratio three to one and write the two masses in.',
+        es: 'Repartir cuatro masas solares entre las dos estrellas en la proporción tres a uno y escribir las dos masas.',
+      },
+    },
+    'one-on-your-own': {
+      to: 'weigh-a-new-pair',
+      release: '3.1',
+      was: {
+        en: 'For a pair 3 AU apart with a 3 year period, put in a and P, cube and square them, and find the total mass.',
+        es: 'Para un par a 3 UA con un periodo de 3 años, escribir a y P, elevarlos al cubo y al cuadrado, y hallar la masa total.',
+      },
+    },
+  },
   objectives: [
     'Explain why both stars in a binary move, rather than one going round the other',
     'Say what the barycenter is and where it sits when one star is heavier',
@@ -565,7 +607,7 @@ const WEIGHING = {
         'Orbit size and period. Those are the only two things in the formula, and both of them are things you can watch happen. Everything else about the stars, however interesting, is beside the point here.',
     },
     {
-      sid: 'measurement-one-how-big-is',
+      sid: 'take-the-orbit-readings',
       stage: hidden(MYSTERY_PAIR),
       type: 'measure',
       title: 'Measurement one: how big is the orbit?',
@@ -650,7 +692,7 @@ const WEIGHING = {
       ],
     },
     {
-      sid: 'measurement-two-how-long-does',
+      sid: 'time-the-laps',
       stage: hidden(MYSTERY_PAIR),
       type: 'measure',
       title: 'Measurement two: how long does a lap take?',
@@ -727,7 +769,7 @@ const WEIGHING = {
     {
       sid: 'weigh-the-pair',
       stage: hidden(MYSTERY_PAIR),
-      requires: ['measurement-one-how-big-is', 'measurement-two-how-long-does'],
+      requires: ['take-the-orbit-readings', 'time-the-laps'],
       type: 'measure',
       title: 'Weigh the pair',
       body: `Choose, from the readings you took, the two numbers the
@@ -866,7 +908,7 @@ const WEIGHING = {
              this investigation.`,
     },
     {
-      sid: 'back-to-the-balance-point',
+      sid: 'compare-the-two-arms',
       stage: hidden(MYSTERY_PAIR),
       type: 'measure',
       title: 'Back to the balance point',
@@ -940,9 +982,9 @@ const WEIGHING = {
         'Star A is three times as heavy. It is the see-saw again: Star B is three times further out, so Star A must be three times heavier to balance it. You now know the total mass and the ratio, which is enough to pin down both stars.',
     },
     {
-      sid: 'now-weigh-each-one',
+      sid: 'share-the-total-out',
       stage: hidden(MYSTERY_PAIR),
-      requires: ['weigh-the-pair', 'back-to-the-balance-point'],
+      requires: ['weigh-the-pair', 'compare-the-two-arms'],
       type: 'measure',
       title: 'Now weigh each one',
       body: `You know the total mass of the pair from the weighing step, and
@@ -972,8 +1014,7 @@ const WEIGHING = {
           label: 'How many times further out Star B is',
           unit: '',
           decimals: 2,
-          compute: (v, e) =>
-            e ? e('back-to-the-balance-point', 'ratio') : NaN,
+          compute: (v, e) => (e ? e('compare-the-two-arms', 'ratio') : NaN),
         },
         {
           id: 'ma',
@@ -1108,7 +1149,7 @@ const WEIGHING = {
       tip: 'That is a different investigation. This one has done its job if you can say why the star moves at all.',
     },
     {
-      sid: 'one-on-your-own',
+      sid: 'weigh-a-new-pair',
       stage: hidden(MYSTERY_PAIR),
       type: 'measure',
       title: 'One on your own',
@@ -1159,7 +1200,7 @@ const WEIGHING = {
     },
     {
       sid: 'say-how-the-weighing-worked',
-      requires: ['now-weigh-each-one'],
+      requires: ['share-the-total-out'],
       type: 'question',
       kind: 'short',
       title: 'Say how the weighing worked',

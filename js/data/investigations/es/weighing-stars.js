@@ -125,6 +125,7 @@ export default {
         'Sube la Estrella A a 3 M☉ y observa cómo se desplaza la cruz',
         'Pon la Estrella A en 4 M☉ y la Estrella B en 1 M☉',
         'Observa qué estrella hace ahora el círculo pequeño y cuál el grande',
+        'Selecciona la estrella pesada y comprueba que su tarjeta coincide con el deslizador',
         'Pruébalo al revés, con la Estrella B como la pesada',
       ],
       tip: 'La estrella más pesada no se queda quieta. Sigue moviéndose. Solo que se mueve en un círculo mucho menor, y se mueve más despacio, porque tiene menos recorrido que hacer en el mismo tiempo.',
