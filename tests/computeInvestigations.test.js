@@ -791,7 +791,7 @@ describe('Refitting a Transit', () => {
     expect(moved / held.k.sigma).toBeGreaterThan(3);
     expect(held.k.sigma).toBeLessThan(main.k.uncertainty.sigma / 3 + 1e-4);
     const predict = step(REFITTING, 'predict-the-shift');
-    expect(predict.options[predict.answer]).toMatch(/that sigma or less/);
+    expect(predict.options[predict.answer]).toMatch(/^about that sigma, /);
     expect(predict.reveal).toBe('shift-from-your-fit');
     expect(REFITTING.steps.findIndex(s => s.sid === predict.sid)).toBe(
       REFITTING.steps.findIndex(s => s.sid === 'shift-from-your-fit') - 1

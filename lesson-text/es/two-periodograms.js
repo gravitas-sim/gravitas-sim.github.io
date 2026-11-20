@@ -78,7 +78,7 @@ export default {
     'separation-from-your-period': {
       title: 'Frente al ajuste',
       body: `El panel de ajuste del Observatorio, que ajusta a esta curva de luz un tránsito y no una caja, da un período de <strong>3,52454</strong> días con una incertidumbre de 0,00003. Introduce el período de mínimos cuadrados de caja de tu última ejecución, y a cuántas incertidumbres del ajuste están los dos períodos, sin tener en cuenta cuál es mayor.
-             \n\nEl panel informa también de que el ruido de esta curva de luz está correlacionado en el tiempo, lo que hace sus incertidumbres demasiado pequeñas en un factor de aproximadamente 1,7. Introduce la separación otra vez en unidades de la incertidumbre multiplicada por 1,7. Luego decide: ¿sigue el período de caja difiriendo del del ajuste en más de tres de esas incertidumbres mayores? Introduce <strong>1</strong> si sí, <strong>0</strong> si no.`,
+             \n\nEl panel informa también de que el ruido de esta curva de luz está correlacionado en el tiempo, lo que hace sus incertidumbres demasiado pequeñas en un factor de aproximadamente 1,7, la simplificación habitual para el ruido rojo (Winn et al. 2008). Introduce la separación otra vez en unidades de la incertidumbre multiplicada por 1,7. Luego decide: ¿sigue el período de caja difiriendo del del ajuste en más de tres de esas incertidumbres mayores (tres es una convención)? Introduce <strong>1</strong> si sí, <strong>0</strong> si no.`,
       fields: [
         { label: 'Tu período de caja' },
         { label: 'Separación, en incertidumbres del ajuste' },

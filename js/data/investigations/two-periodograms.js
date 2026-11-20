@@ -303,10 +303,10 @@ const TWO_PERIODOGRAMS = {
              run, and how many of the fit's uncertainties apart the two periods are,
              without regard to which is the larger.
              \n\nThe panel also reports that this light curve's noise is correlated in
-             time, which makes its uncertainties too small by a factor of about 1.7. Enter
+             time, which makes its uncertainties too small by a factor of about 1.7, the usual simplification for red noise (Winn et al. 2008). Enter
              the separation again in units of the uncertainty made 1.7 times larger. Then
              decide: does the box period still differ from the fit's by more than three of
-             those larger uncertainties? Enter <strong>1</strong> for yes,
+             those larger uncertainties (three is a convention)? Enter <strong>1</strong> for yes,
              <strong>0</strong> for no.`,
       fields: [
         {

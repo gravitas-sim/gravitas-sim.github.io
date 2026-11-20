@@ -122,7 +122,7 @@ const BUDGETS = [
   {
     id: 'deferred',
     label: 'Deferred JavaScript (lazy chunks, gzipped)',
-    limit: 3237.3,
+    limit: 3237.4,
     reason:
       'Jumped from 1369 KB to 2105 KB when three.js and Chart.js stopped being ' +
       'CDN requests and became bundled chunks. That is the point of the change ' +
@@ -730,7 +730,7 @@ const BUDGETS = [
       "\n\nDesktop layout, the Moon and transit-fit rework, and Io's Fire and Tides That Move the Moon taken together (D-R4-TRAIN-05): the limit is raised from 3206.9 to 3215.8 KB, the measurement by CI of the combined branch (3,292,942 bytes gzipped, 3215.76 KB) rounded up to 0.1 KB, under the standing approval of 2026-10-10. This replaces the separate raises the Moon and Io branches recorded (D-R4-330-09, D-R4-331-05)." +
       "\n\nKepler's Laws, the transit lesson and Weighing the Stars taken together (D-R4-TRAIN-06): the limit is raised from 3215.8 to 3225.7 KB, the exact overrun of a Node 22 build over v4 c5705767f (3,303,045 bytes gzipped, 3225.63 KB) rounded up to 0.1 KB, under the standing approval of 2026-10-10. This replaces the separate raises the three branches recorded (D-R4-328-05, D-R4-329-05, D-R4-332-08). CI then measured 3,303,165 bytes (3225.75 KB, run 44551414337) after the answer key learned estimate steps, so the limit is 3225.8." +
       "\n\nThe two computing investigations (integrators-in-practice and extending-an-experiment, D-R4-362-06): the limit is raised from 3225.8 to 3231.5 KB, the exact overrun of a Node 22 build over v4 87338a7ab (3,309,002 bytes gzipped, 3231.45 KB) rounded up to 0.1 KB, under the standing approval of 2026-10-10. The weight is lesson text: both lessons gained steps, a prediction, a six-orbit question and menu tables in English, their Spanish shadows and the instructor expectations, flow and guide notes; the menu field is about 0.3 KB in the step view. CI's figure replaces this one." +
-      "\n\nThree more computing investigations (refitting-a-transit, two-periodograms and sampling-a-posterior, D-R4-362-13): the limit is raised from 3231.5 to 3237.3 KB, the exact overrun of a Node 22 build of this branch over its stacked base (3,314,910 bytes gzipped, 3237.22 KB) rounded up to 0.1 KB, under the standing approval of 2026-10-10. The weight is lesson text: new steps, predictions, menu tables and feedback in English, their Spanish shadows and the instructor expectations and flow. CI's figure replaces this one.",
+      "\n\nThree more computing investigations (refitting-a-transit, two-periodograms and sampling-a-posterior, D-R4-362-13): the limit is raised from 3231.5 to 3237.4 KB, the exact overrun of a Node 22 build of this branch over its stacked base (3,315,028 bytes gzipped, 3237.33 KB, after the wording of two statistical claims was made exact) rounded up to 0.1 KB, under the standing approval of 2026-10-10. The weight is lesson text: new steps, predictions, menu tables and feedback in English, their Spanish shadows and the instructor expectations and flow. CI's figure replaces this one.",
   },
 ];
 

@@ -90,12 +90,12 @@ export default {
         'Comparado con ese sigma, fijar el oscurecimiento del limbo moverá Rp/R* en&hellip;',
       options: [
         'nada, porque el oscurecimiento del limbo cambia la forma del descenso y no su profundidad',
-        'más o menos ese sigma o menos, porque el sigma ya incluye la libertad del oscurecimiento del limbo',
+        'más o menos ese sigma, porque el sigma ya incluye la libertad del oscurecimiento del limbo',
         'varias veces ese sigma, porque los valores fijos son suposiciones',
         'una fracción minúscula, porque los dos ajustes hallan el mismo mínimo',
       ],
       because:
-        'El sigma ajustado es lo que Rp/R* puede moverse cuando los demás son libres, y el oscurecimiento del limbo es uno de ellos. Un valor fijo plausible es un movimiento dentro de esa libertad, así que Rp/R* se desplaza más o menos su antiguo sigma y no varios. El desplazamiento es una cantidad fija, y el nuevo sigma, más pequeño, la medirá en otra unidad.',
+        'El sigma ajustado es lo que Rp/R* puede moverse cuando los demás son libres, y el oscurecimiento del limbo es uno de ellos. Un valor fijo dentro del propio rango del ajuste mueve el resultado más o menos su sigma, no varios. Medido aquí: más o menos un sigma (0,97). El desplazamiento es una cantidad fija, y el nuevo sigma, más pequeño, la medirá en otra unidad.',
     },
     'shift-from-your-fit': {
       title: 'Fija el oscurecimiento del limbo',

@@ -243,13 +243,13 @@ const REFITTING_A_TRANSIT = {
         'Compared with that sigma, holding the limb darkening will move Rp/R* by&hellip;',
       options: [
         'nothing, because limb darkening changes the shape of the dip and not its depth',
-        'about that sigma or less, because the sigma already includes the freedom of the limb darkening',
+        'about that sigma, because the sigma already includes the freedom of the limb darkening',
         'several times that sigma, because the held values are guesses',
         'a tiny fraction of it, because both fits find the same minimum',
       ],
       answer: 1,
       because:
-        'The fitted sigma is how far Rp/R* can move when the others are free, and the limb darkening is one of them. A plausible held value is a move inside that freedom, so Rp/R* shifts by about its old sigma and not by several of them. The shift is a fixed amount, and the new, smaller sigma will measure it in a different unit.',
+        'The fitted sigma is how far Rp/R* can move when the others are free, and the limb darkening is one of them. A held value within the fit’s own range moves the result by about its sigma, not by several of them. Measured here: about one sigma (0.97). The shift is a fixed amount, and the new, smaller sigma will measure it in a different unit.',
     },
     {
       sid: 'shift-from-your-fit',
@@ -310,7 +310,7 @@ const REFITTING_A_TRANSIT = {
           return {
             level: 'ok',
             message:
-              'Holding the limb darkening cut Rp/R*’s sigma from 0.0016 to 0.0005, and moved Rp/R* from 0.1193 to 0.1177: a move of 0.0016, about its old sigma, which is 3.2 of its new sigmas. The smaller error bar does not include the cost of assuming the limb darkening, and the assumption moved the answer by more than the bar.',
+              'Holding the limb darkening cut Rp/R*’s sigma from 0.0016 to 0.0005, and moved Rp/R* from 0.1193 to 0.1177: a move of 0.0016, about one old sigma (0.97), which is 3.2 of its new sigmas. The smaller error bar does not include the cost of assuming the limb darkening, and the assumption moved the answer by more than the bar.',
           };
         }
         if (Math.abs(v.k - 0.11767) <= 0.0004)
