@@ -1,5 +1,5 @@
 {
-"note":"Measured on v4 87338a7ab before the framing change: 342 distinct scene steps at 375x812, 768x1024 and 1280x800, one fresh page per lesson, English, Chromium. sheet is the state of the lesson sheet that was judged (raised, or lowered by the sheet handle after a raised failure). Produced by tools/lesson-framing-table.mjs.",
+"note":"Measured on v4 87338a7ab before the framing change: 342 distinct scene steps at 375x812, 768x1024 and 1280x800, one fresh page per lesson, English, Chromium, judged with the span floor of 20 percent the check uses (the measurements were taken once; the floor was applied to the recorded spans). sheet is the state of the lesson sheet that was judged (raised, or lowered by the sheet handle after a raised failure). Produced by tools/lesson-framing-table.mjs.",
 "columns":["lesson","sid","kind","scene","size","sheet","pass","zoom","fill","bodies [role,x,y,drawnRadius,free]","reasons"],
 "rows":[
 ["keplers-laws","eight-minutes-of-arc","setup","Kepler's 2nd Law","375x812","raised",1,0.383,0.897,[["star",189,187,5.36,1],["circular",311,187,2.75,1],["eccentric",183,169,2.75,1]],[]],
@@ -938,7 +938,7 @@
 ["weighing-jupiter","a-sequence-of-frames","shelf","stars","1280x800","raised",0,3,0.341,[["star",732,554,27,0]],["star is under inv-tool-row"]],
 ["weighing-jupiter","io-period-and-radius","shelf","stars","1280x800","raised",1,3,0.341,[["star",968,392,27,1]],[]],
 ["why-rings","rings-and-limits","shelf","stars","1280x800","raised",0,3,0.341,[["star",732,554,27,0]],["star is under investigationToolReadout"]],
-["why-rings","a-pass-inside-the-limit","setup","Roche Pass","1280x800","raised",0,2.6,0.281,[["(first object)",640,400,18.29,1]],["the bound bodies span 28% of the free region, under 30%"]],
+["why-rings","a-pass-inside-the-limit","setup","Roche Pass","1280x800","raised",1,2.6,0.281,[["(first object)",640,400,18.29,1]],[]],
 ["why-rings","where-the-gap-falls","shelf","stars","1280x800","raised",1,3,0.341,[["star",968,392,27,1]],[]],
 ["why-rings","a-ring-with-a-resonance","setup","Ring Gap","1280x800","raised",1,3.8,0.888,[["(first object)",430,83,4.27,1]],[]],
 ["ios-fire","a-moon-that-melts","setup","Galilean Resonance","1280x800","raised",1,1.992,0.774,[["io",790,394,2.75,1],["europa",645,394,2.75,1],["ganymede",876,394,2.75,1],["callisto",730,143,2.75,1]],[]],
