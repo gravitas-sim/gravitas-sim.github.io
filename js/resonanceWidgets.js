@@ -47,6 +47,8 @@ import {
   TYPE,
 } from './widgetCanvas.js';
 import { recorder, partition } from './resonance/recorder.js';
+import { state } from './appState.js';
+import { setParkedPause } from './timeline.js';
 import {
   ANGLE_STATE,
   classifyAngle,
@@ -352,12 +354,39 @@ function message(g, w, h, colors, text) {
   );
 }
 
+// --- Run and Pause -------------------------------------------------------------
+
+/**
+ * The instruments draw the live world, so Run and Pause set the world's clock.
+ * A step opens it with `autorun` from the Motion choice (js/widgets.js,
+ * autoruns): under Reduced and Step by step the world is held until Run; else
+ * it runs as the step's scene set it.
+ */
+const RUN = {
+  actions: [
+    {
+      id: 'run',
+      icon: 'play',
+      get label() {
+        return t(state.paused ? 'energyW.run' : 'stelE.action.pause');
+      },
+    },
+  ],
+  reset(_v, { autorun = true } = {}) {
+    if (!autorun) setParkedPause((state.paused = true));
+  },
+  act() {
+    setParkedPause((state.paused = !state.paused));
+  },
+};
+
 // --- 1. Periods and ratios ----------------------------------------------------
 
 const PERIODS = {
   id: 'resonance-periods',
   live: true,
   animated: true,
+  ...RUN,
   get title() {
     return t('resW.periods.title');
   },
@@ -494,6 +523,7 @@ const ANGLE = {
   id: 'resonance-angle',
   live: true,
   animated: true,
+  ...RUN,
   get title() {
     return t('resW.angle.title');
   },
@@ -834,6 +864,7 @@ const CONJUNCTIONS = {
   id: 'resonance-conjunctions',
   live: true,
   animated: true,
+  ...RUN,
   get title() {
     return t('resW.conj.title');
   },
@@ -1066,6 +1097,7 @@ const FRAME = {
   id: 'resonance-frame',
   live: true,
   animated: true,
+  ...RUN,
   get title() {
     return t('resW.frame.title');
   },
