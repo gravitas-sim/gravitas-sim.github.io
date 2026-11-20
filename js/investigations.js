@@ -2517,13 +2517,7 @@ const restartHost = {
     startedAt,
     assigned: Boolean(assignment),
   }),
-  put: p =>
-    ([responses, attempts, visited, startedAt] = [
-      p.responses,
-      p.attempts,
-      p.visited,
-      p.startedAt,
-    ]),
+  put: p => ({ responses, attempts, visited, startedAt } = p),
   go: (index, rebuild) => goToStep(index, { rebuild }),
   kept: { drafts, earlierFor, forgetKept, keepEarlier },
 };
