@@ -185,6 +185,11 @@ export function argumentFor(spec, series) {
       // tell" is measured in.
       reference: (a, b) => 1 / (1 / a - 1 / b),
       referencePair: ['Io', 'Europa'],
+      terms: [
+        { name: 'Io', key: 'lambda', c: 1 },
+        { name: 'Europa', key: 'lambda', c: -3 },
+        { name: 'Ganymede', key: 'lambda', c: 2 },
+      ],
       evaluate: s =>
         laplaceArgument(
           s.el.Io?.lambda,
@@ -200,6 +205,11 @@ export function argumentFor(spec, series) {
       label: '3λ(Pluto) − 2λ(Neptune) − ϖ(Pluto)',
       names: ['Neptune', 'Pluto'],
       referencePair: ['Neptune', 'Pluto'],
+      terms: [
+        { name: 'Pluto', key: 'lambda', c: 3 },
+        { name: 'Neptune', key: 'lambda', c: -2 },
+        { name: 'Pluto', key: 'varpi', c: -1 },
+      ],
       evaluate: s =>
         plutoArgument(
           s.el.Pluto?.lambda,
@@ -254,6 +264,10 @@ export function argumentFor(spec, series) {
       names: [inner, outer],
       referencePair: [inner, outer],
       coorbital: { inner, outer },
+      terms: [
+        { name: outer, key: 'lambda', c: 1 },
+        { name: inner, key: 'lambda', c: -1 },
+      ],
       ratio,
       evaluate: s => wrap360(s.el[outer]?.lambda - s.el[inner]?.lambda),
     };
@@ -264,6 +278,11 @@ export function argumentFor(spec, series) {
     label: `${ratio.p}λ(${outer}) − ${ratio.q}λ(${inner}) − ${ratio.p - ratio.q}ϖ(${outer})`,
     names: [inner, outer],
     referencePair: [inner, outer],
+    terms: [
+      { name: outer, key: 'lambda', c: ratio.p },
+      { name: inner, key: 'lambda', c: -ratio.q },
+      { name: outer, key: 'varpi', c: -(ratio.p - ratio.q) },
+    ],
     ratio,
     evaluate: s =>
       twoBodyArgument(
@@ -273,6 +292,20 @@ export function argumentFor(spec, series) {
         s.el[inner]?.lambda,
         s.el[outer]?.varpi
       ),
+  };
+}
+
+/**
+ * Make the recorder carry an argument continuously and hand back what it holds.
+ * @param {Array<{name:string, key:string, c:number}>} terms - Integer terms
+ * @returns {{samples: Array<{t:number, phi:number}>, frameStepDeg: number|null}}
+ */
+function followed(terms) {
+  const key = JSON.stringify(terms);
+  recorder.watch(key, terms);
+  return {
+    samples: recorder.continuous(key),
+    frameStepDeg: recorder.argumentStep(key),
   };
 }
 
@@ -314,7 +347,12 @@ export function measureAngle(ctx, spec) {
       ? pOut || pIn
       : Math.min(rawSynodic, 50 * Math.max(pIn, pOut));
 
-  const verdict = classifyAngle(samples, { referencePeriod: synodic });
+  const held = followed(arg.terms);
+  const verdict = classifyAngle(held.samples, {
+    referencePeriod: synodic,
+    unwrapped: true,
+    frameStepDeg: held.frameStepDeg,
+  });
   return { ...base, arg, samples, verdict, synodic, pIn, pOut };
 }
 
@@ -1245,17 +1283,17 @@ const FRAME = {
     }
     const rows = [{ label: t('resW.row.frame'), value: m.secondary.name }];
     for (const body of m.others) {
-      const samples = m.series
-        .map(s => {
-          const e = s.el[body.name];
-          const sec = s.el[m.secondary.name];
-          return e && sec
-            ? { t: s.t, phi: wrap360(e.trueLongitude - sec.trueLongitude) }
-            : null;
-        })
-        .filter(Boolean);
+      const terms = [
+        { name: body.name, key: 'trueLongitude', c: 1 },
+        { name: m.secondary.name, key: 'trueLongitude', c: -1 },
+      ];
       const period = meanPeriod(m.series, m.secondary.name);
-      const v = classifyAngle(samples, { referencePeriod: period });
+      const held = followed(terms);
+      const v = classifyAngle(held.samples, {
+        referencePeriod: period,
+        unwrapped: true,
+        frameStepDeg: held.frameStepDeg,
+      });
       // A body sitting on its Lagrange point is not a zero-amplitude tadpole,
       // it is the equilibrium the tadpoles go round, and saying "tadpole about
       // 60 degrees, amplitude 0" of it would bury the most striking thing in

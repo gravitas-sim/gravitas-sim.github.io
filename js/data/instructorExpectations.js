@@ -408,7 +408,7 @@ export default {
       'capture-the-tadpole':
         'A center near 296 degrees, an amplitude near 24 and a period near 154 years (13 Jupiter years), a few percent above the 148 linearized. The validation catches a student who has read L4 instead of L5, which is the common slip, and one who has recorded Jupiter’s own period instead of the libration period.',
       'one-last-ratio':
-        'A nearest ratio of 7:5, an offset of 0.3 to 0.5% (two to five times closer than chance), and circulation after about two and a half minutes. The prediction before it asks whether it is resonant.',
+        'A nearest ratio of 7:5, an offset of 0.3 to 0.5% (two to five times closer than chance), and circulation. The prediction before it asks whether it is resonant.',
     },
     'detect-this-planet': {
       'twelve-nights':
