@@ -1225,7 +1225,7 @@ const FRAME = {
     const own = () => [
       ['centre', t('resW.row.center')],
       ['amplitude', t('resW.row.amplitude')],
-      ['period', t('resW.row.libJy')],
+      ['period', t('resW.row.libration')],
     ];
     if (!m.ready) {
       return [
@@ -1271,17 +1271,24 @@ const FRAME = {
           : verdictText(v),
       });
       if (librating && body.name === asked) {
-        const jy = v.period > 0 && period > 0 ? v.period / period : NaN;
+        const years = simSecondsToYears(v.period, scaleOf(m.primary).time);
         const own3 = [
-          [v.center, 0, '\u00b0'],
-          [v.amplitude, 0, '\u00b0'],
-          [jy, 1, ''],
+          [v.center, '\u00b0'],
+          [v.amplitude, '\u00b0'],
+          [years, ''],
         ];
         rows.push(
           ...blanks(asked, own()).map((r, i) => {
-            const [n, d, u] = own3[i];
+            const [n, u] = own3[i];
             return Number.isFinite(n)
-              ? { ...r, text: n.toFixed(d), value: `${n.toFixed(d)}${u}` }
+              ? {
+                  ...r,
+                  text: n.toFixed(0),
+                  value:
+                    i === 2
+                      ? t('resW.value.periodYears', { years: n.toFixed(0) })
+                      : `${n.toFixed(0)}${u}`,
+                }
               : r;
           })
         );

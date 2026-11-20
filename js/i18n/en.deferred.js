@@ -1238,7 +1238,6 @@ export const EN_DEFERRED = {
   'resW.row.center': 'Libration center',
   'resW.row.amplitude': 'Amplitude',
   'resW.row.libration': 'Libration period',
-  'resW.row.libJy': 'Libration period, Jupiter years',
   'resW.row.circulation': 'Circulation period',
   'resW.row.needed': 'What is missing',
   'resW.row.sampling': 'Sampling',

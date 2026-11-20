@@ -1229,7 +1229,6 @@ export const ES_DEFERRED = {
   'resW.row.center': 'Centro de libración',
   'resW.row.amplitude': 'Amplitud',
   'resW.row.libration': 'Periodo de libración',
-  'resW.row.libJy': 'Periodo de libración, años jovianos',
   'resW.row.circulation': 'Periodo de circulación',
   'resW.row.needed': 'Qué falta',
   'resW.row.sampling': 'Muestreo',
