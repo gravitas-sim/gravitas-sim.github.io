@@ -341,7 +341,7 @@ run directly, so debugging never requires a build step.
 ### Everything else
 
 ```bash
-npm test                  # <!--fact:jestTests-->21872<!--/fact--> tests across <!--fact:jestSuites-->682<!--/fact--> suites
+npm test                  # <!--fact:jestTests-->21894<!--/fact--> tests across <!--fact:jestSuites-->683<!--/fact--> suites
 npm run validate:physics  # the physics validation table
 npm run e2e               # browser smoke tests, against the sources
 npm run lint              # eslint
@@ -367,7 +367,7 @@ reports what the browser downloads at start-up separately from what is deferred:
 | ---------------------- | ------------------------------------------------------ | --------------------------------------------- |
 | CSS                    | <!--fact:buildCss-->210<!--/fact--> KB                 | 1                                             |
 | JavaScript at start-up | <!--fact:buildStartupJs-->531<!--/fact--> KB           | <!--fact:buildStartupFiles-->54<!--/fact-->   |
-| JavaScript on demand   | <!--fact:buildDeferredJs-->8960<!--/fact--> KB         | <!--fact:buildDeferredChunks-->851<!--/fact--> |
+| JavaScript on demand   | <!--fact:buildDeferredJs-->8965<!--/fact--> KB         | <!--fact:buildDeferredChunks-->851<!--/fact--> |
 | **Initial download**   | **<!--fact:buildInitialDownload-->742<!--/fact--> KB** |                                               |
 
 Those figures are the last build's, to the nearest kilobyte, and are written
@@ -489,7 +489,7 @@ npm run e2e:ui                    # the Playwright inspector
 npm run e2e:report                # open the last HTML report
 ```
 
-The suite is <!--fact:e2eTests-->4356<!--/fact--> tests
+The suite is <!--fact:e2eTests-->4358<!--/fact--> tests
 in <!--fact:e2eFiles-->269<!--/fact--> files and takes several minutes in
 Chromium.
 
