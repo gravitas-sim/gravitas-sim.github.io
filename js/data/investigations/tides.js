@@ -941,7 +941,7 @@ const TIDES = {
              object is small compared with its distance. It is excellent for the
              Moon on the Earth, and it gets worse as a body closes in on
              something. The first panel in this investigation used the exact
-             difference; the balance and Roche panels later on use this
+             difference; the balance and breakup panels later on use this
              approximation, so read their distances as good estimates.`,
       tip: 'The 2 is not important. The three letters and where they sit are.',
       evidence: SHOWN('choose-three-masses', 'ms', 3),
