@@ -39,31 +39,20 @@
 // never graded: step 3 asks what changed, not what shade it is.
 // =============================================================================
 
-// This lesson names no scenario anywhere, and that is the change.
-//
-// It used to open a Stellar Nursery, pause it, and say in a note that nothing
-// was measured off it - a backdrop. Every screen now stands the stars it is
-// about on the main canvas itself, through `stage`, so there is no scenario to
-// build and immediately discard, and no paused sandbox behind the panel
-// implying that something is being integrated. The stars are handed to the
-// stellar model, which owns them; the transport is not lying about a scene
-// that does not move, and the clock is left alone.
+// This lesson names no scenario. Every screen stands the stars it is about on
+// the main canvas through `stage`; the stellar model owns them, so no paused
+// sandbox implies that something is being integrated and the clock is left
+// alone.
 
 /**
  * A shelf of stars on the main canvas.
  *
- * They stand still and they are not orbiting one another: this is a display,
- * and js/lessonStage.js hands each of them to the stellar model so that the
- * integrator does not pretend otherwise. Spacing is in world units and does
- * not depend on how big anything is drawn, so switching between true and
- * compressed scale changes sizes and moves nothing.
- *
- * Fitted by default, and that is not cosmetic. A shelf exists to be looked at
- * whole, and several of these steps now ask a reader to click a particular
- * star on the canvas - so a star parked underneath the right-hand rail is a
- * step that cannot be completed as written. fitStage() frames the shelf in
- * the clear region between the lesson panel and the rail rather than in the
- * whole window, which is why this works at 390px as well as at 1440.
+ * They stand still and are not orbiting one another: js/lessonStage.js hands
+ * each to the stellar model. Spacing is in world units, so switching between
+ * true and compressed scale changes sizes and moves nothing. Fitted by
+ * default: several steps ask a reader to click a particular star, and one
+ * parked under the right-hand rail cannot be clicked. fitStage() frames the
+ * shelf between the lesson panel and the rail, at 390px as well as at 1440.
  */
 const shelf = (stars, extra = {}) => ({
   spacing: 95,
@@ -74,18 +63,11 @@ const shelf = (stars, extra = {}) => ({
 
 // Where every example on this page sits.
 // -----------------------------------------------------------------------------
-// Each of these is one star, declared once. The canvas resolves the
-// declaration and so does the comparison card - through the same function, and
-// from the same list, because a step that wants its stars compared says
-// `pinStaged` rather than repeating them.
-//
-// Every one of them says out loud where on its track it is. A bare `{track}`
-// is legal and means the middle of the main sequence, but leaving it bare
-// invited the drift this pass was written to fix: for most of a year the
-// canvas read a bare declaration as forty per cent of the way through the
-// star's *age* while the card read it as mid-main-sequence, so "Star 2" was a
-// 16,687 K star of 3.18 solar radii in the scene and a 16,596 K star of 3.26
-// on the diagram beside it.
+// Each is one star, declared once; the canvas and the comparison card resolve
+// it through the same function (a step that wants its stars compared says
+// `pinStaged`). Each says where on its track it is: a bare `{track}` once
+// read as forty per cent of the star's age on the canvas and mid-main-sequence
+// on the card, so "Star 2" differed between scene and diagram.
 
 // The three the lesson opens and closes with. Anonymous at first: a positional
 // name says which one is which without saying what it is.
@@ -1481,50 +1463,22 @@ const A_UNIVERSE_OF_STARS = {
       tip: 'Both statements are true of main-sequence stars, which is why they sound right. Neither is true of stars in general, and roughly one star in a thousand near the Sun is a counterexample to the second.',
     },
     // -----------------------------------------------------------------------
-    // 29-34: what a color cannot tell you
+    // 30-35: what a color cannot tell you
     // -----------------------------------------------------------------------
-    // A coda, and the only part of this lesson built on observations rather
-    // than on models. Everything before it came from eight MIST tracks: a
-    // published grid of stellar structure calculations, which is imported data
-    // and is not a measurement of any star. These six screens are four real
-    // spectra - photons that left four stars, were dispersed by a grating at
-    // Apache Point in 2008 and counted by a CCD. Every readout on them says
-    // which of the two it is looking at, because the lesson now has both.
+    // A coda, and the only part of this lesson built on observations: four
+    // real spectra (Apache Point, 2008), beside eight modeled tracks that are
+    // imported data, not a measurement of any star. Each readout says which
+    // of the two it is looking at. The block argues in order that a color
+    // works; that two measured features still separate stars whose color
+    // cannot (calcium rises and then falls, which no temperature recovers);
+    // and so that a star can be classified with no color at all.
     //
-    // The argument the six screens make, and the order they make it in:
-    //
-    //   30  a color works. Ranked by the slope of the continuum alone the four
-    //       come out in temperature order, and that slope is the whole of what
-    //       starColor() knows. This screen is meant to be easy.
-    //   31  two features, measured. Inside a 170 Angstrom window the continuum
-    //       slope of the three hottest differs by two per cent - there is no
-    //       color to read - and hydrogen still separates them eightfold.
-    //       Calcium then does something hydrogen does not: it rises and falls.
-    //   32  and so a star can be classified with no color available at all.
-    //   33  the general statement, in the student's own words. A quantity that
-    //       rises and falls cannot be recovered from a temperature, so the two
-    //       measurements are not two readings of one thing.
-    //
-    // What is on the canvas behind these six, and why it is the three stars
-    // -----------------------------------------------------------------------
-    // The obvious move is no stage at all: these four stars are not in the
-    // simulation and could not be, and standing four bodies on the canvas
-    // beside their spectra would say Gravitas has a model of them, which it
-    // has nothing of the kind of.
-    //
-    // But a step with no stage does not clear the canvas - it inherits
-    // whatever the previous step left, which here is the shelf of three
-    // modeled stars. So "no stage" does not avoid the juxtaposition; it makes
-    // it accidental and unlabeled, with four real spectra apparently belonging
-    // to three modeled stars that they have nothing to do with.
-    //
-    // The three stars are therefore staged deliberately and named as what they
-    // are on the opening screen of the block: the modeled half of the lesson,
-    // still on the canvas, beside the observed half in the panel. The
-    // distinction the whole coda is about becomes something a reader can see
-    // rather than something the prose asserts. It also keeps the `star-sizes`
-    // activity's `scenario: null` honest, which is only legal while every step
-    // in this lesson stands up its own scene.
+    // The canvas behind it is the three modeled stars, staged on purpose and
+    // named as modeled on the first step. A step with no stage inherits the
+    // previous scene, which would juxtapose four real spectra with three
+    // modeled stars by accident and unlabeled. Staging them also keeps the
+    // `star-sizes` activity's `scenario: null` legal, which needs every step
+    // in this lesson to stand up its own scene.
     {
       sid: 'spectra-the-light-itself',
       stage: shelf(THREE, { fit: true }),
