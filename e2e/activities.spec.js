@@ -137,7 +137,8 @@ test.describe('a link that names nothing real', () => {
     await page.waitForTimeout(2000);
     const panel = page.locator('#investigationPanel');
     await expect(panel).toBeHidden();
-    await expect(page.locator('#gravitasToast')).toContainText('nope');
+    // The refusal stays in a dialog until it is closed (it used to be a toast).
+    await expect(page.locator('#linkNotice')).toContainText('nope');
   });
 
   test('an unknown activity opens no lesson either', async ({ page, app }) => {
@@ -147,7 +148,8 @@ test.describe('a link that names nothing real', () => {
     });
     await page.waitForTimeout(2000);
     await expect(page.locator('#investigationPanel')).toBeHidden();
-    await expect(page.locator('#gravitasToast')).toContainText('nope');
+    // The refusal stays in a dialog until it is closed (it used to be a toast).
+    await expect(page.locator('#linkNotice')).toContainText('nope');
   });
 
   test('the landing page falls back to the list rather than an empty view', async ({
