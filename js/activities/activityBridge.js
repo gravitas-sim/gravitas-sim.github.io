@@ -178,6 +178,9 @@ export async function openActivityFromUrl() {
     link: location.hash,
   });
   if (opened && opened.ok === false)
-    return refuse(t(`assign.error.${opened.reason}`), activity.lesson);
+    return refuse(
+      t(`assign.error.${opened.reason}`),
+      opened.reason === 'noLesson' ? null : activity.lesson
+    );
   return true;
 }

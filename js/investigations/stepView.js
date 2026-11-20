@@ -37,14 +37,8 @@ import {
   nextHintStage,
 } from '../answerFeedback.js';
 import { command, state } from '../appState.js';
-import {
-  RESUME_ROUTE_MAX,
-  drop,
-  get,
-  noteLesson,
-  noteResume,
-  put,
-} from '../storage/local.js';
+import { drop, get, noteLesson, noteResume, put } from '../storage/local.js';
+import { ENTRY_LINK, isKeptLink, isTooLongLink } from '../names.js';
 import { migrateSavedProgress } from '../platform/resolver.js';
 import { assignmentStorageKey, shortHash } from '../assignments/assignment.js';
 import {
@@ -959,25 +953,39 @@ export function keyForAssignment(a) {
 // so Home, the Library and My work open it again as that, not as the bare
 // investigation. Set on every open (null for one that came from no link).
 let entry = null;
-export const ENTRY_LINK =
-  /^#(?:[ai]\d+[zr][\w-]+|activity=[a-z0-9-]+(?:\/[a-z0-9-]+)?)$/i;
+let kept = null;
+export { ENTRY_LINK };
+
+/**
+ * Remember the link this open came from.
+ *
+ * @param {?string} hash - The address fragment, or null for an open from none
+ * @returns {boolean} True where the link is the right shape but too long to
+ *   keep (a pack that carries its whole lesson): js/remix/open.js says so
+ */
 export const setEntryLink = hash => {
-  entry =
-    typeof hash === 'string' &&
-    hash.length < RESUME_ROUTE_MAX &&
-    ENTRY_LINK.test(hash)
-      ? hash
-      : null;
+  entry = isKeptLink(hash) ? hash : null;
+  kept = null;
+  return isTooLongLink(hash);
 };
 
-/** The link a record already holds, for work opened again without one. */
-function keptLink(key) {
+/**
+ * The link a record already holds, for work opened again without one (a pack's
+ * lesson is in no catalogue, so a bare open of it cannot happen; this keeps the
+ * link if it ever does). Read once per open: the record is only ever written
+ * with this link, so the first reading stays true.
+ */
+export function keptLink(key) {
+  if (kept?.key === key) return kept.link;
+  let link;
   try {
-    const link = JSON.parse(get(key) ?? 'null')?.link;
-    return ENTRY_LINK.test(link) ? link : undefined;
+    const held = JSON.parse(get(key) ?? 'null')?.link;
+    link = isKeptLink(held) ? held : undefined;
   } catch {
-    return undefined;
+    link = undefined;
   }
+  kept = { key, link };
+  return link;
 }
 
 /** The resume record's note for this work: its link when it has one. */
@@ -991,9 +999,9 @@ function noteWork(active, step, link, key) {
       : `investigation:${active.id}`,
     route: `/${link}`,
     step,
-    ...(name
-      ? { title: { en: name, ...(getLocale() === 'es' ? { es: name } : {}) } }
-      : {}),
+    // Under the language the name came from, not both: an instructor's words
+    // are not an English title for a Spanish reader or the other way round.
+    ...(name ? { title: { [getLocale() === 'es' ? 'es' : 'en']: name } } : {}),
   });
 }
 
@@ -1032,7 +1040,7 @@ export function save() {
     return;
   }
   const key = progressKey(active.id);
-  const link = entry ?? (host.assigned() ? keptLink(key) : undefined);
+  const link = entry ?? keptLink(key);
   const payload = writeProgress({
     lesson: active,
     responses: s.responses,

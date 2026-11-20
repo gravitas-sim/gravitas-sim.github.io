@@ -63,6 +63,8 @@ import {
   KEY_FIRST_WEEK,
   KEY_NEXT_CONTEXT,
   KEY_RESUME,
+  RESUME_ROUTE_MAX,
+  isSiteRoute,
 } from './names.js';
 
 ensureDeferredMessages().catch(() => {});
@@ -145,9 +147,8 @@ export function resumeItems(raw = () => localStorage.getItem(KEY_RESUME)) {
       !/^[\w.:/-]+$/.test(i.id) ||
       i.id.length > 120 ||
       typeof i.route !== 'string' ||
-      !i.route.startsWith('/') ||
-      i.route.startsWith('//') ||
-      i.route.length > 4000 ||
+      !isSiteRoute(i.route) ||
+      i.route.length > RESUME_ROUTE_MAX ||
       seen.has(i.id)
     )
       continue;
@@ -185,7 +186,7 @@ export function continueRows(catalog, items, going) {
         route: null,
         ...(g ? { seen: g.seen, total: g.total } : {}),
       });
-    } else if (item.title?.en)
+    } else if (item.title?.en || item.title?.es)
       add({ id: item.id, title: item.title, route: item.route });
   }
   for (const g of going)
@@ -218,9 +219,15 @@ async function fillContinue() {
     if (strip && rows.length) {
       const name = r => {
         const act = r.id.startsWith('assignment:');
-        return r.title.es || act
-          ? `<span class="gs-en">${act ? 'Continue the activity: ' : ''}${escape(r.title.en)}</span><span class="gs-es" lang="es">${act ? 'Continuar la actividad: ' : ''}${escape(r.title.es ?? r.title.en)}</span>`
-          : escape(r.title.en);
+        // A title is kept under the language it was written in; the other
+        // span falls back to it, marked as the language it is.
+        const { en = r.title.es, es = r.title.en } = r.title;
+        const said = r.title.en
+          ? escape(en)
+          : `<span lang="es">${escape(en)}</span>`;
+        return es !== en || act || !r.title.en
+          ? `<span class="gs-en">${act ? 'Continue the activity: ' : ''}${said}</span><span class="gs-es" lang="es">${act ? 'Continuar la actividad: ' : ''}${escape(es)}</span>`
+          : said;
       };
       strip.querySelector('ul').innerHTML = rows
         .map(

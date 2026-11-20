@@ -2131,9 +2131,7 @@ export async function openInvestigation(id, opts = {}) {
     throw new Error(`Unsafe step id: ${JSON.stringify(unsafe.sid)}`);
   }
 
-  // An assignment is the same lesson with steps taken out, built here so the
-  // panel has no second kind of thing to know: `active.id` stays the lesson's,
-  // so a response key means the same question in either.
+  // An assignment is the same lesson with steps taken out (`active.id` stays its).
   assignment = opts.assignment ?? null;
   setEntryLink(opts.link);
   assignmentBinding = null;
@@ -2599,9 +2597,11 @@ function openInvestigationFromHash() {
     return;
   }
   if (active?.id === id) return;
-  openInvestigation(id, { depth }).catch(err =>
-    loadFailed(() => openInvestigation(id, { depth }).catch(() => {}), err)
-  );
+  openInvestigation(id, { depth })
+    .then(r => r?.ok === false && toast(t('inv.load.failed')))
+    .catch(err =>
+      loadFailed(() => openInvestigation(id, { depth }).catch(() => {}), err)
+    );
 }
 
 // A language change swaps the manifest the cards are drawn from, and rewrites

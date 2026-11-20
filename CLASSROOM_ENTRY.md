@@ -82,11 +82,18 @@ assignment lived only in the address fragment and the resume record held
   (`tests/compat/boundary.mjs`, row `progress-link`). The schema stays 2.
 - **The resume record** (`gravitas_resume`) holds the same address as the item's
   `route`, with id `assignment:<hash>` for an assignment or activity and the
-  existing `investigation:<id>` for a pack. The only change to the record is the
-  longest `route` it accepts: 4,000 characters instead of 240, because a link is
-  the address (`RESUME_ROUTE_MAX`, `js/storage/local.js`; the same number in
-  `js/welcome.js`). An older build drops an item over 240 characters and keeps
-  the others.
+  existing `investigation:<id>` for a pack. The changes to the record are the
+  longest `route` it accepts (4,000 characters instead of 240, because a link is
+  the address) and a `title` that may hold only the language it was written in
+  (`{ es: ... }` for a Spanish reader; `en` is no longer required, and the
+  readers fall back to whichever is there). The limit, the link shape
+  (`ENTRY_LINK`) and what counts as an address on this site (one slash, then
+  neither a slash nor a backslash) are in one module, `js/names.js` (already imported by all four; a module of its own cost a request on every route),
+  read by the resume record, Home, My work and the lesson panel. An older build
+  drops an item over 240 characters and keeps the others, and drops a title with
+  no `en`. A link of the right shape that is too long to keep (a pack that
+  carries its whole lesson, 4,000 characters or more) is not stored, and the
+  pack opener says so in one line when it opens.
 - **Home** names the item "Continue the activity: <title>" (both languages);
   the **Library** does the same (`lib.continue.assignment`); **My work**'s
   activity rows get a Resume link from the progress record, so an activity

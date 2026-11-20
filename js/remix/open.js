@@ -21,6 +21,7 @@
 // =============================================================================
 
 import { t, registerMessages } from '../i18n/index.js';
+import { isTooLongLink } from '../names.js';
 
 /** The pack, judged and compiled: {ok, compiled} or {ok: false, errors}. */
 export async function compilePack(pack, facts) {
@@ -160,7 +161,9 @@ export async function openPackFromUrl() {
   const opened = await facts.openInvestigation(lesson.id, {
     link: location.hash,
   });
-  if (opened?.ok === false) return fail('', opened.reason);
+  if (opened?.ok === false) return refuse(t(`assign.error.${opened.reason}`));
+  // A pack link can carry a whole lesson: too long to come back to from Home.
+  if (isTooLongLink(location.hash)) toast(t('remix.notice.tooLong'));
   if (pack.derivedFrom)
     toast(
       t('remix.notice.opened', {

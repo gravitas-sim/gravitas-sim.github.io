@@ -447,7 +447,10 @@ const titleOf = item => {
   const e = byId.get(item.id);
   return e
     ? pick(e.title)
-    : item.title?.[document.documentElement.lang] || item.title?.en || '';
+    : item.title?.[document.documentElement.lang] ||
+        item.title?.en ||
+        item.title?.es ||
+        '';
 };
 
 /**

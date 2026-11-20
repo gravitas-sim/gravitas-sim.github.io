@@ -198,6 +198,37 @@ test.describe('a link that cannot be opened says why and what to do', () => {
     await app.boot({ url: `/${l.ghost}` });
     const why = await said(page, { who: 'sender', way: 'Library' });
     expect(why).toBe('That investigation could not be read.');
+    // Described by the reason and by the line that says who can mend it, and the
+    // Library is found from where the page is, not from the site root.
+    await expect(notice(page)).toHaveAttribute(
+      'aria-describedby',
+      'linkNoticeWhy linkNoticeSender'
+    );
+    expect(
+      await notice(page)
+        .locator('#linkNoticeLibrary')
+        .evaluate(a => a.href === new URL('library/', document.baseURI).href)
+    ).toBe(true);
+  });
+
+  test('two refusals in the same moment make one dialog', async ({
+    page,
+    app,
+  }) => {
+    await profile(page, 'returning');
+    await app.boot({ url: '/' });
+    const shown = await page.evaluate(async () => {
+      const { refuseLink } = await import('/js/assignments/linkNotice.js');
+      const both = await Promise.all([
+        refuseLink({ why: 'First reason' }),
+        refuseLink({ why: 'Second reason' }),
+      ]);
+      return { both, dialogs: document.querySelectorAll('#linkNotice').length };
+    });
+    expect(shown).toEqual({ both: [true, true], dialogs: 1 });
+    await expect(notice(page).locator('#linkNoticeWhy')).toHaveText(
+      'Second reason'
+    );
   });
 
   test('an activity with no such format: the investigation on its own is the way on', async ({
@@ -313,6 +344,41 @@ test.describe('a student comes back to the activity, not the bare investigation'
     await expect(row).toHaveCount(1);
     await row.click();
     await resumed(page, 'Week 3');
+  });
+
+  test('a title kept in one language is shown as it is, not as the other', async ({
+    page,
+    app,
+  }) => {
+    await profile(page, 'returning');
+    await app.boot({ url: '/library/' });
+    await page.evaluate(() =>
+      localStorage.setItem(
+        'gravitas_resume',
+        JSON.stringify({
+          v: 1,
+          items: [
+            {
+              id: 'assignment:aaaaaaaa',
+              route: '/#activity=orbital-speed/guided',
+              at: 1,
+              title: { es: 'Semana 3' },
+            },
+          ],
+        })
+      )
+    );
+    await page.goto('/library/');
+    await expect(page.locator('#libContinueList a.lib-resume')).toContainText(
+      'Semana 3'
+    );
+    await page.goto('/#home');
+    await expect(page.locator('#welContinue li a').first()).toContainText(
+      'Semana 3'
+    );
+    await expect(
+      page.locator('#welContinue li a span[lang="es"]').first()
+    ).toBeAttached();
   });
 
   test('an activity link, in Spanish', async ({ page, app }) => {

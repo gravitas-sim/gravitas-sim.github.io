@@ -18,6 +18,34 @@
 /** The fragment's host (tools/index-fragments.mjs) and its file's name. */
 const HOST = 'link-notice';
 
+/** The one fetch of the markup, shared by refusals that arrive together. */
+let mounting = null;
+
+/** Put the dialog on the page once; false where it cannot be. */
+function mount() {
+  if (document.getElementById('linkNotice')) return Promise.resolve(true);
+  mounting ??= (async () => {
+    // Not through js/i18n/dom.js: a module of its own here would be a chunk
+    // every route loads. The markup has no translated attributes to apply.
+    try {
+      const res = await fetch(
+        new URL(`js/fragments/${HOST}.html`, document.baseURI)
+      );
+      const host = document.querySelector(`template[data-host="${HOST}"]`);
+      if (!res.ok || !host) return false;
+      const tpl = document.createElement('template');
+      tpl.innerHTML = await res.text();
+      if (!document.getElementById('linkNotice')) host.after(tpl.content);
+      return true;
+    } catch {
+      return false;
+    } finally {
+      mounting = null;
+    }
+  })();
+  return mounting;
+}
+
 /**
  * Show the dialog for a refused link.
  *
@@ -35,27 +63,23 @@ export async function refuseLink({
   lesson = null,
   reload,
 }) {
-  if (!document.getElementById('linkNotice')) {
-    // Not through js/i18n/dom.js: a module of its own here would be a chunk
-    // every route loads. The markup has no translated attributes to apply.
-    try {
-      const res = await fetch(
-        new URL(`js/fragments/${HOST}.html`, document.baseURI)
-      );
-      const host = document.querySelector(`template[data-host="${HOST}"]`);
-      if (!res.ok || !host) return false;
-      const tpl = document.createElement('template');
-      tpl.innerHTML = await res.text();
-      host.after(tpl.content);
-    } catch {
-      return false;
-    }
-  }
+  if (!(await mount())) return false;
   const d = document.getElementById('linkNotice');
   if (!d || typeof d.showModal !== 'function') return false;
   d.querySelector('#linkNoticeWhy').textContent = why;
   for (const p of d.querySelectorAll('[data-who]'))
     p.hidden = p.dataset.who !== who;
+  // Described by what went wrong and by the line that says who can mend it.
+  d.setAttribute(
+    'aria-describedby',
+    `linkNoticeWhy ${who === 'you' ? 'linkNoticeYou' : 'linkNoticeSender'}`
+  );
+  // The Library is beside the page, not at the site root (a project page lives
+  // under a path).
+  d.querySelector('#linkNoticeLibrary').href = new URL(
+    'library/',
+    document.baseURI
+  ).href;
   const way = lesson ? 'Alone' : reload ? 'Reload' : 'Library';
   for (const k of ['Alone', 'Reload', 'Library'])
     d.querySelector(`#linkNotice${k}`).hidden = k !== way;

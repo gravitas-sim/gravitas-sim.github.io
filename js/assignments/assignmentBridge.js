@@ -7,7 +7,7 @@
 // belongs in everybody's start-up bundle.
 // =============================================================================
 
-import { t } from '../i18n/index.js';
+import { hasMessage, t } from '../i18n/index.js';
 
 /**
  * Open whatever assignment the address bar names.
@@ -41,16 +41,18 @@ export async function openAssignmentFromUrl() {
   // A reason that is not one of the catalog's codes is a link that did not
   // decode, whatever the decoder said.
   const refuse = (reason, detail, lesson) => {
-    const code =
-      t(`assign.error.${reason}`) === `assign.error.${reason}`
-        ? 'corrupt'
-        : reason;
+    // hasMessage asks the catalog without logging a missing id, which t() does.
+    const code = hasMessage(`assign.error.${reason}`) ? reason : 'corrupt';
     notify.refuseLink({
       why: t(`assign.error.${code}`, detail || {}),
       who: ['corrupt', 'newerVersion', 'tooLarge'].includes(code)
         ? 'you'
         : 'sender',
-      lesson: registry.investigationIds().includes(lesson) ? lesson : null,
+      // Alone only for an investigation that exists and can be read.
+      lesson:
+        code !== 'noLesson' && registry.investigationIds().includes(lesson)
+          ? lesson
+          : null,
       reload: code === 'newerVersion',
     });
     return false;
