@@ -285,16 +285,14 @@ export default {
         'The characterization panel reports HD 209458 b at 1.38 Jupiter radii, 0.69 Jupiter masses and a bulk density of 0.33 g/cm³: about a third the density of water and a sixteenth of Earth’s. It receives roughly 785 times Earth’s starlight and sits far inside the inner edge of the modeled zone. At step 32 the accepted density range is 0.25 to 0.41; a student answering near 5.5 has read Earth’s density from the comparison text rather than the planet’s.',
     },
     'goldilocks-question': {
-      'three-distances':
-        'At 0.5, 1 and 2 AU the panel reads 4.00, 1.00 and 0.25 Earths. These are exact by construction, not rounded.',
-      'write-the-three-down':
-        'The three pairs should be (0.5, 4), (1, 1) and (2, 0.25). The validator confirms starlight × distance² is constant and says the relationship has appeared in the student’s own numbers; it warns if the rows do not sit on one curve, which almost always means a value was read at the wrong distance.',
+      'three-distances-yours':
+        'Any three distances from 0.3 to 3 AU, one twice another and at least a factor of two overall, with the starlight taken at each: starlight × distance² is 1.00 within 12%. The check names a reading taken at another distance and a missing doubling.',
       'the-star-is-not-running':
         'The shell areas read 1×, 4×, 9× and 16× at 1, 2, 3 and 4 AU, and the third line of the readout gives 1, 0.25, 0.111 and 0.063 Earths. The last line never changes: the total energy crossing the shell is the same at every distance.',
       'four-stars-one-planet':
         'At a fixed 1 AU: the red dwarf gives 0.0015 Earths, the orange dwarf 0.34, the Sun 1.00, the brighter star 5.1. The starlight equals the luminosity exactly, because the distance is 1 AU.',
       'so-where-would-a-planet':
-        'Conservative zones: red dwarf 0.042 to 0.080 AU, Sun 0.98 to 1.69 AU, brighter star 2.11 to 3.58 AU. A factor of about fifty between the extremes.',
+        'One Earth of starlight lies near 0.04 AU for the red dwarf and 2.3 AU for the brighter star. Conservative zones: 0.042 to 0.080, 0.98 to 1.69, 2.11 to 3.58 AU.',
       'now-put-it-round-the':
         'The ring runs from 0.98 to 1.69 AU. Venus at 0.72 AU sits inside the inner edge and Ceres at 2.77 AU well beyond the outer one, so Earth and Mars are the two worlds inside. Mars being inside is the point of the screen and is worth waiting for a student to notice. Venus at 0.72 AU is inside the inner edge, Earth at 1.00 is comfortably in, Mars at 1.52 is just inside the outer edge on the conservative definition, and Ceres at 2.77 is far outside. Have them click each and read the distance and insolation rather than being told: the numbers come from the same functions that draw the ring.',
       'two-definitions-of-the-same':

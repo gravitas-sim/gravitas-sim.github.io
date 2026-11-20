@@ -32,6 +32,17 @@
       "q": {
         "control": "Q"
       }
+    },
+    "goldilocks-question/three-distances-yours": {
+      "d1": {
+        "control": "distance"
+      },
+      "d2": {
+        "control": "distance"
+      },
+      "d3": {
+        "control": "distance"
+      }
     }
   }
 }

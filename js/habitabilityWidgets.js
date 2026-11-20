@@ -177,6 +177,7 @@ const INSOLATION = {
         value: withUnit(c.distanceAU.toFixed(2), 'AU'),
       },
       {
+        id: 'starlight',
         get label() {
           return t('hzW.starlightReachingEachSquareMeter');
         },

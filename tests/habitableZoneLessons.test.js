@@ -58,8 +58,10 @@ describe('the lesson is deepened, not changed', () => {
     for (const d of DEEP.steps) {
       expect(sids.indexOf(d.sid)).toBeGreaterThan(sids.indexOf(d.after));
     }
+    // Two more than the deepening shipped with: the estimate of the dim star's
+    // limit and the step that sets it beside the reading.
     expect(lesson.steps.filter(s => s.depth === 'quantitative')).toHaveLength(
-      5
+      7
     );
     expect(lesson.steps.filter(s => s.depth === 'advanced')).toHaveLength(4);
   });

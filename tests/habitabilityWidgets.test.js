@@ -577,8 +577,9 @@ describe('the Goldilocks investigation', () => {
     expect(text).toContain('0.75');
     expect(text).toContain('1.77');
 
-    // The red dwarf and bright star ranges quoted in the tips.
-    expect(text).toContain('0.042 to 0.080 AU');
+    // The red dwarf's range is no longer quoted before the step that reads it
+    // (the student finds the distance); the module's own figures stay pinned.
+    expect(text).not.toContain('0.042 to 0.080 AU');
     const red = habitableZoneBounds({ luminositySolar: 0.0015, teffK: 3000 });
     expect(red.innerAU.toFixed(3)).toBe('0.042');
     expect(red.outerAU.toFixed(3)).toBe('0.080');
