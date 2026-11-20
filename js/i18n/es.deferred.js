@@ -2589,7 +2589,6 @@ export const ES_DEFERRED = {
   'binarySweep.recheck.reason.unreliableRun':
     'una de las ejecuciones no es fiable',
   'binarySweep.recheck.reason.notFinished': 'una de las ejecuciones no termino',
-
   // --- El barrido binario, guardado como prueba --------------------------------
   'nb.binarySweep.title': 'Barrido del radio inicial ({scenario})',
   'nb.binarySweep.trials': 'Ensayos',
@@ -3003,7 +3002,6 @@ export const ES_DEFERRED = {
     'El ejemplo es un chirrido modelado de agujeros negros, desplazado hacia arriba para que lo reproduzca el altavoz de un portátil. No es el sonido propio de la simulación, ni una grabación de nada.',
   'sound.lesson.link': 'Escuchar el espacio-tiempo: descubrir una fusión',
   'sound.shortcut': 'Silenciar o activar el sonido',
-
   // --- Textos de instrumentos sacados de la descarga inicial. Véase en.deferred.js. ---
   'dmW.mondTitle': 'La misma curva, dos explicaciones',
   'dmW.mondNote':
@@ -3379,7 +3377,6 @@ export const ES_DEFERRED = {
   'gwW.row.notDetection': 'Lo que eso no es',
   'gwW.value.notDetection':
     'Un solapamiento normalizado, y nada más. No es una relación señal-ruido, ni una probabilidad, ni evidencia de que se haya detectado algo: establecer eso requiere un banco de plantillas, una estimación del fondo y un factor de ensayos, y aquí no hay ninguno.',
-
   // --- Más textos sacados de la descarga inicial. Véase en.deferred.js. ---
   'export.empty': 'Todavía no hay nada registrado que exportar.',
   'export.failed': 'No se pudo generar ese archivo.',
@@ -3886,6 +3883,9 @@ export const ES_DEFERRED = {
   'nb.stellar.limit.fitted':
     'La comparación se dibujó con cada estrella ajustada a su recuadro, así que los tamaños aparentes no son comparables.',
   // --- Words a lesson computes ----------------------------------------------
+  'lessonFn.halfRangeMaxMin23': 'Semirrango ½(máx − mín)',
+  'lessonFn.halfRangeObservedSoFar26': 'Semirrango observado hasta ahora',
+  'lessonFn.keepObserving15': 'Sigue observando…',
   'lessonFn.yourErrorBarForThePeriod129':
     'Tu barra de error del periodo es menor que la dispersión de uno de tus propios tiempos: afirma más de lo que mediste. Ensánchala.',
   'lessonFn.thatErrorBarIsMoreThan140':

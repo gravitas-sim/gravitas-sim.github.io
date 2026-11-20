@@ -2925,7 +2925,7 @@ export const INSTRUCTOR_CONTENT = {
     topic: 'Exoplanet detection and characterization',
     difficulty: 'Introductory, written for non-science majors',
     placement:
-      'The third of the three exoplanet investigations, after Finding Planets by Their Shadows and before or after The Goldilocks Question. It closes the inference chain: Shadows measures a radius, this one measures a mass and combines the two into a density, and Goldilocks asks what that buys. It works standalone, but the payoff at steps 30-33 lands hardest for students who have done the transit investigation.',
+      'The third of the three exoplanet investigations, after Finding Planets by Their Shadows and before or after The Goldilocks Question. It closes the inference chain: Shadows measures a radius, this one measures a mass and combines the two into a density, and Goldilocks asks what that buys. It works standalone, but the payoff at steps 31-34 lands hardest for students who have done the transit investigation.',
     overview: `Students discover that a star and its planet both orbit their common center of
       mass, that the star's share of that motion is measurable through the Doppler shift of
       its spectral lines, and that the size of the wobble gives the planet's mass. They then
@@ -2938,7 +2938,7 @@ export const INSTRUCTOR_CONTENT = {
     priorKnowledge: [
       'That planets orbit stars, and that gravity acts between any two masses',
       'That light can be spread into a spectrum (the investigation explains absorption lines from scratch)',
-      'Helpful but not required: Finding Planets by Their Shadows, for the transit radius reused at step 30',
+      'Helpful but not required: Finding Planets by Their Shadows, for the transit radius reused at step 31',
       'Helpful but not required: Weighing the Stars, for the center-of-mass rule reused at step 4',
     ],
     keyConcepts: [
@@ -2969,47 +2969,47 @@ export const INSTRUCTOR_CONTENT = {
     ],
     features: [
       {
-        name: 'Exoplanet Characterization Lab scenario (steps 1, 3, 10, 14)',
+        name: 'Exoplanet Characterization Lab scenario (steps 1, 3, 11, 15)',
         text: 'HD 209458 with the star free to move. The transit scenarios pin their star so the light curve stays centered; this one initializes both bodies in the center-of-mass frame with zero net momentum, so the wobble the instruments measure is the wobble the simulation is doing. The star circles a point 2.7e-5 AU away at 84 m/s.',
       },
       {
-        name: 'Radial Velocity panel (steps 10-14)',
+        name: 'Radial Velocity panel (steps 11-15)',
         text: 'A live instrument in the Tools list. It projects the observed star’s actual simulated velocity onto the shared line of sight and plots it against time, reporting K once a full cycle is recorded. Velocities are relative to the system barycenter so the curve sits around zero.',
       },
       {
         name: 'Astrometry panel (available from Tools)',
-        text: 'Plots the star’s path on the sky about the barycenter, with the physical reflex orbit in AU and the angle it subtends shown separately. Not used by an investigation step, but worth demonstrating alongside step 24.',
+        text: 'Plots the star’s path on the sky about the barycenter, with the physical reflex orbit in AU and the angle it subtends shown separately. Not used by an investigation step, but worth demonstrating alongside step 25.',
       },
       {
         name: 'Shared observer control',
         text: 'Position angle and inclination live in one module and every observing panel mounts the same control. Changing inclination in one panel changes it everywhere, which is what makes the step-24 comparison honest.',
       },
       {
-        name: 'reflex-motion instrument (steps 4, 6)',
+        name: 'reflex-motion instrument (steps 4, 6, 7)',
         text: 'Star, planet and barycenter with the stellar orbit magnified by a labeled factor. The magnification is cosmetic and stated on the picture; the reported numbers are physical.',
       },
       {
-        name: 'rv-observer instrument (step 9)',
+        name: 'rv-observer instrument (step 10)',
         text: 'Orbit on the left with a line-of-sight arrow, curve on the right with the star’s current position marked. Direction is given in words as well as color.',
       },
       {
-        name: 'rv-mass instrument (step 16)',
+        name: 'rv-mass instrument (step 17)',
         text: 'K against planet mass with everything else held fixed. The straight line is the point.',
       },
       {
-        name: 'rv-inclination instrument (steps 17, 19)',
-        text: 'Two bars: true mass, and the mass radial velocity would report. Used both to weigh the planet at step 17 and to break the reported mass at step 19.',
+        name: 'rv-inclination instrument (steps 18, 20)',
+        text: 'Two bars: true mass, and the mass radial velocity would report. Used both to weigh the planet at step 18 and to break the reported mass at step 20.',
       },
       {
-        name: 'astrometry-signature instrument (steps 24, 28)',
+        name: 'astrometry-signature instrument (steps 25, 29)',
         text: 'The sky path at any inclination, with sliders for planet mass, orbit size and distance. Distance changes the angle and not the orbit, which the readout shows explicitly.',
       },
       {
-        name: 'method-comparison instrument (step 26)',
+        name: 'method-comparison instrument (step 27)',
         text: 'Transit, radial velocity and astrometry side by side as one system tilts. The astrometry bar deliberately stays full: its amplitude does not vanish face-on.',
       },
       {
-        name: 'planet-characterization instrument (steps 31, 34)',
+        name: 'planet-characterization instrument (steps 32, 35)',
         text: 'The inference chain as a table. Calls habitability.js directly for insolation and zone bounds, so its numbers are identical to The Goldilocks Question by construction rather than by coincidence.',
       },
     ],
@@ -3022,7 +3022,7 @@ export const INSTRUCTOR_CONTENT = {
       {
         claim: 'Radial velocity measures the planet’s speed.',
         response:
-          'It measures the star’s. The planet never enters the measurement directly, which is exactly why the method works on planets nobody can see. Worth restating at step 10 when the live panel opens.',
+          'It measures the star’s. The planet never enters the measurement directly, which is exactly why the method works on planets nobody can see. Worth restating at step 11 when the live panel opens.',
       },
       {
         claim: 'A Doppler shift makes the star visibly change color.',
@@ -3032,22 +3032,22 @@ export const INSTRUCTOR_CONTENT = {
       {
         claim: 'Zero radial velocity means the star has stopped.',
         response:
-          'It means all of the star’s motion is across our view at that instant. Step 9 makes this visible; a student who misses it will misread the curve’s zero crossings as pauses.',
+          'It means all of the star’s motion is across our view at that instant. Step 10 makes this visible; a student who misses it will misread the curve’s zero crossings as pauses.',
       },
       {
         claim: 'Radial velocity gives the planet’s true mass.',
         response:
-          'It gives M sin i, a lower limit, unless something else fixes the inclination. Steps 18-21 are built entirely around this, and step 21 is where the transit connection pays off.',
+          'It gives M sin i, a lower limit, unless something else fixes the inclination. Steps 19-22 are built entirely around this, and step 22 is where the transit connection pays off.',
       },
       {
         claim: 'A face-on system cannot be detected by any wobble method.',
         response:
-          'Radial velocity fails; astrometry does not. The astrometric semi-major axis is unchanged face-on, and the projected path is a circle rather than a line. Step 26 asserts this deliberately because the opposite is widely and wrongly assumed.',
+          'Radial velocity fails; astrometry does not. The astrometric semi-major axis is unchanged face-on, and the projected path is a circle rather than a line. Step 27 asserts this deliberately because the opposite is widely and wrongly assumed.',
       },
       {
         claim: 'Astrometry photographs the planet.',
         response:
-          'It measures the star’s position. The planet stays invisible throughout, which is stated at step 23 and worth repeating if anyone describes the sky plot as an image of the planet.',
+          'It measures the star’s position. The planet stays invisible throughout, which is stated at step 24 and worth repeating if anyone describes the sky plot as an image of the planet.',
       },
       {
         claim: 'Density tells you exactly what a planet is made of.',
@@ -3057,18 +3057,18 @@ export const INSTRUCTOR_CONTENT = {
       {
         claim: 'A planet in the habitable zone is habitable, or inhabited.',
         response:
-          'The zone is a statement about the orbit under assumed climate conditions, not a measurement of the planet. Step 36 asks students to name what is still unknown for exactly this reason; answers naming atmosphere, rotation or albedo are the ones to reward.',
+          'The zone is a statement about the orbit under assumed climate conditions, not a measurement of the planet. Step 37 asks students to name what is still unknown for exactly this reason; answers naming atmosphere, rotation or albedo are the ones to reward.',
       },
     ],
     teachingNotes: [
       'Collect the step 3 prediction out loud before anyone runs the simulation. "Only the planet moves" is the majority answer in most classes and the rest of the investigation is built on overturning it.',
-      'At step 10 the live panel takes about thirteen seconds per orbit. Tell students to let it run for two full cycles before moving on; a partial curve gives a K that is too small, and the panel says "so far" while that is true.',
-      'Step 14 asks students to read K off the panel rather than compute it. The panel reports the semi-amplitude, not the full range, which is the definition step 13 just gave them. If a student writes 168 rather than 84 they have taken the peak-to-peak value.',
-      'Step 17 is the quantitative centerpiece. Students match a mass to their measured K rather than rearranging a formula with G in SI units; the arithmetic is the software’s job and the inference is theirs.',
-      'Steps 18-21 work best if you pause between 19 and 20 and ask what a survey would report for a planet it can only see at 30 degrees. The answer, "half its real mass", is the whole of M sin i in one sentence.',
-      'Step 26 is the step to slow down on. The astrometry bar staying full while the radial-velocity bar shrinks is counterintuitive and is the single most valuable idea in the second half.',
-      'For step 35, resist letting students answer from one column. Planet B is in the zone and Planet C is rocky; only A is both, and the point of the exercise is that neither fact alone was sufficient.',
-      'Step 36 is short-answer and deliberately open. Any property beyond the reach of the measurements, tied to liquid water, earns full credit. It is a good exit ticket.',
+      'At step 11 the live panel takes about thirteen seconds per orbit. Tell students to let it run for two full cycles before moving on; a partial curve gives a K that is too small, and the panel says "so far" while that is true.',
+      'Step 15 asks students to read K off the panel rather than compute it. The panel reports the semi-amplitude, not the full range, which is the definition step 14 just gave them. If a student writes 168 rather than 84 they have taken the peak-to-peak value.',
+      'Step 18 is the quantitative centerpiece. Students match a mass to their measured K rather than rearranging a formula with G in SI units; the arithmetic is the software’s job and the inference is theirs.',
+      'Steps 19-22 work best if you pause between 20 and 21 and ask what a survey would report for a planet it can only see at 30 degrees. The answer, "half its real mass", is the whole of M sin i in one sentence.',
+      'Step 27 is the step to slow down on. The astrometry bar staying full while the radial-velocity bar shrinks is counterintuitive and is the single most valuable idea in the second half.',
+      'For step 36, resist letting students answer from one column. Planet B is in the zone and Planet C is rocky; only A is both, and the point of the exercise is that neither fact alone was sufficient.',
+      'Step 37 is short-answer and deliberately open. Any property beyond the reach of the measurements, tied to liquid water, earns full credit. It is a good exit ticket.',
     ],
     discussion: [
       'The first exoplanet surveys found mostly hot Jupiters. What does that tell us about planetary systems, and what does it tell us only about the surveys?',

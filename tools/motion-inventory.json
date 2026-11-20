@@ -185,12 +185,13 @@
       "test": "tests/motionInventory.test.js"
     },
     {
-      "file": "js/exoplanetWidgets.js",
+      "file": "js/exoplanetMotionWidgets.js",
       "kind": "animated-widget",
-      "treatment": "gap",
+      "treatment": "follows",
       "what": "Two instruments that advance a planet's phase every frame",
-      "reason": "They start by themselves and advance a phase on every frame with no Run control and no check of the motion setting.",
-      "proposed": "The same as the resonance instruments"
+      "pause": "A Run and Pause button in each instrument",
+      "reduced": "Open still whatever the Motion choice is (autorun is ignored); only Run starts them, and a slider, a preset or opening the step never does",
+      "test": "tests/motionInventory.test.js"
     },
     {
       "file": "js/experiments/bench.js",
