@@ -3,9 +3,20 @@
  * and the saved sheet state. The pure parts only: the window and the panels are
  * measured in e2e/lessonLayout.spec.js.
  */
-import { describe, test, expect } from '@jest/globals';
+/* global document, window -- jsdom's */
+import { describe, test, expect, beforeAll, beforeEach } from '@jest/globals';
 import { insetFromBoxes } from '../js/lesson/stage.js';
-import { orbitPoints } from '../js/lessonFrame.js';
+import {
+  chooseFrame,
+  fitNow,
+  fitWanted,
+  lessonInset,
+  orbitPoints,
+  refit,
+  requestFit,
+  takeFit,
+} from '../js/lessonFrame.js';
+import { state } from '../js/appState.js';
 import { fitCamera, placedOf } from '../js/lesson/stage.js';
 import {
   readProgress,
@@ -187,5 +198,180 @@ describe('the sheet state in saved progress', () => {
     expect(writeProgress(base)).not.toHaveProperty('sheet');
     const saved = { ...writeProgress(base), sheet: 'sideways' };
     expect(readProgress(saved, lesson).sheet).toBeUndefined();
+  });
+});
+
+describe('what a scene is framed to, and how far in', () => {
+  const pt = (x, y, radius = 0.001) => ({ x, y, radius });
+  test('a lone body, or a probe beside its planet, stops at 3', () => {
+    expect(
+      chooseFrame({ stars: [], bound: [pt(0, 0)], roles: 1, world: [] }).maxZoom
+    ).toBe(3);
+    // two roles, but the points lie within a few radii of one another
+    expect(
+      chooseFrame({
+        stars: [],
+        bound: [pt(0, 0, 0.01), pt(0.02, 0, 0.001)],
+        roles: 2,
+        world: [],
+      }).maxZoom
+    ).toBe(3);
+  });
+  test('bodies spread over many radii fill their room, to the application limit', () => {
+    const f = chooseFrame({
+      stars: [],
+      bound: [pt(0, 0), pt(1, 0.5)],
+      roles: 2,
+      world: [],
+    });
+    expect(f.maxZoom).toBe(100);
+    expect(f.points).toHaveLength(2);
+  });
+  test('a shelf frames the drawn stars and stops at 3', () => {
+    const star = { star: { pos: { x: 0, y: 0 }, radius: 1, stageRadius: 0.2 } };
+    const f = chooseFrame({
+      stars: [star],
+      bound: [pt(5, 5)],
+      roles: 2,
+      world: [],
+    });
+    expect(f.maxZoom).toBe(3);
+    expect(f.points).toEqual(placedOf([star]));
+  });
+  test('a step that binds nothing frames the world, less the far tenth of a crowd', () => {
+    const near = Array.from({ length: 19 }, (_, i) =>
+      pt(i % 5, Math.floor(i / 5))
+    );
+    const world = [...near, pt(5000, 5000)];
+    const f = chooseFrame({ stars: [], bound: [], roles: 0, world });
+    expect(f.maxZoom).toBe(100);
+    expect(f.points).not.toContainEqual(pt(5000, 5000));
+    expect(f.points.length).toBeGreaterThanOrEqual(18);
+    // a handful of bodies is never trimmed
+    const few = [pt(0, 0), pt(9000, 0)];
+    expect(
+      chooseFrame({ stars: [], bound: [], roles: 0, world: few }).points
+    ).toEqual(few);
+  });
+});
+
+describe('the fit is retaken as panels settle, and then left alone', () => {
+  const observed = [];
+  beforeAll(() => {
+    window.ResizeObserver = class {
+      observe(el) {
+        observed.push(el);
+      }
+    };
+    window.innerWidth = 1280;
+    window.innerHeight = 800;
+  });
+  beforeEach(() => {
+    state.cameraTouchedAt = 0;
+    requestFit(false);
+  });
+  const here = [
+    { x: 0, y: 0, radius: 0.001 },
+    { x: 1, y: 0, radius: 0.001 },
+  ];
+
+  // Answer a wanted fit the way a tick that finds the reader's view would:
+  // it is dropped, with the count of refits kept.
+  const settle = () => {
+    state.cameraTouchedAt = 1;
+    takeFit();
+    state.cameraTouchedAt = 0;
+  };
+  test('a layout change refits a few times in a step, then leaves the view', () => {
+    fitNow(here);
+    let taken = 0;
+    for (let i = 0; i < 8; i++) {
+      refit();
+      if (fitWanted()) {
+        taken++;
+        settle();
+      }
+    }
+    expect(taken).toBe(4);
+  });
+  test('the reader choosing the sheet height still refits after the count is spent', () => {
+    fitNow(here);
+    for (let i = 0; i < 6; i++) {
+      refit();
+      settle();
+    }
+    refit();
+    expect(fitWanted()).toBe(false);
+    refit(true);
+    expect(fitWanted()).toBe(true);
+  });
+  test('a new step starts the count again', () => {
+    fitNow(here);
+    for (let i = 0; i < 6; i++) {
+      refit();
+      settle();
+    }
+    requestFit();
+    settle();
+    fitNow(here);
+    refit();
+    expect(fitWanted()).toBe(true);
+  });
+  test('a view the reader chose is not refitted', () => {
+    fitNow(here);
+    state.cameraTouchedAt = Date.now();
+    refit();
+    expect(fitWanted()).toBe(false);
+    refit(true);
+    expect(fitWanted()).toBe(false);
+  });
+  test('panels that open after the first fit are watched on later ticks', () => {
+    fitNow(here);
+    const late = document.createElement('div');
+    late.className = 'experiment-panel';
+    document.body.append(late);
+    takeFit();
+    expect(observed).toContain(late);
+    late.remove();
+  });
+});
+
+describe('the free region on a phone', () => {
+  const rect = (el, r) => {
+    el.getBoundingClientRect = () => ({
+      ...r,
+      width: r.right - r.left,
+      height: r.bottom - r.top,
+    });
+  };
+  const place = (id, r) => {
+    const el = document.createElement('div');
+    el.id = id;
+    rect(el, r);
+    document.body.append(el);
+    return el;
+  };
+  test('the readout chip (#overlay) is furniture that is cut from the free region', () => {
+    window.innerWidth = 375;
+    window.innerHeight = 812;
+    const sheet = place('investigationPanel', {
+      left: 0,
+      top: 500,
+      right: 375,
+      bottom: 812,
+    });
+    const without = lessonInset();
+    const chip = place('overlay', {
+      left: 0,
+      top: 40,
+      right: 375,
+      bottom: 120,
+    });
+    const withChip = lessonInset();
+    expect(withChip.top).toBeGreaterThanOrEqual(120);
+    expect(withChip.top).toBeGreaterThan(without.top);
+    expect(withChip.bottom).toBe(without.bottom);
+    chip.remove();
+    sheet.remove();
   });
 });

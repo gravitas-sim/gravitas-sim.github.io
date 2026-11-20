@@ -18,7 +18,7 @@
 //   3. the bound bodies and the orbits they sweep fill at least `FILL_FLOOR`
 //      (a fifth) of the free region along one axis, unless the zoom is at the fit's own
 //      cap (a single small body is not made to fill the screen).
-// A step that binds nothing is judged on its first named object (rule 4).
+// A step that binds nothing is judged on every body of the scenario it loads.
 // =============================================================================
 
 /** Viewports of the check: a phone, a tablet and a laptop. */
@@ -124,6 +124,18 @@ export function sceneSteps(lessons) {
   return out;
 }
 
+/**
+ * Whether a failing step fails for the reason its known-list entry expects.
+ * An entry is { why, expect }, `expect` a text or a list of them
+ * ("is under timelineBar", "is outside the viewport", "binds no body"): every
+ * reason of the step must contain one, so a step that starts failing another
+ * way is a new failure, not an excused one.
+ */
+export const knownMatches = (reasons, known) => {
+  const texts = [known?.expect].flat().filter(Boolean);
+  return texts.length > 0 && reasons.every(r => texts.some(t => r.includes(t)));
+};
+
 /** The list with steps of one scene collapsed to the first of them. */
 export function distinctScenes(list) {
   const seen = new Set();
@@ -146,21 +158,33 @@ export function byLesson(list) {
  * @param {object} m - What `measureFramingInPage` returned
  * @returns {{pass: boolean, reasons: string[]}}
  */
-export function judgeFraming(m) {
+export function judgeFraming(m, { kind } = {}) {
   const reasons = [];
   if (!m.bodies.length) reasons.push('the step binds no body');
-  // A crowd (a stage of many stars) cannot keep every member clear of the
-  // corner buttons; a tenth may be under furniture.
+  // A crowd (a stage of many stars, a scenario's whole world) cannot keep every
+  // member clear of the corner buttons: a tenth may be out or under furniture.
   const crowd = m.bodies.length > CROWD_BODIES;
-  const hidden = m.bodies.filter(b => !b.free);
+  const hidden = m.bodies.filter(b => !b.inside || !b.free);
+  const spare = crowd && hidden.length <= m.bodies.length * 0.1;
   for (const b of m.bodies) {
-    if (!b.inside) reasons.push(`${b.role} is outside the viewport`);
-    else if (!b.free && !(crowd && hidden.length <= m.bodies.length * 0.1))
+    if (!b.inside) {
+      if (!spare) reasons.push(`${b.role} is outside the viewport`);
+    } else if (!b.free && !spare)
       reasons.push(`${b.role} is under ${b.coveredBy || 'a panel'}`);
     if (b.drawnRadius < (m.markerFloor ?? MARKER_FLOOR_PX) - 1e-6)
       reasons.push(`${b.role} is drawn at radius ${b.drawnRadius} px`);
   }
-  if (m.bodies.length && !m.capped && m.fill < FILL_FLOOR)
+  // Only a shelf, a lone body or bodies drawn on one point are excused from
+  // filling the free region, and only where the zoom is at the cap of 3.
+  const one =
+    m.bodies.length === 1 ||
+    (m.bodies.length > 1 &&
+      m.bodies.every(
+        b => Math.hypot(b.x - m.bodies[0].x, b.y - m.bodies[0].y) < 2
+      ));
+  const excused =
+    (kind === 'shelf' || kind === 'population' || one) && m.zoom >= 2.995;
+  if (m.bodies.length && !excused && m.fill < FILL_FLOOR)
     reasons.push(
       `the bound bodies span ${Math.round(m.fill * 100)}% of the free region, under ${FILL_FLOOR * 100}%`
     );
@@ -203,13 +227,14 @@ export async function measureFramingInPage() {
       : null;
   const count = ls.allBodies().length;
   const bodies = [];
-  // A step that binds nothing is judged on its first named object (rule 4).
-  const named = ls.allBodies().find(x => x?.name) || ls.allBodies()[0];
+  // A step that binds nothing is judged on every body of the scenario it loads.
   const subjects = ls
     .boundRoles()
     .map(role => [role, ls.roleBody(role)])
     .filter(([, b]) => b);
-  if (!subjects.length && named) subjects.push(['(first object)', named]);
+  if (!subjects.length)
+    for (const [i, x] of ls.allBodies().entries())
+      subjects.push([x.name || `body ${i + 1}`, x]);
   for (const [role, b] of subjects) {
     const c = toScreen(b.pos);
     const r = visuals.drawnRadiusPx(
@@ -281,7 +306,6 @@ export async function measureFramingInPage() {
     vh,
     markerFloor: Math.round(visuals.markerFloorPx(count) * 100) / 100,
     zoom: Math.round(state.zoom * 1000) / 1000,
-    capped: state.zoom >= 2.995,
     free: {
       left: Math.round(free.left),
       top: Math.round(free.top),
@@ -414,7 +438,7 @@ export async function measureLessons(page, entries, { origin = '' } = {}) {
     }
     await openStepInPage(page, e.lesson, e.sid);
     let m = await page.evaluate(measureFramingInPage);
-    let v = judgeFraming(m);
+    let v = judgeFraming(m, { kind: e.kind });
     let state = 'raised';
     const raised = v;
     const handle = page.locator('#investigationSheet');
@@ -422,7 +446,7 @@ export async function measureLessons(page, entries, { origin = '' } = {}) {
       await handle.click();
       await settlePage(page);
       const m2 = await page.evaluate(measureFramingInPage);
-      const v2 = judgeFraming(m2);
+      const v2 = judgeFraming(m2, { kind: e.kind });
       if (v2.pass || m2.bodies.length >= m.bodies.length) {
         [m, v, state] = [m2, v2, 'lowered'];
       }
