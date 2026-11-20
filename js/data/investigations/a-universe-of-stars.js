@@ -1319,13 +1319,6 @@ const A_UNIVERSE_OF_STARS = {
         'All of them, because there are so many to begin with',
       ],
       answer: 0,
-      misconceptions: [
-        {
-          id: 'manyMeansSurvive',
-          option: 3,
-          say: 'How many stars there are does not carry them through a brightness cut. The cut asks how much light each star puts out, and a star that gives a thousandth of the Sun’s fails it however many like it there are.',
-        },
-      ],
       because:
         'Almost none — in fact none at all. This is the answer people find hardest to believe before they see it, which is why you are being asked to commit to it first. A brightness cut selects on luminosity, and luminosity spans a far wider range than the numbers of stars do: an M dwarf puts out a thousandth of the Sun&rsquo;s light, so it drops out of the sample long before anything else does, however many of them there are. The next screen is the same population with the cut applied, and you can count.',
       tool: crowd({ values: { view: 0 } }),

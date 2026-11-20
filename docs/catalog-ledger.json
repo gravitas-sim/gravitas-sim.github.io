@@ -839,11 +839,11 @@
       },
       "task_rule_items": [
         "T2: the first prediction returns at the argument beside the student's own evidence; the radius, exponent, lifetime and bright-subset predictions return at their measuring steps.",
-        "T5: authored feedback added for hotter-is-bigger and ten-in-radius (step 10), a hot star read as main sequence (step 22) and many-means-survive (step 26); the bright-means-close slip at step 28 is a short answer and stays in its rubric."
+        "T5: authored feedback added for hotter-is-bigger and ten-in-radius (step 10) and a hot star read as main sequence (step 22); step 26 takes none (a remix cannot carry option feedback on a prediction) and the bright-means-close slip at step 28 is a short answer that stays in its rubric."
       ],
       "editorial": "REVISED",
       "redesign": "REVIEWED CLEAR",
-      "reason": "STRONG: polish and leak fixes only. Four sentences that answered a prediction or a measure before it were moved into the reveal; three misconceptions authored where a because already names the wrong turn (register D-R4-359-01).",
+      "reason": "STRONG: polish and leak fixes only. Four sentences that answered a prediction or a measure before it were moved into the reveal; three misconceptions authored on two steps where a because already names the wrong turn (register D-R4-359-01).",
       "step_revisions": [
         {
           "sid": "same-temperature-different-light",
@@ -872,15 +872,11 @@
         {
           "sid": "classify-from-position",
           "change": "REWORDED: one authored misconception added."
-        },
-        {
-          "sid": "predict-the-bright-subset",
-          "change": "REWORDED: one authored misconception added."
         }
       ],
       "walk": "NOT RUN",
       "pr": null,
-      "hash": "9e7d96aa6e488aaa487ed714aed83f8d432eeb530a17ac098ed4c58273d08bbe"
+      "hash": "f67de81cb6fd835ac45af3ddbf8c2795f3c2bd6b50e16b8d1690282fd3c61906"
     },
     {
       "id": "investigation:a-variable-star-from-frames",

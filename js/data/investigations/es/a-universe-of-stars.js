@@ -457,11 +457,6 @@ export default {
         'Un tercio: menos, pero seguirán siendo las más comunes',
         'Todas, porque hay muchísimas para empezar',
       ],
-      misconceptions: [
-        {
-          say: 'Cuántas estrellas haya no las hace pasar un corte de brillo. El corte pregunta cuánta luz emite cada estrella, y una que da una milésima de la luz del Sol no lo supera, por muchas como ella que haya.',
-        },
-      ],
       because:
         'Casi ninguna: de hecho, ninguna. Es la respuesta que más cuesta creer antes de verla, y por eso se te pide que te comprometas primero. Un corte de brillo selecciona por luminosidad, y la luminosidad abarca un rango mucho más amplio que el número de estrellas: una enana M emite una milésima de la luz del Sol, así que sale de la muestra mucho antes que ninguna otra cosa, por muchas que haya. La pantalla siguiente es la misma población con el corte aplicado, y puedes contarlas.',
       tip: 'Fíjate en cómo nombra las cosas el panel: cuatrocientas extraídas, menos modeladas, menos aún superando el corte, y una muestra acotada de ellas en el lienzo. Son cuatro números distintos y todo el argumento depende de no confundirlos.',
