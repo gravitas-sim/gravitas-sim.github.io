@@ -1,8 +1,6 @@
 {
  "family": "js/data/investigations",
- "calls": 95,
+ "calls": 94,
  "reached": 94,
- "unreached": [
-  "js/data/investigations/goldilocks-question.js:361:83"
- ]
+ "unreached": []
 }
