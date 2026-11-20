@@ -751,6 +751,12 @@ publishes exactly what it publishes today.
 The setting: repository variable `DEPLOY_BUILT_ROUTES` = `on` (Settings,
 Secrets and variables, Actions, Variables). Carl alone sets it.
 
+**Ratified by delegation on 2026-11-19** (D-R4-316-01): the preparation, as
+recommended. The switch is not applied and the variable is unset. The
+workflow change lands as its own pull request after this one, off by default;
+the variable is set only after that pull request's CI shows the overlay deploy
+green on Linux.
+
 The rollback, either of:
 
 1. Set `DEPLOY_BUILT_ROUTES` to `off` (or delete it) and re-run the deploy job
