@@ -177,21 +177,17 @@ describe('a typed number is kept without being an answer', () => {
 });
 
 describe('the reset button names what it did, in both languages', () => {
-  test('four messages each, answers kept in every one', async () => {
-    const { readFileSync } = await import('node:fs');
-    const html = readFileSync('js/fragments/lesson.html', 'utf8');
-    const said = /data-said="([^"]*)"/.exec(html)[1].split('|');
-    expect(said).toHaveLength(8);
-    expect(said.slice(0, 4).every(m => /Your answers are kept\./.test(m))).toBe(
-      true
-    );
-    expect(
-      said.slice(4).every(m => /Tus respuestas se conservan\./.test(m))
-    ).toBe(true);
-    // none, instrument, scene, both
-    expect(said[0]).toMatch(/no scene or instrument/);
-    expect(said[1]).toMatch(/^Instrument/);
-    expect(said[2]).toMatch(/^Scene back/);
-    expect(said[3]).toMatch(/^Scene and instrument/);
+  test('three messages each, answers not changed in every one', async () => {
+    const { EN_RESET } = await import('../js/i18n/en.reset.js');
+    const { ES_RESET } = await import('../js/i18n/es.reset.js');
+    const kinds = ['scene', 'tool', 'both'].map(k => `reset.did.${k}`);
+    for (const [c, said] of [
+      [EN_RESET, /Your answers are not changed\.$/],
+      [ES_RESET, /Tus respuestas no cambian\.$/],
+    ])
+      for (const k of kinds) expect(c[k]).toMatch(said);
+    expect(EN_RESET['reset.did.scene']).toMatch(/^The scene is back/);
+    expect(EN_RESET['reset.did.tool']).toMatch(/^The instrument is back/);
+    expect(EN_RESET['reset.did.both']).toMatch(/^The scene and instrument/);
   });
 });

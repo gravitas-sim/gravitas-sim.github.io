@@ -1142,6 +1142,9 @@ export const sessionProgress = new Map();
  */
 let typed = {};
 export const forgetKept = id => ((typed = {}), id && keepEarlier(id));
+/** The typed-but-unchecked text, copied; given a table, put that back as well. */
+export const drafts = more =>
+  more ? Object.assign(typed, more) : { ...typed };
 
 /** Per storage key: answers to steps it no longer has, written back on save. */
 const earlierKept = new Map();

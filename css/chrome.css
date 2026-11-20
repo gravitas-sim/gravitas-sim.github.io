@@ -2075,14 +2075,12 @@
     #investigationSubtitle {
       display: none;
     }
+    /* Its own row under the title: the reset control carries its words
+       (Reset the scene), which would leave the title a few letters. */
     .investigation-panel > .inv-progress {
-      grid-column: 3;
-      grid-row: 2;
-      padding: 0 var(--space-2) 0 0;
+      grid-row: 3;
+      padding-top: 0;
       border: 0;
-    }
-    .inv-progress-track {
-      flex: 0 0 var(--space-8);
     }
     .investigation-panel > .inv-body {
       border-top: 1px solid var(--border-subtle);

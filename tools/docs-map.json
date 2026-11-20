@@ -1034,6 +1034,14 @@
       "student": true
     },
     {
+      "file": "RESET_VOCABULARY.md",
+      "kind": "feature",
+      "purpose": "The two ways to put an investigation back, Reset the scene and Start this investigation over: their words, where each is used and what each does to the record.",
+      "owner": 366,
+      "added": "2026-11-19",
+      "student": false
+    },
+    {
       "file": "RESONANCES_II.md",
       "kind": "gate",
       "purpose": "Resonances and secular dynamics II: 19 legs, verdict C; the Part A addendum's 25 new legs, bounds first, addendum verdict B; the kernel without consumers (Prompt 273).",

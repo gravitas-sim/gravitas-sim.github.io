@@ -100,17 +100,14 @@ export function keepQuiet() {
 const put = (el, name, value) =>
   value == null ? el?.removeAttribute(name) : el?.setAttribute(name, value);
 
-/** The canvas's text description and the reset control's name, for the kind in force. */
+/** The canvas's text description for the kind in force (the reset control's words are js/investigations/vocabulary.js). */
 function words() {
   const canvas = $('simulationCanvas');
-  const reset = $('investigationResetScenario');
   const kind = now?.kind;
   const said = kind === 'portrait' || kind === 'quiet';
   was ??= {
     label: canvas?.getAttribute('aria-label'),
     by: canvas?.getAttribute('aria-describedby'),
-    reset: reset?.getAttribute('aria-label'),
-    title: reset?.getAttribute('title'),
   };
   put(
     canvas,
@@ -118,9 +115,6 @@ function words() {
     said ? t(`inv.canvas.${kind}`, { what: now.picture }) : was.label
   );
   put(canvas, 'aria-describedby', said ? null : was.by);
-  const name = said ? t(`inv.canvas.reset.${kind}`) : null;
-  put(reset, 'aria-label', name ?? was.reset);
-  put(reset, 'title', name ?? was.title);
   const label = more?.firstChild;
   if (label) label.textContent = t('rail.mainControls.label');
 }

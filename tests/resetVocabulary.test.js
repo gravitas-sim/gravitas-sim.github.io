@@ -1,0 +1,495 @@
+// =============================================================================
+// Reset, restart and discard: one vocabulary
+// -----------------------------------------------------------------------------
+// "Reset the scene" never touches answers. "Start this investigation over"
+// deletes them, says how many, offers a backup first and can be undone until the
+// investigation closes. These tests pin the words (one key set, both languages,
+// the same phrase in the control, its name, the help and the dialog) and the
+// record: a restart removes exactly the investigation's saved answers, an undo
+// puts them back, and nothing is written anywhere the record did not go.
+// =============================================================================
+
+import { afterEach, beforeEach, describe, expect, test } from '@jest/globals';
+import { readFileSync, readdirSync } from 'node:fs';
+import { EN_RESET } from '../js/i18n/en.reset.js';
+import { ES_RESET } from '../js/i18n/es.reset.js';
+import { EN_CANVAS } from '../js/i18n/en.canvas.js';
+import { ES_CANVAS } from '../js/i18n/es.canvas.js';
+import {
+  bindPersistence,
+  drafts,
+  earlierFor,
+  forgetKept,
+  keepEarlier,
+  load,
+  save,
+  sessionProgress,
+} from '../js/investigations/stepView.js';
+import {
+  railLeavesScene,
+  resetSaid,
+  syncReset,
+} from '../js/investigations/vocabulary.js';
+import { setLocale } from '../js/i18n/index.js';
+// Registers the canvas kinds' words, as a lesson that declares a canvas does.
+import '../js/lessonCanvas.js';
+import { countSaved, ask, forget } from '../js/investigations/restart.js';
+
+const SCENE = 'Reset the scene';
+const OVER = 'Start this investigation over';
+const lessonHtml = readFileSync('js/fragments/lesson.html', 'utf8');
+const finishHtml = readFileSync('js/fragments/lesson-finish.html', 'utf8');
+
+const lesson = {
+  id: 'tides',
+  steps: [
+    { sid: 'intro', type: 'read', title: 'Intro', body: 'Read.' },
+    { sid: 'guess', type: 'question', kind: 'numeric', title: 'Guess' },
+    {
+      sid: 'take',
+      type: 'measure',
+      title: 'Take',
+      fields: [{ id: 'a' }, { id: 'b' }, { id: 'c' }],
+    },
+  ],
+};
+
+describe('the words, one key set in both languages', () => {
+  const keys = c => Object.keys(c).sort();
+  const holes = m =>
+    (typeof m === 'string' ? m : m.other).match(/\{\w+\}/g)?.sort() ?? [];
+
+  test('English and Spanish have the same keys, and the same placeholders', () => {
+    expect(keys(ES_RESET)).toEqual(keys(EN_RESET));
+    for (const k of keys(EN_RESET)) {
+      const [en, es] = [EN_RESET[k], ES_RESET[k]];
+      expect(typeof es).toBe(typeof en);
+      if (typeof en === 'object')
+        expect(Object.keys(es).sort()).toEqual(Object.keys(en).sort());
+      expect(holes(es)).toEqual(holes(en));
+    }
+    expect(keys(ES_CANVAS)).toEqual(keys(EN_CANVAS));
+  });
+
+  test('the two actions are named once, in the words of the roadmap', () => {
+    expect(EN_RESET['reset.scene']).toBe(SCENE);
+    expect(EN_RESET['reset.restart']).toBe(OVER);
+    expect(ES_RESET['reset.scene']).toBe('Restablecer la escena');
+    expect(ES_RESET['reset.restart']).toBe(
+      'Empezar esta investigación de nuevo'
+    );
+  });
+
+  test('the scene reset says answers are not changed, in every line that names a scene reset', () => {
+    for (const [c, said] of [
+      [EN_RESET, 'Your answers are not changed.'],
+      [ES_RESET, 'Tus respuestas no cambian.'],
+      [EN_CANVAS, 'Your answers are not changed.'],
+      [ES_CANVAS, 'Tus respuestas no cambian.'],
+    ])
+      for (const k of keys(c).filter(
+        k => /^reset\.(scene\.hint|did\.)/.test(k) || /canvas\.reset/.test(k)
+      ))
+        expect(c[k]).toContain(said);
+  });
+
+  test("a restart's tooltip and dialog say it deletes, asks first and can be undone", () => {
+    expect(EN_RESET['reset.restart.hint']).toMatch(/Deletes .*saved answers/);
+    expect(EN_RESET['reset.restart.hint']).toMatch(/undo/);
+    expect(EN_RESET['reset.ask.go']).toMatch(/^Discard/);
+    expect(EN_RESET['reset.ask.scene']).toMatch(/scene is reset too/);
+    expect(EN_RESET['reset.ask.assigned']).toMatch(/instructor/);
+    expect(ES_RESET['reset.ask.go']).toMatch(/^Descartar/);
+  });
+
+  test('"discard" appears only where something is truly lost', () => {
+    const where = Object.entries(EN_RESET)
+      .filter(([, v]) => /discard/i.test(JSON.stringify(v)))
+      .map(([k]) => k);
+    expect(where).toEqual(['reset.ask.lost', 'reset.ask.go']);
+  });
+
+  test('the student words are activity and investigation, never lesson', () => {
+    for (const c of [EN_RESET, ES_RESET, EN_CANVAS, ES_CANVAS])
+      expect(JSON.stringify(c)).not.toMatch(/\blesson|\blecci[oó]n/i);
+  });
+
+  test('no third phrase names either action anywhere in the English catalogs', () => {
+    const dir = 'js/i18n';
+    const third =
+      /Restart (this|the) investigation|Reset this investigation|Reset the investigation|Start over\b|Restart\b.*answers/;
+    for (const f of readdirSync(dir).filter(f => /^en\..*\.js$/.test(f)))
+      expect(readFileSync(`${dir}/${f}`, 'utf8')).not.toMatch(third);
+  });
+});
+
+describe('the markup takes its words from the keys', () => {
+  const used = html => [...html.matchAll(/data-i18n(?:-title)?="([^"]+)"/g)];
+
+  test('every key the fragments name exists in both languages', () => {
+    for (const [, key] of [...used(lessonHtml), ...used(finishHtml)].filter(
+      ([, k]) => k.startsWith('reset.')
+    )) {
+      expect(EN_RESET).toHaveProperty([key]);
+      expect(ES_RESET).toHaveProperty([key]);
+    }
+  });
+
+  test('the reset control shows its label, whose text is its name', () => {
+    const button =
+      /<button id="investigationResetScenario"[\s\S]*?<\/button>/.exec(
+        lessonHtml
+      )[0];
+    expect(button).toContain('data-i18n="reset.scene"');
+    expect(button).not.toMatch(/aria-label|data-said|title=/);
+    expect(button).toContain(SCENE);
+  });
+
+  test('the restart control, the help and the dialog use the two phrases', () => {
+    expect(lessonHtml).toMatch(
+      /id="investigationReset"[\s\S]*?data-i18n-title="reset\.restart\.hint"[\s\S]*?data-i18n="reset\.restart"/
+    );
+    const help = lessonHtml.slice(lessonHtml.indexOf('reset.help.title'));
+    expect(help).toContain('data-i18n="reset.scene"');
+    expect(help).toContain('data-i18n="reset.restart"');
+    expect(finishHtml).toContain('data-i18n="reset.ask.title"');
+    expect(finishHtml).toContain('data-i18n="reset.ask.backup"');
+    expect(finishHtml).toContain('data-i18n="reset.ask.go"');
+  });
+
+  test('the progress row keeps the reason as text where the control is off', () => {
+    expect(lessonHtml).toContain('id="investigationResetWhy"');
+  });
+});
+
+describe('counting what a restart will delete, from the record', () => {
+  const k = (...p) => ['tides', ...p].join(':');
+
+  test('an answer is a step answered, a reading is a field of a measure', () => {
+    const table = {
+      [k('guess')]: '0.91',
+      [k('guess', 'locale')]: 'en',
+      [k('take', 'a')]: '3',
+      [k('take', 'b')]: '4',
+      [k('take', 'b', 'src')]: 'instrument',
+      [k('take', 'c')]: '  ',
+      [k('intro', 'shown')]: true,
+      [k('guess', 'tool', 'x')]: '2',
+    };
+    expect(countSaved(lesson, table)).toEqual({
+      answers: 1,
+      readings: 2,
+      n: 3,
+    });
+  });
+
+  test('answers kept from an earlier version and answers to other investigations', () => {
+    const now = { [k('guess')]: '1', 'other:guess': '9' };
+    const earlier = { [k('gone-step')]: '7', [k('guess')]: '1' };
+    expect(countSaved(lesson, now, earlier)).toMatchObject({ n: 2 });
+    expect(countSaved(lesson, {})).toEqual({ answers: 0, readings: 0, n: 0 });
+  });
+});
+
+describe('starting over, and undoing it', () => {
+  const KEY = 'gravitas_investigation_tides';
+  let st;
+  let host;
+  let went;
+  let dialog;
+
+  const stored = () => JSON.parse(localStorage.getItem(KEY));
+
+  beforeEach(() => {
+    document.body.innerHTML = `${lessonHtml}${finishHtml}`;
+    dialog = document.getElementById('investigationRestart');
+    dialog.showModal = () => dialog.setAttribute('open', '');
+    dialog.close = () => dialog.removeAttribute('open');
+    localStorage.clear();
+    sessionProgress.clear();
+    went = [];
+    st = {
+      step: 2,
+      responses: {
+        'tides:guess': '0.91',
+        'tides:take:a': '3',
+        'tides:take:b': '4',
+        'tides:take:b:src': 'instrument',
+      },
+      attempts: { 'tides:guess': 2 },
+      visited: new Set(['intro', 'guess', 'take']),
+      startedAt: '2026-11-15T00:00:00.000Z',
+      assigned: false,
+    };
+    host = {
+      state: () => ({ active: lesson, stepIndex: st.step, ...st }),
+      put: p => Object.assign(st, p),
+      go: (i, rebuild) => {
+        went.push([i, rebuild]);
+        st.step = i;
+        st.visited.add(lesson.steps[i].sid);
+        save();
+      },
+      kept: { drafts, earlierFor, forgetKept, keepEarlier },
+    };
+    bindPersistence({
+      state: () => ({
+        active: lesson,
+        stepIndex: st.step,
+        responses: st.responses,
+        attempts: st.attempts,
+        visited: st.visited,
+        startedAt: st.startedAt,
+        depthChoice: 'core',
+        deepest: 'core',
+        spent: 0,
+        progressNotes: [],
+      }),
+      authoring: () => false,
+      assigned: () => false,
+      assignmentKey: () => 'unused',
+      els: () => ({}),
+      clock: () => {},
+    });
+    forgetKept('tides');
+    save();
+  });
+
+  afterEach(() => {
+    forget();
+    document.body.innerHTML = '';
+  });
+
+  const go = () => {
+    ask(host);
+    document.getElementById('investigationRestartGo').click();
+  };
+
+  test('the dialog counts the record, and names the assignment only for one', () => {
+    ask(host);
+    expect(document.getElementById('investigationRestartN').textContent).toBe(
+      '3'
+    );
+    expect(
+      document.getElementById('investigationRestartParts').textContent
+    ).toBe('Answers: 1. Readings: 2.');
+    expect(document.getElementById('investigationRestartAssigned').hidden).toBe(
+      true
+    );
+    host.state = () => ({
+      active: lesson,
+      stepIndex: 2,
+      ...st,
+      assigned: true,
+    });
+    ask(host);
+    expect(document.getElementById('investigationRestartAssigned').hidden).toBe(
+      false
+    );
+  });
+
+  test('asking changes nothing; confirming removes exactly the saved answers and resets the scene', () => {
+    const before = localStorage.getItem(KEY);
+    ask(host);
+    expect(localStorage.getItem(KEY)).toBe(before);
+    expect(went).toEqual([]);
+
+    go();
+    expect(stored().responses).toEqual({});
+    expect(stored().attempts).toEqual({});
+    // Only the first step, which the restart itself opened.
+    expect(stored().visited).toEqual(['intro']);
+    // A restart goes to step 1 and rebuilds its scene.
+    expect(went).toEqual([[0, true]]);
+    expect(document.getElementById('investigationUndo').hidden).toBe(false);
+    expect(
+      document.getElementById('investigationUndoText').textContent
+    ).toMatch(/^Started over\. 3 saved answers and readings were deleted/);
+  });
+
+  test('undo puts the whole record back, and keeps what was answered since', () => {
+    const before = stored();
+    go();
+    st.responses['tides:guess'] = '1.5';
+    st.responses['tides:intro:newer'] = 'x';
+    document.getElementById('investigationUndoGo').click();
+    expect(went.at(-1)).toEqual([2, true]);
+    expect(st.responses).toMatchObject({
+      'tides:take:a': '3',
+      'tides:take:b': '4',
+      'tides:take:b:src': 'instrument',
+      'tides:guess': '1.5',
+      'tides:intro:newer': 'x',
+    });
+    expect(st.attempts).toEqual({ 'tides:guess': 2 });
+    expect([...st.visited].sort()).toEqual(['guess', 'intro', 'take']);
+    expect(stored().startedAt).toBe(before.startedAt);
+    expect(stored().responses['tides:take:a']).toBe('3');
+    expect(document.getElementById('investigationUndo').hidden).toBe(true);
+  });
+
+  test('undo restores the record byte for byte when nothing was answered since', () => {
+    const before = localStorage.getItem(KEY);
+    go();
+    document.getElementById('investigationUndoGo').click();
+    const after = stored();
+    expect(after.responses).toEqual(JSON.parse(before).responses);
+    expect(after.attempts).toEqual(JSON.parse(before).attempts);
+    expect(after.visited.sort()).toEqual(JSON.parse(before).visited.sort());
+  });
+
+  test('closing the investigation drops the deleted record; undo then does nothing', () => {
+    go();
+    forget();
+    document.getElementById('investigationUndoGo').click();
+    expect(st.responses).toEqual({});
+    expect(document.getElementById('investigationUndo').hidden).toBe(true);
+  });
+
+  test('the deleted record is held in memory only: no storage holds it', () => {
+    go();
+    // The progress record and the resume line are what a restart writes.
+    expect(Object.keys(localStorage).sort()).toEqual([KEY, 'gravitas_resume']);
+    const everywhere = JSON.stringify([
+      ...Object.entries(localStorage),
+      ...Object.entries(sessionStorage),
+    ]);
+    expect(everywhere).not.toContain('instrument');
+    expect(everywhere).not.toContain('0.91');
+  });
+
+  test('typed drafts and the answers kept from an earlier version go and come back', () => {
+    keepEarlier('tides', { responses: { 'tides:gone': '7' }, attempts: {} });
+    drafts({ 'tides:guess': '0,9' });
+    go();
+    expect(drafts()).toEqual({});
+    expect(earlierFor('tides')).toBeUndefined();
+    document.getElementById('investigationUndoGo').click();
+    expect(drafts()).toEqual({ 'tides:guess': '0,9' });
+    expect(earlierFor('tides').responses).toEqual({ 'tides:gone': '7' });
+    expect(load('tides', lesson).responses).toMatchObject({
+      'tides:take:a': '3',
+    });
+  });
+
+  test('with nothing saved a restart still resets the scene and offers no undo', () => {
+    st.responses = {};
+    st.attempts = {};
+    save();
+    go();
+    expect(went).toEqual([[0, true]]);
+    expect(document.getElementById('investigationUndoGo').hidden).toBe(true);
+    expect(document.getElementById('investigationUndoText').textContent).toBe(
+      'Started over. Nothing had been saved.'
+    );
+  });
+});
+
+describe('the reset control and the rail, named for what they touch', () => {
+  const button = () => document.getElementById('investigationResetScenario');
+  const why = () => document.getElementById('investigationResetWhy');
+  const rail = [
+    ['refreshScenarioBtn', 'rail.refreshScenario', 'Restart Scenario'],
+    ['resetAllBtn', 'rail.resetAll', 'Reset Settings and Scenario'],
+    ['cleanSimBtn', 'rail.cleanSim', 'Clear All Bodies'],
+  ];
+
+  beforeEach(async () => {
+    document.body.innerHTML = `${lessonHtml}${rail
+      .map(
+        ([id, key, text]) =>
+          `<button id="${id}" title="${text} hint" data-i18n-title="${key}.hint" data-i18n="${key}">${text}</button>`
+      )
+      .join('')}`;
+    await setLocale('en', { persist: false });
+  });
+
+  afterEach(async () => {
+    railLeavesScene(false);
+    await setLocale('en', { persist: false });
+    document.body.innerHTML = '';
+  });
+
+  test('on: the label is the name, the tooltip says answers are not changed', () => {
+    syncReset({ scene: true, tool: false });
+    expect(button().disabled).toBe(false);
+    expect(button().textContent.replace(/\s+/g, ' ').trim()).toBe(`↺ ${SCENE}`);
+    expect(button().title).toBe(
+      "Rebuilds this step's scene. Your answers are not changed."
+    );
+    expect(button().hasAttribute('aria-describedby')).toBe(false);
+    expect(why().hidden).toBe(true);
+  });
+
+  test('off where nothing is set up: disabled, with the reason as visible text', () => {
+    syncReset({ scene: false, tool: false });
+    expect(button().disabled).toBe(true);
+    expect(button().getAttribute('aria-describedby')).toBe(
+      'investigationResetWhy'
+    );
+    expect(why().hidden).toBe(false);
+    expect(why().textContent).toMatch(
+      /off on this step.*no scene or instrument/
+    );
+    syncReset({ scene: false, tool: true });
+    expect(button().disabled).toBe(false);
+    expect(why().hidden).toBe(true);
+  });
+
+  test('a picture or a quiet canvas names what it rebuilds in the tooltip only', () => {
+    syncReset({ scene: true, tool: true, kind: 'portrait' });
+    expect(button().title).toMatch(/^Rebuilds this step's picture\./);
+    syncReset({ scene: false, tool: true, kind: 'quiet' });
+    expect(button().title).toMatch(/^Rebuilds this step's instrument\./);
+    expect(button().textContent).toContain(SCENE);
+  });
+
+  test('what it did is said as the scene, the instrument or both', () => {
+    expect(resetSaid({ scene: true, tool: false })).toBe(
+      EN_RESET['reset.did.scene']
+    );
+    expect(resetSaid({ scene: false, tool: true })).toBe(
+      EN_RESET['reset.did.tool']
+    );
+    expect(resetSaid({ scene: true, tool: true })).toBe(
+      EN_RESET['reset.did.both']
+    );
+  });
+
+  test('the rail leaves the scene inside an investigation, and is handed back after', async () => {
+    railLeavesScene(true);
+    for (const [id, , text] of rail) {
+      expect(document.getElementById(id).textContent).toBe(
+        `Leave this investigation's scene: ${text}`
+      );
+      expect(document.getElementById(id).title).toMatch(
+        /^Leaves this investigation's scene\. /
+      );
+      expect(document.getElementById(id).hasAttribute('data-i18n')).toBe(false);
+    }
+    await setLocale('es', { persist: false });
+    expect(document.getElementById('cleanSimBtn').textContent).toMatch(
+      /^Salir de la escena de esta investigación: /
+    );
+    railLeavesScene(false);
+    for (const [id, key] of rail) {
+      const el = document.getElementById(id);
+      expect(el.dataset.i18n).toBe(key);
+      expect(el.dataset.i18nTitle).toBe(`${key}.hint`);
+      expect(el.textContent).not.toMatch(/investigaci[oó]n/i);
+    }
+  });
+
+  test('in Spanish the control, its reason and its tooltip are Spanish', async () => {
+    await setLocale('es', { persist: false });
+    syncReset({ scene: false, tool: false });
+    expect(button().textContent).toContain('Restablecer la escena');
+    expect(why().textContent).toMatch(
+      /^Restablecer la escena no está disponible/
+    );
+    syncReset({ scene: true, tool: false });
+    expect(button().title).toBe(
+      'Reconstruye la escena de este paso. Tus respuestas no cambian.'
+    );
+  });
+});

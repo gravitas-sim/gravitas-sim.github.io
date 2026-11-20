@@ -898,7 +898,6 @@ export const EN_DEFERRED = {
   'inv.wedge.readout':
     "Each slice is <strong>{share}%</strong> of the orbit's area, and the planet spends <strong>{time}</strong> traversing every one of them.",
   'inv.import.added': 'Added {value}.',
-  'inv.progress.cleared': 'Progress cleared',
   'inv.depth.deeper': 'Go deeper',
   'inv.depth.shallower': 'Fewer steps',
   'inv.answer.needsUncertainty':
