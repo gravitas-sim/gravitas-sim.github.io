@@ -12,19 +12,19 @@
         "requests": 109
       },
       "kepler": {
-        "kb": 2671.7,
+        "kb": 2673.8,
         "requests": 142
       },
       "transit": {
-        "kb": 2677.5,
+        "kb": 2679.6,
         "requests": 142,
-        "toolKb": 2840.7,
+        "toolKb": 2842.8,
         "toolRequests": 158
       },
       "power-law": {
-        "kb": 2636.6,
+        "kb": 2638.6,
         "requests": 142,
-        "toolKb": 2689.8,
+        "toolKb": 2691.8,
         "toolRequests": 145
       },
       "largest-lesson": {
@@ -36,7 +36,7 @@
         "requests": 17
       },
       "evaluation": {
-        "kb": 33.9,
+        "kb": 34.0,
         "requests": 5
       },
       "instructors": {
@@ -72,7 +72,7 @@
         "requests": 52
       },
       "composer": {
-        "kb": 546.7,
+        "kb": 547.0,
         "requests": 31
       },
       "course-builder": {
@@ -80,7 +80,7 @@
         "requests": 48
       },
       "course-home": {
-        "kb": 306.5,
+        "kb": 306.7,
         "requests": 20
       },
       "lab3d": {
@@ -92,7 +92,7 @@
         "requests": 36
       },
       "lab3d-guide": {
-        "kb": 990.1,
+        "kb": 990.4,
         "requests": 41
       },
       "mission": {
@@ -130,31 +130,31 @@
     },
     "build": {
       "front-door": {
-        "kb": 544.8,
+        "kb": 544.9,
         "requests": 58
       },
       "sandbox": {
-        "kb": 544.8,
+        "kb": 544.9,
         "requests": 58
       },
       "kepler": {
-        "kb": 933.4,
+        "kb": 934.2,
         "requests": 77
       },
       "transit": {
-        "kb": 941.6,
+        "kb": 942.3,
         "requests": 77,
-        "toolKb": 1026.8,
+        "toolKb": 1027.5,
         "toolRequests": 93
       },
       "power-law": {
-        "kb": 909.6,
+        "kb": 910.4,
         "requests": 77,
-        "toolKb": 926.1,
+        "toolKb": 926.9,
         "toolRequests": 80
       },
       "largest-lesson": {
-        "kb": 1040.2,
+        "kb": 1040.9,
         "requests": 82
       },
       "teaching": {
@@ -170,7 +170,7 @@
         "requests": 2
       },
       "figure": {
-        "kb": 680.9,
+        "kb": 681.0,
         "requests": 60
       },
       "experiments": {
@@ -186,11 +186,11 @@
         "requests": 2
       },
       "library": {
-        "kb": 37.3,
+        "kb": 37.5,
         "requests": 2
       },
       "my-work": {
-        "kb": 41.9,
+        "kb": 42.1,
         "requests": 4
       },
       "studio": {
@@ -206,7 +206,7 @@
         "requests": 13
       },
       "course-home": {
-        "kb": 118.0,
+        "kb": 118.2,
         "requests": 4
       },
       "lab3d": {

@@ -15,8 +15,6 @@
 // is a plain investigation link.
 // =============================================================================
 
-import { loadFragment, mountFragment } from '../i18n/dom.js';
-
 /**
  * Show the dialog for a refused link.
  *
@@ -35,8 +33,17 @@ export async function refuseLink({
   reload,
 }) {
   if (!document.getElementById('linkNotice')) {
+    // Not through js/i18n/dom.js: a module of its own here would be a chunk
+    // every route loads. The markup has no translated attributes to apply.
     try {
-      mountFragment('link-notice', await loadFragment('link-notice'));
+      const res = await fetch(
+        new URL('js/fragments/link-notice.html', document.baseURI)
+      );
+      const host = document.querySelector('template[data-host="link-notice"]');
+      if (!res.ok || !host) return false;
+      const tpl = document.createElement('template');
+      tpl.innerHTML = await res.text();
+      host.after(tpl.content);
     } catch {
       return false;
     }

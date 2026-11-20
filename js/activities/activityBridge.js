@@ -20,7 +20,6 @@
 // =============================================================================
 
 import { t, getLocale, registerMessages } from '../i18n/index.js';
-import { refuseLink } from '../notify.js';
 
 /**
  * Make the activity prose available to the sandbox's catalog.
@@ -121,16 +120,22 @@ export async function openActivityFromUrl() {
   const request = parseActivityHash(location.hash);
   if (!request) return false;
 
-  const [{ activityById, formatById }, logic, investigations, registry] =
-    await Promise.all([
-      import('../data/activities.js'),
-      import('./activities.js'),
-      import('../investigations.js'),
-      import('../data/investigations/registry.js'),
-      import('../i18n/deferredMessages.js').then(m =>
-        m.ensureDeferredMessages().catch(() => {})
-      ),
-    ]);
+  const [
+    { activityById, formatById },
+    logic,
+    investigations,
+    registry,
+    { refuseLink },
+  ] = await Promise.all([
+    import('../data/activities.js'),
+    import('./activities.js'),
+    import('../investigations.js'),
+    import('../data/investigations/registry.js'),
+    import('../notify.js'),
+    import('../i18n/deferredMessages.js').then(m =>
+      m.ensureDeferredMessages().catch(() => {})
+    ),
+  ]);
 
   await ensureActivityMessages();
 

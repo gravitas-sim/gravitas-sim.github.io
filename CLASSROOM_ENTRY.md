@@ -13,9 +13,10 @@ Words: a student reads "activity" and "investigation", never "assignment" or
 
 ## The matrix
 
-Walked in a locally served build at 1280 by 800 (and the three rows marked
-phone at 412 wide), English; Spanish is walked for the dialog and the Library
-line. "Lands on the task" means the investigation panel is open at step 1, the
+Walked in a locally served build at 1280 by 800 in English. An assignment, a
+pack and a refused link were also walked at 412 by 860, in English and Spanish:
+the panel lands with the title focused, the dialog fits, and nothing scrolls
+sideways. "Lands on the task" means the investigation panel is open at step 1, the
 title holds the keyboard focus and the panel's own line says "Step 1 of N". The
 four visitors are: **fresh** (no stored keys), **returning** (the front door and
 the introduction both seen), **first-week** (a first-week record kept, so a
@@ -59,7 +60,11 @@ introduction and never shows an extra screen.
 
 Every reason an assignment link can fail with has a plain sentence in both
 languages (`assign.error.*`; `tests/classroomEntry.test.js` lists them).
-The dialog never says whether work is saved; that is the status line's job.
+The dialog never says whether work is saved; that is the status line's job. Its
+markup is its own fragment (`js/fragments/link-notice.html`), fetched with
+`js/assignments/linkNotice.js` only when a link is refused, so no visit pays for
+it; offline, where that fragment was never fetched, the refusal falls back to
+the toast it replaced.
 
 ## What remembers an activity
 
@@ -96,7 +101,7 @@ by the activity, as before). The link carries no answers.
 
 - **Version naming (364)** and **vocabulary (366)**: the dialog and the Home and
   Library lines use "activity" and "investigation" and say nothing about
-  resetting; fold their words in at `js/fragments/lesson-finish.html`
+  resetting; fold their words in at `js/fragments/link-notice.html`
   (`#linkNotice`), `lib.continue.assignment` and `js/welcome.js` `fillContinue`.
 - **Saving (365)**: entry never says work is saved or lost; the status line is
   where that is said.

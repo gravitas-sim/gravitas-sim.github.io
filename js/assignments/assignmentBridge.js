@@ -8,7 +8,6 @@
 // =============================================================================
 
 import { t } from '../i18n/index.js';
-import { refuseLink } from '../notify.js';
 
 /**
  * Open whatever assignment the address bar names.
@@ -23,11 +22,11 @@ export async function openAssignmentFromUrl() {
   // watchForAssignments() in js/investigationsLoader.js - has already awaited
   // ensureInvestigations(). Going back through the loader here instead would
   // put the two modules in a cycle for no benefit.
-  const [{ readAssignmentLink }, investigations, { toast }, registry] =
+  const [{ readAssignmentLink }, investigations, notify, registry] =
     await Promise.all([
       import('./assignmentLink.js'),
       import('../investigations.js'),
-      import('../controls.js'),
+      import('../notify.js'),
       import('../data/investigations/registry.js'),
       // These strings are not in the start-up catalog, and every refusal
       // below is one of them.
@@ -36,6 +35,7 @@ export async function openAssignmentFromUrl() {
       ),
     ]);
   const { openInvestigation } = investigations;
+  const { toast } = notify;
 
   // A refusal says why, who can mend it and the one way on (./linkNotice.js).
   // A reason that is not one of the catalog's codes is a link that did not
@@ -45,7 +45,7 @@ export async function openAssignmentFromUrl() {
       t(`assign.error.${reason}`) === `assign.error.${reason}`
         ? 'corrupt'
         : reason;
-    refuseLink({
+    notify.refuseLink({
       why: t(`assign.error.${code}`, detail || {}),
       who: ['corrupt', 'newerVersion', 'tooLarge'].includes(code)
         ? 'you'
