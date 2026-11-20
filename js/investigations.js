@@ -12,8 +12,12 @@ import {
   earlierFor,
   forgetKept,
   keepEarlier,
+  canSave,
   load,
   parseFieldNumber,
+  persisted,
+  resetExplainer,
+  wireExplainer,
   progressFor,
   fieldModule,
   fetchSeams,
@@ -997,44 +1001,6 @@ function syncPlotPanel(step) {
       els.plotToggle.classList.toggle('is-on', plotTransformed);
     }
   }
-}
-
-/**
- * The "What am I looking at?" button of a docked panel.
- *
- * Its label and its closed state are set each time the panel is drawn for a
- * step, so a region opened on one step is not left under the next. The words
- * are a lazy module fetched on the first press (js/explainers.js).
- *
- * @param {?HTMLElement} button - The panel header's button
- * @returns {void}
- */
-function resetExplainer(button) {
-  if (!button) return;
-  const host = button.closest('header');
-  if (host?.nextElementSibling?.classList.contains('explainer'))
-    host.nextElementSibling.remove();
-  button.setAttribute('aria-expanded', 'false');
-  button.removeAttribute('aria-controls');
-  button.textContent = t('inv.explain.open');
-}
-
-/**
- * Wire a panel's explainer button once.
- * @param {?HTMLElement} button - The button
- * @param {(m: object) => ?string} keyOf - The explainer for what is showing now
- * @param {object} [opts] - Listener options (the unmount signal)
- */
-function wireExplainer(button, keyOf, opts) {
-  button?.addEventListener(
-    'click',
-    async () => {
-      const m = await import('./explainers.js');
-      const key = keyOf(m);
-      if (key) m.toggleExplainer(button, key, button.closest('header'));
-    },
-    opts
-  );
 }
 
 /**
@@ -2130,6 +2096,11 @@ export async function openInvestigation(id, opts = {}) {
   // panel has no second kind of thing to know: `active.id` stays the lesson's,
   // so a response key means the same question in either.
   assignment = opts.assignment ?? null;
+  // An undo belongs to the record it was taken from.
+  restartMod?.then(
+    m => m.forget(),
+    () => {}
+  );
   setEntryLink(opts.link);
   assignmentBinding = null;
   if (assignment) {
@@ -2264,7 +2235,10 @@ export function closeInvestigation() {
   els.panel.classList.remove('is-open');
   document.body.classList.remove('investigation-open');
   railLeavesScene(false);
-  restartMod?.then(m => m.forget());
+  restartMod?.then(
+    m => m.forget(),
+    () => {}
+  );
   closeSheet();
   slots.runs?.release();
   stopProbeLoop();
@@ -2505,19 +2479,24 @@ const resetKit = (step = currentStep()) => ({
   kind: canvasNow()?.kind,
 });
 
-/** Starting over, fetched by its first press; what it reads and writes of the open record. */
+/** Starting over, fetched by its first press and kept only once it arrived; what it reads and writes of the open record. */
 let restartMod = null;
+const loadRestart = () =>
+  (restartMod ??= import('./investigations/restart.js').catch(err => {
+    restartMod = null;
+    throw err;
+  }));
 const restartHost = {
   state: () => ({
-    active,
-    stepIndex,
-    responses,
-    attempts,
-    visited,
-    startedAt,
+    ...persisted(),
     assigned: Boolean(assignment),
+    key: assignment ? assignmentKey : storageKey(active.id),
+    saved: canSave(),
   }),
-  put: p => ({ responses, attempts, visited, startedAt } = p),
+  put: p => {
+    ({ responses, attempts, visited, startedAt } = p);
+    save();
+  },
   go: (index, rebuild) => goToStep(index, { rebuild }),
   kept: { drafts, earlierFor, forgetKept, keepEarlier },
 };
@@ -2835,11 +2814,12 @@ export function initInvestigations({ signal } = {}) {
   const on = (id, fn) =>
     document.getElementById(id)?.addEventListener('click', fn);
   // Starting over asks first (js/investigations/restart.js, lesson-finish.html).
-  on('investigationReset', () =>
-    (restartMod ??= import('./investigations/restart.js')).then(m =>
-      m.ask(restartHost)
-    )
-  );
+  const askRestart = () =>
+    loadRestart().then(
+      m => m.ask(restartHost),
+      err => loadFailed(askRestart, err)
+    );
+  on('investigationReset', askRestart);
   on('investigationDownload', finishAction('generateReport'));
   on('investigationDownloadHtml', finishAction('generateHtmlReport'));
   const backup = finishAction('downloadBackup', 'inv.backup.failed');

@@ -27,6 +27,12 @@ export const ES_RESET = {
     'Esta es una actividad: sus respuestas guardadas también se borran. La versión de tu docente no cambia.',
   'reset.ask.lost':
     'Descartarlas las quita de este dispositivo. Descarga antes una copia si quieres poder recuperarlas. También puedes deshacerlo hasta que cierres esta investigación.',
+  'reset.ask.lost.mem':
+    'Este navegador no está guardando tus respuestas, así que solo están en esta pestaña. Descartarlas las quita de la pestaña. Descarga antes una copia si quieres poder recuperarlas. También puedes deshacerlo hasta que cierres esta investigación.',
+  'reset.ask.none':
+    'Todavía no hay nada guardado aquí, así que no se borrará ninguna respuesta.',
+  'reset.ask.progress':
+    'Se restablecen tu posición y los pasos que has visitado. Puedes deshacerlo hasta que cierres esta investigación.',
   'reset.ask.backup': 'Descargar una copia primero',
   'reset.ask.go': 'Descartar las respuestas y empezar de nuevo',
   'reset.ask.cancel': 'Cancelar',
@@ -35,7 +41,8 @@ export const ES_RESET = {
     other:
       'Has empezado de nuevo. Se borraron {n} respuestas y lecturas guardadas. Puedes deshacerlo hasta que cierres esta investigación.',
   },
-  'reset.undo.none': 'Has empezado de nuevo. No había nada guardado.',
+  'reset.undo.none':
+    'Has empezado de nuevo. No había nada guardado, así que solo se restableció tu posición. Puedes deshacerlo hasta que cierres esta investigación.',
   'reset.undo': 'Deshacer',
   'reset.undo.done': 'Tus respuestas y lecturas han vuelto.',
   'reset.leave': 'Salir de la escena de esta investigación: {what}',
