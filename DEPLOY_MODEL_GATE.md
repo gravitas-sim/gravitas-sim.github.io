@@ -760,7 +760,7 @@ The rollback, either of:
 2. `git revert -m 1` of the merge that brought the workflow change
    (RELEASING.md), then the deploy that follows.
 
-Not verified: Node 20 and CI's runner (byte counts may differ by a few bytes);
+Not verified: CI's Linux runner (byte counts may differ by a few bytes);
 Firefox and WebKit; a real phone; a deploy from GitHub Actions (the deploy
 sequence ran locally, as `tests/deployRehearsal.test.js` runs it).
 
