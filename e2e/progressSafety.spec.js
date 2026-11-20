@@ -22,6 +22,9 @@ const OUT = join(process.cwd(), 'test-results', 'progress-safety');
 const LESSON = 'missing-mass';
 const PREFIX = 'gravitas_investigation_';
 
+/** Everything announced so far, joined. */
+const said = page => page.evaluate(() => (window.__said || []).join(' | '));
+
 /**
  * Make writes to the lesson's own key fail, the way a real browser would.
  *
@@ -34,6 +37,19 @@ const PREFIX = 'gravitas_investigation_';
  */
 async function breakStorage(page, name) {
   await page.addInitScript(errName => {
+    // Everything said into #srStatus, in order: other announcements (the
+    // simulation starting) overwrite the one shared region, so a test that
+    // reads only its current text would race them.
+    window.__said = [];
+    new window.MutationObserver(() => {
+      const t = document.getElementById('srStatus')?.textContent;
+      if (t && window.__said[window.__said.length - 1] !== t)
+        window.__said.push(t);
+    }).observe(document, {
+      subtree: true,
+      childList: true,
+      characterData: true,
+    });
     const real = window.Storage.prototype.setItem;
     window.Storage.prototype.setItem = function (key, value) {
       if (String(key).startsWith('gravitas_investigation_')) {
@@ -114,7 +130,7 @@ test.describe('the save status', () => {
 
     await expect(status(page)).toBeVisible();
     await expect(status(page)).toHaveAttribute('data-state', 'full');
-    await expect(page.locator('#srStatus')).toContainText(/Not saved/);
+    await expect.poll(() => said(page)).toMatch(/Not saved/);
     await expect(status(page)).toContainText(/storage|full|space/i);
 
     // Standing, not transient: several more steps and it is still on screen.

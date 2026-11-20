@@ -47,9 +47,25 @@ const status = page => page.locator('#investigationSaveStatus');
 const note = page =>
   page.locator('#investigationSaveStatus + .inv-save-status');
 
+/** Everything announced so far, joined. */
+const said = page => page.evaluate(() => (window.__said || []).join(' | '));
+
 /** Make writes to the lesson's own keys refuse, until `window.__refuse` is set false. */
 async function refuse(page, name) {
   await page.addInitScript(errName => {
+    // Everything said into #srStatus, in order: other announcements (the
+    // simulation starting) overwrite the one shared region, so a test that
+    // reads only its current text would race them.
+    window.__said = [];
+    new window.MutationObserver(() => {
+      const t = document.getElementById('srStatus')?.textContent;
+      if (t && window.__said[window.__said.length - 1] !== t)
+        window.__said.push(t);
+    }).observe(document, {
+      subtree: true,
+      childList: true,
+      characterData: true,
+    });
     window.__refuse = true;
     const real = window.Storage.prototype.setItem;
     window.Storage.prototype.setItem = function (key, value) {
@@ -231,7 +247,7 @@ test.describe('the save status, in words', () => {
     await answerAndAdvance(page);
     await answerAndAdvance(page);
     await expect(status(page)).toHaveAttribute('data-state', 'full');
-    await expect(page.locator('#srStatus')).toContainText(/Not saved/);
+    await expect.poll(() => said(page)).toMatch(/Not saved/);
     const button = status(page).getByRole('button', {
       name: 'Download a backup of your answers',
     });
@@ -251,9 +267,7 @@ test.describe('the save status, in words', () => {
     });
     await answerAndAdvance(page);
     await expect(status(page)).toHaveAttribute('data-state', 'saved');
-    await expect(page.locator('#srStatus')).toContainText(
-      /saved on this device/
-    );
+    await expect.poll(() => said(page)).toMatch(/saved on this device/);
     await expect(status(page).getByRole('button')).toHaveCount(0);
   });
 
