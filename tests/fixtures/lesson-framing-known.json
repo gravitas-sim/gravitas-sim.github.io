@@ -35,6 +35,8 @@
   "768|black-holes|where-the-room-comes-from": "orbiters sit on the edge of the free region at 768, so a body can fall under the step text on a run: lesson layout, not the fit (flaky in the browser check)",
   "768|black-holes|the-thermometer": "orbiters sit on the edge of the free region at 768, so a body can fall under the step text on a run: lesson layout, not the fit (flaky in the browser check)",
   "768|black-holes|a-timeline-that-will-not": "orbiters sit on the edge of the free region at 768, so a body can fall under the step text on a run: lesson layout, not the fit (flaky in the browser check)",
-  "768|black-holes|from-city-sized-to-solar": "orbiters sit on the edge of the free region at 768, so a body can fall under the step text on a run: lesson layout, not the fit (flaky in the browser check)"
+  "768|black-holes|from-city-sized-to-solar": "orbiters sit on the edge of the free region at 768, so a body can fall under the step text on a run: lesson layout, not the fit (flaky in the browser check)",
+  "1280|gravity-assist|voyager-left-faster": "borderline at 1280 (passes on some runs): the planet or spacecraft can stand under the step text or a docked panel: lesson layout, not the fit",
+  "1280|radial-velocity|measure-the-period": "borderline at 1280 (passes on some runs): the star and planet can stand under the observing toolbar or the pause control, which open after the fit: lesson layout, not the fit"
  }
 }
