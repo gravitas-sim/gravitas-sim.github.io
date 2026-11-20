@@ -69,7 +69,7 @@ Not mine to license. Each keeps its own, and the license text ships with it.
 | `vendor/fonts/inter-*` | Inter | SIL OFL 1.1 — `vendor/fonts/inter-LICENSE` |
 | `vendor/fonts/poppins-*` | Poppins | SIL OFL 1.1 — `vendor/fonts/poppins-LICENSE` |
 | `vendor/fonts/roboto-mono-*` | Roboto Mono | SIL OFL 1.1 — `vendor/fonts/roboto-mono-LICENSE` |
-| `images/transit-of-venus-2012.jpg` | photograph by Brocken Inaglory | CC BY 2.5 |
+| `images/transit-of-venus-2012.webp` | photograph by Brocken Inaglory | CC BY 2.5 |
 | `js/data/gw/**` | derived from GWOSC released data | CC BY 4.0 |
 | `js/data/stellar/**` | derived from the MIST model grids | cite the papers; see NOTICE |
 | `js/data/spectra/**` | derived from SDSS DR18 observed spectra | public domain; acknowledge SDSS, see NOTICE |

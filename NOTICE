@@ -43,11 +43,11 @@ https://github.com/googlefonts/robotomono
 ===============================================================================
 Transit of Venus photograph
 -------------------------------------------------------------------------------
-images/transit-of-venus-2012.jpg
+images/transit-of-venus-2012.webp
 "2012 Transit of Venus from SF" by Brocken Inaglory
 Licensed under CC BY 2.5: https://creativecommons.org/licenses/by/2.5/
 Source: https://commons.wikimedia.org/wiki/File:2012_Transit_of_Venus_from_SF.jpg
-Changes: resized.
+Changes: resized and recompressed as WebP.
 The same attribution is shown to the reader beside the figure, in
 js/data/investigations/transit-photometry.js.
 

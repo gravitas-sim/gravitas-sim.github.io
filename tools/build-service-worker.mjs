@@ -178,10 +178,10 @@ const FILES = [
   { path: 'cosmology/coma-cluster-quoted.json', core: false },
   { path: 'favicon.ico', core: false },
   { path: 'favicon.png', core: false },
-  // images/transit-of-venus-2012.jpg (56 KB gzipped) is not installed: the figure on
-  // one read step of Transit Photometry is fetched with that step and kept by the
-  // service worker after that (the first-visit tier is at its data-budget ceiling,
-  // D-R4-329-05); the step's caption and alt text stand without it.
+  // The photograph on one read step of Transit Photometry, an 11 KB WebP at the
+  // size the step shows it. It was a 56 KB JPEG left out of the first-visit tier
+  // (D-R4-329-05) and comes back with the recompression (D-R4-329-09).
+  { path: 'images/transit-of-venus-2012.webp', core: false },
 ];
 
 /**
