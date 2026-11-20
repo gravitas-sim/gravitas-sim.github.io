@@ -1137,7 +1137,11 @@ test.describe('the central experiment of each investigation', () => {
     const ageGyr = rows => {
       const text = row(rows, /^age$/i).text;
       const n = reading(rows, /^age$/i);
-      return /Myr/i.test(text) ? n / 1000 : /trillion/i.test(text) ? n * 1000 : n;
+      return /Myr/i.test(text)
+        ? n / 1000
+        : /trillion/i.test(text)
+          ? n * 1000
+          : n;
     };
     const numbers = s => ({
       age: ageGyr(s.rows),

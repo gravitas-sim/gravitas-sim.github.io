@@ -488,7 +488,7 @@ test.describe('three ways of running the clock', () => {
   }) => {
     test.slow();
     await openLesson(page, app);
-    await goTo(page, 'Two moments in one life');
+    await goTo(page, 'What exactly runs out?');
     await pause(page);
     await page.waitForTimeout(400);
 
