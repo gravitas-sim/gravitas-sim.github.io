@@ -1002,7 +1002,7 @@
         }
       ],
       "questions": {
-        "Q1": "The student finds that one configuration gives three different outcomes at three steps while the energy drift stays under a part in a million, that an outcome counts only when halving the step leaves it unchanged, and where a published boundary and a short integration disagree: measured on the live Binary and Circumbinary Planet Lab runs, which a paragraph could not show.",
+        "Q1": "The student finds that one configuration gives three different outcomes at three steps while the energy drift stays under two parts in a million, that an outcome counts only when halving the step leaves it unchanged, and where a published boundary and a short integration disagree: measured on the live Binary and Circumbinary Planet Lab runs, which a paragraph could not show.",
         "Q2": "Each run names its panel, its starting radius and what to set and watch; the held predictions (starting radius, the sweep, the circumbinary direction) reveal at the step that runs them, and the panel's own rows say which bodies are on the canvas and whether the last run still describes the scene.",
         "Q3": "Scene, panel, plot, formula and prose name the same two stars and the planet, radii in binary separations, periods in binary periods and the drift in per cent; survived this integration is never written as stable, in both languages.",
         "Q4": "The student chooses the starting radius, the step to halve to, which sweep trial to recheck, which of three runs to report and what to claim; each can be made badly, and the short answer is graded on whether it claims a verdict.",
@@ -1012,7 +1012,7 @@
         "L1": "HOLDS: no field cue or step placeholder holds a numeral at any depth, in either language, and the panel renders none that does (tests/fieldCue.test.js); the expected value is the field's `want`, which no page reads.",
         "L2": "UNCHANGED (357): no panel or stage state was edited; the Binary Planet Run panel opens on the 0.15 configuration the first run reads, as before.",
         "L3": "HOLDS (357): the starting-radius prediction (before-you-run-anything) comes before any run, and what-survived-will-mean names no radius; the move-it-out, sweep and circumbinary-direction predictions are no longer answered by a body, checklist or tip before their reveal (the islands-of-stability tip on what-the-fit-assumes and the expect-the-disagreement clause of the optional circumbinary sweep are removed).",
-        "L4": "HOLDS (357): no checklist, body or tip of run-the-default, run-it-at-030, energy-drift-as-a-screen, the-case-that-matters, run-the-circumbinary or where-the-fit-disagrees states what the run shows; the readings sit in the because of why-so-quiet, which-answer-is-right and how-without-a-pass. The hint-less fields of read-the-sweep hold units only (the expected values are each field's `want`, which no page shows).",
+        "L4": "HOLDS (357, rechecked after review): no title, checklist, body or tip of run-the-default, run-it-at-030, energy-drift-as-a-screen, the-case-that-matters, run-the-circumbinary or where-the-fit-disagrees states or hints at what the run shows or when it happens: the circumbinary checklist no longer names the 4.0 figure or the first and second binary period, the 0.30 checklist and tip no longer give a timescale or the ten-separation rule, the 0.50 halvings are bounded without naming a figure the run reaches, and where-the-fit-disagrees is titled and worded neutrally (two radii inside the published boundary, no disagreement). The readings sit in the because of why-so-quiet, which-answer-is-right and how-without-a-pass. The hint-less fields of read-the-sweep hold units only (the expected values are each field's `want`, which no page shows).",
         "L5": "UNCHANGED (357): readout and instructor text were not edited; the because texts show only after the question is answered."
       },
       "task_rule_items": [
@@ -1031,23 +1031,23 @@
         },
         {
           "sid": "why-so-quiet",
-          "change": "REWORDED: the body points back to the student's four readings; the 0.62 separations and the quarter of a separation moved to the because."
+          "change": "REWORDED: the body points back to the student's four readings (periods, farthest out, encounters, energy drift) and the panel's Closest to the other star row; the 0.62 separations and the quarter of a separation moved to the because."
         },
         {
           "sid": "run-it-at-030",
-          "change": "REWORDED: the body no longer says the run will not take twenty periods; the checklist and tip no longer say how it ends."
+          "change": "REWORDED: the body no longer says the run will not take twenty periods; the checklist and tip no longer say how it ends, when, or how far the planet goes."
         },
         {
           "sid": "what-the-fit-assumes",
-          "change": "REWORDED: the tip no longer states the islands-of-stability finding that answers the next prediction."
+          "change": "REWORDED: the tip no longer states the islands-of-stability finding that answers the next prediction; it now says which radius lies inside the band where the panel declines (0.18) and which just beyond it (0.20), which is what the panel does."
         },
         {
           "sid": "energy-drift-as-a-screen",
-          "change": "REWORDED: the body and checklist no longer give the drift, the eccentricity, the collision or the number of halvings; they moved to the because of which-answer-is-right."
+          "change": "REWORDED: the body and checklist no longer give the drift, the eccentricity or the collision; they moved to the because of which-answer-is-right. The halvings are bounded without a figure the run reaches (two or three, never below a step of 0.1, say so if it still declines) and the tip carries a self-check that needs no expected value (the last line of notes shows a drift under the screen beside a named outcome)."
         },
         {
           "sid": "the-case-that-matters",
-          "change": "REWORDED: the body no longer says the run is not quiet or that the counter climbs."
+          "change": "REWORDED: the body no longer says the run is not quiet or that the counter climbs; the checklist separates the 0.25 separations from the steps 1.0, 0.5 and 0.25 and no longer hints that the runs differ; the tip no longer calls the last run the most important."
         },
         {
           "sid": "which-answer-is-right",
@@ -1055,7 +1055,7 @@
         },
         {
           "sid": "run-the-circumbinary",
-          "change": "REWORDED: the checklist no longer gives the eccentricity at 4.0 or at 2.0 or says the encounter count surprises; the tip no longer says nothing came near anything."
+          "change": "REWORDED: the checklist no longer gives the eccentricity at 4.0 or at 2.0, the first or second binary period, or the 4.0 figure to compare with, or says the encounter count surprises; the tip no longer says nothing came near anything."
         },
         {
           "sid": "how-without-a-pass",
@@ -1067,12 +1067,12 @@
         },
         {
           "sid": "where-the-fit-disagrees",
-          "change": "REWORDED: the tip no longer says both planets survive."
+          "change": "REWORDED: the title, body, checklist and tip no longer say the planets disagree with the fit, survive, or come back; the body states only that both radii lie inside the published boundary."
         }
       ],
       "walk": "NOT RUN",
       "pr": null,
-      "hash": "6b26aab9e23edb0303b34ebeb478eb9bd0cc1b615724130246145c2209b58d47"
+      "hash": "817d0849697a663f2524dd685479e485b0eeeef49b3cd1fe408e625576add3f0"
     },
     {
       "id": "investigation:black-holes",
