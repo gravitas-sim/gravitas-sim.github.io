@@ -588,7 +588,6 @@ export const ES_DEFERRED = {
     '{count} ensayos se ejecutaron pero no cubrieron la duracion pedida. Sus numeros estan en la tabla y no en el resumen de arriba: una curva trazada con ellos describiria un experimento mas corto que el que este barrido dice haber hecho.',
   'sweep.partial':
     'Algunas pruebas no dieron medida, asi que esto describe los valores que se ejecutaron y no el rango que se pidio.',
-
   'sweep.guide.title':
     'Hasta donde puede orbitar un planeta alrededor de una estrella de un par?',
   'sweep.guide.body':
@@ -2162,11 +2161,13 @@ export const ES_DEFERRED = {
   'inv.step.kind.ellipse': 'exploración',
   'inv.step.kind.wedges': 'exploración',
   'inv.save.link': 'Ver todo en Mi trabajo',
-  'inv.save.saved': 'Progreso guardado en este dispositivo',
+  'inv.save.saved':
+    'Tus respuestas, los valores de los deslizadores y las pistas se guardan en este dispositivo.',
   'inv.save.full':
-    'No se pudo guardar el progreso: el almacenamiento de este navegador est\u00e1 lleno. Tus respuestas siguen aqu\u00ed, pero se perder\u00e1n al cerrar la pesta\u00f1a. Descarga una copia de seguridad para conservarlas.',
+    'No se guarda: este navegador no tiene espacio para ello (su almacenamiento est\u00e1 lleno o este registro es demasiado grande). Tus respuestas se conservan en esta p\u00e1gina mientras siga abierta.',
   'inv.save.unavailable':
-    'No se puede guardar el progreso en este navegador; la navegaci\u00f3n privada suele impedirlo. Tus respuestas siguen aqu\u00ed, pero se perder\u00e1n al cerrar la pesta\u00f1a. Descarga una copia de seguridad para conservarlas.',
+    'No se guarda: este navegador no permite guardar (la navegaci\u00f3n privada suele impedirlo). Tus respuestas se conservan en esta p\u00e1gina mientras siga abierta.',
+  'inv.save.preview': 'Vista previa de estudiante: no se guarda nada.',
   'inv.save.authoring':
     'Vista previa de autor\u00eda: no se guarda nada y no se toca el progreso de ning\u00fan estudiante.',
   'inv.save.foreign':
@@ -2588,7 +2589,6 @@ export const ES_DEFERRED = {
   'binarySweep.recheck.reason.unreliableRun':
     'una de las ejecuciones no es fiable',
   'binarySweep.recheck.reason.notFinished': 'una de las ejecuciones no termino',
-
   // --- El barrido binario, guardado como prueba --------------------------------
   'nb.binarySweep.title': 'Barrido del radio inicial ({scenario})',
   'nb.binarySweep.trials': 'Ensayos',
