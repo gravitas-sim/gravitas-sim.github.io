@@ -19,7 +19,7 @@ export default {
     },
     'estimate-the-dim-limit': {
       title: 'Estima el límite para una estrella tenue',
-      body: 'Tienes la cantidad de luz estelar en el límite del invernadero desbocado del Sol, del paso anterior. Supón que una enana M de 3200 K, con cerca del 0,4 por ciento de la luminosidad del Sol (0,004 Soles), tuviera su límite en esa misma cantidad de luz estelar.\n\nSin abrir el panel, usa la regla que escribiste al principio para estimar a qué distancia de la estrella estaría ese límite. Comprométete con un número. Queda sin marcar hasta que hayas leído el panel.',
+      body: 'Tienes la cantidad de luz estelar en el límite del invernadero desbocado del Sol, del paso anterior. Supón que una enana M de 3200 K, con cerca del 0,4 por ciento de la luminosidad del Sol (0,004 Soles), tuviera su límite en esa misma cantidad de luz estelar.\n\nSin abrir el panel, usa lo que hallaste sobre la luz estelar y la distancia (cae como el inverso del cuadrado de la distancia) y sobre la luminosidad (es proporcional a la luminosidad de la estrella) para estimar a qué distancia de la estrella estaría ese límite. Comprométete con un número. Queda sin marcar hasta que hayas leído el panel.',
       prompt: 'El límite estaría a unos',
     },
     'the-same-limit-a-dim-star': {

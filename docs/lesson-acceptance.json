@@ -122,7 +122,7 @@
       "object": "earth",
       "control": "hz-insolation/distance",
       "quantity": "starlight at three distances the student chooses, one twice another and spread over a factor of two or more, each taken from the panel; the prediction for a doubling is set beside the readings",
-      "evidence": "instrument-capture",
+      "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": [
         "move-it-twice-as-far",

@@ -229,6 +229,19 @@ describe('three distances of your own', () => {
       expect(m).not.toMatch(/\d|one quarter|inverse|squared/);
   });
 
+  test('equal distances (1, 2, 2) are told to choose three different ones, not that they are too close', () => {
+    for (const ds of [
+      [1, 2, 2],
+      [0.5, 0.5, 2],
+      [1, 1, 1],
+    ]) {
+      const r = check(ds);
+      expect(r.level).toBe('warn');
+      expect(r.message).toMatch(/Choose three different distances/);
+      expect(r.message).not.toMatch(/too close together/);
+    }
+  });
+
   test('two rows wait, empty waits, a non-positive row is an error', () => {
     expect(check([0.5, 1, 2], { d3: undefined, s3: undefined })).toBeNull();
     expect(s().validate({})).toBeNull();
@@ -252,10 +265,13 @@ describe('three distances of your own', () => {
     expect(ids).toContain('starlight');
     for (const f of s().fields.filter(x => x.source))
       expect(f.source).toEqual({ tool: 'starlight' });
-    // Every field's own expected value passes the check (the author's hint values).
-    const v = Object.fromEntries(s().fields.map(f => [f.id, Number(f.want)]));
-    expect(s().validate(v, null, {}).level).toBe('ok');
-    for (const f of s().fields) expect(f.hint).toBeUndefined();
+    // The distances are the reader's own choice, so no field carries an
+    // expected value for the answer key to print, and none a placeholder.
+    for (const f of s().fields) {
+      expect(f.want).toBeUndefined();
+      expect(f.hint).toBeUndefined();
+    }
+    expect(s().validate(rowsFor([0.5, 1, 2]), null, {}).level).toBe('ok');
   });
 
   test('the plot is the reader’s own three points', () => {
@@ -432,5 +448,23 @@ describe('saved work under the two steps this lesson retired', () => {
     expect(
       read.responses['goldilocks-question:write-the-three-down:s1']
     ).toBeUndefined();
+  });
+
+  test('a student saved on the step that now requires the new measurement, holding only the retired answers, is not sent back or blocked', () => {
+    // `requires` is an edge of the step graph (it adds the measurement to an
+    // assignment that uses the rule); the lesson itself never gates on it.
+    const at = readProgress(
+      { ...SAVED, stepSid: 'writing-it-down-then-using' },
+      LESSON
+    );
+    expect(at.stepSid).toBe('writing-it-down-then-using');
+    expect(at.responses['goldilocks-question:three-distances-yours:d1']).toBe(
+      undefined
+    );
+    const live = new Set(LESSON.steps.map(s => s.sid));
+    for (const st of LESSON.steps)
+      for (const r of st.requires || []) expect(live.has(r)).toBe(true);
+    expect(live.has('three-distances')).toBe(false);
+    expect(live.has('write-the-three-down')).toBe(false);
   });
 });

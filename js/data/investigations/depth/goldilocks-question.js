@@ -91,9 +91,11 @@ export default {
              limit from the last step. Suppose an M dwarf of 3200 K, with about 0.4
              percent of the Sun&rsquo;s luminosity (0.004 Suns), had its limit at
              that same amount of starlight.
-             \n\nWithout opening the panel, use the rule you wrote down at the start
-             to estimate how far from the star that limit would lie. Commit to a
-             number. It stays unmarked until you have read the panel.`,
+             \n\nWithout opening the panel, use what you found about starlight and
+             distance (it falls as the inverse square of distance) and about
+             luminosity (it scales with the star&rsquo;s luminosity) to estimate
+             how far from the star that limit would lie. Commit to a number. It
+             stays unmarked until you have read the panel.`,
       prompt: 'The limit would lie at about',
     },
     {

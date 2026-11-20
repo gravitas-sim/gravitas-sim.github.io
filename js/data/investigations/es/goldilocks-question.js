@@ -58,15 +58,14 @@ export default {
       title: 'Tres distancias tuyas',
       body: 'El panel es el Sol con un planeta en un deslizador. Elige tres distancias tuyas, y haz que una sea el doble de otra, para poner a prueba lo que predijiste.\n\nPara cada distancia, pon el deslizador, pulsa <strong>Tomar la lectura</strong> junto a la luz estelar y escribe la distancia que pusiste. El número que hay que leer es el etiquetado <strong>luz estelar que llega a cada metro cuadrado</strong>. Tus puntos caen en la gráfica a medida que los registras.',
       fields: [
-        { label: 'Distancia 1', unit: 'UA', want: '0,5' },
-        { label: 'Luz estelar a la distancia 1', unit: 'Tierras', want: '4' },
-        { label: 'Distancia 2', unit: 'UA', want: '1' },
-        { label: 'Luz estelar a la distancia 2', unit: 'Tierras', want: '1' },
-        { label: 'Distancia 3', unit: 'UA', want: '2' },
+        { label: 'Distancia 1', unit: 'UA' },
+        { label: 'Luz estelar a la distancia 1', unit: 'Tierras' },
+        { label: 'Distancia 2', unit: 'UA' },
+        { label: 'Luz estelar a la distancia 2', unit: 'Tierras' },
+        { label: 'Distancia 3', unit: 'UA' },
         {
           label: 'Luz estelar a la distancia 3',
           unit: 'Tierras',
-          want: '0,25',
         },
       ],
       plot: {

@@ -272,29 +272,25 @@ const GOLDILOCKS = {
           id: 'd1',
           label: 'Distance 1',
           unit: 'AU',
-          want: '0.5',
         },
         {
           id: 's1',
           label: 'Starlight at distance 1',
           unit: 'Earths',
-          want: '4',
           source: { tool: 'starlight' },
         },
-        { id: 'd2', label: 'Distance 2', unit: 'AU', want: '1' },
+        { id: 'd2', label: 'Distance 2', unit: 'AU' },
         {
           id: 's2',
           label: 'Starlight at distance 2',
           unit: 'Earths',
-          want: '1',
           source: { tool: 'starlight' },
         },
-        { id: 'd3', label: 'Distance 3', unit: 'AU', want: '2' },
+        { id: 'd3', label: 'Distance 3', unit: 'AU' },
         {
           id: 's3',
           label: 'Starlight at distance 3',
           unit: 'Earths',
-          want: '0.25',
           source: { tool: 'starlight' },
         },
       ],
@@ -339,7 +335,14 @@ const GOLDILOCKS = {
         if (rows.length < 3) return null;
         const ds = rows.map(([d]) => d);
         const span = Math.max(...ds) / Math.min(...ds);
-        if (new Set(ds).size < 3 || span < 2) {
+        if (new Set(ds).size < 3) {
+          return {
+            level: 'warn',
+            message:
+              'Choose three different distances: two of yours are the same, so they make one point, not two.',
+          };
+        }
+        if (span < 2) {
           return {
             level: 'warn',
             message:

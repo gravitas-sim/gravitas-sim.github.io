@@ -243,6 +243,10 @@ describe('the golden tables', () => {
     ];
     for (const [lo, hi, want] of golden) expect(ticks(lo, hi)).toEqual(want);
     expect(ticks(0, 1, 3)).toEqual([0, 0.5, 1]);
+    // A range of one unit in the last place of its ends has one tick, not a
+    // loop that cannot advance (a log axis over identical points, nudged).
+    expect(ticks(1, 1 + Number.EPSILON)).toEqual([1]);
+    expect(ticks(0.3, 0.3 + 1e-16)).toHaveLength(1);
     expect(ticks(0, 1, 10)).toEqual([
       0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1,
     ]);
