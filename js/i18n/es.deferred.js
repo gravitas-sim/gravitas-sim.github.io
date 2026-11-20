@@ -896,7 +896,6 @@ export const ES_DEFERRED = {
   'inv.wedge.readout':
     'Cada porción es el <strong>{share} %</strong> del área de la órbita, y el planeta tarda <strong>{time}</strong> en recorrer cada una.',
   'inv.import.added': 'Añadido: {value}.',
-  'inv.progress.cleared': 'Progreso borrado',
   'inv.depth.deeper': 'Profundizar',
   'inv.depth.shallower': 'Menos pasos',
   'inv.answer.needsUncertainty':

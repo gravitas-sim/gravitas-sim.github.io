@@ -12,24 +12,24 @@
         "requests": 109
       },
       "kepler": {
-        "kb": 2673.8,
-        "requests": 142
+        "kb": 2682.3,
+        "requests": 145
       },
       "transit": {
-        "kb": 2679.6,
-        "requests": 142,
-        "toolKb": 2842.8,
-        "toolRequests": 158
+        "kb": 2688.1,
+        "requests": 145,
+        "toolKb": 2861.5,
+        "toolRequests": 162
       },
       "power-law": {
-        "kb": 2638.6,
-        "requests": 142,
-        "toolKb": 2691.8,
-        "toolRequests": 145
+        "kb": 2647.1,
+        "requests": 145,
+        "toolKb": 2700.3,
+        "toolRequests": 148
       },
       "largest-lesson": {
         "kb": 2955.8,
-        "requests": 150
+        "requests": 153
       },
       "teaching": {
         "kb": 248.1,
@@ -138,23 +138,23 @@
         "requests": 58
       },
       "kepler": {
-        "kb": 934.2,
+        "kb": 938.9,
         "requests": 77
       },
       "transit": {
-        "kb": 942.3,
+        "kb": 947.1,
         "requests": 77,
-        "toolKb": 1027.5,
+        "toolKb": 1032.3,
         "toolRequests": 93
       },
       "power-law": {
-        "kb": 910.4,
+        "kb": 915.1,
         "requests": 77,
-        "toolKb": 926.9,
+        "toolKb": 931.7,
         "toolRequests": 80
       },
       "largest-lesson": {
-        "kb": 1040.9,
+        "kb": 1045.7,
         "requests": 82
       },
       "teaching": {

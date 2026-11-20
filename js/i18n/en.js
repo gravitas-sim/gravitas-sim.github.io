@@ -1429,9 +1429,6 @@ export const EN = {
   // "inv.step.kind.ellipse" where a word should be. They are hands-on screens,
   // so they take the word the other hands-on screens already use rather than
   // introducing two more for a reader to learn.
-  'inv.action.restart': 'Restart',
-  'inv.action.restart.hint':
-    'Clear every answer and start this investigation again',
   'inv.action.back': 'Back',
   'inv.action.back.hint': 'Previous step (Shift + Left arrow)',
   'inv.body.label': 'Investigation step',
