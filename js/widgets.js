@@ -630,6 +630,18 @@ export async function ensureWidget(id) {
 }
 
 /**
+ * Fetch the instrument of the next step that has one while the reader is still
+ * on an earlier step, so a measure step opens on a drawn instrument. A failure is
+ * left for the step itself to meet and report.
+ * @param {Object[]} steps - The lesson's steps
+ * @param {number} at - Index of the open step
+ */
+export function warmAhead(steps, at) {
+  const id = steps.slice(at + 1, at + 4).find(s => s.tool)?.tool.id;
+  if (id && needsLoading(id)) ensureWidget(id).catch(() => {});
+}
+
+/**
  * Look up a widget by id.
  * @param {string} id - Widget id from a lesson step
  * @returns {Object|null} The widget, or null
