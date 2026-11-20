@@ -1223,7 +1223,7 @@ export default {
       {
         from: 'compare-two-moments',
         to: 'core-in-envelope-out',
-        text: 'The long part, and what ends it — Screen 6 is the one place students choose their moments: two ages on the Sun-like track, the first frozen and the second live, with luminosity, radius and temperature read at each. A pair on the main sequence shows the star brightening by about three times at nearly the same temperature, which kills the picture of a star sitting at one point for ten billion years; a pair that spans the main sequence and the giant branch shows far more. Two moments close together show little, and the page says so. Screen 8 is the core-hydrogen prediction and the most important single screen in the investigation; give it time before revealing.',
+        text: 'The long part, and what ends it — Screen 6 is the one place students choose their moments on the Sun-like track; a main-sequence pair shows about three times the luminosity at nearly the same temperature, which kills the picture of a star sitting at one point for ten billion years. Screen 8 is the core-hydrogen prediction and the most important single screen in the investigation; give it time before revealing.',
       },
       {
         from: 'predict-direction',

@@ -4262,7 +4262,7 @@ export const INSTRUCTOR_CONTENT = {
       {
         claim: 'Stars slide down the main sequence as they age and fade.',
         response:
-          'They do not move along it at all. A solar-mass star drifts slowly up and very slightly right across ten billion years - a pair of moments chosen at the start and the end of the main sequence in screen 6 shows a factor near 3 in luminosity - and then leaves the band sideways. The main sequence is a sequence in mass, not in time.',
+          'They do not move along it at all. A solar-mass star drifts slowly up and very slightly right across ten billion years - screen 6 shows a factor near 3 in luminosity - and then leaves the band sideways. The main sequence is a sequence in mass, not in time.',
       },
       {
         claim: 'A red giant is cooler, so it is a cooler star.',
@@ -4298,7 +4298,7 @@ export const INSTRUCTOR_CONTENT = {
     teachingNotes: [
       'Screen 1 depends on students committing before anything is revealed. If asked which star is which, the honest answer is "that is what the next thirty-two screens are for".',
       'Screen 2 shows a cloud with no numbers at all, and some students read the empty readout as a bug. It is not: a cloud has no photosphere, so it has no surface temperature or luminosity, and the readout says exactly that. It is worth reading aloud.',
-      'Screen 6 has each student choose two moments of the Sun-like track, freeze the first and read both, so no two sets of numbers need agree. The page checks that the luminosity, radius and temperature of each moment belong together (in solar units the luminosity is the radius squared times the temperature over 5,772 K, to the fourth power), that the two moments differ, and that the ages are written in Gyr. Most students pick the start and the end of the main sequence; ask a pair who picked two moments close together what their numbers show.',
+      'Screen 6 has each student choose two moments of the Sun-like track, so no two sets of numbers need agree; the page checks that each moment’s readings belong together, that the moments differ, and that ages are in Gyr.',
       'Screens 8 to 10 are the core of the investigation. If time is short, cut screens 13 and 24 rather than any of these three.',
       'Screen 19 needs the phase pacing to have been noticed. Ask the class to switch the playhead to time pacing and watch everything after the main sequence collapse into a sliver - the contrast makes the point faster than the numbers do.',
       'Screen 25 asks why iron ends the star and is the hardest written answer here. The rubric rejects "it runs out of fuel", which is the answer students reach for and which is wrong: an iron core is surrounded by plenty of unburnt material.',
