@@ -1541,6 +1541,17 @@ test.describe('the central experiment of each investigation', () => {
     await box('a2_day').fill(raw2);
     await box('a2_day').dispatchEvent('change');
     await expect(check).toHaveClass(/is-ok/);
+    // A bracket as wide as a loop holds the turn and says almost nothing: the
+    // check says so in its own words and does not mark the length as found.
+    await box('a1_day').fill('100');
+    await box('a2_day').fill('200');
+    await box('a2_day').dispatchEvent('change');
+    await expect(check).not.toHaveClass(/is-ok/);
+    await expect(check).toContainText('brackets are wide');
+    await box('a1_day').fill(raw1);
+    await box('a2_day').fill(raw2);
+    await box('a2_day').dispatchEvent('change');
+    await expect(check).toHaveClass(/is-ok/);
 
     // The readings are in saved progress, and the prediction is settled at the reveal.
     await expectEvidenceRetained(page, id, measureSid, {

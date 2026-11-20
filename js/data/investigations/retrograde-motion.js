@@ -732,15 +732,17 @@ const RETROGRADE = {
           return {
             level: 'warn',
             message:
-              'The second turn comes after the first. Take its two readings on days after your first pair.',
+              'Your second pair must come after your first. Take both readings of the second turn on days later than the second reading of the first pair.',
           };
         }
-        // The loops whose turn lies between a pair's two days, a little wider for the engine's drift.
+        // The loops whose turn lies between a pair's two days. The engine's own turns sit within
+        // half a day of the circular ones at the first loop and drift by about a tenth of a day
+        // a loop after it (tests/retrogradeMotion.test.js), so that is all the slack allowed.
         const loops = (lo, hi, at) => {
           const out = [];
           for (let n = 0; n < 60; n++) {
             const t = at + n * EVERY;
-            const slack = 1 + n / 10;
+            const slack = 0.6 + n / 10;
             if (t + slack >= lo && t - slack <= hi) out.push(n);
           }
           return out;
@@ -766,6 +768,14 @@ const RETROGRADE = {
             level: 'warn',
             message:
               'Your two turns belong to different loops. The second turn is the end of the loop that began at the first, so take it soon after.',
+          };
+        }
+        // Brackets of a few days each are what the frames allow; much wider tell almost nothing.
+        if (v.a2_day - v.a1_day + v.b2_day - v.b1_day > 20) {
+          return {
+            level: 'warn',
+            message:
+              'Your two brackets are wide: together they are more than 20 days across, so the loop is known only to within more than 10 days. Both turns are inside them, but step back and bracket each turn again with the two readings closer together.',
           };
         }
         return {

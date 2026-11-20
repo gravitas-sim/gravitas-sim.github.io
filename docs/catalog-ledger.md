@@ -114,7 +114,7 @@ Scene class of the lessons: portrait or backdrop 94, setup scenario 26, engine-i
 | `investigation:radial-velocity`                      | lesson      |   354 | FOCUSED  | setup scenario          | OPEN      | OPEN     | NOT RUN      | authentic leg E1 NOT RUN              |          1 |
 | `investigation:reading-the-hr-diagram`               | lesson      |   382 | REDESIGN | portrait or backdrop    | OPEN      | OPEN     | NOT RUN      | -                                     |          0 |
 | `investigation:refitting-a-transit`                  | lesson      |   362 | FOCUSED  | setup scenario          | OPEN      | OPEN     | NOT RUN      | -                                     |          0 |
-| `investigation:retrograde-motion`                    | lesson      |   346 | FOCUSED  | setup scenario          | REVISED   | REVISED  | NOT RUN      | -                                     |          2 |
+| `investigation:retrograde-motion`                    | lesson      |   346 | FOCUSED  | setup scenario          | REVISED   | REVISED  | NOT RUN      | -                                     |          1 |
 | `investigation:sampling-a-posterior`                 | lesson      |   362 | FOCUSED  | setup scenario          | OPEN      | OPEN     | NOT RUN      | -                                     |          0 |
 | `investigation:scaling-the-main-sequence`            | lesson      |   379 | FOCUSED  | portrait or backdrop    | OPEN      | OPEN     | NOT RUN      | -                                     |          0 |
 | `investigation:signal-noise-and-exposure`            | lesson      |   406 | FOCUSED  | portrait or backdrop    | OPEN      | OPEN     | NOT RUN      | synthetic frame (+1)                  |          0 |

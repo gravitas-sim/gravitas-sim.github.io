@@ -4541,11 +4541,6 @@
       "limits": null,
       "open_items": [
         {
-          "ref": "D-R4-346-03",
-          "owner": 346,
-          "note": "validator messages of the timing step stay English in Spanish (js/i18n/es.deferred.js is at its line ceiling); the page's widths and uncertainties are fields and translate."
-        },
-        {
           "ref": "D-R4-346-04",
           "owner": 346,
           "note": "the Jupiter transfer is calculated, not predicted first (T4)."
@@ -4644,7 +4639,7 @@
       ],
       "walk": "NOT RUN",
       "pr": null,
-      "hash": "40e9039017660cd7d6f8826571b561f83fe2e17ca1296109f3d2fcbee8139290"
+      "hash": "334e371af683cd6e70ffb076a59019a2e39dd8f4ac02c97600555405f5646274"
     },
     {
       "id": "investigation:sampling-a-posterior",
