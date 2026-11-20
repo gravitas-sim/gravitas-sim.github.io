@@ -358,7 +358,7 @@ const GOLDILOCKS = {
         }
         return {
           level: 'ok',
-          message: `Three readings, taken where you said, over a factor of ${span.toFixed(1)} in distance. Look at the points on the graph before you read on.`,
+          message: `Three readings, taken where you said, over a factor of ${Math.round(span * 10) / 10} in distance. Look at the points on the graph before you read on.`,
         };
       },
       plot: {
