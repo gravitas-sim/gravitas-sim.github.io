@@ -125,6 +125,7 @@ export default {
         'Sube la Estrella A a 3 M☉ y observa cómo se desplaza la cruz',
         'Pon la Estrella A en 4 M☉ y la Estrella B en 1 M☉',
         'Observa qué estrella hace ahora el círculo pequeño y cuál el grande',
+        'Selecciona la estrella pesada y comprueba que su tarjeta coincide con el deslizador',
         'Pruébalo al revés, con la Estrella B como la pesada',
       ],
       tip: 'La estrella más pesada no se queda quieta. Sigue moviéndose. Solo que se mueve en un círculo mucho menor, y se mueve más despacio, porque tiene menos recorrido que hacer en el mismo tiempo.',
@@ -263,7 +264,7 @@ export default {
       because:
         'Tamaño de la órbita y periodo. Son las dos únicas cosas de la fórmula, y ambas son cosas que puedes ver suceder. Todo lo demás sobre las estrellas, por interesante que sea, es irrelevante aquí.',
     },
-    'measurement-one-how-big-is': {
+    'take-the-orbit-readings': {
       title: 'Medida uno: ¿cómo de grande es la órbita?',
       body: 'El par del lienzo es ahora otro distinto: dos estrellas cuyas masas no te han dicho. El punto de equilibrio está marcado, con una línea discontinua hasta cada estrella, y el panel mide esas líneas por ti mientras el par gira.\n\nPausa el simulador si quieres mirar con calma, y toma las lecturas que vas a necesitar. Recuerda lo que decía el paso anterior: el tamaño de la órbita <strong>a</strong> es la distancia de una estrella <em>hasta la otra</em>. Cuál de tus lecturas es esa lo dices tú en el paso de pesar.',
       fields: [
@@ -280,7 +281,7 @@ export default {
         'Vuelve a ponerlo en marcha y comprueba que una lectura sigue valiendo una vuelta después',
       ],
     },
-    'measurement-two-how-long-does': {
+    'time-the-laps': {
       title: 'Medida dos: ¿cuánto dura una vuelta?',
       body: 'Ahora cronométralo. Pulsa <strong>Marcar</strong> cuando la Estrella A esté en un sitio fácil de reconocer: aparece una línea de puntos por esa posición. Mira a la Estrella A volver a la línea y pulsa <strong>Parar</strong> en el momento en que la cruce otra vez.\n\nTú decides cuántas vueltas cronometras. Tu tiempo de reacción es el mismo esperes lo que esperes, así que pesa menos en una medida más larga. Di cuántas vueltas cronometraste, toma la lectura del cronómetro, y la página calcula el periodo de una vuelta.\n\nPulsa <strong>Capturar esta órbita</strong> para registrar la separación, los dos brazos y tu cronometraje en tu cuaderno, marcado como cronometrado por ti y no tomado del modelo.',
       tool: {
@@ -359,7 +360,7 @@ export default {
       title: 'Detente y mira lo que acabas de hacer',
       body: 'Tienes la masa combinada de dos estrellas a las que nadie se ha acercado jamás, y la obtuviste de dos cosas que podías ver: lo separadas que están y cuánto tardan en dar la vuelta.\n\nEsta no es una versión simplificada de cómo se hace. Es cómo se hace. Las masas de los libros de texto salieron exactamente de este cálculo, aplicado a pares de estrellas que los astrónomos llevan fotografiando pacientemente siglo y medio.\n\nQueda una cosa. Sabes cuánto pesa el par <em>en conjunto</em>. Todavía no sabes cómo se reparte ese peso entre las dos, y para eso necesitas la otra idea de antes en esta investigación.',
     },
-    'back-to-the-balance-point': {
+    'compare-the-two-arms': {
       title: 'De vuelta al punto de equilibrio',
       body: 'El punto de equilibrio está otra vez en el lienzo. Esta vez lee las dos líneas discontinuas al revés: no para sumar las distancias, sino para compararlas.\n\nToma cuántas veces más lejos se aleja una estrella que la otra, y decide qué estrella tiene que ser la más pesada.',
       fields: [
@@ -384,7 +385,7 @@ export default {
       because:
         'La Estrella A es tres veces más pesada. Es el balancín otra vez: la Estrella B está tres veces más lejos, así que la Estrella A debe ser tres veces más pesada para equilibrarla. Ahora conoces la masa total y el cociente, que es suficiente para fijar ambas estrellas.',
     },
-    'now-weigh-each-one': {
+    'share-the-total-out': {
       title: 'Ahora pesa cada una',
       body: 'Conoces la masa total del par por el paso de pesar, y sabes cuánto más lejos se aleja una estrella que la otra. Reparte el total entre las dos estrellas.\n\nEl panel es el balancín otra vez: pon las dos distancias como tus lecturas y mira qué dice de las masas. Después escribe las dos masas abajo.',
       tool: {
@@ -428,7 +429,7 @@ export default {
       },
       tip: 'Esa es otra investigación. Esta habrá cumplido su función si sabes decir por qué se mueve la estrella.',
     },
-    'one-on-your-own': {
+    'weigh-a-new-pair': {
       title: 'Uno por tu cuenta',
       body: 'Un par nuevo, que no has visto. Las dos estrellas están a <strong>3 UA</strong> y tardan <strong>3 años</strong> en girar una alrededor de la otra.\n\nCalcula cuánto pesan entre las dos.',
       fields: [{ label: 'Masa total', unit: 'M☉' }],
