@@ -213,3 +213,35 @@ describe('the stage a deeper step stands on', () => {
     expect(stageOf([core, setup, deep], deep)).toBeUndefined();
   });
 });
+
+describe('the masses on the canvas', () => {
+  const hidden = lesson.steps.filter(s => s.stage?.hideMasses).map(s => s.sid);
+
+  test('stay off the canvas on every step that asks the student for a mass', () => {
+    for (const sid of [
+      'a-practice-run',
+      'the-mystery-pair',
+      'measurement-one-how-big-is',
+      'measurement-two-how-long-does',
+      'weigh-the-pair',
+      'back-to-the-balance-point',
+      'splitting-them-up',
+      'now-weigh-each-one',
+      'one-on-your-own',
+      'and-which-one-is-heavier',
+    ])
+      expect(hidden).toContain(sid);
+  });
+
+  test('come back on the step that tells the student the answer, on the same pair', () => {
+    const answer = step('the-answer');
+    expect(answer.stage.hideMasses).toBeUndefined();
+    expect(answer.stage.starPair).toEqual(
+      step('weigh-the-pair').stage.starPair
+    );
+    // Every step that shows masses runs on a pair that is not hidden, and the
+    // scene each one stands is the one the lesson means.
+    for (const s of lesson.steps.filter(x => x.stage && !x.stage.hideMasses))
+      expect(Object.keys(s.stage)).toEqual(['starPair']);
+  });
+});

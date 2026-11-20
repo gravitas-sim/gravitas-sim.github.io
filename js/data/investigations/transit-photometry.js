@@ -560,7 +560,7 @@ const TRANSITS = {
              and the orbit together, because they are all tangled up in the same
              curve.`,
       figure: {
-        src: 'images/transit-of-venus-2012.jpg',
+        src: 'images/transit-of-venus-2012.webp',
         alt: 'The Sun photographed in white light. Its disk is noticeably brighter in the middle and fades towards the rim. The small, hard-edged black disk of Venus sits near the upper right edge, and several sunspots are scattered across the middle.',
         caption: `Venus crossing the Sun on 5 June 2012, photographed from San
                   Francisco. This is the same measurement you have been making,
