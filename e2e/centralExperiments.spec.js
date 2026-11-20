@@ -3632,6 +3632,7 @@ test.describe('the central experiment of each investigation', () => {
     const shift = Math.abs((held.value - main.k) / held.sigma);
     expect(shift).toBeGreaterThan(3);
     const moved = {
+      yours: four(main.k),
       k: four(held.value),
       kSigma: four(held.sigma),
       shift: four(shift),
@@ -3668,14 +3669,43 @@ test.describe('the central experiment of each investigation', () => {
 
     // The relationship: the box period is many fit sigmas from the fitted one.
     await walkToSid(page, plan, relationSid);
+    const sigmas = Math.abs(main['bls.period'] - 3.52454) / 0.00003;
+    expect(sigmas).toBeGreaterThan(10);
     const gap = {
-      difference: four(main['bls.period'] - 3.52454),
-      sigmas: four((main['bls.period'] - 3.52454) / 0.00003),
+      period: main['bls.period'].toFixed(5),
+      sigmas: four(sigmas),
+      corrected: four(sigmas / 1.7),
+      survives: '1',
     };
-    expect(Math.abs(Number(gap.sigmas))).toBeGreaterThan(10);
     await recordFields(page, id, relationSid, gap);
     await accepted(page);
     await expectEvidenceRetained(page, id, relationSid, gap);
+
+    // The box with a limit the student chose: the numbers of another limit are
+    // refused by name, and the limit below the best box sits at the edge.
+    const boxSid = 'the-box-with-your-limit';
+    await walkToSid(page, plan, boxSid);
+    const reference = (await runs())['periodograms/limit2'];
+    await recordFields(page, id, boxSid, {
+      limit: '2',
+      duration: '2.5',
+      depth: four(main['bls.depth']),
+      snr: four(main['bls.snr']),
+      edge: '0',
+    });
+    await expect(
+      page.locator('#investigationBody .inv-check.is-error')
+    ).toContainText('limits 4 and 6');
+    const atEdge = {
+      limit: '2',
+      duration: String(reference['bls.duration'].value),
+      depth: String(Math.round(reference['bls.depth'].value)),
+      snr: reference['bls.snr'].value.toFixed(1),
+      edge: '1',
+    };
+    await recordFields(page, id, boxSid, atEdge);
+    await accepted(page);
+    await expectEvidenceRetained(page, id, boxSid, atEdge);
     await expectVerdictRevealed(page, plan, predict);
   });
 
@@ -3695,6 +3725,7 @@ test.describe('the central experiment of each investigation', () => {
     await commitPredictionHeld(page, predict);
     await walkToSid(page, plan, measureSid);
     const draws = {
+      ratio: '9.21',
       k: four(main.k),
       kWidth: four(main['k.hi'] - main['k.lo']),
       b: four(main.b),
@@ -3703,6 +3734,12 @@ test.describe('the central experiment of each investigation', () => {
     await recordFields(page, id, measureSid, draws);
     await accepted(page);
     await expectEvidenceRetained(page, id, measureSid, draws);
+    // The same numbers after choosing another orbit size belong to the run
+    // with 9.21, and the check says so.
+    await recordFields(page, id, measureSid, { ratio: '8' });
+    await expect(
+      page.locator('#investigationBody .inv-check.is-error')
+    ).toContainText('a/R* 9.21');
 
     await walkToSid(page, plan, relationSid);
     const diag = {

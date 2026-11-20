@@ -218,9 +218,9 @@ export default {
         text: 'Why a profile interval can be lopsided where a covariance sigma is symmetric.',
       },
       {
-        from: 'hold-the-limb-darkening',
+        from: 'predict-the-shift',
         to: 'what-is-not-counted',
-        text: 'Hold the limb darkening fixed and see the sigma fall and the value move; what the scaled sigmas do not count.',
+        text: 'Predict, then hold the limb darkening: sigma falls, value moves; what sigmas omit.',
       },
       {
         from: 'what-you-worked-out',
@@ -240,9 +240,9 @@ export default {
         text: 'Run the notebook and read the two best periods; why Lomb-Scargle peaks at a harmonic.',
       },
       {
-        from: 'the-box',
-        to: 'against-the-fit',
-        text: "The best box, and the box period against the fitted one in the fit's uncertainties.",
+        from: 'the-box-with-your-limit',
+        to: 'separation-from-your-period',
+        text: "Choose a longest box; your box period against the fit's, with the red-noise factor.",
       },
       {
         from: 'what-a-grid-step-is',
@@ -258,13 +258,13 @@ export default {
     'sampling-a-posterior': [
       {
         from: 'what-a-sampler-does',
-        to: 'how-wide',
-        text: "What a posterior and a sampler are, and a prediction about the interval's width.",
+        to: 'pick-the-ratio-predict-the-width',
+        text: "A posterior, a sampler, and a prediction of the interval's width at a chosen a/R*.",
       },
       {
-        from: 'the-draws',
+        from: 'the-draws-at-your-ratio',
         to: 'did-it-converge',
-        text: 'Run the notebook, read the medians and widths, then the convergence diagnostics.',
+        text: 'Run at the chosen a/R*: the median moves, the width does not; convergence.',
       },
       {
         from: 'profile-and-posterior',

@@ -735,8 +735,8 @@ export const MANIFEST = [
     duration: '30-40 min',
     level: 'Introductory astronomy',
     thumbnail: 'images/scenarios/transit-lab.webp',
-    stepCount: 8,
-    gradedCount: 6,
+    stepCount: 9,
+    gradedCount: 7,
     objectiveCount: 4,
   },
   {

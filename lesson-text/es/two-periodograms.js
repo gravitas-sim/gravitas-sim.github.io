@@ -12,13 +12,13 @@ export default {
   steps: {
     'two-ways-to-look-for-a-period': {
       title: 'Dos maneras de buscar un período',
-      body: `Una curva de luz que se hunde cada pocos días tiene un período, y hay dos maneras habituales de pedirlo. Un <strong>periodograma de Lomb-Scargle</strong> ajusta una onda senoidal en cada frecuencia de prueba, ponderada por las barras de error, e informa de cuánta variación explica cada una. Se hizo para datos espaciados de forma irregular y para señales que son senoides: una estrella con manchas que gira, una pulsación. Un <strong>periodograma de mínimos cuadrados de caja</strong> ajusta en cambio una caída de fondo plano en cada período, época y duración de prueba, que es lo que parece un tránsito. La búsqueda de caja del Observatorio es la misma idea.
+      body: `¿Cómo se halla el período de un planeta en una curva de luz, y cuánto hay que fiarse del número? Una curva de luz que se hunde cada pocos días tiene un período, y hay dos maneras habituales de pedirlo. Un <strong>periodograma de Lomb-Scargle</strong> ajusta una onda senoidal en cada frecuencia de prueba, ponderada por las barras de error, e informa de cuánta variación explica cada una. Se hizo para datos espaciados de forma irregular y para señales que son senoides: una estrella con manchas que gira, una pulsación. Un <strong>periodograma de mínimos cuadrados de caja</strong> ajusta en cambio una caída de fondo plano en cada período, época y duración de prueba, que es lo que parece un tránsito. La búsqueda de caja del Observatorio es la misma idea.
              \n\nEl cuaderno calcula los dos para la curva de luz de TESS de HD 209458 con <strong>astropy.timeseries</strong>, y los pone en un mismo eje de períodos.
              \n\nAbre la página de cálculo en <strong>/compute/</strong> de este sitio. Solo funciona con conexión y la primera vez descarga unos 17 MB de Python, cuando pulsas el botón. Elige el cuaderno <strong>Dos periodogramas de una curva de luz</strong>, deja su entrada de ejemplo y sus ajustes en 15 días y 6 horas. Todavía no pulses Ejecutar.`,
     },
     'the-tallest-peak': {
       title: 'Dónde estará el pico más alto',
-      body: `El planeta transita cada 3,52 días; la curva de luz dura 27,9 días. El cuaderno buscará períodos desde medio día hasta quince.`,
+      body: `El planeta transita cada 3,52 días; la curva de luz dura 27,9 días. El cuaderno calculará un periodograma de Lomb-Scargle de ella.`,
       prompt:
         'El pico más alto del periodograma de Lomb-Scargle estará en&hellip;',
       options: [
@@ -63,21 +63,27 @@ export default {
       because:
         'Una caída estrecha que se repite cada P es una suma de senoides en P, P/2, P/3 y así sucesivamente, con fuerzas parecidas. Lomb-Scargle ajusta una senoide a la vez, así que cada una es un pico y cualquiera puede ser el más alto. Su pico más alto dice que hay una señal periódica y da un período que divide al real; no dice cuál.',
     },
-    'the-box': {
-      title: 'La mejor caja',
-      body: `La búsqueda de caja devuelve más que un período: la duración y la profundidad de la caja que mejor ajusta, y la relación señal-ruido de la profundidad, donde la barra de error de la profundidad se ha escalado hacia arriba porque los puntos se dispersan unas 2,8 veces sus barras de error. Introduce la duración, la profundidad y la relación señal-ruido.`,
+    'the-box-with-your-limit': {
+      title: 'La mejor caja, dentro de tu límite',
+      body: `La búsqueda de caja prueba cajas de varias duraciones, hasta una más larga que es uno de los dos ajustes del cuaderno. La ejecución que hiciste antes permitía 6 horas, y es la de referencia. Elige una duración máxima de caja del menú: <strong>2</strong>, <strong>3</strong>, <strong>4</strong>, <strong>6</strong> u <strong>8</strong> horas. En la página de cálculo pon <strong>Duración de caja más larga probada</strong> en tu elección, deja el período más largo en 15 y ejecuta de nuevo.
+             \n\nLa búsqueda devuelve más que un período: la duración y la profundidad de la caja que mejor ajusta, y la relación señal-ruido de la profundidad, donde la barra de error de la profundidad se ha escalado hacia arriba porque los puntos se dispersan unas 2,8 veces sus barras de error. Introduce tu límite, la duración, la profundidad y la relación señal-ruido, y di luego si la mejor caja es tan larga como el límite que permitiste: introduce <strong>1</strong> si lo es, <strong>0</strong> si es más corta. Una mejor caja tan larga como el límite está en el borde del intervalo que la búsqueda tenía permitido.`,
       fields: [
-        { label: 'Duración de la caja' },
-        { label: 'Profundidad de la caja' },
+        { label: 'Duración máxima de caja que permitiste' },
+        { label: 'Duración de la mejor caja' },
+        { label: 'Profundidad de la mejor caja' },
         { label: 'S/N de la profundidad' },
+        { label: 'Mejor caja tan larga como tu límite (1 sí, 0 no)' },
       ],
     },
-    'against-the-fit': {
+    'separation-from-your-period': {
       title: 'Frente al ajuste',
-      body: `El panel de ajuste del Observatorio, que ajusta a esta curva de luz un tránsito y no una caja, da un período de <strong>3,52454</strong> días con una incertidumbre de 0,00003. Réstalo del período de la búsqueda de caja, y di a cuántas incertidumbres del ajuste están.`,
+      body: `El panel de ajuste del Observatorio, que ajusta a esta curva de luz un tránsito y no una caja, da un período de <strong>3,52454</strong> días con una incertidumbre de 0,00003. Introduce el período de mínimos cuadrados de caja de tu última ejecución, y a cuántas incertidumbres del ajuste están los dos períodos, sin tener en cuenta cuál es mayor.
+             \n\nEl panel informa también de que el ruido de esta curva de luz está correlacionado en el tiempo, lo que hace sus incertidumbres demasiado pequeñas en un factor de aproximadamente 1,7. Introduce la separación otra vez en unidades de la incertidumbre multiplicada por 1,7. Luego decide: ¿sigue el período de caja difiriendo del del ajuste en más de tres de esas incertidumbres mayores? Introduce <strong>1</strong> si sí, <strong>0</strong> si no.`,
       fields: [
-        { label: 'Período de caja menos período ajustado' },
-        { label: 'En incertidumbres del ajuste' },
+        { label: 'Tu período de caja' },
+        { label: 'Separación, en incertidumbres del ajuste' },
+        { label: 'Separación, con la incertidumbre 1,7 veces mayor' },
+        { label: 'Aún más allá de tres de ellas (1 sí, 0 no)' },
       ],
     },
     'what-a-grid-step-is': {
@@ -85,7 +91,7 @@ export default {
       body: `Un colega informa del período de la búsqueda de caja como 3,52396 &plusmn; 0,0000003 días, tomando el segundo número de la rejilla fina que el cuaderno recorre sobre el pico, cuyo paso es de 3e-7 días.`,
       prompt: '¿Qué hay de malo en eso?',
       options: [
-        'El paso de la rejilla es la finura con que se muestrearon los períodos, no lo bien que los datos fijan el período: este período está a 19 incertidumbres del período del ajuste, así que su incertidumbre real es mucho mayor que el paso',
+        'El paso de la rejilla es la finura con que se muestrearon los períodos, no lo bien que los datos fijan el período: este período está a más de diez incertidumbres del período del ajuste, así que su incertidumbre real es mucho mayor que el paso',
         'El paso de la rejilla es demasiado pequeño y debería hacerse mayor',
         'Una búsqueda de caja no puede encontrar un período',
         'La incertidumbre debería ser la relación señal-ruido',
@@ -106,8 +112,9 @@ export default {
     },
     'what-you-worked-out': {
       title: 'Lo que has deducido',
-      body: `Dos periodogramas de una misma curva de luz discrepan en un factor de dos, y los dos aciertan en lo que se les preguntó. Lomb-Scargle halló la onda senoidal más fuerte, en 1,769 días, un armónico del período del planeta. La búsqueda de caja halló una caída, en 3,524 días, de 2,5 horas de duración y 14.600 partes por millón de profundidad, y coincide con el período del ajuste hasta 0,0006 días.
-             \n\nUn periodograma responde a "¿hay aquí un período, y más o menos dónde?", y no a "¿cuál es, con qué precisión?". Lo segundo necesita un modelo, un ajuste y una incertidumbre, que la investigación anterior hizo y esta no. La ejecución es tuya para conservarla: su cápsula registra el hash del cuaderno y el de la curva de luz, así que un informe puede citarla.`,
+      body: `Dos periodogramas de una misma curva de luz discrepan en un factor de dos, y los dos aciertan en lo que se les preguntó. Lomb-Scargle halló la onda senoidal más fuerte, en 1,769 días, un armónico del período del planeta. La búsqueda de caja halló una caída, en 3,524 días, de unas 2,5 horas de duración y 14.600 partes por millón de profundidad cuando su límite le dejaba espacio, y su período está a menos de 0,0007 días del del ajuste.
+             \n\nUn periodograma responde a "¿hay aquí un período, y más o menos dónde?", y no a "¿cuál es, con qué precisión?". Lo segundo necesita un modelo, un ajuste y una incertidumbre, que la investigación anterior hizo y esta no.
+             \n\nLo que la búsqueda de caja no cubre: ajusta una sola forma de caída, así que su duración y su profundidad son un promedio del tránsito real, y la caja más larga que permitas decide si la búsqueda puede siquiera alcanzar la mejor. Su período es un punto de rejilla, y con las incertidumbres del ajuste ensanchadas por el ruido correlacionado el período de caja sigue a varias de ellas. La ejecución es tuya para conservarla: su cápsula registra el hash del cuaderno y el de la curva de luz, así que un informe puede citarla.`,
     },
   },
 };
