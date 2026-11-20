@@ -4298,8 +4298,7 @@ export const INSTRUCTOR_CONTENT = {
     teachingNotes: [
       'Screen 1 depends on students committing before anything is revealed. If asked which star is which, the honest answer is "that is what the next thirty-two screens are for".',
       'Screen 2 shows a cloud with no numbers at all, and some students read the empty readout as a bug. It is not: a cloud has no photosphere, so it has no surface temperature or luminosity, and the readout says exactly that. It is worth reading aloud.',
-      'Screen 6 has each student choose two moments of the Sun-like track, so no two sets of numbers need agree; the page checks that each moment’s readings belong together, that the moments differ, and that ages are in Gyr.',
-      'Screens 8 to 10 are the core of the investigation. If time is short, cut screens 13 and 24 rather than any of these three.',
+      'Screen 6 has each student choose two moments of the Sun-like track, so no two sets of numbers need agree; the page checks that each moment’s readings belong together, that the moments differ, and that ages are in Gyr. Screens 8 to 10 are the core of the investigation. If time is short, cut screens 13 and 24 rather than any of these three.',
       'Screen 19 needs the phase pacing to have been noticed. Ask the class to switch the playhead to time pacing and watch everything after the main sequence collapse into a sliver - the contrast makes the point faster than the numbers do.',
       'Screen 25 asks why iron ends the star and is the hardest written answer here. The rubric rejects "it runs out of fuel", which is the answer students reach for and which is wrong: an iron core is surrounded by plenty of unburnt material.',
       'Screens 27 and 29 are a matched pair. The value in running both is the contrast in confidence, so if you demonstrate rather than assign, demonstrate both.',

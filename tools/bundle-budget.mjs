@@ -123,7 +123,7 @@ const BUDGETS = [
   {
     id: 'deferred',
     label: 'Deferred JavaScript (lazy chunks, gzipped)',
-    limit: 3226.1,
+    limit: 3227.8,
     reason:
       'Jumped from 1369 KB to 2105 KB when three.js and Chart.js stopped being ' +
       'CDN requests and became bundled chunks. That is the point of the change ' +
@@ -730,7 +730,8 @@ const BUDGETS = [
       '\n\nLesson figures drawn from the model (D-R4-TRAIN-04, D-R4-457-03), listed separately for the maintainer: raised from 3202.2 to 3206.9 KB, the measurement by CI of the combined branch (run 44415955830) at 3,283,804 bytes gzipped (3206.84 KB) rounded up to 0.1 KB. The change was asked to raise no ceiling; the raise was adopted as a maintainer decision of 2026-11-18 (D-R4-457-03).' +
       "\n\nDesktop layout, the Moon and transit-fit rework, and Io's Fire and Tides That Move the Moon taken together (D-R4-TRAIN-05): the limit is raised from 3206.9 to 3215.8 KB, the measurement by CI of the combined branch (3,292,942 bytes gzipped, 3215.76 KB) rounded up to 0.1 KB, under the standing approval of 2026-10-10. This replaces the separate raises the Moon and Io branches recorded (D-R4-330-09, D-R4-331-05)." +
       "\n\nKepler's Laws, the transit lesson and Weighing the Stars taken together (D-R4-TRAIN-06): the limit is raised from 3215.8 to 3225.7 KB, the exact overrun of a Node 22 build over v4 c5705767f (3,303,045 bytes gzipped, 3225.63 KB) rounded up to 0.1 KB, under the standing approval of 2026-10-10. This replaces the separate raises the three branches recorded (D-R4-328-05, D-R4-329-05, D-R4-332-08). CI then measured 3,303,165 bytes (3225.75 KB, run 44551414337) after the answer key learned estimate steps, so the limit is 3225.8." +
-      '\n\nA Universe of Stars, leak fixes and authored misconceptions in two languages (D-R4-359-02): the limit is raised from 3225.8 to 3226.1 KB, the exact overrun of a Node 22 build over v4 8c19d915d (3,303,451 bytes gzipped, 3226.02 KB) rounded up to 0.1 KB, under the standing approval of 2026-10-10.',
+      '\n\nA Universe of Stars, leak fixes and authored misconceptions in two languages (D-R4-359-02): the limit is raised from 3225.8 to 3226.1 KB, the exact overrun of a Node 22 build over v4 8c19d915d (3,303,451 bytes gzipped, 3226.02 KB) rounded up to 0.1 KB, under the standing approval of 2026-10-10.' +
+      '\n\nLives of Stars, the two moments a student chooses (D-R4-360-05): the limit is raised from 3226.1 to 3227.8 KB, the exact overrun of a Node 22 build over v4 8bfd69386 (3,305,207 bytes gzipped, 3227.74 KB; the base builds to 3,303,417 bytes, 3226.0 KB) rounded up to 0.1 KB, under the standing approval of 2026-10-10.',
   },
 ];
 
