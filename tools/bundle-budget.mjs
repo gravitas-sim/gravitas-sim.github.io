@@ -53,7 +53,7 @@ const BUDGETS = [
   {
     id: 'initial',
     label: 'Initial download (CSS + eager JS)',
-    limit: 741.5,
+    limit: 741.4,
     reason:
       'Was 743 KB when this budget was first asked for. The application had ' +
       'already grown to 771 KB on its own - the extracted state module, the ' +
@@ -117,8 +117,7 @@ const BUDGETS = [
       '\n\nCrowded-scene drawing (D-R4-450-07): the trail, detail and label rules, the label choice and the tier note are start-up drawing code; raised from 735.3 to 735.8 KB, the exact overrun of a Node 22 build over v4 dc0112f6b (753,420 bytes, 735.76 KB) rounded up to 0.1 KB, under the standing approval of 2026-10-10.' +
       '\n\nRaised from 735.8 to 739.9 KB for the overlay, Library, lesson type, instrument start, reading feedback and lesson layout changes taken together (D-R4-TRAIN-03): a Node 22 build over v4 5c9942253 measures 757,604 bytes, 739.85 KB, and the limit is that figure rounded up to 0.1 KB, under the standing approval of 2026-10-10.' +
       '\n\nOrbit geometry and sizes (D-R4-447-07): raised from 739.9 to 740.2 KB, the exact overrun of a Node 22 build over v4 6852131e7 (757,903 bytes, 740.14 KB) rounded up to 0.1 KB, under the standing approval of 2026-10-10.' +
-      '\n\nBarycenter marker, frame and source statement, and lesson figures drawn from the model, taken together (D-R4-TRAIN-04): raised from 740.2 to 741.4 KB, the measurement by CI of the combined branch (run 44415955830): 759,138 bytes (741.35 KB), rounded up to 0.1 KB. The share of the lesson figures is 69 bytes, the hook that loads them. Under the standing approval of 2026-10-10; that share was adopted as a maintainer decision of 2026-11-18 (D-R4-457-03).' +
-      "\n\nThe status line and its backup button (D-R4-365-05): raised from 741.4 to 741.5 KB, the exact overrun of a Node 22 build stacked over #696 (759,261 bytes, 741.47 KB) rounded up to 0.1 KB, under the standing approval of 2026-10-10. The growth is the button and note styles and the longer status words. CI's figure replaces it before the change is ready.",
+      '\n\nBarycenter marker, frame and source statement, and lesson figures drawn from the model, taken together (D-R4-TRAIN-04): raised from 740.2 to 741.4 KB, the measurement by CI of the combined branch (run 44415955830): 759,138 bytes (741.35 KB), rounded up to 0.1 KB. The share of the lesson figures is 69 bytes, the hook that loads them. Under the standing approval of 2026-10-10; that share was adopted as a maintainer decision of 2026-11-18 (D-R4-457-03).',
   },
   {
     id: 'deferred',
@@ -731,8 +730,7 @@ const BUDGETS = [
       "\n\nDesktop layout, the Moon and transit-fit rework, and Io's Fire and Tides That Move the Moon taken together (D-R4-TRAIN-05): the limit is raised from 3206.9 to 3215.8 KB, the measurement by CI of the combined branch (3,292,942 bytes gzipped, 3215.76 KB) rounded up to 0.1 KB, under the standing approval of 2026-10-10. This replaces the separate raises the Moon and Io branches recorded (D-R4-330-09, D-R4-331-05)." +
       "\n\nKepler's Laws, the transit lesson and Weighing the Stars taken together (D-R4-TRAIN-06): the limit is raised from 3215.8 to 3225.7 KB, the exact overrun of a Node 22 build over v4 c5705767f (3,303,045 bytes gzipped, 3225.63 KB) rounded up to 0.1 KB, under the standing approval of 2026-10-10. This replaces the separate raises the three branches recorded (D-R4-328-05, D-R4-329-05, D-R4-332-08). CI then measured 3,303,165 bytes (3225.75 KB, run 44551414337) after the answer key learned estimate steps, so the limit is 3225.8." +
       "\n\nResuming an activity and saying why a link cannot open (D-R4-363-04): the limit is raised from 3225.8 to 3226.9 KB, the exact overrun of a Node 22 build over v4 87338a7ab (3,304,298 bytes gzipped, 3226.85 KB) rounded up to 0.1 KB, under the standing approval of 2026-10-10. CI's figure replaces it before the change is ready." +
-      "\n\nTwo reset actions named by what they touch (D-R4-366-05): the limit is raised from 3226.9 to 3229.7 KB, the exact overrun of a Node 22 build stacked over #689 (3,307,127 bytes gzipped, 3229.62 KB, against 3,304,328 for the same tree without it) rounded up to 0.1 KB, under the standing approval of 2026-10-10. The growth is the vocabulary module, its two catalogs and the lazy restart module. The initial download is lower than before (759,039 bytes). CI's figure replaces it before the change is ready." +
-      "\n\nThe status line and the scene note (D-R4-365-05): the limit is raised from 3229.7 to 3230.4 KB, the exact overrun of a Node 22 build stacked over #696 (3,307,888 bytes gzipped, 3230.36 KB) rounded up to 0.1 KB, under the standing approval of 2026-10-10. The growth is the scene note in the vocabulary module and its two sentences; the status words got shorter. CI's figure replaces it before the change is ready.",
+      "\n\nTwo reset actions named by what they touch (D-R4-366-05): the limit is raised from 3226.9 to 3230.4 KB, the exact overrun of a Node 22 build stacked over #689 (3,307,889 bytes gzipped, 3230.36 KB, against 3,304,328 for the same tree without it) rounded up to 0.1 KB, under the standing approval of 2026-10-10. The growth is the vocabulary module, its two catalogs and the lazy restart module with its merge-by-step undo. The initial download is lower than before (759,039 bytes). CI's figure replaces it before the change is ready.",
   },
 ];
 

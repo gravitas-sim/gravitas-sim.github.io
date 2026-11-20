@@ -25,6 +25,11 @@ export const EN_RESET = {
     "This is an activity: its saved answers go too. Your instructor's version of the activity does not change.",
   'reset.ask.lost':
     'Discarding removes them from this device. Download a backup first if you may want them back. You can also undo until you close this investigation.',
+  'reset.ask.lost.mem':
+    'This browser is not keeping your answers, so they are only in this tab. Discarding removes them from the tab. Download a backup first if you may want them back. You can also undo until you close this investigation.',
+  'reset.ask.none': 'Nothing is saved here yet, so no answers will be deleted.',
+  'reset.ask.progress':
+    'Your place and the steps you have visited are reset. You can undo until you close this investigation.',
   'reset.ask.backup': 'Download a backup first',
   'reset.ask.go': 'Discard answers and start over',
   'reset.ask.cancel': 'Cancel',
@@ -33,7 +38,8 @@ export const EN_RESET = {
     other:
       'Started over. {n} saved answers and readings were deleted. You can undo until you close this investigation.',
   },
-  'reset.undo.none': 'Started over. Nothing had been saved.',
+  'reset.undo.none':
+    'Started over. Nothing had been saved, so only your place was reset. You can undo until you close this investigation.',
   'reset.undo': 'Undo',
   'reset.undo.done': 'Your answers and readings are back.',
   'reset.leave': "Leave this investigation's scene: {what}",

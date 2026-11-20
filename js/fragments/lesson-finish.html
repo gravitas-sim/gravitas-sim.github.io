@@ -169,19 +169,26 @@
 <!-- Start this investigation over: asks before it deletes the answers
      (js/investigations/restart.js). A native modal dialog, as My work's delete
      is; the words are js/i18n/en.reset.js. -->
-<dialog id="investigationRestart" aria-labelledby="investigationRestartTitle">
+<dialog
+  id="investigationRestart"
+  aria-labelledby="investigationRestartTitle"
+  aria-describedby="investigationRestartSummary"
+>
   <form method="dialog">
     <div class="inv-finish-header">
       <h3 id="investigationRestartTitle" data-i18n="reset.ask.title">
         Start this investigation over?
       </h3>
     </div>
-    <div class="inv-finish-summary">
-      <p>
+    <div class="inv-finish-summary" id="investigationRestartSummary">
+      <p id="investigationRestartCount">
         <span data-i18n="reset.ask.count"
           >Saved answers and readings that will be deleted:</span
         >
         <b id="investigationRestartN"></b>
+      </p>
+      <p id="investigationRestartNone" hidden="" data-i18n="reset.ask.none">
+        Nothing is saved here yet, so no answers will be deleted.
       </p>
       <p id="investigationRestartParts"></p>
       <p
@@ -195,7 +202,7 @@
       <p data-i18n="reset.ask.scene">
         The scene is reset too, from the start of step 1.
       </p>
-      <p data-i18n="reset.ask.lost">
+      <p id="investigationRestartLost" data-i18n="reset.ask.lost">
         Discarding removes them from this device. Download a backup first if you
         may want them back. You can also undo until you close this
         investigation.

@@ -106,7 +106,11 @@ describe('the words, one key set in both languages', () => {
     const where = Object.entries(EN_RESET)
       .filter(([, v]) => /discard/i.test(JSON.stringify(v)))
       .map(([k]) => k);
-    expect(where).toEqual(['reset.ask.lost', 'reset.ask.go']);
+    expect(where).toEqual([
+      'reset.ask.lost',
+      'reset.ask.lost.mem',
+      'reset.ask.go',
+    ]);
   });
 
   test('the student words are activity and investigation, never lesson', () => {
@@ -197,17 +201,24 @@ describe('starting over, and undoing it', () => {
   let host;
   let went;
   let dialog;
+  let key;
+  let saved;
 
   const stored = () => JSON.parse(localStorage.getItem(KEY));
+  const el = id => document.getElementById(id);
+  /** Let the restart's awaited scene rebuild finish. */
+  const flush = () => new Promise(r => setTimeout(r, 0));
 
   beforeEach(() => {
     document.body.innerHTML = `${lessonHtml}${finishHtml}`;
-    dialog = document.getElementById('investigationRestart');
+    dialog = el('investigationRestart');
     dialog.showModal = () => dialog.setAttribute('open', '');
     dialog.close = () => dialog.removeAttribute('open');
     localStorage.clear();
     sessionProgress.clear();
     went = [];
+    key = KEY;
+    saved = true;
     st = {
       step: 2,
       responses: {
@@ -222,9 +233,20 @@ describe('starting over, and undoing it', () => {
       assigned: false,
     };
     host = {
-      state: () => ({ active: lesson, stepIndex: st.step, ...st }),
-      put: p => Object.assign(st, p),
-      go: (i, rebuild) => {
+      state: () => ({
+        active: lesson,
+        stepIndex: st.step,
+        key,
+        saved,
+        ...st,
+      }),
+      put: p => {
+        Object.assign(st, p);
+        save();
+      },
+      // The real one is async where a stage has to load first.
+      go: async (i, rebuild) => {
+        await Promise.resolve();
         went.push([i, rebuild]);
         st.step = i;
         st.visited.add(lesson.steps[i].sid);
@@ -260,59 +282,109 @@ describe('starting over, and undoing it', () => {
     document.body.innerHTML = '';
   });
 
-  const go = () => {
+  const go = async () => {
     ask(host);
-    document.getElementById('investigationRestartGo').click();
+    el('investigationRestartGo').click();
+    await flush();
+  };
+  const undo = async () => {
+    el('investigationUndoGo').click();
+    await flush();
   };
 
   test('the dialog counts the record, and names the assignment only for one', () => {
     ask(host);
-    expect(document.getElementById('investigationRestartN').textContent).toBe(
-      '3'
+    expect(el('investigationRestartN').textContent).toBe('3');
+    expect(el('investigationRestartParts').textContent).toBe(
+      'Answers: 1. Readings: 2.'
+    );
+    expect(el('investigationRestartAssigned').hidden).toBe(true);
+    expect(el('investigationRestartBackup').hidden).toBe(false);
+    expect(el('investigationRestartGo').textContent).toBe(
+      'Discard answers and start over'
+    );
+    expect(dialog.getAttribute('aria-describedby')).toBe(
+      'investigationRestartSummary'
     );
     expect(
-      document.getElementById('investigationRestartParts').textContent
-    ).toBe('Answers: 1. Readings: 2.');
-    expect(document.getElementById('investigationRestartAssigned').hidden).toBe(
-      true
-    );
-    host.state = () => ({
-      active: lesson,
-      stepIndex: 2,
-      ...st,
-      assigned: true,
-    });
+      el('investigationRestartSummary').contains(el('investigationRestartN'))
+    ).toBe(true);
+    const base = host.state;
+    host.state = () => ({ ...base(), assigned: true });
     ask(host);
-    expect(document.getElementById('investigationRestartAssigned').hidden).toBe(
-      false
+    expect(el('investigationRestartAssigned').hidden).toBe(false);
+  });
+
+  test('with nothing saved the dialog says only that the place resets, and offers no backup', () => {
+    st.responses = {};
+    ask(host);
+    expect(el('investigationRestartCount').hidden).toBe(true);
+    expect(el('investigationRestartNone').hidden).toBe(false);
+    expect(el('investigationRestartParts').hidden).toBe(true);
+    expect(el('investigationRestartBackup').hidden).toBe(true);
+    expect(el('investigationRestartLost').textContent).toBe(
+      EN_RESET['reset.ask.progress']
+    );
+    expect(el('investigationRestartGo').textContent).toBe(OVER);
+  });
+
+  test('where the browser will not keep the answers the dialog does not say "from this device"', () => {
+    saved = false;
+    ask(host);
+    expect(el('investigationRestartLost').textContent).toBe(
+      EN_RESET['reset.ask.lost.mem']
+    );
+    expect(el('investigationRestartLost').textContent).not.toMatch(
+      /from this device/
     );
   });
 
-  test('asking changes nothing; confirming removes exactly the saved answers and resets the scene', () => {
+  test('asking changes nothing; confirming removes exactly the saved answers and resets the scene', async () => {
     const before = localStorage.getItem(KEY);
     ask(host);
     expect(localStorage.getItem(KEY)).toBe(before);
     expect(went).toEqual([]);
 
-    go();
+    await go();
     expect(stored().responses).toEqual({});
     expect(stored().attempts).toEqual({});
     // Only the first step, which the restart itself opened.
     expect(stored().visited).toEqual(['intro']);
     // A restart goes to step 1 and rebuilds its scene.
     expect(went).toEqual([[0, true]]);
-    expect(document.getElementById('investigationUndo').hidden).toBe(false);
-    expect(
-      document.getElementById('investigationUndoText').textContent
-    ).toMatch(/^Started over\. 3 saved answers and readings were deleted/);
+    expect(el('investigationUndo').hidden).toBe(false);
+    expect(el('investigationUndo').hasAttribute('role')).toBe(false);
+    expect(el('investigationUndoText').textContent).toMatch(
+      /^Started over\. 3 saved answers and readings were deleted/
+    );
   });
 
-  test('undo puts the whole record back, and keeps what was answered since', () => {
+  test('the record is written the moment the restart empties it, before a staged scene has loaded', async () => {
+    let release;
+    const gate = new Promise(r => (release = r));
+    const slow = host.go;
+    host.go = async (...a) => {
+      await gate;
+      return slow(...a);
+    };
+    ask(host);
+    el('investigationRestartGo').click();
+    await flush();
+    // The scene is still loading; the record already says nothing is saved.
+    expect(stored().responses).toEqual({});
+    expect(el('investigationUndo').hidden).toBe(true);
+    release();
+    await flush();
+    expect(el('investigationUndo').hidden).toBe(false);
+    expect(stored().visited).toEqual(['intro']);
+  });
+
+  test('undo puts the whole record back, and keeps what was answered since', async () => {
     const before = stored();
-    go();
+    await go();
     st.responses['tides:guess'] = '1.5';
     st.responses['tides:intro:newer'] = 'x';
-    document.getElementById('investigationUndoGo').click();
+    await undo();
     expect(went.at(-1)).toEqual([2, true]);
     expect(st.responses).toMatchObject({
       'tides:take:a': '3',
@@ -321,33 +393,115 @@ describe('starting over, and undoing it', () => {
       'tides:guess': '1.5',
       'tides:intro:newer': 'x',
     });
-    expect(st.attempts).toEqual({ 'tides:guess': 2 });
+    // The guess was answered again, so its step wins whole: no old tries beside the new answer.
+    expect(st.attempts).toEqual({});
     expect([...st.visited].sort()).toEqual(['guess', 'intro', 'take']);
     expect(stored().startedAt).toBe(before.startedAt);
     expect(stored().responses['tides:take:a']).toBe('3');
-    expect(document.getElementById('investigationUndo').hidden).toBe(true);
+    expect(el('investigationUndo').hidden).toBe(true);
   });
 
-  test('undo restores the record byte for byte when nothing was answered since', () => {
+  test('undo merges a step at a time: a step answered since wins whole and never mixes readings', async () => {
+    await go();
+    // One new reading of the measure step; its old b and src must not come back beside it.
+    st.responses['tides:take:a'] = '9';
+    st.attempts['tides:take'] = 1;
+    await undo();
+    expect(st.responses['tides:take:a']).toBe('9');
+    expect(st.responses).not.toHaveProperty(['tides:take:b']);
+    expect(st.responses).not.toHaveProperty(['tides:take:b:src']);
+    // The step not touched since comes back, with its tries.
+    expect(st.responses['tides:guess']).toBe('0.91');
+    expect(st.attempts).toEqual({ 'tides:guess': 2, 'tides:take': 1 });
+  });
+
+  test('instrument values written since do not make a step newer', async () => {
+    await go();
+    st.responses['tides:take:tool:x'] = '2';
+    await undo();
+    expect(st.responses).toMatchObject({
+      'tides:take:a': '3',
+      'tides:take:b': '4',
+      'tides:take:tool:x': '2',
+    });
+  });
+
+  test('undo keeps newer typed text over the older', async () => {
+    drafts({ 'tides:guess': '0,9', 'tides:other': 'old' });
+    await go();
+    expect(drafts()).toEqual({});
+    drafts({ 'tides:guess': '1,5' });
+    await undo();
+    expect(drafts()).toEqual({ 'tides:guess': '1,5', 'tides:other': 'old' });
+  });
+
+  test('a second restart keeps the first undo: nothing answered in between changes nothing', async () => {
+    const before = JSON.parse(localStorage.getItem(KEY));
+    await go();
+    await go();
+    expect(el('investigationUndoGo').hidden).toBe(false);
+    await undo();
+    expect(st.responses).toMatchObject(before.responses);
+    expect(st.step).toBe(2);
+    expect(st.attempts).toEqual(before.attempts);
+  });
+
+  test('a second restart after answering holds both records, newer steps whole', async () => {
+    await go();
+    st.responses['tides:guess'] = '7';
+    st.attempts['tides:guess'] = 1;
+    st.step = 1;
+    await go();
+    expect(el('investigationUndoText').textContent).toMatch(
+      /^Started over\. 3 saved answers and readings were deleted/
+    );
+    await undo();
+    expect(st.responses).toMatchObject({
+      'tides:guess': '7',
+      'tides:take:a': '3',
+      'tides:take:b': '4',
+    });
+    expect(st.attempts).toEqual({ 'tides:guess': 1 });
+  });
+
+  test('undo restores the record byte for byte when nothing was answered since', async () => {
     const before = localStorage.getItem(KEY);
-    go();
-    document.getElementById('investigationUndoGo').click();
+    await go();
+    await undo();
     const after = stored();
     expect(after.responses).toEqual(JSON.parse(before).responses);
     expect(after.attempts).toEqual(JSON.parse(before).attempts);
     expect(after.visited.sort()).toEqual(JSON.parse(before).visited.sort());
   });
 
-  test('closing the investigation drops the deleted record; undo then does nothing', () => {
-    go();
+  test('closing the investigation drops the deleted record; undo then does nothing', async () => {
+    await go();
     forget();
-    document.getElementById('investigationUndoGo').click();
+    await undo();
     expect(st.responses).toEqual({});
-    expect(document.getElementById('investigationUndo').hidden).toBe(true);
+    expect(el('investigationUndo').hidden).toBe(true);
   });
 
-  test('the deleted record is held in memory only: no storage holds it', () => {
-    go();
+  test('another record open (an investigation opened without closing this one) is never overwritten by an undo', async () => {
+    await go();
+    key = 'gravitas_investigation_other';
+    st.responses = { 'other:x': '1' };
+    await undo();
+    expect(st.responses).toEqual({ 'other:x': '1' });
+    expect(el('investigationUndo').hidden).toBe(true);
+    // And a restart there does not fold the first record into its own undo.
+    key = KEY;
+    await go();
+    key = 'gravitas_investigation_other';
+    st.responses = { 'other:y': '2' };
+    await go();
+    key = KEY;
+    await undo();
+    expect(st.responses).toEqual({});
+  });
+
+  test('the deleted record is held in memory only: no storage holds it', async () => {
+    await go();
     // The progress record and the resume line are what a restart writes.
     expect(Object.keys(localStorage).sort()).toEqual([KEY, 'gravitas_resume']);
     const everywhere = JSON.stringify([
@@ -358,13 +512,13 @@ describe('starting over, and undoing it', () => {
     expect(everywhere).not.toContain('0.91');
   });
 
-  test('typed drafts and the answers kept from an earlier version go and come back', () => {
+  test('typed drafts and the answers kept from an earlier version go and come back', async () => {
     keepEarlier('tides', { responses: { 'tides:gone': '7' }, attempts: {} });
     drafts({ 'tides:guess': '0,9' });
-    go();
+    await go();
     expect(drafts()).toEqual({});
     expect(earlierFor('tides')).toBeUndefined();
-    document.getElementById('investigationUndoGo').click();
+    await undo();
     expect(drafts()).toEqual({ 'tides:guess': '0,9' });
     expect(earlierFor('tides').responses).toEqual({ 'tides:gone': '7' });
     expect(load('tides', lesson).responses).toMatchObject({
@@ -372,16 +526,19 @@ describe('starting over, and undoing it', () => {
     });
   });
 
-  test('with nothing saved a restart still resets the scene and offers no undo', () => {
+  test('with nothing saved a restart resets the scene and the place, and an undo gives the place back', async () => {
     st.responses = {};
     st.attempts = {};
     save();
-    go();
+    await go();
     expect(went).toEqual([[0, true]]);
-    expect(document.getElementById('investigationUndoGo').hidden).toBe(true);
-    expect(document.getElementById('investigationUndoText').textContent).toBe(
-      'Started over. Nothing had been saved.'
+    expect(el('investigationUndoGo').hidden).toBe(false);
+    expect(el('investigationUndoText').textContent).toMatch(
+      /^Started over\. Nothing had been saved, so only your place was reset/
     );
+    await undo();
+    expect(st.step).toBe(2);
+    expect([...st.visited].sort()).toEqual(['guess', 'intro', 'take']);
   });
 });
 
