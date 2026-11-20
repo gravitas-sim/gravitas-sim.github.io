@@ -97,7 +97,10 @@ describe('the readings the student takes', () => {
       phaseDeg: 90,
       observerAngleDeg: 90,
       towards: 'towards us',
-      range,
+      range: range && {
+        ...range,
+        shown: range.halfRange.toFixed(1),
+      },
     }),
   });
   const k = (range, sid = 'read-k-off-the-panel') =>

@@ -88,9 +88,7 @@ const kRows = ctx => {
       label: range?.bracketedBothExtremes
         ? 'Half-range ½(max − min)'
         : 'Half-range observed so far',
-      value: range
-        ? `${range.halfRange.toPrecision(3)} m/s`
-        : 'Keep observing…',
+      value: range ? `${range.shown} m/s` : 'Keep observing…',
     },
   ];
 };
