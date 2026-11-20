@@ -3346,8 +3346,8 @@
         "js/stellarEvolutionWidgets.js",
         "js/stellarWidgets.js"
       ],
-      "depths": { "core": 35, "quantitative": 0, "advanced": 0 },
-      "spanish_steps": { "core": 35, "deeper": 0 },
+      "depths": { "core": 33, "quantitative": 0, "advanced": 0 },
+      "spanish_steps": { "core": 33, "deeper": 0 },
       "languages": ["en", "es"],
       "sequences": [{ "id": "light-and-stars", "position": 5 }],
       "courses": [
@@ -3361,20 +3361,111 @@
       "audit": "FOCUSED",
       "scene_class": "portrait or backdrop",
       "limits": null,
-      "open_items": [],
-      "questions": { "Q1": "", "Q2": "", "Q3": "", "Q4": "", "Q5": "" },
+      "open_items": [
+        "D-R4-360-04 (for Carl): the first main-sequence sample is at 457 Myr (0.797 solar luminosities) but the model's zero-age main sequence is at 41.9 Myr (0.747); compare-young-and-old still labels 457 Myr 'On arrival'. Needs a scientist's call, not made here."
+      ],
+      "questions": {
+        "Q1": "The student chooses two moments of the Sun-like track, freezes the first beside the live star and reads luminosity, radius and temperature at both: a comparison each student designs, which a paragraph could not hold. The giant, the cinder and the two ends of the mass range are read off the playhead and the stage.",
+        "Q2": "Each step names its controls as the student sees them (Through its life, Freeze this moment, Next phase). The five predictions that opened on their phase now open at the start of the track, paused, and each reveals at the step that measures it.",
+        "Q3": "Stage star, panel, readout and prose name the same star: luminosity in solar units, radius in solar radii, temperature in kelvin, age in Gyr. The new step's check ties one moment's three readings together by L = R^2 (T / 5772 K)^4, which the model's own rows satisfy.",
+        "Q4": "The student chooses which two ages to compare, so which stages of a life to claim a change across; a pair under ten per cent apart is told so and readings that are not from one moment are told they do not belong together. Each can be made badly.",
+        "Q5": "Met by the core's model limits (why iron stops it, the endpoint admissions at 40 solar masses, and the argument that names a limitation), not by a deeper depth: the lesson has no deeper steps."
+      },
       "leak": {
         "L1": "HOLDS: no field cue or step placeholder holds a numeral at any depth, in either language, and the panel renders none that does (tests/fieldCue.test.js); the expected value is the field's `want`, which no page reads.",
-        "L2": "",
-        "L3": "",
-        "L4": "",
-        "L5": ""
+        "L2": "FIXED (360): the prediction steps that opened on their phase (predict-protostar-power, predict-direction, predict-the-red-dwarf, predict-massive-lifetime, predict-core-and-envelope) open at the start of the track, paused, with no phase preselected; the new two-moment step names no phase; the measuring steps keep the phase they name. not-a-supernova still opens on the post-AGB phase, which the readout does not mark as an ending (checked in the browser).",
+        "L3": "HOLDS (360): the Sun comparison and 56 solar luminosities (predict-protostar-power), the direction and the area argument (predict-direction, and the two sentences of core-in-envelope-out that stated them), and the 'it is not' of not-a-supernova are in the becauses, shown at each reveal; the detector finds no prediction stated earlier.",
+        "L4": "HOLDS (360): the 8.65 Myr tip of predict-massive-lifetime is in its because; no body or tip gives a result before the step that measures it; the validators speak only after a reading.",
+        "L5": "UNCHANGED (360): readout text was not edited; the added feedback shows only with the verdict or after an answer."
       },
-      "task_rule_items": [],
-      "editorial": "OPEN",
-      "redesign": "OPEN",
-      "reason": "Corrections I reworded steps for factual consistency (register D-R4-300-15); editorial pass still OPEN.",
-      "step_revisions": [],
+      "task_rule_items": [
+        "T1: the three consecutive read-a-number steps (the first main-sequence point, the Sun today, the end of the main sequence) become one comparison the student designs; no run of more than two read-a-number steps remains.",
+        "T2: the opening prediction returns at the black-hole step beside the student's own luminosity and main-sequence readings from the stars step (evidence and one authored sentence); the other predictions return at their measuring steps.",
+        "T4: the red dwarf and the 20 solar-mass star are predicted before they are measured; no new case. Likely overlap with a-stars-life-in-numbers, for the consolidation decision.",
+        "T5: option feedback on two wrong turns (helium ignition keeps the star swelling; every neutron star is a pulsar) and per-reading feedback on the new step; the all-the-hydrogen misconception on predict-what-runs-out was tried and dropped (a remix cannot carry option feedback on a prediction).",
+        "Time band: stated 80-100 min, unchanged. By the table's own method (declared minutes over steps) 33 steps give 76-94 min; no class has been timed (NOT RUN), so this is an estimate and not a measurement."
+      ],
+      "editorial": "REVISED",
+      "redesign": "REVISED",
+      "reason": "FOCUSED: three read-a-number steps become one student-designed comparison (retired with a successor), five predictions open at the start of the track and no longer carry their answers, the closing argument asks for two cited readings, two wrong turns get authored feedback (register D-R4-360-01).",
+      "step_revisions": [
+        {
+          "sid": "arriving",
+          "change": "REVISED: retired, successor compare-two-moments (the student chooses the moments)."
+        },
+        {
+          "sid": "the-sun-today",
+          "change": "REVISED: retired, successor compare-two-moments."
+        },
+        {
+          "sid": "across-the-main-sequence",
+          "change": "REVISED: retired, successor compare-two-moments."
+        },
+        {
+          "sid": "compare-two-moments",
+          "change": "NEW: the student freezes one moment, moves to another and reads luminosity, radius and temperature at both; checks the readings agree and the moments differ."
+        },
+        {
+          "sid": "three-futures",
+          "change": "REWORDED: no step number in the body; the prediction returns beside the student's readings at the black-hole step."
+        },
+        {
+          "sid": "the-black-hole",
+          "change": "REWORDED: names the readings the opening prediction is set beside and one authored sentence (no change of task or answer)."
+        },
+        {
+          "sid": "predict-protostar-power",
+          "change": "REWORDED: the Sun comparison and the 56 solar luminosities moved to the because; opens at the start of the track."
+        },
+        {
+          "sid": "core-in-envelope-out",
+          "change": "REWORDED: the message and tip that stated the next prediction's direction moved to that prediction's because."
+        },
+        {
+          "sid": "predict-direction",
+          "change": "REWORDED: no 'cooler and more luminous', no axes; opens at the start of the track."
+        },
+        {
+          "sid": "measure-the-giant",
+          "change": "REWORDED: step numbers follow the shorter lesson."
+        },
+        {
+          "sid": "helium-and-the-loop",
+          "change": "REWORDED: authored misconception added (the star keeps swelling)."
+        },
+        {
+          "sid": "not-a-supernova",
+          "change": "REWORDED: 'It is not' removed from the body; the tip moved to the because; the stale step count removed."
+        },
+        {
+          "sid": "predict-the-red-dwarf",
+          "change": "REWORDED: opens at the start of the track."
+        },
+        {
+          "sid": "predict-massive-lifetime",
+          "change": "REWORDED: the 8.65 Myr tip moved to the because; opens at the start of the track."
+        },
+        {
+          "sid": "predict-core-and-envelope",
+          "change": "REWORDED: opens at the start of the track; step numbers updated."
+        },
+        {
+          "sid": "neutron-star-scale",
+          "change": "REWORDED: authored misconception added (every neutron star is a pulsar); step number updated."
+        },
+        {
+          "sid": "compare-young-and-old",
+          "change": "REWORDED: tip no longer claims no other step shows two ages at once."
+        },
+        {
+          "sid": "design-a-comparison",
+          "change": "REWORDED: step number updated."
+        },
+        {
+          "sid": "the-lifecycle-argument",
+          "change": "REWORDED: asks for two readings cited by name; rubric updated."
+        }
+      ],
       "walk": "NOT RUN",
       "pr": null,
       "hash": null

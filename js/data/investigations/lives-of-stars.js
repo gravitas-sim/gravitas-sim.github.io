@@ -1,7 +1,7 @@
 // =============================================================================
 // Lives of stars: from clouds to cosmic remnants
 // -----------------------------------------------------------------------------
-// Thirty-four steps on the evolutionary playback (js/stellarEvolutionWidgets.js)
+// Thirty-three steps on the evolutionary playback (js/stellarEvolutionWidgets.js)
 // and the eight bundled MIST tracks behind it. A companion to "A Universe of
 // Stars", which teaches the diagram this lesson moves across; steps 1 to 7
 // recap enough of it that this one stands alone.
@@ -20,8 +20,8 @@
 // Send every star down the same road. The 0.2 solar-mass model is not given
 // the Sun's future; the 20 solar-mass model is not given a confident remnant,
 // because the sources do not give it one; and the 40 solar-mass model is not
-// given a bright supernova to justify its black hole. Step 31 is about that
-// last point and step 23 about the first.
+// given a bright supernova to justify its black hole. Step 29 is about that
+// last point and step 20 about the first.
 //
 // It also refuses to make anything depend on waiting. Every phase is reachable
 // with one button, the age is a slider and a number, and no step asks a
@@ -39,7 +39,7 @@
 // and any snapshot pinned beside it survive the whole of its life.
 //
 // A change of track is a change of star, and the scene says so by rebuilding:
-// the twenty-solar-mass model on screen 24 is not the Sun grown heavier, and
+// the twenty-solar-mass model on screen 22 is not the Sun grown heavier, and
 // it would be a lie to keep the same object for it.
 
 /**
@@ -96,7 +96,7 @@ const pair = (stars, extra = {}) => ({
  * Same fraction of a life rather than same age - all three are half way
  * through their main sequences, which is the only way to line up stars whose
  * lives differ by six orders of magnitude. The prose says so, and the
- * same-age comparison at step 23 is the deliberate contrast.
+ * same-age comparison at step 21 is the deliberate contrast.
  */
 const THREE_FUTURES = [
   { role: 'light', name: '0.2 M☉', track: 'm020', at: 'ms' },
@@ -126,6 +126,32 @@ const LIVES_OF_STARS = {
   prerequisites: [],
   tags: ['stars', 'stellar-evolution'],
   lock: { placement: true, inspector: false, areaSweep: false },
+  retired: {
+    arriving: {
+      to: 'compare-two-moments',
+      release: '3.1',
+      was: {
+        en: 'Press Next phase to the first point of the main sequence and record the star’s temperature, luminosity and age there.',
+        es: 'Pulsar Fase siguiente hasta el primer punto de la secuencia principal y anotar allí la temperatura, la luminosidad y la edad de la estrella.',
+      },
+    },
+    'the-sun-today': {
+      to: 'compare-two-moments',
+      release: '3.1',
+      was: {
+        en: 'Set the age to 4.6 billion years and record the temperature, luminosity and radius the model gives for a solar-mass star.',
+        es: 'Poner la edad en 4.600 millones de años y anotar la temperatura, la luminosidad y el radio que da el modelo para una estrella de masa solar.',
+      },
+    },
+    'across-the-main-sequence': {
+      to: 'compare-two-moments',
+      release: '3.1',
+      was: {
+        en: 'Run to the end of the main sequence, record the luminosity there and work out how many times brighter the star had become since it arrived.',
+        es: 'Avanzar hasta el final de la secuencia principal, anotar la luminosidad y calcular cuántas veces más brillante se había vuelto la estrella desde que llegó.',
+      },
+    },
+  },
   objectives: [
     'Follow one star across the H-R diagram from before it forms to after it stops',
     'Say what powers a star at each stage, and what it means when a stage ends',
@@ -137,7 +163,7 @@ const LIVES_OF_STARS = {
   ],
   steps: [
     // -----------------------------------------------------------------------
-    // 1-6: before there is a star
+    // 1-5: before there is a star
     // -----------------------------------------------------------------------
     {
       sid: 'three-futures',
@@ -150,7 +176,8 @@ const LIVES_OF_STARS = {
              main sequences now, fusing hydrogen in their cores.
              \n\nAll three will stop. Commit to what you think happens, and to
              which one gets there first. You are not expected to get this
-             right; step 34 asks you to look at your answer again.`,
+             right; a step near the end asks you to look at your answer
+             again.`,
       prompt: 'Which of these three changes fastest, and how does it end?',
       options: [
         'The red dwarf, because small things burn out quickly. It fades away.',
@@ -166,7 +193,7 @@ const LIVES_OF_STARS = {
         pinStaged: true,
         hide: ['order'],
       }),
-      tip: 'If you have done "A Universe of Stars" — the companion investigation, which teaches the diagram this one moves across — the stage will be familiar. If not, the next six steps recap everything from it that this investigation needs.',
+      tip: 'If you have done "A Universe of Stars" — the companion investigation, which teaches the diagram this one moves across — the stage will be familiar. If not, the next steps recap everything from it that this investigation needs.',
     },
     {
       sid: 'the-cloud',
@@ -198,14 +225,11 @@ const LIVES_OF_STARS = {
       type: 'predict',
       reveal: 'contraction-luminosity',
       title: 'What is it running on?',
-      body: `Press <strong>Next phase</strong> to reach the first point the
-             model actually describes: a pre-main-sequence star. It has a
-             surface now, so it has a place on the diagram.
-             \n\nIt is also very luminous — the model&rsquo;s first sample
-             puts it at fifty-six times the Sun&rsquo;s output, from a surface
-             at 4,100 K and a radius fifteen times the Sun&rsquo;s. But it is
-             not yet doing what the Sun does.
-             \n\nBefore you look at the readout, commit.`,
+      body: `The first point the model actually describes is a
+             pre-main-sequence star. It has a surface now, so it has a place
+             on the diagram.
+             \n\nIt shines. Before you press <strong>Next phase</strong> to
+             reach that point and look at the readout, commit to why.`,
       prompt: 'A pre-main-sequence star shines because…',
       options: [
         'it has started fusing hydrogen in its core, just more slowly',
@@ -215,13 +239,9 @@ const LIVES_OF_STARS = {
       ],
       answer: 1,
       because:
-        'It is falling in on itself, and something falling releases energy. Half of the gravitational energy released by a contracting gas cloud heats it and the other half is radiated away, and that radiated half is what you are seeing. No sustained hydrogen fusion is happening yet. This matters for a reason beyond bookkeeping: a star that shines is not necessarily a star that is fusing, and fusion starting is not the same event as arriving on the main sequence.',
-      tool: evol({
-        track: 'm100',
-        phase: 'pre-main-sequence',
-        autoplay: false,
-      }),
-      tip: 'The readout&rsquo;s "About this phase" row has the full version, including what deuterium does before hydrogen gets going.',
+        'It is falling in on itself, and something falling releases energy. The model&rsquo;s first sample shows how much: fifty-six times the Sun&rsquo;s output, from a surface at 4,100 K and a radius fifteen times the Sun&rsquo;s, and it is not yet doing what the Sun does. Half of the gravitational energy released by a contracting gas cloud heats it and the other half is radiated away, and that radiated half is what you are seeing. No sustained hydrogen fusion is happening yet. This matters for a reason beyond bookkeeping: a star that shines is not necessarily a star that is fusing, and fusion starting is not the same event as arriving on the main sequence.',
+      tool: evol({ track: 'm100', at: 0.02, autoplay: false }),
+      tip: 'Once you have committed, the readout&rsquo;s "About this phase" row has the full version, including what deuterium does before hydrogen gets going.',
     },
     {
       sid: 'contraction-luminosity',
@@ -281,128 +301,136 @@ const LIVES_OF_STARS = {
       tool: evol({ track: 'm100', phase: 'pre-main-sequence' }),
       tip: 'A common confusion worth settling now: this diagram is not a map of where stars are in space. It is a graph of two properties. Two stars next to each other on it may be nowhere near each other.',
     },
-    {
-      sid: 'arriving',
-      stage: protagonist('m100'),
-      type: 'measure',
-      title: 'Arriving',
-      body: `Press <strong>Next phase</strong>. The readout&rsquo;s phase
-             changes to <em>main sequence</em>: hydrogen fusion in the core is
-             now steady, and it is what holds the star up.
-             \n\nThis is the zero-age main sequence — the beginning of the long
-             part. Record where the star is.`,
-      fields: [
-        { id: 'teff', label: 'Surface temperature', unit: 'K' },
-        { id: 'lum', label: 'Luminosity', unit: 'L☉' },
-        { id: 'age', label: 'Age', unit: 'Myr' },
-      ],
-      validate: v => {
-        if (![v.teff, v.lum, v.age].every(x => Number.isFinite(x))) {
-          return { level: 'warn', message: 'All three, from the readout.' };
-        }
-        if (v.teff < 5200 || v.teff > 6300) {
-          return {
-            level: 'warn',
-            message:
-              'That is not the arrival point. Press "Next phase" until the readout says Main sequence, and read the first values it shows.',
-          };
-        }
-        return {
-          level: 'ok',
-          message:
-            'About 5,740 K and 0.80 solar luminosities, at 457 million years old. The Sun today is 4.6 billion years old and puts out 1.0 — so it has already brightened by nearly forty per cent since it arrived here. The next step measures that.',
-        };
-      },
-      tool: evol({ track: 'm100', phase: 'main-sequence', capture: true }),
-      tip: 'Fusion did not start at this instant — it started earlier and built up. What happens here is that it becomes the thing supporting the star, which is what the main sequence means.',
-    },
 
     // -----------------------------------------------------------------------
-    // 7-12: the long part, and its end
+    // 6-12: the long part, and its end
     // -----------------------------------------------------------------------
     {
-      sid: 'the-sun-today',
+      sid: 'compare-two-moments',
       stage: protagonist('m100'),
       type: 'measure',
-      title: 'The Sun, today',
-      body: `Set the age to 4.6 billion years — where the Sun is now. You can
-             type into the age slider or step it with the arrow keys.
-             \n\nRecord the three properties. These are the model&rsquo;s
-             values for a solar-mass star of that age, and they are close to
-             the measured Sun without having been fitted to it.`,
+      title: 'Two moments in one life',
+      body: `The Sun&rsquo;s whole life is one track, from the cloud to the white
+             dwarf, and you choose which two moments of it to compare.
+             \n\nMove the <strong>Through its life</strong> slider to the first
+             moment you choose; its value reads as the star&rsquo;s age. Press
+             <strong>Freeze this moment</strong>: a copy of the star stays on
+             the canvas, labeled with its age. Then move the slider to your
+             second moment. The frozen copy keeps the first and the live star
+             is the second. Click each star on the canvas to read its card.
+             \n\nRecord the age, the luminosity, the radius and the surface
+             temperature at each moment. Moments close together show little,
+             so the decision is which two show the change you want to claim.`,
       fields: [
-        { id: 'teff', label: 'Surface temperature', unit: 'K' },
-        { id: 'lum', label: 'Luminosity', unit: 'L☉' },
-        { id: 'radius', label: 'Radius', unit: 'R☉' },
-      ],
-      validate: v => {
-        if (![v.teff, v.lum, v.radius].every(x => Number.isFinite(x))) {
-          return { level: 'warn', message: 'All three, from the readout.' };
-        }
-        if (v.teff < 5500 || v.teff > 6200 || v.lum < 0.7 || v.lum > 1.8) {
-          return {
-            level: 'warn',
-            message:
-              'Not at 4.6 Gyr yet. The readout&rsquo;s Age row is what to steer by.',
-          };
-        }
-        return {
-          level: 'ok',
-          message:
-            'About 5,850 K, 1.11 solar luminosities and 1.03 solar radii. The real Sun is 5,772 K and 1.00 by definition, so the model is within a couple of per cent — which is a check on it, not an input to it.',
-        };
-      },
-      tool: evol({ track: 'm100', phase: 'main-sequence', capture: true }),
-      tip: 'Surface temperature, not core temperature. The Sun&rsquo;s core is about 15 million K; its surface is 5,772. Nothing in this investigation ever plots a core temperature.',
-    },
-    {
-      sid: 'across-the-main-sequence',
-      stage: protagonist('m100'),
-      type: 'measure',
-      title: 'Ten billion years, measured',
-      body: `Now run to the end of the main sequence — press
-             <strong>Next phase</strong>, or drag the playhead to just before
-             the phase changes.
-             \n\nRecord where it ends up, and work out how much it brightened
-             across its main-sequence life. You measured the arrival point two
-             steps ago.`,
-      fields: [
-        { id: 'lumStart', label: 'Luminosity on arrival', unit: 'L☉' },
-        { id: 'lumEnd', label: 'Luminosity at the end', unit: 'L☉' },
+        { id: 'ageA', label: 'First moment (frozen copy): age', unit: 'Gyr' },
         {
-          id: 'ratio',
-          label: 'How many times brighter',
+          id: 'lumA',
+          label: 'First moment: luminosity',
+          unit: 'L☉',
+        },
+        { id: 'radA', label: 'First moment: radius', unit: 'R☉' },
+        {
+          id: 'teffA',
+          label: 'First moment: surface temperature',
+          unit: 'K',
+        },
+        { id: 'ageB', label: 'Second moment (live star): age', unit: 'Gyr' },
+        {
+          id: 'lumB',
+          label: 'Second moment: luminosity',
+          unit: 'L☉',
+        },
+        { id: 'radB', label: 'Second moment: radius', unit: 'R☉' },
+        {
+          id: 'teffB',
+          label: 'Second moment: surface temperature',
+          unit: 'K',
+        },
+        {
+          id: 'lumRatio',
+          label: 'Luminosity, second over first',
           unit: '×',
-          compute: v => v.lumEnd / v.lumStart,
+          compute: v => v.lumB / v.lumA,
           decimals: 2,
         },
-        { id: 'age', label: 'Age at the end', unit: 'Gyr' },
+        {
+          id: 'radRatio',
+          label: 'Radius, second over first',
+          unit: '×',
+          compute: v => v.radB / v.radA,
+          decimals: 2,
+        },
       ],
       validate: v => {
-        if (![v.lumStart, v.lumEnd, v.age].every(x => Number.isFinite(x))) {
-          return { level: 'warn', message: 'Three numbers, from the readout.' };
-        }
-        if (v.lumEnd <= v.lumStart) {
-          return {
-            level: 'error',
-            message: 'It brightens. Check which reading went in which box.',
-          };
-        }
-        if (v.age < 8 || v.age > 12) {
+        const all = [v.ageA, v.lumA, v.radA, v.teffA];
+        all.push(v.ageB, v.lumB, v.radB, v.teffB);
+        if (all.some(x => !Number.isFinite(x) || x <= 0)) {
           return {
             level: 'warn',
             message:
-              'The end of the main sequence is at about 9.9 billion years for this star. The readout gives the age in Gyr.',
+              'Each moment needs four readings: its age, luminosity, radius and surface temperature. Freeze the first moment, move to the second, and read the frozen star and the live one.',
           };
         }
+        if (v.ageA > 12 || v.ageB > 12) {
+          return {
+            level: 'warn',
+            message:
+              'No age that large is on this track, which ends near 11.5 billion years. The readout writes young ages in Myr, so type them in Gyr (457 Myr is 0.457 Gyr).',
+          };
+        }
+        // One moment's three readings are tied together: in solar units the
+        // luminosity is the radius squared times (T / 5772 K) to the fourth.
+        const apart = (l, r, t) =>
+          Math.abs(Math.log(l / (r * r * (t / 5772) ** 4))) > 0.06;
+        const bad = [];
+        if (apart(v.lumA, v.radA, v.teffA)) bad.push('first');
+        if (apart(v.lumB, v.radB, v.teffB)) bad.push('second');
+        if (bad.length) {
+          return {
+            level: 'error',
+            message: `The ${bad.join(' and ')} moment's luminosity, radius and temperature do not belong together. In solar units the luminosity is the radius squared times the temperature over 5,772 K, raised to the fourth power, so one of the three came from a different moment. Read all three from the same one.`,
+          };
+        }
+        const dLum = Math.log(v.lumB / v.lumA);
+        const dRad = Math.log(v.radB / v.radA);
+        if (Math.abs(dLum) < 0.1 && Math.abs(dRad) < 0.1) {
+          return {
+            level: 'error',
+            message:
+              'These two moments are almost the same star: the luminosity and the radius differ by less than ten per cent. Choose two moments further apart, on different stages or far apart on one stage, and read both again.',
+          };
+        }
+        if (Math.abs(v.ageB - v.ageA) / Math.max(v.ageA, v.ageB) < 0.02) {
+          return {
+            level: 'warn',
+            message:
+              'Two readings at the same age cannot differ. Check the ages you wrote down against the frozen star&rsquo;s label and the slider.',
+          };
+        }
+        const [e, l] = v.ageA <= v.ageB ? ['A', 'B'] : ['B', 'A'];
+        const hot = v['teff' + l] / v['teff' + e] - 1;
+        const say = x =>
+          x >= 100 ? String(Math.round(x)) : String(+x.toPrecision(3));
+        const up = v['lum' + l] > v['lum' + e];
+        const side =
+          Math.abs(hot) < 0.05
+            ? 'almost straight ' + (up ? 'up' : 'down')
+            : (up ? 'up' : 'down') +
+              ' and to the ' +
+              (hot > 0 ? 'left' : 'right');
         return {
           level: 'ok',
-          message:
-            'From 0.80 to 2.28 solar luminosities — nearly three times brighter — over 9.9 billion years, while the surface temperature barely moved. A star does not sit at one point on the diagram for its whole main-sequence life, and it does not slide down the main sequence either: it drifts slowly up and very slightly right.',
+          message: `From ${say(v['age' + e])} to ${say(v['age' + l])} billion years the luminosity changed by a factor of ${say(v['lum' + l] / v['lum' + e])}, the radius by ${say(v['rad' + l] / v['rad' + e])}, and the surface temperature ${hot > 0 ? 'rose' : 'fell'} by ${say(Math.abs(hot) * 100)} per cent. On the H-R diagram that is ${side}. Whether those two moments show the change you meant to claim is the decision: a pair closer together on one stage shows less, and a pair on different stages shows the changes the next steps are about.`,
         };
       },
-      tool: evol({ track: 'm100', phase: 'main-sequence', capture: true }),
-      tip: 'The "Moved so far" row in the readout tracks this for you as you go.',
+      tool: evol({
+        track: 'm100',
+        at: 0.02,
+        autoplay: false,
+        freeze: true,
+        capture: true,
+      }),
+      tip: 'The frozen copy is a record: nothing writes to it again, and it keeps the age it was frozen at. If the two cards read the same, the slider is still where you froze it.',
     },
     {
       sid: 'compare-young-and-old',
@@ -457,7 +485,7 @@ const LIVES_OF_STARS = {
         hide: ['order'],
         capture: true,
       }),
-      tip: 'Both are the same star, and both are standing on the canvas — click either one to read it. Nothing else in this investigation puts one model on screen at two ages at once.',
+      tip: 'Both are the same star, and both are standing on the canvas — click either one to read it.',
     },
     {
       sid: 'predict-what-runs-out',
@@ -480,7 +508,7 @@ const LIVES_OF_STARS = {
       because:
         'Only the core&rsquo;s hydrogen - a few per cent of the star&rsquo;s mass. Most of the hydrogen is still there, sitting in the envelope where it has never been hot enough to fuse and where it is not mixed down into the core. That is why what happens next happens: a shell of that hydrogen, just outside the spent core, is now hot enough to burn, and the star does not go out. It gets very much brighter. This is the single most common misunderstanding about stellar evolution and the next four steps are about it.',
       tool: evol({ track: 'm100', phase: 'main-sequence' }),
-      tip: 'A star has no way to stir fresh hydrogen down into its core - not one like the Sun, anyway. The 0.2 solar-mass star in step 22 does, and that is why its life is so different.',
+      tip: 'A star has no way to stir fresh hydrogen down into its core - not one like the Sun, anyway. The 0.2 solar-mass star in step 20 does, and that is why its life is so different.',
     },
     {
       sid: 'the-interior',
@@ -551,7 +579,7 @@ const LIVES_OF_STARS = {
         return {
           level: 'ok',
           message:
-            'From about 1.6 to about 173 solar radii, and the surface cools from 5,700 K to about 3,100 K on the way. A hundredfold in radius, and it got cooler — which is exactly how something can be far more luminous and far redder at the same time.',
+            'From about 1.6 to about 173 solar radii, and the surface cools from 5,700 K to about 3,100 K on the way: a hundredfold in radius, and cooler. The next step asks what those two numbers mean for the star&rsquo;s place on the diagram.',
         };
       },
       tool: evol({
@@ -560,11 +588,11 @@ const LIVES_OF_STARS = {
         interior: true,
         capture: true,
       }),
-      tip: 'Its surface is cooler because it is spread over a hundred times the radius — ten thousand times the area. Each square meter is radiating less, and there are so many more of them that the total goes up by a factor of a thousand.',
+      tip: 'The branch begins where the main sequence ends and ends where helium ignites, and Previous phase and Next phase land on those boundaries.',
     },
 
     // -----------------------------------------------------------------------
-    // 13-21: giant, ejection, and the cinder
+    // 11-19: giant, ejection, and the cinder
     // -----------------------------------------------------------------------
     {
       sid: 'predict-direction',
@@ -572,10 +600,12 @@ const LIVES_OF_STARS = {
       type: 'predict',
       reveal: 'measure-the-giant',
       title: 'Which way does it go?',
-      body: `You have the numbers: cooler at the surface, far more luminous
-             overall. Before looking at the trace, work out what that means for
-             the diagram.
-             \n\nHotter is to the left. More luminous is up.`,
+      body: `You recorded the radius and the surface temperature at the start
+             and at the tip of the red-giant branch. Those two numbers already
+             say something about where the star sits on the diagram.
+             \n\nWork out which way the star moves as it leaves the main
+             sequence, and commit before you step the playhead forward to
+             watch the marker.`,
       prompt: 'Leaving the main sequence, the star moves…',
       options: [
         'up and to the left — brighter and hotter',
@@ -585,8 +615,8 @@ const LIVES_OF_STARS = {
       ],
       answer: 1,
       because:
-        'Up and to the right, and the bright line on the diagram shows it doing exactly that. "Up and right" is a combination the main sequence never contains, which is why the giant region is somewhere else on the diagram rather than an extension of the band. And note what it is not doing: it is not sliding down the main sequence. Nothing does that.',
-      tool: evol({ track: 'm100', phase: 'red-giant-branch' }),
+        'Up and to the right, and the bright line on the diagram shows it doing exactly that: cooler at the surface, which is to the right, and far more luminous overall, which is up. Its surface is cooler because it is spread over a hundred times the radius, ten thousand times the area; each square meter radiates less, and there are so many more of them that the total goes up by a factor of a thousand. "Up and right" is a combination the main sequence never contains, which is why the giant region is somewhere else on the diagram rather than an extension of the band. And note what it is not doing: it is not sliding down the main sequence. Nothing does that.',
+      tool: evol({ track: 'm100', at: 0.02, autoplay: false }),
       tip: 'You are watching the diagram earn its keep. Two measurable numbers, and the path they trace tells you the star has stopped burning hydrogen in its core.',
     },
     {
@@ -597,8 +627,8 @@ const LIVES_OF_STARS = {
       body: `Park at the tip of the red-giant branch — the largest and coolest
              this star gets on this branch — and record all three properties
              together, plus its mass.
-             \n\nSave it to the notebook: step 15 compares it with what you
-             measured at step 9.`,
+             \n\nSave it to the notebook: step 13 compares it with what you
+             measured at step 7.`,
       fields: [
         { id: 'teff', label: 'Surface temperature', unit: 'K' },
         { id: 'lum', label: 'Luminosity', unit: 'L☉' },
@@ -693,6 +723,13 @@ const LIVES_OF_STARS = {
         'stops changing until it dies',
       ],
       answer: 1,
+      misconceptions: [
+        {
+          id: 'keepsSwelling',
+          option: 0,
+          say: 'The model does not simply carry on. Helium ignition changes what supports the core, and a star supported differently sits somewhere else on the diagram. Look at where the marker goes after the tip.',
+        },
+      ],
       because:
         'It falls and moves left, and then climbs again on the asymptotic giant branch. The core is now supported by burning helium rather than by contracting, and a star supported differently sits somewhere different. The reason this step exists is that "and then it just keeps getting bigger and redder until it dies" is a tidier story than the truth, and this investigation follows each track&rsquo;s actual sequence rather than straightening it. Different masses do different things here; the 5 solar-mass model loops further left than this one does.',
       tool: evol({ track: 'm100', phase: 'core-helium-burning' }),
@@ -757,7 +794,7 @@ const LIVES_OF_STARS = {
       reveal: 'planetary-nebula',
       title: 'Is that an explosion?',
       body: `Half a star has just come off. That sounds violent.
-             \n\nIt is not. Commit before reading on.`,
+             \n\nCommit before you read on.`,
       prompt:
         'A solar-mass star shedding half its mass at the end of its life is…',
       options: [
@@ -768,9 +805,9 @@ const LIVES_OF_STARS = {
       ],
       answer: 1,
       because:
-        'A wind. Strong for a star, glacial for an explosion: the material leaves over hundreds of thousands of years at speeds of tens of kilometers per second, not the tens of thousands a supernova reaches. Nothing detonates and nothing collapses. The readout for this track says so where it names the endpoint: "A visible supernova? No. Nothing here explodes." The Sun will not explode, and the step where something does is nineteen steps away.',
+        'A wind. Strong for a star, glacial for an explosion: the material leaves over hundreds of thousands of years at speeds of tens of kilometers per second, not the tens of thousands a supernova reaches. Nothing detonates and nothing collapses. The readout for this track says so where it names the endpoint: "A visible supernova? No. Nothing here explodes." The Sun will not explode, and the stars where something does come later in this investigation. A supernova needs a core massive enough to collapse. The Sun&rsquo;s will end up at about 0.54 solar masses, and electron degeneracy holds that up indefinitely.',
       tool: evol({ track: 'm100', phase: 'post-agb-and-cooling' }),
-      tip: 'A supernova needs a core massive enough to collapse. The Sun&rsquo;s will end up at about 0.54 solar masses, and electron degeneracy holds that up indefinitely.',
+      tip: 'Mass is the quantity to think about: how much the star has lost, and how much it keeps.',
     },
     {
       sid: 'planetary-nebula',
@@ -875,7 +912,7 @@ const LIVES_OF_STARS = {
     },
 
     // -----------------------------------------------------------------------
-    // 22-31: the two ends of the mass range
+    // 20-29: the two ends of the mass range
     // -----------------------------------------------------------------------
     {
       sid: 'predict-the-red-dwarf',
@@ -883,9 +920,9 @@ const LIVES_OF_STARS = {
       type: 'predict',
       reveal: 'the-same-age',
       title: 'The star that does none of this',
-      body: `Switch to the 0.2 solar-mass model. It is on its main sequence,
-             like the Sun.
-             \n\nIt is also 13.8 billion years since the Universe began.
+      body: `The 0.2 solar-mass model is on the stage, at the start of its
+             track.
+             \n\nIt is 13.8 billion years since the Universe began.
              Predict what this star looks like at the Sun&rsquo;s present age,
              and then at the age of the Universe.`,
       prompt: 'A 0.2 M☉ star, between 4.6 and 13.8 billion years old…',
@@ -898,7 +935,7 @@ const LIVES_OF_STARS = {
       answer: 1,
       because:
         'Almost nothing happens. Between 4.6 and 13.8 billion years its luminosity goes from 0.00478 to 0.00496 solar - under four per cent - and its radius from 0.221 to 0.224 solar radii. It is fully convective, so it can stir fresh hydrogen down into its core rather than being stuck with what is already there, and it burns what it has extraordinarily slowly. Its main sequence lasts 1.1 trillion years. The two wrong answers here are the two ways students are usually taught to think about small stars, and both give them the Sun&rsquo;s future.',
-      tool: evol({ track: 'm020', phase: 'main-sequence' }),
+      tool: evol({ track: 'm020', at: 0.02, autoplay: false }),
       tip: 'Press "Next phase" and notice there is nowhere to go: this track has a pre-main sequence and a main sequence and then it stops.',
     },
     {
@@ -969,7 +1006,7 @@ const LIVES_OF_STARS = {
         hide: ['order'],
         capture: true,
       }),
-      tip: 'Comparing at the same age and comparing at the same fraction of a life are different experiments and answer different questions. Step 33 asks you to pick one deliberately.',
+      tip: 'Comparing at the same age and comparing at the same fraction of a life are different experiments and answer different questions. Step 31 asks you to pick one deliberately.',
     },
     {
       sid: 'predict-massive-lifetime',
@@ -977,9 +1014,9 @@ const LIVES_OF_STARS = {
       type: 'predict',
       reveal: 'massive-versus-sun',
       title: 'Twenty solar masses',
-      body: `Now the other end. Switch to the 20 solar-mass model and look at
-             where it sits on the main sequence: about 43,000 solar
-             luminosities, at 35,000 K.
+      body: `Now the other end. The 20 solar-mass model is on the stage, at
+             the start of its track. On its main sequence it sits at about
+             43,000 solar luminosities, at 35,000 K.
              \n\nIt has twenty times the Sun&rsquo;s fuel. Predict how long its
              main sequence lasts.`,
       prompt: 'The main-sequence lifetime of a 20 M☉ star is about…',
@@ -991,9 +1028,9 @@ const LIVES_OF_STARS = {
       ],
       answer: 2,
       because:
-        'Nine million years: about a thousandth of the Sun&rsquo;s. Twenty times the fuel and forty thousand times the rate of spending it. This is the single most useful consequence of the steep relation between mass and luminosity, and it is why the massive stars in any region of a galaxy are always the young ones - a star like this cannot be old, because nothing that bright lasts.',
-      tool: evol({ track: 'm2000', phase: 'main-sequence' }),
-      tip: 'The readout gives it as 8.65 Myr on the "This phase" row while you are parked on the main sequence.',
+        'Nine million years: about a thousandth of the Sun&rsquo;s. Twenty times the fuel and forty thousand times the rate of spending it. This is the single most useful consequence of the steep relation between mass and luminosity, and it is why the massive stars in any region of a galaxy are always the young ones - a star like this cannot be old, because nothing that bright lasts. The readout gives it as 8.65 Myr on the "This phase" row while you are parked on the main sequence.',
+      tool: evol({ track: 'm2000', at: 0.02, autoplay: false }),
+      tip: 'Commit before you move the playhead: the readout&rsquo;s "This phase" row gives a duration for whichever phase you are parked on.',
     },
     {
       sid: 'massive-versus-sun',
@@ -1091,7 +1128,7 @@ const LIVES_OF_STARS = {
       type: 'predict',
       reveal: 'the-neutron-star',
       title: 'Two different fates in one star',
-      body: `The core is about to collapse. The outer layers — most of the
+      body: `At the end of its track, a 10 solar-mass star&rsquo;s core is about to collapse. The outer layers — most of the
              star&rsquo;s mass — are a long way out and are not, yet, doing
              anything.
              \n\nPredict what happens to each.`,
@@ -1104,8 +1141,8 @@ const LIVES_OF_STARS = {
       ],
       answer: 2,
       because:
-        'They part company. The core collapses in about a second to something a few tens of kilometers across; whether the envelope is expelled is a separate question with a separate answer, and it is not always yes. Where the explosion succeeds, the ejecta and the remnant are two different objects with two different fates: the ejecta enrich the interstellar medium, the remnant stays. Where it fails, the envelope falls back in and there is no bright supernova at all. Steps 29 and 31 are those two cases.',
-      tool: evol({ track: 'm1000', phase: 'advanced-burning' }),
+        'They part company. The core collapses in about a second to something a few tens of kilometers across; whether the envelope is expelled is a separate question with a separate answer, and it is not always yes. Where the explosion succeeds, the ejecta and the remnant are two different objects with two different fates: the ejecta enrich the interstellar medium, the remnant stays. Where it fails, the envelope falls back in and there is no bright supernova at all. Steps 27 and 29 are those two cases.',
+      tool: evol({ track: 'm1000', at: 0.02, autoplay: false }),
       tip: 'This is a prediction about the model&rsquo;s endpoint prescription, not about the track — the track has already stopped by here, and the readout says so.',
     },
     {
@@ -1155,7 +1192,7 @@ const LIVES_OF_STARS = {
       type: 'question',
       title: 'How small, and why you might never see it',
       kind: 'choice',
-      body: `The white dwarf you measured at step 20 was about twice the radius
+      body: `The white dwarf you measured at step 18 was about twice the radius
              of the Earth, holding 0.54 solar masses. This neutron star holds
              about 1.4 solar masses in roughly twenty kilometers across.
              \n\nIt is often said that neutron stars are pulsars. Think about
@@ -1168,6 +1205,13 @@ const LIVES_OF_STARS = {
         'it is still inside its supernova remnant',
       ],
       answer: 1,
+      misconceptions: [
+        {
+          id: 'everyNeutronStarPulses',
+          option: 0,
+          say: 'Not every neutron star is seen as a pulsar. A pulsar is a neutron star whose beam happens to sweep across us, so the geometry has to be right, and older ones stop pulsing at all.',
+        },
+      ],
       because:
         'Three conditions, and the last one is luck. A pulsar is a neutron star whose beam happens to point our way once per rotation; if the geometry is wrong we never see the pulses, however close it is. Many neutron stars are not observed as pulsars at all, and older ones slow down and stop producing detectable pulses regardless of geometry. Nothing in this lab models any of it - the endpoint here is a mass and a kind, and calling it a pulsar would be adding a claim the model does not make.',
       tool: evol({ track: 'm1000', phase: 'end' }),
@@ -1177,6 +1221,15 @@ const LIVES_OF_STARS = {
       sid: 'the-black-hole',
       stage: protagonist('m4000'),
       type: 'measure',
+      // The opening prediction is settled here, beside what the student read
+      // for the Sun-like and the 20 solar-mass stars.
+      evidence: [
+        { step: 'massive-versus-sun', field: 'lumBig' },
+        { step: 'massive-versus-sun', field: 'msSun' },
+        { step: 'massive-versus-sun', field: 'msBig' },
+      ],
+      compare:
+        'The 20 M☉ star&rsquo;s main sequence is about a thousandth of the Sun&rsquo;s because it is about forty thousand times as luminous: light is fuel leaving. The red dwarf does not burn out quickly, it barely changes in any time that has passed, and the Sun does not explode.',
       title: 'And one that probably does not explode',
       body: `Switch to the 40 solar-mass model and run it to the end.
              \n\nRead the whole endpoint section carefully. It contains three
@@ -1215,7 +1268,7 @@ const LIVES_OF_STARS = {
     },
 
     // -----------------------------------------------------------------------
-    // 32-34: reading it back
+    // 30-32: reading it back
     // -----------------------------------------------------------------------
     {
       sid: 'read-the-descriptions',
@@ -1257,7 +1310,7 @@ const LIVES_OF_STARS = {
              \n\n<strong>Same age</strong> asks what two stars born together
              look like now. <strong>Same fraction of a life</strong> asks what
              two stars look like at the same stage. They are different
-             questions and they give different answers; step 23 was the first
+             questions and they give different answers; step 21 was the first
              kind.
              \n\nPredict first, then measure, then save the comparison.`,
       fields: [
@@ -1311,13 +1364,14 @@ const LIVES_OF_STARS = {
              each ends. Your answer is saved and nothing has overwritten it.
              \n\nYou have now followed all three, plus a forty solar-mass model
              that ends as a black hole. Write the account you would give now.
-             \n\nOne requirement: name a limitation of the models this whole
-             investigation rests on. There are several and the readouts have been
-             telling you about them throughout.`,
+             \n\nTwo requirements. Cite two readings you saved or recorded, by
+             name: the star, the moment and the quantity. And name a limitation
+             of the models this whole investigation rests on; there are several
+             and the readouts have been telling you about them throughout.`,
       prompt:
-        'Explain what determines how a star lives and how it ends, referring to at least two of your own measurements — and name one thing these models do not tell you.',
+        'Explain what determines how a star lives and how it ends, citing at least two of your own readings by name — and name one thing these models do not tell you.',
       rubric:
-        'Mark on the connections and on the limitation, not on coverage. Look for: mass sets the luminosity, steeply, and therefore sets the lifetime, because lifetime is fuel over the rate of spending it; leaving the main sequence is core hydrogen exhaustion and not the end of the star; what happens afterwards depends on mass, with a white dwarf for the Sun-like case, a neutron star for ten solar masses and a black hole for forty; and the red dwarf does none of it on any timescale that has yet elapsed. A strong answer cites the 1.14 trillion against 8.65 million year lifetimes, or the 0.90 to 173 solar radii swing of one star.\\n\\nFor the limitation, accept any of: the tracks are single stars with no companion, so no mass transfer and no merger; they stop before core collapse, so every remnant beyond a white dwarf is a quoted prescription rather than a computed result; they are one composition and no rotation; the endpoint at forty solar masses is a range spanning a factor of three; the 1.1 trillion year lifetime is unverifiable in principle. Do NOT accept "the animation is not to scale in time" alone - that is a property of the display, which the investigation states repeatedly, rather than of the models.\\n\\nCredit an answer that revises the step 1 prediction and credit one that defends it, provided the defense engages with what was measured.',
+        'Mark on the connections and on the limitation, not on coverage. Look for: mass sets the luminosity, steeply, and therefore sets the lifetime, because lifetime is fuel over the rate of spending it; leaving the main sequence is core hydrogen exhaustion and not the end of the star; what happens afterwards depends on mass, with a white dwarf for the Sun-like case, a neutron star for ten solar masses and a black hole for forty; and the red dwarf does none of it on any timescale that has yet elapsed. Look for two of the student’s own readings cited by name (the star, the moment and the quantity, for example the 20 M☉ star’s main-sequence duration, a luminosity or radius at a moment they chose in the two-moment step, or a giant’s radius), with the numbers they recorded; a number copied from the text and not from their own work does not count as one. A strong answer sets the 1.14 trillion against the 8.65 million year lifetimes, or the swing in one star’s radius across its life.\\n\\nFor the limitation, accept any of: the tracks are single stars with no companion, so no mass transfer and no merger; they stop before core collapse, so every remnant beyond a white dwarf is a quoted prescription rather than a computed result; they are one composition and no rotation; the endpoint at forty solar masses is a range spanning a factor of three; the 1.1 trillion year lifetime is unverifiable in principle. Do NOT accept "the animation is not to scale in time" alone - that is a property of the display, which the investigation states repeatedly, rather than of the models.\\n\\nCredit an answer that revises the step 1 prediction and credit one that defends it, provided the defense engages with what was measured.',
       tool: stage({
         pace: 'phase',
         pinStaged: true,

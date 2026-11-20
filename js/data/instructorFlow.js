@@ -1217,33 +1217,33 @@ export default {
     'lives-of-stars': [
       {
         from: 'three-futures',
-        to: 'arriving',
-        text: 'Before there is a star — The opening prediction is worth protecting: do not resolve it, and note that the two wrong answers about the small and the Sun-like star are corrected at screens 22 and 18 respectively. Screen 2 is the cloud, which carries no numbers at all, and the readout says why - that refusal is the investigation, not a gap. All three stars now stand on the main canvas rather than only on the comparison card, and they are half way through their own main sequences - the same FRACTION of a life, not the same age. That is the deliberate contrast with screen 23, which lines two stars up at the same number of years and gets a completely different picture. Name the difference here; a class that misses it reads screen 23 as contradicting this one.',
+        to: 'the-pms-track',
+        text: 'Before there is a star — The opening prediction is worth protecting: do not resolve it, and note that the two wrong answers about the small and the Sun-like star are corrected at screens 20 and 16 respectively. Screen 2 is the cloud, which carries no numbers at all, and the readout says why - that refusal is the investigation, not a gap. All three stars now stand on the main canvas rather than only on the comparison card, and they are half way through their own main sequences - the same FRACTION of a life, not the same age. That is the deliberate contrast with screen 21, which lines two stars up at the same number of years and gets a completely different picture. Name the difference here; a class that misses it reads screen 21 as contradicting this one.',
       },
       {
-        from: 'the-sun-today',
+        from: 'compare-two-moments',
         to: 'core-in-envelope-out',
-        text: 'The long part, and what ends it — Screen 8 is where a student sees that the Sun has already brightened by a third since it arrived, which kills the picture of a star sitting at one point for ten billion years. Screen 10 is the core-hydrogen prediction and the most important single screen in the investigation; give it time before revealing.',
+        text: 'The long part, and what ends it — Screen 6 is the one place students choose their moments: two ages on the Sun-like track, the first frozen and the second live, with luminosity, radius and temperature read at each. A pair on the main sequence shows the star brightening by about three times at nearly the same temperature, which kills the picture of a star sitting at one point for ten billion years; a pair that spans the main sequence and the giant branch shows far more. Two moments close together show little, and the page says so. Screen 8 is the core-hydrogen prediction and the most important single screen in the investigation; give it time before revealing.',
       },
       {
         from: 'predict-direction',
         to: 'how-long-was-each-part',
-        text: 'Giant, ejection, cinder — Screen 16 exists to stop the tidy story: after helium ignites the star does not carry on getting bigger and redder, it drops and loops back. Screen 18 is the "the Sun will explode" correction. Screen 21 is the duration comparison and is the one to keep if you are short of time.',
+        text: 'Giant, ejection, cinder — Screen 14 exists to stop the tidy story: after helium ignites the star does not carry on getting bigger and redder, it drops and loops back. Screen 16 is the "the Sun will explode" correction. Screen 19 is the duration comparison and is the one to keep if you are short of time.',
       },
       {
         from: 'predict-the-red-dwarf',
         to: 'massive-versus-sun',
-        text: 'The two ends of the mass range — Screen 22 is the red dwarf, and the point is that almost nothing happens to it. Screen 23 is explicitly a same-age comparison and says so - the distinction between comparing at the same age and at the same fraction of a life is set up here and used again at screen 33.',
+        text: 'The two ends of the mass range — Screen 20 is the red dwarf, and the point is that almost nothing happens to it. Screen 21 is explicitly a same-age comparison and says so - the distinction between comparing at the same age and at the same fraction of a life is set up here and used again at screen 31.',
       },
       {
         from: 'supergiant-and-burning',
         to: 'the-black-hole',
-        text: 'What the heavy ones do — Screen 27 is a written answer about iron and is the hardest question in the investigation. Screens 29 and 31 are the two endpoint cases, and the contrast between them is deliberate: one is confident, one is a range spanning a factor of three with no bright supernova expected.',
+        text: 'What the heavy ones do — Screen 25 is a written answer about iron and is the hardest question in the investigation. Screens 27 and 29 are the two endpoint cases, and the contrast between them is deliberate: one is confident, one is a range spanning a factor of three with no bright supernova expected.',
       },
       {
         from: 'read-the-descriptions',
         to: 'what-you-followed',
-        text: 'Reading it back — Screen 32 has "not enough information" as its correct answer, which students find harder than any of the physics. Screen 33 is the open challenge and screen 34 the summative piece, which requires naming a limitation of the models. The last screen is a closing summary: mass to luminosity to lifetime, what is left behind, and what these models do not model.',
+        text: 'Reading it back — Screen 30 has "not enough information" as its correct answer, which students find harder than any of the physics. Screen 31 is the open challenge and screen 32 the summative piece, which requires citing two of the student’s own readings by name and naming a limitation of the models. The last screen is a closing summary: mass to luminosity to lifetime, what is left behind, and what these models do not model.',
       },
     ],
     'twelve-nights': [

@@ -641,12 +641,8 @@ export default {
     'lives-of-stars': {
       'contraction-luminosity':
         'The radius falls from about 14.9 to about 0.88 solar radii across the pre-main-sequence stage, over 42 million years. Students sometimes read the two boxes in the wrong order; the validator catches it and says so.',
-      arriving:
-        'About 5,740 K and 0.80 solar luminosities at 457 million years - the zero-age main sequence.',
-      'the-sun-today':
-        'About 5,850 K, 1.11 solar luminosities, 1.03 solar radii at 4.6 Gyr. Worth pointing out that the real Sun is 5,772 K and 1.00 by definition, so the model is within a couple of per cent without having been fitted.',
-      'across-the-main-sequence':
-        'From 0.80 to 2.28 solar luminosities over 9.9 billion years - nearly three times - with the surface temperature almost unchanged.',
+      'compare-two-moments':
+        'Any two moments that differ; there is no single answer. Moments to expect on the Sun-like track: 0.457 Gyr 0.797 solar luminosities, 0.904 solar radii, 5,736 K (the first main-sequence sample); 4.60 Gyr 1.11, 1.03, 5,850 K; 9.92 Gyr 2.28, 1.56, 5,683 K (the end of the main sequence). The page accepts a pair when each moment passes the luminosity = radius squared times (temperature over 5,772 K) to the fourth check within 6 per cent, the luminosity or the radius differs by more than ten per cent between them, and the ages are in Gyr and not equal. A student who writes a young age in Myr gets told. A pair on the main sequence shows a factor near 3 in luminosity at nearly the same temperature; the model starts its main sequence at 42 Myr (0.747 solar luminosities), so a student who freezes there and runs to the end sees about 3.1.',
       'compare-young-and-old':
         'Radii of about 0.90 and 1.56 solar - a factor of 1.7 across ten billion years, and the smallest change in the investigation. Both versions are on the canvas at once, so a student can click either. Hold on to these: three screens later the same star is 173.',
       'the-interior':

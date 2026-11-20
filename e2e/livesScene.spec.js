@@ -145,7 +145,7 @@ test.describe('one model time, two views', () => {
   }) => {
     test.slow();
     await openLesson(page, app);
-    await goTo(page, 'The Sun, today');
+    await goTo(page, 'What exactly runs out?');
     await pause(page);
     await page.waitForTimeout(400);
 
@@ -251,7 +251,7 @@ test.describe('forwards and backwards', () => {
   }) => {
     test.slow();
     await openLesson(page, app);
-    await goTo(page, 'The Sun, today');
+    await goTo(page, 'Two moments in one life');
     await pause(page);
     await page.waitForTimeout(400);
 
@@ -430,7 +430,7 @@ test.describe('three ways of running the clock', () => {
   }) => {
     test.slow();
     await openLesson(page, app);
-    await goTo(page, 'The Sun, today');
+    await goTo(page, 'Two moments in one life');
     await pause(page);
     await page.waitForTimeout(400);
 
@@ -488,7 +488,7 @@ test.describe('three ways of running the clock', () => {
   }) => {
     test.slow();
     await openLesson(page, app);
-    await goTo(page, 'The Sun, today');
+    await goTo(page, 'Two moments in one life');
     await pause(page);
     await page.waitForTimeout(400);
 
