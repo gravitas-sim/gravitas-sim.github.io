@@ -9,8 +9,7 @@
 // binary-star instruments are: a student reading insolation off a planet at
 // periapsis needs the number to be exactly right and exactly repeatable. The
 // eccentric orbit solves Kepler's equation, so the planet dawdles through its
-// cold outer year and hurries through its hot periapsis, which is the whole
-// point of that section.
+// cold outer year and hurries through its hot periapsis: that is the section.
 //
 // Accessibility note: habitable-zone status is never carried by color alone.
 // Every band is labeled, the two edges use different dash patterns as well as
