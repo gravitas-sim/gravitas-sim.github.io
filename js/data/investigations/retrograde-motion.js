@@ -770,12 +770,12 @@ const RETROGRADE = {
               'Your two turns belong to different loops. The second turn is the end of the loop that began at the first, so take it soon after.',
           };
         }
-        // Brackets of a few days each are what the frames allow; much wider tell almost nothing.
-        if (v.a2_day - v.a1_day + v.b2_day - v.b1_day > 20) {
+        // A bracket of about nine days is what the frames give at the readout's 0.01 degree; much wider tells almost nothing.
+        if (v.a2_day - v.a1_day + v.b2_day - v.b1_day > 30) {
           return {
             level: 'warn',
             message:
-              'Your two brackets are wide: together they are more than 20 days across, so the loop is known only to within more than 10 days. Both turns are inside them, but step back and bracket each turn again with the two readings closer together.',
+              'Your two brackets are wide: together they are more than 30 days across, so the loop is known only to within more than 15 days. Both turns are inside them, but step back and bracket each turn again with the two readings closer together.',
           };
         }
         return {

@@ -407,11 +407,21 @@ describe('a set that is refused, with a message the author wrote', () => {
     expect(verdict(v).message).toMatch(/brackets are wide/);
   });
 
-  test('brackets of the width the frames allow are accepted', () => {
-    // 7.8 days each is what a reading 0.1 degree under the peak gives at the 0.01 degree readout.
-    const v = readings({ before: 3.8, after: 4, endBefore: 3.8, endAfter: 4 });
-    expect(fieldsOf(v).loop_unc).toBeLessThan(10);
-    expect(verdict(v).level).toBe('ok');
+  test('brackets of the width a student’s own frames give are accepted', () => {
+    // The first frame 0.1 degree under the printed peak and the first below it
+    // are about nine days apart at the 0.01 degree readout; twelve is the most
+    // the browser test lets a bracket be.
+    for (const w of [9, 12]) {
+      const v = readings({
+        before: w / 2 - 0.5,
+        after: w / 2 + 0.5,
+        endBefore: w / 2 - 0.5,
+        endAfter: w / 2 + 0.5,
+      });
+      expect(fieldsOf(v).wid_a).toBeCloseTo(w, 6);
+      expect(fieldsOf(v).loop_unc).toBeCloseTo(w, 6);
+      expect(verdict(v).level).toBe('ok');
+    }
   });
 
   test('a second turn taken before the first pair is finished', () => {

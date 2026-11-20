@@ -3964,7 +3964,7 @@ export const ES_DEFERRED = {
   'lessonFn.yourTwoTurnsBelongToDifferent128':
     'Tus dos giros pertenecen a bucles distintos. El segundo giro es el final del bucle que empezó en el primero, así que tómalo poco después.',
   'lessonFn.yourTwoBracketsAreWideTogether235':
-    'Tus dos intervalos son anchos: juntos abarcan más de 20 días, así que conoces la duración del bucle con una incertidumbre de más de 10 días. Los dos giros están dentro de ellos, pero retrocede y encierra cada giro de nuevo con las dos lecturas más próximas.',
+    'Tus dos intervalos son anchos: juntos abarcan más de 30 días, así que conoces la duración del bucle con una incertidumbre de más de 15 días. Los dos giros están dentro de ellos, pero retrocede y encierra cada giro de nuevo con las dos lecturas más próximas.',
   'lessonFn.bothTurnsLieBetweenTheirTwo208':
     'Los dos giros quedan entre sus dos días. La duración del bucle es el intervalo entre los dos giros, y su incertidumbre es la mitad de las anchuras de tus dos intervalos, sumadas: estrecha un intervalo y la incertidumbre se reduce.',
   'lessonFn.day3': 'Día',
