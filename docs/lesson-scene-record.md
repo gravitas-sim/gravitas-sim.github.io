@@ -11,16 +11,16 @@ The hand-written, human-reviewed acceptance map is
 [`lesson-acceptance.json`](lesson-acceptance.json); `npm run
 audit:scene:check` fails if it disagrees with what is generated here.
 
-Across 124 investigations and 1528 steps: 1420 steps
-declare a scene, 166 let a reader change one, 180 read the
-running integration, 1009 show a prescribed model result, 161 draw
+Across 124 investigations and 1526 steps: 1418 steps
+declare a scene, 164 let a reader change one, 178 read the
+running integration, 1007 show a prescribed model result, 159 draw
 on a stored dataset, 878 put a self-contained panel beside the text,
-395 keep something, and 59 are prose.
+393 keep something, and 59 are prose.
 Of 197 prediction loops, 197 are returned to,
 197 produce a measurement before they are answered, and
 1 end in an explanation in the reader's own words.
 196 hold their marking until the experiment settles them.
-The canvas behind a step is stated as scene on 0, portrait on 7, quiet on 16; 1505 state none.
+The canvas behind a step is stated as scene on 0, portrait on 7, quiet on 16; 1503 state none.
 
 ## Kepler's Laws (`keplers-laws`)
 
@@ -318,17 +318,17 @@ The canvas behind a step is stated as scene on 0, portrait on 7, quiet on 16; 15
 
 ## Lives of Stars (`lives-of-stars`)
 
-- **Steps:** 35. Scene declared on 35; a reader can change something on 35; 0 declare a scene nobody on that step can touch.
-- **Where the numbers come from:** 35 live engine, 35 prescribed model, 35 stored dataset, 0 self-contained panel.
+- **Steps:** 33. Scene declared on 33; a reader can change something on 33; 0 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 33 live engine, 33 prescribed model, 33 stored dataset, 0 self-contained panel.
 - **What students do:** commit-a-prediction, change-a-scene-object, move-an-instrument-control, press-an-instrument-button, press-an-instrument-preset, tick-a-checklist, record-values, choose-an-option, answer-in-words.
 - **Objects the steps declare:** light, sun, heavy, star, young, old, dwarf.
 - **Instruments:** stellar-compare, stellar-evolution, stellar-lab.
 - **Stored data:** MIST v1.2 evolutionary tracks (computed-grid).
 - **Evidence kept:** notebook-fields, instrument-capture.
-- **Prediction loops:** three-futures → the-cloud → the-black-hole; predict-protostar-power → contraction-luminosity, the-pms-track, arriving, the-sun-today, across-the-main-sequence, compare-young-and-old → contraction-luminosity; predict-what-runs-out → the-interior, core-in-envelope-out → the-interior; predict-direction → measure-the-giant, true-size-then-and-now, helium-and-the-loop, the-agb-and-the-wind → measure-the-giant; not-a-supernova → planetary-nebula, white-dwarf-cooling, how-long-was-each-part → planetary-nebula; predict-the-red-dwarf → the-same-age → the-same-age; predict-massive-lifetime → massive-versus-sun, supergiant-and-burning, why-iron-stops-it → massive-versus-sun; predict-core-and-envelope → the-neutron-star, neutron-star-scale, the-black-hole, read-the-descriptions, design-a-comparison, the-lifecycle-argument, what-you-followed → the-neutron-star.
+- **Prediction loops:** three-futures → the-cloud → the-black-hole; predict-protostar-power → contraction-luminosity, the-pms-track, compare-two-moments, compare-young-and-old → contraction-luminosity; predict-what-runs-out → the-interior, core-in-envelope-out → the-interior; predict-direction → measure-the-giant, true-size-then-and-now, helium-and-the-loop, the-agb-and-the-wind → measure-the-giant; not-a-supernova → planetary-nebula, white-dwarf-cooling, how-long-was-each-part → planetary-nebula; predict-the-red-dwarf → the-same-age → the-same-age; predict-massive-lifetime → massive-versus-sun, supergiant-and-burning, why-iron-stops-it → massive-versus-sun; predict-core-and-envelope → the-neutron-star, neutron-star-scale, the-black-hole, read-the-descriptions, design-a-comparison, the-lifecycle-argument, what-you-followed → the-neutron-star.
 - **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
 - **Scene rebuilds:** none.
-- **Accepted central experiment** (reviewed 2026-09-11): object `sun`, control stellar-evolution/position, measures radius and luminosity at a stated model age, evidence `instrument-capture`, covered by `e2e/centralExperiments.spec.js`.
+- **Accepted central experiment** (reviewed 2026-09-11): object `sun`, control stellar-evolution/position, measures luminosity, radius and surface temperature at two ages of the Sun-like track that the student chooses, one frozen and one live, and at the tip of the giant branch, evidence `instrument-capture`, covered by `e2e/centralExperiments.spec.js`.
 
 ## Twelve Nights (`twelve-nights`)
 

@@ -88,7 +88,7 @@ export default {
         stars: [{ name: 'La más pequeña' }, { name: 'La más brillante' }],
       },
       title: 'Dos estrellas, una temperatura',
-      body: 'Las dos estrellas del escenario tienen la superficie cerca de 4.300 K. Son del mismo color, porque el color sigue a la temperatura superficial y a nada más.\n\nUna de ellas emite unas trescientas veces más luz que la otra.\n\nPiensa qué significa una temperatura fija. Cada metro cuadrado de una superficie a 4.300 K radia lo mismo por segundo, sea de la estrella que sea: eso <em>es</em> una temperatura. Así que la única forma de que una de ellas emita trescientas veces más luz es tener muchísimos más metros cuadrados.',
+      body: 'Las dos estrellas del escenario tienen la superficie cerca de 4.300 K. Son del mismo color, porque el color sigue a la temperatura superficial y a nada más.\n\nUna de ellas emite unas trescientas veces más luz que la otra.\n\nLas dos estrellas comparten temperatura, así que otra cosa en ellas es distinta. El paso siguiente te pide que te comprometas sobre cuál.',
       tip: 'La luminosidad es toda la luz que emite una estrella. El brillo aparente es cuánta te llega, y eso depende además de la distancia. Este paso trata de lo primero.',
     },
     'predict-which-is-bigger': {
@@ -96,7 +96,7 @@ export default {
         stars: [{ name: 'La más pequeña' }, { name: 'La más brillante' }],
       },
       title: '¿Cuál es mayor, y por cuánto?',
-      body: 'Las mismas dos estrellas. La misma temperatura superficial. Una unas trescientas veces más luminosa.\n\nCompromete una respuesta antes de medir. El razonamiento importa más que el número: la superficie de una estrella crece con el <em>cuadrado</em> del radio.',
+      body: 'Las mismas dos estrellas. La misma temperatura superficial. Una unas trescientas veces más luminosa.\n\nCompromete una respuesta antes de medir. El razonamiento importa más que el número.',
       prompt:
         'Dos estrellas a la misma temperatura superficial, una 300 veces más luminosa. Su radio es unas…',
       options: [
@@ -106,7 +106,7 @@ export default {
         '90.000 veces mayor',
       ],
       because:
-        'Unas diecisiete, porque el área va con el cuadrado del radio y la raíz cuadrada de 300 es poco más de 17. Eso es toda la relación entre las tres magnitudes: la luz que emite una estrella es su superficie multiplicada por lo fuerte que radia cada trozo de esa superficie, y a temperatura fija el segundo factor es el mismo para las dos. Duplica el radio y cuadruplicas la luz.',
+        'Unas diecisiete. Cada metro cuadrado de una superficie a 4.300 K radia lo mismo por segundo, sea de la estrella que sea —eso es una temperatura—, así que la única forma de que una estrella emita trescientas veces más luz es tener muchísimos más metros cuadrados. La superficie de una estrella crece con el cuadrado del radio, y la raíz cuadrada de 300 es poco más de 17. Eso es toda la relación entre las tres magnitudes: la luz que emite una estrella es su superficie multiplicada por lo fuerte que radia cada trozo de esa superficie, y a temperatura fija el segundo factor es el mismo para las dos. Duplica el radio y cuadruplicas la luz.',
       tip: 'Radio, no diámetro. Todos los tamaños de esta investigación son radios, en unidades del radio del Sol: 696.000 km.',
     },
     'measure-the-radius-ratio': {
@@ -145,9 +145,9 @@ export default {
     'where-the-sun-sits': {
       stage: { stars: [{ name: 'Tu estrella' }] },
       title: 'Encuentra el Sol',
-      body: 'La superficie del Sol está a 5.772 K y su luminosidad es, por definición, una luminosidad solar. Pon ahí el cursor y lee el radio.\n\nDeberías obtener alrededor de un radio solar. No es un razonamiento circular: el laboratorio no está consultando el Sol en ninguna tabla. Está calculando un radio a partir de la temperatura y la luminosidad que has puesto, con la misma relación que usa en todas partes. Que salga 1,0 es una comprobación de que la relación hace su trabajo.',
+      body: 'La superficie del Sol está a 5.772 K y su luminosidad es, por definición, una luminosidad solar. Pon ahí el cursor y lee el radio.\n\nLuego pregúntate si es el radio que esperarías para el Sol. Esa comprobación no es circular: el laboratorio no está consultando el Sol en ninguna tabla. Está calculando un radio a partir de la temperatura y la luminosidad que has puesto, con la misma relación que usa en todas partes, así que la respuesta pone a prueba la relación.',
       fields: [{ label: 'Radio que da el laboratorio' }],
-      tip: 'El Sol es la referencia de las tres unidades de aquí: R☉, L☉ y M☉. Es una comodidad, no una afirmación de que sea una estrella típica. El paso 24 enseña qué aspecto tiene lo típico.',
+      tip: 'El Sol es la referencia de las tres unidades de aquí: R☉, L☉ y M☉. Es una comodidad, no una afirmación de que sea una estrella típica. El paso de las cuatrocientas estrellas enseña qué aspecto tiene lo típico.',
     },
     'straight-up-the-diagram': {
       stage: { stars: [{ name: 'Tu estrella' }] },
@@ -167,6 +167,14 @@ export default {
         'no cambia, porque la luminosidad está fija',
         'se reduce en un factor de unas 100 veces',
         'se reduce en un factor de unas 10 veces',
+      ],
+      misconceptions: [
+        {
+          say: 'Más caliente no significa más grande aquí. La luminosidad está fija, y una superficie más caliente radia muchísimo más por cada metro cuadrado, así que pregúntate cuántos metros cuadrados necesita la estrella para emitir el mismo total.',
+        },
+        {
+          say: 'Diez es el cambio de la temperatura, no del radio. La emisión por metro cuadrado crece con la cuarta potencia de la temperatura, así que es el área la que tiene que caer tanto, y el radio va con la raíz cuadrada del área.',
+        },
       ],
       because:
         'Se reduce unas cien veces. Diez veces la temperatura son diez a la cuarta —diez mil veces— de emisión por metro cuadrado, y para mantener fija la luz total el área tiene que caer esas mismas diez mil, que son cien en radio. Compruébalo en el diagrama: a 1 L(sol) el extremo frío está en unos 3,7 radios solares y el caliente en unos 0,037. Ese segundo número es territorio de enana blanca, y el paso 20 vuelve sobre él.',
@@ -244,13 +252,13 @@ export default {
         ],
       },
       title: '¿Con cuánta pendiente?',
-      body: 'Tienes dos puntos de la secuencia principal: 0,2 masas solares dando unas 0,0066 luminosidades solares, y 20 masas solares dando unas 59.000.\n\nCien veces la masa, nueve millones de veces la luz. Compromete la forma de esa relación antes de comprobar las estrellas intermedias.',
+      body: 'Tienes dos puntos de la secuencia principal: 0,2 masas solares dando unas 0,0066 luminosidades solares, y 20 masas solares dando unas 59.000.\n\nSon las dos estrellas que mediste en el paso anterior. Compromete la forma de la relación entre sus masas y su luz antes de comprobar las estrellas intermedias.',
       prompt:
         'A lo largo de la secuencia principal, la luminosidad crece aproximadamente como la masa elevada a…',
       options: ['1: proporcional', '2', '3,5', '10'],
       because:
-        'Aproximadamente a 3,5, y esta medida da 3,5 casi exactamente: nueve millones son cien elevado a 3,5. No es una ley de la naturaleza —es un resumen de lo que producen los cálculos de estructura estelar para estrellas sostenidas como lo están las de la secuencia principal— y el exponente no es realmente constante: es más pronunciado cerca de una masa solar y más suave en el extremo alto. Lo que importa para el resto de la investigación es que es muy pronunciado. Una estrella con diez veces la masa no emite diez veces la luz; emite miles de veces más.',
-      tip: 'Cien elevado a 3,5 es diez elevado a siete, que son diez millones: bastante cerca de nueve millones para una relación tan aproximada.',
+        'Aproximadamente a 3,5, y esta medida da 3,5 casi exactamente: nueve millones son cien elevado a 3,5, y cien elevado a 3,5 es diez elevado a siete, diez millones: bastante cerca de nueve millones para una relación tan aproximada. No es una ley de la naturaleza —es un resumen de lo que producen los cálculos de estructura estelar para estrellas sostenidas como lo están las de la secuencia principal— y el exponente no es realmente constante: es más pronunciado cerca de una masa solar y más suave en el extremo alto. Lo que importa para el resto de la investigación es que es muy pronunciado. Una estrella con diez veces la masa no emite diez veces la luz; emite miles de veces más.',
+      tip: 'Las luminosidades están en la lista bajo la imagen, y en tu cuaderno si guardaste el paso anterior.',
     },
     'the-whole-sequence': {
       stage: {
@@ -382,6 +390,11 @@ export default {
         'una gigante roja, porque es débil',
         'imposible: nada puede estar tan caliente y ser tan débil',
       ],
+      misconceptions: [
+        {
+          say: 'Una estrella de la secuencia principal a esa temperatura estaría en decenas de miles de luminosidades solares, muchísimo más brillante que 0,01. Pon ahí el cursor en el modo libre y lee el radio antes de elegir.',
+        },
+      ],
       because:
         'Una enana blanca. A 30.000 K cada metro cuadrado radia ferozmente, así que emitir solo una centésima de luminosidad solar exige muy poca superficie: el radio sale en unos 0,0037 radios solares, bastante menos que el tamaño de la Tierra. Una estrella de la secuencia principal a 30.000 K estaría en decenas de miles de luminosidades solares, seis millones de veces más brillante que esta. La posición en el diagrama basta para clasificarla, porque los dos ejes fijan el radio entre ambos, y para eso sirve el diagrama.',
       tip: 'Las zonas del diagrama están dibujadas como bloques suaves con el borde de trazos a propósito. Una estrella no es gigante por cruzar una línea; el sombreado resume dónde acaba cada tipo de estrella.',
@@ -409,7 +422,7 @@ export default {
         stars: [{ name: '0,2 M☉' }, { name: '1 M☉' }, { name: '20 M☉' }],
       },
       title: 'Cuánto dura cada una',
-      body: 'La lectura da la vida total en la secuencia principal del modelo seleccionado. Recorre el deslizador de masa y anota tres de ellas.\n\nUno de estos números merece cuidado. El modelo de 0,2 masas solares da una vida en la secuencia principal de unos 1,1 <em>billones</em> de años. El Universo tiene unos 13.800 millones de años, aproximadamente una milésima de eso. Así que ninguna estrella así ha terminado su secuencia principal en ninguna parte. Esa cifra es una predicción obtenida integrando un modelo hacia adelante, no una vida observada, y no se puede contrastar con nada.',
+      body: 'La lectura da la vida total en la secuencia principal del modelo seleccionado. Recorre el deslizador de masa y anota tres de ellas.\n\nEstas vidas salen de integrar un modelo hacia adelante, no de ver terminar a ninguna estrella. El Universo tiene unos 13.800 millones de años: al anotar cada vida, pregúntate si una estrella de esa masa podría haber terminado ya su secuencia principal, y si algo podría contrastar la cifra.',
       fields: [
         { label: 'Vida en la secuencia principal de 0,2 M☉' },
         { label: '1 M☉' },
