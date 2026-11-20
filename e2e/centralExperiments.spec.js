@@ -555,7 +555,7 @@ test.describe('the central experiment of each investigation', () => {
     // that shares the total out reads them back.
     await walkToSid(page, plan, 'weigh-the-pair');
     await recordFields(page, id, 'weigh-the-pair', { a: '4.00', p: '4.00' });
-    await walkToSid(page, plan, 'back-to-the-balance-point');
+    await walkToSid(page, plan, 'compare-the-two-arms');
     await page.locator('#investigationBody [data-take="ratio"]').click();
 
     await walkToSid(page, plan, measureSid);

@@ -77,12 +77,12 @@
       "test": "e2e/centralExperiments.spec.js",
       "loop": [
         "which-pair-is-quicker",
-        "measurement-one-how-big-is",
-        "now-weigh-each-one",
+        "take-the-orbit-readings",
+        "share-the-total-out",
         "say-how-the-weighing-worked"
       ],
       "evidenceFrom": "engine",
-      "decision": "unreviewed",
+      "decision": "Which readings to take from the live pair (each star's distance from the balance point and the distance between the stars), which of them is the orbit size, how many laps to time before stopping the watch, and which reading to change to see what limits the mass.",
       "leakFree": true
     },
     "black-holes": {

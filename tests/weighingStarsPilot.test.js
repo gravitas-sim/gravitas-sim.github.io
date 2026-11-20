@@ -96,7 +96,7 @@ describe('the orbit size and the period, in the weighing step', () => {
 });
 
 describe('a reading at another phase is the same reading', () => {
-  const rows = ctx => step('measurement-one-how-big-is').probe(ctx);
+  const rows = ctx => step('take-the-orbit-readings').probe(ctx);
 
   test('the arms and the separation do not depend on the phase of a circular pair', () => {
     const a = rows(pairAt(0));
@@ -106,7 +106,7 @@ describe('a reading at another phase is the same reading', () => {
   });
 
   test('three readings that fit together are accepted, whatever phase they were taken at', () => {
-    const v = step('measurement-one-how-big-is').validate;
+    const v = step('take-the-orbit-readings').validate;
     expect(v({ ra: 1, rb: 3, sep: 4 }).level).toBe('ok');
     expect(v({ ra: 1.0, rb: 3.01, sep: 4.0 }).level).toBe('ok');
     expect(v({ ra: 1, rb: 3, sep: 5 }).level).toBe('warn');
@@ -115,10 +115,8 @@ describe('a reading at another phase is the same reading', () => {
 });
 
 describe('the period from the laps timed', () => {
-  const p = step('measurement-two-how-long-does').fields.find(
-    f => f.id === 'p'
-  );
-  const check = step('measurement-two-how-long-does').validate;
+  const p = step('time-the-laps').fields.find(f => f.id === 'p');
+  const check = step('time-the-laps').validate;
 
   test('the page divides the stopwatch reading by the laps', () => {
     expect(p.compute({ t: 12, laps: 3 })).toBeCloseTo(4, 12);
@@ -221,13 +219,13 @@ describe('the masses on the canvas', () => {
     for (const sid of [
       'a-practice-run',
       'the-mystery-pair',
-      'measurement-one-how-big-is',
-      'measurement-two-how-long-does',
+      'take-the-orbit-readings',
+      'time-the-laps',
       'weigh-the-pair',
-      'back-to-the-balance-point',
+      'compare-the-two-arms',
       'splitting-them-up',
-      'now-weigh-each-one',
-      'one-on-your-own',
+      'share-the-total-out',
+      'weigh-a-new-pair',
       'and-which-one-is-heavier',
     ])
       expect(hidden).toContain(sid);
