@@ -96,6 +96,7 @@ import {
   ensureWidget,
   getWidget,
   needsLoading,
+  warmAhead,
   toolFold,
   openingValues,
   startButton,
@@ -875,8 +876,9 @@ function renderStep() {
   const id = stepId(stepIndex);
   const saved = responses[id];
 
-  // A run's or an estimate's code comes with its step, so a lesson opened before the network dropped still opens.
+  // The code for a run, an estimate or a reveal comes with its step, and the next instrument ahead of it, not with the lesson: a lesson opened before the network dropped still opens.
   fetchSeams(step, () => currentStep() === step && renderStep());
+  warmAhead(active.steps, stepIndex);
 
   const parts = stepMarkup(step, {
     id,
