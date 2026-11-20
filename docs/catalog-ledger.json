@@ -994,24 +994,85 @@
           "ref": "D-R10-24",
           "owner": 300,
           "note": "Answer printed to more places than its tolerance resolves; reword the displayed precision only"
+        },
+        {
+          "ref": "D-R4-357-02",
+          "owner": 357,
+          "note": "For Carl: a pre-computed run path for slow machines is a new shared capability and needs a named task it improves; recorded, not built"
         }
       ],
-      "questions": { "Q1": "", "Q2": "", "Q3": "", "Q4": "", "Q5": "" },
+      "questions": {
+        "Q1": "The student finds that one configuration gives three different outcomes at three steps while the energy drift stays under a part in a million, that an outcome counts only when halving the step leaves it unchanged, and where a published boundary and a short integration disagree: measured on the live Binary and Circumbinary Planet Lab runs, which a paragraph could not show.",
+        "Q2": "Each run names its panel, its starting radius and what to set and watch; the held predictions (starting radius, the sweep, the circumbinary direction) reveal at the step that runs them, and the panel's own rows say which bodies are on the canvas and whether the last run still describes the scene.",
+        "Q3": "Scene, panel, plot, formula and prose name the same two stars and the planet, radii in binary separations, periods in binary periods and the drift in per cent; survived this integration is never written as stable, in both languages.",
+        "Q4": "The student chooses the starting radius, the step to halve to, which sweep trial to recheck, which of three runs to report and what to claim; each can be made badly, and the short answer is graded on whether it claims a verdict.",
+        "Q5": "Met by the core's uncertainty, convergence and model-limit steps (what-the-fit-assumes, who-is-wrong, what-you-can-say): the lesson has no deeper steps."
+      },
       "leak": {
         "L1": "HOLDS: no field cue or step placeholder holds a numeral at any depth, in either language, and the panel renders none that does (tests/fieldCue.test.js); the expected value is the field's `want`, which no page reads.",
-        "L2": "",
-        "L3": "",
-        "L4": "",
-        "L5": ""
+        "L2": "UNCHANGED (357): no panel or stage state was edited; the Binary Planet Run panel opens on the 0.15 configuration the first run reads, as before.",
+        "L3": "HOLDS (357): the starting-radius prediction (before-you-run-anything) comes before any run, and what-survived-will-mean names no radius; the move-it-out, sweep and circumbinary-direction predictions are no longer answered by a body, checklist or tip before their reveal (the islands-of-stability tip on what-the-fit-assumes and the expect-the-disagreement clause of the optional circumbinary sweep are removed).",
+        "L4": "HOLDS (357): no checklist, body or tip of run-the-default, run-it-at-030, energy-drift-as-a-screen, the-case-that-matters, run-the-circumbinary or where-the-fit-disagrees states what the run shows; the readings sit in the because of why-so-quiet, which-answer-is-right and how-without-a-pass. The hint-less fields of read-the-sweep hold units only (the expected values are each field's `want`, which no page shows).",
+        "L5": "UNCHANGED (357): readout and instructor text were not edited; the because texts show only after the question is answered."
       },
-      "task_rule_items": [],
-      "editorial": "OPEN",
-      "redesign": "OPEN",
-      "reason": "Corrections I reworded steps for factual consistency (register D-R4-300-26); editorial pass still OPEN.",
-      "step_revisions": [],
+      "task_rule_items": [
+        "T2: the held predictions return at the step that runs them, as before; no step was re-tasked.",
+        "T5: authored feedback unchanged (finerAlwaysRight at which-answer-is-right, usedSType at circumbinary-boundary); the other numeric steps keep their validate messages, which must stay byte-identical.",
+        "PATTERN WORTH COPYING (controlled runs): the student predicts the outcome before any run (before-you-run-anything, move-it-out, predict-the-sweep), runs one configuration and reads it (run-the-default, what-the-quiet-run-did), runs the same configuration at three steps and gets three outcomes that disagree (the-case-that-matters, the-drift-was-tiny), is asked what to report rather than which run is right (which-answer-is-right), is told that an outcome counts only when halving the step leaves it unchanged (convergence-is-the-test), and writes a sentence that names the configuration and the method, reports the disagreement and claims no verdict (report-it). The lesson is the reference for the controlled-run pattern that K6 formalises; K3 and K8 are realised by hand here.",
+        "SLOW-MACHINE CONCERN FOR CARL, recorded and not built (register D-R4-357-02): the runs take minutes and the sweep four to seven (INFERRED from the text), so a slow machine pays for them. A pre-computed run path would be a new shared capability (section 7.2, item 1) and needs a named task it improves before anything is built."
+      ],
+      "editorial": "REVISED",
+      "redesign": "REVIEWED CLEAR",
+      "reason": "STRONG: leak fixes and polish only. Narrated run outcomes moved out of checklists, bodies and tips into the because of the question that follows each run; no validate, answer, tolerance, id or stage changed (register D-R4-357-01).",
+      "step_revisions": [
+        {
+          "sid": "run-the-default",
+          "change": "REWORDED: the checklist no longer says the semi-major axis barely moves, that the eccentricity does not come back down or that the run is quiet."
+        },
+        {
+          "sid": "why-so-quiet",
+          "change": "REWORDED: the body points back to the student's four readings; the 0.62 separations and the quarter of a separation moved to the because."
+        },
+        {
+          "sid": "run-it-at-030",
+          "change": "REWORDED: the body no longer says the run will not take twenty periods; the checklist and tip no longer say how it ends."
+        },
+        {
+          "sid": "what-the-fit-assumes",
+          "change": "REWORDED: the tip no longer states the islands-of-stability finding that answers the next prediction."
+        },
+        {
+          "sid": "energy-drift-as-a-screen",
+          "change": "REWORDED: the body and checklist no longer give the drift, the eccentricity, the collision or the number of halvings; they moved to the because of which-answer-is-right."
+        },
+        {
+          "sid": "the-case-that-matters",
+          "change": "REWORDED: the body no longer says the run is not quiet or that the counter climbs."
+        },
+        {
+          "sid": "which-answer-is-right",
+          "change": "REWORDED: the because now carries the readings of the 0.50 run and contrasts it with the 0.25 case."
+        },
+        {
+          "sid": "run-the-circumbinary",
+          "change": "REWORDED: the checklist no longer gives the eccentricity at 4.0 or at 2.0 or says the encounter count surprises; the tip no longer says nothing came near anything."
+        },
+        {
+          "sid": "how-without-a-pass",
+          "change": "REWORDED: the because now carries the 4.0 reading and the contrast with the close pass."
+        },
+        {
+          "sid": "sweep-the-circumbinary",
+          "change": "REWORDED: the clause that told the student to expect the disagreement is removed."
+        },
+        {
+          "sid": "where-the-fit-disagrees",
+          "change": "REWORDED: the tip no longer says both planets survive."
+        }
+      ],
       "walk": "NOT RUN",
       "pr": null,
-      "hash": null
+      "hash": "6b26aab9e23edb0303b34ebeb478eb9bd0cc1b615724130246145c2209b58d47"
     },
     {
       "id": "investigation:black-holes",
