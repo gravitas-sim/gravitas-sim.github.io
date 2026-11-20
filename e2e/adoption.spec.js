@@ -99,7 +99,7 @@ test.describe('the instructor path', () => {
           ),
         { timeout: 60_000 }
       )
-      .toBe('Eight minutes of arc');
+      .toBe('Three questions about an orbit');
     await page.keyboard.press('ArrowRight');
     expect(
       await page.evaluate(

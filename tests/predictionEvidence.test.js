@@ -324,6 +324,17 @@ describe('the step on screen, held and revealed', () => {
     expect(body.querySelector('#invChoicePrompt')).not.toBeNull();
   });
 
+  test('until the box has arrived the step says so, and the box replaces the line when it does', () => {
+    slots.reveal = null;
+    go('guess');
+    expect(body.querySelector('[data-est]')).toBeNull();
+    expect(body.querySelector('[data-est-wait]').textContent).toBe('Loading…');
+    revealModule(reveal);
+    paint();
+    expect(body.querySelector('[data-est-wait]')).toBeNull();
+    expect(body.querySelector('[data-est-commit]')).not.toBeNull();
+  });
+
   test('every box is a labelled text input and the commit is a button', () => {
     go('guess');
     for (const b of body.querySelectorAll('[data-est]')) {

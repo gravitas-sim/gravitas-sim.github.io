@@ -15,6 +15,7 @@ import {
   parseFieldNumber,
   progressFor,
   fieldModule,
+  estimateHolds,
   fetchSeams,
   renderProgressNotice,
   renderSaveStatus,
@@ -872,9 +873,7 @@ function renderStep() {
   const id = stepId(stepIndex);
   const saved = responses[id];
 
-  // The code for a controlled run, or for an estimate and the box where a
-  // prediction meets its readings, comes with the step that shows it, not with
-  // the lesson, so a lesson nobody opened before the network dropped still opens.
+  // The code for a run, an estimate or a reveal comes with its step, not with the lesson: a lesson opened before the network dropped still opens.
   fetchSeams(step, () => currentStep() === step && renderStep());
 
   const parts = stepMarkup(step, {
@@ -2039,6 +2038,7 @@ function applyingFrom(from, dir) {
 }
 
 function next() {
+  if (estimateHolds()) return;
   if (stepIndex === active.steps.length - 1) {
     openFinish();
     return;
@@ -2404,8 +2404,8 @@ function openFinish() {
     })}</p>
     <p class="inv-finish-note">${escape(t('inv.finish.note'))}</p>`;
   els.nameInput.value = getStudentName();
-  import('./investigations/next.js').then(m =>
-    m.whatNext(document.getElementById('investigationNextList'), {
+  import('./investigations/ending.js').then(m =>
+    m.ending(finishHost(), shown(), {
       id: active.id,
       deeper: active.depths && !els.deeper.hidden && els.deeper.textContent,
       onDeeper: () => {

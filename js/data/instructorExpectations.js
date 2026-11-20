@@ -237,17 +237,17 @@ export default {
         'At 4 M☉ and 1 M☉ the arms are 0.80 and 3.20 AU, a ratio of 4.00 against a mass ratio of 4.00. Expect somebody to ask why the pair restarts when they move a slider: because a star whose mass changed mid-orbit would be on a path that no longer closes, so the pair is restood rather than edited. That is worth two minutes.',
       'a-practice-run':
         'Practice pair: a = 2 AU, P = 2 years, giving a total of 2 solar masses.',
-      'measurement-one-how-big-is':
+      'take-the-orbit-readings':
         'The mystery pair is 4 AU apart: Star A about 1 AU from the balance point, Star B about 3 AU. Students take both arms and the separation from the panel; any phase gives the same readings.',
-      'measurement-two-how-long-does':
+      'time-the-laps':
         'One lap takes about 4 years. Students say how many laps they timed and take the stopwatch reading; the page divides. Expect the half-lap slip.',
       'weigh-the-pair':
         'a³ = 64, P² = 16, so the total is 4 solar masses. Students choose which reading is a; each wrong choice, half a lap and months get a named slip.',
-      'back-to-the-balance-point':
+      'compare-the-two-arms':
         'Star B swings about three times as far out as Star A; the nearer star is the heavier.',
-      'now-weigh-each-one':
+      'share-the-total-out':
         'The 3:1 distance ratio splits the 4 solar masses into 3 and 1.',
-      'one-on-your-own':
+      'weigh-a-new-pair':
         'The independent pair is a = 3 AU, P = 3 years, giving 3 solar masses.',
     },
     'black-holes': {

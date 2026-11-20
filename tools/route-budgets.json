@@ -12,19 +12,19 @@
         "requests": 109
       },
       "kepler": {
-        "kb": 2672,
+        "kb": 2671.7,
         "requests": 142
       },
       "transit": {
-        "kb": 2677.8,
+        "kb": 2677.5,
         "requests": 142,
-        "toolKb": 2841,
+        "toolKb": 2840.7,
         "toolRequests": 158
       },
       "power-law": {
-        "kb": 2636.8,
+        "kb": 2636.6,
         "requests": 142,
-        "toolKb": 2690,
+        "toolKb": 2689.8,
         "toolRequests": 145
       },
       "largest-lesson": {
@@ -52,7 +52,7 @@
         "requests": 61
       },
       "observatory": {
-        "kb": 201,
+        "kb": 200.7,
         "requests": 18
       },
       "catalog": {
@@ -92,7 +92,7 @@
         "requests": 36
       },
       "lab3d-guide": {
-        "kb": 990.1,
+        "kb": 990.4,
         "requests": 41
       },
       "mission": {
@@ -124,37 +124,37 @@
         "requests": 14
       },
       "compute": {
-        "kb": 181.6,
+        "kb": 181.5,
         "requests": 20
       }
     },
     "build": {
       "front-door": {
-        "kb": 545.0,
+        "kb": 545.1,
         "requests": 58
       },
       "sandbox": {
-        "kb": 545.0,
+        "kb": 545.1,
         "requests": 58
       },
       "kepler": {
-        "kb": 934,
+        "kb": 933.8,
         "requests": 77
       },
       "transit": {
-        "kb": 942.1,
+        "kb": 941.8,
         "requests": 77,
-        "toolKb": 1027.4,
+        "toolKb": 1027.0,
         "toolRequests": 93
       },
       "power-law": {
-        "kb": 910.2,
+        "kb": 910.0,
         "requests": 77,
-        "toolKb": 926.7,
+        "toolKb": 926.5,
         "toolRequests": 80
       },
       "largest-lesson": {
-        "kb": 1040.8,
+        "kb": 1040.6,
         "requests": 82
       },
       "teaching": {
@@ -170,15 +170,15 @@
         "requests": 2
       },
       "figure": {
-        "kb": 681.1,
+        "kb": 681.2,
         "requests": 60
       },
       "experiments": {
-        "kb": 297.1,
+        "kb": 297.2,
         "requests": 4
       },
       "observatory": {
-        "kb": 96.3,
+        "kb": 96.1,
         "requests": 6
       },
       "catalog": {
@@ -218,7 +218,7 @@
         "requests": 3
       },
       "lab3d-guide": {
-        "kb": 789.9,
+        "kb": 790.0,
         "requests": 5
       },
       "mission": {
@@ -250,7 +250,7 @@
         "requests": 4
       },
       "compute": {
-        "kb": 83.1,
+        "kb": 82.9,
         "requests": 3
       }
     }

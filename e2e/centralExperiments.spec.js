@@ -368,6 +368,37 @@ test.describe('the central experiment of each investigation', () => {
     await expectVerdictRevealed(page, plan, predict);
   });
 
+  test('transit-photometry: Next waits for a slow estimate box instead of passing it', async ({
+    page,
+    app,
+  }) => {
+    const id = 'transit-photometry';
+    const [predictSid] = declared(id).loop;
+    await openInvestigation(page, app, id);
+    const plan = await lessonPlan(page, id);
+    // The estimate box's code is held back, as on a slow phone.
+    let release;
+    const held = new Promise(r => (release = r));
+    await page.route(/\/reveal\.js(\?|$)/, async route => {
+      await held;
+      await route.continue();
+    });
+    await walkToSid(page, plan, predictSid);
+    const body = page.locator('#investigationBody');
+    const title = page.locator('.inv-step-title');
+    const here = await title.innerText();
+    await expect(body.locator('[data-est-wait]')).toBeVisible();
+    await expect(body.locator('[data-est]')).toHaveCount(0);
+    await page.locator('#investigationNext').click();
+    await expect(title).toHaveText(here);
+    await expect(page.locator('#srStatus')).toHaveText('Loading…');
+    release();
+    await expect(body.locator('[data-est]')).toBeVisible();
+    await expect(body.locator('[data-est-wait]')).toHaveCount(0);
+    await page.locator('#investigationNext').click();
+    await expect(title).not.toHaveText(here);
+  });
+
   test('transit-photometry: the dip goes as the square of the planet radius @accepts:ce.transit-photometry', async ({
     page,
     app,
@@ -569,7 +600,7 @@ test.describe('the central experiment of each investigation', () => {
     // that shares the total out reads them back.
     await walkToSid(page, plan, 'weigh-the-pair');
     await recordFields(page, id, 'weigh-the-pair', { a: '4.00', p: '4.00' });
-    await walkToSid(page, plan, 'back-to-the-balance-point');
+    await walkToSid(page, plan, 'compare-the-two-arms');
     await page.locator('#investigationBody [data-take="ratio"]').click();
 
     await walkToSid(page, plan, measureSid);

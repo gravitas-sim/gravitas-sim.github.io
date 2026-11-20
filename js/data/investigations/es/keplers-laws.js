@@ -13,6 +13,9 @@
 export default {
   title: 'Las leyes de Kepler',
   subtitle: 'Mide la forma, el ritmo y la duración de órbitas reales',
+  question:
+    '¿Qué trayectoria sigue un planeta alrededor de su estrella, y qué fija lo rápido que se mueve y lo que dura su año?',
+  medium: { name: 'la vista de la órbita en directo' },
   duration: '35-45 min',
   level: 'Astronomía introductoria',
   objectives: [
@@ -23,12 +26,8 @@ export default {
   ],
   steps: [
     {
-      title: 'Ocho minutos de arco',
-      body: 'Durante casi toda la historia registrada las órbitas fueron círculos. Cuando las observaciones no encajaban, los astrónomos añadían más círculos —epiciclos— hasta que el modelo cuadraba. Copérnico movió el Sol al centro pero mantuvo los círculos, y su modelo no fue más preciso que el que sustituía.\n\nLo que rompió el círculo fueron los datos. Tycho Brahe pasó dos décadas midiendo posiciones planetarias con una precisión de un minuto de arco, el límite de lo posible sin telescopio. Cuando Johannes Kepler intentó ajustar las observaciones de Marte de Tycho a una órbita circular, el mejor ajuste que consiguió fallaba por ocho minutos de arco. Podría haber llamado a eso error observacional y haber seguido adelante. En vez de eso confió en las medidas de Tycho por encima de dos mil años de suposiciones, y pasó años averiguando qué curva encajaría.\n\nLa respuesta fue una elipse. Dónde se sitúa el Sol dentro de ella es lo primero que hay que averiguar.',
-      quote: {
-        text: 'Puesto que estos ocho minutos no podían ignorarse, ellos solos han abierto el camino a la reforma de toda la astronomía.',
-        by: 'Johannes Kepler, Astronomia Nova, 1609',
-      },
+      title: 'Tres preguntas sobre una órbita',
+      body: '¿Qué trayectoria sigue un planeta alrededor de su estrella, y qué fija lo rápido que se mueve y lo que dura su año? Lo responderás en la vista de la órbita en directo, prediciendo y midiendo.\n\nJohannes Kepler lo respondió hace cuatrocientos años a partir de posiciones de Marte medidas sin telescopio. Por qué confió en ellas llega después de tu primera predicción.',
       tip: 'Mientras una investigación está en marcha, pulsar selecciona un objeto sin abrir la ficha del inspector, y la colocación de objetos nuevos queda desactivada para que un clic accidental no altere el sistema que estás midiendo.',
     },
     {
@@ -95,7 +94,11 @@ export default {
     },
     {
       title: 'La primera ley, y la anatomía de una elipse',
-      body: '<strong>Primera ley</strong> de Kepler: todo planeta se mueve sobre una elipse, con la estrella en uno de los focos.\n\nUna elipse tiene dos focos. Su propiedad definitoria es que, para cualquier punto de la curva, las distancias a los dos focos suman siempre el mismo total. El <em>[[semi-major-axis|semieje mayor]]</em> <strong>a</strong> es la mitad del diámetro largo, y es el tamaño de la órbita. La <em>[[eccentricity|excentricidad]]</em> <strong>e</strong> es su forma: los focos quedan a una distancia <em>a</em> × <em>e</em> a cada lado del centro, así que <em>e</em> = 0 pone ambos focos en el centro y da un círculo, mientras que e acercándose a 1 estira la elipse hasta convertirla en una astilla.\n\nEl segundo foco es la parte rara. Allí no hay nada. Ninguna masa, ningún objeto, nada que lo marque. Es una consecuencia puramente geométrica de la fuerza del inverso del cuadrado.',
+      quote: {
+        text: 'Puesto que estos ocho minutos no podían ignorarse, ellos solos han abierto el camino a la reforma de toda la astronomía.',
+        by: 'Johannes Kepler, Astronomia Nova, 1609',
+      },
+      body: 'Tycho Brahe midió posiciones planetarias con una precisión de un minuto de arco, el límite sin telescopio. Cuando Johannes Kepler ajustó las observaciones de Marte de Tycho a un círculo, el mejor ajuste fallaba por ocho minutos de arco, y confió en las medidas por encima de dos mil años de círculos.\n\n<strong>Primera ley</strong> de Kepler: todo planeta se mueve sobre una elipse, con la estrella en uno de los focos.\n\nUna elipse tiene dos focos. Su propiedad definitoria es que, para cualquier punto de la curva, las distancias a los dos focos suman siempre el mismo total. El <em>[[semi-major-axis|semieje mayor]]</em> <strong>a</strong> es la mitad del diámetro largo, y es el tamaño de la órbita. La <em>[[eccentricity|excentricidad]]</em> <strong>e</strong> es su forma: los focos quedan a una distancia <em>a</em> × <em>e</em> a cada lado del centro, así que <em>e</em> = 0 pone ambos focos en el centro y da un círculo, mientras que e acercándose a 1 estira la elipse hasta convertirla en una astilla.\n\nEl segundo foco es la parte rara. Allí no hay nada. Ninguna masa, ningún objeto, nada que lo marque. Es una consecuencia puramente geométrica de la fuerza del inverso del cuadrado.',
       tip: 'Arrastra el deslizador del paso siguiente para ver cómo se separan los focos a medida que crece e.',
       compare:
         'La estrella se sitúa en uno de los focos y el otro foco está vacío. La separación del panel y la que dan tus dos distancias son el mismo número porque los focos son simétricos respecto al centro.',
@@ -303,6 +306,12 @@ export default {
       body: 'Arriba están tu estimación, el periodo que da la ley a tu distancia y el planeta desde el que lo escalaste. Una ley es más que una curva que pasa por tus puntos: dice cuál tiene que ser el periodo a una distancia que nadie ha medido, y un planeta puesto ahí estaría obligado a cumplirla.\n\nSi tu estimación se desvió, fíjate en de dónde salió: de leer a ojo una gráfica curva. Enderezar la gráfica, o usar el exponente, es para lo que sirve la ley.',
     },
     {
+      stage: {
+        system: {
+          starName: 'Estrella de prueba',
+          planets: [{ name: 'Planeta de prueba' }],
+        },
+      },
       title: 'De qué depende la constante',
       body: 'Tus planetas tenían masas descabelladamente distintas, desde un pequeño mundo rocoso hasta un gigante gaseoso cientos de veces más pesado, y todos dieron el mismo <em>P</em>²/<em>a</em>³. ¿De qué depende entonces esa constante?\n\nAquí hay un planeta en una órbita circular a 1 UA. Pulsa <strong>Ejecutar A</strong> y lee su periodo; después <strong>Cambiar masa de la estrella</strong> y pulsa <strong>Ejecutar B</strong>: el mismo planeta a la misma distancia, alrededor de una estrella de doble masa. Las dos ejecuciones quedan en la tabla.',
       prompt:
@@ -350,7 +359,7 @@ export default {
     },
     {
       title: 'Pesar otra estrella',
-      body: 'Aquí está la recompensa. Kepler-10 es una estrella parecida al Sol a unos 600 años luz con un planeta de 2,4 radios terrestres, Kepler-10c, descubierto por [[transit|tránsito]]. Su órbita tiene un semieje mayor de unas 0,24 UA y un periodo de unos 45 días, que son 0,123 años.\n\nUsa la forma de Newton, tomando la masa del planeta como despreciable:\n\n<em>M</em> = <em>a</em>³ / <em>P</em>²  (en masas solares, con <em>a</em> en UA y <em>P</em> en años)\n\n<strong>Paso 1.</strong> Eleva la distancia al cubo: 0,24³ = 0,0138.\n\n<strong>Paso 2.</strong> Eleva el periodo al cuadrado: 0,123² = 0,0151.\n\n<strong>Paso 3.</strong> Divide.',
+      body: 'Aquí está la recompensa. Kepler-10 es una estrella parecida al Sol a unos 600 años luz con un planeta de 2,4 radios terrestres, Kepler-10c, descubierto por [[transit|tránsito]]. Su órbita tiene un semieje mayor de unas 0,24 UA y un periodo de unos 45 días, que son 0,123 años.\n\nUsa la forma de Newton, tomando la masa del planeta como despreciable:\n\n<em>M</em> = <em>a</em>³ / <em>P</em>²  (en masas solares, con <em>a</em> en UA y <em>P</em> en años)\n\n<strong>Primero:</strong> eleva la distancia al cubo: 0,24³ = 0,0138.\n\n<strong>Segundo:</strong> eleva el periodo al cuadrado: 0,123² = 0,0151.\n\n<strong>Tercero:</strong> divide.',
       prompt: 'Masa de Kepler-10, en masas solares',
       unit: 'M_sol',
       because:
@@ -393,7 +402,7 @@ export default {
     },
     {
       title: 'Dónde te deja esto',
-      body: 'Has medido la forma de una órbita, has visto a un planeta cambiar velocidad por distancia conservando el momento angular, y has recuperado una ley de potencias a partir de ocho medidas que tomaste tú mismo. Después la has usado para pesar una estrella que nunca visitarás.\n\nTodo esto salió de posiciones a simple vista registradas antes de que existiera el telescopio, por un observador que se negó a redondear ocho minutos de arco.',
+      body: 'Las tres leyes no son tres hechos separados. Una sola atracción hacia la estrella, que se debilita con el cuadrado de la distancia, las produce todas, y por eso se cumplen en TRAPPIST-1 igual que aquí. Describen un cuerpo ligero que gira alrededor de otro mucho más pesado: cuando las dos masas son parecidas, como en una pareja de estrellas, las dos se mueven, y el periodo depende de su suma.',
       tip: 'Si vas a entregar esto para una calificación, pulsa Terminar para introducir tu nombre y descargar tu informe de laboratorio. Si no, simplemente puedes cerrar el panel.',
     },
   ],

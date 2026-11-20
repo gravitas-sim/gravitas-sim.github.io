@@ -21,6 +21,8 @@ const WEIGHING = {
   thumbnail: 'images/investigations/weighing-stars.webp',
   title: 'Weighing the Stars',
   subtitle: 'Use an orbit to measure something you cannot put on a scale',
+  question: 'How can anyone weigh a star they can never touch?',
+  medium: { kind: 'scene', name: 'the live view' },
   duration: '35-45 min',
   level: 'Introductory astronomy',
   audience: 'intro',
@@ -31,6 +33,48 @@ const WEIGHING = {
   prerequisites: [],
   tags: ['stars', 'gravity', 'orbits'],
   lock: { placement: true, inspector: true, areaSweep: false },
+  retired: {
+    'measurement-one-how-big-is': {
+      to: 'take-the-orbit-readings',
+      release: '3.1',
+      was: {
+        en: 'Pause the pair and read the two arm lengths and the star-to-star distance off the panel.',
+        es: 'Pausar el par y leer en el panel las dos longitudes de brazo y la distancia de estrella a estrella.',
+      },
+    },
+    'measurement-two-how-long-does': {
+      to: 'time-the-laps',
+      release: '3.1',
+      was: {
+        en: 'Time one lap of Star A with the stopwatch and capture the orbit.',
+        es: 'Cronometrar una vuelta de la estrella A y registrar la órbita.',
+      },
+    },
+    'back-to-the-balance-point': {
+      to: 'compare-the-two-arms',
+      release: '3.1',
+      was: {
+        en: 'Compare the two arms and say which star stays closer to the balance point.',
+        es: 'Comparar los dos brazos y decir qué estrella queda más cerca del punto de equilibrio.',
+      },
+    },
+    'now-weigh-each-one': {
+      to: 'share-the-total-out',
+      release: '3.1',
+      was: {
+        en: 'Share four solar masses between the two stars in the ratio three to one and write the two masses in.',
+        es: 'Repartir cuatro masas solares entre las dos estrellas en la proporción tres a uno y escribir las dos masas.',
+      },
+    },
+    'one-on-your-own': {
+      to: 'weigh-a-new-pair',
+      release: '3.1',
+      was: {
+        en: 'For a pair 3 AU apart with a 3 year period, put in a and P, cube and square them, and find the total mass.',
+        es: 'Para un par a 3 UA con un periodo de 3 años, escribir a y P, elevarlos al cubo y al cuadrado, y hallar la masa total.',
+      },
+    },
+  },
   objectives: [
     'Explain why both stars in a binary move, rather than one going round the other',
     'Say what the barycenter is and where it sits when one star is heavier',
@@ -45,21 +89,13 @@ const WEIGHING = {
       stage: EQUAL_PAIR,
       type: 'read',
       title: 'You cannot put a star on a scale',
-      body: `A bathroom scale works by pushing back. Stand on it, and it measures
-             how hard the Earth is pulling you down. There is no version of that
-             for a star. Stars are enormous, they are unreachable, and the
-             nearest one after the Sun is forty thousand years away at the speed
-             of a spacecraft.
-             \n\nAnd yet, open any astronomy textbook and it will tell you the
-             mass of dozens of stars, to two decimal places. Somebody measured
-             them. How?
-             \n\nThe answer is the last thing the Kepler investigation showed
-             you. Kepler found that the size and the timing of an orbit go
-             together. Newton found that the <em>mass</em> of whatever is doing
-             the pulling belongs in that relationship too, and once you know
-             that, an orbit becomes a measuring instrument.
-             \n\nThis investigation is about pointing that instrument at a pair of
-             stars.`,
+      body: `How can anyone weigh a star they can never touch? You will choose a
+             way it could be done, then try it in the live view and take the
+             measurements yourself.
+             \n\nA bathroom scale works by pushing back: stand on it, and it
+             measures how hard the Earth is pulling you down. There is no
+             version of that for a star, and yet any astronomy textbook gives
+             the masses of dozens of stars, to two decimal places.`,
       tip: 'Nothing here needs algebra. You will read two numbers off a screen and do one division.',
     },
     {
@@ -571,7 +607,7 @@ const WEIGHING = {
         'Orbit size and period. Those are the only two things in the formula, and both of them are things you can watch happen. Everything else about the stars, however interesting, is beside the point here.',
     },
     {
-      sid: 'measurement-one-how-big-is',
+      sid: 'take-the-orbit-readings',
       stage: hidden(MYSTERY_PAIR),
       type: 'measure',
       title: 'Measurement one: how big is the orbit?',
@@ -656,7 +692,7 @@ const WEIGHING = {
       ],
     },
     {
-      sid: 'measurement-two-how-long-does',
+      sid: 'time-the-laps',
       stage: hidden(MYSTERY_PAIR),
       type: 'measure',
       title: 'Measurement two: how long does a lap take?',
@@ -733,7 +769,7 @@ const WEIGHING = {
     {
       sid: 'weigh-the-pair',
       stage: hidden(MYSTERY_PAIR),
-      requires: ['measurement-one-how-big-is', 'measurement-two-how-long-does'],
+      requires: ['take-the-orbit-readings', 'time-the-laps'],
       type: 'measure',
       title: 'Weigh the pair',
       body: `Choose, from the readings you took, the two numbers the
@@ -872,7 +908,7 @@ const WEIGHING = {
              this investigation.`,
     },
     {
-      sid: 'back-to-the-balance-point',
+      sid: 'compare-the-two-arms',
       stage: hidden(MYSTERY_PAIR),
       type: 'measure',
       title: 'Back to the balance point',
@@ -946,9 +982,9 @@ const WEIGHING = {
         'Star A is three times as heavy. It is the see-saw again: Star B is three times further out, so Star A must be three times heavier to balance it. You now know the total mass and the ratio, which is enough to pin down both stars.',
     },
     {
-      sid: 'now-weigh-each-one',
+      sid: 'share-the-total-out',
       stage: hidden(MYSTERY_PAIR),
-      requires: ['weigh-the-pair', 'back-to-the-balance-point'],
+      requires: ['weigh-the-pair', 'compare-the-two-arms'],
       type: 'measure',
       title: 'Now weigh each one',
       body: `You know the total mass of the pair from the weighing step, and
@@ -978,8 +1014,7 @@ const WEIGHING = {
           label: 'How many times further out Star B is',
           unit: '',
           decimals: 2,
-          compute: (v, e) =>
-            e ? e('back-to-the-balance-point', 'ratio') : NaN,
+          compute: (v, e) => (e ? e('compare-the-two-arms', 'ratio') : NaN),
         },
         {
           id: 'ma',
@@ -1114,7 +1149,7 @@ const WEIGHING = {
       tip: 'That is a different investigation. This one has done its job if you can say why the star moves at all.',
     },
     {
-      sid: 'one-on-your-own',
+      sid: 'weigh-a-new-pair',
       stage: hidden(MYSTERY_PAIR),
       type: 'measure',
       title: 'One on your own',
@@ -1165,7 +1200,7 @@ const WEIGHING = {
     },
     {
       sid: 'say-how-the-weighing-worked',
-      requires: ['now-weigh-each-one'],
+      requires: ['share-the-total-out'],
       type: 'question',
       kind: 'short',
       title: 'Say how the weighing worked',
@@ -1180,20 +1215,13 @@ const WEIGHING = {
       sid: 'what-you-can-now-say',
       stage: MYSTERY_PAIR,
       type: 'read',
-      title: 'What you can now say',
-      body: `In ordinary words, with nothing memorized:
-             \n\n<strong>When two stars orbit each other, both of them move
-             around a shared balance point. How big their orbit is and how long
-             it takes tell us their combined mass. How far each star sits from
-             the balance point tells us how that mass is divided between
-             them.</strong>
-             \n\nThat is why binary stars matter so much. They are the only
-             direct way we have of weighing a star, and very nearly everything
-             else we claim to know about stellar masses rests on them. When a
-             textbook says the Sun is an average sort of star, or that a star ten
-             times the Sun's mass burns out in a few tens of millions of years,
-             the numbers behind those statements were calibrated on pairs of
-             stars measured exactly the way you just did it.
+      title: 'Why it matters',
+      body: `Binary stars are the only direct way we have of weighing a star,
+             and very nearly everything else we claim to know about stellar
+             masses rests on them. When a textbook says that a star ten times
+             the Sun's mass burns out in a few tens of millions of years, the
+             masses behind that statement were calibrated on pairs of stars
+             measured the way you measured this one.
              \n\nAbout half the stars in the sky have a companion. Every one of
              them is quietly announcing its own mass to anyone who watches long
              enough.`,

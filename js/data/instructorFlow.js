@@ -567,7 +567,7 @@ export default {
         text: 'The central measurement. Students practice on a known pair, then measure a mystery binary’s separation and period with a stopwatch and weigh it.',
       },
       {
-        from: 'back-to-the-balance-point',
+        from: 'compare-the-two-arms',
         to: 'the-answer',
         text: 'Splitting the total between the two stars using the balance point, and the reveal.',
       },

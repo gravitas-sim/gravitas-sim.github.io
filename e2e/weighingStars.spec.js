@@ -46,12 +46,12 @@ test('the arm lengths are taken, not typed, and a later lap gives the same readi
   test.slow();
   await openInvestigation(page, app, ID);
   const plan = await lessonPlan(page, ID);
-  await walkToSid(page, plan, 'measurement-one-how-big-is');
+  await walkToSid(page, plan, 'take-the-orbit-readings');
 
   for (const f of ['ra', 'rb', 'sep']) await take(page, f);
   await expect(page.locator('.inv-check')).toContainText(/add up/i);
   const first = (await progressOf(page, ID)).responses;
-  const sid = 'measurement-one-how-big-is';
+  const sid = 'take-the-orbit-readings';
   const at = f => Number(first[`${ID}:${sid}:${f}`]);
   expect(at('ra') + at('rb')).toBeCloseTo(at('sep'), 1);
   expect(at('sep')).toBeCloseTo(4, 1);
@@ -73,19 +73,17 @@ test('a wrong star, a period of half a lap and a unit slip are named; the right 
   const plan = await lessonPlan(page, ID);
 
   // The stopwatch is taken, and the page divides by the laps the student timed.
-  await walkToSid(page, plan, 'measurement-two-how-long-does');
+  await walkToSid(page, plan, 'time-the-laps');
   await toolAction(page, 'mark');
   await app.waitForFrames(240);
   await toolAction(page, 'stop');
-  await typeIn(page, 'measurement-two-how-long-does', 'laps', 1);
+  await typeIn(page, 'time-the-laps', 'laps', 1);
   await take(page, 't');
   const t = Number(
-    (await progressOf(page, ID)).responses[
-      `${ID}:measurement-two-how-long-does:t`
-    ]
+    (await progressOf(page, ID)).responses[`${ID}:time-the-laps:t`]
   );
   expect(t).toBeGreaterThan(0.5);
-  const p = box(page, 'measurement-two-how-long-does', 'p');
+  const p = box(page, 'time-the-laps', 'p');
   await expect.poll(async () => Number(await p.inputValue())).toBeCloseTo(t, 1);
 
   await walkToSid(page, plan, 'weigh-the-pair');
@@ -184,12 +182,12 @@ async function framesDrawn(page, n) {
 const HIDDEN_STEPS = [
   'a-practice-run',
   'the-mystery-pair',
-  'measurement-one-how-big-is',
-  'measurement-two-how-long-does',
+  'take-the-orbit-readings',
+  'time-the-laps',
   'weigh-the-pair',
-  'back-to-the-balance-point',
-  'now-weigh-each-one',
-  'one-on-your-own',
+  'compare-the-two-arms',
+  'share-the-total-out',
+  'weigh-a-new-pair',
 ];
 
 for (const language of ['en', 'es']) {
