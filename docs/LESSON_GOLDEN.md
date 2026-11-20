@@ -87,8 +87,8 @@ The browser half takes about seven minutes on the private port.
 | 5 | `weighing-stars` | 5: `key:explore.showBarycenter`, `key:explore.stage`, `key:measure.showBarycenter`, `key:read.showBarycenter`, `math:arithmetic` |
 | 6 | `black-holes` | 3: `key:question.checklist`, `key:read.explainView`, `lock:{"placement":true,"inspector":false,"areaSweep":false}` |
 | 7 | `butterfly-effect` | 3: `key:explore.rubric`, `key:predict.requires`, `lock:null` |
-| 8 | `measuring-the-moon` | 3: `key:question.maxUncertainty`, `key:question.minUncertainty`, `key:question.valueWithin` |
-| 9 | `extending-an-experiment` | 2: `key:measure.compute`, `key:read.canvas` |
+| 8 | `extending-an-experiment` | 3: `key:measure.canvas`, `key:measure.compute`, `key:read.canvas` |
+| 9 | `measuring-the-moon` | 3: `key:question.maxUncertainty`, `key:question.minUncertainty`, `key:question.valueWithin` |
 | 10 | `missing-mass` | 2: `key:predict.setup`, `key:question.restates` |
 | 11 | `propose-an-observation` | 2: `key:measure.plan`, `key:question.rubricCriteria` |
 | 12 | `what-is-a-gravitational-wave` | 2: `audience:beginner`, `key:read.checklist` |

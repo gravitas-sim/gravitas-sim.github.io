@@ -7,8 +7,8 @@
     "weighing-stars",
     "black-holes",
     "butterfly-effect",
-    "measuring-the-moon",
     "extending-an-experiment",
+    "measuring-the-moon",
     "missing-mass",
     "propose-an-observation",
     "what-is-a-gravitational-wave",
@@ -189,14 +189,15 @@
       "key:predict.requires",
       "lock:null"
     ],
+    "extending-an-experiment": [
+      "key:measure.canvas",
+      "key:measure.compute",
+      "key:read.canvas"
+    ],
     "measuring-the-moon": [
       "key:question.maxUncertainty",
       "key:question.minUncertainty",
       "key:question.valueWithin"
-    ],
-    "extending-an-experiment": [
-      "key:measure.compute",
-      "key:read.canvas"
     ],
     "missing-mass": [
       "key:predict.setup",
@@ -297,7 +298,7 @@
     "investigations": 124,
     "steps": 1993,
     "activityCuts": 6,
-    "lessonTokens": 172,
+    "lessonTokens": 173,
     "activityTokens": 29,
     "stepTypes": {
       "read": 377,
