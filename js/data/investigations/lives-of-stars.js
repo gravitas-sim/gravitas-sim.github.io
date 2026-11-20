@@ -3,7 +3,7 @@
 // -----------------------------------------------------------------------------
 // Thirty-three steps on the evolutionary playback (js/stellarEvolutionWidgets.js)
 // and the eight bundled MIST tracks behind it. A companion to "A Universe of
-// Stars", which teaches the diagram this lesson moves across; steps 1 to 7
+// Stars", which teaches the diagram this lesson moves across; steps 1 to 6
 // recap enough of it that this one stands alone.
 //
 // The H-R diagram is the spine
@@ -213,8 +213,6 @@ const LIVES_OF_STARS = {
         'Read the caption underneath it',
         'Read the two rows in the list: "Stage" and "Why there are no numbers"',
         'Notice that the diagram on the left is empty — nothing is plotted yet',
-        'Press "Next phase" once, and watch a point appear on the diagram',
-        'Press "Previous phase" to come back to the cloud',
       ],
       tool: evol({ track: 'm100', at: 0.02, autoplay: false, capture: false }),
       tip: 'The diagram is empty on purpose. A cloud has no photosphere, so it has no surface temperature and no luminosity, and putting it somewhere on these axes would be inventing both.',
@@ -225,9 +223,9 @@ const LIVES_OF_STARS = {
       type: 'predict',
       reveal: 'contraction-luminosity',
       title: 'What is it running on?',
-      body: `The first point the model actually describes is a
-             pre-main-sequence star. It has a surface now, so it has a place
-             on the diagram.
+      body: `The first point the model actually describes is a young star
+             on its way to the main sequence. Once it has a surface it has a
+             place on the diagram.
              \n\nIt shines. Before you press <strong>Next phase</strong> to
              reach that point and look at the readout, commit to why.`,
       prompt: 'A pre-main-sequence star shines because…',
@@ -573,13 +571,13 @@ const LIVES_OF_STARS = {
           return {
             level: 'warn',
             message:
-              'The tip is cooler than that. Keep going along the branch: the surface temperature falls as the star swells.',
+              'That temperature is too warm for the tip. Keep going to the end of the branch and read the Surface temperature row there.',
           };
         }
         return {
           level: 'ok',
           message:
-            'From about 1.6 to about 173 solar radii, and the surface cools from 5,700 K to about 3,100 K on the way: a hundredfold in radius, and cooler. The next step asks what those two numbers mean for the star&rsquo;s place on the diagram.',
+            'From about 1.6 to about 173 solar radii: a hundredfold in radius. The next step asks what the radius and the tip temperature you recorded mean for the star&rsquo;s place on the diagram.',
         };
       },
       tool: evol({
@@ -709,12 +707,11 @@ const LIVES_OF_STARS = {
       sid: 'helium-and-the-loop',
       stage: protagonist('m100'),
       type: 'question',
-      title: 'It does not simply keep swelling',
+      title: 'After helium ignites',
       kind: 'choice',
       body: `Press <strong>Next phase</strong> past the tip. Helium ignites in
              the core, and then the star burns it for a while.
-             \n\nWatch what the marker does. It does not carry on up and to the
-             right.`,
+             \n\nWatch what the marker does.`,
       prompt: 'After helium ignites, the model star…',
       options: [
         'continues smoothly to larger and cooler values',

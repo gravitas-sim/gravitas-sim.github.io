@@ -52,15 +52,13 @@ export default {
         'Lee el pie que hay debajo',
         'Lee las dos filas de la lista: «Etapa» y «Por qué no hay números»',
         'Fíjate en que el diagrama de la izquierda está vacío: todavía no se dibuja nada',
-        'Pulsa «Fase siguiente» una vez y observa cómo aparece un punto en el diagrama',
-        'Pulsa «Fase anterior» para volver a la nube',
       ],
       tip: 'El diagrama está vacío a propósito. Una nube no tiene fotosfera, así que no tiene temperatura superficial ni luminosidad, y colocarla en algún punto de estos ejes sería inventarse las dos.',
     },
     'predict-protostar-power': {
       stage: { stars: [{ name: 'La estrella' }] },
       title: '¿Con qué funciona?',
-      body: 'El primer punto que el modelo describe de verdad es una estrella de la presecuencia principal. Ya tiene superficie, así que tiene un sitio en el diagrama.\n\nBrilla. Antes de pulsar <strong>Fase siguiente</strong> para llegar a ese punto y mirar la lectura, comprométete con el porqué.',
+      body: 'El primer punto que el modelo describe de verdad es una estrella joven de camino a la secuencia principal. Cuando tiene superficie, tiene un sitio en el diagrama.\n\nBrilla. Antes de pulsar <strong>Fase siguiente</strong> para llegar a ese punto y mirar la lectura, comprométete con el porqué.',
       prompt: 'Una estrella de la presecuencia principal brilla porque…',
       options: [
         'ha empezado a fusionar hidrógeno en el núcleo, solo que más despacio',
@@ -213,8 +211,8 @@ export default {
     },
     'helium-and-the-loop': {
       stage: { stars: [{ name: 'La estrella' }] },
-      title: 'No se limita a seguir hinchándose',
-      body: 'Pulsa <strong>Fase siguiente</strong> más allá de la punta. El helio se enciende en el núcleo, y después la estrella lo quema durante un tiempo.\n\nMira lo que hace el marcador. No sigue subiendo hacia la derecha.',
+      title: 'Después de que se encienda el helio',
+      body: 'Pulsa <strong>Fase siguiente</strong> más allá de la punta. El helio se enciende en el núcleo, y después la estrella lo quema durante un tiempo.\n\nMira lo que hace el marcador.',
       prompt: 'Después de que se encienda el helio, la estrella del modelo…',
       options: [
         'continúa suavemente hacia valores mayores y más fríos',

@@ -125,6 +125,20 @@ describe('the check on two chosen moments', () => {
     }
   });
 
+  test('refuses the zero-age main sequence against the first main-sequence sample: the main sequence is slow', () => {
+    // 41.9 Myr and 456.8 Myr are a tenfold age apart and under seven per cent
+    // apart in luminosity and about two per cent in radius.
+    const zams = readout(0.0419);
+    const first = readout(0.4568);
+    expect(Math.abs(Math.log(first.lum / zams.lum))).toBeLessThan(0.1);
+    expect(Math.abs(Math.log(first.rad / zams.rad))).toBeLessThan(0.1);
+    for (const pair of [values(zams, first), values(first, zams)]) {
+      const r = check(pair);
+      expect(r.level).toBe('error');
+      expect(r.message).toMatch(/almost the same star/);
+    }
+  });
+
   test('refuses readings that are not from one moment, and names which moment', () => {
     const r = check({ ...values(early, late), lumB: early.lum });
     expect(r.level).toBe('error');
@@ -207,7 +221,14 @@ describe('the predictions open at the start of the track and say nothing', () =>
     expect(plain(before.tip)).not.toMatch(/cooler|total goes up/i);
     expect(
       before.validate({ rStart: 1.65, rTip: 172.6, tTip: 3070 }).message
-    ).not.toMatch(/luminous/i);
+    ).not.toMatch(/luminous|cooler|cools|falls/i);
+    expect(
+      before.validate({ rStart: 1.65, rTip: 172.6, tTip: 5000 }).message
+    ).not.toMatch(/cooler|cools|falls/i);
+    // The cloud step does not send the student to the phase that answers the
+    // next prediction, and the helium step's title does not refute an option.
+    expect(step('the-cloud').checklist.some(c => /phase/i.test(c))).toBe(false);
+    expect(step('helium-and-the-loop').title).not.toMatch(/simply|keep/i);
   });
 
   test('the first prediction returns beside the student’s own readings at the step that settles it', () => {

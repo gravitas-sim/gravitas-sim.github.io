@@ -4166,7 +4166,7 @@ export const INSTRUCTOR_CONTENT = {
     difficulty:
       'Introductory, conceptual. Arithmetic no harder than a ratio, and the readout does most of it',
     placement:
-      'Eighty to a hundred minutes, after "A Universe of Stars" if you have time for both - steps 1 to 7 recap enough of it that this one can stand alone if you do not. It works as the spine of a stellar-evolution unit, and steps 25 to 29 are a natural place to hand over to any nucleosynthesis material you teach afterwards. No calculus. Nothing needs sound.',
+      'Eighty to a hundred minutes, after "A Universe of Stars" if you have time for both - steps 1 to 6 recap enough of it that this one can stand alone if you do not. It works as the spine of a stellar-evolution unit, and steps 25 to 29 are a natural place to hand over to any nucleosynthesis material you teach afterwards. No calculus. Nothing needs sound.',
     overview: `Three stars are shown on the first screen and the student predicts which changes
       fastest and how each ends. The next thirty-two screens follow them: a solar-mass model
       from a contracting cloud to a white dwarf, a ten solar-mass model to a neutron star, a
@@ -4190,7 +4190,7 @@ export const INSTRUCTOR_CONTENT = {
       'That stars differ in mass, size, temperature and brightness, and that these are four different things',
       'Reading a point off a graph with logarithmic axes, or willingness to be shown',
       'That gravity pulls everything towards everything else',
-      'Helpful but not required: "A Universe of Stars", which teaches the diagram this investigation moves across. Steps 1 to 7 recap what is needed.',
+      'Helpful but not required: "A Universe of Stars", which teaches the diagram this investigation moves across. Steps 1 to 6 recap what is needed.',
     ],
     keyConcepts: [
       {
