@@ -24,7 +24,7 @@
     }
   },
   "sourceFiles": 309,
-  "sourceDigest": "7bdf86659b0cecafb80d61987d3637456f2bdd097e19dab0fb2e565ba3cdcf45",
+  "sourceDigest": "dc9757f7083704ad48645ae6b7fe42a3ed615780d36582673dfaf0de4f56b724",
   "sources": {
     "js/activities/activities.js": "af9b7e121b9a72c2a5cc18e07331d6ee841934d402b030294d25c442628881ef",
     "js/activities/activityBridge.js": "67a82aff98e0ed935d6b8b0f0f654c6ad4332ee929cb3604e896a7f790a6fdc1",
@@ -223,7 +223,7 @@
     "js/data/investigations/inside-a-star.js": "1d818e86352a2a49d5380253ffc1bbd7b749690cceb95ccb7e8242edcc84cfc8",
     "js/data/investigations/integrators-in-practice.js": "caef1b30a656b20fe9e2fcd45af2a8f660a5181f4727a72af133fd2818f6022b",
     "js/data/investigations/joint-sequence.js": "7877a1a03672ad2eeba8d8a8a8648b47dd238aef29a81e7c1c148b031974b0e3",
-    "js/data/investigations/keplers-laws.js": "ab2efdc83495abf923e36ba3c441c209fd82cd72e4e2270a50d27ba4a9807d27",
+    "js/data/investigations/keplers-laws.js": "b83d37e1f255563d3e1486abcf8bf40707f19931c9049d7c3d5bc6d103b7e2b5",
     "js/data/investigations/lagrange-points.js": "674e88bb5a8b36bc49c4b7a9fae370f224935ac91b3789027226cb906acbba48",
     "js/data/investigations/leavitts-law.js": "301201ec610aa8e5f2089482b68c77eb1082f37d71e9f0410b61f652f942ef17",
     "js/data/investigations/lines-and-motion.js": "b0b4d4fce8a53dca84c98787bee6758518bfdce9942a906bf931d26aa768b7b4",
