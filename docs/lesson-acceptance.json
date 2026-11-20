@@ -192,7 +192,7 @@
       "test": "e2e/centralExperiments.spec.js",
       "loop": [
         "the-laplace-argument",
-        "record-the-laplace-libration",
+        "capture-the-laplace-libration",
         "say-what-a-libration-shows"
       ],
       "evidenceFrom": "engine",

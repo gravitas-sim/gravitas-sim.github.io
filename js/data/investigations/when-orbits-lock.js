@@ -3,71 +3,31 @@
 // -----------------------------------------------------------------------------
 // Orbital resonance, and the one piece of evidence that establishes it.
 //
-// The lesson exists because the usual telling of resonance is circular. It says
-// two bodies are in resonance because their periods are in a small whole-number
-// ratio, and then explains the ratio by the resonance. A student who accepts
-// that has learned nothing they can test, and has been handed a rule that gives
-// wrong answers immediately:
+// The usual telling is circular: two bodies are in resonance because their
+// periods are in a small whole-number ratio, and the ratio is explained by the
+// resonance. Callisto's ratio with Ganymede is 0.03% from 7:3, ten times closer
+// than Pluto's is to 3:2, and Callisto is in no resonance; the three inner moons
+// are locked as tightly as any in the Solar System with ratios no better than
+// chance. So the ratio is not the evidence. A resonant angle is: it librates
+// about a fixed value, or it circulates through 360 degrees.
 //
-//   Callisto's period ratio with Ganymede is 2.33258. The nearest small ratio is
-//   7:3, and it is 0.03% away - ten times closer than Pluto's ratio with Neptune
-//   is to 3:2. Callisto is in no resonance with anything.
-//
-//   Ganymede's ratio with Io is 4.044, which is 1.1% from 4:1 - worse than
-//   chance would usually manage. The three inner moons are nonetheless locked
-//   together as tightly as any resonance in the Solar System.
-//
-// So the ratio is not the evidence and cannot be. The evidence is a resonant
-// angle: a particular integer combination of longitudes, chosen so the fast
-// terms cancel, which either librates - swings back and forth about a fixed
-// value - or circulates through all 360 degrees. Libration is the lock.
-//
-// The third answer
-// -----------------------------------------------------------------------------
-// The instrument the lesson is built around will refuse to answer. Over a short
-// run a resonant angle that is drifting slowly and one that is librating with a
-// long period look identical, and the classifier in js/resonance/elements.js
-// reports "inconclusive" rather than guessing. That refusal is not a rough edge
-// to work around; it is the third of the three states the lesson teaches, and
-// Callisto spends the whole lesson in it. A student who leaves knowing that a
-// short record cannot settle the question has learned the thing that the ratio
-// rule was hiding.
-//
-// The scenarios, the published parameters they were built from, and the
-// measurements that justify every number quoted below are in
-// js/resonance/systems.js and the "Orbital resonance" group of
-// js/validation/physicsChecks.js.
+// The third answer. The angle instrument reports "inconclusive" whenever the
+// record cannot separate a slow circulation from a wide libration, and over a
+// lesson-length run that is the honest answer for Callisto. It is the third of
+// the three states the lesson teaches. The scenarios and the published values
+// behind every number here are in js/resonance/systems.js and the "Orbital
+// resonance" group of js/validation/physicsChecks.js.
 // =============================================================================
 
 /**
- * The four moons this lesson is about, bound by exact name.
- *
- * Every instrument here - the period table, the conjunction map, the Laplace
- * angle, the rotating frame - is about the same four bodies, and a reader had
- * no way to point at one. The chips name them, so "Io laps Europa twice" is a
- * claim about an object that can be selected and watched rather than a label
- * on a plot.
- */
-/**
- * The four moons, the angle they make, and how long it has been watched.
- *
- * The lesson's instruments plot a resonant argument against time. What the
- * plot could not say is *which bodies* the angle is made of, or how much of a
- * claim a librating trace is: a curve that has stayed between two bounds for
- * the last few minutes is evidence about the last few minutes.
- *
- * This reports both. The three mean longitudes come off the live bodies
- * through the same resonanceElements() the recorder uses, the argument is the
- * same laplaceArgument() the plot draws, and the last row says how long the
- * window is - in Io orbits, which is the unit the resonance is counted in.
+ * The three moons' longitudes, the Laplace angle they make, and how long it has
+ * been watched (in Io orbits), read off the live bodies.
  */
 const laplaceRows = ctx => {
   const io = ctx.role('io');
   const europa = ctx.role('europa');
   const ganymede = ctx.role('ganymede');
-  // Whatever the moons are going round: the heaviest thing in the scene. It is
-  // called Jupiter here and something else in the other resonance scenarios,
-  // and picking it by mass means this readout does not have to be told.
+  // Whatever the moons go round: the heaviest thing in the scene.
   const primary = (ctx.bodies || []).reduce(
     (best, b) => (!best || b.mass > best.mass ? b : best),
     null
@@ -75,11 +35,8 @@ const laplaceRows = ctx => {
   if (!io || !europa || !ganymede || !primary) {
     return [{ label: 'The three moons', value: 'not all on the canvas' }];
   }
-  // Longitude measured straight off the positions. For these four the
-  // eccentricities are between 0.004 and 0.009, so the true longitude and the
-  // mean longitude the argument is properly built from agree to well under a
-  // degree - close enough to point at, and not close enough to compute with,
-  // which is why the instrument keeps its own history and this does not.
+  // True longitude off the positions: within a degree of the mean longitude
+  // for these eccentricities, enough to point at and not to compute with.
   const lon = b =>
     ((Math.atan2(b.pos.y - primary.pos.y, b.pos.x - primary.pos.x) * 180) /
       Math.PI +
@@ -103,6 +60,23 @@ const laplaceRows = ctx => {
   ];
 };
 
+// A captured amplitude below these is a bound taken before the instrument had
+// seen the angle turn back (the converged values are about 26, 80 and 24).
+const AMPLITUDE_FLOOR = 22;
+const PLUTO_FLOOR = 60;
+const TADPOLE_FLOOR = 15;
+
+/** A measure field the student fills from an instrument row (K1) or types. */
+const reading = (id, label, unit, want, tool) => ({
+  id,
+  label,
+  unit,
+  want,
+  ...(tool && { source: { tool } }),
+});
+
+const WAS = (to, en, es) => ({ to, release: '3.1', was: { en, es } });
+
 const GALILEANS = {
   io: { name: 'Io' },
   europa: { name: 'Europa' },
@@ -122,10 +96,29 @@ const WHEN_ORBITS_LOCK = {
   courseLevel: 'survey',
   mathematics: 'algebra',
   prerequisites: [],
-  // Subject tags, for the browser's filters. A fixed vocabulary
-  // shared across the catalog rather than free text, so a filter can offer
-  // the whole set without a second list to keep in step.
   tags: ['orbits', 'resonance', 'solar-system'],
+  retired: {
+    'write-down-the-ratios': WAS(
+      'rank-the-three-pairs',
+      'Read the three period ratios off the instrument and type them in.',
+      'Leer las tres razones de periodos en el instrumento y escribirlas.'
+    ),
+    'record-the-laplace-libration': WAS(
+      'capture-the-laplace-libration',
+      'Read the Laplace libration centre, amplitude and period off the instrument once its verdict reads libration, and type them in.',
+      'Leer el centro, la amplitud y el periodo de la libración de Laplace en el instrumento cuando su veredicto dice libración, y escribirlos.'
+    ),
+    'record-pluto-s-libration': WAS(
+      'capture-pluto-s-libration',
+      'Read Pluto’s libration centre, amplitude and period in years off the instrument and type them in.',
+      'Leer el centro, la amplitud y el periodo en años de la libración de Plutón en el instrumento y escribirlos.'
+    ),
+    'record-the-tadpole': WAS(
+      'capture-the-tadpole',
+      'Read Patroclus’s libration centre, amplitude and period off the frame instrument and type them in.',
+      'Leer el centro, la amplitud y el periodo de libración de Patroclo en el instrumento del marco y escribirlos.'
+    ),
+  },
   objectives: [
     'Measure orbital periods and period ratios from the orbits themselves, and find the nearest small-integer ratio to each',
     'Explain why a near-rational period ratio is weak evidence, using a case where the closest ratio in the system belongs to a body in no resonance',
@@ -207,13 +200,16 @@ const WHEN_ORBITS_LOCK = {
         paused: false,
       },
       tool: { id: 'resonance-periods' },
-      body: `Let it run. The instrument below measures each moon's period from
-             its orbit — from the energy and the distance, the way an
-             astronomer would — and averages over everything it has seen, so the
-             numbers settle within a few Io orbits.
+      body: `Press <strong>Run</strong> and let it run. The instrument below
+             measures each moon's period from its orbit — from the energy and
+             the distance, the way an astronomer would — and averages over
+             everything it has seen, so the numbers settle within a few Io
+             orbits. Read the periods here: the app's own inspector shows them a
+             thousand times too long, because of the scale model.
 
-             \n\nGive it about half a minute, which is around 150 Io orbits, and
-             then read the table. It reports each period, the ratio of each moon
+             \n\nGive it about half a minute, which is around 150 Io orbits (the
+             Fast button in the transport bar shortens the wait), and then read
+             the table. It reports each period, the ratio of each moon
              to the one inside it, and the nearest ratio of small whole numbers
              to that.
 
@@ -221,6 +217,7 @@ const WHEN_ORBITS_LOCK = {
              closer the measured ratio is to a small whole-number ratio than an
              arbitrary number would have been. That figure is the one this
              investigation is about.`,
+      tip: 'If Motion is set to Reduced or Step by step, the instrument opens paused: press Run to start it, and Pause to hold it again.',
       checklist: [
         'Let the simulation run for about 150 Io orbits',
         'Read the four periods',
@@ -235,67 +232,53 @@ const WHEN_ORBITS_LOCK = {
                far the tidiest ratio.`,
     },
     {
-      sid: 'write-down-the-ratios',
+      sid: 'rank-the-three-pairs',
       bind: GALILEANS,
       // Read off the instrument that step sets running.
       requires: ['measure-the-four-periods'],
       type: 'measure',
-      title: 'Write down the ratios',
+      title: 'Rank the three pairs',
       tool: { id: 'resonance-periods' },
-      body: `Read these off the instrument. They go into your report, and two of
-             them are about to be used against you.`,
+      body: `The last figure in each ratio row says how many times closer the
+             ratio sits to a whole-number ratio than a number picked at random
+             would. Once the run has settled, rank the three pairs by that
+             figure: 1 for the pair whose figure is the largest, 3 for the
+             smallest.`,
       fields: [
-        {
-          id: 'europaIo',
-          label: 'Europa’s period ÷ Io’s',
-          unit: '',
-          want: '2.0075',
-        },
-        {
-          id: 'ganymedeEuropa',
-          label: 'Ganymede’s period ÷ Europa’s',
-          unit: '',
-          want: '2.0144',
-        },
-        {
-          id: 'callistoGanymede',
-          label: 'Callisto’s period ÷ Ganymede’s',
-          unit: '',
-          want: '2.3327',
-        },
+        reading('rankEuropa', 'Rank of Europa’s period ÷ Io’s', '', '2'),
+        reading(
+          'rankGanymede',
+          'Rank of Ganymede’s period ÷ Europa’s',
+          '',
+          '3'
+        ),
+        reading(
+          'rankCallisto',
+          'Rank of Callisto’s period ÷ Ganymede’s',
+          '',
+          '1'
+        ),
       ],
       validate: v => {
-        if (!Number.isFinite(v.europaIo)) return null;
-        const near = (x, target, tol) =>
-          Number.isFinite(x) && Math.abs(x - target) < tol;
-        if (near(v.europaIo, 2, 0.0005)) {
+        const r = [v.rankEuropa, v.rankGanymede, v.rankCallisto];
+        if (!r.every(Number.isFinite)) return null;
+        if ([...r].sort().join() !== '1,2,3') {
           return {
             level: 'warn',
-            message:
-              'That is exactly 2, which is what the resonance is supposed to give and not what the instrument reports. Read the figure to four decimal places.',
+            message: 'Give each pair a different rank: 1, 2 and 3, once each.',
           };
         }
-        if (!near(v.europaIo, 2.0075, 0.01)) {
+        if (r.join() !== '2,3,1') {
           return {
             level: 'warn',
             message:
-              'Expected about 2.0075 for Europa over Io. Check you have the outer period on top.',
-          };
-        }
-        if (
-          Number.isFinite(v.callistoGanymede) &&
-          !near(v.callistoGanymede, 2.3327, 0.01)
-        ) {
-          return {
-            level: 'warn',
-            message:
-              'Expected about 2.3327 for Callisto over Ganymede. That one is not 2:1 and is not meant to be.',
+              'Look at the last figure in each row again. The pair with the largest "closer than chance" figure is 1, and the run has to have settled before the order is steady.',
           };
         }
         return {
           level: 'ok',
           message:
-            'Those are the values. Now compare how close each is to its nearest small ratio: about 0.4%, 0.7% and 0.03%. The tidiest belongs to Callisto.',
+            'That is the order the instrument gives. The next question is what the order is evidence of.',
         };
       },
     },
@@ -303,16 +286,13 @@ const WHEN_ORBITS_LOCK = {
       sid: 'which-is-the-impressive-one',
       bind: GALILEANS,
       // "The three ratios you measured".
-      requires: ['write-down-the-ratios'],
+      requires: ['rank-the-three-pairs'],
       type: 'question',
       kind: 'choice',
       title: 'Which is the impressive one?',
-      body: `The three ratios you measured sit near 2:1, 2:1 and 7:3
-             respectively. Their distances from those ratios are about 0.4%,
-             0.7% and 0.03%.
-
-             \n\nIo, Europa and Ganymede are in resonance. Callisto is in
-             resonance with nothing.`,
+      body: `You ranked the three pairs by how much closer than chance their
+             ratios are. The first step said which moons hold each other in
+             resonance. Set that beside your ranking.`,
       prompt:
         'What does that tell you about "the periods are nearly in a small whole-number ratio" as evidence?',
       options: [
@@ -436,6 +416,23 @@ const WHEN_ORBITS_LOCK = {
         'The test only works for pairs, and there are three moons here',
       ],
       answer: 1,
+      misconceptions: [
+        {
+          id: 'weakerResonance',
+          option: 0,
+          say: 'The line-ups did drift in the sky and the moons are still locked, so it is the test that fails, not the resonance. Ask what in the sky stays fixed while an orbit’s long axis turns.',
+        },
+        {
+          id: 'timingIsHard',
+          option: 2,
+          say: 'The instrument timed them without trouble. What is wrong is what they are measured against, not how well they are timed.',
+        },
+        {
+          id: 'pairsOnly',
+          option: 3,
+          say: 'The test could be tried on any one pair of the three. Look instead at the frame a direction in the sky is measured in.',
+        },
+      ],
       because: `An orbit is not a fixed thing. Its long axis turns — precesses —
                 because of the pull of the other moons, so a conjunction that
                 happens at the same point <em>of the orbit</em> every time will
@@ -512,14 +509,16 @@ const WHEN_ORBITS_LOCK = {
       options: [
         'run through all 360° once every few Io orbits',
         'sit at one value and never move at all',
-        'swing back and forth about 180° without ever going all the way round',
+        'swing back and forth about a fixed value without ever going all the way round',
         'drift slowly and steadily in one direction',
       ],
       answer: 2,
-      because: `It librates about 180°, and the amplitude in this model is about
-                26°. Commit to that now, because the instrument is going to
-                refuse to confirm it for the first minute and a half, and the
-                reason it refuses is the next thing worth understanding.`,
+      because: `It librates: it swings back and forth about a fixed value and
+                never goes all the way round. Where that value sits, how wide the
+                swing is and how long it takes are yours to read off the
+                instrument a few steps on. The instrument will refuse to confirm
+                it for the first minute and a half, and the reason it refuses is
+                the next thing worth understanding.`,
     },
     {
       sid: 'watch-the-laplace-argument',
@@ -529,8 +528,10 @@ const WHEN_ORBITS_LOCK = {
       type: 'explore',
       title: 'Watch the Laplace argument',
       tool: { id: 'resonance-angle', argument: 'laplace' },
-      body: `Start it running and <strong>leave it running</strong>. This one
-             takes a while, and the way it changes its mind is the point.
+      body: `Press <strong>Run</strong> and <strong>leave it running</strong>.
+             At normal speed this one takes about three and a half minutes (the
+             Fast button in the transport bar shortens the wait), and the way it
+             changes its mind is the point.
 
              \n\nThe upper plot is φ<sub>L</sub> folded into a single turn. The
              lower one is the same angle unwrapped, so a circulation would be a
@@ -598,39 +599,25 @@ const WHEN_ORBITS_LOCK = {
              temptation to call it resonant will be considerable.`,
     },
     {
-      sid: 'record-the-laplace-libration',
+      sid: 'capture-the-laplace-libration',
       bind: GALILEANS,
       allowInspector: true,
       probe: laplaceRows,
-      // Recorded off the angle instrument once it has reached its verdict,
+      // Taken from the angle instrument once it has reached its verdict,
       // which takes the run that step starts.
       requires: ['watch-the-laplace-argument'],
       type: 'measure',
-      title: 'Record the Laplace libration',
+      title: 'Capture the Laplace libration',
       tool: { id: 'resonance-angle', argument: 'laplace' },
-      body: `Once the verdict reads LIBRATION, read these off and record them.
-
-             \n\nIf it has not got there yet, let it keep running — it needs
-             about three and a half minutes from the start.`,
+      body: `Take the centre, the amplitude and the libration period from the
+             instrument you ran. Before its verdict reads LIBRATION the amplitude
+             is only a lower bound and the period a guess from one swing, so
+             deciding when the run is long enough is part of the measurement. If
+             you took a reading too soon, let the run go on and take it again.`,
       fields: [
-        {
-          id: 'center',
-          label: 'libration center',
-          unit: 'degrees',
-          want: '180',
-        },
-        {
-          id: 'amplitude',
-          label: 'amplitude',
-          unit: 'degrees',
-          want: '26',
-        },
-        {
-          id: 'period',
-          label: 'libration period',
-          unit: 'days',
-          want: '2100',
-        },
+        reading('center', 'libration center', 'degrees', '180', 'center'),
+        reading('amplitude', 'amplitude', 'degrees', '26', 'amplitude'),
+        reading('period', 'libration period', 'days', '2100', 'period'),
       ],
       validate: v => {
         if (!Number.isFinite(v.center)) return null;
@@ -647,6 +634,13 @@ const WHEN_ORBITS_LOCK = {
             level: 'error',
             message:
               'An amplitude above 180° is more than the whole circle and would mean the angle had circulated.',
+          };
+        }
+        if (Number.isFinite(v.amplitude) && v.amplitude < AMPLITUDE_FLOOR) {
+          return {
+            level: 'error',
+            message:
+              'That amplitude is still growing: it was taken before the angle had turned back, so it is only a lower bound. Let the run go on until the verdict reads LIBRATION and take it again.',
           };
         }
         if (Number.isFinite(v.period) && (v.period < 1200 || v.period > 3200)) {
@@ -670,16 +664,11 @@ const WHEN_ORBITS_LOCK = {
       title: 'What 180° means',
       kind: 'numeric',
       body: `φ<sub>L</sub> = λ<sub>Io</sub> − 3λ<sub>Europa</sub> +
-             2λ<sub>Ganymede</sub> sits at 180°.
+             2λ<sub>Ganymede</sub> librates about the centre you captured.
 
              \n\nConsider a moment when Io and Europa are in conjunction, so
-             λ<sub>Io</sub> = λ<sub>Europa</sub>. Substitute that in and the
-             expression collapses: φ<sub>L</sub> becomes
-             2λ<sub>Ganymede</sub> − 2λ<sub>Europa</sub>, which is twice the
-             angle between Ganymede and Europa.
-
-             \n\nSetting that equal to 180° gives the angle between Ganymede and
-             Europa at every Io–Europa conjunction.`,
+             λ<sub>Io</sub> = λ<sub>Europa</sub>. Work out what that says about
+             Ganymede.`,
       prompt:
         'How many degrees away from Europa is Ganymede whenever Io and Europa line up?',
       unit: 'degrees',
@@ -851,16 +840,9 @@ const WHEN_ORBITS_LOCK = {
       type: 'question',
       kind: 'choice',
       title: 'The best ratio in the system',
-      body: `Callisto's period ratio with Ganymede is 2.3327, which is 0.03%
-             from 7:3 — about twenty-five times closer than chance. Pluto's
-             ratio with Neptune, which you are about to meet, is 0.30% from 3:2,
-             about four times closer than chance. Pluto is in resonance.
-             Callisto is not.
-
-             \n\nOver a long enough run, Callisto's 7:3 argument completes a
-             circuit: it circulates, with a period of roughly three thousand Io
-             orbits. Within a class-length run the instrument cannot see that
-             and says so.`,
+      body: `A colleague has looked at your run of Callisto's 7:3 argument, the
+             one whose amplitude you watched as it went, and disagrees with what
+             the instrument said about it.`,
       prompt:
         'A colleague says the instrument should have called Callisto resonant, because its angle stayed within 100° for the whole run. What is the best reply?',
       options: [
@@ -870,6 +852,13 @@ const WHEN_ORBITS_LOCK = {
         'The run was too short to say anything at all about Callisto',
       ],
       answer: 1,
+      misconceptions: [
+        {
+          id: 'confinedIsLibration',
+          option: 0,
+          say: 'Staying inside 100° says only that no circuit has been completed yet, and a slow circulation looks the same early on. Ask what the amplitude did as the run went on.',
+        },
+      ],
       because: `The second, and the growing amplitude is the specific evidence.
                 A libration returns to the same extremes: its maxima are all at
                 about the same value, run after run. Callisto's each exceeded
@@ -879,7 +868,9 @@ const WHEN_ORBITS_LOCK = {
                 \n\nThe fourth option is tempting and slightly wrong. The run
                 <em>did</em> establish something: any circulation is slower than
                 a few hundred conjunction cycles. That is a genuine constraint.
-                It just is not a resonance.`,
+                It just is not a resonance. Over a long enough run Callisto's
+                argument does complete a circuit, in roughly three thousand Io
+                orbits, which a class-length run cannot see and says so.`,
     },
 
     // --- Act 5: Pluto --------------------------------------------------------
@@ -950,33 +941,21 @@ const WHEN_ORBITS_LOCK = {
                observation that the wanderer's angle circulates.`,
     },
     {
-      sid: 'record-pluto-s-libration',
+      sid: 'capture-pluto-s-libration',
       bind: GALILEANS,
-      // Read off the run that step starts.
+      // Taken from the run that step starts.
       requires: ['measure-pluto-s-resonance'],
       type: 'measure',
-      title: 'Record Pluto’s libration',
+      title: 'Capture Pluto’s libration',
       tool: { id: 'resonance-angle', argument: 'pluto' },
-      body: `Read these off the instrument.`,
+      body: `Take the centre and the amplitude from the instrument you ran, and
+             the libration period in years. The instrument gives the period in
+             days; the conversion is yours. As with the moons, a reading taken
+             before the verdict says LIBRATION is only a bound.`,
       fields: [
-        {
-          id: 'plutoCenter',
-          label: 'libration center',
-          unit: 'degrees',
-          want: '180',
-        },
-        {
-          id: 'plutoAmplitude',
-          label: 'amplitude',
-          unit: 'degrees',
-          want: '80',
-        },
-        {
-          id: 'plutoPeriod',
-          label: 'libration period',
-          unit: 'years',
-          want: '19600',
-        },
+        reading('plutoCenter', 'libration center', 'degrees', '180', 'center'),
+        reading('plutoAmplitude', 'amplitude', 'degrees', '80', 'amplitude'),
+        reading('plutoPeriod', 'libration period', 'years', '19600'),
       ],
       validate: v => {
         if (!Number.isFinite(v.plutoCenter)) return null;
@@ -992,12 +971,19 @@ const WHEN_ORBITS_LOCK = {
         }
         if (
           Number.isFinite(v.plutoAmplitude) &&
-          (v.plutoAmplitude < 50 || v.plutoAmplitude > 110)
+          v.plutoAmplitude < PLUTO_FLOOR
         ) {
+          return {
+            level: 'error',
+            message:
+              'That amplitude is only a bound: the instrument had not yet seen the angle turn back twice. Let the run go on until the verdict reads LIBRATION and take it again.',
+          };
+        }
+        if (Number.isFinite(v.plutoAmplitude) && v.plutoAmplitude > 110) {
           return {
             level: 'warn',
             message:
-              'Expected an amplitude near 80°. Much less usually means the instrument has only caught one swing and is still reporting a bound.',
+              'Expected an amplitude near 80°. A value this large usually means the unwrapped angle was read instead of the amplitude.',
           };
         }
         if (
@@ -1007,7 +993,7 @@ const WHEN_ORBITS_LOCK = {
           return {
             level: 'warn',
             message:
-              'Expected about 19,600 years. Check you have read the years figure and not the number of conjunction cycles beside it.',
+              'Expected about 19,600 years. The instrument gives days: divide by 365.25, and check you have read the period and not the number of conjunction cycles beside it.',
           };
         }
         return {
@@ -1169,39 +1155,38 @@ const WHEN_ORBITS_LOCK = {
                using the rotating frame rather than the main view to read them.`,
     },
     {
-      sid: 'record-the-tadpole',
+      sid: 'capture-the-tadpole',
       bind: GALILEANS,
-      // Read off the frame instrument that step sets running.
+      // Taken from the frame instrument that step sets running.
       requires: ['the-rotating-frame'],
       type: 'measure',
-      title: 'Record the tadpole',
-      tool: { id: 'resonance-frame', secondary: 'Jupiter' },
+      title: 'Capture the tadpole',
+      tool: { id: 'resonance-frame', secondary: 'Jupiter', read: 'Patroclus' },
       body: `Patroclus is a real object and this is a real measurement of the
-             kind made for it. Read its libration off the frame instrument.
+             kind made for it. Take its libration centre, amplitude and period
+             from the frame instrument once it has committed to a verdict for
+             it.
 
              \n\nThe theoretical small-amplitude tadpole period, from the
              linearized restricted three-body problem, is
              P<sub>Jupiter</sub> ÷ √(27μ/4) with μ Jupiter's share of the total
              mass — which works out at 12.47 Jupiter years.`,
       fields: [
-        {
-          id: 'tadpoleCenter',
-          label: 'libration center, measured from Jupiter',
-          unit: 'degrees',
-          want: '296',
-        },
-        {
-          id: 'tadpoleAmplitude',
-          label: 'amplitude',
-          unit: 'degrees',
-          want: '24',
-        },
-        {
-          id: 'tadpolePeriod',
-          label: 'libration period',
-          unit: 'Jupiter years',
-          want: '13',
-        },
+        reading(
+          'tadpoleCenter',
+          'libration center, measured from Jupiter',
+          'degrees',
+          '296',
+          'centre'
+        ),
+        reading('tadpoleAmplitude', 'amplitude', 'degrees', '24', 'amplitude'),
+        reading(
+          'tadpolePeriod',
+          'libration period',
+          'Jupiter years',
+          '13',
+          'period'
+        ),
       ],
       validate: v => {
         if (!Number.isFinite(v.tadpoleCenter)) return null;
@@ -1220,6 +1205,16 @@ const WHEN_ORBITS_LOCK = {
             level: 'warn',
             message:
               'Expected a center near 296° — that is 60° behind Jupiter, which is L5.',
+          };
+        }
+        if (
+          Number.isFinite(v.tadpoleAmplitude) &&
+          v.tadpoleAmplitude < TADPOLE_FLOOR
+        ) {
+          return {
+            level: 'error',
+            message:
+              'That amplitude was taken before the instrument had committed to a libration, so it is not the swing Patroclus makes. Let the run go on and take it again.',
           };
         }
         if (
@@ -1257,6 +1252,23 @@ const WHEN_ORBITS_LOCK = {
         'L3 is unstable because the probe was given the wrong velocity',
       ],
       answer: 1,
+      misconceptions: [
+        {
+          id: 'l3IsWrong',
+          option: 0,
+          say: 'A point can be an equilibrium and still lose whatever is nudged off it. One degree is all the probe was given, so the offset shows the point is unstable, not that the calculation is wrong.',
+        },
+        {
+          id: 'tooFarOut',
+          option: 2,
+          say: 'Distance alone does not decide it: the L4 and L5 points are as far out as L3. Ask which way the force points once a body is nudged off each of them.',
+        },
+        {
+          id: 'wrongVelocity',
+          option: 3,
+          say: 'The probe was displaced by one degree, as the text says. What differs between L3 and L4 is what the force does after a small displacement.',
+        },
+      ],
       because: `Both are equilibria; only L4 and L5 are stable. The distinction
                 is the same one as between a marble at the bottom of a bowl and
                 a marble balanced on top of a dome. Both are places where the
@@ -1273,6 +1285,31 @@ const WHEN_ORBITS_LOCK = {
                 \n\nAnd it is why there are no asteroids at L3 and more than fifteen
                 thousand at L4 and L5. Stability is not a detail; it is the whole reason
                 a population exists.`,
+    },
+    {
+      sid: 'predict-the-wide-probe',
+      bind: GALILEANS,
+      type: 'predict',
+      reveal: 'one-last-ratio',
+      title: 'A body on a wider orbit',
+      body: `The fourth body in this scene is on an ordinary circular orbit a
+             quarter again as wide as Jupiter's. The instrument will find the
+             nearest ratio of small whole numbers to its period over Jupiter's,
+             build the resonant argument that goes with it and report both.`,
+      prompt:
+        'Is the wide probe in resonance with Jupiter, and how does its ratio compare with Pluto’s?',
+      options: [
+        'It is resonant: a ratio that close to a whole-number ratio is the mark of a lock',
+        'It is not resonant, and its ratio is clearly further from a whole-number ratio than Pluto’s is from 3:2',
+        'It is not resonant, and its ratio is as close to a whole-number ratio as Pluto’s, or closer',
+        'It is resonant, but too weakly for the angle to show it',
+      ],
+      answer: 2,
+      because: `The third. The wide probe sits 0.25% from 7:5, nearer than Pluto
+                is to 3:2 at 0.30%, and its angle circulates: it is in no
+                resonance at all. A ratio that near a small whole-number ratio is
+                what many pairs reach by chance, which is why the angle and not
+                the ratio is the evidence.`,
     },
     {
       sid: 'one-last-ratio',
@@ -1383,7 +1420,7 @@ const WHEN_ORBITS_LOCK = {
       // they mean. The distinction between a ratio that is close and an angle
       // that is held is the entire argument, and it is the one thing a
       // checklist of readings cannot demonstrate.
-      requires: ['record-the-laplace-libration'],
+      requires: ['capture-the-laplace-libration'],
       type: 'question',
       kind: 'short',
       title: 'What a libration shows that a ratio does not',

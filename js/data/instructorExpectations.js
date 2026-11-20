@@ -385,30 +385,30 @@ export default {
     'when-orbits-lock': {
       'measure-the-four-periods':
         'Periods of about 1.769, 3.552, 7.155 and 16.69 days and ratios of 2.007, 2.014 and 2.333, settling within about thirty Io orbits. The figures to draw attention to are the "closer than chance" numbers, which come out around 2, 1 and 25 depending on how long the run has been going.',
-      'write-down-the-ratios':
-        'The field validation warns rather than blocks. A student who enters exactly 2 gets a note that the instrument does not report exactly 2, which is the point of the step. Expect about 2.008, 2.014 and 2.333; the last figure of each moves a little with the length of the run.',
+      'rank-the-three-pairs':
+        'The three pairs ranked by the "closer than chance" figure: Callisto–Ganymede 1, Europa–Io 2, Ganymede–Europa 3 (figures near 25, 2 and 1, moving with the run). The check warns on any other order.',
       'watch-the-line-ups':
         'The sky dial should be a broad arc rather than a tight clump, and the arrow short. Most students predicted clustering at step 7, so this is the moment the investigation turns; do not rescue it too quickly.',
       'watch-the-laplace-argument':
         'Three verdicts in order over about three and a half minutes: confined, then one reversal, then libration. If a class has less time, the first two are enough to make the argument as long as the paired control at step 17 is also run.',
-      'record-the-laplace-libration':
-        'A center within a degree or two of 180, an amplitude near 26 degrees and a libration period near 2,100 days. A much shorter period usually means the instrument is still quoting a provisional value from a single swing; leave it running.',
+      'capture-the-laplace-libration':
+        'A center within a degree or two of 180, an amplitude near 26 degrees and a period near 2,100 days. A smaller amplitude or a much shorter period was taken too soon, from one swing; the check refuses it: leave it running.',
       'break-it':
         'CIRCULATION within about ten seconds, with a period near 47 Io orbits. Worth remarking on how much faster this verdict arrives than the libration one, and why: one completed circuit proves circulation, while ruling out a slow circulation takes as long as it takes.',
       'the-awkward-case':
         'Never LIBRATION. The verdict passes through confined, then either "the center is moving" or "it has turned back once", and the reported amplitude grows through the run. The growing amplitude is the specific evidence and is what step 20 asks about.',
       'measure-pluto-s-resonance':
         'LIBRATION about 180 degrees with an amplitude near 80 and a period near 19,600 years, against published values of 180, 82 and 19,670. This is the closest agreement with a published measurement anywhere in the investigation, and it takes about ninety seconds.',
-      'record-pluto-s-libration':
+      'capture-pluto-s-libration':
         'The same three numbers, recorded. The validation accepts a center within 15 degrees of 180 and a period between 12,000 and 30,000 years; a value near zero for the center means the sign of the argument was read backwards, and the note says so.',
       'where-the-line-ups-happen':
         'The sky dial is a broad smear; the orbit dial clusters near 180 degrees with a spread of about 38. The instrument’s own summary line reads that every line-up happens near the outer body’s aphelion.',
       'the-rotating-frame':
         'Four different behaviors: the L4 probe reported as an equilibrium with an amplitude of 0, Patroclus librating about 296 degrees with an amplitude near 24 and a period near 13 Jupiter years, the L3 probe more than 150 degrees from where it started, and the wide probe circulating. The instrument needs about twenty Jupiter years - roughly forty-five seconds - before it will commit to any of them.',
-      'record-the-tadpole':
+      'capture-the-tadpole':
         'A center near 296 degrees, an amplitude near 24 and a period near 13 Jupiter years against a linearized prediction of 12.47. The validation catches a student who has read L4 instead of L5, which is the common slip, and one who has recorded Jupiter’s own period instead of the libration period.',
       'one-last-ratio':
-        'A nearest ratio of 7:5, an offset near 0.25%, about 4.6 times closer than chance, and circulation. Ask the class to compare that offset with Pluto’s 0.30% before revealing the verdict.',
+        'A nearest ratio of 7:5, an offset near 0.25%, about 4.6 times closer than chance, and circulation. The prediction before it asks whether it is resonant; the offset beats Pluto’s 0.30%.',
     },
     'detect-this-planet': {
       'twelve-nights':

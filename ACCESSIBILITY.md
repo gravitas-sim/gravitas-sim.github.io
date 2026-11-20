@@ -681,10 +681,10 @@ Settings has a Motion choice for a reader who wants more: Reduced applies the
 same stop on a device that did not ask for it, and Step by step also starts the
 simulation paused, so nothing moves until the reader steps it or presses play
 (INTERACTION.md, "Reduced motion"). The choice is applied
-on every page, before the first paint. One thing is not yet true of it: six
-lesson instruments (the four resonance ones and the two exoplanet ones) start
-moving by themselves with no Run control; it is in `tools/motion-inventory.json`
-with its proposal.
+on every page, before the first paint. One thing is not yet true of it: two
+lesson instruments (the two exoplanet ones) start moving by themselves with no
+Run control; it is in `tools/motion-inventory.json` with its proposal. The four
+resonance instruments open held under Reduced and Step by step and run on Run.
 
 **The shape of a curve is described by a template that no blind or low-vision reader has validated.** The light curve, the radial-velocity trace, the
 energy chart and the bench's two charts are one component

@@ -380,6 +380,23 @@ const RUN = {
   },
 };
 
+/**
+ * Rows a reading step can name before there is anything to read (K1 takes a
+ * row by id; a step is checked against the readout of an empty world). A dash
+ * cannot be captured, so a reading taken too soon is refused in words.
+ */
+const blanks = (who, ids) =>
+  ids.map(([id, label]) => ({
+    id,
+    label: who ? `${who}: ${label}` : label,
+    value: '\u2014',
+  }));
+const LIBRATION_ROWS = () => [
+  ['center', t('resW.row.center')],
+  ['amplitude', t('resW.row.amplitude')],
+  ['period', t('resW.row.libration')],
+];
+
 // --- 1. Periods and ratios ----------------------------------------------------
 
 const PERIODS = {
@@ -581,6 +598,7 @@ export function angleRows(m) {
         label: t('resW.row.status'),
         value: t(`resW.empty.${m?.reason || 'no-world'}`),
       },
+      ...blanks('', LIBRATION_ROWS()),
     ];
   }
   const scale = scaleOf(m.primary);
@@ -621,12 +639,16 @@ export function angleRows(m) {
 
   if (v.center != null) {
     rows.push({
+      id: 'center',
       label: t('resW.row.center'),
       value: `${v.center.toFixed(1)}\u00b0`,
     });
   }
   if (v.amplitude != null) {
     rows.push({
+      id: 'amplitude',
+      // A bound is not an amplitude: there is nothing for Capture to take.
+      text: v.amplitudeIsBound ? '' : v.amplitude.toFixed(1),
       label: t('resW.row.amplitude'),
       value: v.amplitudeIsBound
         ? t('resW.value.amplitudeBound', { amp: v.amplitude.toFixed(1) })
@@ -641,6 +663,10 @@ export function angleRows(m) {
 
   if (v.state === ANGLE_STATE.LIBRATION) {
     rows.push({
+      id: 'period',
+      text: v.period
+        ? simSecondsToDays(v.period, scale.time).toFixed(0)
+        : undefined,
       label: t('resW.row.libration'),
       value: v.period
         ? t('resW.value.librationPeriod', {
@@ -1194,12 +1220,20 @@ const FRAME = {
 
   readout(_v, ctx, spec) {
     const m = measureFrame(ctx, spec);
+    // A step names the one body whose libration it captures (`read`).
+    const asked = spec?.read;
+    const own = () => [
+      ['centre', t('resW.row.center')],
+      ['amplitude', t('resW.row.amplitude')],
+      ['period', t('resW.row.libJy')],
+    ];
     if (!m.ready) {
       return [
         {
           label: t('resW.row.status'),
           value: t(`resW.empty.${m.reason || 'no-world'}`),
         },
+        ...(asked ? blanks(asked, own()) : []),
       ];
     }
     const rows = [{ label: t('resW.row.frame'), value: m.secondary.name }];
@@ -1236,6 +1270,22 @@ const FRAME = {
             })
           : verdictText(v),
       });
+      if (librating && body.name === asked) {
+        const jy = v.period > 0 && period > 0 ? v.period / period : NaN;
+        const own3 = [
+          [v.center, 0, '\u00b0'],
+          [v.amplitude, 0, '\u00b0'],
+          [jy, 1, ''],
+        ];
+        rows.push(
+          ...blanks(asked, own()).map((r, i) => {
+            const [n, d, u] = own3[i];
+            return Number.isFinite(n)
+              ? { ...r, text: n.toFixed(d), value: `${n.toFixed(d)}${u}` }
+              : r;
+          })
+        );
+      }
     }
     return rows;
   },

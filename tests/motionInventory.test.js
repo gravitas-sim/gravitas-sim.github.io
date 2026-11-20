@@ -138,9 +138,7 @@ describe('what each entry promises', () => {
 
   test('a gap says why and what would close it, and the instruments are the ones that lack a Run control', () => {
     const gaps = inventory.js.filter(x => x.treatment === 'gap');
-    expect(gaps.map(g => g.file)).toEqual([
-      'js/exoplanetWidgets.js',
-    ]);
+    expect(gaps.map(g => g.file)).toEqual(['js/exoplanetWidgets.js']);
     for (const g of gaps) {
       expect(g.reason.length).toBeGreaterThan(30);
       expect(g.proposed.length).toBeGreaterThan(30);
@@ -191,7 +189,8 @@ describe('the resonance instruments open held and run on press', () => {
       'resonance-conjunctions',
       'resonance-frame',
     ]);
-    const open = (w, spec = {}) => w.reset({}, { autorun: autoruns(spec), spec });
+    const open = (w, spec = {}) =>
+      w.reset({}, { autorun: autoruns(spec), spec });
     const name = w => w.actions.find(a => a.id === 'run').label;
     for (const choice of ['reduce', 'step']) {
       for (const w of RESONANCE_WIDGETS) {

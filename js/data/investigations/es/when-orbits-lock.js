@@ -78,12 +78,16 @@ export default {
     },
     {
       title: 'Mide los cuatro periodos',
-      body: `Déjalo correr. El instrumento de abajo mide el periodo de cada luna
-             a partir de su órbita —de la energía y la distancia, como lo haría
-             un astrónomo— y promedia sobre todo lo que ha visto, de modo que
-             los números se asientan en unas pocas órbitas de Ío.
+      body: `Pulsa <strong>Ejecutar</strong> y déjalo correr. El instrumento de
+             abajo mide el periodo de cada luna a partir de su órbita —de la
+             energía y la distancia, como lo haría un astrónomo— y promedia
+             sobre todo lo que ha visto, de modo que los números se asientan en
+             unas pocas órbitas de Ío. Lee aquí los periodos: el inspector de la
+             propia aplicación los muestra mil veces demasiado largos, por el
+             modelo a escala.
 
-             \n\nDale medio minuto, que son unas 150 órbitas de Ío, y luego lee
+             \n\nDale medio minuto, que son unas 150 órbitas de Ío (el botón
+             Rápido de la barra de transporte acorta la espera), y luego lee
              la tabla. Informa de cada periodo, de la razón entre cada luna y la
              de dentro, y de la razón de enteros pequeños más cercana a esa
              razón.
@@ -92,6 +96,7 @@ export default {
              está la razón medida de una razón de enteros pequeños de lo que
              habría estado un número cualquiera. Esa cifra es de lo que trata
              esta investigación.`,
+      tip: 'Si Movimiento está en Reducido o en Paso a paso, el instrumento se abre en pausa: pulsa Ejecutar para ponerlo en marcha y Pausar para detenerlo de nuevo.',
       checklist: [
         'Deja correr la simulación unas 150 órbitas de Ío',
         'Lee los cuatro periodos',
@@ -106,23 +111,23 @@ export default {
                diferencia la razón más limpia.`,
     },
     {
-      title: 'Anota las razones',
-      body: `Léelas del instrumento. Van a tu informe, y dos de ellas están a
-             punto de usarse en tu contra.`,
+      title: 'Ordena los tres pares',
+      body: `La última cifra de cada fila de razón dice cuántas veces más cerca
+             está la razón de una razón de enteros pequeños de lo que habría
+             estado un número elegido al azar. Cuando la ejecución se haya
+             asentado, ordena los tres pares según esa cifra: 1 para el par con
+             la cifra mayor, 3 para el de la menor.`,
       fields: [
-        { label: 'Periodo de Europa ÷ el de Ío' },
-        { label: 'Periodo de Ganímedes ÷ el de Europa' },
-        { label: 'Periodo de Calisto ÷ el de Ganímedes' },
+        { label: 'Puesto del periodo de Europa ÷ el de Ío' },
+        { label: 'Puesto del periodo de Ganímedes ÷ el de Europa' },
+        { label: 'Puesto del periodo de Calisto ÷ el de Ganímedes' },
       ],
     },
     {
       title: '¿Cuál es la impresionante?',
-      body: `Las tres razones que has medido rondan 2:1, 2:1 y 7:3
-             respectivamente. Sus distancias a esas razones son de un 0,4 %, un
-             0,7 % y un 0,03 % aproximadamente.
-
-             \n\nÍo, Europa y Ganímedes están en resonancia. Calisto no lo está
-             con nada.`,
+      body: `Has ordenado los tres pares según cuánto más cerca que el azar
+             están sus razones. El primer paso dijo qué lunas se sujetan entre
+             sí en resonancia. Ponlo junto a tu orden.`,
       prompt:
         '¿Qué te dice eso sobre «los periodos guardan casi una razón de enteros pequeños» como prueba?',
       options: [
@@ -225,6 +230,17 @@ export default {
         'Las conjunciones son demasiado difíciles de cronometrar con precisión',
         'La prueba sólo vale para pares, y aquí hay tres lunas',
       ],
+      misconceptions: [
+        {
+          say: 'Las conjunciones sí se desplazaron por el cielo y las lunas siguen enganchadas, así que lo que falla es la prueba, no la resonancia. Pregúntate qué permanece fijo en el cielo mientras el eje mayor de una órbita gira.',
+        },
+        {
+          say: 'El instrumento las cronometró sin problema. Lo que falla es contra qué se miden, no lo bien que se cronometran.',
+        },
+        {
+          say: 'La prueba podría intentarse con cualquier par de las tres. Fíjate mejor en el marco en que se mide una dirección en el cielo.',
+        },
+      ],
       because: `Una órbita no es algo fijo. Su eje mayor gira —precesa— por el
                 tirón de las demás lunas, así que una conjunción que ocurra en el
                 mismo punto <em>de la órbita</em> cada vez seguirá deslizándose
@@ -293,18 +309,22 @@ export default {
       options: [
         'recorrerá los 360° una vez cada pocas órbitas de Ío',
         'se quedará en un valor y no se moverá en absoluto',
-        'oscilará de un lado a otro en torno a 180° sin dar nunca la vuelta entera',
+        'oscilará de un lado a otro en torno a un valor fijo sin dar nunca la vuelta entera',
         'derivará lenta y constantemente en un sentido',
       ],
-      because: `Libra en torno a 180°, y la amplitud en este modelo es de unos
-                26°. Comprométete ahora, porque el instrumento se va a negar a
-                confirmarlo durante el primer minuto y medio, y el motivo de esa
-                negativa es lo siguiente que merece la pena entender.`,
+      because: `Libra: oscila de un lado a otro en torno a un valor fijo y nunca
+                da la vuelta entera. Dónde está ese valor, cuánto se abre la
+                oscilación y cuánto dura es cosa tuya leerlo en el instrumento
+                unos pasos más adelante. El instrumento se negará a confirmarlo
+                durante el primer minuto y medio, y el motivo de esa negativa es
+                lo siguiente que merece la pena entender.`,
     },
     {
       title: 'Observa el argumento de Laplace',
-      body: `Ponlo en marcha y <strong>déjalo correr</strong>. Este tarda un
-             rato, y la forma en que cambia de opinión es lo importante.
+      body: `Pulsa <strong>Ejecutar</strong> y <strong>déjalo correr</strong>.
+             A velocidad normal este tarda unos tres minutos y medio (el botón
+             Rápido de la barra de transporte acorta la espera), y la forma en
+             que cambia de opinión es lo importante.
 
              \n\nEl gráfico superior es φ<sub>L</sub> plegado en una sola vuelta.
              El inferior es el mismo ángulo desplegado, de modo que una
@@ -369,11 +389,14 @@ export default {
              tentación de llamarlo resonante será considerable.`,
     },
     {
-      title: 'Registra la libración de Laplace',
-      body: `Cuando el veredicto diga LIBRACIÓN, lee estos valores y anótalos.
-
-             \n\nSi todavía no ha llegado, déjalo correr: necesita unos tres
-             minutos y medio desde el principio.`,
+      title: 'Captura la libración de Laplace',
+      body: `Toma el centro, la amplitud y el periodo de libración del
+             instrumento que has ejecutado. Antes de que su veredicto diga
+             LIBRACIÓN, la amplitud es sólo una cota inferior y el periodo una
+             conjetura a partir de una oscilación, así que decidir cuándo la
+             ejecución es lo bastante larga forma parte de la medida. Si tomaste
+             una lectura demasiado pronto, deja seguir la ejecución y tómala de
+             nuevo.`,
       fields: [
         { label: 'centro de libración', unit: 'grados' },
         { label: 'amplitud', unit: 'grados' },
@@ -383,16 +406,11 @@ export default {
     {
       title: 'Lo que significan los 180°',
       body: `φ<sub>L</sub> = λ<sub>Ío</sub> − 3λ<sub>Europa</sub> +
-             2λ<sub>Ganímedes</sub> se sitúa en 180°.
+             2λ<sub>Ganímedes</sub> libra en torno al centro que capturaste.
 
              \n\nConsidera un momento en que Ío y Europa están en conjunción, de
-             modo que λ<sub>Ío</sub> = λ<sub>Europa</sub>. Sustitúyelo y la
-             expresión se colapsa: φ<sub>L</sub> pasa a ser
-             2λ<sub>Ganímedes</sub> − 2λ<sub>Europa</sub>, que es el doble del
-             ángulo entre Ganímedes y Europa.
-
-             \n\nIgualar eso a 180° da el ángulo entre Ganímedes y Europa en cada
-             conjunción Ío–Europa.`,
+             modo que λ<sub>Ío</sub> = λ<sub>Europa</sub>. Averigua qué dice eso
+             de Ganímedes.`,
       prompt:
         '¿A cuántos grados de Europa está Ganímedes cada vez que Ío y Europa se alinean?',
       unit: 'grados',
@@ -523,16 +541,9 @@ export default {
     },
     {
       title: 'La mejor razón del sistema',
-      body: `La razón de periodos de Calisto con Ganímedes es 2,3327, a un
-             0,03 % de 7:3: unas veinticinco veces más cerca que el azar. La de
-             Plutón con Neptuno, que estás a punto de conocer, queda a un 0,30 %
-             de 3:2, unas cuatro veces más cerca que el azar. Plutón está en
-             resonancia. Calisto no.
-
-             \n\nEn una ejecución suficientemente larga, el argumento 7:3 de
-             Calisto completa una vuelta: circula, con un periodo de unas tres
-             mil órbitas de Ío. Dentro de una ejecución de duración lectiva el
-             instrumento no puede verlo, y lo dice.`,
+      body: `Un colega ha mirado tu ejecución del argumento 7:3 de Calisto, aquella
+             cuya amplitud viste crecer, y discrepa de lo que dijo el
+             instrumento sobre ella.`,
       prompt:
         'Un colega dice que el instrumento debería haber declarado resonante a Calisto, porque su ángulo se mantuvo dentro de 100° durante toda la ejecución. ¿Cuál es la mejor respuesta?',
       options: [
@@ -540,6 +551,11 @@ export default {
         'Mantenerse dentro de 100° es lo que parece una circulación lenta al principio; la amplitud que informó el instrumento no dejó de crecer, cosa que la de una libración no haría',
         'El ángulo era el equivocado: otra combinación habría librado',
         'La ejecución fue demasiado corta para decir nada en absoluto sobre Calisto',
+      ],
+      misconceptions: [
+        {
+          say: 'Mantenerse dentro de 100° sólo dice que todavía no se ha completado ninguna vuelta, y una circulación lenta se ve igual al principio. Pregúntate qué hizo la amplitud a medida que avanzaba la ejecución.',
+        },
       ],
       because: `La segunda, y la amplitud creciente es la prueba concreta. Una
                 libración vuelve a los mismos extremos: sus máximos están todos
@@ -551,7 +567,10 @@ export default {
                 \n\nLa cuarta opción es tentadora y ligeramente falsa. La
                 ejecución <em>sí</em> estableció algo: cualquier circulación es
                 más lenta que unos cientos de ciclos de conjunción. Es una
-                restricción genuina. Sólo que no es una resonancia.`,
+                restricción genuina. Sólo que no es una resonancia. En una
+                ejecución suficientemente larga el argumento de Calisto sí
+                completa una vuelta, en unas tres mil órbitas de Ío, cosa que
+                una ejecución de duración lectiva no puede ver, y lo dice.`,
     },
     {
       title: 'La órbita que se cruza y nunca choca',
@@ -603,8 +622,11 @@ export default {
                la observación de que el ángulo del errante circula.`,
     },
     {
-      title: 'Registra la libración de Plutón',
-      body: `Lee estos valores del instrumento.`,
+      title: 'Captura la libración de Plutón',
+      body: `Toma el centro y la amplitud del instrumento que has ejecutado, y
+             el periodo de libración en años. El instrumento da el periodo en
+             días; la conversión es cosa tuya. Como con las lunas, una lectura
+             tomada antes de que el veredicto diga LIBRACIÓN es sólo una cota.`,
       fields: [
         { label: 'centro de libración', unit: 'grados' },
         { label: 'amplitud', unit: 'grados' },
@@ -736,9 +758,11 @@ export default {
                rotante en lugar de la vista principal para leerlas.`,
     },
     {
-      title: 'Registra el renacuajo',
+      title: 'Captura el renacuajo',
       body: `Patroclo es un objeto real y esta es una medida real del tipo que se
-             hace para él. Lee su libración en el instrumento del marco.
+             hace para él. Toma su centro de libración, su amplitud y su periodo
+             del instrumento del marco, cuando se haya decidido por un veredicto
+             para él.
 
              \n\nEl periodo teórico de renacuajo para amplitud pequeña, según el
              problema restringido de tres cuerpos linealizado, es
@@ -764,6 +788,17 @@ export default {
         'L3 está más lejos de Júpiter, así que su atracción es demasiado débil para sujetar nada ahí',
         'L3 es inestable porque a la sonda se le dio una velocidad equivocada',
       ],
+      misconceptions: [
+        {
+          say: 'Un punto puede ser de equilibrio y aun así perder lo que se aparta de él. A la sonda sólo se le dio un grado de desplazamiento, así que el desfase muestra que el punto es inestable, no que el cálculo esté mal.',
+        },
+        {
+          say: 'La distancia sola no lo decide: L4 y L5 están tan lejos como L3. Pregúntate hacia dónde apunta la fuerza cuando un cuerpo se aparta de cada uno.',
+        },
+        {
+          say: 'A la sonda se le dio un grado de desplazamiento, como dice el texto. Lo que distingue a L3 de L4 es lo que hace la fuerza tras un pequeño desplazamiento.',
+        },
+      ],
       because: `Ambos son equilibrios; sólo L4 y L5 son estables. La distinción
                 es la misma que hay entre una canica en el fondo de un cuenco y
                 una canica en equilibrio sobre una cúpula. En ambos sitios la
@@ -780,6 +815,27 @@ export default {
                 \n\nY es la razón de que no haya asteroides en L3 y sí más de quince mil
                 en L4 y L5. La estabilidad no es un detalle; es toda la razón de que
                 exista una población.`,
+    },
+    {
+      title: 'Un cuerpo en una órbita más ancha',
+      body: `El cuarto cuerpo de esta escena va en una órbita circular corriente
+             un cuarto más ancha que la de Júpiter. El instrumento hallará la
+             razón de enteros pequeños más cercana a su periodo sobre el de
+             Júpiter, construirá el argumento resonante correspondiente e
+             informará de ambos.`,
+      prompt:
+        '¿Está la sonda ancha en resonancia con Júpiter, y cómo se compara su razón con la de Plutón?',
+      options: [
+        'Es resonante: una razón tan cercana a una razón de enteros es la marca de un enganche',
+        'No es resonante, y su razón está claramente más lejos de una razón de enteros que la de Plutón de 3:2',
+        'No es resonante, y su razón está tan cerca de una razón de enteros como la de Plutón, o más',
+        'Es resonante, pero demasiado débilmente para que el ángulo lo muestre',
+      ],
+      because: `La tercera. La sonda ancha está a un 0,25 % de 7:5, más cerca que
+                Plutón de 3:2, que está a un 0,30 %, y su ángulo circula: no está
+                en ninguna resonancia. Una razón tan próxima a una razón de
+                enteros pequeños es algo que muchos pares alcanzan por azar, y
+                por eso la prueba es el ángulo y no la razón.`,
     },
     {
       title: 'Una última razón',
