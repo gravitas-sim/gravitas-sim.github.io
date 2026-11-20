@@ -126,7 +126,7 @@ export const INSTRUCTOR_CONTENT = {
       },
     ],
     teachingNotes: [
-      'The runs are seeded and deterministic: every student should get the digits in the answer key, and for the two steps that depend on a menu (the cutoff, 2, 4, 6 or 10, and the pair of cutoffs compared) the key lists every choice; cutoffs 4, 6 and 10 give identical results because no trial lies between four and ten starting distances, so a pair among them moves no trial and is answered with the word none.',
+      'The runs are seeded and deterministic: every student should get the digits in the answer key, which lists each menu choice.',
       'The half-way distance with the cutoff at 6 comes with a warning that the fitted width is at the grid’s floor: the data are a clean step.',
       'The cold download is about 19 MB because the notebook plots. Capsule files open without the runtime.',
       'The example has only twenty trials because an experiment’s parameter has at most twenty values and the lab’s outcome does not depend on the seed; the limit is the point of the investigation.',
@@ -456,7 +456,7 @@ export const INSTRUCTOR_CONTENT = {
       },
     ],
     teachingNotes: [
-      'The runs are deterministic. Every student should get the digits in the answer key; a different number means a different setting or a different input file. The second run is a choice from a menu (250, 438, 750 or 1000 steps per period) and the key lists the drifts and improvements for every choice; a student who types another choice’s numbers is told which step count they belong to. At six orbits a value that falls with a longer run is a phase of a swing, not an accuracy.',
+      'The runs are deterministic. Every student should get the digits in the answer key; a different number means a different setting or a different input file.',
       'The cold download is about 19 MB because the notebook plots. If connections are poor, run the notebook once on the instructor’s machine and have students open the capsule file, which needs no runtime.',
       'The engine comparison was checked headlessly at the Builder’s own step (tests/computeCurriculum.test.js): symplectic Euler -0.0023168 percent and velocity Verlet +0.0017676 at the notebook’s step, to seven digits.',
       'Explicit Euler is not in the application; the notebook adds it as the method everyone writes first.',

@@ -193,7 +193,7 @@ export default {
       {
         from: 'move-the-definition-yours',
         to: 'which-trial-moved',
-        text: 'Choose a cutoff and see the edge and the fraction move, then find the trial that changes class between two cutoffs.',
+        text: 'Choose a cutoff, then find the trial that changed class.',
       },
       {
         from: 'what-you-worked-out',
@@ -296,12 +296,12 @@ export default {
       {
         from: 'predict-the-halving',
         to: 'choose-the-second-step',
-        text: 'Predict the halving, then choose a second step count from a menu and set its drifts beside the baseline: fourfold for second order at the halving, far more for fourth order.',
+        text: 'Predict the halving, then choose a second step: fourfold for second order, far more for fourth.',
       },
       {
         from: 'the-engine',
         to: 'trust-at-six-orbits',
-        text: 'The same step as the application’s engine, why one symplectic number is a point on a curve, and at six orbits which drift is a size and which a phase of a swing.',
+        text: 'The same step as the application’s engine; at six orbits, a size or a phase.',
       },
       {
         from: 'what-you-worked-out',
