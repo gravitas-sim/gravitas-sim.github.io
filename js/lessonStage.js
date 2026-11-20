@@ -1453,5 +1453,7 @@ export function centerOnSelected() {
   const body = state.selectedObject?.object;
   if (!body?.pos) return false;
   state.pan = { x: -body.pos.x * state.zoom, y: -body.pos.y * state.zoom };
+  // The reader chose this view: a lesson's fit leaves it alone.
+  state.cameraTouchedAt = Date.now();
   return true;
 }
