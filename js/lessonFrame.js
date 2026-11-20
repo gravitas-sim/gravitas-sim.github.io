@@ -15,6 +15,9 @@ import { stagedStars } from './lesson/stageGate.js';
 
 const MAX_FIT_ATTEMPTS = 24;
 
+/** More bound or world points than this are a crowd. */
+const CROWD_POINTS = 12;
+
 const SHEET_PARTS = [
   '#investigationPanel',
   '#investigationTool',
@@ -127,6 +130,20 @@ export function boundPoints() {
 
 let pending = false;
 let attempts = 0;
+// A scene's own fit may be retaken this many times as panels settle; the
+// reader's own choices (the sheet handle) are not counted.
+const MAX_REFITS = 4;
+let refits = 0;
+// Ticks after a fit in which panels that open late are still picked up.
+const WATCH_TICKS = 24;
+let watchTicks = 0;
+// What a shelf's stars looked like at the last fit: a tool that resizes them
+// after the fit (the star's track reaching its end) asks for another.
+let fittedStars = '';
+const starsKey = () =>
+  stagedStars()
+    .map(e => [e.star.pos.x, e.star.pos.y, e.star.stageRadius, e.star.radius])
+    .join('|');
 let applied = null;
 let fitted = false;
 
@@ -143,8 +160,12 @@ export function requestFit(on = true) {
   pending = Boolean(on);
   attempts = 0;
   applied = null;
+  refits = 0;
   if (on) state.cameraTouchedAt = 0;
-  else fitted = false;
+  else {
+    fitted = false;
+    fittedStars = '';
+  }
 }
 
 /** Put the points in the clear region, in the canvas's own pixels, y up. */
@@ -171,6 +192,7 @@ export function fitNow(points, maxZoom = 3) {
   state.zoom = camera.zoom;
   state.pan = camera.pan;
   fitted = true;
+  watchTicks = WATCH_TICKS;
   watchLayout();
   return true;
 }
@@ -187,22 +209,66 @@ function watchLayout() {
     watcher.observe(el);
 }
 
-/** What to frame, and how far in it may go: a shelf stops at 3, a scene fills its room. */
-const framed = () => {
-  const stars = stagedStars();
-  if (stars.length) return [placedOf(stars)];
-  const bound = boundPoints();
-  if (bound.length) return [bound, bound.length > 1 ? 100 : 3];
-  // A scenario the step binds nothing in: the whole world it loads.
-  return [
-    allBodies().map(b => ({ x: b.pos.x, y: b.pos.y, radius: b.radius })),
-    100,
-  ];
-};
+/** The nearest nine tenths of a crowd of points, so one far body does not set the view. */
+function nearest(points) {
+  if (points.length <= CROWD_POINTS) return points;
+  const mid = k => {
+    const v = points.map(p => p[k]).sort((x, y) => x - y);
+    return v[Math.floor(v.length / 2)];
+  };
+  const [cx, cy] = [mid('x'), mid('y')];
+  const near = [...points].sort(
+    (p, q) => Math.hypot(p.x - cx, p.y - cy) - Math.hypot(q.x - cx, q.y - cy)
+  );
+  return near.slice(0, Math.ceil(points.length * 0.9));
+}
+
+/**
+ * What to frame, and how far in it may go. A shelf of staged stars stops at a
+ * zoom of 3; bound bodies fill their room, to the application's own limit,
+ * unless there is one role or the bodies lie within a few radii of one another
+ * (a probe beside its planet), which stop at 3 as a lone body does; a step that
+ * binds nothing frames the world it loads, less the farthest tenth of a crowd.
+ *
+ * @param {{stars: Array, bound: Array, roles: number, world: Array}} scene
+ * @returns {{points: Array, maxZoom: number}}
+ */
+export function chooseFrame({ stars, bound, roles, world }) {
+  if (stars.length) return { points: placedOf(stars), maxZoom: 3 };
+  if (bound.length) {
+    const xs = bound.map(p => p.x);
+    const ys = bound.map(p => p.y);
+    const spread = Math.max(
+      Math.max(...xs) - Math.min(...xs),
+      Math.max(...ys) - Math.min(...ys)
+    );
+    const reach = Math.max(...bound.map(p => p.radius || 0));
+    return {
+      points: bound,
+      maxZoom: roles > 1 && spread >= 4 * reach ? 100 : 3,
+    };
+  }
+  return { points: nearest(world), maxZoom: 100 };
+}
+
+const framed = () =>
+  chooseFrame({
+    stars: stagedStars(),
+    bound: boundPoints(),
+    roles: boundRoles().length,
+    world: allBodies().map(b => ({ x: b.pos.x, y: b.pos.y, radius: b.radius })),
+  });
 
 /** Perform a fit that was asked for, once the panels can be measured. */
 export function takeFit() {
-  if (!pending) return false;
+  if (!pending) {
+    if (fittedStars && fittedStars !== starsKey()) refit();
+    if (watchTicks > 0) {
+      watchTicks--;
+      watchLayout();
+    }
+    return false;
+  }
   if (state.cameraTouchedAt || ++attempts > MAX_FIT_ATTEMPTS) {
     pending = false;
     applied = null;
@@ -217,7 +283,9 @@ export function takeFit() {
     applied = null;
     return false;
   }
-  const done = fitNow(...framed());
+  const { points, maxZoom } = framed();
+  const done = fitNow(points, maxZoom);
+  fittedStars = done ? starsKey() : '';
   applied = done ? { zoom: state.zoom, pan: { ...state.pan } } : null;
   return done;
 }
@@ -226,8 +294,12 @@ export function frameScene() {
   requestFit();
 }
 
-export function refit() {
-  if (fitted && !state.cameraTouchedAt) requestFit();
+export function refit(byReader = false) {
+  if (!fitted || state.cameraTouchedAt) return;
+  if (!byReader && refits >= MAX_REFITS) return;
+  const was = refits;
+  requestFit();
+  refits = byReader ? was : was + 1;
 }
 
 // The sheet handle (phone): `body.lesson-peek`; saved as `sheet: 'peek'`.
@@ -251,7 +323,7 @@ export function setPeek(on, said = true) {
   if (peek === on) return;
   peek = on;
   paint();
-  refit();
+  refit(true);
   if (said) hooks.announce(words()[peek ? 2 : 3]);
   hooks.save();
 }

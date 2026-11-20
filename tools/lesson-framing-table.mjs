@@ -85,7 +85,6 @@ try {
           state: r.state,
           raisedPass: r.raised.pass,
           zoom: r.m.zoom,
-          capped: r.m.capped,
           fill: r.m.fill,
           free: r.m.free,
           pass: r.pass,

@@ -15,6 +15,7 @@ import {
   MARKER_FLOOR_PX,
   distinctScenes,
   judgeFraming,
+  knownMatches,
   sceneKindOf,
   sceneSteps,
 } from '../tools/lesson-framing.mjs';
@@ -72,21 +73,19 @@ describe('the list of scene steps', () => {
 describe('the verdict', () => {
   const body = (over = {}) => ({
     role: 'a',
+    x: 100,
+    y: 100,
     inside: true,
     free: true,
     coveredBy: null,
     drawnRadius: 3,
     ...over,
   });
-  const m = (bodies, over = {}) => ({
-    bodies,
-    capped: false,
-    fill: 0.8,
-    ...over,
-  });
+  const two = [body(), body({ role: 'b', x: 300, y: 200 })];
+  const m = (bodies, over = {}) => ({ bodies, zoom: 1, fill: 0.8, ...over });
 
   test('passes a framed step', () => {
-    expect(judgeFraming(m([body(), body({ role: 'b' })])).pass).toBe(true);
+    expect(judgeFraming(m(two)).pass).toBe(true);
   });
   test('fails a body off the screen, under a panel, or too small', () => {
     expect(judgeFraming(m([body({ inside: false, free: false })])).pass).toBe(
@@ -103,12 +102,55 @@ describe('the verdict', () => {
   test('fails a step that binds nothing', () => {
     expect(judgeFraming(m([])).pass).toBe(false);
   });
-  test('fails bodies that fill little of the free region unless zoom is capped', () => {
-    expect(judgeFraming(m([body()], { fill: FILL_FLOOR - 0.05 })).pass).toBe(
+  test('a small span fails, and only a shelf, a lone body or one point at the cap of 3 is excused', () => {
+    const small = { fill: FILL_FLOOR - 0.05 };
+    expect(judgeFraming(m(two, small)).pass).toBe(false);
+    // at a zoom of 3 a scene of several bodies is not excused: it is a speck scene
+    expect(
+      judgeFraming(m(two, { ...small, zoom: 3 }), { kind: 'bind' }).pass
+    ).toBe(false);
+    expect(
+      judgeFraming(m(two, { ...small, zoom: 3 }), { kind: 'shelf' }).pass
+    ).toBe(true);
+    expect(judgeFraming(m([body()], { ...small, zoom: 3 })).pass).toBe(true);
+    const onePoint = [body(), body({ role: 'b', x: 101, y: 100 })];
+    expect(judgeFraming(m(onePoint, { ...small, zoom: 3 })).pass).toBe(true);
+    // the cap is 3: a lone body at a zoom of 2 is not at it
+    expect(judgeFraming(m([body()], { ...small, zoom: 2 })).pass).toBe(false);
+  });
+  test('a crowd may lose a tenth of its members, in view or under furniture', () => {
+    const crowd = n =>
+      Array.from({ length: 20 }, (_, i) =>
+        i < n
+          ? body({ role: `s${i}`, inside: false, free: false })
+          : body({ role: `s${i}` })
+      );
+    expect(judgeFraming(m(crowd(2))).pass).toBe(true);
+    expect(judgeFraming(m(crowd(3))).pass).toBe(false);
+  });
+});
+
+describe('the known list', () => {
+  test('excuses a failure only for the reason it lists', () => {
+    const known = { why: 'the timeline bar', expect: 'is under timelineBar' };
+    expect(knownMatches(['primary is under timelineBar'], known)).toBe(true);
+    expect(knownMatches(['primary is under investigationBody'], known)).toBe(
       false
     );
-    expect(judgeFraming(m([body()], { fill: 0.01, capped: true })).pass).toBe(
-      true
-    );
+    expect(
+      knownMatches(
+        ['a is under timelineBar', 'b is outside the viewport'],
+        known
+      )
+    ).toBe(false);
+    expect(knownMatches(['a is under timelineBar'], undefined)).toBe(false);
+    const two = {
+      why: 'docks',
+      expect: ['is under timelineBar', 'is under timelineAux'],
+    };
+    expect(
+      knownMatches(['a is under timelineBar', 'b is under timelineAux'], two)
+    ).toBe(true);
+    expect(knownMatches(['a is under timelineScrubber'], two)).toBe(false);
   });
 });

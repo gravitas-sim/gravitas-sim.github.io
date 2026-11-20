@@ -627,7 +627,7 @@ function bindStepRoles(force, fresh) {
     });
     warn(problems, 'unbound role');
   } else releaseModelOwnership();
-  if (fresh && (step?.bind || !appliedSetup?.camera)) frameScene();
+  if (fresh) frameScene();
 }
 
 function applyLocks() {
