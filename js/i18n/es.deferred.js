@@ -706,6 +706,7 @@ export const ES_DEFERRED = {
   'burn.export': 'Exportar el registro de impulsos',
   'burn.logRow':
     'Impulso {n}: {body} en t = {time}, radial {radial}, transversal {transverse}.',
+
   // --- The investigations panel ------------------------------------------------
   'inv.stage.scale.display':
     'Escala comprimida: todas las estrellas se ven y el orden por tamaño es correcto, pero las proporciones en pantalla no son las del modelo.',
@@ -738,7 +739,6 @@ export const ES_DEFERRED = {
   'inv.take.default': 'Tomar la lectura',
   'inv.take.name': 'Tomar la lectura: {what}',
   'inv.take.predict': 'Haz primero tu predicción.',
-  'inv.est.wait': 'Tu cuadro de estimación se está cargando. Si falla, sigue.',
   'inv.take.none': '{what} no se muestra, así que no hay nada que leer.',
   'inv.take.done': 'Lectura tomada: {what}, {value}.',
   'inv.take.from': 'Tomado de {what}.',

@@ -377,9 +377,7 @@ test.describe('the central experiment of each investigation', () => {
     await expect(body.locator('[data-est]')).toHaveCount(0);
     await page.locator('#investigationNext').click();
     await expect(title).toHaveText(here);
-    await expect(page.locator('#srStatus')).toContainText(
-      'estimate box is loading'
-    );
+    await expect(page.locator('#srStatus')).toHaveText('Loading…');
     release();
     await expect(body.locator('[data-est]')).toBeVisible();
     await expect(body.locator('[data-est-wait]')).toHaveCount(0);

@@ -328,9 +328,7 @@ describe('the step on screen, held and revealed', () => {
     slots.reveal = null;
     go('guess');
     expect(body.querySelector('[data-est]')).toBeNull();
-    expect(body.querySelector('[data-est-wait]').textContent).toContain(
-      'estimate box is loading'
-    );
+    expect(body.querySelector('[data-est-wait]').textContent).toBe('Loading…');
     revealModule(reveal);
     paint();
     expect(body.querySelector('[data-est-wait]')).toBeNull();

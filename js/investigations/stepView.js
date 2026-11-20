@@ -89,8 +89,7 @@ export function runsModule(m) {
   return (slots.runs = m);
 }
 
-let lost = false; // the reveal code could not be fetched: Next goes on without the box
-
+let lost = false; // the reveal code failed to load
 /** Fetch the run and reveal code with the step that needs it: offline, the lesson opens. */
 export function fetchSeams(step, again) {
   const get = (needed, load, use, fail = () => {}) =>
@@ -106,18 +105,6 @@ export function fetchSeams(step, again) {
     revealModule,
     () => (lost = true)
   );
-}
-
-/** Whether Next waits: an estimate's box is fetched with its step, and a student is not carried past one never seen. */
-export function estimateHolds() {
-  const h = bound;
-  const step = h?.currentStep();
-  if (step?.kind !== 'estimate' || slots.reveal || lost) return false;
-  fetchSeams(step, () => h.currentStep() === step && h.renderStep());
-  const note = h.els().body.querySelector('[data-est-wait]');
-  announce(note?.textContent ?? '');
-  note?.scrollIntoView?.({ block: 'nearest' });
-  return true;
 }
 
 /** Install the field slot's module with the engine functions it needs. */
@@ -231,7 +218,7 @@ export function stepMarkup(step, c) {
   if (step.kind === 'estimate')
     parts.push(
       slots.reveal?.estimate(step, c) ??
-        `<p class="inv-held" data-est-wait>${escape(t('inv.est.wait'))}</p>`
+        `<p class="inv-held" data-est-wait>${escape(t('inv.card.loading'))}</p>`
     );
   else if (step.type === 'predict' || step.kind === 'choice') {
     const locked = saved !== undefined;
@@ -676,9 +663,6 @@ export function bindStepInputs(h) {
   const id = h.stepId();
   bound = h;
 
-  // An estimate's code is fetched while the step before it is read, so its box is there when it opens.
-  const ahead = h.steps()[h.steps().indexOf(h.currentStep()) + 1];
-  if (ahead?.kind === 'estimate') fetchSeams(ahead, () => {});
   slots.reveal?.bind(h, els.body);
   // The orbit geometry panel belongs to the step that has the object card:
   // where a lesson withholds the card again, the panel goes with it.
@@ -1294,4 +1278,14 @@ export function roleEchoesName(label, name) {
   const a = String(label).trim().toLowerCase();
   const b = String(name).trim().toLowerCase();
   return Boolean(a) && (a === b || b.startsWith(`${a} `));
+}
+
+/** Whether Next waits: an estimate's box is fetched with its step, and is never passed unseen. */
+export function estimateHolds() {
+  const h = bound;
+  const step = h?.currentStep();
+  if (step?.kind !== 'estimate' || slots.reveal || lost) return false;
+  fetchSeams(step, () => h.currentStep() === step && h.renderStep());
+  announce(t('inv.card.loading'));
+  return true;
 }
