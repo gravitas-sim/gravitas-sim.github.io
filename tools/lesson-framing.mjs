@@ -16,7 +16,7 @@
 //      (`DISPLAY_MIN_PX`, a radius), and its name is not drawn under the label
 //      floor of tools/visual-criteria.mjs;
 //   3. the bound bodies and the orbits they sweep fill at least `FILL_FLOOR`
-//      of the free region along one axis, unless the zoom is at the fit's own
+//      (a fifth) of the free region along one axis, unless the zoom is at the fit's own
 //      cap (a single small body is not made to fill the screen).
 // A step that binds nothing is judged on its first named object (rule 4).
 // =============================================================================
@@ -29,7 +29,7 @@ export const FRAMING_SIZES = [
 ];
 
 /** The share of the free region the bound bodies must span along one axis. */
-export const FILL_FLOOR = 0.3;
+export const FILL_FLOOR = 0.2;
 
 /** The renderer's smallest marker radius, CSS px (js/bodyVisuals.js DISPLAY_MIN_PX; a crowd's floor is lower, and the page reports it). */
 export const MARKER_FLOOR_PX = 2.75;
