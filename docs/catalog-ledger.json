@@ -4488,8 +4488,8 @@
       "source": ["js/data/investigations/retrograde-motion.js"],
       "shadows": ["js/data/investigations/es/retrograde-motion.js"],
       "instrument_files": [],
-      "depths": { "core": 33, "quantitative": 0, "advanced": 0 },
-      "spanish_steps": { "core": 33, "deeper": 0 },
+      "depths": { "core": 32, "quantitative": 0, "advanced": 0 },
+      "spanish_steps": { "core": 32, "deeper": 0 },
       "languages": ["en", "es"],
       "sequences": [{ "id": "gravity-and-orbits", "position": 1 }],
       "courses": [
@@ -4500,20 +4500,101 @@
       "audit": "FOCUSED",
       "scene_class": "setup scenario",
       "limits": null,
-      "open_items": [],
-      "questions": { "Q1": "", "Q2": "", "Q3": "", "Q4": "", "Q5": "" },
-      "leak": {
-        "L1": "HOLDS: no field cue or step placeholder holds a numeral at any depth, in either language, and the panel renders none that does (tests/fieldCue.test.js); the expected value is the field's `want`, which no page reads.",
-        "L2": "",
-        "L3": "",
-        "L4": "",
-        "L5": ""
+      "open_items": [
+        "D-R4-346-03: validator messages of the timing step stay English in Spanish (js/i18n/es.deferred.js is at its line ceiling); the page's widths and uncertainties are fields and translate.",
+        "D-R4-346-04: the Jupiter transfer is calculated, not predicted first (T4)."
+      ],
+      "questions": {
+        "Q1": "The student times the two turns of the direction to Mars themselves, by reading it at moments they choose and bracketing each turn between two readings, which a paragraph cannot do; the synodic period comes from their own measured periods.",
+        "Q2": "Each measure step names the readout rows (direction, day, period, distance) and the control (Space, Step forward, Take reading); the scene opens paused for the timing step and says which two readings make a bracket.",
+        "Q3": "The probe prints the periods in days as the fields ask (they printed years), the distance from the Sun by the element that holds it (the row showed a dash), and the direction to 0.01 degree; the turning days in the check are the circular model's, held to it and to the engine by tests/retrogradeMotion.test.js.",
+        "Q4": "The student decides when to pause, which frames to read, how narrow to make each bracket and which two turns belong to one loop; a set in which nothing fell, a bracket that leaves out the turn and two turns of different loops each get authored feedback.",
+        "Q5": "Not applicable: the lesson is core only and no deeper layer is added."
       },
-      "task_rule_items": [],
-      "editorial": "OPEN",
-      "redesign": "OPEN",
-      "reason": "Corrections I reworded steps for factual consistency (register D-R4-300-09); editorial pass still OPEN.",
-      "step_revisions": [],
+      "leak": {
+        "L1": "HOLDS: no field cue or step placeholder holds a numeral at any depth, in either language; the expected value is the field's `want`, which no page reads.",
+        "L2": "HOLDS: the timing step opens paused with every reading box empty; the readout shows only the live direction and day.",
+        "L3": "HOLDS: the share of the cycle spent going backwards is predicted before the frame is changed and is given nowhere in a body, tip or checklist; the loop is predicted (before-you-look) before it is drawn.",
+        "L4": "HOLDS: the cycle length (780 days) and the length of the loop (72 days, ten weeks) are stated only in steps after the ones that measure them; the synodic subtraction and the periods are no longer worked in the question, and the hints locate.",
+        "L5": "HOLDS: the readout, the verdict box and the instructor text visible to students carry no held answer before the reveal step."
+      },
+      "task_rule_items": [
+        "T1: the periods and distances are captured with provenance; the day and direction of each reading are captured, and the page works out the turn days, the length and its uncertainty.",
+        "T2: the predicted share of the cycle returns at the reveal beside the student's length and its uncertainty.",
+        "T3: not applicable (no dependence is investigated).",
+        "T4: Jupiter's synodic period by the same arithmetic, calculated and not predicted first; recorded as an open item.",
+        "T5: authored feedback for the wrong turns in the faster-planet, when-it-reverses and which-is-moving choices, for a synodic period in years, and for each refusal of the timing set."
+      ],
+      "editorial": "REVISED",
+      "redesign": "REVISED",
+      "reason": "The task changed (retired steps with successors): the student times the reversal themselves and compares it with a prediction; no body gives the loop's length before the measurement.",
+      "step_revisions": [
+        {
+          "sid": "the-wandering-stars",
+          "change": "REWORDED: the cycle and the length of the reversal are no longer stated."
+        },
+        {
+          "sid": "the-two-orbits",
+          "change": "REWORDED: the distances and periods are taken from the readout, the periods in days and the distance by the right element."
+        },
+        {
+          "sid": "how-fast-each-one-goes",
+          "change": "REWORDED: the periods are taken, not copied."
+        },
+        {
+          "sid": "how-often-does-earth-catch",
+          "change": "REWORDED: the worked subtraction and the periods leave the body; the first hint locates."
+        },
+        {
+          "sid": "a-lap-gained",
+          "change": "RETIRED: no successor (the synodic period was computed twice)."
+        },
+        {
+          "sid": "share-of-the-cycle",
+          "change": "NEW: the share of the cycle spent going backwards is predicted, held to the reveal."
+        },
+        {
+          "sid": "time-the-reversal",
+          "from": "catch-the-reversal",
+          "change": "REVISED: each turn of the direction is bracketed between two readings the student takes; the length comes with an uncertainty."
+        },
+        {
+          "sid": "time-the-reversal",
+          "from": "how-long-does-a-loop",
+          "change": "REVISED: successor of both reversal steps."
+        },
+        {
+          "sid": "the-share-you-found",
+          "change": "NEW: the prediction beside the student's length."
+        },
+        {
+          "sid": "which-one-is-faster",
+          "change": "REWORDED: named wrong turns on three options."
+        },
+        {
+          "sid": "when-does-it-reverse",
+          "change": "REWORDED: named wrong turns on three options."
+        },
+        {
+          "sid": "which-one-is-moving",
+          "change": "REWORDED: named wrong turns on three options."
+        },
+        {
+          "sid": "overtaking-on-the-inside",
+          "change": "REWORDED: the cycle and the length are no longer stated."
+        },
+        { "sid": "what-it-cost-to-explain", "change": "REWORDED: shortened." },
+        {
+          "sid": "frames-are-not-all-equal",
+          "from": "what-actually-settled-it",
+          "change": "REWORDED: takes the history of what settled the argument; the old step is retired."
+        },
+        {
+          "sid": "jupiters-loops",
+          "from": "mars-or-jupiter",
+          "change": "REVISED: Jupiter's synodic period is calculated from its distance and year, not chosen."
+        }
+      ],
       "walk": "NOT RUN",
       "pr": null,
       "hash": null

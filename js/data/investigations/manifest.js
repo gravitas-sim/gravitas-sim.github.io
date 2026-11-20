@@ -33,9 +33,9 @@ export const MANIFEST = [
     duration: '35-45 min',
     level: 'Introductory astronomy',
     thumbnail: 'images/scenarios/retrograde-mars.webp',
-    stepCount: 33,
-    gradedCount: 18,
-    objectiveCount: 6,
+    stepCount: 32,
+    gradedCount: 17,
+    objectiveCount: 7,
   },
   {
     id: 'transit-photometry',

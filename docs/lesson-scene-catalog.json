@@ -4953,10 +4953,10 @@
      ]
     },
     {
-     "sid": "a-lap-gained",
+     "sid": "share-of-the-cycle",
      "index": 10,
-     "type": "question",
-     "title": "A lap gained",
+     "type": "predict",
+     "title": "How much of the cycle?",
      "declares": {
       "stage": null,
       "bound": [
@@ -4974,15 +4974,13 @@
       "scene-declared"
      ],
      "actions": [
-      "read"
+      "commit-a-prediction"
      ],
-     "requires": [
-      "how-fast-each-one-goes"
-     ],
-     "reveal": null,
+     "requires": [],
+     "reveal": "the-share-you-found",
      "asks": {
-      "choice": false,
-      "numeric": true,
+      "choice": true,
+      "numeric": false,
       "short": false,
       "rubric": false,
       "validated": false
@@ -4994,8 +4992,9 @@
       "areaSweep": "locked"
      },
      "loop": {
-      "declared": "interpret",
+      "declared": "predict",
       "actual": [
+       "predict",
        "interpret"
       ],
       "handTranscribed": false,
@@ -5352,10 +5351,10 @@
      ]
     },
     {
-     "sid": "catch-the-reversal",
+     "sid": "time-the-reversal",
      "index": 16,
      "type": "measure",
-     "title": "Catch the reversal",
+     "title": "Time the reversal",
      "declares": {
       "stage": null,
       "bound": [
@@ -5386,7 +5385,7 @@
       "numeric": false,
       "short": false,
       "rubric": false,
-      "validated": false
+      "validated": true
      },
      "worldRunning": true,
      "affordances": {
@@ -5398,7 +5397,8 @@
       "declared": "measure",
       "actual": [
        "experiment",
-       "measure"
+       "measure",
+       "interpret"
       ],
       "handTranscribed": false,
       "mismatch": null
@@ -5428,13 +5428,77 @@
      "recovery": [
       "wrong body: the step binds the object by name, so there is none",
       "missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand",
-      "null result: the probe names what is missing",
-      "ambiguous result: nothing marks these, they are a record"
+      "null result: the probe prints a dash and does not say why",
+      "ambiguous result: the check says in words how close is close enough"
+     ]
+    },
+    {
+     "sid": "the-share-you-found",
+     "index": 17,
+     "type": "read",
+     "title": "The share you found",
+     "declares": {
+      "stage": null,
+      "bound": [
+       "sun",
+       "earth",
+       "mars"
+      ],
+      "roles": [
+       "sun",
+       "earth",
+       "mars"
+      ]
+     },
+     "kinds": [
+      "scene-declared"
+     ],
+     "actions": [
+      "read"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": true,
+     "affordances": {
+      "inspector": "whole lesson",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "read",
+      "actual": [
+       "read"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [
+      "lesson locks: placement"
+     ],
+     "recovery": [
+      "wrong body: the step binds the object by name, so there is none"
      ]
     },
     {
      "sid": "nearest-and-furthest",
-     "index": 17,
+     "index": 18,
      "type": "measure",
      "title": "Nearest and furthest",
      "declares": {
@@ -5514,7 +5578,7 @@
     },
     {
      "sid": "bright-and-backwards-together",
-     "index": 18,
+     "index": 19,
      "type": "question",
      "title": "Bright and backwards together",
      "declares": {
@@ -5578,7 +5642,7 @@
     },
     {
      "sid": "when-does-it-reverse",
-     "index": 19,
+     "index": 20,
      "type": "question",
      "title": "When does it reverse?",
      "declares": {
@@ -5642,7 +5706,7 @@
     },
     {
      "sid": "overtaking-on-the-inside",
-     "index": 20,
+     "index": 21,
      "type": "read",
      "title": "Overtaking on the inside",
      "declares": {
@@ -5706,7 +5770,7 @@
     },
     {
      "sid": "say-it-in-your-own",
-     "index": 21,
+     "index": 22,
      "type": "question",
      "title": "Say it in your own words",
      "declares": {
@@ -5770,7 +5834,7 @@
     },
     {
      "sid": "what-it-cost-to-explain",
-     "index": 22,
+     "index": 23,
      "type": "read",
      "title": "What it cost to explain this",
      "declares": {
@@ -5834,7 +5898,7 @@
     },
     {
      "sid": "what-the-epicycle-was-really",
-     "index": 23,
+     "index": 24,
      "type": "question",
      "title": "What the epicycle was really tracking",
      "declares": {
@@ -5898,7 +5962,7 @@
     },
     {
      "sid": "counting-the-machinery",
-     "index": 24,
+     "index": 25,
      "type": "question",
      "title": "Counting the machinery",
      "declares": {
@@ -5962,7 +6026,7 @@
     },
     {
      "sid": "and-what-about-the-sun",
-     "index": 25,
+     "index": 26,
      "type": "predict",
      "title": "And what about the Sun?",
      "declares": {
@@ -6027,7 +6091,7 @@
     },
     {
      "sid": "do-it-for-the-sun",
-     "index": 26,
+     "index": 27,
      "type": "explore",
      "title": "Do it for the Sun",
      "declares": {
@@ -6103,7 +6167,7 @@
     },
     {
      "sid": "which-one-is-moving",
-     "index": 27,
+     "index": 28,
      "type": "question",
      "title": "Which one is moving?",
      "declares": {
@@ -6167,73 +6231,9 @@
     },
     {
      "sid": "frames-are-not-all-equal",
-     "index": 28,
-     "type": "read",
-     "title": "Frames are not all equal",
-     "declares": {
-      "stage": null,
-      "bound": [
-       "sun",
-       "earth",
-       "mars"
-      ],
-      "roles": [
-       "sun",
-       "earth",
-       "mars"
-      ]
-     },
-     "kinds": [
-      "scene-declared"
-     ],
-     "actions": [
-      "read"
-     ],
-     "requires": [],
-     "reveal": null,
-     "asks": {
-      "choice": false,
-      "numeric": false,
-      "short": false,
-      "rubric": false,
-      "validated": false
-     },
-     "worldRunning": true,
-     "affordances": {
-      "inspector": "whole lesson",
-      "placement": "locked",
-      "areaSweep": "locked"
-     },
-     "loop": {
-      "declared": "read",
-      "actual": [
-       "read"
-      ],
-      "handTranscribed": false,
-      "mismatch": null
-     },
-     "scene": {
-      "nameMatches": [],
-      "readsSelection": false,
-      "importsFromSelection": false,
-      "engineReads": [],
-      "mutates": [],
-      "eventWatch": null
-     },
-     "instrument": null,
-     "evidence": [],
-     "reset": [
-      "lesson locks: placement"
-     ],
-     "recovery": [
-      "wrong body: the step binds the object by name, so there is none"
-     ]
-    },
-    {
-     "sid": "what-actually-settled-it",
      "index": 29,
      "type": "read",
-     "title": "What actually settled it",
+     "title": "Frames are not all equal",
      "declares": {
       "stage": null,
       "bound": [
@@ -6358,91 +6358,10 @@
      ]
     },
     {
-     "sid": "how-long-does-a-loop",
+     "sid": "jupiters-loops",
      "index": 31,
-     "type": "measure",
-     "title": "How long does a loop last?",
-     "declares": {
-      "stage": null,
-      "bound": [
-       "sun",
-       "earth",
-       "mars"
-      ],
-      "roles": [
-       "sun",
-       "earth",
-       "mars"
-      ]
-     },
-     "kinds": [
-      "scene-declared",
-      "engine-measurement",
-      "captured-evidence"
-     ],
-     "actions": [
-      "record-values",
-      "open-a-body-inspector",
-      "run-the-simulation"
-     ],
-     "requires": [],
-     "reveal": null,
-     "asks": {
-      "choice": false,
-      "numeric": false,
-      "short": false,
-      "rubric": false,
-      "validated": false
-     },
-     "worldRunning": true,
-     "affordances": {
-      "inspector": "whole lesson",
-      "placement": "locked",
-      "areaSweep": "locked"
-     },
-     "loop": {
-      "declared": "measure",
-      "actual": [
-       "experiment",
-       "measure"
-      ],
-      "handTranscribed": false,
-      "mismatch": null
-     },
-     "scene": {
-      "nameMatches": [
-       "Mars",
-       "Earth"
-      ],
-      "readsSelection": false,
-      "importsFromSelection": false,
-      "engineReads": [
-       "days",
-       "find",
-       "seenFrom"
-      ],
-      "mutates": [],
-      "eventWatch": null
-     },
-     "instrument": null,
-     "evidence": [
-      "notebook-fields"
-     ],
-     "reset": [
-      "lesson locks: placement"
-     ],
-     "recovery": [
-      "wrong body: the step binds the object by name, so there is none",
-      "missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand",
-      "null result: the probe names what is missing",
-      "ambiguous result: nothing marks these, they are a record"
-     ]
-    },
-    {
-     "sid": "mars-or-jupiter",
-     "index": 32,
      "type": "question",
-     "title": "Mars or Jupiter?",
+     "title": "How often does Jupiter loop?",
      "declares": {
       "stage": null,
       "bound": [
@@ -6460,13 +6379,13 @@
       "scene-declared"
      ],
      "actions": [
-      "choose-an-option"
+      "read"
      ],
      "requires": [],
      "reveal": null,
      "asks": {
-      "choice": true,
-      "numeric": false,
+      "choice": false,
+      "numeric": true,
       "short": false,
       "rubric": false,
       "validated": false
@@ -6504,7 +6423,7 @@
     },
     {
      "sid": "what-you-did",
-     "index": 33,
+     "index": 32,
      "type": "read",
      "title": "What you did",
      "declares": {
@@ -6569,21 +6488,35 @@
    ],
    "loops": [
     {
+     "predict": "share-of-the-cycle",
+     "predictCollects": true,
+     "heldUntil": "the-share-you-found",
+     "experiment": [],
+     "measure": [],
+     "evidence": [],
+     "interpret": "the-share-you-found",
+     "measuredBeforeAnswering": false,
+     "explained": false,
+     "answeredByTheExperiment": true,
+     "closed": true,
+     "complete": false
+    },
+    {
      "predict": "before-you-look",
      "predictCollects": true,
      "heldUntil": "put-yourself-on-earth",
      "experiment": [
       "put-yourself-on-earth",
-      "catch-the-reversal",
+      "time-the-reversal",
       "nearest-and-furthest"
      ],
      "measure": [
       "put-yourself-on-earth",
-      "catch-the-reversal",
+      "time-the-reversal",
       "nearest-and-furthest"
      ],
      "evidence": [
-      "catch-the-reversal",
+      "time-the-reversal",
       "nearest-and-furthest"
      ],
      "interpret": "put-yourself-on-earth",
@@ -6598,16 +6531,12 @@
      "predictCollects": true,
      "heldUntil": "do-it-for-the-sun",
      "experiment": [
-      "do-it-for-the-sun",
-      "how-long-does-a-loop"
+      "do-it-for-the-sun"
      ],
      "measure": [
-      "do-it-for-the-sun",
-      "how-long-does-a-loop"
+      "do-it-for-the-sun"
      ],
-     "evidence": [
-      "how-long-does-a-loop"
-     ],
+     "evidence": [],
      "interpret": "do-it-for-the-sun",
      "measuredBeforeAnswering": true,
      "explained": false,
@@ -6617,16 +6546,16 @@
     }
    ],
    "totals": {
-    "steps": 33,
-    "declared": 33,
+    "steps": 32,
+    "declared": 32,
     "student": 0,
-    "engine": 8,
+    "engine": 7,
     "model": 0,
     "data": 0,
     "diagram": 0,
-    "evidence": 5,
+    "evidence": 4,
     "computation": 0,
-    "declaredButInert": 33,
+    "declaredButInert": 32,
     "prose": 0,
     "mismatched": 0,
     "rebuilds": 1
@@ -120443,16 +120372,16 @@
   }
  ],
  "totals": {
-  "steps": 1528,
-  "declared": 1420,
+  "steps": 1527,
+  "declared": 1419,
   "student": 166,
-  "engine": 180,
+  "engine": 179,
   "model": 1009,
   "data": 161,
   "diagram": 878,
-  "evidence": 395,
+  "evidence": 394,
   "computation": 14,
-  "declaredButInert": 1254,
+  "declaredButInert": 1253,
   "prose": 59,
   "mismatched": 8,
   "rebuilds": 81,
@@ -120460,13 +120389,13 @@
    "scene": 0,
    "portrait": 7,
    "quiet": 16,
-   "unstated": 1505
+   "unstated": 1504
   },
   "lessons": 124,
-  "loops": 197,
-  "closedLoops": 197,
+  "loops": 198,
+  "closedLoops": 198,
   "explainedLoops": 1,
-  "heldLoops": 196,
+  "heldLoops": 197,
   "completeLoops": 197
  }
 }
