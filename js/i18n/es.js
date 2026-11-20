@@ -1414,10 +1414,10 @@ export const ES = {
   'inv.action.back.hint': 'Paso anterior (Mayús + flecha izquierda)',
   'inv.body.label': 'Paso de la investigación',
   'inv.backup.summary': 'Copia del progreso',
-  'inv.backup.download': 'Descargar copia del progreso',
+  'inv.backup.download': 'Descargar una copia de tu trabajo',
   'inv.backup.download.hint':
     'Guarda una copia de tus respuestas en un archivo tuyo. El informe PDF sigue siendo lo que se entrega.',
-  'inv.backup.restore': 'Restaurar copia del progreso',
+  'inv.backup.restore': 'Restaurar una copia de tu trabajo',
   'inv.backup.restore.hint':
     'Carga respuestas desde un archivo que guardaste antes.',
   'inv.probe.title': 'Lectura en vivo',

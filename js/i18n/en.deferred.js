@@ -2160,11 +2160,12 @@ export const EN_DEFERRED = {
   'inv.step.kind.ellipse': 'explore',
   'inv.step.kind.wedges': 'explore',
   'inv.save.link': 'See everything in My work',
-  'inv.save.saved': 'Progress saved on this device',
+  'inv.save.saved':
+    'Your answers, slider settings and hints are saved on this device.',
   'inv.save.full':
-    'Progress could not be saved: this browser\u2019s storage is full. Your answers are still here, but they will be lost when you close the tab. Download a progress backup to keep them.',
+    'Not saved: this browser\u2019s storage is full. Your work is kept here, but will be lost when you close the tab.',
   'inv.save.unavailable':
-    'Progress cannot be saved in this browser \u2014 private browsing usually blocks it. Your answers are still here, but they will be lost when you close the tab. Download a progress backup to keep them.',
+    'Not saved: this browser does not allow saving (private browsing often blocks it). Your work is kept here, but will be lost when you close the tab.',
   'inv.save.authoring':
     'Authoring preview \u2014 nothing is saved, and no student\u2019s progress is touched.',
   'inv.save.foreign':

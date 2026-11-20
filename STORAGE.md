@@ -38,6 +38,25 @@ These are the student's own work, and what an "export everything" would carry:
 
 It is a sidecar key and not a field of a progress record, on purpose. The compatibility corpus says a 2.0.0 reader accepts a progress record with an unknown field and silently drops it (the boundary row `resume-in-progress-record`, kept as the record of the design not built), and does not know a key of its own at all, so a rolled-back build neither misreads nor loses anything. `tests/compat/kinds/resume-record.mjs` is the corpus row: a progress record beside the sidecar reads exactly as before in both builds. A record that is not version 1, or is damaged, reads as empty and the next write replaces it. Nothing in it is a progress record: how many steps of a lesson were seen is still that lesson's own record.
 
+## What an investigation keeps, and what it says about it
+
+One write does it all: `save()` in `js/investigations/stepView.js` writes the investigation's progress record (`gravitas_investigation_<id>`, or the activity's `gravitas_assignment_<hash>`) and nothing else, and never on a timer. `e2e/savedAndSaid.spec.js` is this list: it changes each kept thing, reloads and finds it, and finds the scene rebuilt.
+
+| What the student changes | Kept | Written | Where in the record |
+|---|---|---|---|
+| A choice (predict or question) | yes | on the click | `<id>:<sid>`, `:first`, `attempts` |
+| A written answer | yes | on every keystroke | `<id>:<sid>` |
+| A number typed and not yet checked | yes | on every keystroke | `drafts` (a 2.0.0 reader ignores the field) |
+| A number checked, and the tries | yes | on Check or Enter | `<id>:<sid>`, `:locale`, `attempts` |
+| A measure field, and a reading taken from the screen | yes, with how it was taken (instrument, scene object, time) | on every keystroke, or when the reading is taken | `<id>:<sid>:<field>`, `:locale`, `:src`; the same reading is also a ledger entry in the evidence notebook |
+| An instrument slider and the wedge slider | yes | on every move and when a step opens | `:tool:<control>`, `:wedges`, `:e` |
+| A hint stage | yes | on the click | `:help` |
+| The step, the steps seen, the depth, time spent | yes | on every step change | `stepSid`, `visited`, `depth`, `deepest`, `spent` |
+| Notes in the evidence notebook | yes, in the notebook's own store | on every entry | `gravitas_evidence_notebook` |
+| The live scene: a pause, a body added, removed or merged | no: rebuilt from the start of the step | never | none |
+
+The status line (`#investigationSaveStatus`) says which of three things is true: saved on this device; not saved because the browser's storage is full; not saved because the browser does not allow saving (private browsing). A refusal offers the existing "Download a backup of your work" and the existing restore reads it (FORMATS.md, progress backup, unchanged). Where a student has paused the scene or changed its bodies on a step that has one, and when they come back to such a step, `js/investigations/vocabulary.js` says the scene is rebuilt from the start of the step and the answers are not. It compares the number of bodies and whether the run is paused; a body moved or a value edited without adding, removing or merging one is not noticed.
+
 ## A preview as a student (Prompt 175)
 
 An address with `preview=student` is read and written in memory only for the

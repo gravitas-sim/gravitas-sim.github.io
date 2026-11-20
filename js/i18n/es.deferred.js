@@ -2162,11 +2162,12 @@ export const ES_DEFERRED = {
   'inv.step.kind.ellipse': 'exploración',
   'inv.step.kind.wedges': 'exploración',
   'inv.save.link': 'Ver todo en Mi trabajo',
-  'inv.save.saved': 'Progreso guardado en este dispositivo',
+  'inv.save.saved':
+    'Tus respuestas, los valores de los deslizadores y las pistas se guardan en este dispositivo.',
   'inv.save.full':
-    'No se pudo guardar el progreso: el almacenamiento de este navegador est\u00e1 lleno. Tus respuestas siguen aqu\u00ed, pero se perder\u00e1n al cerrar la pesta\u00f1a. Descarga una copia de seguridad para conservarlas.',
+    'No se guarda: el almacenamiento de este navegador est\u00e1 lleno. Tu trabajo se conserva aqu\u00ed, pero se perder\u00e1 al cerrar la pesta\u00f1a.',
   'inv.save.unavailable':
-    'No se puede guardar el progreso en este navegador; la navegaci\u00f3n privada suele impedirlo. Tus respuestas siguen aqu\u00ed, pero se perder\u00e1n al cerrar la pesta\u00f1a. Descarga una copia de seguridad para conservarlas.',
+    'No se guarda: este navegador no permite guardar (la navegaci\u00f3n privada suele impedirlo). Tu trabajo se conserva aqu\u00ed, pero se perder\u00e1 al cerrar la pesta\u00f1a.',
   'inv.save.authoring':
     'Vista previa de autor\u00eda: no se guarda nada y no se toca el progreso de ning\u00fan estudiante.',
   'inv.save.foreign':

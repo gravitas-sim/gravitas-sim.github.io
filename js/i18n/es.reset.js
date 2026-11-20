@@ -40,5 +40,9 @@ export const ES_RESET = {
   'reset.undo.done': 'Tus respuestas y lecturas han vuelto.',
   'reset.leave': 'Salir de la escena de esta investigación: {what}',
   'reset.leave.hint': 'Sale de la escena de esta investigación. {what}',
+  'saved.scene.leave':
+    'La escena que preparaste no se guarda. Cuando vuelvas, se reconstruye desde el inicio de este paso.',
+  'saved.scene.back':
+    'La escena se reconstruye desde el inicio de este paso. Tus respuestas y lecturas se guardan; la escena que preparaste la última vez, no.',
   'reset.help.title': 'Empezar de nuevo',
 };
