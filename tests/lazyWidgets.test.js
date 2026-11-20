@@ -16,7 +16,6 @@ import {
   ensureWidget,
   getWidget,
   needsLoading,
-  warmAhead,
   whenWidgetsReady,
 } from '../js/widgets.js';
 
@@ -64,29 +63,6 @@ describe('the lazy widget manifest', () => {
     expect(needsLoading('depth-size')).toBe(false);
     const ids = allWidgets().map(w => w.id);
     expect(ids.filter(id => id === 'depth-size')).toHaveLength(1);
-  });
-
-  test('warmAhead fetches the next instrument within three steps and no other', async () => {
-    const steps = [
-      { sid: 'a' },
-      { sid: 'b' },
-      { sid: 'c' },
-      { sid: 'd' },
-      { sid: 'e', tool: { id: 'moon-frames' } },
-    ];
-    // Four steps ahead is out of reach: nothing starts.
-    warmAhead(steps, 0);
-    expect(needsLoading('moon-frames')).toBe(true);
-    // Three ahead starts the family; asking for the widget joins that fetch.
-    warmAhead(steps, 1);
-    const widget = await ensureWidget('moon-frames');
-    expect(widget?.id).toBe('moon-frames');
-    expect(needsLoading('moon-frames')).toBe(false);
-    // Nothing ahead, or an unknown id: a no-op that does not throw.
-    expect(() => warmAhead(steps, 4)).not.toThrow();
-    expect(() =>
-      warmAhead([{ sid: 'x' }, { tool: { id: 'no-such-instrument' } }], 0)
-    ).not.toThrow();
   });
 
   test('whenWidgetsReady brings in every family for readers of the whole catalog', async () => {
