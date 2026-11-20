@@ -618,4 +618,156 @@ WebKit; a real phone (the profile is a proxy); transfer sizes beyond the
 harness's compressed transport; the full `dist` suite beyond the 28 workflow
 specs.
 
+## Part B's candidate (Roadmap IV, Prompt 316): the Observatory from the build
+
+Prepared on 2026-11-19 on `perf/deploy-build-prereqs`, from the ratified third
+run (`v4` at 87338a7a plus D-R4-315-02). Nothing is switched: the published
+site is the tree, and the switch unit below is written down, not applied.
+
+### The front door stays with the tree
+
+The front door is `index.html`, and so are the sandbox scenario and every
+lesson: one document, one service-worker scope, one start-up closure. A build
+of the front door is the build of the sandbox and of all the lessons, and S2,
+S4 and S10 are not judged on the build. The front door therefore cannot be
+published from the build without publishing routes the gate did not name, and
+it is not prepared. The Observatory is its own page, with its own entry
+(`js/observatoryPage.js`) and its own document, and it stands alone. The
+candidate is the Observatory only. No threshold or mapping was changed to reach
+this: the front door is named and withheld, not judged again.
+
+### What the candidate is
+
+The tree, published as today, with the built Observatory laid over it
+(`tools/route-overlay.mjs`, the one list of routes published from the build):
+
+- `node build.js` now records, for every bundle, its entries, the outputs each
+  loads and each output's own source modules and static imports
+  (`dist/build-inputs.json`, from esbuild's metafile). `dist/` is not published
+  from, and the build job's `dist` artifact carries the record.
+- The deploy (`tools/prepare-pages.mjs --overlay dist`) copies the built page
+  and its whole output closure (143 files) under `observatory/js/`, so nothing
+  collides with the tree's module of the same name; links the tree's
+  stylesheets rather than the build's joined `css/app.css`; stamps the built
+  page with the commit like the tree's stamped pages; checks its content
+  policy (the built page keeps its inline scripts, so `tools/csp.mjs` finds its
+  hashes current); lets exactly those files through the guard that refuses any
+  other difference from the commit; and names the overlay in
+  `deployed-revision.json`.
+- The one precache generator (`tools/build-service-worker.mjs`) reads the
+  staged `deploy-overlay.json`: it installs the page's start-up closure (6
+  files, 96.1 KB) in the tier the tree gives the page (optional, the first
+  visit's pictures-and-pages tier), and drops the 8 sources (124.7 KB) that
+  only this closure was built from and no other bundle uses. The 137 lazy
+  chunks are published, not installed: precaching them would install built
+  copies of modules the tree installs already, about 1.3 MB beyond the tree's
+  tiers. The worker caches each on first use, as it does the tree's own
+  modules.
+- Without `--overlay`, the deploy is byte-for-byte today's.
+
+### The thresholds of the third run, on the candidate as committed
+
+Judged by the rule the third run committed for B: a named route meets its
+kind's T1 bar, every spec of its workflows passes against what is served, and
+it opens offline.
+
+| Threshold | Candidate | Result |
+|---|---|---|
+| T1, observatory (40% of bytes) | 200.7 KB and 18 requests to 96.1 KB and 6 (`node tools/route-budget.mjs`, the staged trees, cold cache, worker blocked) | **52.1%: met** |
+| T1, front door (50% and 30%) | not prepared (above); served from the tree, 1921.9 KB and 109 requests as before | withheld, not claimed |
+| T1, every other route | identical to the tree, byte for byte | unchanged |
+| T2 offline | the candidate's worker installs from its own precache; with the network off the front door, Kepler's Laws and the Observatory open in English and Spanish, no failed request, no page error | **met** |
+| T3 committed artifacts | none added (`dist/build-inputs.json` and `deploy-overlay.json` are generated, the latter only in the staged copy) | **met** |
+| T4, S5 for the Observatory | every spec S5 names passes against the candidate, served as staged, unchanged (`npm run e2e:dist:workflows`'s 28 specs with the staged tree as the root): observatory 8 passed and its one existing build-target skip (the offline open, which the rehearsal below makes), stellarSpectra 3 of 3 | **met** |
+| T5 instructor bundle | the staged `instructors/materials.enc.json` is the committed file, byte for byte; the overlay copies nothing outside the Observatory's closure, so CI's throwaway bundle cannot reach the site; no secret read | **met** |
+| T6 updates | the same commit deployed twice over the same build gives one version; a one-line change to a module only a lazy chunk loads (`js/observatory/skyPanel.js`) renames that chunk, changes the bytes of the entry that imports it by name, which is installed, and so gives a new version; the staged trees differ in exactly those two files, the manifest and the two deploy records | **met** |
+
+All 28 workflow specs against the candidate: 316 passed, 1 failed, 7 skipped
+(the existing build-target skips). The failure is chartParity's A4, the bench
+charts (S4): two `role="status"` elements where the test asks for one. That
+page is served from the tree, byte for byte the same in both staged trees, and
+the same test failed twice of two against the tree as published today (and
+once of two against the candidate) while the machine was loaded (one-minute
+load 85 to 145). It is the tree's, recorded here and not the candidate's.
+
+First visit: core 845 files, 13,764,342 bytes, to 837 and 13,636,675; optional
+128 and 1,010,552 to 134 and 1,108,960; idle 210 and 5,007,513, unchanged. A
+first visit installs 29,259 bytes less than the tree's.
+
+**Rollback rehearsal** (`tools/overlay-rehearsal.mjs`, a development run: one
+origin, one browser profile, the tree published, then the candidate, then the
+tree again). After each, once every tab had closed, the reader's worker took
+the new publication and exactly one cache was left, named as that
+publication's manifest names it; the Observatory was the one that publication
+serves, stamped as it should be; the offline opens above all passed; and once the tree was back, its cache held none of the built Observatory's files (the candidate's held its 6 installed start-up files). Run twice, the second time with that last check added; coherent both times.
+
+**Compatibility corpus.** `tests/compat/` passes on this branch: every record kind built and read by the current readers and by the 2.0.0 and 3.0 readers. The corpus runs the readers in Node from `js/`; the built Observatory is compiled from those same modules, and it reads saved observations in the browser in S5's specs, which run against the candidate above. Stored caches migrate by version: each publication's worker deletes every other `gravitas-` cache on activation (the rehearsal).
+
+### The switch unit, prepared and not applied
+
+One workflow change, one setting, the rollback. The change adds a step to the
+deploy job that downloads the build job's `dist` artifact from the same run,
+and passes `--overlay dist` to `tools/prepare-pages.mjs`; both only when the
+repository variable `DEPLOY_BUILT_ROUTES` is `on`. The deploy job still
+installs nothing and builds nothing. Merged with the variable unset, it
+publishes exactly what it publishes today.
+
+```diff
+--- a/.github/workflows/ci.yml
++++ b/.github/workflows/ci.yml
+@@ -1453,6 +1453,20 @@
+             echo "superseded=false" >> "$GITHUB_OUTPUT"
+           fi
+ 
++      # The routes published from the build (tools/route-overlay.mjs; the
++      # deploy-model gate, DEPLOY_MODEL_GATE.md). Off unless the repository
++      # variable DEPLOY_BUILT_ROUTES is "on". It is the build job's dist
++      # artifact from this same run, so this job still installs and builds
++      # nothing. The overlay takes the named pages and the files they load,
++      # never the throwaway instructor bundle that build makes, and
++      # prepare-pages.mjs refuses any other difference from the commit.
++      - name: Fetch the build for the routes it publishes
++        if: steps.tip.outputs.superseded == 'false' && vars.DEPLOY_BUILT_ROUTES == 'on'
++        uses: actions/download-artifact@v8
++        with:
++          name: dist
++          path: dist
++
+       - name: Prepare the publishable tree
+         if: steps.tip.outputs.superseded == 'false'
+         run: |
+@@ -1480,7 +1494,8 @@
+             --ref "${{ github.ref_name }}" \
+             --run-id "${{ github.run_id }}" \
+             --run-attempt "${{ github.run_attempt }}" \
+-            --workflow "${{ github.workflow }}"
++            --workflow "${{ github.workflow }}" \
++            ${{ vars.DEPLOY_BUILT_ROUTES == 'on' && '--overlay dist' || '' }}
+           grep -o 'name="gravitas-revision" content="[^"]*"' _site/index.html
+           grep -o "VERSION = '[^']*'" _site/sw-manifest.js || true
+           cat _site/deployed-revision.json
+```
+
+The setting: repository variable `DEPLOY_BUILT_ROUTES` = `on` (Settings,
+Secrets and variables, Actions, Variables). Carl alone sets it.
+
+**Ratified by delegation on 2026-11-19** (D-R4-316-01): the preparation, as
+recommended. The switch is not applied and the variable is unset. The
+workflow change lands as its own pull request after this one, off by default;
+the variable is set only after that pull request's CI shows the overlay deploy
+green on Linux.
+
+The rollback, either of:
+
+1. Set `DEPLOY_BUILT_ROUTES` to `off` (or delete it) and re-run the deploy job
+   of the latest run on `main`. The tree is published again; each reader's
+   worker takes it once their tabs close, and the built files leave their
+   cache (rehearsed above).
+2. `git revert -m 1` of the merge that brought the workflow change
+   (RELEASING.md), then the deploy that follows.
+
+Not verified: CI's Linux runner (byte counts may differ by a few bytes);
+Firefox and WebKit; a real phone; a deploy from GitHub Actions (the deploy
+sequence ran locally, as `tests/deployRehearsal.test.js` runs it).
+
 <!-- Listed in DOCUMENTS.md. -->
