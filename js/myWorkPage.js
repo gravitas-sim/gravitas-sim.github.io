@@ -249,6 +249,8 @@ function sections() {
         L(`${a.seen} steps seen`, `${a.seen} pasos vistos`),
         since(a.since),
       ],
+      href: a.href,
+      open: L('Resume', 'Continuar'),
       ids: [a.key],
     })
   );

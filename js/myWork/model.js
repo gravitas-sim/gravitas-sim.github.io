@@ -62,6 +62,8 @@ const GUIDE_KEYS = [
   [KEY_LAB3D_GUIDE_PREFIX, 'lab3d', '/3d/'],
   [KEY_MISSIONLAB_PREFIX, 'mission', '/mission/lab/'],
 ];
+export const ENTRY_LINK =
+  /^#(?:[ai]\d+[zr][\w-]+|activity=[a-z0-9-]+(?:\/[a-z0-9-]+)?)$/i;
 const isObj = v => v && typeof v === 'object' && !Array.isArray(v);
 const count = v => (Array.isArray(v) ? new Set(v).size : 0);
 const iso = ms =>
@@ -147,6 +149,9 @@ export function describe(records, library = new Map()) {
       const e = entryOf(value?.lesson);
       out.assignments.push({
         key,
+        // The address the work was opened from (js/investigations/stepView.js,
+        // ENTRY_LINK holds the same shape): a record made before it has none.
+        href: ENTRY_LINK.test(value?.link) ? `/${value.link}` : null,
         title: e?.title ?? value?.lesson ?? key,
         seen: count(value?.visited),
         answered: isObj(value?.responses)

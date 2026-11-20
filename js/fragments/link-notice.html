@@ -1,0 +1,58 @@
+<!-- A link that could not be opened (js/assignments/linkNotice.js): what
+     happened, who can fix it and the one way on. A native modal dialog like
+     Restart, fetched when a link is refused and not with the lesson. Both
+     languages are here; the sentence that says what went wrong comes from the
+     catalog of the link kind that refused. -->
+<dialog
+  id="linkNotice"
+  aria-labelledby="linkNoticeTitle"
+  aria-describedby="linkNoticeWhy"
+>
+  <form method="dialog">
+    <div class="inv-finish-header">
+      <h3 id="linkNoticeTitle" tabindex="-1">
+        <span class="gs-en">This link could not be opened</span
+        ><span class="gs-es" lang="es">No se pudo abrir este enlace</span>
+      </h3>
+    </div>
+    <div class="inv-finish-summary">
+      <p id="linkNoticeWhy"></p>
+      <p data-who="you">
+        <span class="gs-en"
+          >You may be able to fix this: copy the whole link again or reload the
+          page. If it still fails, ask the person who sent it.</span
+        ><span class="gs-es" lang="es"
+          >Quizá puedas arreglarlo: copia el enlace entero otra vez o recarga la
+          página. Si sigue fallando, pregunta a quien lo envió.</span
+        >
+      </p>
+      <p data-who="sender">
+        <span class="gs-en"
+          >Only the person who sent it can fix this. Ask them for a new link, or
+          for the file.</span
+        ><span class="gs-es" lang="es"
+          >Solo puede arreglarlo quien lo envió. Pídele un enlace nuevo o el
+          archivo.</span
+        >
+      </p>
+    </div>
+    <div class="inv-finish-actions">
+      <button type="button" class="ui-button primary" id="linkNoticeAlone">
+        <span class="gs-en">Open the investigation on its own</span
+        ><span class="gs-es" lang="es">Abrir la investigación sola</span>
+      </button>
+      <button type="button" class="ui-button primary" id="linkNoticeReload">
+        <span class="gs-en">Reload this page</span
+        ><span class="gs-es" lang="es">Recargar esta página</span>
+      </button>
+      <a class="ui-button primary" id="linkNoticeLibrary" href="/library/">
+        <span class="gs-en">Find it in the Library</span
+        ><span class="gs-es" lang="es">Buscarla en la Biblioteca</span>
+      </a>
+      <button class="ui-button" value="close">
+        <span class="gs-en">Close</span
+        ><span class="gs-es" lang="es">Cerrar</span>
+      </button>
+    </div>
+  </form>
+</dialog>

@@ -140,6 +140,7 @@ export const EN_LIBRARY = {
     'Each subject has a page of its own: its sequences, courses and the rest.',
   'lib.recent.title': 'Opened recently',
   'lib.continue.last': 'Continue: {title}',
+  'lib.continue.assignment': 'Continue the activity: {title}',
   'lib.why': 'Matches in {fields}',
   'lib.why.title': 'the title',
   'lib.why.id': 'the name',

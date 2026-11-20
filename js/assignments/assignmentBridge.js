@@ -8,6 +8,7 @@
 // =============================================================================
 
 import { t } from '../i18n/index.js';
+import { refuseLink } from '../notify.js';
 
 /**
  * Open whatever assignment the address bar names.
@@ -22,35 +23,50 @@ export async function openAssignmentFromUrl() {
   // watchForAssignments() in js/investigationsLoader.js - has already awaited
   // ensureInvestigations(). Going back through the loader here instead would
   // put the two modules in a cycle for no benefit.
-  const [{ readAssignmentLink }, investigations, { toast }] = await Promise.all(
-    [
+  const [{ readAssignmentLink }, investigations, { toast }, registry] =
+    await Promise.all([
       import('./assignmentLink.js'),
       import('../investigations.js'),
       import('../controls.js'),
+      import('../data/investigations/registry.js'),
       // These strings are not in the start-up catalog, and every refusal
       // below is one of them.
       import('../i18n/deferredMessages.js').then(m =>
         m.ensureDeferredMessages().catch(() => {})
       ),
-    ]
-  );
+    ]);
   const { openInvestigation } = investigations;
 
-  const read = await readAssignmentLink(location.hash);
-  if (!read.ok) {
-    toast(t(`assign.error.${read.reason}`, read.detail || {}));
+  // A refusal says why, who can mend it and the one way on (./linkNotice.js).
+  // A reason that is not one of the catalog's codes is a link that did not
+  // decode, whatever the decoder said.
+  const refuse = (reason, detail, lesson) => {
+    const code =
+      t(`assign.error.${reason}`) === `assign.error.${reason}`
+        ? 'corrupt'
+        : reason;
+    refuseLink({
+      why: t(`assign.error.${code}`, detail || {}),
+      who: ['corrupt', 'newerVersion', 'tooLarge'].includes(code)
+        ? 'you'
+        : 'sender',
+      lesson: registry.investigationIds().includes(lesson) ? lesson : null,
+      reload: code === 'newerVersion',
+    });
     return false;
-  }
+  };
+
+  const read = await readAssignmentLink(location.hash);
+  if (!read.ok) return refuse(read.reason, read.detail, read.lesson);
 
   const opened = await openInvestigation(read.assignment.l, {
     assignment: read.assignment,
+    link: location.hash,
   });
   // openInvestigation returns a refusal only when it cannot proceed; a normal
   // open returns nothing at all.
-  if (opened && opened.ok === false) {
-    toast(t(`assign.error.${opened.reason}`));
-    return false;
-  }
+  if (opened && opened.ok === false)
+    return refuse(opened.reason, null, read.assignment.l);
 
   // A lesson revised since the assignment was set. Said out loud, because the
   // student is about to see fewer steps than their classmate, or a question
