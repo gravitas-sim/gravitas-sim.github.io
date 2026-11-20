@@ -758,7 +758,7 @@ describe('the rotating frame', () => {
       { secondary: 'Jupiter', read: 'trojan' }
     );
     expect(empty.slice(1).map(r => [r.id, r.value])).toEqual([
-      ['centre', '\u2014'],
+      ['center', '\u2014'],
       ['amplitude', '\u2014'],
       ['period', '\u2014'],
     ]);

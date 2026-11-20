@@ -48,6 +48,7 @@ import {
 } from './widgetCanvas.js';
 import { recorder, partition } from './resonance/recorder.js';
 import { state } from './appState.js';
+import { fixed } from './format.js';
 import { setParkedPause } from './timeline.js';
 import {
   ANGLE_STATE,
@@ -648,7 +649,7 @@ export function angleRows(m) {
     rows.push({
       id: 'amplitude',
       // A bound is not an amplitude: there is nothing for Capture to take.
-      text: v.amplitudeIsBound ? '' : v.amplitude.toFixed(1),
+      text: v.amplitudeIsBound ? '' : fixed(v.amplitude, 1),
       label: t('resW.row.amplitude'),
       value: v.amplitudeIsBound
         ? t('resW.value.amplitudeBound', { amp: v.amplitude.toFixed(1) })
@@ -665,7 +666,7 @@ export function angleRows(m) {
     rows.push({
       id: 'period',
       text: v.period
-        ? simSecondsToDays(v.period, scale.time).toFixed(0)
+        ? fixed(simSecondsToDays(v.period, scale.time), 0)
         : undefined,
       label: t('resW.row.libration'),
       value: v.period
@@ -1223,7 +1224,7 @@ const FRAME = {
     // A step names the one body whose libration it captures (`read`).
     const asked = spec?.read;
     const own = () => [
-      ['centre', t('resW.row.center')],
+      ['center', t('resW.row.center')],
       ['amplitude', t('resW.row.amplitude')],
       ['period', t('resW.row.libration')],
     ];
@@ -1283,11 +1284,11 @@ const FRAME = {
             return Number.isFinite(n)
               ? {
                   ...r,
-                  text: n.toFixed(0),
+                  text: fixed(n, 0),
                   value:
                     i === 2
-                      ? t('resW.value.periodYears', { years: n.toFixed(0) })
-                      : `${n.toFixed(0)}${u}`,
+                      ? t('resW.value.periodYears', { years: fixed(n, 0) })
+                      : `${fixed(n, 0)}${u}`,
                 }
               : r;
           })

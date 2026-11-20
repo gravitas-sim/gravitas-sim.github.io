@@ -105,17 +105,17 @@ const WHEN_ORBITS_LOCK = {
     ),
     'record-the-laplace-libration': WAS(
       'capture-the-laplace-libration',
-      'Read the Laplace libration centre, amplitude and period off the instrument once its verdict reads libration, and type them in.',
+      'Read the Laplace libration center, amplitude and period off the instrument once its verdict reads libration, and type them in.',
       'Leer el centro, la amplitud y el periodo de la libración de Laplace en el instrumento cuando su veredicto dice libración, y escribirlos.'
     ),
     'record-pluto-s-libration': WAS(
       'capture-pluto-s-libration',
-      'Read Pluto’s libration centre, amplitude and period in years off the instrument and type them in.',
+      'Read Pluto’s libration center, amplitude and period in years off the instrument and type them in.',
       'Leer el centro, la amplitud y el periodo en años de la libración de Plutón en el instrumento y escribirlos.'
     ),
     'record-the-tadpole': WAS(
       'capture-the-tadpole',
-      'Read Patroclus’s libration centre, amplitude and period off the frame instrument and type them in.',
+      'Read Patroclus’s libration center, amplitude and period off the frame instrument and type them in.',
       'Leer el centro, la amplitud y el periodo de libración de Patroclo en el instrumento del marco y escribirlos.'
     ),
   },
@@ -609,7 +609,7 @@ const WHEN_ORBITS_LOCK = {
       type: 'measure',
       title: 'Capture the Laplace libration',
       tool: { id: 'resonance-angle', argument: 'laplace' },
-      body: `Take the centre, the amplitude and the libration period from the
+      body: `Take the center, the amplitude and the libration period from the
              instrument you ran. Before its verdict reads LIBRATION the amplitude
              is only a lower bound and the period a guess from one swing, so
              deciding when the run is long enough is part of the measurement. If
@@ -664,7 +664,7 @@ const WHEN_ORBITS_LOCK = {
       title: 'What 180° means',
       kind: 'numeric',
       body: `φ<sub>L</sub> = λ<sub>Io</sub> − 3λ<sub>Europa</sub> +
-             2λ<sub>Ganymede</sub> librates about the centre you captured.
+             2λ<sub>Ganymede</sub> librates about the center you captured.
 
              \n\nConsider a moment when Io and Europa are in conjunction, so
              λ<sub>Io</sub> = λ<sub>Europa</sub>. Work out what that says about
@@ -948,7 +948,7 @@ const WHEN_ORBITS_LOCK = {
       type: 'measure',
       title: 'Capture Pluto’s libration',
       tool: { id: 'resonance-angle', argument: 'pluto' },
-      body: `Take the centre and the amplitude from the instrument you ran, and
+      body: `Take the center and the amplitude from the instrument you ran, and
              the libration period in years. The instrument gives the period in
              days; the conversion is yours. As with the moons, a reading taken
              before the verdict says LIBRATION is only a bound.`,
@@ -1163,7 +1163,7 @@ const WHEN_ORBITS_LOCK = {
       title: 'Capture the tadpole',
       tool: { id: 'resonance-frame', secondary: 'Jupiter', read: 'Patroclus' },
       body: `Patroclus is a real object and this is a real measurement of the
-             kind made for it. Take its libration centre, amplitude and period
+             kind made for it. Take its libration center, amplitude and period
              from the frame instrument once it has committed to a verdict for
              it.
 
@@ -1177,7 +1177,7 @@ const WHEN_ORBITS_LOCK = {
           'libration center, measured from Jupiter',
           'degrees',
           '296',
-          'centre'
+          'center'
         ),
         reading('tadpoleAmplitude', 'amplitude', 'degrees', '24', 'amplitude'),
         reading('tadpolePeriod', 'libration period', 'years', '154', 'period'),
