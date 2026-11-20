@@ -120,13 +120,13 @@ export default {
     {
       stage: {
         stars: [
-          { name: 'Al llegar (0,46 Gyr)' },
+          { name: 'Joven (0,46 Gyr)' },
           { name: 'Al dejar la secuencia principal (9,9 Gyr)' },
         ],
       },
       title: 'Entonces y ahora, lado a lado',
-      body: 'En el escenario de comparación hay dos versiones de la misma estrella: el modelo de masa solar al llegar, y el mismo modelo al final de su secuencia principal.\n\nLee los dos radios y guarda la comparación en el cuaderno. Este es el cambio más pequeño de toda la investigación y aun así es una estrella casi tres cuartas partes más grande.',
-      fields: [{ label: 'Radio al llegar' }, { label: 'Radio al final' }],
+      body: 'En el escenario de comparación hay dos versiones de la misma estrella: el modelo de masa solar a los 0,46 Gyr, y el mismo modelo al final de su secuencia principal.\n\nLee los dos radios y guarda la comparación en el cuaderno. Este es el cambio más pequeño de toda la investigación y aun así es una estrella casi tres cuartas partes más grande.',
+      fields: [{ label: 'Radio a los 0,46 Gyr' }, { label: 'Radio al final' }],
       tip: 'Las dos son la misma estrella, y las dos están en el lienzo: haz clic en cualquiera para leerla.',
     },
     {

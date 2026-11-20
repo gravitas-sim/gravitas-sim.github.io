@@ -440,7 +440,7 @@ const LIVES_OF_STARS = {
       stage: pair([
         {
           role: 'young',
-          name: 'On arrival (0.46 Gyr)',
+          name: 'Young (0.46 Gyr)',
           track: 'm100',
           ageYr: 4.6e8,
         },
@@ -454,13 +454,13 @@ const LIVES_OF_STARS = {
       type: 'measure',
       title: 'Then and now, side by side',
       body: `Two versions of the same star are on the comparison stage: the
-             solar-mass model on arrival, and the same model at the end of its
+             solar-mass model at 0.46 Gyr, and the same model at the end of its
              main sequence.
              \n\nRead both radii and save the comparison to your notebook. This
              is the smallest change in this whole investigation and it still amounts
              to a star nearly three quarters as big again.`,
       fields: [
-        { id: 'rStart', label: 'Radius on arrival', unit: 'R☉' },
+        { id: 'rStart', label: 'Radius at 0.46 Gyr', unit: 'R☉' },
         { id: 'rEnd', label: 'Radius at the end', unit: 'R☉' },
       ],
       validate: v => {

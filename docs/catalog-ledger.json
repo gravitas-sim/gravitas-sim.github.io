@@ -3365,7 +3365,7 @@
         {
           "ref": "D-R4-360-04",
           "owner": "maintainer",
-          "note": "The first main-sequence sample is at 457 Myr (0.797 solar luminosities) but the model's zero-age main sequence is at 41.9 Myr (0.747); compare-young-and-old still labels 457 Myr 'On arrival'. Needs a scientist's call, not made here."
+          "note": "The first main-sequence sample is at 457 Myr (0.797 solar luminosities) but the model's zero-age main sequence is at 41.9 Myr (0.747). The star is now labelled 'Young (0.46 Gyr)' and no step calls 457 Myr an arrival; placing the first sample at the boundary is for the later prompt that owns the tracks."
         }
       ],
       "questions": {
@@ -3472,7 +3472,7 @@
       ],
       "walk": "NOT RUN",
       "pr": null,
-      "hash": "ebaead573e9ff340eb3795b14f7dc7a13b6acb89fa0fa049bb925740ae7213f4"
+      "hash": "af5f0c54a9eb30323200de35fc0f60f561ba3191db456ebaab0ee568f914da18"
     },
     {
       "id": "investigation:measuring-the-moon",
