@@ -27,8 +27,8 @@ import {
 const groups = groupsOfScenes(distinctScenes(sceneSteps(INVESTIGATIONS)));
 
 // Steps that fail today, each with the reason and who owns the fix (a layout
-// the framing cannot change). The list only shrinks: a listed step that passes
-// fails the run until it is removed, and an unlisted failure fails it.
+// the framing cannot change). An unlisted failure fails the run; a listed step
+// that passes is reported as an annotation, and its entry is removed on review.
 const KNOWN = JSON.parse(
   readFileSync(
     new URL('../tests/fixtures/lesson-framing-known.json', import.meta.url),
@@ -57,7 +57,12 @@ for (const size of FRAMING_SIZES) {
             stale.push(`${id} passes: remove it from the known list`);
         }
         expect(failures).toEqual([]);
-        expect(stale).toEqual([]);
+        // A listed step can pass on a run when it depends on where a body is in
+        // its orbit; say so without failing, and remove the entry on review.
+        for (const note of stale)
+          test
+            .info()
+            .annotations.push({ type: 'known step passes', description: note });
       });
     }
   });

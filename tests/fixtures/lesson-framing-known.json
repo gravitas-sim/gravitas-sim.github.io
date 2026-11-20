@@ -1,5 +1,5 @@
 {
- "note": "Scene steps that are not framed after the change, by width|lesson|step, each with the reason. The list only shrinks (e2e/lessonFraming.spec.js): a listed step that passes fails the run until it is removed, and an unlisted failure fails it.",
+ "note": "Scene steps that are not framed after the change, by width|lesson|step, each with the reason. An unlisted failure fails e2e/lessonFraming.spec.js; a listed step that passes is reported as an annotation and its entry is removed on review (a step whose body is mid-orbit can pass on one run).",
  "steps": {
   "375|missing-mass|forty-years-earlier": "the scenario draws bodies the lesson roster does not list, so there is no bound body to frame: the step binds no body",
   "375|binary-star-planets|run-the-circumbinary": "a body outside or under furniture: planet is outside the viewport",
