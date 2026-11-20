@@ -2081,6 +2081,16 @@
       grid-row: 3;
       padding-top: 0;
       border: 0;
+      /* At 320 px in Spanish the three would leave the bar a few pixels:
+         the control drops to its own line instead. */
+      flex-wrap: wrap;
+      row-gap: var(--space-1);
+    }
+    .inv-progress-track {
+      min-width: calc(var(--space-8) * 2);
+    }
+    .inv-reset-scenario {
+      margin-inline-start: auto;
     }
     .investigation-panel > .inv-body {
       border-top: 1px solid var(--border-subtle);

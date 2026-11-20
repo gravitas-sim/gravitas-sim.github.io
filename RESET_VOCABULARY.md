@@ -62,8 +62,13 @@ because until the investigation closes they can come back.
 - **Undo** is a copy of the deleted record held in memory only. It is dropped
   when the investigation closes and is never written to storage, so a reload or
   a closed tab ends it. Undo puts the deleted answers back and goes to the step
-  the student restarted from; an answer given since, to the same question,
-  stays, because it is newer.
+  the student restarted from. It merges a step at a time: a step answered since
+  the restart is kept whole, with its tries, and the older step is not mixed
+  into it; text typed since also wins. A second restart before an undo keeps the
+  first one's record (merged the same way when something was answered between
+  them); with nothing saved the dialog says only that the place and the visited
+  steps reset, and an undo gives them back. Another record opened since is
+  never overwritten: the strip is dropped when an investigation opens.
 - **An activity** (an assignment) keeps its answers under its own record; the
   confirmation says they go too and offers the backup. The instructor's pinned
   version of the activity does not change.
