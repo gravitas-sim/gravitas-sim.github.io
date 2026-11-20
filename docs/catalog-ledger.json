@@ -3362,7 +3362,11 @@
       "scene_class": "portrait or backdrop",
       "limits": null,
       "open_items": [
-        "D-R4-360-04 (for Carl): the first main-sequence sample is at 457 Myr (0.797 solar luminosities) but the model's zero-age main sequence is at 41.9 Myr (0.747); compare-young-and-old still labels 457 Myr 'On arrival'. Needs a scientist's call, not made here."
+        {
+          "ref": "D-R4-360-04",
+          "owner": "maintainer",
+          "note": "The first main-sequence sample is at 457 Myr (0.797 solar luminosities) but the model's zero-age main sequence is at 41.9 Myr (0.747); compare-young-and-old still labels 457 Myr 'On arrival'. Needs a scientist's call, not made here."
+        }
       ],
       "questions": {
         "Q1": "The student chooses two moments of the Sun-like track, freezes the first beside the live star and reads luminosity, radius and temperature at both: a comparison each student designs, which a paragraph could not hold. The giant, the cinder and the two ends of the mass range are read off the playhead and the stage.",
@@ -3468,7 +3472,7 @@
       ],
       "walk": "NOT RUN",
       "pr": null,
-      "hash": null
+      "hash": "ebaead573e9ff340eb3795b14f7dc7a13b6acb89fa0fa049bb925740ae7213f4"
     },
     {
       "id": "investigation:measuring-the-moon",
