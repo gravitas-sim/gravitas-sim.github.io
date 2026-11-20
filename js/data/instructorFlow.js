@@ -763,8 +763,8 @@ export default {
       },
       {
         from: 'bring-the-companion-closer',
-        to: 'what-the-mass-graph-says',
-        text: 'The two scaling relationships, each predicted and then measured. Four distances give the inverse cube (with a straighten-the-curve transform on the plot); three masses give simple proportionality. The expression 2GMR/d³ appears at step 12, after the distance measurement and before the mass one.',
+        to: 'the-relationship-written-down',
+        text: 'The two scaling relationships, each predicted and then measured. Four distances of the students’ own give the inverse cube; three masses give simple proportionality. The expression 2GMR/d³ appears at step 19, after both measurements.',
       },
       {
         from: 'the-sun-against-the-moon',

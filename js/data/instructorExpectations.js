@@ -353,6 +353,10 @@ export default {
         'The residual row shows about 1.1 × 10⁻⁶ m/s² outward on each side, roughly a thirtieth of the pull itself, and the panel reports the magnification between the two rows. The center shows a dot rather than an arrow, and students regularly ask whether that is a drawing error; it is the answer.',
       'choose-four-distances':
         'Any four distances from 0.2 to 2 times the Moon’s, each stretch read at the slider position beside it. The mass is held at the Moon’s, so every row has stretch × distance³ near 1.00. The check warns on swapped or mismatched rows and on a span under a factor of four.',
+      'pick-a-new-distance':
+        'A multiple of 0.05 between 0.2 and 2, not near their four.',
+      'read-the-new-distance':
+        'Stretch near 1 ÷ distance³ at their distance; the estimate is set beside it.',
       'choose-three-masses':
         'Any three masses from 0.25 to 4 times the Moon’s, at distance 1: stretch ÷ mass is 1.00 in every row. The check warns if the distance moved or the masses are within a factor of two.',
       'seven-real-tides-on-one':
