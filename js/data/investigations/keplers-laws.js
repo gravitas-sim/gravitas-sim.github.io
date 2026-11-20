@@ -1178,7 +1178,7 @@ const KEPLER = {
       stage: {
         system: {
           starName: 'Test star',
-          planets: [{ name: 'Test planet', role: 'world', aAU: 1, ecc: 0 }],
+          planets: [{ name: 'Test planet', role: 'planet', aAU: 1, ecc: 0 }],
           fit: true,
         },
       },
@@ -1418,9 +1418,9 @@ const KEPLER = {
              about 45 days, which is 0.123 years.
              \n\nUse Newton's form, taking the planet's mass as negligible:
              \n\n<em>M</em> = <em>a</em>³ / <em>P</em>²  (in solar masses, with <em>a</em> in AU and <em>P</em> in years)
-             \n\n<strong>Step 1.</strong> Cube the distance: 0.24³ = 0.0138.
-             \n\n<strong>Step 2.</strong> Square the period: 0.123² = 0.0151.
-             \n\n<strong>Step 3.</strong> Divide.`,
+             \n\n<strong>First,</strong> cube the distance: 0.24³ = 0.0138.
+             \n\n<strong>Second,</strong> square the period: 0.123² = 0.0151.
+             \n\n<strong>Third,</strong> divide.`,
       prompt: 'Mass of Kepler-10, in solar masses',
       unit: 'M_sun',
       answer: 0.91,
