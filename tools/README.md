@@ -224,7 +224,7 @@ current, and the orchestrator checks it.
 | `pr-class.mjs` | The pull-request class check (Roadmap III, Prompt 122) |  |
 | `precache-inventory.mjs` | What the service worker precaches, measured |  |
 | `precache-tour.mjs` | What a visit actually fetches, against what the precache holds (Prompt 112) |  |
-| `prepare-pages.mjs` | Assemble the tree that gets published |  |
+| `prepare-pages.mjs` | Assemble the tree that gets published | `npm run deploy:rehearse-overlay` |
 | `project-metadata.mjs` | The project's own description of itself |  |
 | `prose-whitespace.mjs` | Prose whitespace: write a lesson's line wrapping once, in the source only |  |
 | `pulsar-validate.mjs` | The pulsar kernel against its committed thresholds (Prompt 242, Part A) | `npm run pulsar:validate` |

@@ -489,6 +489,14 @@ jobs:
             | sort -rn | head -12 >> "$GITHUB_STEP_SUMMARY"
           echo '```' >> "$GITHUB_STEP_SUMMARY"
 
+      # The deploy with the built routes laid over the tree (DEPLOY_MODEL_GATE.md,
+      # the switch unit), rehearsed on every run into a scratch folder: the
+      # deploy job only runs on main, so this is where a pull request shows the
+      # overlay deploy working on Linux before DEPLOY_BUILT_ROUTES is set.
+      # Nothing here is published.
+      - name: Rehearse the deploy with the built routes
+        run: npm run deploy:rehearse-overlay
+
       - name: Upload dist
         uses: actions/upload-artifact@v7
         with:
@@ -1453,6 +1461,20 @@ jobs:
             echo "superseded=false" >> "$GITHUB_OUTPUT"
           fi
 
+      # The routes published from the build (tools/route-overlay.mjs; the
+      # deploy-model gate, DEPLOY_MODEL_GATE.md). Off unless the repository
+      # variable DEPLOY_BUILT_ROUTES is "on". It is the build job's dist
+      # artifact from this same run, so this job still installs and builds
+      # nothing. The overlay takes the named pages and the files they load,
+      # never the throwaway instructor bundle that build makes, and
+      # prepare-pages.mjs refuses any other difference from the commit.
+      - name: Fetch the build for the routes it publishes
+        if: steps.tip.outputs.superseded == 'false' && vars.DEPLOY_BUILT_ROUTES == 'on'
+        uses: actions/download-artifact@v8
+        with:
+          name: dist
+          path: dist
+
       - name: Prepare the publishable tree
         if: steps.tip.outputs.superseded == 'false'
         run: |
@@ -1480,7 +1502,8 @@ jobs:
             --ref "${{ github.ref_name }}" \
             --run-id "${{ github.run_id }}" \
             --run-attempt "${{ github.run_attempt }}" \
-            --workflow "${{ github.workflow }}"
+            --workflow "${{ github.workflow }}" \
+            ${{ vars.DEPLOY_BUILT_ROUTES == 'on' && '--overlay dist' || '' }}
           grep -o 'name="gravitas-revision" content="[^"]*"' _site/index.html
           grep -o "VERSION = '[^']*'" _site/sw-manifest.js || true
           cat _site/deployed-revision.json
