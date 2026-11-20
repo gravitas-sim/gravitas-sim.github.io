@@ -109,8 +109,10 @@ export default {
         'Slope 1, 200,000 planets, cutoff 3: half-way distance 0.255 (within 0.003), its uncertainty 0.0243 (within 0.004), 0.6 of the trials bound (within 0.01) and 0.596 of the synthetic population (within 0.02).',
       'a-uniform-population':
         'Slope 0: 0.451 bound in the synthetic population (within 0.02), 0.149 below the trials’ 0.6 (within 0.03).',
-      'move-the-definition':
-        'Slope 1, cutoff 6: half-way distance 0.289 (within 0.004) and 0.701 of the synthetic population bound (within 0.02).',
+      'move-the-definition-yours':
+        'Slope 1, by the student’s choice of cutoff: 2, half-way distance 0.233 (within 0.004) and 0.529 of the synthetic population bound (within 0.02); 4, 6 or 10, the same numbers, 0.289 and 0.701 (cutoffs 4, 6 and 10 classify the twenty trials alike). The baseline, cutoff 3, is 0.255 and 0.596; those numbers after another choice are named as the baseline’s.',
+      'which-trial-moved':
+        'By the pair of cutoffs from 2, 3, 4, 6 and 10: 2 and 3 move one trial (started at 0.2468, the bin centred on 0.255); 3 and 4, 6 or 10 move one (0.2315, the bin centred on 0.225); 2 and 4, 6 or 10 move two (the bin nearest the star is 0.225); 4, 6 and 10 against each other move none, and are accepted only as 0 with the word none.',
     },
     'refitting-a-transit': {
       'the-fit':
@@ -137,8 +139,8 @@ export default {
     'integrators-in-practice': {
       'four-drifts':
         'Kepler-16, 3 periods, 500 steps: explicit Euler +49.75 percent (within 0.5), symplectic Euler -0.002317, velocity Verlet +0.001768, Runge-Kutta 4 -6.47e-8 (each within 3 percent, with the sign) and 10,722 steps. Explicit Euler is about 50 because its orbit has changed, not because its error is small.',
-      'halve-the-step':
-        '1000 steps: velocity Verlet +0.000442 (within 5 percent) and Runge-Kutta 4 -2.44e-9; the improvement is 4.0 for Verlet (within 10 percent) and 26.5 for Runge-Kutta 4 (within 15).',
+      'choose-the-second-step':
+        'By the student’s choice of second step count (3 periods): 250 steps, velocity Verlet +0.007074 percent and Runge-Kutta 4 -1.856e-6, improvements 0.2499 and 0.03487; 438, +0.002304 and -1.222e-7, improvements 0.7673 and 0.5295; 750, +0.0007856 and -9.408e-9, improvements 2.25 and 6.88; 1000, +0.0004419 and -2.443e-9, improvements 4.0 and 26.5. Drifts within 5 percent, the Verlet improvement within 10 and Runge-Kutta 4’s within 15; the improvement is the 500-step drift over the new one. Numbers from another choice are named by their step count.',
       'the-engine':
         '438 steps: velocity Verlet +0.002304 (within 5 percent), Runge-Kutta 4 -1.22e-7 (within 5) and symplectic Euler -0.0001646 (within 10); the application’s engine gave +0.002299 and -1.217e-7.',
     },

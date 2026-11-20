@@ -3521,10 +3521,12 @@ test.describe('the central experiment of each investigation', () => {
     await accepted(page);
     await expectEvidenceRetained(page, id, measureSid, drifts);
 
-    // 3. the relationship the lesson is about: halving the step improves a
-    //    second-order method four times, and a fourth-order one far more.
+    // 3. the relationship the lesson is about: the student chooses the second
+    //    step count from a menu (here the halving), and a second-order method
+    //    improves by the square of the ratio, a fourth-order one far more.
     await walkToSid(page, plan, halveSid);
     const halved = {
+      second: '1000',
       verlet: four(half['drift.verlet'].value),
       rk4: four(half['drift.rk4'].value),
       ratioVerlet: four(main['drift.verlet'] / half['drift.verlet'].value),
@@ -3573,6 +3575,7 @@ test.describe('the central experiment of each investigation', () => {
     // outcome is a definition.
     await walkToSid(page, plan, moveSid);
     const moved = {
+      cutoff: '6',
       edge: four(six['a.crit'].value),
       extended: four(six['bound.extended'].value),
     };

@@ -475,7 +475,10 @@ export async function recordFields(page, lessonId, sid, values) {
       readonly,
       `"${field}" is a box the reader fills, not one the lesson works out`
     ).toBe(false);
-    await box.fill(String(value));
+    // A menu (a select) is chosen from, not typed into.
+    if (await box.evaluate(el => el.tagName === 'SELECT'))
+      await box.selectOption(String(value));
+    else await box.fill(String(value));
     await box.dispatchEvent('input');
     await box.dispatchEvent('change');
   }

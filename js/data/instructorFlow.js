@@ -191,9 +191,9 @@ export default {
         text: 'Run the notebook, read the edge and two fractions; a uniform population and why the sample differs from it.',
       },
       {
-        from: 'move-the-definition',
-        to: 'what-moved-it',
-        text: 'Change the cutoff and see one reclassified planet move the edge.',
+        from: 'move-the-definition-yours',
+        to: 'which-trial-moved',
+        text: 'Choose a cutoff and see the edge and the fraction move, then find the trial that changes class between two cutoffs.',
       },
       {
         from: 'what-you-worked-out',
@@ -294,14 +294,19 @@ export default {
         text: 'Run the notebook on Kepler-16 and read four drifts; why the symplectic one stays bounded.',
       },
       {
-        from: 'halve-the-step',
-        to: 'halve-the-step',
-        text: 'Halve the step: fourfold for second order, far more for fourth order.',
+        from: 'predict-the-halving',
+        to: 'choose-the-second-step',
+        text: 'Predict the halving, then choose a second step count from a menu and set its drifts beside the baseline: fourfold for second order at the halving, far more for fourth order.',
       },
       {
         from: 'the-engine',
         to: 'phase-luck',
         text: 'The same step as the application’s engine, and why one symplectic number is a point on a curve.',
+      },
+      {
+        from: 'trust-at-six-orbits',
+        to: 'trust-at-six-orbits',
+        text: 'Six orbits: which drift is a size and which is a phase of a swing.',
       },
       {
         from: 'what-you-worked-out',

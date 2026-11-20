@@ -19,7 +19,43 @@
 //   1000 steps, 21,443 steps: Verlet +0.000442 %, RK4 -2.44e-9 %
 //   438 steps, 9,392 steps (the application's own step): Verlet +0.002304 %,
 //     RK4 -1.22e-7 %; the application's engine gave +0.002299 and -1.217e-7
+//   6 periods at 500 steps: explicit Euler +60.07 %, symplectic Euler +0.08515 %,
+//     velocity Verlet +0.0001587 %, Runge-Kutta 4 -1.046e-7 %
+//
+// The second run of `choose-the-second-step` is the student's choice of one of
+// four step counts, so its expected numbers are one set per choice (SECOND,
+// below). Each set is copied from tests/fixtures/compute/investigation-runs.json,
+// written by tools/compute-answers.mjs from the notebook's own cells, and
+// tests/computeInvestigations.test.js fails when a literal differs from it.
+// A lesson file is content only and a check sees only its own step's fields, so
+// the menu is a field of the step and the table is in this file.
 // =============================================================================
+
+/**
+ * The drifts (percent) of the 500-step run, and for each second step count the
+ * drifts of velocity Verlet and Runge-Kutta 4 and the improvement over the
+ * 500-step run (its drift divided by this run's drift).
+ */
+const FIRST = { verlet: 0.001768, rk4: -6.473e-8 };
+const SECOND = {
+  250: {
+    verlet: 0.007074,
+    rk4: -1.856e-6,
+    ratioVerlet: 0.2499,
+    ratioRk4: 0.03487,
+  },
+  438: {
+    verlet: 0.002304,
+    rk4: -1.222e-7,
+    ratioVerlet: 0.7673,
+    ratioRk4: 0.5295,
+  },
+  750: { verlet: 0.0007856, rk4: -9.408e-9, ratioVerlet: 2.25, ratioRk4: 6.88 },
+  1000: { verlet: 0.0004419, rk4: -2.443e-9, ratioVerlet: 4.0, ratioRk4: 26.5 },
+};
+/** One field's value for each choice, for the answer key. */
+const byChoice = field =>
+  Object.fromEntries(Object.entries(SECOND).map(([n, r]) => [n, r[field]]));
 
 const INTEGRATORS_IN_PRACTICE = {
   id: 'integrators-in-practice',
@@ -39,20 +75,17 @@ const INTEGRATORS_IN_PRACTICE = {
   objectives: [
     'Say what the energy drift of a numerical integration is, and why a method that does not conserve energy can still be useful',
     'Run a reviewed Python notebook on a system from the Orbital System Builder and read its four energy drifts',
-    'Show from two step sizes that a second-order method improves about fourfold when the step is halved, and a fourth-order one far more',
+    'Predict, then measure from two step sizes, how much a smaller step improves a second-order method and a fourth-order one',
     'Compare the notebook’s drift with Gravitas’s own engine at the same step, and say why a symplectic method’s end-of-run drift is a poor number to quote',
   ],
   steps: [
     {
       sid: 'one-system-four-steps',
       type: 'read',
-      setup: {
-        scenario: 'Circumbinary Planet Lab',
-        seed: 'binary',
-        paused: true,
-      },
+      canvas: 'quiet',
       title: 'One system, four ways to take a step',
-      body: `An integrator turns forces into a path by taking small steps. Gravitas
+      body: `How much energy does each way of taking a step lose on a real system, and what does a smaller step buy back? You will run a reviewed Python notebook on the compute page to find out.
+             \n\nAn integrator turns forces into a path by taking small steps. Gravitas
              uses <strong>symplectic Euler</strong> by default and offers
              <strong>velocity Verlet</strong> and <strong>fourth-order
              Runge-Kutta</strong> in the Settings. A fourth method, the plain
@@ -97,10 +130,11 @@ const INTEGRATORS_IN_PRACTICE = {
       compute: 'integrators-compared',
       type: 'measure',
       title: 'Run it: the four drifts',
-      body: `Press <strong>Start the runtime</strong>, wait, then
-             <strong>Run the notebook</strong>. Read the five numbers it returns and
-             enter them here. The page shows them in percent; the last is how many
-             steps each method took.`,
+      body: `This is the <strong>baseline run</strong>: every later choice in this
+             investigation is compared with it, so keep its settings, 3 periods and 500
+             steps. Press <strong>Start the runtime</strong>, wait, then
+             <strong>Run the notebook</strong>. Read each method's drift and the number of
+             steps it took, and enter them here. The page shows the drifts in percent.`,
       fields: [
         { id: 'euler', label: 'Explicit Euler', unit: '%', want: '49.75' },
         {
@@ -193,64 +227,128 @@ const INTEGRATORS_IN_PRACTICE = {
         'A symplectic integrator is the exact flow of a nearby Hamiltonian, so it conserves that nearby energy for ever, and the true energy only wanders by the small difference between the two. That is why it is the default for orbits that must run for millions of steps.',
     },
     {
-      sid: 'halve-the-step',
+      sid: 'predict-the-halving',
+      type: 'predict',
+      reveal: 'the-engine',
+      title: 'Predict the halving',
+      body: `Your next run changes the step count. Before you choose it, think about
+             the clearest case: the step made half as long, 1000 steps per period
+             instead of 500, still over 3 periods. Velocity Verlet is a second-order
+             method and Runge-Kutta 4 a fourth-order one.`,
+      prompt:
+        'How much smaller will the drift of each of these two methods be after the step is halved?',
+      options: [
+        'Both about half as large: the step is half as long',
+        'Velocity Verlet about four times smaller, and Runge-Kutta 4 smaller by a much larger factor, tens of times',
+        'Velocity Verlet and Runge-Kutta 4 both about four times smaller',
+        'Neither changes: the size of the drift is set by the method, not by the step',
+      ],
+      answer: 1,
+      because:
+        'A method of order p has an error that scales as the step to the power p, so halving the step divides the error by two to the power p: four for a second-order method, and sixteen for a fourth-order one once the step is small enough that the leading term is all there is. At these steps the fourth-order method gains more than that.',
+    },
+    {
+      sid: 'choose-the-second-step',
       compute: 'integrators-compared',
       type: 'measure',
-      title: 'Halve the step',
-      body: `On the compute page set <strong>steps</strong> to <strong>1000</strong>,
-             leave the periods at 3, and run again; it takes about twice as long. Enter
-             the drifts of velocity Verlet and of Runge-Kutta 4 now, and how many
-             times smaller each is than before (the old number divided by the new,
-             as a positive ratio).`,
+      title: 'Choose the second step',
+      body: `Choose a second step count from the menu: <strong>250</strong>,
+             <strong>438</strong>, <strong>750</strong> or <strong>1000</strong> steps per
+             period. On the compute page set <strong>steps</strong> to your choice, keep the
+             periods at 3, and run again; a run takes longer the more steps it has. 1000 is
+             the halved step you just predicted, and 438 is the step the application takes
+             itself.
+             \n\nEnter your choice, the drifts that run gave for velocity Verlet and
+             Runge-Kutta 4, and for each method the 500-step drift of the baseline run
+             divided by this run's drift, as a positive ratio. A ratio above one means the
+             smaller step helped; below one, it hurt.`,
       fields: [
         {
+          id: 'second',
+          label: 'Steps per period of your second run',
+          unit: '',
+          options: [250, 438, 750, 1000],
+          want: '1000',
+        },
+        {
           id: 'verlet',
-          label: 'Velocity Verlet, 1000 steps',
+          label: 'Velocity Verlet, your second run',
           unit: '%',
-          want: '0.000442',
+          want: String(SECOND[1000].verlet),
+          by: byChoice('verlet'),
         },
         {
           id: 'rk4',
-          label: 'Runge-Kutta 4, 1000 steps',
+          label: 'Runge-Kutta 4, your second run',
           unit: '%',
-          want: '-2.44e-9',
+          want: String(SECOND[1000].rk4),
+          by: byChoice('rk4'),
         },
         {
           id: 'ratioVerlet',
-          label: 'Verlet: improvement',
+          label: 'Velocity Verlet: 500-step drift over this drift',
           unit: '',
-          want: '4.0',
+          want: String(SECOND[1000].ratioVerlet),
+          by: byChoice('ratioVerlet'),
         },
         {
           id: 'ratioRk4',
-          label: 'Runge-Kutta 4: improvement',
+          label: 'Runge-Kutta 4: 500-step drift over this drift',
           unit: '',
-          want: '26.5',
+          want: String(SECOND[1000].ratioRk4),
+          by: byChoice('ratioRk4'),
         },
       ],
       validate: v => {
-        if (
-          ![v.verlet, v.rk4, v.ratioVerlet, v.ratioRk4].every(Number.isFinite)
-        )
-          return null;
+        const typed = [v.verlet, v.rk4, v.ratioVerlet, v.ratioRk4];
+        if (!Number.isFinite(v.second)) {
+          return typed.some(Number.isFinite)
+            ? {
+                level: 'warn',
+                message:
+                  'Choose the step count you ran from the menu first: what is right depends on it.',
+              }
+            : null;
+        }
+        if (!typed.every(Number.isFinite)) return null;
         const near = (x, want, rel) =>
           Math.abs(x - want) <= rel * Math.abs(want);
-        if (
-          near(v.verlet, 0.000442, 0.05) &&
-          near(v.rk4, -2.44e-9, 0.05) &&
-          near(v.ratioVerlet, 4, 0.1) &&
-          near(v.ratioRk4, 26.5, 0.15)
-        ) {
+        const drifts = (x, row) =>
+          near(x.verlet, row.verlet, 0.05) && near(x.rk4, row.rk4, 0.05);
+        const mine = SECOND[v.second];
+        if (!mine) return null;
+        if (drifts(v, mine)) {
+          if (
+            near(v.ratioVerlet, mine.ratioVerlet, 0.1) &&
+            near(v.ratioRk4, mine.ratioRk4, 0.15)
+          ) {
+            const n = v.second;
+            return {
+              level: 'ok',
+              message:
+                n === 1000
+                  ? 'Velocity Verlet improved four times, which is a factor of two squared: second order. Runge-Kutta 4 improved by about twenty-six, more than the sixteen a clean fourth-order law gives, because at 500 steps it was still not in the regime where the leading term is all there is.'
+                  : `The ratio of your step count to the baseline's is ${n / 500}. Velocity Verlet's improvement, ${mine.ratioVerlet}, is that ratio squared, which is what second order means; Runge-Kutta 4's, ${mine.ratioRk4}, is not its fourth power, because at these steps its error is not yet only the leading term.`,
+            };
+          }
           return {
-            level: 'ok',
-            message:
-              'Verlet improved four times, which is a factor of two squared: second order. Runge-Kutta 4 improved by about twenty-six, more than the sixteen a clean fourth-order law gives, because at 500 steps it was still not in the regime where the leading term is all there is.',
+            level: 'error',
+            message: `Your two drifts match the ${v.second}-step run. The improvement is the baseline's 500-step drift divided by this run's drift, for each method: the old number over the new, not the other way round.`,
           };
+        }
+        for (const [n, row] of Object.entries({ 500: FIRST, ...SECOND })) {
+          if (Number(n) !== v.second && drifts(v, row))
+            return {
+              level: 'error',
+              message:
+                Number(n) === 500
+                  ? `Those are the drifts of the baseline run, 500 steps. You chose ${v.second}: set steps to ${v.second} on the compute page and run again.`
+                  : `Those are the drifts of the ${n}-step run. You chose ${v.second}: set steps to ${v.second} on the compute page and run again.`,
+            };
         }
         return {
           level: 'error',
-          message:
-            'Run it again with 1000 steps and 3 periods, read the two drifts, and divide the 500-step drift by the 1000-step drift for each method.',
+          message: `Set steps to ${v.second} with 3 periods, run, and read the drifts of velocity Verlet and Runge-Kutta 4, then divide each baseline drift by the new one.`,
         };
       },
     },
@@ -259,13 +357,19 @@ const INTEGRATORS_IN_PRACTICE = {
       compute: 'integrators-compared',
       type: 'measure',
       title: 'Against the application',
-      body: `The notebook’s three schemes are the application’s three. Gravitas’s own
-             engine, given this system and taking its own step of 0.0278 time units, gave
-             <strong>+0.002299 %</strong> for velocity Verlet and
-             <strong>&minus;1.217&times;10<sup>&minus;7</sup> %</strong> for Runge-Kutta 4
-             over the same three periods. That step is the tightest pair’s period
-             divided by about <strong>438</strong>. Set <strong>steps</strong> to
-             438 and run again.`,
+      evidence: [
+        { step: 'choose-the-second-step', field: 'ratioVerlet' },
+        { step: 'choose-the-second-step', field: 'ratioRk4' },
+      ],
+      compare:
+        'These are the improvements for the step count you chose. The prediction was about 1000; for velocity Verlet the improvement is the square of the ratio of the step counts at whatever count you chose, and that is the order of the method showing itself.',
+      body: `The notebook’s three schemes are the application’s three, so
+             Gravitas’s own engine can be set against them. The engine takes its own
+             step of 0.0278 time units, which is the tightest pair’s period divided by
+             about <strong>438</strong>. Set <strong>steps</strong> to 438, keep the
+             periods at 3, and run again; if you chose 438 in the last step, you have
+             this run already. Enter the drifts of velocity Verlet, Runge-Kutta 4 and
+             symplectic Euler.`,
       fields: [
         {
           id: 'verlet',
@@ -299,7 +403,7 @@ const INTEGRATORS_IN_PRACTICE = {
           return {
             level: 'ok',
             message:
-              'Velocity Verlet and Runge-Kutta 4 agree with the engine to a fraction of a percent: the same arithmetic. Symplectic Euler’s number is a different matter, and the next question is about why.',
+              'Velocity Verlet and Runge-Kutta 4 agree with the engine, which gave +0.002299 % and −1.217×10⁻⁷ % over the same three periods, to a fraction of a percent: the same arithmetic. Symplectic Euler’s number is a different matter, and the next question is about why.',
           };
         }
         return {
@@ -345,24 +449,79 @@ const INTEGRATORS_IN_PRACTICE = {
         'The drift of a symplectic method is a bounded oscillation. A single end-of-run reading catches it anywhere in the swing, including close to zero, so the honest number to quote is the largest value over the run, which is in the notebook’s table, and not the last.',
     },
     {
+      sid: 'trust-at-six-orbits',
+      type: 'question',
+      kind: 'choice',
+      title: 'Which number to trust at six orbits',
+      body: `Run the notebook once more with <strong>periods</strong> set to
+             <strong>6</strong> and <strong>steps</strong> back at <strong>500</strong>.
+             Set each method’s drift now beside its drift in the baseline run, which
+             had 3 periods and the same steps.`,
+      prompt:
+        'Which method’s six-orbit drift would you still trust as a size of its error?',
+      options: [
+        'Runge-Kutta 4’s: it is tiny and creeps up steadily with the length of the run, so its end value is a fair size of its error',
+        'Velocity Verlet’s: it is smaller than at three orbits, and the smaller the drift the more accurate the method',
+        'Symplectic Euler’s: its error is bounded, so its value at the end of any run represents it',
+        'Explicit Euler’s: it is the only one that clearly keeps growing, so its number shows the real trend',
+      ],
+      answer: 0,
+      misconceptions: [
+        {
+          id: 'smallest-number-is-accurate',
+          option: 1,
+          say: 'Its drift did fall, from 0.001768 % at three orbits to 0.0001587 % at six, but a longer run cannot make a method more accurate. Velocity Verlet is symplectic: its drift swings, and this run stopped near the bottom of a swing. A smaller number at one moment is not a more accurate method.',
+        },
+        {
+          id: 'bounded-is-representative',
+          option: 2,
+          say: 'Bounded is not small or steady. Symplectic Euler’s drift went from −0.002317 % at three orbits to +0.08515 % at six, and changed sign, because its error swings. The end of one run is one point on the swing; its largest swing is the number to quote.',
+        },
+        {
+          id: 'euler-trend',
+          option: 3,
+          say: 'Explicit Euler’s drift does grow clearly, to about 60 % of the starting energy, but at that size the orbit is already a different one: its number says the method has failed, not how large its error is.',
+        },
+      ],
+      hints: [
+        'For each method put the three-orbit and the six-orbit drift side by side, and ask which kind of change each shows: growing, swinging or falling.',
+      ],
+      because:
+        'Runge-Kutta 4’s drift is tiny and grows smoothly with the length of the run, about 6.473×10⁻⁸ % at three orbits and 1.046×10⁻⁷ % at six, so its end value is a fair size of its error at that length. The two symplectic methods keep their error bounded, but their end values are phases of a swing: when the run doubled Verlet’s fell elevenfold and symplectic Euler’s rose thirty-seven-fold, so for them the honest number is the largest swing in the notebook’s table.',
+    },
+    {
       sid: 'what-you-worked-out',
       type: 'read',
       title: 'What you worked out',
       body: `Four integrators, one system, the same ten thousand steps. Explicit Euler
              gained about half the system’s energy; symplectic Euler and velocity
              Verlet kept it to a few thousandths of a percent and let it swing rather than
-             grow; Runge-Kutta 4 kept it to a hundred thousand times better. Halving the
-             step bought four times for a second-order method and more for a fourth-order
-             one, and at the application’s own step the notebook and the engine gave the
-             same numbers for the two methods whose end-of-run drift is a property.
-             \n\nWhat the numbers do not say: this is one system, one length of run and
-             no close encounter. The notebook has no softening, no merging and no
-             relativity, which the application can switch on. And a small energy drift
-             is not an accurate orbit: a method can keep the energy and still put a body
-             in the wrong place along its orbit. The run is yours to keep: its capsule
+             grow; Runge-Kutta 4 kept it to a hundred thousand times better. Changing the
+             step moved velocity Verlet’s drift by the square of the ratio of the step
+             counts, whichever count you chose, and Runge-Kutta 4’s by more than the
+             fourth power; at the application’s own step the notebook and the engine gave
+             the same numbers for the two methods whose end-of-run drift is a property.
+             Doubling the run to six orbits showed which numbers are sizes and which are
+             phases.
+             \n\nWhat the drift does not cover: this is one system, a few lengths of run
+             and no close encounter. The notebook has no softening, no merging and no
+             relativity, which the application can switch on. A small energy drift is not
+             an accurate orbit: a method can keep the energy and still put a body in the
+             wrong place along its orbit. And the drift of a method that swings is not one
+             number, whatever one run ends on. The run is yours to keep: its capsule
              records the notebook’s hash and the input’s, so a report can cite it.`,
     },
   ],
+  retired: {
+    'halve-the-step': {
+      to: 'choose-the-second-step',
+      release: '3.1',
+      was: {
+        en: 'Run the notebook again at 1000 steps and enter the drifts of velocity Verlet and Runge-Kutta 4 and how many times smaller each was than at 500 steps.',
+        es: 'Ejecutar de nuevo el cuaderno con 1000 pasos e introducir las derivas del Verlet de velocidad y del Runge-Kutta 4 y cuántas veces menor era cada una que con 500 pasos.',
+      },
+    },
+  },
 };
 
 export default INTEGRATORS_IN_PRACTICE;

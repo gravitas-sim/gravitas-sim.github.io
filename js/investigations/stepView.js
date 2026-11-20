@@ -405,10 +405,19 @@ export function stepMarkup(step, c) {
           const derived = Boolean(f.compute);
           return `<label class="inv-field${derived ? ' is-derived' : ''}">
               <span class="inv-field-label">${prose(f.label)}${f.unit ? ` <span class="inv-field-unit">(${escape(f.unit)})</span>` : ''}${derived ? ` <span class="inv-field-auto">${escape(t('inv.field.auto'))}</span>` : ''}</span>
-              <input type="text" ${f.kind === 'text' ? '' : 'inputmode="decimal"'}
+              ${
+                f.options
+                  ? `<select data-field="${attr(key)}"><option value=""></option>${f.options
+                      .map(
+                        o =>
+                          `<option${String(responses[key]) === String(o) ? ' selected' : ''}>${escape(o)}</option>`
+                      )
+                      .join('')}</select>`
+                  : `<input type="text" ${f.kind === 'text' ? '' : 'inputmode="decimal"'}
                      data-field="${attr(key)}" value="${attr(responses[key] ?? '')}"
                      ${derived ? 'readonly tabindex="-1"' : ''}
-                     placeholder="${escape(cueText(f.hint))}" />
+                     placeholder="${escape(cueText(f.hint))}" />`
+              }
             </label>${slots.field?.takeRow(step, f, c) ?? ''}`;
         })
         .join('')}</div>`

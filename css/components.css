@@ -3932,6 +3932,7 @@
   .inv-answer:focus,
   .inv-answer-num:focus,
   .inv-field input:focus,
+  .inv-field select:focus,
   #investigationName:focus {
     outline: var(--focus-ring);
     outline-offset: 1px;
@@ -3974,7 +3975,8 @@
     font-family: var(--font-mono);
     color: var(--text-muted);
   }
-  .inv-field input {
+  .inv-field input,
+  .inv-field select {
     width: 100%;
     padding: var(--space-2) var(--space-3);
     font-family: var(--font-mono);
