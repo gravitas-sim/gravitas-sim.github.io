@@ -351,14 +351,16 @@ export default {
         'At a distance of 1.00 the three arrows are visually indistinguishable, which is the intended reaction. The readout gives 3.43 × 10⁻⁵, 3.32 × 10⁻⁵ and 3.21 × 10⁻⁵ m/s², and the last row reports the near side as 6.9% larger than the far side. Students who slide the distance down to 0.2 will see the arrows separate visibly, which is worth encouraging.',
       'take-the-center-away':
         'The residual row shows about 1.1 × 10⁻⁶ m/s² outward on each side, roughly a thirtieth of the pull itself, and the panel reports the magnification between the two rows. The center shows a dot rather than an arrow, and students regularly ask whether that is a drawing error; it is the answer.',
-      'four-distances':
-        'At mass 1, the readings should be 0.13, 1.00, 8.00 and 64.00 times the lunar tide at distances of 2, 1, 0.5 and 0.25. The validator checks that stretch × distance³ is the same for every row and warns at a spread above 35%, which almost always means a strength read at a different slider position from the distance beside it. The transformed plot straightens to a line through the origin.',
-      'three-masses':
-        'At distance 1, the readings should be 1.00, 2.00 and 4.00 at masses of 1, 2 and 4. The validator checks that stretch ÷ mass is constant and warns if the distance slider was moved during the run, which is the only common failure here.',
+      'choose-four-distances':
+        'Any four distances from 0.2 to 2 times the Moon’s, each stretch read at the slider position beside it. The mass is held at the Moon’s, so every row has stretch × distance³ near 1.00. The check warns on swapped or mismatched rows and on a span under a factor of four.',
+      'choose-three-masses':
+        'Any three masses from 0.25 to 4 times the Moon’s, at distance 1: stretch ÷ mass is 1.00 in every row. The check warns if the distance moved or the masses are within a factor of two.',
       'seven-real-tides-on-one':
         'The seven bars run from 5.05 × 10⁻⁷ m/s² for the Sun on the Earth to 68 m/s² for a stellar-mass black hole on the Sun at three million km. The two comparisons worth drawing out are the Moon beating the Sun by 2.2, and the last two rows differing by 1.2 × 10⁵ for a fifty-fold change in distance alone.',
       'stretch-against-grip':
-        'At 5 Earth radii and lunar density the green bar dwarfs the red one and the verdict reads HOLDS TOGETHER. The bars become equal near 1.50 Earth radii. Comet ice moves the crossing out to about 2.64 Earth radii and iron brings it in to about 1.22, which is the observation step 25 depends on.',
+        'At 5 Earth radii and lunar density the green bar dwarfs the red one and the verdict reads HOLDS TOGETHER. The bars become equal near 1.50 Earth radii; this panel does not print where.',
+      'hunt-the-crossing':
+        'Comet ice crosses near 2.64 Earth radii and iron near 1.22 (the slider moves in 0.05, so 1.20 or 1.25). The check accepts within 0.12 of the model and refuses the two swapped.',
       'the-roche-limit-and-why':
         'With porous ice at 600 kg/m³ the no-strength limit is 2.47 Saturn radii, or about 149,000 km, and the keeps-its-shape limit is 1.27 Saturn radii. The A ring’s outer edge is at 2.27 Saturn radii and Mimas at 3.08, so the rings sit inside the outer limit and the innermost round moon sits outside it. That is the payoff of the screen.',
       'change-what-the-moon-is':

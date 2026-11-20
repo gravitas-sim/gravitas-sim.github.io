@@ -14,7 +14,7 @@ export default {
   title: 'Mareas',
   subtitle:
     'Estira un mundo, mueve una luna y descubre por qué la gravedad puede desgarrar objetos',
-  duration: '35-45 min',
+  duration: '40-50 min',
   level: 'Astronomía introductoria',
   objectives: [
     'Explicar por qué un objeto extenso siente una atracción gravitatoria distinta en cada uno de sus puntos',
@@ -79,6 +79,17 @@ export default {
         'el lado lejano es atraído hacia la Luna menos que la Tierra en conjunto, así que se queda rezagado',
         'el agua desplazada del lado cercano tiene que ir a alguna parte',
       ],
+      misconceptions: [
+        {
+          say: 'Nadie empuja el lado lejano. La gravedad de la Luna solo tira: el lado lejano es atraído hacia la Luna como todo lo demás, solo que menos que la Tierra en conjunto.',
+        },
+        {
+          say: 'El giro no crea los abultamientos: una Tierra que no girase tendría igualmente los dos, y el giro solo te lleva a través de ellos. La causa es la atracción de la Luna, tomada como una diferencia.',
+        },
+        {
+          say: 'El abultamiento del lado lejano no es agua del lado cercano que se fue a otra parte. Lo levanta la misma resta que levanta el del lado cercano, así que existen a la vez.',
+        },
+      ],
       because:
         'El lado lejano se queda rezagado. Nadie lo empuja: es atraído hacia la Luna como todo lo demás, solo que menos que la media, así que respecto a la Tierra en conjunto se rezaga en el lado lejano. Esa es la respuesta, y la pantalla siguiente muestra la aritmética que la produce. La opción del giro es un relato común y tenaz, y conviene dejar claro que no es la causa: los dos abultamientos están ahí también para una Tierra que no rotara, y la rotación de la Tierra es lo que te lleva a través de ellos dos veces al día, no lo que los crea.',
     },
@@ -102,6 +113,17 @@ export default {
         'una segunda fuerza, distinta de la gravedad, actúa sobre el lado lejano',
         'el lado lejano está fuera del alcance de la Luna',
       ],
+      misconceptions: [
+        {
+          say: 'La atracción de la Luna sigue apuntando hacia la Luna en el lado lejano. Lo que apunta hacia fuera es lo que queda después de quitar el movimiento que comparte la Tierra entera.',
+        },
+        {
+          say: 'No hay una segunda fuerza: las dos filas salen solo de la gravedad de la Luna, y la fila de abajo es la de arriba con un número restado.',
+        },
+        {
+          say: 'La gravedad no tiene borde. El lado lejano es atraído por la Luna, algo menos que el centro.',
+        },
+      ],
       because:
         'Sigue siendo atraído hacia la Luna, solo que menos que la media. La gravedad nunca se invierte y nunca se apaga; no hay ninguna segunda fuerza. La flecha hacia fuera es un resultado contable, no un empujón: es lo que queda después de restar la aceleración que comparte el planeta entero. Si te empeñas en describir las mareas sin restar el centro, te quedas con un solo abultamiento y una costa que te lleva la contraria dos veces al día.',
       tool: {
@@ -111,7 +133,7 @@ export default {
     },
     {
       title: 'Qué es realmente una marea',
-      body: 'Una definición que merece la pena memorizar, porque es corta y es toda la materia:\n\n<strong>Una marea es la diferencia de aceleración gravitatoria a lo largo de un objeto.</strong>\n\nNo la intensidad de la gravedad. La <em>diferencia</em> en ella. Esta distinción hace trabajo de verdad. Ahora mismo el Sol tira de ti unas 180 veces más fuerte que la Luna: el Sol es enormemente más masivo. Y sin embargo la Luna levanta la marea oceánica mayor, por más de un factor dos. La gravedad intensa y las mareas intensas sencillamente no son lo mismo, y medirás por qué en unas pantallas.\n\nLa misma diferencia actúa allí donde la gravedad se encuentra con algo que tiene tamaño: los mares subiendo por una playa, una luna mantenida fundida a base de amasarla, un cometa que se deshace en una hilera de fragmentos, y una estrella estirada en un reguero alrededor de un agujero negro. Un mecanismo, y ya lo has visto entero.',
+      body: 'Una definición que merece la pena memorizar, porque es corta y es toda la materia:\n\n<strong>Una marea es la diferencia de aceleración gravitatoria a lo largo de un objeto.</strong>\n\nNo la intensidad de la gravedad. La <em>diferencia</em> en ella. Esta distinción hace trabajo de verdad: la gravedad intensa y las mareas intensas no son lo mismo, y dentro de unas pantallas pondrás a prueba un caso en el que se separan.\n\nLa misma diferencia actúa allí donde la gravedad se encuentra con algo que tiene tamaño: los mares subiendo por una playa, una luna mantenida fundida a base de amasarla, un cometa que se deshace en una hilera de fragmentos, y una estrella estirada en un reguero alrededor de un agujero negro. Un mecanismo, y ya lo has visto entero.',
       quote: {
         text: 'Las aguas del mar suben dos veces y bajan dos veces en el espacio de un día lunar, y las mayores mareas ocurren a la tercera hora tras el paso de los luminares por el meridiano del lugar.',
         by: 'Isaac Newton, Principia, Libro III, 1687',
@@ -132,30 +154,30 @@ export default {
         'Ocho veces. La mayoría dice cuatro, razonando a partir de la ley del inverso del cuadrado, y ese razonamiento es correcto para la atracción en sí: reduce la distancia a la mitad y la atracción se cuadruplica. Pero una marea es una diferencia entre dos atracciones, y acercarse hace que las distancias cercana y lejana difieran en una fracción mayor además de hacer más intensas ambas atracciones. Los dos efectos se componen. Estás a punto de medirlo.',
     },
     {
-      title: 'Cuatro distancias',
-      body: 'El panel informa del estiramiento de marea como un múltiplo de la marea lunar real, así que la Luna real marca 1,00 y todo lo demás se mide frente a ella.\n\nPon el deslizador en cada una de las cuatro distancias por turno y escribe lo que diga el panel. Tus puntos aparecen en la gráfica según escribes, así que no hay que recordar nada de una fila a la siguiente.',
+      title: 'Cuatro distancias a tu elección',
+      body: 'El panel informa del estiramiento de marea como un múltiplo de la marea lunar real, así que la Luna real marca 1,00 y todo lo demás se mide frente a ella.\n\nElige cuatro distancias tuyas, dos de ellas con una razón de al menos cuatro, y deja en paz la masa del compañero. Para cada una, pon el deslizador, pulsa <strong>Tomar la lectura</strong> junto al estiramiento y escribe la distancia que pusiste. Tus puntos aparecen en la gráfica según los anotas.',
       fields: [
         { label: 'Distancia 1', unit: '× la de la Luna', want: '2' },
         {
-          label: 'Estiramiento de marea allí',
+          label: 'Estiramiento a la distancia 1',
           unit: '× marea lunar',
           want: '0,13',
         },
         { label: 'Distancia 2', unit: '× la de la Luna', want: '1' },
         {
-          label: 'Estiramiento de marea allí',
+          label: 'Estiramiento a la distancia 2',
           unit: '× marea lunar',
           want: '1',
         },
         { label: 'Distancia 3', unit: '× la de la Luna', want: '0,5' },
         {
-          label: 'Estiramiento de marea allí',
+          label: 'Estiramiento a la distancia 3',
           unit: '× marea lunar',
           want: '8',
         },
         { label: 'Distancia 4', unit: '× la de la Luna', want: '0,25' },
         {
-          label: 'Estiramiento de marea allí',
+          label: 'Estiramiento a la distancia 4',
           unit: '× marea lunar',
           want: '64',
         },
@@ -173,36 +195,78 @@ export default {
       },
       tool: {
         title: 'Lee aquí cada distancia',
-        note: 'Pon el deslizador en 2, luego 1, luego 0,5, luego 0,25, y escribe cada lectura en las casillas. La masa del compañero se mantiene en la de la Luna.',
+        note: 'El deslizador va de 0,2 a 2 veces la distancia de la Luna. La masa del compañero se mantiene en la de la Luna.',
       },
-      tip: 'Las cuatro distancias sugeridas son solo sugerencias. Sirven cuatro cualesquiera, siempre que cada intensidad se leyera a la distancia que tiene al lado.',
+      tip: 'Sirven cuatro distancias cualesquiera, siempre que cada estiramiento se leyera a la distancia que tiene al lado y estén bien separadas.',
     },
     {
       hints: [
         'Una atracción ordinaria del inverso del cuadrado sube con el cuadrado del factor de distancia. Una marea depende de cuán rápido cambia la atracción a lo largo de un cuerpo.',
-        'Compara las dos filas de tu tabla: el estiramiento subió por una potencia mayor que dos de la razón de distancias.',
+        'Busca dos de tus distancias en las que una sea la mitad de la otra, y divide el estiramiento mayor entre el menor.',
       ],
       feedback: {
         close:
-          'Cerca. Lee los dos estiramientos de tu propia tabla y divide el mayor entre el menor.',
-        off: 'Divide el estiramiento a la mitad de la distancia entre el estiramiento a la distancia completa, ambos de tu tabla.',
+          'Cerca. Toma dos de tus distancias en las que una sea la mitad de la otra y divide el estiramiento mayor entre el menor.',
+        off: 'Busca un par de distancias en el que una sea la mitad de la otra, en tu tabla o en el panel, y divide el estiramiento a la distancia menor entre el estiramiento a la mayor.',
       },
-      title: '¿Con qué pendiente cae?',
-      body: 'Mira las filas 2 y 3 de tu propia tabla: pasaste de 1,00 a 0,50 veces la distancia de la Luna, que es la mitad de la distancia.\n\nUna atracción corriente del inverso del cuadrado habría subido por cuatro. Una marea no es una atracción corriente.',
+      misconceptions: [
+        {
+          say: 'Eso es lo que haría una atracción ordinaria al reducir la distancia a la mitad. Una marea es una diferencia entre atracciones, y crece más. Lee tus dos estiramientos.',
+        },
+        {
+          say: 'Al reducir la distancia a la mitad la marea es más intensa, así que el factor es mayor que uno. Divide el estiramiento a la distancia menor entre el de la distancia mayor, no al revés.',
+        },
+      ],
+      title: 'El factor por cada mitad',
+      body: 'Mira tu propia tabla y tu gráfica. Cada vez que la distancia se reduce a la mitad, el estiramiento se multiplica por un factor. Búscalo en tus lecturas: toma dos de tus distancias en las que una sea la mitad de la otra. Si tu tabla no tiene ningún par así, pon el deslizador del panel en uno y lee los dos estiramientos allí.\n\nUna atracción ordinaria del inverso del cuadrado subiría por cuatro. Una marea no es una atracción corriente.',
       prompt:
-        '¿En qué factor aumentó el estiramiento de marea al reducir a la mitad la distancia?',
-      unit: '×',
+        '¿Por qué factor aumenta el estiramiento de marea cada vez que la distancia se reduce a la mitad?',
+      compare:
+        'Pon el factor que dan tus lecturas para cada mitad junto al que predijiste.',
       because:
-        'Ocho, que es dos al cubo. Reducirla otra vez a la mitad multiplica por ocho de nuevo: tu cuarta lectura, a un cuarto de la distancia de la Luna, debería ser unas 64 veces la marea lunar. La distancia entra tres veces, no dos: la marea va como uno partido por la separación al cubo. Por eso se endereza la gráfica transformada, y por eso los efectos de marea son casi siempre despreciables hasta que algo se acerca, y entonces de pronto dejan de serlo.',
+        'Ocho, que es dos al cubo: cada vez que la distancia se reduce a la mitad, la marea se multiplica otra vez por ocho, sean cuales sean las distancias de las que partiste. La distancia entra tres veces, no dos: la marea va como uno partido por la separación al cubo. Por eso la gráfica transformada se endereza, y por eso los efectos de marea casi siempre son despreciables hasta que algo se acerca, y entonces de repente no lo son.',
       tool: {
         title: 'La curva que mediste',
-        note: 'El punto es tu deslizador. Deslízalo de 1,00 a 0,50 y observa la lectura, si quieres comprobar el factor directamente.',
+        note: 'El punto es tu deslizador. Úsalo para leer un par de distancias, una la mitad de la otra, si tu tabla no tiene ninguno.',
       },
     },
     {
-      title: 'La relación, escrita',
-      body: 'La has medido, así que aquí está en símbolos. No se te pide deducirla ni calcular con ella, solo reconocer las tres cosas que hay en ella.\n\nPara un cuerpo de radio <em>R</em> situado a una distancia <em>d</em> de un compañero de masa <em>M</em>, el estiramiento de marea a lo largo de él es aproximadamente\n\n<strong>2 G M R ÷ d³</strong>\n\nLéelo como tres afirmaciones que ya crees:\n\n<strong>M arriba.</strong> Un compañero más pesado te estira más. Lo comprobarás a continuación.\n\n<strong>R arriba.</strong> Un objeto más grande se estira más, porque sus dos extremos están más separados y por tanto difieren más. Un guijarro no siente prácticamente ninguna marea.\n\n<strong>d³ abajo.</strong> La que acabas de medir. La distancia importa muchísimo más que cualquier otra cosa de la expresión.\n\nUna salvedad honesta: esto es una aproximación, buena cuando el objeto es pequeño comparado con su distancia. Es excelente para la Luna sobre la Tierra, y empeora a medida que un cuerpo se acerca a algo. Más adelante en esta investigación, donde eso importa, se usa la diferencia exacta.',
-      tip: 'El 2 no es importante. Las tres letras y dónde están sí.',
+      title: 'Elige una distancia que no hayas usado',
+      body: 'Una relación se gana el sueldo prediciendo algo que no has medido. Elige una distancia entre 0,2 y 2 veces la de la Luna que no sea una de tus cuatro ni esté cerca de ninguna.\n\nAnótala aquí, y no pongas todavía el deslizador ahí. El paso siguiente te pide primero tu estimación del estiramiento.',
+      fields: [
+        { label: 'La nueva distancia', unit: '× la de la Luna', want: '0,7' },
+        {
+          label: 'Tu distancia anterior más cercana está a esta separación',
+          unit: '× la de la Luna',
+        },
+      ],
+    },
+    {
+      title: 'Estima el estiramiento allí',
+      body: 'Mira tus cuatro lecturas y la curva que forman. Sin poner el deslizador en la nueva distancia, estima el estiramiento allí como un múltiplo de la marea lunar real.\n\nComprométete con un número. Queda sin marcar hasta que hayas leído el panel.',
+      prompt: 'El estiramiento a la distancia que elegiste será de unos',
+    },
+    {
+      title: 'Lee el panel en tu nueva distancia',
+      body: 'Pon el deslizador en la distancia que elegiste, pulsa <strong>Tomar la lectura</strong> junto al estiramiento y compáralo con tu estimación, debajo. Deja en paz la masa del compañero.',
+      fields: [
+        { label: 'La distancia que elegiste', unit: '× la de la Luna' },
+        {
+          label: 'Estiramiento a esa distancia',
+          unit: '× marea lunar',
+          want: '2,9',
+        },
+      ],
+      tool: {
+        title: 'Lee el estiramiento a tu distancia',
+        note: 'Pon el deslizador en la distancia que elegiste y deja la masa del compañero en la de la Luna.',
+      },
+    },
+    {
+      title: 'Tu estimación y el panel',
+      body: 'Tu estimación y el estiramiento que leíste están debajo, a la distancia que elegiste.',
+      compare:
+        'Pon tu estimación junto al estiramiento que dio el panel, y di en cuál de tus cuatro lecturas te apoyaste.',
     },
     {
       title: 'Ahora cambia el compañero',
@@ -218,24 +282,24 @@ export default {
         'El doble de intensa. La masa entra una sola vez, sin más: dóblala y la marea se dobla. Esto es mucho menos espectacular que la relación con la distancia, y ese contraste es el sentido de las siguientes pantallas. Dónde está un compañero importa enormemente más que lo pesado que sea.',
     },
     {
-      title: 'Tres masas',
-      body: 'La distancia se mantiene ahora en la distancia real de la Luna y el deslizador de masa es tuyo. Ponlo en cada valor por turno y anota lo que marque el panel.\n\nTres puntos bastan aquí, porque buscas una recta y tres puntos o la forman o no.',
+      title: 'Tres masas a tu elección',
+      body: 'Esta vez la distancia se mantiene en la distancia real de la Luna, y solo cambia la masa. El deslizador es tuyo.\n\nElige tres masas tuyas, tan separadas que el estiramiento cambie de forma visible. Para cada una, pon el deslizador, pulsa <strong>Tomar la lectura</strong> junto al estiramiento y escribe la masa que pusiste. Tres puntos bastan, porque buscas una recta y tres puntos o la forman o no.',
       fields: [
         { label: 'Masa 1', unit: '× la de la Luna', want: '1' },
         {
-          label: 'Estiramiento de marea allí',
+          label: 'Estiramiento con la masa 1',
           unit: '× marea lunar',
           want: '1',
         },
         { label: 'Masa 2', unit: '× la de la Luna', want: '2' },
         {
-          label: 'Estiramiento de marea allí',
+          label: 'Estiramiento con la masa 2',
           unit: '× marea lunar',
           want: '2',
         },
         { label: 'Masa 3', unit: '× la de la Luna', want: '4' },
         {
-          label: 'Estiramiento de marea allí',
+          label: 'Estiramiento con la masa 3',
           unit: '× marea lunar',
           want: '4',
         },
@@ -244,13 +308,13 @@ export default {
         title: 'Tus tres lecturas',
         xLabel: 'masa del compañero  (× la de la Luna)',
         yLabel: 'estiramiento  (× marea lunar)',
-        note: 'Esta vez no se ofrece ninguna transformación, y no hace falta: si estos tres caen tal cual sobre una recta que pasa por la esquina, la relación es tan simple como puede serlo una relación.',
+        note: 'Esta vez no se ofrece ninguna transformación, y no hace falta: si estos tres puntos caen sobre una recta que pasa por la esquina tal como están, la relación es todo lo sencilla que puede ser una relación.',
       },
       tool: {
         title: 'Lee aquí cada masa',
-        note: 'Pon el deslizador en 1, luego 2, luego 4 veces la masa de la Luna. La distancia se mantiene en la distancia real de la Luna.',
+        note: 'El deslizador de masa va de un cuarto de la de la Luna a cuatro veces la de la Luna. La distancia se mantiene en la distancia real de la Luna.',
       },
-      tip: 'Si tus tres puntos forman una recta que pasa por la esquina de la gráfica en lugar de arrancar a media altura de un eje, las dos magnitudes son simplemente proporcionales.',
+      tip: 'Si tus tres puntos forman una recta que pasa por la esquina de la gráfica y no empieza a media altura de un eje, las dos magnitudes son sencillamente proporcionales.',
     },
     {
       title: 'Qué dice la gráfica de masas',
@@ -264,6 +328,13 @@ export default {
       ],
       because:
         'Simplemente proporcional. Ambas relaciones están ya en tus propios números: una potencia de masa arriba, tres potencias de distancia abajo. Por eso la respuesta a «qué levanta la marea más grande» casi nunca es «lo más pesado que hay cerca».',
+    },
+    {
+      title: 'La relación, escrita',
+      body: 'Has medido las dos, así que aquí está en símbolos. No se te pide deducirla ni calcular con ella, solo reconocer las tres cosas que hay en ella.\n\nPara un cuerpo de radio <em>R</em> situado a una distancia <em>d</em> de un compañero de masa <em>M</em>, el estiramiento de marea a lo largo de él es aproximadamente\n\n<strong>2 G M R ÷ d³</strong>\n\nLéelo como tres afirmaciones que ya crees:\n\n<strong>M arriba.</strong> Un compañero más pesado te estira más, en proporción: la recta que dibujaste.\n\n<strong>R arriba.</strong> Un objeto más grande se estira más, porque sus dos extremos están más separados y por tanto difieren más. Un guijarro no siente prácticamente ninguna marea.\n\n<strong>d³ abajo.</strong> El cubo que encontraste. La distancia importa muchísimo más que cualquier otra cosa de la expresión.\n\nUna salvedad honesta: esto es una aproximación, buena cuando el objeto es pequeño comparado con su distancia. Es excelente para la Luna sobre la Tierra, y empeora a medida que un cuerpo se acerca a algo. El primer panel de esta investigación usó la diferencia exacta; los paneles del equilibrio y de Roche que vienen después usan esta aproximación, así que lee sus distancias como buenas estimaciones.',
+      tip: 'El 2 no es importante. Las tres letras y dónde están sí.',
+      compare:
+        'Divide cada uno de tus estiramientos entre su masa: si sale lo mismo cada vez, la masa aparece una sola vez.',
     },
     {
       title: 'El Sol contra la Luna',
@@ -315,42 +386,62 @@ export default {
     },
     {
       title: 'Estiramiento contra agarre',
-      body: 'El panel toma un cuerpo del tamaño de la Luna y te deja acercarlo a la Tierra. Dos barras, medidas en la superficie del cuerpo:\n\n<strong>Verde</strong> es su propia gravedad, que lo mantiene unido. No cambia cuando mueves el cuerpo, porque depende solo del propio cuerpo.\n\n<strong>Roja</strong> es el estiramiento de marea que intenta separar sus extremos. Crece como uno partido por la distancia al cubo, así que sube muy deprisa cuando acercas el cuerpo.\n\nEn algún punto la barra roja alcanza a la verde. Encuéntralo.\n\nLa Luna está de verdad a unos sesenta radios terrestres, muy fuera del extremo derecho de este deslizador. La estás trayendo a un sitio donde nunca ha estado.',
+      body: 'El panel toma un cuerpo del tamaño de la Luna y con su misma densidad, y te deja acercarlo a la Tierra. Dos barras, medidas en la superficie del cuerpo:\n\n<strong>Verde</strong> es su propia gravedad, que lo mantiene unido. No cambia cuando mueves el cuerpo, porque depende solo del propio cuerpo.\n\n<strong>Roja</strong> es el estiramiento de marea que intenta separar sus extremos. Crece como uno partido por la distancia al cubo, así que sube muy deprisa cuando acercas el cuerpo.\n\nEn algún punto la barra roja alcanza a la verde. Encuéntralo moviendo el cuerpo, y observa qué hace la línea del veredicto al cruzarlo.\n\nLa Luna está de verdad a unos sesenta radios terrestres, muy fuera del extremo derecho de este deslizador. La estás trayendo a un sitio donde nunca ha estado.',
       checklist: [
         'Empieza a 5 radios terrestres y observa que la barra verde empequeñece a la roja',
         'Baja el deslizador de distancia despacio y vigila solo la barra roja',
-        'Encuentra la distancia a la que las dos barras miden lo mismo',
-        'Lee la línea del veredicto, y la distancia que informa el panel debajo',
-        'Pulsa Hielo de cometa y encuentra de nuevo el punto de cruce',
-        'Pulsa Hierro y encuéntralo una tercera vez',
+        'Párate donde las dos barras miden lo mismo y fíjate en lo que dice allí la línea del veredicto',
       ],
       tool: {
         title: 'Su propia gravedad, contra la marea',
-        note: 'Verde es agarre, roja es estiramiento. El marcador de la regla de abajo es donde has puesto el cuerpo; la muesca es donde ambas se igualan.',
+        note: 'Verde es agarre, roja es estiramiento. El marcador de la regla de abajo es donde has puesto el cuerpo. La densidad se mantiene en la propia de la Luna.',
       },
-      tip: 'La barra verde no se mueve nunca al cambiar la distancia, y la barra roja no se mueve nunca al cambiar la densidad. Cada control mueve exactamente una barra, lo que hace fácil razonar sobre el equilibrio.',
+      tip: 'La barra verde no se mueve nunca al cambiar la distancia: depende del cuerpo, no de dónde esté.',
     },
     {
-      hints: [
-        'Pon la densidad en el valor de la Luna y observa las dos barras.',
-        'Lee la distancia en la línea que dice que las dos son iguales, en radios terrestres.',
-      ],
-      feedback: {
-        close:
-          'Cerca. Lee la distancia a la que las dos barras tienen la misma altura, en radios terrestres.',
-        off: 'La respuesta es la distancia a la que el estiramiento iguala al agarre; el panel la da en radios terrestres.',
-      },
-      title: 'Dónde se inclina la balanza',
-      body: 'Devuelve la densidad a la propia de la Luna, 3300 kg/m³, y lee la distancia a la que las dos barras se igualan. El panel la informa en radios terrestres, en la línea que dice que ambas son iguales.',
+      title: '¿Un cuerpo más denso, más cerca?',
+      body: 'Has hallado dónde alcanza la marea a un cuerpo con la densidad de la Luna. Ahora cambia de qué está hecho el cuerpo. El hielo de cometa es una bola de nieve suelta y porosa; el hierro es casi tan denso como puede ser un cuerpo sólido.\n\nComprométete antes de mover nada.',
       prompt:
-        'Para un cuerpo de la densidad de la Luna, el estiramiento iguala al agarre a una distancia de aproximadamente…',
-      unit: 'radios terrestres',
+        'Comparado con el hielo de cometa, un cuerpo de hierro macizo será desgarrado…',
+      options: [
+        'más cerca del planeta, porque se mantiene unido con más fuerza para su tamaño',
+        'a la misma distancia, porque solo el planeta decide dónde gana la marea',
+        'más lejos del planeta, porque tiene más masa para que el planeta tire de ella',
+        'a la misma distancia, porque los dos cuerpos tienen el mismo tamaño',
+      ],
       because:
-        'Alrededor de 1,5 radios terrestres desde el centro de la Tierra, o unos 9500 km, que son solo unos 3100 km sobre el suelo. Esa distancia tiene nombre: es el <strong>límite de Roche</strong>, por Édouard Roche, que lo dedujo en 1848. No es casualidad que haya salido de una comparación que montaste tú: el límite de Roche de un cuerpo rígido se define exactamente por ese equilibrio, y su fórmula de los libros de texto no es más que el álgebra de igualar esas dos barras.',
+        'Más cerca. Un cuerpo más denso del mismo tamaño tiene más gravedad en su superficie, así que la marea tiene que hacerse más intensa, y eso significa acercarse, antes de ganar. La masa del planeta es la misma en todos los casos; lo que cambia es lo que cae hacia él.',
+    },
+    {
+      title: 'Busca el cruce de dos cuerpos',
+      body: 'Pulsa <strong>Hielo de cometa</strong>. Baja la distancia hasta que las barras roja y verde tengan la misma altura, y anota la distancia en radios terrestres. Luego pulsa <strong>Hierro</strong> y busca otra vez el cruce.\n\nEsta vez el panel no imprime dónde se encuentran las barras. Lo encuentras moviendo el deslizador, y el cociente entre estiramiento y agarre vale uno en el cruce.',
+      fields: [
+        {
+          label: 'Cruce para el hielo de cometa',
+          unit: 'radios terrestres',
+          want: '2,64',
+        },
+        {
+          label: 'Cruce para el hierro',
+          unit: 'radios terrestres',
+          want: '1,22',
+        },
+      ],
       tool: {
-        title: 'Lee la distancia de cruce',
-        note: 'La densidad se mantiene en la propia de la Luna para esta pregunta. Desliza la distancia hasta que las dos barras coincidan, o simplemente lee la línea que dice dónde son iguales.',
+        title: 'Dónde el estiramiento alcanza al agarre',
+        note: 'Las distancias están en radios terrestres desde el centro de la Tierra. Los tres botones fijan la densidad; los deslizadores son tuyos.',
       },
+      tip: 'La barra roja no se mueve nunca al cambiar la densidad, y la barra verde no se mueve nunca al cambiar la distancia. Cada control mueve exactamente una barra.',
+    },
+    {
+      title: 'Qué hizo la densidad',
+      body: 'Tus dos cruces están debajo, junto a lo que predijiste.\n\nLa distancia a la que la gravedad propia de un cuerpo iguala a la marea que lo atraviesa tiene nombre: el <strong>límite de Roche</strong>, por Édouard Roche, que lo dedujo en 1848. Este equilibrio da el límite de Roche de un cuerpo rígido, y su fórmula de los libros de texto es el álgebra de igualar las dos barras.',
+      prompt:
+        'En una frase, di cómo movió la densidad del cuerpo la distancia a la que lo alcanza la marea, y por qué.',
+      rubric:
+        'El cuerpo más denso es alcanzado más cerca. Un cuerpo más denso se sujeta con más fuerza para su tamaño, así que la marea debe hacerse más intensa, lo que significa acercarse, antes de que el estiramiento iguale al agarre. Crédito completo exige la dirección y una razón basada en la gravedad propia del cuerpo frente a la marea. Crédito parcial por la dirección sola. No dar crédito a «los cuerpos más densos son más pesados, así que el planeta tira más de ellos» ni al tamaño como causa: el tamaño se cancela.',
+      compare:
+        'Pon tu predicción junto a las dos distancias que hallaste, y di qué hizo el agarre del cuerpo más denso con el cruce.',
     },
     {
       title: 'El límite de Roche, y por qué hay dos',
@@ -386,6 +477,17 @@ export default {
         'la masa del planeta y la densidad del cuerpo que cae',
         'el tamaño del cuerpo que cae, deshaciéndose los mayores más lejos',
         'la velocidad orbital del cuerpo que cae',
+      ],
+      misconceptions: [
+        {
+          say: 'Un planeta no tiene un solo límite. Dos cuerpos de distinta densidad se deshacen a distancias distintas del mismo planeta, como mostraron los arcos que moviste.',
+        },
+        {
+          say: 'El tamaño se cancela. Duplicar el radio de un cuerpo duplica el estiramiento a lo largo de él y también duplica su propia gravedad en la superficie, así que el equilibrio no se mueve.',
+        },
+        {
+          say: 'La velocidad orbital no decide dónde gana la marea; la comparación es el estiramiento contra la gravedad propia del cuerpo.',
+        },
       ],
       because:
         'La masa del planeta y la densidad del cuerpo que cae. Su tamaño se cancela por completo, cosa que sorprende a la mayoría: doblar el radio de una luna dobla el estiramiento a lo largo de ella y también dobla su propia gravedad superficial, así que el equilibrio no se toca. Hablar de «el límite de Roche de Saturno» es por tanto una afirmación incompleta. Tiene que ser el límite de Roche de Saturno para algo.',

@@ -584,6 +584,7 @@ const STRENGTH = {
       });
     }
     rows.push({
+      id: 'stretch',
       get label() {
         return t('tideW.tidalStretch');
       },
@@ -984,7 +985,7 @@ const BALANCE = {
       regime: disruptionRegime(distanceM, rigid, fluid),
     };
   },
-  readout(v) {
+  readout(v, _ctx, spec = {}) {
     const f = BALANCE.compute(v);
     const verdict = {
       safe: 'Its own gravity wins. It stays a ball.',
@@ -1012,13 +1013,18 @@ const BALANCE = {
         value: ratioLabel(f.ratio),
         emphasis: true,
       },
-      {
-        get label() {
-          return t('tideW.theTwoAreEqualAt');
-        },
-        value: `${fixed(f.rigid / EARTH_RADIUS_M, 2)} Earth radii  (${distanceLabel(f.rigid)})`,
-        emphasis: true,
-      },
+      // A hunt withholds where the bars meet: the student finds it.
+      ...(spec.hunt
+        ? []
+        : [
+            {
+              get label() {
+                return t('tideW.theTwoAreEqualAt');
+              },
+              value: `${fixed(f.rigid / EARTH_RADIUS_M, 2)} Earth radii  (${distanceLabel(f.rigid)})`,
+              emphasis: true,
+            },
+          ]),
       {
         get label() {
           return t('tideW.whatThatMeans');
@@ -1027,7 +1033,7 @@ const BALANCE = {
       },
     ];
   },
-  draw(canvas, v) {
+  draw(canvas, v, _ctx, spec = {}) {
     const H = responsiveHeight(280, 230);
     const { ctx, w } = surface(canvas, H);
     sky(ctx, w, H);
@@ -1093,7 +1099,7 @@ const BALANCE = {
     ctx.lineTo(w - 20, ry);
     ctx.stroke();
     const cross = f.rigid / EARTH_RADIUS_M;
-    if (cross >= scaleLo && cross <= scaleHi) {
+    if (!spec.hunt && cross >= scaleLo && cross <= scaleHi) {
       ctx.strokeStyle = WARN;
       ctx.beginPath();
       ctx.moveTo(rx(cross), ry - 8);
