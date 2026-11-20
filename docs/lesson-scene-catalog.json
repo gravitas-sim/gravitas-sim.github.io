@@ -77765,7 +77765,8 @@
     "inspector": true
    },
    "canvas": [
-    "quiet"
+    "quiet",
+    "scene"
    ],
    "steps": [
     {
@@ -78060,7 +78061,7 @@
       "external-computation",
       "captured-evidence"
      ],
-     "canvas": "quiet",
+     "canvas": "scene",
      "actions": [
       "record-values"
      ],
@@ -78073,7 +78074,7 @@
       "rubric": false,
       "validated": true
      },
-     "worldRunning": "inherited",
+     "worldRunning": false,
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
@@ -78102,10 +78103,12 @@
       "notebook-fields"
      ],
      "reset": [
+      "rebuilds: scenario \"Circumbinary Planet Lab\" seed binary",
       "lesson locks: placement, inspector"
      ],
      "recovery": [
       "missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand",
+      "reset: rebuilds the scenario on arrival",
       "ambiguous result: the check says in words how close is close enough"
      ]
     },
@@ -78123,7 +78126,7 @@
       "external-computation",
       "captured-evidence"
      ],
-     "canvas": "quiet",
+     "canvas": "scene",
      "actions": [
       "record-values"
      ],
@@ -78136,7 +78139,7 @@
       "rubric": false,
       "validated": true
      },
-     "worldRunning": "inherited",
+     "worldRunning": false,
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
@@ -78183,7 +78186,7 @@
       "roles": []
      },
      "kinds": [],
-     "canvas": "quiet",
+     "canvas": "scene",
      "actions": [
       "choose-an-option"
      ],
@@ -78196,7 +78199,7 @@
       "rubric": false,
       "validated": false
      },
-     "worldRunning": "inherited",
+     "worldRunning": false,
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
@@ -78236,7 +78239,7 @@
       "roles": []
      },
      "kinds": [],
-     "canvas": "quiet",
+     "canvas": "scene",
      "actions": [
       "choose-an-option"
      ],
@@ -78249,7 +78252,7 @@
       "rubric": false,
       "validated": false
      },
-     "worldRunning": "inherited",
+     "worldRunning": false,
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
@@ -78289,7 +78292,7 @@
       "roles": []
      },
      "kinds": [],
-     "canvas": "quiet",
+     "canvas": "scene",
      "actions": [
       "read"
      ],
@@ -78302,7 +78305,7 @@
       "rubric": false,
       "validated": false
      },
-     "worldRunning": "inherited",
+     "worldRunning": false,
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
@@ -78385,7 +78388,7 @@
     "declaredButInert": 0,
     "prose": 7,
     "mismatched": 0,
-    "rebuilds": 0
+    "rebuilds": 1
    }
   },
   {
@@ -78396,7 +78399,8 @@
     "inspector": true
    },
    "canvas": [
-    "quiet"
+    "quiet",
+    "scene"
    ],
    "steps": [
     {
@@ -78700,7 +78704,7 @@
       "external-computation",
       "captured-evidence"
      ],
-     "canvas": "quiet",
+     "canvas": "scene",
      "actions": [
       "record-values"
      ],
@@ -78713,7 +78717,7 @@
       "rubric": false,
       "validated": true
      },
-     "worldRunning": "inherited",
+     "worldRunning": false,
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
@@ -78742,10 +78746,12 @@
       "notebook-fields"
      ],
      "reset": [
+      "rebuilds: scenario \"Binary Planet Lab\" seed binary",
       "lesson locks: placement, inspector"
      ],
      "recovery": [
       "missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand",
+      "reset: rebuilds the scenario on arrival",
       "ambiguous result: the check says in words how close is close enough"
      ]
     },
@@ -78762,7 +78768,7 @@
      "kinds": [
       "captured-evidence"
      ],
-     "canvas": "quiet",
+     "canvas": "scene",
      "actions": [
       "record-values"
      ],
@@ -78775,7 +78781,7 @@
       "rubric": false,
       "validated": true
      },
-     "worldRunning": "inherited",
+     "worldRunning": false,
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
@@ -78821,7 +78827,7 @@
       "roles": []
      },
      "kinds": [],
-     "canvas": "quiet",
+     "canvas": "scene",
      "actions": [
       "read"
      ],
@@ -78834,7 +78840,7 @@
       "rubric": false,
       "validated": false
      },
-     "worldRunning": "inherited",
+     "worldRunning": false,
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
@@ -78903,7 +78909,7 @@
     "declaredButInert": 0,
     "prose": 4,
     "mismatched": 0,
-    "rebuilds": 0
+    "rebuilds": 1
    }
   },
   {
@@ -120606,11 +120612,11 @@
   "declaredButInert": 1254,
   "prose": 60,
   "mismatched": 8,
-  "rebuilds": 79,
+  "rebuilds": 81,
   "canvas": {
-   "scene": 0,
+   "scene": 8,
    "portrait": 7,
-   "quiet": 34,
+   "quiet": 26,
    "unstated": 1489
   },
   "lessons": 124,

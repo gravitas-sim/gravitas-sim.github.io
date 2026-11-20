@@ -1,33 +1,13 @@
 // =============================================================================
 // Extending an Experiment
-// -----------------------------------------------------------------------------
-// Content only, no imports. The companion of the compute page's notebook
-// "population-at-scale" (Roadmap II Prompt 102, COMPUTE.md). There is no
-// instrument on this page: the student runs the reviewed notebook at /compute/
-// on an experiment result the experiment runner writes (twenty planets of the
-// Binary Planet Lab, each started at a seeded random distance from Star A and
-// run by the engine) and types back the numbers the capsule holds. Every number
-// here is a declared output of that notebook (js/compute/catalogueData.js),
-// checked by tests/computeInvestigations.test.js against the notebook's own
-// answer (tests/fixtures/compute/population-at-scale.answer.json). The runs are
-// seeded: two students get the same digits.
-//
-// The numbers (slope 1, 200,000 synthetic planets, cutoff 3 unless stated):
-//   a.crit 0.255 +/- 0.0243 (setting 0.12 to 0.42; the edge of the unbound),
-//   bound fraction in the trials 0.600 +/- 0.110, in the extension 0.596 +/-
-//   0.076; slope 0: 0.451 +/- 0.081; cutoff 6: a.crit 0.289 +/- 0.0096,
-//   extension 0.701 +/- 0.028.
-//
-// `move-the-definition-yours` and `which-trial-moved` depend on a cutoff the
-// student chooses from a menu, so their expected numbers are tables here, one
-// row per choice (CUTOFF) and one per pair of cutoffs (MOVED). Each is copied
-// from tests/fixtures/compute/investigation-runs.json, written by
-// tools/compute-answers.mjs (the cutoff runs from the notebook's cells, the
-// moved trials from the experiment result with the notebook's classification
-// rule, checked against the notebook's bound counts), and
-// tests/computeInvestigations.test.js fails when a literal differs from it. A
-// lesson file is content only and a check sees only its own step's fields, so
-// each menu is a field of its step.
+// Content only, no imports. The student runs the compute page's reviewed
+// notebook "population-at-scale" on twenty seeded planets of the Binary Planet
+// Lab and types back the numbers its capsule holds. tests/
+// computeInvestigations.test.js holds every literal here to the notebook's own
+// answer and to tests/fixtures/compute/investigation-runs.json, written by
+// tools/compute-answers.mjs. `move-the-definition-yours` and `which-trial-moved`
+// take menu choices, so their expected numbers are tables (CUTOFF, MOVED); a
+// check sees only its own step, so each menu is a field of its step.
 // =============================================================================
 
 /** The run of the-fit: cutoff 3, the baseline every cutoff is compared with. */
@@ -275,6 +255,8 @@ const EXTENDING_AN_EXPERIMENT = {
     },
     {
       sid: 'move-the-definition-yours',
+      canvas: 'scene',
+      setup: { scenario: 'Binary Planet Lab', seed: 'binary', paused: true },
       compute: 'population-at-scale',
       type: 'measure',
       title: 'Move the definition',
@@ -364,9 +346,9 @@ const EXTENDING_AN_EXPERIMENT = {
              <strong>10</strong>; your last choice and the baseline's 3 are a natural pair.
              Run each on the compute page if you have not, and set the <em>bound trials</em>
              column of the notebook's two tables side by side. The table has ten bins of
-             starting distance, and its first column holds each bin's centre.
+             starting distance, and its first column holds each bin's center.
              Enter your two cutoffs, how many trials change class between them, and the
-             centre of the bin nearest the star where the bound count differs. If no bin
+             center of the bin nearest the star where the bound count differs. If no bin
              differs, enter 0 and write <strong>none</strong>.`,
       fields: [
         {
@@ -391,7 +373,7 @@ const EXTENDING_AN_EXPERIMENT = {
         },
         {
           id: 'where',
-          label: 'Nearest bin where the count differs (its centre), or none',
+          label: 'Nearest bin where the count differs (its center), or none',
           unit: '',
           kind: 'text',
           want: String(MOVED['3|6'][0][1]),
@@ -427,8 +409,8 @@ const EXTENDING_AN_EXPERIMENT = {
             message: !mine.length
               ? `No trial changes class between cutoffs ${lo} and ${hi}: none has a mean distance between ${lo} and ${hi} of its starting distances, so the two tables agree in every bin.`
               : mine.length === 1
-                ? `One trial changes class: the one that started at ${mine[0][0]}, in the bin centred on ${mine[0][1]}. Its mean distance is more than ${lo} and less than ${hi} of its starting distance, so it is unbound at the smaller cutoff and bound at the larger. One reclassification is enough to move the edge: an outcome is a definition, and the uncertainty of the extension does not include the choice of it.`
-                : `Two trials change class: the ones that started at ${mine[0][0]} and ${mine[1][0]}, in the bins centred on ${mine[0][1]} and ${mine[1][1]}. Each has a mean distance between ${lo} and ${hi} of its starting distance. An outcome is a definition, and the uncertainty of the extension does not include the choice of it.`,
+                ? `One trial changes class: the one that started at ${mine[0][0]}, in the bin centered on ${mine[0][1]}. Its mean distance is more than ${lo} and less than ${hi} of its starting distance, so it is unbound at the smaller cutoff and bound at the larger. One reclassification is enough to move the edge: an outcome is a definition, and the uncertainty of the extension does not include the choice of it.`
+                : `Two trials change class: the ones that started at ${mine[0][0]} and ${mine[1][0]}, in the bins centered on ${mine[0][1]} and ${mine[1][1]}. Each has a mean distance between ${lo} and ${hi} of its starting distance. An outcome is a definition, and the uncertainty of the extension does not include the choice of it.`,
           };
         }
         // "None" for a pair that moves a trial is not the answer of another pair: say they differ.
@@ -436,7 +418,7 @@ const EXTENDING_AN_EXPERIMENT = {
         if (mine.length && none)
           return {
             level: 'error',
-            message: `The bound counts do differ between cutoffs ${lo} and ${hi}. Compare the bound trials column of the two tables bin by bin, count how many trials change class, and give the centre of the bin nearest the star where they differ.`,
+            message: `The bound counts do differ between cutoffs ${lo} and ${hi}. Compare the bound trials column of the two tables bin by bin, count how many trials change class, and give the center of the bin nearest the star where they differ.`,
           };
         for (const a of cutoffs)
           for (const b of cutoffs)
@@ -448,7 +430,7 @@ const EXTENDING_AN_EXPERIMENT = {
         return {
           level: 'error',
           message: mine.length
-            ? `The bound counts do differ between cutoffs ${lo} and ${hi}. Compare the bound trials column of the two tables bin by bin, count how many trials change class, and give the centre of the bin nearest the star where they differ.`
+            ? `The bound counts do differ between cutoffs ${lo} and ${hi}. Compare the bound trials column of the two tables bin by bin, count how many trials change class, and give the center of the bin nearest the star where they differ.`
             : `No bound count differs between cutoffs ${lo} and ${hi}. If the tables agree in every bin, enter 0 and write none.`,
         };
       },

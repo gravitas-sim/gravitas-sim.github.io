@@ -1,34 +1,14 @@
 // =============================================================================
 // Integrators in Practice
-// -----------------------------------------------------------------------------
-// Content only, no imports. The companion of the compute page's notebook
-// "integrators-compared" (Roadmap II Prompt 102, COMPUTE.md). There is no
-// instrument on this page: the student runs the reviewed notebook at
-// /compute/ on the Kepler-16 system the Orbital System Builder saves, and
-// types back the numbers the notebook's capsule holds. Every number checked
-// here is a declared output of that notebook (js/compute/catalogueData.js),
-// and tests/computeInvestigations.test.js holds each one to the notebook's own
-// answer (tests/fixtures/compute/integrators-compared.answer.json) and the
-// 438-step run to Gravitas's own engine, so a changed notebook or engine fails
-// a test, not a student. The runs are deterministic: two students get the
-// same digits.
-//
-// The numbers (Kepler-16, three periods of the widest orbit):
-//   500 steps per period, 10,722 steps:  explicit Euler +49.75 %, symplectic
-//     Euler -0.002317 %, velocity Verlet +0.001768 %, Runge-Kutta 4 -6.47e-8 %
-//   1000 steps, 21,443 steps: Verlet +0.000442 %, RK4 -2.44e-9 %
-//   438 steps, 9,392 steps (the application's own step): Verlet +0.002304 %,
-//     RK4 -1.22e-7 %; the application's engine gave +0.002299 and -1.217e-7
-//   6 periods at 500 steps: explicit Euler +60.07 %, symplectic Euler +0.08515 %,
-//     velocity Verlet +0.0001587 %, Runge-Kutta 4 -1.046e-7 %
-//
-// The second run of `choose-the-second-step` is the student's choice of one of
-// four step counts, so its expected numbers are one set per choice (SECOND,
-// below). Each set is copied from tests/fixtures/compute/investigation-runs.json,
-// written by tools/compute-answers.mjs from the notebook's own cells, and
-// tests/computeInvestigations.test.js fails when a literal differs from it.
-// A lesson file is content only and a check sees only its own step's fields, so
-// the menu is a field of the step and the table is in this file.
+// Content only, no imports. The student runs the compute page's reviewed
+// notebook "integrators-compared" on the Kepler-16 system and types back the
+// numbers its capsule holds. tests/computeInvestigations.test.js holds every
+// literal here to the notebook's own answer and to the generated runs in
+// tests/fixtures/compute/investigation-runs.json (tools/compute-answers.mjs),
+// and the 438-step run to the application's own engine.
+// `choose-the-second-step` takes a menu choice, so its expected numbers are one
+// set per choice (SECOND); a check sees only its own step, so the menu is a
+// field of the step and the table lives in this file.
 // =============================================================================
 
 /**
@@ -249,6 +229,12 @@ const INTEGRATORS_IN_PRACTICE = {
     },
     {
       sid: 'choose-the-second-step',
+      canvas: 'scene',
+      setup: {
+        scenario: 'Circumbinary Planet Lab',
+        seed: 'binary',
+        paused: true,
+      },
       compute: 'integrators-compared',
       type: 'measure',
       title: 'Choose the second step',
