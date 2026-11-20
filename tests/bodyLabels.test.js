@@ -439,3 +439,39 @@ describe('what a label says', () => {
     expect(summaryText()).not.toContain('Reduced population');
   });
 });
+
+describe('the canvas width is not read every frame', () => {
+  test('a resize observer keeps it, and the frame reads the kept value', () => {
+    const observers = [];
+    globalThis.ResizeObserver = class {
+      constructor(cb) {
+        this.cb = cb;
+        observers.push(this);
+      }
+      observe() {}
+      disconnect() {}
+    };
+    try {
+      let reads = 0;
+      let css = 400;
+      const canvas = {
+        width: 800,
+        get clientWidth() {
+          reads++;
+          return css;
+        },
+      };
+      expect(frameScale(canvas)).toBe(2);
+      observers[0].cb();
+      const before = reads;
+      for (let i = 0; i < 5; i++) expect(frameScale(canvas)).toBe(2);
+      expect(reads).toBe(before);
+      css = 200;
+      observers[0].cb();
+      expect(frameScale(canvas)).toBe(4);
+    } finally {
+      delete globalThis.ResizeObserver;
+      frameScale({ clientWidth: 1000, width: 1000 });
+    }
+  });
+});

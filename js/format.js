@@ -156,16 +156,16 @@ export function decimal(value, sig = 3, locale) {
   // on, while "1.00", "0.750" and "80.0" do.
   const exponent = Math.floor(Math.log10(Math.abs(rounded)));
   const decimals = Math.max(0, Math.min(20, digits - 1 - exponent));
-  return typesetMinus(
-    inLocale(
-      rounded.toLocaleString('en-US', {
-        minimumFractionDigits: decimals,
-        maximumFractionDigits: decimals,
-      }),
-      locale
-    )
-  );
+  return typesetMinus(inLocale(fixedFormat(decimals).format(rounded), locale));
 }
+
+// toLocaleString builds a formatter per call; keep one per decimal count.
+const fixedFormats = [];
+const fixedFormat = d =>
+  (fixedFormats[d] ??= new Intl.NumberFormat('en-US', {
+    minimumFractionDigits: d,
+    maximumFractionDigits: d,
+  }));
 
 /**
  * Format a number for display, choosing decimal or scientific notation.

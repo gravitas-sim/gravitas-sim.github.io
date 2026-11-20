@@ -309,21 +309,8 @@ export function trailSpeedScale(trail) {
 // Slowest a trail point is drawn, as a fraction of full brightness.
 export const TRAIL_MIN_INTENSITY = 0.45;
 
-// The most glow sprites one trail blits per frame at the low tier.
+// At the low tier a glow trail blits at most this many sprites, spread over its span.
 export const LOW_GLOW_DOTS = 24;
-
-/**
- * The step between the trail points a glow trail draws. A trail covers a stated
- * span of simulated time at every tier (its samples are thinned, not cut), so at
- * the low tier a long trail holds a few hundred points; one sprite each was most
- * of a throttled frame. The low tier draws every stride-th point instead, from
- * the newest, so the dots still reach across the whole span. Other tiers draw
- * every point.
- *
- * @param {number} points - Points in the trail
- * @param {string} tier - The current quality tier
- * @returns {number} 1 or more
- */
 export function glowStride(points, tier) {
   return tier === 'low' ? Math.max(1, Math.ceil(points / LOW_GLOW_DOTS)) : 1;
 }
