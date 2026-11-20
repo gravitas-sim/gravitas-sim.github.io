@@ -68,7 +68,7 @@ test.describe('the central experiment of each investigation', () => {
     const id = 'goldilocks-question';
     const entry = declared(id);
     const { control } = controlOf(entry);
-    const [predictSid, exploreSid, measureSid] = entry.loop;
+    const [predictSid, measureSid] = entry.loop;
 
     await openInvestigation(page, app, id);
     const plan = await lessonPlan(page, id);
@@ -77,19 +77,26 @@ test.describe('the central experiment of each investigation', () => {
     const predict = await walkToSid(page, plan, predictSid);
     await commitPredictionHeld(page, predict);
 
-    // 2. the declared control, moved, on the declared screens
-    await walkToSid(page, plan, exploreSid);
-    expect(step(plan, exploreSid).tool).toBe(
+    // 2. the declared control, moved to three distances of the reader's own
+    //    (one twice another), each starlight taken from the panel by a press
+    await walkToSid(page, plan, measureSid);
+    expect(step(plan, measureSid).tool).toBe(
       entry.object === 'earth' ? 'hz-insolation' : null
     );
-    await walkToSid(page, plan, measureSid);
 
-    const d = [0.5, 1, 1.5, 2];
+    const d = [0.6, 1.2, 2.4];
     const at = {};
-    for (const au of d) {
+    const taken = {};
+    for (const [i, au] of d.entries()) {
       const { before, after } = await setControl(page, control, au);
-      if (au !== d[0]) expect(after).not.toEqual(before);
+      if (i) expect(after).not.toEqual(before);
       at[au] = reading(after, /starlight reaching/i);
+      await page.locator(`[data-take="s${i + 1}"]`).click();
+      taken[`s${i + 1}`] = await page
+        .locator(
+          `#investigationBody [data-field="${id}:${measureSid}:s${i + 1}"]`
+        )
+        .inputValue();
     }
 
     // 3. the relationship the lesson is about. Starlight spreads over the
@@ -100,22 +107,32 @@ test.describe('the central experiment of each investigation', () => {
       d.map(au => at[au])
     );
     expect(n, 'starlight goes as 1/d^2').toBeCloseTo(-2, 1);
-    expect(at[0.5] / at[2]).toBeGreaterThan(1);
+    expect(at[0.6] / at[2.4]).toBeGreaterThan(1);
+    expect(at[0.6] / at[1.2]).toBeCloseTo(4, 0);
+    for (const [i, au] of d.entries())
+      expect(
+        Number(taken[`s${i + 1}`]),
+        'a press takes the printed number'
+      ).toBe(Number(at[au].toFixed(2)));
 
-    // 4. the evidence, written down and kept
-    const evidence = {
-      d1: 0.5,
-      s1: at[0.5].toFixed(2),
-      d2: 1,
-      s2: at[1].toFixed(2),
-      d3: 2,
-      s3: at[2].toFixed(2),
-    };
+    // 4. the evidence, written down and kept. A distance typed where the
+    //    slider was not is refused in words; the right ones restore it.
+    const evidence = { d1: 0.6, d2: 1.2, d3: 2.4 };
+    const check = page.locator('#investigationBody [data-check-slot]');
+    await recordFields(page, id, measureSid, { d1: 0.9 });
+    await expect(check).toContainText(/not where the slider was/);
     await recordFields(page, id, measureSid, evidence);
-    await expectEvidenceRetained(page, id, measureSid, evidence);
+    await expect(check).toContainText(/Three readings, taken where you said/);
+    await expectEvidenceRetained(page, id, measureSid, {
+      ...evidence,
+      ...taken,
+    });
 
-    // 5. and only now is the prediction settled
+    // 5. and only now is the prediction settled, beside the readings
     await expectVerdictRevealed(page, plan, predict);
+    await expect(page.locator('#investigationBody .inv-verdict')).toContainText(
+      /Starlight at distance 1/
+    );
   });
 
   test('color-and-temperature: the peak wavelength is inversely proportional to the temperature @accepts:ce.color-and-temperature', async ({

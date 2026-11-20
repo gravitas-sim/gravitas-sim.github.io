@@ -2001,8 +2001,8 @@
         "js/habitabilityLimitsWidgets.js",
         "js/habitabilityWidgets.js"
       ],
-      "depths": { "core": 37, "quantitative": 5, "advanced": 4 },
-      "spanish_steps": { "core": 37, "deeper": 9 },
+      "depths": { "core": 36, "quantitative": 7, "advanced": 4 },
+      "spanish_steps": { "core": 36, "deeper": 11 },
       "languages": ["en", "es"],
       "sequences": [
         { "id": "planets-and-exoplanets", "position": 4 },

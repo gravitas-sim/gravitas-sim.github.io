@@ -6,7 +6,7 @@
 import { describe, test, expect } from '@jest/globals';
 import { insetFromBoxes } from '../js/lesson/stage.js';
 import { orbitPoints } from '../js/lessonFrame.js';
-import { fitCamera } from '../js/lesson/stage.js';
+import { fitCamera, placedOf } from '../js/lesson/stage.js';
 import {
   readProgress,
   writeProgress,
@@ -72,6 +72,40 @@ describe('what the camera is fitted to', () => {
     const sy = -20 * cam.zoom + cam.pan.y + 400;
     expect(sx).toBeCloseTo(200, 6);
     expect(sy).toBeCloseTo(100 + (800 - 400) / 2, 6);
+  });
+});
+
+describe('the size a staged star is fitted at', () => {
+  test('is the radius it is drawn at when a lesson sets one', () => {
+    const star = (radius, stageRadius) => ({
+      star: { pos: { x: 1, y: 2 }, radius, stageRadius },
+    });
+    expect(placedOf([star(3, 40)])[0].radius).toBe(40);
+    expect(placedOf([star(3, undefined)])[0].radius).toBe(3);
+  });
+});
+
+describe('how far in a fit may go', () => {
+  const view = { width: 600, height: 400 };
+  const system = [
+    { x: 0, y: 0, radius: 0.001 },
+    { x: 0.02, y: 0.01, radius: 0.0005 },
+  ];
+  test('a shelf stops at the default cap of 3', () => {
+    expect(fitCamera(system, view).zoom).toBe(3);
+  });
+  test('a scene of small extent fills its room when the cap is lifted', () => {
+    const camera = fitCamera(system, view, { maxZoom: 100 });
+    expect(camera.zoom).toBe(100);
+    const wide = fitCamera(
+      [
+        { x: -4, y: 0, radius: 0.001 },
+        { x: 4, y: 0, radius: 0.001 },
+      ],
+      view,
+      { maxZoom: 100 }
+    );
+    expect(wide.zoom).toBeCloseTo((600 * 0.78) / 10, 3);
   });
 });
 

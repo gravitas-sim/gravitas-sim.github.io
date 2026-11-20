@@ -17,7 +17,8 @@
 const HZ_LAB = {
   scenario: 'Solar System',
   seed: 'goldilocks',
-  camera: { zoom: 1.5, pan: { x: 0, y: 0 } },
+  // No camera of its own: the scene is fitted to the room the panels leave, so
+  // the Sun is not left under the step text on a narrow window.
   paused: false,
 };
 
@@ -139,6 +140,15 @@ const zoneRows = ctx => {
   ];
 };
 
+/** A step this lesson replaced, with its successor and what it asked. */
+const WAS = (to, en, es) => ({ to, release: '3.1', was: { en, es } });
+
+/** The three readings of the measuring step, as the evidence a reveal sets beside a prediction. */
+const THREE_READINGS = ['d1', 's1', 'd2', 's2', 'd3', 's3'].map(field => ({
+  step: 'three-distances-yours',
+  field,
+}));
+
 const GOLDILOCKS = {
   id: 'goldilocks-question',
   thumbnail: 'images/scenarios/habitable-zone-lab.webp',
@@ -159,6 +169,18 @@ const GOLDILOCKS = {
   // the whole set without a second list to keep in step.
   tags: ['exoplanets', 'habitability'],
   lock: { placement: true, inspector: true, areaSweep: false },
+  retired: {
+    'three-distances': WAS(
+      'three-distances-yours',
+      'Set the planet to 0.5, 1 and 2 AU in turn and read the starlight at each.',
+      'Poner el planeta a 0,5, 1 y 2 UA por turno y leer la luz estelar en cada una.'
+    ),
+    'write-the-three-down': WAS(
+      'three-distances-yours',
+      'Type the starlight read at 0.5, 1 and 2 AU beside each distance.',
+      'Escribir la luz estelar leída a 0,5, 1 y 2 UA junto a cada distancia.'
+    ),
+  },
   objectives: [
     'Explain why the starlight reaching a planet falls off rapidly with distance, and use the twice-as-far, one-quarter rule',
     'Explain why a dim star’s habitable zone lies close in and a luminous star’s lies far out',
@@ -215,7 +237,7 @@ const GOLDILOCKS = {
     {
       sid: 'move-it-twice-as-far',
       type: 'predict',
-      reveal: 'three-distances',
+      reveal: 'what-the-graph-says',
       title: 'Move it twice as far out',
       body: `Now imagine picking the Earth up and putting it down at 2 AU,
              twice as far from the Sun as it is now. The Sun is unchanged. The
@@ -234,49 +256,53 @@ const GOLDILOCKS = {
         'One quarter. Half is the answer almost everyone reaches for, and it is worth noticing why it is wrong: the light is not being divided along a line, it is being spread over a surface. Double the distance and that surface is four times bigger. You are about to measure this rather than take it on trust.',
     },
     {
-      sid: 'three-distances',
-      type: 'explore',
-      title: 'Three distances',
-      body: `The slider moves the planet. Take a reading at each of the three
-             distances below and write the numbers down, or keep this panel open:
-             the next screen asks you to record them.
-             \n\nThe number to read is the one labeled <strong>starlight
-             reaching each square meter</strong>.`,
-      tool: {
-        id: 'hz-insolation',
-        values: { distance: 1 },
-        title: 'Move the planet',
-        note: 'Use the buttons underneath for the three distances, or drag the slider anywhere in between.',
-      },
-      checklist: [
-        'Set the planet to 0.5 AU and read the starlight',
-        'Set it to 1 AU and read it again',
-        'Set it to 2 AU and read it a third time',
-        'Notice what happened between 1 AU and 2 AU',
-      ],
-      tip: 'The bar changes length and the number under it changes with it. Both say the same thing; the bar is there so the change is visible before you read the digits.',
-    },
-    {
-      sid: 'write-the-three-down',
+      sid: 'three-distances-yours',
       type: 'measure',
-      title: 'Write the three down',
-      body: `Set the slider to each distance in turn and type what the panel
-             reads. The instrument and the graph are both on this screen, so
-             nothing has to be remembered from the last one: read a value,
-             enter it, watch the point land.`,
+      title: 'Three distances of your own',
+      body: `The panel is the Sun with one planet on a slider. Choose three
+             distances of your own, and make one of them twice another, so that
+             you test what you predicted.
+             \n\nFor each distance, set the slider, press <strong>Take
+             reading</strong> beside the starlight, and type the distance you
+             set. The number to read is the one labeled <strong>starlight
+             reaching each square meter</strong>. Your points land on the graph
+             as you record them.`,
       fields: [
-        { id: 'd1', label: 'Distance 1', unit: 'AU', want: '0.5' },
-        { id: 's1', label: 'Starlight there', unit: 'Earths', want: '4' },
+        {
+          id: 'd1',
+          label: 'Distance 1',
+          unit: 'AU',
+          want: '0.5',
+        },
+        {
+          id: 's1',
+          label: 'Starlight at distance 1',
+          unit: 'Earths',
+          want: '4',
+          source: { tool: 'starlight' },
+        },
         { id: 'd2', label: 'Distance 2', unit: 'AU', want: '1' },
-        { id: 's2', label: 'Starlight there', unit: 'Earths', want: '1' },
+        {
+          id: 's2',
+          label: 'Starlight at distance 2',
+          unit: 'Earths',
+          want: '1',
+          source: { tool: 'starlight' },
+        },
         { id: 'd3', label: 'Distance 3', unit: 'AU', want: '2' },
-        { id: 's3', label: 'Starlight there', unit: 'Earths', want: '0.25' },
+        {
+          id: 's3',
+          label: 'Starlight at distance 3',
+          unit: 'Earths',
+          want: '0.25',
+          source: { tool: 'starlight' },
+        },
       ],
-      validate: v => {
+      validate: (v, _ctx, got = {}) => {
         const rows = [
-          [v.d1, v.s1],
-          [v.d2, v.s2],
-          [v.d3, v.s3],
+          [v.d1, v.s1, 1],
+          [v.d2, v.s2, 2],
+          [v.d3, v.s3, 3],
         ].filter(([d, s]) => Number.isFinite(d) && Number.isFinite(s));
         if (rows.length < 2) return null;
         if (rows.some(([d, s]) => d <= 0 || s <= 0)) {
@@ -285,22 +311,54 @@ const GOLDILOCKS = {
             message: 'Distances and starlight are both positive numbers.',
           };
         }
-        // Every row should satisfy S x d^2 = 1 for a one-solar-luminosity star.
+        const moved = rows.find(([d, , i]) => {
+          const at = got[`s${i}`]?.s?.distance;
+          return Number.isFinite(at) && Math.abs(at - d) > 0.005;
+        });
+        if (moved) {
+          return {
+            level: 'warn',
+            message: `Row ${moved[2]} has a distance that is not where the slider was when you took its reading. Type the distance you set, or take the reading again.`,
+          };
+        }
+        // The star is the Sun, so every honest reading has the same
+        // starlight x distance x distance. Judged against that one number, so
+        // a uniform slip is caught as well as a stray row.
         const products = rows.map(([d, s]) => s * d * d);
-        const spread =
-          (Math.max(...products) - Math.min(...products)) /
-          (products.reduce((a, b) => a + b, 0) / products.length);
-        if (spread > 0.35) {
+        if (products.some(p => Math.abs(p - 1) > 0.12)) {
+          const mean = products.reduce((a, b) => a + b, 0) / products.length;
+          const spread = (Math.max(...products) - Math.min(...products)) / mean;
           return {
             level: 'warn',
             message:
-              'These do not all sit on the same relationship. Check that each starlight value was read at the distance beside it.',
+              spread < 0.12
+                ? 'Your rows agree with each other but not with the panel. Read each starlight from the panel at the distance beside it.'
+                : 'These readings do not belong together. The usual cause is a starlight read at a different distance from the one beside it: check each row against the slider position that produced it.',
+          };
+        }
+        if (rows.length < 3) return null;
+        const ds = rows.map(([d]) => d);
+        const span = Math.max(...ds) / Math.min(...ds);
+        if (new Set(ds).size < 3 || span < 2) {
+          return {
+            level: 'warn',
+            message:
+              'Your distances are too close together for a curve to show. Spread them so that the farthest is at least twice the nearest.',
+          };
+        }
+        const doubling = ds.some(a =>
+          ds.some(b => a !== b && Math.abs(b / a - 2) <= 0.1)
+        );
+        if (!doubling) {
+          return {
+            level: 'warn',
+            message:
+              'Your readings agree. Your prediction was about twice the distance, so make one of your three distances twice another.',
           };
         }
         return {
           level: 'ok',
-          message:
-            'Every one of your readings satisfies starlight x distance x distance = 1. That is the pattern, already in your own numbers.',
+          message: `Three readings, taken where you said, over a factor of ${Math.round(span * 10) / 10} in distance. Look at the points on the graph before you read on.`,
         };
       },
       plot: {
@@ -317,20 +375,24 @@ const GOLDILOCKS = {
       },
       tool: {
         id: 'hz-insolation',
-        values: { distance: 0.5 },
-        title: 'Read each distance here',
-        note: 'Drag the slider to 0.5, then 1, then 2 AU. Type each reading into the boxes.',
+        values: { distance: 1.5 },
+        presets: false,
+        title: 'Move the planet',
+        note: 'The slider runs from 0.3 to 3 AU in steps of 0.05; the arrow keys move it one step.',
       },
-      tip: 'The three suggested distances are only suggestions. Any three will do, as long as the starlight value beside each one was read at that distance.',
+      tip: 'Any three distances will do, as long as the starlight beside each one was read at that distance and one is twice another.',
     },
     {
       sid: 'what-the-graph-says',
       type: 'question',
       title: 'What the graph says',
       kind: 'choice',
-      body: `Look at the curve your three points make. It starts high on the
-             left, drops steeply, and then flattens out as it goes right without
-             ever quite reaching zero.`,
+      evidence: THREE_READINGS,
+      compare:
+        'Find your two distances that are one twice the other, and set how much the starlight fell between them beside what you predicted.',
+      body: `Your prediction and your three readings are below. Look at the
+             curve your three points make, and at how the starlight changes as
+             the planet moves out.`,
       prompt:
         'As a planet moves further from its star, the starlight it receives…',
       options: [
@@ -357,7 +419,7 @@ const GOLDILOCKS = {
       checklist: [
         'At 1 AU, note how large the lit patch is.',
         'Move out to 2 AU. The shell has twice the radius. Read how many times bigger its area is.',
-        'Move out to 3 AU and then 4 AU, reading the area each time: 1, 4, 9, 16.',
+        'Move out to 3 AU and then 4 AU, reading the area each time. How does the area grow with the radius?',
         'Notice the bottom line of the panel: the total energy crossing the shell never changes.',
       ],
       tool: {
@@ -380,14 +442,13 @@ const GOLDILOCKS = {
       },
       sid: 'writing-it-down-then-using',
       // "The areas you just read off" are the three recorded there.
-      requires: ['write-the-three-down'],
+      requires: ['three-distances-yours'],
       type: 'question',
       title: 'Writing it down, then using it',
       kind: 'numeric',
-      body: `The areas you just read off were 1, 4, 9 and 16: the squares of
-             1, 2, 3 and 4. That is not a coincidence about shells, it is what
-             the surface of a sphere does. Double the radius and the area goes
-             up by four.
+      body: `The areas you just read off grew as the square of the radius.
+             That is not a coincidence about shells, it is what the surface of a
+             sphere does. Double the radius and the area goes up by four.
              \n\nSame energy, four times the area, a quarter as much on each
              square meter. Written down:
              \n\n<strong>starlight ∝ 1 / d²</strong>
@@ -396,7 +457,7 @@ const GOLDILOCKS = {
              rearrange it. What matters is the sentence: <strong>twice as far,
              one quarter as much</strong>.
              \n\nSo, without the panel: a planet sits three times as far from
-             its star as Earth is from the Sun. Three squared is nine.`,
+             its star as Earth is from the Sun.`,
       prompt: 'Starlight at 3 AU, in Earths',
       unit: 'Earths',
       answer: 0.111,
@@ -413,9 +474,9 @@ const GOLDILOCKS = {
       body: `So far the star has been the Sun and only the planet has moved. Now
              turn it around.
              \n\nPut a planet at 1 AU, exactly where Earth is, and swap the Sun
-             for a red dwarf: a small, cool, very faint star. Red dwarfs are the
-             commonest kind of star in the galaxy by a wide margin, and the
-             nearest star to the Sun is one.`,
+             for a red dwarf: a small, cool star. Red dwarfs are the commonest
+             kind of star in the galaxy by a wide margin, and the nearest star
+             to the Sun is one.`,
       prompt: 'That planet, still at 1 AU, would now receive…',
       options: [
         'the same starlight, because it has not moved',
@@ -448,7 +509,7 @@ const GOLDILOCKS = {
         'Switch to the orange dwarf, then to the brighter star',
         'Look at the luminosity row each time, and at the starlight row',
       ],
-      tip: 'A star about 670 times fainter delivers about 670 times less light to a planet at the same distance.',
+      tip: 'The red dwarf’s luminosity is about 670 times less than the Sun’s. Check that against the luminosity row, then look at the starlight row.',
     },
     {
       sid: 'what-luminosity-does',
@@ -472,42 +533,40 @@ const GOLDILOCKS = {
       sid: 'so-where-would-a-planet',
       type: 'explore',
       title: 'So where would a planet have to be?',
-      body: `Put those two together and an obvious question follows. If a dim
-             star delivers far less light, then a planet would have to sit far
-             closer to it to receive as much as Earth receives from the Sun.
-             \n\nAstronomers turn that into a band, and the panel now draws one:
-             the range of distances where the starlight is in a range that could
-             permit liquid water at the surface, given suitable conditions on the
-             planet. It is bounded by a dashed line on the hot side and a dotted
-             line on the cold side, and the numbers underneath give its inner and
-             outer edges for whichever star is showing.
-             \n\nChange the star and watch the band rather than the planet.`,
+      body: `Put those two together and a question follows. A planet at 1 AU from
+             a dim star gets very little light. How far from the dim star would
+             it have to sit to receive as much as Earth receives from the Sun?
+             And from a brighter star?
+             \n\nThe panel opens on the Sun, with a planet at 1 AU, and now
+             draws a band: the range of distances where the starlight is in a
+             range that could permit liquid water at the surface, given suitable
+             conditions on the planet. It is bounded by a dashed line on the hot
+             side and a dotted line on the cold side, and the numbers underneath
+             give its inner and outer edges for whichever star is showing.
+             \n\nChange the star, then move the planet to find the distance you
+             want, and watch the band as well as the planet.`,
       tool: {
         id: 'hz-star',
-        // 0.04 rather than 0.05: on the control's 0.02 grid, so a student who
-        // drags the planet can put it back, and a better illustration of the
-        // sentence above it - at 0.04 AU this red dwarf delivers 0.94 times
-        // Earth's insolation, which is the "far closer to receive as much"
-        // being described. 0.05 delivered 0.60 and was on no grid line.
-        values: { star: 0, distance: 0.04 },
+        values: { star: 2, distance: 1 },
         showZone: true,
         title: 'The band appears',
         note: 'The shaded band is a calculated range of orbital distances, not a physical region of space. Nothing is there. The distance scale changes with the star, so read the axis rather than the pixels.',
       },
       checklist: [
-        'On the dim red dwarf, read where the band begins and ends',
-        'Switch to the Sun and read the band again',
-        'Switch to the brighter star and read it a third time',
+        'Choose the dim red dwarf. Move the planet in until it receives about one Earth of starlight, and note the distance',
+        'Choose the hotter, brighter star and move the planet out until it receives about one Earth, and note that distance',
+        'On each star, read where the band begins and ends and compare it with the distance you found',
         'Put the planet inside the band for each star in turn',
       ],
-      tip: 'For the red dwarf the band runs from about 0.042 to 0.080 AU. For the bright star it runs from about 2.1 to 3.6 AU. That is a factor of fifty between them, and it is entirely the star’s doing.',
+      tip: 'The band is calculated from the star alone: moving the planet never moves it. The calculator covers stars from 2600 to 7200 K only. Outside that range it gives no limits, and you say so rather than guess.',
     },
     {
       sid: 'dim-stars-close-bands',
       type: 'question',
       title: 'Dim stars, close bands',
       kind: 'choice',
-      body: `You have watched the band jump around as the star changed.`,
+      body: `You have moved the planet to find where one Earth of starlight sits
+             for each star, and watched the band move with the star.`,
       prompt:
         'Compared with the Sun’s, the band around a much dimmer star lies…',
       options: [
@@ -746,8 +805,7 @@ const GOLDILOCKS = {
       kind: 'numeric',
       body: `You do not need a climate model to see why Venus is a hard case.
              Venus orbits at 0.72 AU. Use the rule from the first half of this
-             investigation: starlight goes as 1 / d².
-             \n\n0.72 squared is about 0.52.`,
+             investigation: starlight goes as 1 / d². Work it out first.`,
       prompt: 'Starlight at Venus, in Earths',
       unit: 'Earths',
       answer: 1.92,

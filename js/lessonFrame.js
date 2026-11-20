@@ -42,7 +42,7 @@ function boxesOf(selectors, early = false) {
 export function lessonInset() {
   const view = { width: window.innerWidth, height: window.innerHeight };
   if (view.width <= SHEET_MAX_WIDTH)
-    return insetFromBoxes(boxesOf(SHEET_PARTS), view);
+    return insetFromBoxes(boxesOf([...SHEET_PARTS, '#overlay']), view);
   let left = 0;
   let right = 0;
   for (const b of boxesOf(
@@ -148,7 +148,7 @@ export function requestFit(on = true) {
 }
 
 /** Put the points in the clear region, in the canvas's own pixels, y up. */
-export function fitNow(points) {
+export function fitNow(points, maxZoom = 3) {
   const canvas = document.getElementById('simulationCanvas');
   const scale = canvas?.clientWidth ? canvas.width / canvas.clientWidth : 1;
   const inset = lessonInset();
@@ -157,6 +157,7 @@ export function fitNow(points) {
     points.map(p => ({ x: p.x - off.x, y: p.y - off.y, radius: p.radius })),
     { width: window.innerWidth * scale, height: window.innerHeight * scale },
     {
+      maxZoom,
       ...(window.innerWidth <= SHEET_MAX_WIDTH && { margin: 0.1 }),
       inset: {
         left: (inset.left || 0) * scale,
@@ -170,12 +171,33 @@ export function fitNow(points) {
   state.zoom = camera.zoom;
   state.pan = camera.pan;
   fitted = true;
+  watchLayout();
   return true;
 }
 
+// A fit taken before an instrument or plot finished opening is taken again when
+// a panel changes size (while the reader has not touched the view).
+let watcher = null;
+function watchLayout() {
+  if (!window.ResizeObserver) return;
+  watcher ??= new window.ResizeObserver(() => refit());
+  for (const el of document.querySelectorAll(
+    [...SHEET_PARTS, '#mainControls'].join(',')
+  ))
+    watcher.observe(el);
+}
+
+/** What to frame, and how far in it may go: a shelf stops at 3, a scene fills its room. */
 const framed = () => {
   const stars = stagedStars();
-  return stars.length ? placedOf(stars) : boundPoints();
+  if (stars.length) return [placedOf(stars)];
+  const bound = boundPoints();
+  if (bound.length) return [bound, bound.length > 1 ? 100 : 3];
+  // A scenario the step binds nothing in: the whole world it loads.
+  return [
+    allBodies().map(b => ({ x: b.pos.x, y: b.pos.y, radius: b.radius })),
+    100,
+  ];
 };
 
 /** Perform a fit that was asked for, once the panels can be measured. */
@@ -195,7 +217,7 @@ export function takeFit() {
     applied = null;
     return false;
   }
-  const done = fitNow(framed());
+  const done = fitNow(...framed());
   applied = done ? { zoom: state.zoom, pan: { ...state.pan } } : null;
   return done;
 }

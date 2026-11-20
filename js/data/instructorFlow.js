@@ -660,12 +660,12 @@ export default {
       {
         from: 'what-does-earth-get-from',
         to: 'what-the-graph-says',
-        text: 'Insolation is introduced with Earth as the unit. Students predict what doubling the distance does, measure three distances with the instrument and the graph on the same screen, and read the curve their own points make.',
+        text: 'Insolation is introduced with Earth as the unit. Students predict what doubling the distance does, take readings at three distances of their own, one twice another, and read the curve their own points make.',
       },
       {
         from: 'the-star-is-not-running',
         to: 'writing-it-down-then-using',
-        text: 'Only now the explanation. Students step a shell outward one astronomical unit at a time and read off the areas 1, 4, 9, 16 before the inverse-square relation is written down, then apply it at an unfamiliar distance.',
+        text: 'Only now the explanation. Students step a shell outward one astronomical unit at a time and read off the areas before the inverse-square relation is written down, then apply it at an unfamiliar distance.',
       },
       {
         from: 'leave-the-planet-change-the',
