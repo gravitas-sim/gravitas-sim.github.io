@@ -39,6 +39,8 @@ import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { verifyRelease } from './verify-release.mjs';
+import { applyOverlay, OVERLAY_FILE } from './route-overlay.mjs';
+import { withPolicy } from './csp.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const REPO = path.resolve(HERE, '..');
@@ -209,7 +211,28 @@ export function preparePages(opts = {}) {
   exportTree(commit, pristine, repo);
 
   try {
-    for (const page of STAMPED_PAGES) stampPage(path.join(out, page), commit);
+    // Routes published from the build (tools/route-overlay.mjs), only when
+    // the deploy asks for them: the built page and its files over the tree's,
+    // stamped and policed like the tree's own pages, and allowed through the
+    // guard below by name.
+    const overlay = opts.overlay
+      ? applyOverlay(out, { dist: opts.overlay, inputs: opts.overlayInputs })
+      : null;
+    const overlayPages = overlay ? overlay.routes.map(r => r.page) : [];
+    const allowed = new Set([
+      ...ALLOWED_CHANGES,
+      ...(overlay
+        ? [OVERLAY_FILE, ...overlay.routes.flatMap(r => [r.page, ...r.files])]
+        : []),
+    ]);
+    for (const page of overlayPages) {
+      const html = readFileSync(path.join(out, page), 'utf8');
+      if (withPolicy(page, html) !== html)
+        problems.push(`${page}: its policy does not match its inline scripts`);
+    }
+
+    for (const page of [...STAMPED_PAGES, ...overlayPages])
+      stampPage(path.join(out, page), commit);
 
     // The manifest's version is a sha256 over the CONTENTS of everything it
     // precaches, index.html included. Stamping changes those bytes, so the
@@ -230,6 +253,7 @@ export function preparePages(opts = {}) {
           runId: opts.runId ?? null,
           runAttempt: opts.runAttempt ?? null,
           deployedAt: new Date().toISOString(),
+          overlay: overlay ? overlay.routes.map(r => r.id) : [],
           workflow: opts.workflow ?? null,
         },
         null,
@@ -253,8 +277,8 @@ export function preparePages(opts = {}) {
 
     // Only the changes this job is supposed to make.
     const diff = treeDifference(out, pristine);
-    const unexpected = diff.changed.filter(f => !ALLOWED_CHANGES.includes(f));
-    const strays = diff.added.filter(f => !ALLOWED_CHANGES.includes(f));
+    const unexpected = diff.changed.filter(f => !allowed.has(f));
+    const strays = diff.added.filter(f => !allowed.has(f));
     if (unexpected.length) {
       problems.push(
         `these files differ from the commit and should not: ${unexpected.join(', ')}`
@@ -268,7 +292,7 @@ export function preparePages(opts = {}) {
     }
 
     // And the four artifacts have to describe ONE candidate.
-    for (const page of STAMPED_PAGES) {
+    for (const page of [...STAMPED_PAGES, ...overlayPages]) {
       const file = path.join(out, page);
       if (!existsSync(file)) continue;
       const found = stampedCommit(file);

@@ -53,7 +53,7 @@ const BUDGETS = [
   {
     id: 'initial',
     label: 'Initial download (CSS + eager JS)',
-    limit: 741.4,
+    limit: 741.5,
     reason:
       'Was 743 KB when this budget was first asked for. The application had ' +
       'already grown to 771 KB on its own - the extracted state module, the ' +
@@ -117,7 +117,8 @@ const BUDGETS = [
       '\n\nCrowded-scene drawing (D-R4-450-07): the trail, detail and label rules, the label choice and the tier note are start-up drawing code; raised from 735.3 to 735.8 KB, the exact overrun of a Node 22 build over v4 dc0112f6b (753,420 bytes, 735.76 KB) rounded up to 0.1 KB, under the standing approval of 2026-10-10.' +
       '\n\nRaised from 735.8 to 739.9 KB for the overlay, Library, lesson type, instrument start, reading feedback and lesson layout changes taken together (D-R4-TRAIN-03): a Node 22 build over v4 5c9942253 measures 757,604 bytes, 739.85 KB, and the limit is that figure rounded up to 0.1 KB, under the standing approval of 2026-10-10.' +
       '\n\nOrbit geometry and sizes (D-R4-447-07): raised from 739.9 to 740.2 KB, the exact overrun of a Node 22 build over v4 6852131e7 (757,903 bytes, 740.14 KB) rounded up to 0.1 KB, under the standing approval of 2026-10-10.' +
-      '\n\nBarycenter marker, frame and source statement, and lesson figures drawn from the model, taken together (D-R4-TRAIN-04): raised from 740.2 to 741.4 KB, the measurement by CI of the combined branch (run 44415955830): 759,138 bytes (741.35 KB), rounded up to 0.1 KB. The share of the lesson figures is 69 bytes, the hook that loads them. Under the standing approval of 2026-10-10; that share was adopted as a maintainer decision of 2026-11-18 (D-R4-457-03).',
+      '\n\nBarycenter marker, frame and source statement, and lesson figures drawn from the model, taken together (D-R4-TRAIN-04): raised from 740.2 to 741.4 KB, the measurement by CI of the combined branch (run 44415955830): 759,138 bytes (741.35 KB), rounded up to 0.1 KB. The share of the lesson figures is 69 bytes, the hook that loads them. Under the standing approval of 2026-10-10; that share was adopted as a maintainer decision of 2026-11-18 (D-R4-457-03).' +
+      '\n\nLesson openings and endings, merged with the masses kept off the weighing steps (D-R4-456-06): raised from 741.4 to 741.5 KB, the measurement of the combined tree on a Node 22.23.4 build: 759,287 bytes (741.49 KB), rounded up to 0.1 KB. Each change fitted alone; together they are 149 bytes above the last measurement. Under the standing approval of 2026-10-10.',
   },
   {
     id: 'deferred',
