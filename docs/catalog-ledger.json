@@ -4395,8 +4395,8 @@
         "js/data/investigations/joint-sequence.js"
       ],
       "instrument_files": ["js/exoplanetWidgets.js", "js/jointWidgets.js"],
-      "depths": { "core": 38, "quantitative": 0, "advanced": 4 },
-      "spanish_steps": { "core": 38, "deeper": 4 },
+      "depths": { "core": 39, "quantitative": 0, "advanced": 4 },
+      "spanish_steps": { "core": 39, "deeper": 4 },
       "languages": ["en", "es"],
       "sequences": [{ "id": "planets-and-exoplanets", "position": 1 }],
       "courses": [
@@ -4419,27 +4419,88 @@
       },
       "open_items": [
         {
-          "ref": "D-R10-279-04",
+          "ref": "D-R4-354-02",
           "owner": 354,
-          "note": "Two exoplanet instruments are among the six that start by themselves"
+          "note": "For Carl: arming the period watch for the student is refused by the author rule interaction/auto-arm (the period field is in days); waive it for this step with a reason, or leave the student's own Arm"
         }
       ],
-      "questions": { "Q1": "", "Q2": "", "Q3": "", "Q4": "", "Q5": "" },
-      "leak": {
-        "L1": "HOLDS: no field cue or step placeholder holds a numeral at any depth, in either language, and the panel renders none that does (tests/fieldCue.test.js); the expected value is the field's `want`, which no page reads.",
-        "L2": "",
-        "L3": "",
-        "L4": "",
-        "L5": ""
+      "questions": {
+        "Q1": "The student watches a star go round a point it shares with a planet, takes the star's own orbit for a light and a heavy planet, builds the radial-velocity curve on the live panel and takes its half-range, then searches for the planet mass whose K reproduces it: measured or worked on the live Exoplanet Characterization Lab and the analytic instruments, which a paragraph could not show.",
+        "Q2": "Each moving diagram says it waits for Run; each step names its box, its button and what to take; the prediction about a heavier planet reveals at the step that sets it beside the two readings.",
+        "Q3": "Scene, panel, instruments and prose name the same star, planet, K (the panel's half-range), AU and Jupiter masses, in both languages.",
+        "Q4": "The student chooses the two masses and when to take each reading, how many cycles to time for the period, whether to take K or type it and when the curve has turned at both ends, and which mass reproduces the K they took; each can be done badly (equal masses, a peak-to-peak K, a mass off by a factor of two).",
+        "Q5": "Met by the advanced steps (the star's share of the planet's uncertainty, jitter and a star that does not fit the transit); they are unchanged apart from a pointer."
       },
-      "task_rule_items": [],
-      "editorial": "OPEN",
-      "redesign": "OPEN",
-      "reason": "",
-      "step_revisions": [],
+      "leak": {
+        "L1": "HOLDS: the K box and the period box start empty and carry no hint; no field cue or placeholder holds a numeral (tests/fieldCue.test.js); the expected value is the field's `want`, which no page reads.",
+        "L2": "HOLDS: reflex-motion, rv-observer and rv-mass open at 0.3 or 0.25 Jupiter masses without the preset that names the real planet; rv-inclination opens at 0.25 (K well away from the K to match); planet-characterization opens on 1 and 1 (tests/findingPlanetsByTug.test.js).",
+        "L3": "HOLDS: the s3 body and because no longer give the planet's mass or the star-to-planet ratio; the heavier-planet prediction is held until the two readings are taken.",
+        "L4": "HOLDS: no step before the weighing says 84, 0.69, two thirds or seventeen (tested); the weighing's method hint no longer gives the K.",
+        "L5": "HOLDS: no description, probe row or because shows the K or the mass before it is taken; the instructor text keeps the key."
+      },
+      "task_rule_items": [
+        "T1: K and the star's orbit are taken from what the panel and the instrument print, with provenance; the density is worked out by the student, not read.",
+        "T2: the prediction returns at its reveal beside the student's two readings (K3).",
+        "T4: the transfer (three candidates) is unchanged.",
+        "T5: the peak-to-peak and Earth-density misconceptions are kept; the new equal-readings step warns without stating a direction.",
+        "NOT BUILT (D-R4-354-02): K5, arming the period watch for the student."
+      ],
+      "editorial": "REVISED",
+      "redesign": "REVISED",
+      "reason": "FOCUSED: neutral starts, captured K, a Run control and a density the student computes (register D-R4-354-01, -02, -03).",
+      "step_revisions": [
+        {
+          "sid": "which-one-moves",
+          "change": "REWORDED: the body and because no longer give the planet's mass or the star-to-planet ratio."
+        },
+        {
+          "sid": "both-of-them-go-round",
+          "change": "REWORDED: waits for Run; opens at a light planet without the preset that names the real one."
+        },
+        {
+          "sid": "read-the-two-wobbles",
+          "change": "INSERTED: takes the star's own orbit at a light and at a heavy planet."
+        },
+        {
+          "sid": "watch-it-grow",
+          "change": "REWORDED: the reveal of the heavier-planet prediction sets it beside the two readings."
+        },
+        {
+          "sid": "toward-away-toward-again",
+          "change": "REWORDED: waits for Run; opens at 0.25 Jupiter masses."
+        },
+        {
+          "sid": "measure-the-period",
+          "change": "REWORDED: the student decides how many cycles to time."
+        },
+        {
+          "sid": "read-k-off-the-panel",
+          "change": "REWORDED: takes the panel's half-range with provenance into an empty box, or types it."
+        },
+        {
+          "sid": "one-thing-at-a-time",
+          "change": "REWORDED: opens at 0.25 without the preset that names the real planet."
+        },
+        {
+          "sid": "weigh-hd-209458-b",
+          "change": "REWORDED: search for the mass that reproduces your K from an instrument that opens at 0.25; answer and tolerance unchanged."
+        },
+        {
+          "sid": "characterize-the-planet",
+          "change": "REWORDED: opens on a Jupiter of its own; the student sets the transit radius and their mass."
+        },
+        {
+          "sid": "how-dense-is-it",
+          "change": "REVISED: retired, successor density-from-your-mass (3.1)."
+        },
+        {
+          "sid": "density-from-your-mass",
+          "change": "NEW ID: the density worked out from the student's own mass and the transit radius, then checked against the panel."
+        }
+      ],
       "walk": "NOT RUN",
-      "pr": null,
-      "hash": null
+      "pr": 702,
+      "hash": "fb12e23a95d5e5eb49398f8be3066b12d17be199272ace905e7ff903ef3c221f"
     },
     {
       "id": "investigation:reading-the-hr-diagram",

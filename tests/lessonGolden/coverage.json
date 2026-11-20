@@ -8,13 +8,14 @@
     "black-holes",
     "butterfly-effect",
     "measuring-the-moon",
-    "missing-mass",
+    "radial-velocity",
     "propose-an-observation",
     "what-is-a-gravitational-wave",
     "a-night-at-the-telescope",
     "counts-to-magnitudes",
     "detect-this-planet",
     "extending-an-experiment",
+    "missing-mass",
     "power-law-gravity",
     "retrograde-motion"
   ],
@@ -194,9 +195,10 @@
       "key:question.minUncertainty",
       "key:question.valueWithin"
     ],
-    "missing-mass": [
-      "key:predict.setup",
-      "key:question.restates"
+    "radial-velocity": [
+      "key:explore.compare",
+      "key:explore.evidence",
+      "key:predict.setup"
     ],
     "propose-an-observation": [
       "key:measure.plan",
@@ -217,6 +219,9 @@
     ],
     "extending-an-experiment": [
       "key:measure.compute"
+    ],
+    "missing-mass": [
+      "key:question.restates"
     ],
     "power-law-gravity": [
       "key:question.explain"
@@ -294,14 +299,14 @@
   ],
   "totals": {
     "investigations": 124,
-    "steps": 1991,
+    "steps": 1992,
     "activityCuts": 6,
-    "lessonTokens": 171,
+    "lessonTokens": 173,
     "activityTokens": 29,
     "stepTypes": {
       "read": 377,
       "predict": 200,
-      "measure": 520,
+      "measure": 521,
       "ellipse": 1,
       "question": 751,
       "explore": 141,

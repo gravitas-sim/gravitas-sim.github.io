@@ -88,15 +88,16 @@ The browser half takes about seven minutes on the private port.
 | 6 | `black-holes` | 3: `key:question.checklist`, `key:read.explainView`, `lock:{"placement":true,"inspector":false,"areaSweep":false}` |
 | 7 | `butterfly-effect` | 3: `key:explore.rubric`, `key:predict.requires`, `lock:null` |
 | 8 | `measuring-the-moon` | 3: `key:question.maxUncertainty`, `key:question.minUncertainty`, `key:question.valueWithin` |
-| 9 | `missing-mass` | 2: `key:predict.setup`, `key:question.restates` |
+| 9 | `radial-velocity` | 3: `key:explore.compare`, `key:explore.evidence`, `key:predict.setup` |
 | 10 | `propose-an-observation` | 2: `key:measure.plan`, `key:question.rubricCriteria` |
 | 11 | `what-is-a-gravitational-wave` | 2: `audience:beginner`, `key:read.checklist` |
 | 12 | `a-night-at-the-telescope` | 1: `key:question.reflect` |
 | 13 | `counts-to-magnitudes` | 1: `depth-step:quantitative/predict` |
 | 14 | `detect-this-planet` | 1: `key:read.allowInspector` |
 | 15 | `extending-an-experiment` | 1: `key:measure.compute` |
-| 16 | `power-law-gravity` | 1: `key:question.explain` |
-| 17 | `retrograde-motion` | 1: `lock:{"placement":true,"inspector":false}` |
+| 16 | `missing-mass` | 1: `key:question.restates` |
+| 17 | `power-law-gravity` | 1: `key:question.explain` |
+| 18 | `retrograde-motion` | 1: `lock:{"placement":true,"inspector":false}` |
 
 | # | Activity cut | Tokens it adds |
 |---|---|---|

@@ -97,8 +97,8 @@ export const MANIFEST = [
     thumbnail: 'images/scenarios/exoplanet-characterization-lab.webp',
     series: 'Detección de exoplanetas',
     depths: 2,
-    stepCount: 38,
-    gradedCount: 20,
+    stepCount: 39,
+    gradedCount: 21,
     objectiveCount: 7,
   },
   {
