@@ -151,7 +151,7 @@ export function describe(records, library = new Map()) {
         key,
         // The address the work was opened from (js/investigations/stepView.js,
         // ENTRY_LINK holds the same shape): a record made before it has none.
-        href: ENTRY_LINK.test(value?.link) ? `/${value.link}` : null,
+        ...(ENTRY_LINK.test(value?.link) ? { href: `/${value.link}` } : {}),
         title: e?.title ?? value?.lesson ?? key,
         seen: count(value?.visited),
         answered: isObj(value?.responses)

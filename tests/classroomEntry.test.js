@@ -196,8 +196,8 @@ describe('the progress record keeps where it was opened from', () => {
     ];
     expect(work(records).assignments.map(a => a.href)).toEqual([
       `/${assignment}`,
-      null,
-      null,
+      undefined,
+      undefined,
     ]);
   });
 });

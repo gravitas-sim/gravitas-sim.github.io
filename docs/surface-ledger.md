@@ -276,7 +276,7 @@ Every published surface has one row in [`surface-ledger.json`](surface-ledger.js
 | ----------------------------- | ------------------------------ | --- | -------- | ----: | ---------- | ----------- | -------- | ------- | ---- | ---- | ------- | ---- | ----------- |
 | `not-a-surface:compute-frame` | compute-frame/index.html       | —   | —        |   497 | —          | OPEN        | —        | —       | —    | —    | —       | —    | —           |
 | `not-a-surface:spike`         | spike/**/*.html (3 files)      | —   | —        |   497 | —          | OPEN        | —        | —       | —    | —    | —       | —    | —           |
-| `not-a-surface:fragments`     | js/fragments/*.html (10 files) | —   | —        |   497 | —          | OPEN        | —        | —       | —    | —    | —       | —    | —           |
+| `not-a-surface:fragments`     | js/fragments/*.html (11 files) | —   | —        |   497 | —          | OPEN        | —        | —       | —    | —    | —       | —    | —           |
 | `not-a-surface:static-files`  | docs, manual, sdk, extensions  | —   | —        |   497 | —          | OPEN        | —        | —       | —    | —    | —       | —    | —           |
 
 | Id                            | Purpose                                                                         | Audience                            | First action                          |

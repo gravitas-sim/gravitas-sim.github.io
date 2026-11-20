@@ -15,6 +15,9 @@
 // is a plain investigation link.
 // =============================================================================
 
+/** The fragment's host (tools/index-fragments.mjs) and its file's name. */
+const HOST = 'link-notice';
+
 /**
  * Show the dialog for a refused link.
  *
@@ -37,9 +40,9 @@ export async function refuseLink({
     // every route loads. The markup has no translated attributes to apply.
     try {
       const res = await fetch(
-        new URL('js/fragments/link-notice.html', document.baseURI)
+        new URL(`js/fragments/${HOST}.html`, document.baseURI)
       );
-      const host = document.querySelector('template[data-host="link-notice"]');
+      const host = document.querySelector(`template[data-host="${HOST}"]`);
       if (!res.ok || !host) return false;
       const tpl = document.createElement('template');
       tpl.innerHTML = await res.text();
