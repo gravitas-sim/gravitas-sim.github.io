@@ -76,7 +76,7 @@
         "requests": 31
       },
       "course-builder": {
-        "kb": 1165.3,
+        "kb": 1174.2,
         "requests": 48
       },
       "course-home": {
@@ -202,7 +202,7 @@
         "requests": 16
       },
       "course-builder": {
-        "kb": 712.1,
+        "kb": 717.5,
         "requests": 13
       },
       "course-home": {
