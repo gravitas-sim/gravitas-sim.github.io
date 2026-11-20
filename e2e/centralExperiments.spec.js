@@ -1244,6 +1244,10 @@ test.describe('the central experiment of each investigation', () => {
         timeout: 10_000,
       })
       .toBeGreaterThan(before.entries.length);
+    // The notebook opens over the instrument's buttons; the student closes it
+    // to carry on.
+    await page.locator('#nbClose').click();
+    await expect(page.locator('#evidenceNotebook')).toBeHidden();
 
     // 3. The prediction, which opens at the start of the track and says
     //    nothing, is committed and held.
