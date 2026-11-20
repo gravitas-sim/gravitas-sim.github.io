@@ -195,6 +195,7 @@ describe('the note that the scene is rebuilt', () => {
     expect(note().hidden).toBe(false);
     expect(note().getAttribute('role')).toBe('status');
     expect(note().textContent).toBe(EN_RESET['saved.scene.leave']);
+    at = 1;
     syncReset(scene);
     expect(note().hidden).toBe(true);
   });
@@ -213,6 +214,16 @@ describe('the note that the scene is rebuilt', () => {
     expect(note().hidden).toBe(false);
     expect(note().textContent).toBe(EN_RESET['saved.scene.back']);
     jest.advanceTimersByTime(3000);
+  });
+
+  test('drawn again (an instrument arriving), the same step keeps what was said', () => {
+    at = 1;
+    visited = new Set(['intro', 'guess']);
+    syncReset(scene);
+    syncReset(scene);
+    expect(note().textContent).toBe(EN_RESET['saved.scene.back']);
+    jest.advanceTimersByTime(3000);
+    expect(note().hidden).toBe(false);
   });
 
   test('both languages have both sentences, about the scene and the answers', () => {

@@ -159,7 +159,7 @@ test.describe('what an investigation keeps', () => {
     await walkToSid(page, plan, 'which-arrangement-gives-a-flat');
     await expect(
       page.locator('#investigationBody .inv-option').nth(1)
-    ).toHaveAttribute('aria-pressed', 'true');
+    ).toHaveAttribute('aria-checked', 'true');
     await walkToSid(page, plan, 'put-the-mass-somewhere');
     await expect(
       page.locator(`#investigationToolControls [data-tool="${toolId}"]`)

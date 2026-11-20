@@ -77,6 +77,7 @@ const mark = () =>
 
 let timer = 0;
 let open = null;
+let at = -1;
 let base = '';
 let has = false;
 let said = '';
@@ -111,20 +112,25 @@ function tick() {
     timer = open = 0;
     say('');
   } else if (has && !said && mark() !== base) say('saved.scene.leave');
+  // The scene is back as it was drawn (a reset): nothing left to warn of.
+  else if (said === 'saved.scene.leave' && mark() === base) say('');
 }
 
 /**
  * A step was drawn: take its scene as the one to compare against, and say so
- * if this is a return to a step that has one.
+ * if this is a return to a step that has one. Drawn again (an instrument
+ * arriving, a language) it is the same step: what was said stands.
  * @param {{scene: boolean}} step - What the step has
  */
 function noteScene({ scene }) {
   const { id, n, i } = sceneContext();
+  const again = id === open && i === at;
   const back = id !== open && (i > 0 || n > 1);
   open = id;
+  at = i;
   has = scene;
-  base = mark();
-  say(scene && back ? 'saved.scene.back' : '');
+  if (!again || !said) base = mark();
+  if (!again) say(scene && back ? 'saved.scene.back' : '');
   timer ||= setInterval(tick, 1000);
 }
 
