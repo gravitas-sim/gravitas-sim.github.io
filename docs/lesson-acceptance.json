@@ -771,7 +771,7 @@
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["which-loses-most", "four-drifts", "choose-the-second-step"],
       "evidenceFrom": "computation",
-      "decision": "Which second step count to run (250, 438, 750 or 1000 steps per period) and compare with the baseline, and which method's six-orbit drift is still a size of its error and not a phase of a swing.",
+      "decision": "Which second step count to run (250, 438, 750 or 1000 steps per period) and compare with the baseline. The six-orbit comparison that follows is a choice question the student answers from their own run; its readings are not recorded in a notebook field.",
       "leakFree": true
     },
     "extending-an-experiment": {

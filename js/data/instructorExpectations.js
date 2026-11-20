@@ -110,9 +110,9 @@ export default {
       'a-uniform-population':
         'Slope 0: 0.451 bound in the synthetic population (within 0.02), 0.149 below the trials’ 0.6 (within 0.03).',
       'move-the-definition-yours':
-        'Slope 1, cutoff 6: half-way distance 0.289 (within 0.004), 0.701 bound (within 0.02); cutoff 2: 0.233, 0.529; 4 and 10 as 6.',
+        'Slope 1, cutoff 6 (4, 10 alike): 0.289 (within 0.004), 0.701 bound (within 0.02); cutoff 2: 0.233, 0.529.',
       'which-trial-moved':
-        'The trial that changes class, by its bin center: 0.255 (cutoffs 2 and 3) or 0.225; 4, 6 and 10 move none.',
+        'By pair: 2 and 3, one trial, bin 0.255; 3 with 4, 6 or 10, one, 0.225; 2 with 4, 6 or 10, two, nearest 0.225; among 4, 6, 10, none (0, none).',
     },
     'refitting-a-transit': {
       'the-fit':

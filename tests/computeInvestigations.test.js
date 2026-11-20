@@ -11,6 +11,8 @@ import SAMPLING from '../js/data/investigations/sampling-a-posterior.js';
 import REFITTING_ES from '../js/data/investigations/es/refitting-a-transit.js';
 import PERIODOGRAMS_ES from '../js/data/investigations/es/two-periodograms.js';
 import SAMPLING_ES from '../js/data/investigations/es/sampling-a-posterior.js';
+import { ES_DEFERRED } from '../js/i18n/es.deferred.js';
+import { lessonKey } from '../js/i18n/lesson.js';
 import { stepFingerprint } from '../js/investigations/progressBackup.js';
 import {
   mergeTranslation,
@@ -256,23 +258,30 @@ describe('Integrators in Practice', () => {
       expect(Math.abs(ratio / (n / 500) ** 2 - 1)).toBeLessThan(0.001);
     }
     expect(step(INTEGRATORS, 'the-engine').compare).toMatch(
-      /square of the ratio/
+      /square of the step ratio/
     );
   });
 
-  test('the halving prediction claims neither sixteen for Runge-Kutta 4 nor its own answer in an earlier step', () => {
+  test('the prediction is about the step ratio, so every menu choice tests it, and it claims neither sixteen for Runge-Kutta 4 nor its own answer in an earlier step', () => {
     const predict = step(INTEGRATORS, 'predict-the-halving');
     expect(predict.type).toBe('predict');
     expect(predict.reveal).toBe('the-engine');
     expect(predict.options).toHaveLength(4);
     expect(predict.options.join(' ')).not.toMatch(/\b16\b|sixteen/i);
-    // The right option says four and tens, which is what the 500 to 1000 run gives.
-    const halved = typed(1000);
-    expect(halved.ratioVerlet).toBeCloseTo(4, 1);
-    expect(halved.ratioRk4).toBeGreaterThan(20);
+    // The right option says the square for Verlet and a higher power for Runge-Kutta 4;
+    // every choice of the menu bears it out (the improvement is old drift over new).
     expect(predict.options[predict.answer]).toMatch(
-      /four times.*tens of times/
+      /squared.*higher power.*at least the fourth/
     );
+    for (const n of [250, 438, 750, 1000]) {
+      const t = typed(n);
+      const r = n / 500;
+      expect(t.ratioVerlet / r ** 2).toBeGreaterThan(0.99);
+      expect(t.ratioVerlet / r ** 2).toBeLessThan(1.01);
+      expect(Math.log(t.ratioRk4) / Math.log(r)).toBeGreaterThan(4);
+    }
+    // The compare sentence is about the choice made, not about 1000.
+    expect(step(INTEGRATORS, 'the-engine').compare).not.toMatch(/about 1000/);
     // Nothing earlier states the improvement: the objectives, the first body and the tips.
     const earlier = JSON.stringify([
       INTEGRATORS.objectives,
@@ -281,6 +290,18 @@ describe('Integrators in Practice', () => {
     expect(earlier).not.toMatch(/fourfold|four times|squared|sixteen/);
     expect(JSON.stringify(INTEGRATORS_ES.objectives)).not.toMatch(
       /cuatro veces/
+    );
+  });
+
+  test('no step claims Runge-Kutta 4 is a hundred thousand times better', () => {
+    // 0.001768 over 6.47e-8 is about 27,000, and symplectic Euler's 0.002317 gives about 36,000.
+    const ratio = Math.abs(
+      main['drift.verlet'].value / main['drift.rk4'].value
+    );
+    expect(ratio).toBeGreaterThan(2e4);
+    expect(ratio).toBeLessThan(5e4);
+    expect(JSON.stringify([INTEGRATORS, INTEGRATORS_ES])).not.toMatch(
+      /hundred thousand|cien mil/
     );
   });
 
@@ -320,54 +341,50 @@ describe('Integrators in Practice', () => {
     expect(step(INTEGRATORS, 'the-engine').body).toContain('0.0278');
   });
 
-  test('the six-orbit run: every number the feedback quotes is the notebook’s', () => {
+  test('the six-orbit run: the feedback does not print the numbers the student is to read off their own run', () => {
     const trust = step(INTEGRATORS, 'trust-at-six-orbits');
     const say = id => trust.misconceptions.find(m => m.id === id).say;
     const d = (run, k) => run[`drift.${k}`].value;
-    // The three-orbit baseline and the six-orbit run, as the feedback prints them.
-    expect(four(d(main, 'verlet'))).toBe(0.001768);
-    expect(four(d(six, 'verlet'))).toBe(0.0001587);
-    expect(say('smallest-number-is-accurate')).toContain('0.001768 %');
-    expect(say('smallest-number-is-accurate')).toContain('0.0001587 %');
-    expect(four(d(main, 'symplectic'))).toBe(-0.002317);
-    expect(four(d(six, 'symplectic'))).toBe(0.08515);
-    expect(say('bounded-is-representative')).toContain('−0.002317 %');
-    expect(say('bounded-is-representative')).toContain('+0.08515 %');
-    expect(Math.round(d(six, 'euler'))).toBe(60);
-    expect(say('euler-trend')).toContain('60 %');
-    expect(four(d(main, 'rk4'))).toBe(-6.473e-8);
-    expect(four(d(six, 'rk4'))).toBe(-1.046e-7);
-    expect(trust.because).toContain('6.473×10⁻⁸ %');
-    expect(trust.because).toContain('1.046×10⁻⁷ %');
-    // The right answer's claims: Runge-Kutta 4's value grows steadily and stays tiny;
-    // Verlet's falls with a longer run and symplectic Euler's changes sign.
+    // What the feedback claims, held to the notebook's own runs.
     expect(Math.abs(d(six, 'rk4'))).toBeGreaterThan(Math.abs(d(main, 'rk4')));
-    expect(Math.abs(d(six, 'rk4'))).toBeLessThan(3 * Math.abs(d(main, 'rk4')));
+    expect(Math.abs(d(six, 'rk4'))).toBeLessThan(2 * Math.abs(d(main, 'rk4')));
+    expect(Math.sign(d(six, 'rk4'))).toBe(Math.sign(d(main, 'rk4')));
     expect(Math.abs(d(six, 'verlet'))).toBeLessThan(
       Math.abs(d(main, 'verlet'))
     );
+    expect(d(main, 'verlet') / d(six, 'verlet')).toBeGreaterThan(5);
     expect(Math.sign(d(six, 'symplectic'))).not.toBe(
       Math.sign(d(main, 'symplectic'))
     );
-    expect(Math.round(d(main, 'verlet') / d(six, 'verlet'))).toBe(11);
     expect(
-      Math.round(Math.abs(d(six, 'symplectic') / d(main, 'symplectic')))
-    ).toBe(37);
+      Math.abs(d(six, 'symplectic') / d(main, 'symplectic'))
+    ).toBeGreaterThan(10);
+    expect(Math.round(d(six, 'euler'))).toBe(60);
+    // No six-orbit number, and no digit at all, in what a wrong answer is told, or in the
+    // options: the student reads those off their own run.
+    for (const id of [
+      'smallest-number-is-accurate',
+      'bounded-is-representative',
+      'euler-trend',
+    ])
+      expect(say(id)).not.toMatch(/\d/);
+    expect(trust.options.join(' ')).not.toMatch(/%/);
+    // The Runge-Kutta 4 claim is the two-point one: tiny and within a factor of two, not "steadily".
+    expect(JSON.stringify([trust, INTEGRATORS_ES.steps])).not.toMatch(
+      /steadily|de forma constante|pre-asymptotic/
+    );
     // Authored feedback exists for the plausible wrong turns, one per wrong option, and the
     // smallest-number mistake is among them.
     expect(trust.answer).toBe(0);
     expect(trust.misconceptions.map(m => m.option).sort()).toEqual([1, 2, 3]);
   });
 
-  test('the Spanish feedback quotes the same numbers, with the comma', () => {
-    const es = JSON.stringify(
-      mergeTranslation(INTEGRATORS, INTEGRATORS_ES).steps.find(
-        s => s.sid === 'trust-at-six-orbits'
-      )
+  test('the Spanish feedback of the six-orbit step prints no six-orbit number either', () => {
+    const es = mergeTranslation(INTEGRATORS, INTEGRATORS_ES).steps.find(
+      s => s.sid === 'trust-at-six-orbits'
     );
-    expect(es).toContain('0,0001587');
-    expect(es).toContain('0,08515');
-    expect(es).toContain('1,046×10⁻⁷');
+    for (const m of es.misconceptions) expect(m.say).not.toMatch(/\d/);
+    expect(es.options.join(' ')).not.toMatch(/%/);
   });
 });
 
@@ -620,6 +637,18 @@ describe('Extending an Experiment', () => {
     });
     expect(other.level).toBe('error');
     expect(other.message).toContain('cutoffs 2 and 3');
+    // The same cutoff twice is not a comparison: a warning, whatever else is typed.
+    for (const c of [2, 3, 4, 6, 10]) {
+      const twice = verdict(EXTENDING, 'which-trial-moved', {
+        from: c,
+        to: c,
+        count: 0,
+        where: NaN,
+        where_text: 'none',
+      });
+      expect(twice.level).toBe('warn');
+      expect(twice.message).toMatch(/same cutoff twice/);
+    }
     // No pair chosen yet.
     expect(
       verdict(EXTENDING, 'which-trial-moved', { ...typedPair(3, 6), from: NaN })
@@ -857,5 +886,51 @@ describe.each([
     const prose = JSON.stringify([lesson.steps, es.steps]);
     expect(prose).not.toMatch(/\blessons?\b/i);
     expect(prose).not.toMatch(/\blabelled\b|\bcolour\b/);
+  });
+});
+
+describe('The Spanish of the static check messages', () => {
+  // A check's sentence is translated by what it says (js/i18n/lesson.js). The ones that
+  // carry a number from the student's choice are English until they are enumerated.
+  const cutoff = c => ({
+    cutoff: c,
+    edge: c === 2 ? 0.233 : 0.289,
+    extended: c === 2 ? 0.5292 : 0.7007,
+  });
+  const messages = [
+    verdict(INTEGRATORS, 'choose-the-second-step', {
+      second: NaN,
+      verlet: 1,
+      rk4: 1,
+    }),
+    verdict(INTEGRATORS, 'choose-the-second-step', {
+      second: 1000,
+      verlet: 0.0004419,
+      rk4: -2.443e-9,
+      ratioVerlet: 4.0,
+      ratioRk4: 26.5,
+    }),
+    verdict(EXTENDING, 'move-the-definition-yours', {
+      cutoff: NaN,
+      edge: 1,
+      extended: 1,
+    }),
+    verdict(EXTENDING, 'move-the-definition-yours', cutoff(2)),
+    verdict(EXTENDING, 'move-the-definition-yours', cutoff(6)),
+    verdict(EXTENDING, 'which-trial-moved', { count: 1, from: NaN, to: NaN }),
+    verdict(EXTENDING, 'which-trial-moved', {
+      from: 3,
+      to: 3,
+      count: 0,
+      where_text: 'none',
+      where: NaN,
+    }),
+  ].map(r => r.message);
+
+  test('each is in the Spanish catalog', () => {
+    expect(messages).toHaveLength(7);
+    for (const m of messages) {
+      expect(ES_DEFERRED[lessonKey(m)]).toBeTruthy();
+    }
   });
 });

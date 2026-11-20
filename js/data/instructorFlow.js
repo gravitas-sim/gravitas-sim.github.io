@@ -296,7 +296,7 @@ export default {
       {
         from: 'predict-the-halving',
         to: 'choose-the-second-step',
-        text: 'Predict the halving, then choose a second step: fourfold for second order, far more for fourth.',
+        text: 'Predict how the step changes each drift, then choose a second step.',
       },
       {
         from: 'the-engine',
