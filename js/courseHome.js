@@ -219,6 +219,11 @@ async function openFromAddress() {
   } catch (err) {
     return showRefusal({ path: '', message: String(err?.message || err) });
   }
+  if (builtin)
+    return showRefusal({
+      path: '',
+      message: t('courseHome.error.unknown', { id: builtin }),
+    });
   showEmpty();
   return false;
 }

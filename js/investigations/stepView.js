@@ -37,7 +37,14 @@ import {
   nextHintStage,
 } from '../answerFeedback.js';
 import { command, state } from '../appState.js';
-import { drop, get, noteLesson, put } from '../storage/local.js';
+import {
+  RESUME_ROUTE_MAX,
+  drop,
+  get,
+  noteLesson,
+  noteResume,
+  put,
+} from '../storage/local.js';
 import { migrateSavedProgress } from '../platform/resolver.js';
 import { assignmentStorageKey, shortHash } from '../assignments/assignment.js';
 import {
@@ -46,7 +53,7 @@ import {
   stepKey,
   writeProgress,
 } from './progressSchema.js';
-import { KEY_INVESTIGATION_PREFIX } from '../names.js';
+import { KEY_ASSIGNMENT_PREFIX, KEY_INVESTIGATION_PREFIX } from '../names.js';
 import { isPeek, openSheet } from '../lessonFrame.js';
 const getAreaSweepWedges = command('getAreaSweepWedges');
 
@@ -892,7 +899,8 @@ export const formatFieldNumber = (value, decimals, locale) =>
 /**
  * What persistence needs of the engine: state() is {active, responses,
  * attempts, visited, stepIndex, startedAt, depthChoice, deepest, spent,
- * progressNotes}; authoring() and assigned() are booleans; assignmentKey() is
+ * progressNotes}; authoring() and assigned() are booleans, assignment() the one
+ * open; assignmentKey() is
  * where an assignment's progress lives; els() the elements; clock() brings the
  * time spent up to date.
  * @typedef {Object} PersistenceHost
@@ -947,6 +955,48 @@ export function keyForAssignment(a) {
   return key;
 }
 
+// What a link opened (an activity, an assignment or a pack), kept with the work
+// so Home, the Library and My work open it again as that, not as the bare
+// investigation. Set on every open (null for one that came from no link).
+let entry = null;
+export const ENTRY_LINK =
+  /^#(?:[ai]\d+[zr][\w-]+|activity=[a-z0-9-]+(?:\/[a-z0-9-]+)?)$/i;
+export const setEntryLink = hash => {
+  entry =
+    typeof hash === 'string' &&
+    hash.length < RESUME_ROUTE_MAX &&
+    ENTRY_LINK.test(hash)
+      ? hash
+      : null;
+};
+
+/** The link a record already holds, for work opened again without one. */
+function keptLink(key) {
+  try {
+    const link = JSON.parse(get(key) ?? 'null')?.link;
+    return ENTRY_LINK.test(link) ? link : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+/** The resume record's note for this work: its link when it has one. */
+function noteWork(active, step, link, key) {
+  if (!link) return noteLesson(active.id, step);
+  const a = host.assigned() ? host.assignment() : null;
+  const name = a?.t || active.title;
+  noteResume({
+    id: a
+      ? `assignment:${key.slice(KEY_ASSIGNMENT_PREFIX.length)}`
+      : `investigation:${active.id}`,
+    route: `/${link}`,
+    step,
+    ...(name
+      ? { title: { en: name, ...(getLocale() === 'es' ? { es: name } : {}) } }
+      : {}),
+  });
+}
+
 /** Whether the last write reached the disk: 'saved' | 'unavailable' | 'full' | 'authoring' | 'idle'. */
 let saveState = { status: 'idle', at: null };
 
@@ -981,6 +1031,8 @@ export function save() {
     setSaveState('authoring');
     return;
   }
+  const key = progressKey(active.id);
+  const link = entry ?? (host.assigned() ? keptLink(key) : undefined);
   const payload = writeProgress({
     lesson: active,
     responses: s.responses,
@@ -992,19 +1044,19 @@ export function save() {
     deepest: s.deepest,
     spent: s.spent,
     earlier: earlierFor(active.id),
+    link,
   });
   if (Object.keys(typed).length) payload.drafts = typed;
   if (isPeek()) payload.sheet = 'peek';
 
   // This tab's copy, always, and before the disk is asked. It is what makes
   // closing and reopening the lesson safe when the write below fails.
-  const key = progressKey(active.id);
   sessionProgress.set(key, payload);
 
   try {
     put(key, JSON.stringify(payload), progressArea());
     setSaveState('saved');
-    noteLesson(active.id, payload.stepSid);
+    noteWork(active, payload.stepSid, link, key);
   } catch (err) {
     // The answers stay in memory and the lesson keeps working; what changes is
     // that the reader is told, once, and given a way to take the work with

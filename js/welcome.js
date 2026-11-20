@@ -147,7 +147,7 @@ export function resumeItems(raw = () => localStorage.getItem(KEY_RESUME)) {
       typeof i.route !== 'string' ||
       !i.route.startsWith('/') ||
       i.route.startsWith('//') ||
-      i.route.length > 240 ||
+      i.route.length > 4000 ||
       seen.has(i.id)
     )
       continue;
@@ -216,10 +216,12 @@ async function fillContinue() {
     const rows = continueRows(INVESTIGATIONS, resumeItems(), going);
     const strip = els.body?.querySelector('#welContinue');
     if (strip && rows.length) {
-      const name = r =>
-        r.title.es
-          ? `<span class="gs-en">${escape(r.title.en)}</span><span class="gs-es" lang="es">${escape(r.title.es)}</span>`
+      const name = r => {
+        const act = r.id.startsWith('assignment:');
+        return r.title.es || act
+          ? `<span class="gs-en">${act ? 'Continue the activity: ' : ''}${escape(r.title.en)}</span><span class="gs-es" lang="es">${act ? 'Continuar la actividad: ' : ''}${escape(r.title.es ?? r.title.en)}</span>`
           : escape(r.title.en);
+      };
       strip.querySelector('ul').innerHTML = rows
         .map(
           r =>

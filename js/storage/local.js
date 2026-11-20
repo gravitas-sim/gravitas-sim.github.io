@@ -108,12 +108,23 @@ export const RESUME_MAX = 6;
 const words = (v, max) =>
   typeof v === 'string' && v.length > 0 && v.length <= max;
 
+/**
+ * The longest address an item may hold. An assignment, activity or pack link
+ * is the address, so it must fit; 240 held lesson addresses only. An older
+ * build drops an item over 240 and keeps the rest of the record.
+ */
+export const RESUME_ROUTE_MAX = 4000;
+
 /** One entry, cleaned to the shape the record allows, or null. */
 function resumeItem(raw) {
   if (!raw || typeof raw !== 'object') return null;
   const { id, route, step, path, title, at } = raw;
   if (!words(id, 120) || !/^[\w.:/-]+$/.test(id)) return null;
-  if (!words(route, 240) || !route.startsWith('/') || route.startsWith('//'))
+  if (
+    !words(route, RESUME_ROUTE_MAX) ||
+    !route.startsWith('/') ||
+    route.startsWith('//')
+  )
     return null;
   const item = { id, route, at: Number.isFinite(at) ? at : 0 };
   if (words(step, 60)) item.step = step;

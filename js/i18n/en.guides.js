@@ -20,6 +20,8 @@ export const EN_GUIDES = {
   'gd.path': 'Path',
   'gd.path.intro': 'Introductory',
   'gd.path.advanced': 'Advanced (adds steps)',
+  'gd.unknown':
+    'There is no investigation called “{id}” on this page. Choose one from the list below.',
   'gd.start': 'Start',
   'gd.meta': '{steps} steps, about {minutes} minutes.',
   'gd.stepOf': 'Step {n} of {of}: {title}',

@@ -84,6 +84,16 @@ export function toast(message, action) {
   toastTimer = setTimeout(hide, action ? 10000 : 2200);
 }
 
+/**
+ * A link could not be opened: the dialog that says why and what to do, loaded
+ * when one is refused; the toast where the page has no dialog.
+ * @param {object} what - See js/assignments/linkNotice.js
+ */
+export const refuseLink = what =>
+  import('./assignments/linkNotice.js').then(
+    m => m.refuseLink(what) || toast(what.why)
+  );
+
 let failedAt = 0;
 
 /**
