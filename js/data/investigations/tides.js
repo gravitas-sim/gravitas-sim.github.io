@@ -550,12 +550,12 @@ const TIDES = {
         if (span < 4) {
           return {
             level: 'warn',
-            message: `Your distances span only a factor of ${span.toFixed(1)}. Spread them wider, so that one is at least four times another and the curve has room to show its shape.`,
+            message: `Your distances span only a factor of ${Math.round(span * 10) / 10}. Spread them wider, so that one is at least four times another and the curve has room to show its shape.`,
           };
         }
         return {
           level: 'ok',
-          message: `Four distances spanning a factor of ${span.toFixed(1)}, each stretch read where you said. Look at the graph: press Try 1 ÷ distance³ and see whether your points straighten.`,
+          message: `Four distances spanning a factor of ${Math.round(span * 10) / 10}, each stretch read where you said. Look at the graph: press Try 1 ÷ distance³ and see whether your points straighten.`,
         };
       },
       plot: {
@@ -870,7 +870,7 @@ const TIDES = {
         }
         return {
           level: 'ok',
-          message: `Three masses held at one distance. Stretch ÷ mass comes out ${(ratios.reduce((a, b) => a + b, 0) / 3).toFixed(2)} for every row: a constant ratio is what a straight line through the corner looks like in a table.`,
+          message: `Three masses held at one distance. Stretch ÷ mass comes out ${Math.round((ratios.reduce((a, b) => a + b, 0) / 3) * 100) / 100} for every row: a constant ratio is what a straight line through the corner looks like in a table.`,
         };
       },
       plot: {
