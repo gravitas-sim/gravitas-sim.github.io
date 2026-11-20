@@ -147,6 +147,7 @@
     "validation:data": "node tools/build-validation-data.mjs",
     "validation:check": "node tools/generate.mjs --check --only validation-data",
     "validate:links": "node tools/check-links.mjs",
+    "deploy:rehearse-overlay": "node tools/prepare-pages.mjs --out \"${TMPDIR:-/tmp}/gravitas-overlay-site\" --overlay dist && rm -rf \"${TMPDIR:-/tmp}/gravitas-overlay-site\"",
     "validate:links:dist": "node tools/check-links.mjs --root dist",
     "catalog": "node tools/catalog.mjs generate",
     "archive:live": "node tools/archive-live-check.mjs",
