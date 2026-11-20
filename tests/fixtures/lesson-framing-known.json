@@ -1,0 +1,4 @@
+{
+  "note": "Scene steps that are not framed today, by size|lesson|step, each with the reason and where the fix belongs. The list only shrinks (e2e/lessonFraming.spec.js).",
+  "steps": {}
+}

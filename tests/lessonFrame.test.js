@@ -75,6 +75,30 @@ describe('what the camera is fitted to', () => {
   });
 });
 
+describe('how far in a fit may go', () => {
+  const view = { width: 600, height: 400 };
+  const system = [
+    { x: 0, y: 0, radius: 0.001 },
+    { x: 0.02, y: 0.01, radius: 0.0005 },
+  ];
+  test('a shelf stops at the default cap of 3', () => {
+    expect(fitCamera(system, view).zoom).toBe(3);
+  });
+  test('a scene of small extent fills its room when the cap is lifted', () => {
+    const camera = fitCamera(system, view, { maxZoom: 100 });
+    expect(camera.zoom).toBe(100);
+    const wide = fitCamera(
+      [
+        { x: -4, y: 0, radius: 0.001 },
+        { x: 4, y: 0, radius: 0.001 },
+      ],
+      view,
+      { maxZoom: 100 }
+    );
+    expect(wide.zoom).toBeCloseTo((600 * 0.78) / 10, 3);
+  });
+});
+
 describe('the extent of an orbit', () => {
   const star = {
     pos: { x: 0, y: 0 },
