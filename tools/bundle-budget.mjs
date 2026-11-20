@@ -122,7 +122,7 @@ const BUDGETS = [
   {
     id: 'deferred',
     label: 'Deferred JavaScript (lazy chunks, gzipped)',
-    limit: 3226.9,
+    limit: 3229.7,
     reason:
       'Jumped from 1369 KB to 2105 KB when three.js and Chart.js stopped being ' +
       'CDN requests and became bundled chunks. That is the point of the change ' +
@@ -729,7 +729,8 @@ const BUDGETS = [
       '\n\nLesson figures drawn from the model (D-R4-TRAIN-04, D-R4-457-03), listed separately for the maintainer: raised from 3202.2 to 3206.9 KB, the measurement by CI of the combined branch (run 44415955830) at 3,283,804 bytes gzipped (3206.84 KB) rounded up to 0.1 KB. The change was asked to raise no ceiling; the raise was adopted as a maintainer decision of 2026-11-18 (D-R4-457-03).' +
       "\n\nDesktop layout, the Moon and transit-fit rework, and Io's Fire and Tides That Move the Moon taken together (D-R4-TRAIN-05): the limit is raised from 3206.9 to 3215.8 KB, the measurement by CI of the combined branch (3,292,942 bytes gzipped, 3215.76 KB) rounded up to 0.1 KB, under the standing approval of 2026-10-10. This replaces the separate raises the Moon and Io branches recorded (D-R4-330-09, D-R4-331-05)." +
       "\n\nKepler's Laws, the transit lesson and Weighing the Stars taken together (D-R4-TRAIN-06): the limit is raised from 3215.8 to 3225.7 KB, the exact overrun of a Node 22 build over v4 c5705767f (3,303,045 bytes gzipped, 3225.63 KB) rounded up to 0.1 KB, under the standing approval of 2026-10-10. This replaces the separate raises the three branches recorded (D-R4-328-05, D-R4-329-05, D-R4-332-08). CI then measured 3,303,165 bytes (3225.75 KB, run 44551414337) after the answer key learned estimate steps, so the limit is 3225.8." +
-      "\n\nResuming an activity and saying why a link cannot open (D-R4-363-04): the limit is raised from 3225.8 to 3226.9 KB, the exact overrun of a Node 22 build over v4 87338a7ab (3,304,298 bytes gzipped, 3226.85 KB) rounded up to 0.1 KB, under the standing approval of 2026-10-10. CI's figure replaces it before the change is ready.",
+      "\n\nResuming an activity and saying why a link cannot open (D-R4-363-04): the limit is raised from 3225.8 to 3226.9 KB, the exact overrun of a Node 22 build over v4 87338a7ab (3,304,298 bytes gzipped, 3226.85 KB) rounded up to 0.1 KB, under the standing approval of 2026-10-10. CI's figure replaces it before the change is ready." +
+      "\n\nTwo reset actions named by what they touch (D-R4-366-05): the limit is raised from 3226.9 to 3229.7 KB, the exact overrun of a Node 22 build stacked over #689 (3,307,127 bytes gzipped, 3229.62 KB, against 3,304,328 for the same tree without it) rounded up to 0.1 KB, under the standing approval of 2026-10-10. The growth is the vocabulary module, its two catalogs and the lazy restart module. The initial download is lower than before (759,039 bytes). CI's figure replaces it before the change is ready.",
   },
 ];
 
