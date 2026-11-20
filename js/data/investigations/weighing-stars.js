@@ -12,6 +12,10 @@ const MYSTERY_PAIR = {
   starPair: { m1: 3, m2: 1, separation: 4 * AU, fit: true },
 };
 
+// Steps whose answer is a mass keep the masses off the canvas (`hideMasses`);
+// the answer step puts them back. The stage is the same pair, so no rebuild.
+const hidden = stage => ({ ...stage, hideMasses: true });
+
 const WEIGHING = {
   id: 'weighing-stars',
   thumbnail: 'images/investigations/weighing-stars.webp',
@@ -474,7 +478,7 @@ const WEIGHING = {
     },
     {
       sid: 'a-practice-run',
-      stage: EQUAL_PAIR,
+      stage: hidden(EQUAL_PAIR),
       type: 'measure',
       title: 'A practice run',
       body: `Try the formula once on numbers chosen to be kind, before using it
@@ -528,7 +532,7 @@ const WEIGHING = {
     },
     {
       sid: 'the-mystery-pair',
-      stage: MYSTERY_PAIR,
+      stage: hidden(MYSTERY_PAIR),
       type: 'read',
       title: 'The mystery pair',
       body: `Now the real thing.
@@ -543,7 +547,7 @@ const WEIGHING = {
     },
     {
       sid: 'what-do-you-need-to',
-      stage: MYSTERY_PAIR,
+      stage: hidden(MYSTERY_PAIR),
       type: 'question',
       title: 'What do you need to measure?',
       kind: 'choice',
@@ -562,7 +566,7 @@ const WEIGHING = {
     },
     {
       sid: 'measurement-one-how-big-is',
-      stage: MYSTERY_PAIR,
+      stage: hidden(MYSTERY_PAIR),
       type: 'measure',
       title: 'Measurement one: how big is the orbit?',
       body: `The pair on the canvas is a different one now: two stars whose
@@ -647,7 +651,7 @@ const WEIGHING = {
     },
     {
       sid: 'measurement-two-how-long-does',
-      stage: MYSTERY_PAIR,
+      stage: hidden(MYSTERY_PAIR),
       type: 'measure',
       title: 'Measurement two: how long does a lap take?',
       body: `Now time it. Press <strong>Mark</strong> when Star A is
@@ -722,7 +726,7 @@ const WEIGHING = {
     },
     {
       sid: 'weigh-the-pair',
-      stage: MYSTERY_PAIR,
+      stage: hidden(MYSTERY_PAIR),
       requires: ['measurement-one-how-big-is', 'measurement-two-how-long-does'],
       type: 'measure',
       title: 'Weigh the pair',
@@ -846,7 +850,7 @@ const WEIGHING = {
     },
     {
       sid: 'stop-and-look-at-what',
-      stage: MYSTERY_PAIR,
+      stage: hidden(MYSTERY_PAIR),
       type: 'read',
       title: 'Stop and look at what you just did',
       body: `You have the combined mass of two stars that nobody has ever been
@@ -863,7 +867,7 @@ const WEIGHING = {
     },
     {
       sid: 'back-to-the-balance-point',
-      stage: MYSTERY_PAIR,
+      stage: hidden(MYSTERY_PAIR),
       type: 'measure',
       title: 'Back to the balance point',
       body: `The balance point is on the canvas again. This time read the two
@@ -918,7 +922,7 @@ const WEIGHING = {
     },
     {
       sid: 'splitting-them-up',
-      stage: MYSTERY_PAIR,
+      stage: hidden(MYSTERY_PAIR),
       type: 'question',
       title: 'Splitting them up',
       kind: 'choice',
@@ -937,7 +941,7 @@ const WEIGHING = {
     },
     {
       sid: 'now-weigh-each-one',
-      stage: MYSTERY_PAIR,
+      stage: hidden(MYSTERY_PAIR),
       requires: ['weigh-the-pair', 'back-to-the-balance-point'],
       type: 'measure',
       title: 'Now weigh each one',
@@ -1105,7 +1109,7 @@ const WEIGHING = {
     },
     {
       sid: 'one-on-your-own',
-      stage: MYSTERY_PAIR,
+      stage: hidden(MYSTERY_PAIR),
       type: 'measure',
       title: 'One on your own',
       body: `A new pair, not one you have seen. The two stars are
@@ -1136,7 +1140,7 @@ const WEIGHING = {
     },
     {
       sid: 'and-which-one-is-heavier',
-      stage: MYSTERY_PAIR,
+      stage: hidden(MYSTERY_PAIR),
       type: 'question',
       title: 'And which one is heavier?',
       kind: 'choice',

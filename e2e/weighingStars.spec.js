@@ -18,6 +18,11 @@ import {
   walkToSid,
 } from './centralExperiment.js';
 
+import {
+  installCanvasTextRecorder,
+  openLessonStep,
+} from '../tools/visual-criteria.mjs';
+
 const ID = 'weighing-stars';
 const body = page => page.locator('#investigationBody');
 const take = (page, field) =>
@@ -156,4 +161,73 @@ test('a deeper step opens on its anchor scene and the error bar follows the scat
   );
   await typeIn(page, s, 'sp', (sd * 1.5 + 0.05).toFixed(3));
   await expect(page.locator('.inv-check')).toContainText(/solar masses/i);
+});
+
+// A mass drawn under a star is the answer to the steps that ask for it. The
+// canvas draws the number and the solar symbol as separate texts.
+const massTexts = page =>
+  page.evaluate(() => {
+    const last = window.__canvasText?.simulationCanvas?.last ?? [];
+    return last
+      .map(b => b.text.trim())
+      .filter(x => x.includes('\u2609') || /^\d+[.,]\d+\s*M$/.test(x));
+  });
+
+/** Wait until the canvas has drawn `n` more whole frames. */
+async function framesDrawn(page, n) {
+  const count = () =>
+    page.evaluate(() => window.__canvasText?.simulationCanvas?.frames ?? 0);
+  const from = await count();
+  await expect.poll(count).toBeGreaterThanOrEqual(from + n);
+}
+
+const HIDDEN_STEPS = [
+  'a-practice-run',
+  'the-mystery-pair',
+  'measurement-one-how-big-is',
+  'measurement-two-how-long-does',
+  'weigh-the-pair',
+  'back-to-the-balance-point',
+  'now-weigh-each-one',
+  'one-on-your-own',
+];
+
+for (const language of ['en', 'es']) {
+  test(`no star mass is drawn where the student works one out (${language})`, async ({
+    page,
+  }) => {
+    test.slow();
+    await page.addInitScript(installCanvasTextRecorder);
+    await page.setViewportSize({ width: 1366, height: 800 });
+    // The step that tells the answer draws them: the check can see a mass.
+    await openLessonStep(page, { lesson: ID, sid: 'the-answer', language });
+    await expect
+      .poll(() => massTexts(page).then(m => m.length))
+      .toBeGreaterThan(1);
+    for (const sid of HIDDEN_STEPS) {
+      await openLessonStep(page, { lesson: ID, sid, language });
+      expect(await massTexts(page), sid).toEqual([]);
+    }
+  });
+}
+
+test('the masses go off the canvas and come back as the student steps through', async ({
+  page,
+}) => {
+  test.slow();
+  await page.addInitScript(installCanvasTextRecorder);
+  await page.setViewportSize({ width: 1366, height: 800 });
+  await openLessonStep(page, { lesson: ID, sid: 'the-answer' });
+  await expect
+    .poll(() => massTexts(page).then(m => m.length))
+    .toBeGreaterThan(1);
+  await page.locator('#investigationPrev').click();
+  await expect(page.locator('.inv-step-title')).toHaveText(/weigh each one/i);
+  await framesDrawn(page, 12);
+  expect(await massTexts(page)).toEqual([]);
+  await page.locator('#investigationNext').click();
+  await expect(page.locator('.inv-step-title')).toHaveText(/The answer/i);
+  await expect
+    .poll(() => massTexts(page).then(m => m.length))
+    .toBeGreaterThan(1);
 });

@@ -414,9 +414,9 @@ test.describe('the central experiment of each investigation', () => {
       .poll(
         async () => {
           const c = await curve();
-          // A secondary eclipse (the planet behind the star, 0.007 percent)
-          // is also a dip to the recorder when there is no noise: wait for a
-          // transit.
+          // The recorder no longer counts a secondary eclipse (0.007 percent)
+          // as a transit; the depth floor still says this is the lesson's
+          // transit, not a grazing or partial one.
           return (
             c.a.last && c.a.last.depth > 0.005 && c.end - c.a.last.mid > 0.5
           );
