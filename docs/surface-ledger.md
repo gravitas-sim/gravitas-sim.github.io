@@ -25,7 +25,7 @@ Every published surface has one row in [`surface-ledger.json`](surface-ledger.js
 | 370            |    3 |
 | 371            |    2 |
 | 454            |    1 |
-| 456            |    2 |
+| 456            |    3 |
 | 483            |    9 |
 | 487            |    4 |
 | 488            |    6 |
@@ -190,7 +190,7 @@ Every published surface has one row in [`surface-ledger.json`](surface-ledger.js
 | `dialog:data-export`              | #dataExportContent in index.html; opened by #exportDataBtn                                                                    | workspace | —        |   497 | 480        | OPEN        | —        | —       | —    | —                          | —                | —              | —           |
 | `dialog:investigation-finish`     | #investigationFinishContent in index.html; opened by the last step of a lesson (js/investigations.js)                         | lesson    | —        |   456 | 369        | OPEN        | —        | —       | —    | lesson.finish              | lesson.finish    | —              | —           |
 | `dialog:investigation-restart`    | #investigationRestart in index.html; opened by Restart in the lesson panel's More (js/investigations.js)                      | lesson    | —        |   456 | —          | OPEN        | —        | —       | —    | —                          | —                | —              | —           |
-| `dialog:link-notice`              | #linkNotice in index.html; opened by A link that cannot be opened (js/assignments/linkNotice.js, js/notify.js refuseLink)     | lesson    | —        |   363 | —          | OPEN        | —        | —       | —    | —                          | —                | —              | —           |
+| `dialog:link-notice`              | #linkNotice in index.html; opened by A link that cannot be opened (js/assignments/linkNotice.js, js/notify.js refuseLink)     | lesson    | —        |   456 | —          | OPEN        | —        | —       | —    | —                          | —                | —              | —           |
 | `dialog:share`                    | #shareContent in index.html; opened by #shareBtn                                                                              | workspace | —        |   483 | 479        | OPEN        | —        | —       | —    | sandbox.share              | sandbox.share    | —              | —           |
 | `dialog:settings`                 | #settingsPanel in index.html; opened by #settingsBtn                                                                          | workspace | —        |   483 | 335        | OPEN        | —        | —       | —    | sandbox.settings (NOT RUN) | sandbox.settings | —              | —           |
 | `dialog:black-hole-masses`        | #bhMassesModal in index.html; opened by the button the settings panel adds beside the black hole masses (js/settingsPanel.js) | workspace | —        |   483 | 335        | OPEN        | —        | —       | —    | —                          | —                | —              | —           |

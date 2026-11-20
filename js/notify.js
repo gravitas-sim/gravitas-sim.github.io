@@ -90,9 +90,10 @@ export function toast(message, action) {
  * @param {object} what - See js/assignments/linkNotice.js
  */
 export const refuseLink = what =>
-  import('./assignments/linkNotice.js').then(
-    m => m.refuseLink(what) || toast(what.why)
-  );
+  import('./assignments/linkNotice.js')
+    .then(m => m.refuseLink(what))
+    .catch(() => false)
+    .then(shown => shown || toast(what.why));
 
 let failedAt = 0;
 

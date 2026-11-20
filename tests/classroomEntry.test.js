@@ -40,7 +40,7 @@ import { ES_DEFERRED } from '../js/i18n/es.deferred.js';
 
 const REPO = path.resolve(import.meta.dirname, '..');
 const fragment = readFileSync(
-  path.join(REPO, 'js/fragments/lesson-finish.html'),
+  path.join(REPO, 'js/fragments/link-notice.html'),
   'utf8'
 );
 

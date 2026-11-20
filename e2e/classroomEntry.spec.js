@@ -231,7 +231,7 @@ test.describe('a link that cannot be opened says why and what to do', () => {
     await app.boot({ url: '/#activity=no-such-activity/guided' });
     await said(page, { who: 'sender', way: 'Library' });
     await expect(notice(page).locator('#linkNoticeWhy')).toContainText(
-      'No hay ninguna actividad'
+      'No existe ninguna actividad'
     );
     await expect(notice(page).locator('#linkNoticeTitle .gs-es')).toBeVisible();
     const axe = await new AxeBuilder({ page }).include('#linkNotice').analyze();
