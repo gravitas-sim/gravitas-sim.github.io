@@ -52,7 +52,7 @@
         "requests": 61
       },
       "observatory": {
-        "kb": 200.7,
+        "kb": 201,
         "requests": 18
       },
       "catalog": {
@@ -124,7 +124,7 @@
         "requests": 14
       },
       "compute": {
-        "kb": 181.5,
+        "kb": 181.6,
         "requests": 20
       }
     },
@@ -178,7 +178,7 @@
         "requests": 4
       },
       "observatory": {
-        "kb": 96.1,
+        "kb": 96.3,
         "requests": 6
       },
       "catalog": {
@@ -250,7 +250,7 @@
         "requests": 4
       },
       "compute": {
-        "kb": 82.9,
+        "kb": 83.1,
         "requests": 3
       }
     }
