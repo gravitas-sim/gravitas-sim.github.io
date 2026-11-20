@@ -4540,8 +4540,16 @@
       "scene_class": "setup scenario",
       "limits": null,
       "open_items": [
-        "D-R4-346-03: validator messages of the timing step stay English in Spanish (js/i18n/es.deferred.js is at its line ceiling); the page's widths and uncertainties are fields and translate.",
-        "D-R4-346-04: the Jupiter transfer is calculated, not predicted first (T4)."
+        {
+          "ref": "D-R4-346-03",
+          "owner": 346,
+          "note": "validator messages of the timing step stay English in Spanish (js/i18n/es.deferred.js is at its line ceiling); the page's widths and uncertainties are fields and translate."
+        },
+        {
+          "ref": "D-R4-346-04",
+          "owner": 346,
+          "note": "the Jupiter transfer is calculated, not predicted first (T4)."
+        }
       ],
       "questions": {
         "Q1": "The student times the two turns of the direction to Mars themselves, by reading it at moments they choose and bracketing each turn between two readings, which a paragraph cannot do; the synodic period comes from their own measured periods.",
