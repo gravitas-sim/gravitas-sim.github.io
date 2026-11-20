@@ -758,7 +758,7 @@ describe('the declaration and the authoring rules', () => {
 
   test('the photograph form is left to its own test', () => {
     expect(
-      problems({ src: 'images/transit-of-venus-2012.jpg', alt: 'x' })
+      problems({ src: 'images/transit-of-venus-2012.webp', alt: 'x' })
     ).toEqual([]);
     expect(Object.keys(FIGURES)).toEqual(['orbit', 'transit']);
   });

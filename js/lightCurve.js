@@ -49,11 +49,9 @@ import { stellarStateFor } from './stellar/state.js';
 import { EV_LIGHT_CURVE_TOGGLED, EV_SIMULATION_RESET } from './names.js';
 
 let enabled = false;
-// The observer used to live here. It now lives in js/observerGeometry.js,
-// because photometry is no longer the only instrument that depends on where you
-// are standing: radial velocity and astrometry need the same answer. What stays
-// here is the snapshot used to notice that the observer moved, which is when
-// recorded photometry stops describing the geometry it was taken from.
+// The observer lives in js/observerGeometry.js. What stays here is the snapshot
+// that notices the observer moved, when a recording stops describing its
+// geometry.
 let prevAngleSnapshot = 0;
 let chart = null;
 let chartHost = null;
@@ -68,11 +66,9 @@ let isDraggingHandle = false;
 let handleScreenPos = { x: 0, y: 0 };
 
 const HANDLE_RADIUS = 14;
-// A hot Jupiter's transit lasts a few percent of its orbit, so a window that
-// holds only one period shows one dip and no way to time the next. Sampling
-// every frame keeps about thirty points inside a transit that goes past in half
-// a second, and 2000 of them hold half a minute of wall clock: two or three
-// transits of the lesson's scenarios, with the shape of each one intact.
+// A hot Jupiter's transit lasts a few percent of its orbit, so the window must
+// hold two or three transits to time one against the next: 2000 samples, one a
+// frame, keep about thirty inside each transit.
 const MAX_DATA_POINTS = 2000;
 const SAMPLE_INTERVAL = 1;
 // Redrawing a 2000-point path sixty times a second is most of a frame's budget
@@ -100,6 +96,9 @@ const TRANSIT_LOG_LIMIT = 400;
 
 const timeDays = [];
 const brightnessValues = [];
+// Per sample: a planet was on the star's disc.
+const onDisc = [];
+let crossing = false;
 
 let container = null;
 let angleSlider = null;
@@ -151,10 +150,7 @@ function drawChart() {
 
 export function initLightCurve() {
   container = document.getElementById('lightCurveContainer');
-  // The bespoke angle slider that used to live here has been replaced by the
-  // shared observer control, so that this panel, radial velocity and astrometry
-  // are demonstrably driving one observer rather than three that happen to
-  // agree. It also gains an inclination control it never had.
+  // The shared observer control, which radial velocity and astrometry use too.
   const controlHost = document.getElementById('lightCurveObserverControls');
   if (controlHost) mountObserverControls(controlHost);
   angleSlider = null;
@@ -164,9 +160,8 @@ export function initLightCurve() {
   // The controls work whether or not the chart library ever arrives.
   wireLightCurveControls();
 
-  // The chart itself waits until the panel is opened. Nothing else in this
-  // module needs it: every path that touches `chart` already returns early when
-  // it is null, because that was already the state before initialization.
+  // The chart waits until the panel is opened; paths that touch it return early
+  // while it is null.
   chartHost = document.getElementById('lightCurveChart');
 }
 
@@ -174,8 +169,7 @@ export function initLightCurve() {
  * Create the chart once the component has arrived.
  *
  * Split out of initLightCurve() so start-up does not wait on the chart code
- * for a panel that is closed. Everything else in the module already tolerates a
- * missing chart: drawChart() and the update path both return early on null.
+ * for a panel that is closed.
  *
  * @param {HTMLElement} host - The light-curve chart's host
  */
@@ -254,17 +248,13 @@ function toggle() {
 }
 
 function setEnabled(next) {
-  // Opening the panel starts a fresh observing run. Keeping the old samples
-  // would join the last point before it closed to the first point after with a
-  // straight line across however much time went by, which on a light curve
-  // reads as "nothing happened" rather than "nobody was watching".
+  // Opening the panel starts a fresh run: old samples would be joined to the new
+  // ones by a straight line across the time between.
   if (next && !enabled) clearData();
   enabled = next;
   if (container) container.style.display = enabled ? '' : 'none';
   if (enabled) noteObservationPanelUsed('lightCurveContainer');
-  // Every path that opens or closes this panel comes through here - the toggle
-  // button, the close button and the public setter - so this is the one place
-  // the observing stack can be re-laid out without being bypassed.
+  // Every path that opens or closes the panel comes through here.
   layoutObservationPanels();
 
   // First time the panel is opened: fetch the chart component and build the
@@ -294,6 +284,7 @@ function setEnabled(next) {
 function clearData() {
   timeDays.length = 0;
   brightnessValues.length = 0;
+  onDisc.length = 0;
   transitLog.length = 0;
   analysis = { baseline: 1, transits: [] };
   transitsSeen = 0;
@@ -311,13 +302,10 @@ export function isLightCurveEnabled() {
 /**
  * The photospheric radius, in solar radii.
  *
- * From the shared description rather than from a local mass-radius power law.
- * The two disagreed: this module used M^0.8 and the habitable-zone ring used a
- * temperature and a luminosity, so a transit depth and a zone drawn around the
- * same star were computed from two different stars. The shared description
- * derives the radius from the luminosity and the temperature by the
- * Stefan-Boltzmann relation, which is exact, and falls back to a main-sequence
- * estimate only when there is nothing but a mass - and says which it did.
+ * From the shared description, not a local mass-radius power law: the two
+ * disagreed, so a transit depth and the habitable-zone ring around the same star
+ * came from two different stars. It uses the Stefan-Boltzmann relation and falls
+ * back to a main-sequence estimate only when there is nothing but a mass.
  *
  * @param {Object} star - A simulation star
  * @returns {number} Radius in solar radii
@@ -481,6 +469,7 @@ function calculateBrightness() {
   ].filter(o => o.alive);
 
   let flux = 1.0; // normalized stellar baseline
+  crossing = false;
 
   for (const star of liveStars) {
     const w = stellarLuminosity(star) / totalLum; // luminosity weight
@@ -524,6 +513,7 @@ function calculateBrightness() {
       // ── Primary transit ──
       if (losDepth > 0 && sep < Rs_sim + Rp_sim) {
         flux -= w * transitDip(k, b, Rs_sim, Rp_sim, sep);
+        crossing = true;
       }
 
       // Where this body is against the star's disc, right now, recorded for
@@ -589,10 +579,12 @@ export function updateLightCurve() {
 
   timeDays.push(simTimeToDays(simTime));
   brightnessValues.push(lastBrightness);
+  onDisc.push(crossing);
 
   while (timeDays.length > MAX_DATA_POINTS) {
     timeDays.shift();
     brightnessValues.shift();
+    onDisc.shift();
   }
 
   sampleCounter++;
@@ -637,7 +629,9 @@ function median(values) {
  * variability. Without that test, a window that happens to contain no transit
  * has its threshold set by whatever the deepest thing in it is, and the
  * secondary eclipse gets reported as a transit at half the period. It is about
- * seven times the scatter; a real transit is hundreds of times it.
+ * seven times the scatter; a real transit is hundreds of times it. A curve with
+ * no scatter passes that for the eclipse too, so a transit also needs a
+ * planet on the disc (onDisc).
  *
  * The middle of a transit is taken as the midpoint of its two half-depth
  * crossings rather than the position of the lowest sample, which is the
@@ -697,6 +691,7 @@ function addTransit(first, last, baseline, noise) {
   for (let i = first; i <= last; i++) {
     if (brightnessValues[i] < bottom) bottom = brightnessValues[i];
   }
+  if (!onDisc.slice(first, last + 1).includes(true)) return;
   const depth = baseline - bottom;
   // A planet crossing the disk is hundreds of times the scatter. A secondary
   // eclipse, where the star hides the planet's own light, is about seven.
@@ -710,7 +705,6 @@ function addTransit(first, last, baseline, noise) {
     if (a < 0) a = i;
     b = i;
   }
-  if (a < 0) return;
 
   analysis.transits.push({
     mid: (timeDays[a] + timeDays[b]) / 2,
