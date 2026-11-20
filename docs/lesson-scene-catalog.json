@@ -2332,7 +2332,7 @@
      "sid": "eight-minutes-of-arc",
      "index": 1,
      "type": "read",
-     "title": "Eight minutes of arc",
+     "title": "Three questions about an orbit",
      "declares": {
       "stage": null,
       "bound": [
@@ -6648,7 +6648,7 @@
      "sid": "a-firefly-beside-a-lighthouse",
      "index": 1,
      "type": "read",
-     "title": "A firefly beside a lighthouse",
+     "title": "A planet you cannot see",
      "declares": {
       "stage": null,
       "bound": [
@@ -12952,7 +12952,7 @@
      "sid": "what-you-can-now-say",
      "index": 36,
      "type": "read",
-     "title": "What you can now say",
+     "title": "Why it matters",
      "declares": {
       "stage": {
        "objects": 2,

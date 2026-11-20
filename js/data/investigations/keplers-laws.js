@@ -47,6 +47,9 @@ const KEPLER = {
   thumbnail: 'images/scenarios/keplers-2nd-law.webp',
   title: "Kepler's Laws",
   subtitle: 'Measure the shape, pacing and timing of real orbits',
+  question:
+    'What path does a planet follow around its star, and what sets how fast it moves and how long its year is?',
+  medium: { kind: 'scene', name: 'the live orbit view' },
   duration: '35-45 min',
   level: 'Introductory astronomy',
   audience: 'intro',
@@ -99,25 +102,14 @@ const KEPLER = {
       sid: 'eight-minutes-of-arc',
       bind: KEPLER_PAIR,
       type: 'read',
-      title: 'Eight minutes of arc',
-      body: `For most of recorded history orbits were circles. When observations
-             disagreed, astronomers added more circles: epicycles: until the
-             model fit. Copernicus moved the Sun to the center but kept the
-             circles, and his model was no more accurate than the one it
-             replaced.
-             \n\nWhat broke the circle was data. Tycho Brahe spent two decades
-             measuring planetary positions to about one arcminute, the limit of
-             what is possible without a telescope. When Johannes Kepler tried to
-             fit Tycho's observations of Mars to a circular orbit, the best fit
-             he could manage was off by eight arcminutes. He could have called
-             that observational error and moved on. Instead he trusted Tycho's
-             measurements over two thousand years of assumption, and spent years
-             working out what curve would fit.
-             \n\nThe answer was an ellipse. Where the Sun sits in it is the first thing to find out.`,
-      quote: {
-        text: 'Because these eight minutes could not be ignored, they alone have led the way toward reforming the whole of astronomy.',
-        by: 'Johannes Kepler, Astronomia Nova, 1609',
-      },
+      title: 'Three questions about an orbit',
+      body: `What path does a planet follow around its star, and what sets how
+             fast it moves and how long its year is? You will answer it in the
+             live orbit view: predict first, then measure distances, speeds
+             and years in orbits you choose.
+             \n\nJohannes Kepler answered it four hundred years ago from
+             positions of Mars measured without a telescope. Why he trusted
+             them comes after your first prediction.`,
       tip: 'While an investigation is running, clicking selects an object without opening the inspector card, and placing new objects is switched off so a stray click cannot alter the system you are measuring.',
       setup: {
         scenario: "Kepler's 2nd Law",
@@ -315,8 +307,17 @@ const KEPLER = {
       ],
       compare:
         'The star sits at one focus and the other focus is empty. The panel’s separation and the one your two distances give are the same number because the foci mirror each other about the center.',
+      quote: {
+        text: 'Because these eight minutes could not be ignored, they alone have led the way toward reforming the whole of astronomy.',
+        by: 'Johannes Kepler, Astronomia Nova, 1609',
+      },
       title: 'The First Law, and the anatomy of an ellipse',
-      body: `Kepler's <strong>first law</strong>: every planet moves on an
+      body: `Tycho Brahe measured planetary positions to about one arcminute,
+             the limit without a telescope. When Johannes Kepler fitted Tycho's
+             observations of Mars to a circle, the best fit was off by eight
+             arcminutes, and he trusted the measurements over two thousand
+             years of circles.
+             \n\nKepler's <strong>first law</strong>: every planet moves on an
              ellipse, with the star at one focus.
              \n\nAn ellipse has two foci. Their defining property is that for
              any point on the curve, the distances to the two foci always add to
@@ -1485,13 +1486,12 @@ const KEPLER = {
       bind: TRAPPIST_1,
       type: 'read',
       title: 'Where this leaves you',
-      body: `You have measured the shape of an orbit, watched a planet trade
-             speed for distance while conserving angular momentum, and recovered
-             a power law from eight measurements you took yourself. Then you used
-             it to weigh a star you will never visit.
-             \n\nEverything here came out of naked-eye positions recorded before
-             the telescope existed, by an observer who refused to round away eight
-             minutes of arc.`,
+      body: `The three laws are not three separate facts. One pull toward the
+             star, weakening as the square of the distance, produces all of
+             them, which is why they hold for TRAPPIST-1 as they do here. They
+             describe a light body going round a much heavier one: when the two
+             masses are close, as in a pair of stars, both move, and the period
+             depends on their sum.`,
       tip: 'If you are submitting this for credit, press Finish to enter your name and download your lab report. Otherwise you can simply close the panel.',
     },
   ],

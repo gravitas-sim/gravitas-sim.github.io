@@ -2602,7 +2602,10 @@
         "L4": "HOLDS: no step before `heating-at-two-eccentricities` states 1.99 or 7.96, and the hunt's observed range appears only in its own step; the step offers no pair and no hint that names one.",
         "L5": "HOLDS: the accessible instrument description, the readout rows, the reading buttons and the answer-key rows print the held values only after the student's own reading; docs/lesson-acceptance.json records leakFree for the lesson."
       },
-      "task_rule_items": [],
+      "task_rule_items": [
+        "T6: the medium is the tidal heating instrument, with the held portrait of Jupiter and Io behind it (the canvas mode stays portrait; the roadmap named a live scene, which the lesson does not use).",
+        "T9: the first step opens with the lesson's question and the action on the tidal heating instrument; the finish dialog returns to the question with the student's own prediction, readings and words."
+      ],
       "editorial": "REVISED",
       "redesign": "REVISED",
       "reason": "",
@@ -2631,11 +2634,19 @@
         {
           "step": "what-would-separate-them",
           "change": "New deeper step with three authored misconceptions."
+        },
+        {
+          "step": "a-moon-that-melts",
+          "change": "REWORDED: opens with the question and the action; the friction explanation is cut to the tide rising and falling once an orbit."
+        },
+        {
+          "step": "what-heat-is",
+          "change": "REWORDED: shortened to the resonance that keeps the orbit eccentric and why the heat gives a bound."
         }
       ],
       "walk": "VERIFIED",
       "pr": 676,
-      "hash": "6b0d88f1023101468539e12e6caf9f4d353fabfc5ec43386c2fea3831c0c68e5"
+      "hash": "eb7a42472f6ab28ce87d9464a99b5ec09bbbb3005c9ce5bd3c8bf3b193e4ccc7"
     },
     {
       "id": "investigation:keplers-laws",
@@ -2684,7 +2695,9 @@
         "T2: the star, fastest-point and period predictions return at their reveal steps beside the readings.",
         "T3: one controlled run of one planet around two star masses.",
         "T4: an orbit nobody measured is predicted, then checked against the nearest planet.",
-        "T5: authored feedback for the wrong panel points, the centre of the ellipse, a reading from the wrong body, and a period without the square root."
+        "T5: authored feedback for the wrong panel points, the centre of the ellipse, a reading from the wrong body, and a period without the square root.",
+        "T6: the medium is the live orbit view (a scene medium; the canvas mode is unchanged).",
+        "T9: the first step opens with the lesson's question and the action in the live orbit view; the finish dialog returns to the question with the student's own predictions, readings and words."
       ],
       "editorial": "REVISED",
       "redesign": "REVISED",
@@ -2740,11 +2753,23 @@
         {
           "sid": "size-of-the-miss",
           "change": "NEW (deeper): the size of Kepler's miss for TRAPPIST-1g."
+        },
+        {
+          "sid": "eight-minutes-of-arc",
+          "change": "REWORDED: opens with the question and the action; the history of Tycho's arcminutes moves to the first-law step."
+        },
+        {
+          "sid": "the-first-law-and-the",
+          "change": "REWORDED: carries the history and Kepler's quotation, after the first prediction."
+        },
+        {
+          "sid": "where-this-leaves-you",
+          "change": "REWORDED: says what the student's readings cannot show (one inverse-square pull behind all three laws; the sum of the masses for a pair)."
         }
       ],
       "walk": "NOT RUN",
       "pr": null,
-      "hash": "201cc6768c034b71bfd369b73e10f996604efeabca03a92b5f4fe2b8f7f082ed"
+      "hash": "9ad90eaeff4d66aa9c7b5f0bf0f730cb55fe4dc4580a5228bf7d17053cda4685"
     },
     {
       "id": "investigation:l3-eclipse",
@@ -3380,7 +3405,9 @@
       "task_rule_items": [
         "T1: the scale, the pair and the share are captured from the readout with their provenance (K1); the km fields are the student's own measurement.",
         "T2: the held prediction of the scale and of the plain return at the reveal step beside the measurement.",
-        "T5: authored feedback for a short pair, a scale under 7.4, a diameter that does not match the pair, and a pair that is too long."
+        "T5: authored feedback for a short pair, a scale under 7.4, a diameter that does not match the pair, and a pair that is too long.",
+        "T6: the medium is the Galileo picture (an image; the canvas stays quiet).",
+        "T9: the first step opens with the lesson's question and the action on the Galileo picture without saying where a scale comes from (held by predict-the-scale); the finish dialog returns to the question with the student's own readings."
       ],
       "editorial": "REVISED",
       "redesign": "REVISED",
@@ -3415,11 +3442,23 @@
           "sid": "a-diameter-with-the-squeeze",
           "from": "a-diameter-with-an-error-bar",
           "change": "REVISED: quantitative, answer 660, tolerance 4, uncertainty up to 60."
+        },
+        {
+          "sid": "a-picture-of-the-moon",
+          "change": "REWORDED: opens with the question and the action; the display-only explanation and the pixel numbering move to mark-the-disc-width."
+        },
+        {
+          "sid": "mark-the-disc-width",
+          "change": "REWORDED: carries the picture's size, numbering and display-only status before the pair is placed."
+        },
+        {
+          "sid": "what-you-worked-out",
+          "change": "REWORDED: shortened to what the stated uncertainty leaves out and why gray levels are not light."
         }
       ],
       "walk": "NOT VERIFIED",
       "pr": 675,
-      "hash": "d650eb53277bb362da2e35347c2e52a1af4a567c8273c4d37c6e628f436e6521"
+      "hash": "4c994bfeb70a4cad79bc109b469b09a6fd2a7f3e8934232b80666aaa2067d612"
     },
     {
       "id": "investigation:missing-mass",
@@ -5766,7 +5805,10 @@
         "L4": "HOLDS: the measured 3.82 appears in the instrument's row and in no earlier body, hint or the closing step.",
         "L5": "HOLDS: the readout rows and the answer-key rows print the held answers only as the student's own reading; docs/lesson-acceptance.json records the quiet canvas and the decision text."
       },
-      "task_rule_items": [],
+      "task_rule_items": [
+        "T6: the medium is the tide model (an instrument; the canvas stays quiet).",
+        "T9: the first step opens with the lesson's question and the action on the tide model; the finish dialog returns to the question with the student's own readings and prediction."
+      ],
       "editorial": "REVISED",
       "redesign": "REVISED",
       "reason": "",
@@ -5786,11 +5828,19 @@
         {
           "step": "what-the-model-leaves-out",
           "change": "No longer introduces the measured 3.82."
+        },
+        {
+          "step": "the-bulge-ahead",
+          "change": "REWORDED: opens with the question and the action; the bulge is described in two sentences."
+        },
+        {
+          "step": "what-the-model-leaves-out",
+          "change": "REWORDED: shortened to why the backward run shows Q was not constant; the student's own numbers are left to the ending."
         }
       ],
       "walk": "VERIFIED",
       "pr": 676,
-      "hash": "c198085665d636a803dbd14df100eb51824328302b4a06709eec7eeee82d6ef9"
+      "hash": "24b05a00b1bde10550247fb62f1c7d78aaa71b26fe274d21ef6cdd094fe6d8be"
     },
     {
       "id": "investigation:transit-photometry",
@@ -5832,11 +5882,27 @@
         "L4": "",
         "L5": ""
       },
-      "task_rule_items": [],
+      "task_rule_items": [
+        "T6: the medium is the light curve (an instrument; the scene behind it is the transit the light curve records).",
+        "T9: the first step opens with the lesson's question and the action on the light curve; the finish dialog returns to the question with the student's own estimates, readings and words."
+      ],
       "editorial": "OPEN",
       "redesign": "OPEN",
       "reason": "",
-      "step_revisions": [],
+      "step_revisions": [
+        {
+          "sid": "a-firefly-beside-a-lighthouse",
+          "change": "REWORDED: opens with the question and the action; why planets are found through their stars moves to where-the-depth-comes-from."
+        },
+        {
+          "sid": "where-the-depth-comes-from",
+          "change": "REWORDED: opens with why a transit measures the star, after the first transit is recorded."
+        },
+        {
+          "sid": "what-you-did-and-where",
+          "change": "REWORDED: shortened to what each correction rested on and the follow-up behind every survey radius."
+        }
+      ],
       "walk": "NOT RUN",
       "pr": null,
       "hash": "6d13496c03891576734f575375251649d3015f0404512e0ead2e05628fa98f51"
@@ -6235,11 +6301,23 @@
         "L4": "",
         "L5": ""
       },
-      "task_rule_items": [],
+      "task_rule_items": [
+        "T6: the medium is the live view of the pair (a scene medium; the canvas mode is unchanged).",
+        "T9: the first step opens with the lesson's question and the action without naming the method (L3: how-would-you-do-it asks for it); the finish dialog returns to the question with the student's own readings and words."
+      ],
       "editorial": "OPEN",
       "redesign": "OPEN",
       "reason": "Corrections I reworded steps for factual consistency (register D-R4-300-14); editorial pass still OPEN.",
-      "step_revisions": [],
+      "step_revisions": [
+        {
+          "sid": "you-cannot-put-a-star",
+          "change": "REWORDED: opens with the question and the action; the sentence that an orbit is the measuring instrument, which answered how-would-you-do-it before it was asked, is removed (what-kepler-found-and-what still says it)."
+        },
+        {
+          "sid": "what-you-can-now-say",
+          "change": "REWORDED: titled Why it matters and shortened to why binaries calibrate stellar masses; the student's own summary is in say-how-the-weighing-worked and the ending."
+        }
+      ],
       "walk": "NOT RUN",
       "pr": null,
       "hash": "4ebc920c49ee3ef3e137f613f4722be679c783aa53e68587a4dc88a509e3a279"
