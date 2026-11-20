@@ -627,7 +627,7 @@ function bindStepRoles(force, fresh) {
     });
     warn(problems, 'unbound role');
   } else releaseModelOwnership();
-  if (fresh && (step?.bind || !appliedSetup?.camera)) frameScene();
+  if (fresh) frameScene();
 }
 
 function applyLocks() {
@@ -2404,8 +2404,8 @@ function openFinish() {
     })}</p>
     <p class="inv-finish-note">${escape(t('inv.finish.note'))}</p>`;
   els.nameInput.value = getStudentName();
-  import('./investigations/next.js').then(m =>
-    m.whatNext(document.getElementById('investigationNextList'), {
+  import('./investigations/ending.js').then(m =>
+    m.ending(finishHost(), shown(), {
       id: active.id,
       deeper: active.depths && !els.deeper.hidden && els.deeper.textContent,
       onDeeper: () => {
