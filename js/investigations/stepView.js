@@ -89,11 +89,15 @@ export function runsModule(m) {
   return (slots.runs = m);
 }
 
-let lost = false; // the reveal code failed to load
+let lost = false; // a lazy module failed to load: Next stops waiting for the estimate box
 /** Fetch the run and reveal code with the step that needs it: offline, the lesson opens. */
 export function fetchSeams(step, again) {
-  const get = (needed, load, use, fail = () => {}) =>
-    needed && load().then(m => (use(m), again()), fail);
+  const get = (needed, load, use) =>
+    needed &&
+    load().then(
+      m => (use(m), again()),
+      () => (lost = true)
+    );
   get(
     step.variation && !slots.runs,
     () => import('../lesson/runs.js'),
@@ -102,8 +106,7 @@ export function fetchSeams(step, again) {
   get(
     (step.evidence || step.kind === 'estimate') && !slots.reveal,
     () => import('./reveal.js'),
-    revealModule,
-    () => (lost = true)
+    revealModule
   );
 }
 
@@ -1281,11 +1284,8 @@ export function roleEchoesName(label, name) {
 }
 
 /** Whether Next waits: an estimate's box is fetched with its step, and is never passed unseen. */
-export function estimateHolds() {
-  const h = bound;
-  const step = h?.currentStep();
-  if (step?.kind !== 'estimate' || slots.reveal || lost) return false;
-  fetchSeams(step, () => h.currentStep() === step && h.renderStep());
-  announce(t('inv.card.loading'));
-  return true;
-}
+export const estimateHolds = () =>
+  bound?.currentStep()?.kind === 'estimate' &&
+  !slots.reveal &&
+  !lost &&
+  (announce(t('inv.card.loading')), true);
