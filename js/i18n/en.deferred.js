@@ -709,9 +709,8 @@ export const EN_DEFERRED = {
     'Burn {n}: {body} at t = {time}, radial {radial}, transverse {transverse}.',
 
   // --- The investigations panel ------------------------------------------------
-  // Read only by js/investigations.js (ensureInvestigations() registers them),
-  // js/lessonStage.js and the lesson engine; the base catalog keeps the dozen on
-  // static buttons in index.html and the two the loader says when a chunk fails.
+  // Read only by js/investigations.js (ensureInvestigations() registers them), js/lessonStage.js and the lesson engine;
+  // the base catalog keeps the dozen on static buttons in index.html and the two the loader says when a chunk fails.
   'inv.stage.scale.display':
     'Compressed scale: every star is visible and the order by size is right, but the ratios on screen are not the ratios in the model.',
   'inv.stage.scale.true':
@@ -741,6 +740,7 @@ export const EN_DEFERRED = {
   'inv.take.default': 'Take reading',
   'inv.take.name': 'Take reading: {what}',
   'inv.take.predict': 'Make your prediction first.',
+  'inv.est.wait': 'Your estimate box is loading. Press Next to try again.',
   'inv.take.none': '{what} is not showing, so there is nothing to read.',
   'inv.take.done': 'Reading taken: {what}, {value}.',
   'inv.take.from': 'Taken from {what}.',

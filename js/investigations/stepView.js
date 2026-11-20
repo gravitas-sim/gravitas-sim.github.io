@@ -109,6 +109,23 @@ export function fetchSeams(step, again) {
   );
 }
 
+/**
+ * Whether Next must wait: an estimate holds it until committed, so a student is never carried past the prediction
+ * the readings are held against. Its box is fetched with the step; a press before it arrives asks again and says why.
+ */
+export function estimateHolds() {
+  const h = bound;
+  const step = h?.currentStep();
+  if (step?.kind !== 'estimate' || h.responses()[h.stepId()]) return false;
+  fetchSeams(step, () => h.currentStep() === step && h.renderStep());
+  const body = h.els().body;
+  announce(
+    body.querySelector('[data-est-note],[data-est-wait]')?.textContent ?? ''
+  );
+  body.querySelector('[data-est]')?.focus();
+  return true;
+}
+
 /** Install the field slot's module with the engine functions it needs. */
 export function fieldModule(m) {
   m.setKit({
@@ -218,7 +235,10 @@ export function stepMarkup(step, c) {
   }
 
   if (step.kind === 'estimate')
-    parts.push(slots.reveal?.estimate(step, c) ?? '');
+    parts.push(
+      slots.reveal?.estimate(step, c) ??
+        `<p class="inv-held" data-est-wait>${escape(t('inv.est.wait'))}</p>`
+    );
   else if (step.type === 'predict' || step.kind === 'choice') {
     const locked = saved !== undefined;
     // A step that names `reveal` holds the marking and the explanation until

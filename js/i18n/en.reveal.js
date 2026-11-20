@@ -8,7 +8,7 @@ export const EN_REVEAL = {
   'reveal.est.commit': 'Commit my estimate',
   'reveal.est.number': 'Enter a number in each box.',
   'reveal.est.first':
-    'Once you commit it, your estimate stays unmarked until you reach “{title}”.',
+    'Commit your estimate to go on. It stays unmarked until you reach “{title}”.',
   'reveal.est.held':
     'Your estimate is recorded. It stays unmarked until you reach “{title}”.',
   'reveal.est.said': 'You estimated: {value}',

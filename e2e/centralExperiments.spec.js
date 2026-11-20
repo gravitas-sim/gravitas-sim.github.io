@@ -370,6 +370,15 @@ test.describe('the central experiment of each investigation', () => {
     // The estimate, committed and held: nothing on the screen marks it.
     const predict = await walkToSid(page, plan, predictSid);
     expect(predict.reveal).toBeTruthy();
+    // Next holds at an estimate that is not committed, and says why.
+    await expect(page.locator('#investigationBody [data-est]')).toBeVisible();
+    const where = page.locator('.inv-step-title');
+    const title = await where.innerText();
+    await page.locator('#investigationNext').click();
+    await expect(where).toHaveText(title);
+    await expect(
+      page.locator('#investigationBody [data-est-note]')
+    ).toContainText('Commit your estimate to go on');
     await page.locator('#investigationBody [data-est]').fill('1.5');
     await page.locator('#investigationBody [data-est-commit]').click();
     const body = page.locator('#investigationBody');
