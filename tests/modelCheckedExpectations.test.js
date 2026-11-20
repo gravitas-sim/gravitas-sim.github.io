@@ -232,7 +232,8 @@ describe('the instructor expectations record', () => {
     // 551 after the two Gaia investigations (Prompt 233 Part B): 4 more over 547.
     // 556 over v4's 552: the new steps of Weighing the Stars, Transit Photometry and Kepler's Laws, net of the ones they retire.
     // 557 after Tides: two entries renamed with their steps and one new one for the Roche hunt.
-    expect(total).toBe(557);
+    // 559 after the review fixes: expectations for the two new-distance steps.
+    expect(total).toBe(559);
     // 542 after How Many Earths? (Prompt 229): 3 more over 539.
     // 547 after the four exoplanet closeout investigations (Prompt 231): 5 more over 542.
   });
