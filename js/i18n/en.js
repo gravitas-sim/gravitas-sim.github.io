@@ -1433,10 +1433,10 @@ export const EN = {
   'inv.action.back.hint': 'Previous step (Shift + Left arrow)',
   'inv.body.label': 'Investigation step',
   'inv.backup.summary': 'Progress backup',
-  'inv.backup.download': 'Download a backup of your work',
+  'inv.backup.download': 'Download a backup of your answers',
   'inv.backup.download.hint':
     'Save a copy of your answers to a file you keep. The PDF report is still what you hand in.',
-  'inv.backup.restore': 'Restore a backup of your work',
+  'inv.backup.restore': 'Restore a backup of your answers',
   'inv.backup.restore.hint': 'Load answers back from a file you saved earlier.',
   'inv.probe.title': 'Live readout',
   'inv.stage.fit': 'Fit comparison',

@@ -114,7 +114,7 @@ test.describe('the save status', () => {
 
     await expect(status(page)).toBeVisible();
     await expect(status(page)).toHaveAttribute('data-state', 'full');
-    await expect(status(page)).toHaveAttribute('aria-live', 'polite');
+    await expect(page.locator('#srStatus')).toContainText(/Not saved/);
     await expect(status(page)).toContainText(/storage|full|space/i);
 
     // Standing, not transient: several more steps and it is still on screen.
@@ -203,7 +203,9 @@ test.describe('work survives the panel closing when storage refuses', () => {
     expect(await stepNumber(page)).toBe(reached);
     // And the warning is still accurate: safe here, not on the disk.
     await expect(status(page)).toHaveAttribute('data-state', 'full');
-    await expect(status(page)).toContainText(/lost when you close the tab/i);
+    await expect(status(page)).toContainText(
+      /stay on this page while it is open/i
+    );
   });
 
   test('switching to another lesson and back keeps both', async ({

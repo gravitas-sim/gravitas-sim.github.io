@@ -85,21 +85,33 @@ const bodies = () =>
     white_dwarfs,
   ].reduce((n, l) => n + l.length, 0);
 
-/** The scene as a step drew it: the run paused or not, how many bodies, whether the student placed one. */
-let start = { paused: false, count: 0, at: 0, placed: false };
+/**
+ * The scene as a step drew it: the run paused or not, how many bodies, whether
+ * the student placed one, and whether they touched anything outside the lesson
+ * panel since (a lesson that pauses the run itself, or bodies that merge on
+ * their own, are not the student's doing).
+ */
+let start = { paused: false, count: 0, at: 0, placed: false, acted: false };
 /** An instrument settling in puts bodies in the scene for a moment: only later changes are the student's. */
 const SETTLE_MS = 3000;
+const acted = e => {
+  if (!e.target?.closest?.('#investigationPanel')) start.acted = true;
+};
 window.addEventListener(EV_OBJECT_PLACED, () => (start.placed = true));
+window.addEventListener('pointerdown', acted, true);
+window.addEventListener('keydown', acted, true);
 const changed = () =>
-  state.paused !== start.paused ||
   start.placed ||
-  (Date.now() - start.at > SETTLE_MS && bodies() !== start.count);
+  (start.acted &&
+    (state.paused !== start.paused ||
+      (Date.now() - start.at > SETTLE_MS && bodies() !== start.count)));
 const rebase = () =>
   (start = {
     paused: state.paused,
     count: bodies(),
     at: Date.now(),
     placed: false,
+    acted: false,
   });
 
 let timer = 0;

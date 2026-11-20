@@ -43,6 +43,7 @@ import {
   get,
   noteLesson,
   noteResume,
+  previewing,
   put,
 } from '../storage/local.js';
 import { migrateSavedProgress } from '../platform/resolver.js';
@@ -1055,7 +1056,7 @@ export function save() {
 
   try {
     put(key, JSON.stringify(payload), progressArea());
-    setSaveState('saved');
+    setSaveState(previewing() ? 'preview' : 'saved');
     noteWork(active, payload.stepSid, link, key);
   } catch (err) {
     // The answers stay in memory and the lesson keeps working; what changes is
@@ -1094,10 +1095,12 @@ export function renderProgressNotice() {
 }
 
 /**
- * Show whether the work is safe, in words: a polite live region, not a toast
- * (one would fire on every keystroke). The first "saved" is not spoken; a
- * refusal, and a recovery from one, are, once each (the text is drawn only when
- * the state or the language changes). A refusal carries the backup button.
+ * Show whether the work is safe, in words: a status line, not a toast (one
+ * would fire on every keystroke). A change of state is drawn once (the text is
+ * redrawn only when the state or the language changes) and a refusal, a
+ * recovery from one and a record that cannot be written are also spoken once,
+ * through the page's status region: the line itself is drawn visible and in
+ * one go, which a reader may not announce. A refusal carries the backup button.
  */
 export function renderSaveStatus() {
   const el = host.els()?.saveStatus;
@@ -1105,18 +1108,13 @@ export function renderSaveStatus() {
   const { status, was } = saveState;
   const key = `${status}${getLocale()}`;
   if (el.dataset.shown === key) return;
+  const changed = el.dataset.state !== status;
   const refused = status === 'full' || status === 'unavailable';
+  const focused = el.contains(document.activeElement);
+  const text = status === 'idle' ? '' : t(`inv.save.${status}`);
   el.dataset.shown = key;
   el.dataset.state = status;
-  el.setAttribute(
-    'aria-live',
-    status === 'foreign' ||
-      refused ||
-      (status === 'saved' && ['full', 'unavailable'].includes(was))
-      ? 'polite'
-      : 'off'
-  );
-  el.textContent = status === 'idle' ? '' : t(`inv.save.${status}`);
+  el.textContent = text;
   el.hidden = status === 'idle';
   // A way out of a refusal, and a way to everything saved when saving works.
   if (refused) {
@@ -1131,6 +1129,15 @@ export function renderSaveStatus() {
     link.textContent = t('inv.save.link');
     el.append(' ', link);
   }
+  // The button that had focus is gone: keep the reader's place on the line.
+  if (focused) ((el.tabIndex = -1), el.focus());
+  if (
+    changed &&
+    (status === 'foreign' ||
+      refused ||
+      (status === 'saved' && ['full', 'unavailable'].includes(was)))
+  )
+    announce(text);
 }
 
 /** This tab's copy of every lesson's progress, written on every save. */
@@ -1151,7 +1158,9 @@ export const drafts = more =>
 export const persisted = () => host.state();
 /** Whether a write reaches the disk now; false when storage refuses or the record is not this reader's. */
 export const canSave = () =>
-  !['unavailable', 'full', 'foreign', 'authoring'].includes(saveState.status);
+  !['unavailable', 'full', 'foreign', 'authoring', 'preview'].includes(
+    saveState.status
+  );
 
 /** Per storage key: answers to steps it no longer has, written back on save. */
 const earlierKept = new Map();

@@ -50,6 +50,6 @@ export const ES_RESET = {
   'saved.scene.leave':
     'La escena que preparaste no se guarda. Cuando vuelvas, se reconstruye desde el inicio de este paso.',
   'saved.scene.back':
-    'La escena se reconstruye desde el inicio de este paso. Tus respuestas y lecturas se guardan; la escena que preparaste la última vez, no.',
+    'La escena se reconstruye desde el inicio de este paso. La escena que preparaste la última vez no se conserva.',
   'reset.help.title': 'Empezar de nuevo',
 };

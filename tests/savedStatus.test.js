@@ -24,11 +24,14 @@ import { ES_RESET } from '../js/i18n/es.reset.js';
 import { registerMessages, setLocale, t } from '../js/i18n/index.js';
 import {
   bindPersistence,
+  drafts,
+  forgetKept,
   save,
   sessionProgress,
 } from '../js/investigations/stepView.js';
 import { syncReset } from '../js/investigations/vocabulary.js';
 import { state } from '../js/appState.js';
+import { setPreview } from '../js/storage/local.js';
 
 registerMessages('en', EN_DEFERRED, true);
 registerMessages('es', ES_DEFERRED, true);
@@ -69,6 +72,7 @@ const bind = () =>
   });
 
 const status = () => document.getElementById('investigationSaveStatus');
+const spoken = () => document.getElementById('srStatus').textContent;
 const refuse = name => {
   jest.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
     throw Object.assign(new Error('refused'), { name });
@@ -76,7 +80,7 @@ const refuse = name => {
 };
 
 beforeEach(async () => {
-  document.body.innerHTML = lessonHtml;
+  document.body.innerHTML = `${lessonHtml}<div id="srStatus"></div>`;
   localStorage.clear();
   sessionProgress.clear();
   at = 0;
@@ -98,7 +102,7 @@ describe('the status line', () => {
       'Your answers, slider settings and hints are saved on this device.'
     );
     expect(status().querySelector('a').getAttribute('href')).toBe('/my-work/');
-    expect(status().getAttribute('aria-live')).toBe('off');
+    expect(spoken()).toBe('');
     expect(status().querySelector('button')).toBeNull();
   });
 
@@ -106,17 +110,21 @@ describe('the status line', () => {
     refuse('QuotaExceededError');
     save();
     expect(status().dataset.state).toBe('full');
-    expect(status().textContent).toMatch(/storage is full/);
-    expect(status().getAttribute('aria-live')).toBe('polite');
+    expect(status().textContent).toMatch(
+      /storage is full, or this record is too large/
+    );
+    expect(status().textContent).toMatch(/stay on this page while it is open/);
+    expect(status().textContent).not.toMatch(/lost when/);
+    expect(spoken()).toBe(status().firstChild.textContent);
     expect(status().querySelector('button').textContent).toBe(
-      'Download a backup of your work'
+      'Download a backup of your answers'
     );
 
     refuse('SecurityError');
     save();
     expect(status().dataset.state).toBe('unavailable');
     expect(status().textContent).toMatch(/private browsing/);
-    expect(status().textContent).not.toMatch(/full/);
+    expect(status().textContent).not.toMatch(/full|too large/);
     expect(status().querySelector('button')).not.toBeNull();
   });
 
@@ -139,14 +147,44 @@ describe('the status line', () => {
     expect(status().querySelector('button')).toBe(button);
   });
 
-  test('recovery is said once, politely, and the button goes', () => {
+  test('recovery is spoken once, the button goes, and focus stays on the line', () => {
     refuse('QuotaExceededError');
     save();
+    status().querySelector('button').focus();
     jest.restoreAllMocks();
     save();
     expect(status().dataset.state).toBe('saved');
-    expect(status().getAttribute('aria-live')).toBe('polite');
+    expect(spoken()).toMatch(/saved on this device/);
     expect(status().querySelector('button')).toBeNull();
+    expect(document.activeElement).toBe(status());
+    const said = spoken();
+    document.getElementById('srStatus').textContent = '';
+    save();
+    expect(spoken()).toBe('');
+    expect(said).not.toBe('');
+  });
+
+  test('a student preview does not say it is saved on this device', () => {
+    setPreview(true);
+    try {
+      save();
+      expect(status().dataset.state).toBe('preview');
+      expect(status().textContent).toBe('Student preview: nothing is saved.');
+      expect(status().querySelector('a')).toBeNull();
+    } finally {
+      setPreview(false);
+    }
+  });
+
+  test('typed drafts are forgotten when a backup is restored', () => {
+    drafts({ 'tides:guess': '12' });
+    expect(drafts()).toEqual({ 'tides:guess': '12' });
+    forgetKept();
+    expect(drafts()).toEqual({});
+    save();
+    expect(
+      JSON.parse(localStorage.getItem('gravitas_investigation_tides')).drafts
+    ).toBeUndefined();
   });
 
   test('both languages say the same three things', async () => {
@@ -157,7 +195,7 @@ describe('the status line', () => {
     save();
     expect(status().textContent).toMatch(/lleno/);
     expect(status().querySelector('button').textContent).toBe(
-      'Descargar una copia de tu trabajo'
+      'Descargar una copia de tus respuestas'
     );
     refuse('SecurityError');
     save();
@@ -191,6 +229,7 @@ describe('the note that the scene is rebuilt', () => {
   test('appears, once, when the student pauses the run, and goes at the next step', () => {
     syncReset(scene);
     state.paused = true;
+    window.dispatchEvent(new Event('pointerdown'));
     jest.advanceTimersByTime(1100);
     expect(note().hidden).toBe(false);
     expect(note().getAttribute('role')).toBe('status');
@@ -219,6 +258,7 @@ describe('the note that the scene is rebuilt', () => {
   test('Reset the scene puts the scene back as drawn, and the note goes', () => {
     syncReset(scene);
     state.paused = true;
+    window.dispatchEvent(new Event('pointerdown'));
     jest.advanceTimersByTime(1100);
     expect(note().hidden).toBe(false);
     state.paused = false;
@@ -238,16 +278,29 @@ describe('the note that the scene is rebuilt', () => {
     expect(note().hidden).toBe(false);
   });
 
-  test('both languages have both sentences, about the scene and the answers', () => {
+  test('both languages have both sentences, and the second claims nothing is saved', () => {
     for (const k of ['saved.scene.leave', 'saved.scene.back']) {
       expect(typeof ES_RESET[k]).toBe('string');
       expect(t(k)).toBe(EN_RESET[k]);
     }
-    expect(EN_RESET['saved.scene.back']).toMatch(
-      /answers and readings are saved/
-    );
-    expect(ES_RESET['saved.scene.back']).toMatch(
-      /respuestas y lecturas se guardan/
-    );
+    expect(EN_RESET['saved.scene.back']).not.toMatch(/answers/);
+    expect(ES_RESET['saved.scene.back']).not.toMatch(/respuestas/);
+  });
+
+  test('a lesson that pauses the run itself is not the student changing the scene', () => {
+    syncReset(scene);
+    state.paused = true;
+    jest.advanceTimersByTime(3000);
+    expect(note().hidden).toBe(true);
+  });
+
+  test('a press inside the lesson panel is not the student changing the scene either', () => {
+    syncReset(scene);
+    state.paused = true;
+    document
+      .getElementById('investigationPanel')
+      .dispatchEvent(new Event('pointerdown', { bubbles: true }));
+    jest.advanceTimersByTime(3000);
+    expect(note().hidden).toBe(true);
   });
 });

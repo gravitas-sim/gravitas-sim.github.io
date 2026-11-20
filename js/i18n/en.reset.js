@@ -48,5 +48,5 @@ export const EN_RESET = {
   'saved.scene.leave':
     'The scene you set up is not saved. When you come back, it is rebuilt from the start of this step.',
   'saved.scene.back':
-    'The scene is rebuilt from the start of this step. Your answers and readings are saved; the scene you set up last time is not.',
+    'The scene is rebuilt from the start of this step. The scene you set up last time is not kept.',
 };

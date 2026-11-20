@@ -588,7 +588,6 @@ export const ES_DEFERRED = {
     '{count} ensayos se ejecutaron pero no cubrieron la duracion pedida. Sus numeros estan en la tabla y no en el resumen de arriba: una curva trazada con ellos describiria un experimento mas corto que el que este barrido dice haber hecho.',
   'sweep.partial':
     'Algunas pruebas no dieron medida, asi que esto describe los valores que se ejecutaron y no el rango que se pidio.',
-
   'sweep.guide.title':
     'Hasta donde puede orbitar un planeta alrededor de una estrella de un par?',
   'sweep.guide.body':
@@ -2165,9 +2164,10 @@ export const ES_DEFERRED = {
   'inv.save.saved':
     'Tus respuestas, los valores de los deslizadores y las pistas se guardan en este dispositivo.',
   'inv.save.full':
-    'No se guarda: el almacenamiento de este navegador est\u00e1 lleno. Tu trabajo se conserva aqu\u00ed, pero se perder\u00e1 al cerrar la pesta\u00f1a.',
+    'No se guarda: este navegador no tiene espacio para ello (su almacenamiento est\u00e1 lleno o este registro es demasiado grande). Tus respuestas se conservan en esta p\u00e1gina mientras siga abierta.',
   'inv.save.unavailable':
-    'No se guarda: este navegador no permite guardar (la navegaci\u00f3n privada suele impedirlo). Tu trabajo se conserva aqu\u00ed, pero se perder\u00e1 al cerrar la pesta\u00f1a.',
+    'No se guarda: este navegador no permite guardar (la navegaci\u00f3n privada suele impedirlo). Tus respuestas se conservan en esta p\u00e1gina mientras siga abierta.',
+  'inv.save.preview': 'Vista previa de estudiante: no se guarda nada.',
   'inv.save.authoring':
     'Vista previa de autor\u00eda: no se guarda nada y no se toca el progreso de ning\u00fan estudiante.',
   'inv.save.foreign':

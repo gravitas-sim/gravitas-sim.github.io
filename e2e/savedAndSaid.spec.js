@@ -198,7 +198,9 @@ test.describe('what an investigation keeps', () => {
     await expect(note(page)).toContainText(
       /rebuilt from the start of this step/i
     );
-    await expect(note(page)).toContainText(/answers and readings are saved/i);
+    await expect(note(page)).toContainText(
+      /scene you set up last time is not kept/i
+    );
     await expect(page.locator('#timelinePlay')).toHaveAttribute(
       'aria-label',
       /Pause simulation/
@@ -229,9 +231,9 @@ test.describe('the save status, in words', () => {
     await answerAndAdvance(page);
     await answerAndAdvance(page);
     await expect(status(page)).toHaveAttribute('data-state', 'full');
-    await expect(status(page)).toHaveAttribute('aria-live', 'polite');
+    await expect(page.locator('#srStatus')).toContainText(/Not saved/);
     const button = status(page).getByRole('button', {
-      name: 'Download a backup of your work',
+      name: 'Download a backup of your answers',
     });
     await expect(button).toBeVisible();
 
@@ -249,7 +251,9 @@ test.describe('the save status, in words', () => {
     });
     await answerAndAdvance(page);
     await expect(status(page)).toHaveAttribute('data-state', 'saved');
-    await expect(status(page)).toHaveAttribute('aria-live', 'polite');
+    await expect(page.locator('#srStatus')).toContainText(
+      /saved on this device/
+    );
     await expect(status(page).getByRole('button')).toHaveCount(0);
   });
 
@@ -264,7 +268,7 @@ test.describe('the save status, in words', () => {
     await expect(status(page)).toContainText(/private browsing/i);
     await expect(
       status(page).getByRole('button', {
-        name: 'Download a backup of your work',
+        name: 'Download a backup of your answers',
       })
     ).toBeVisible();
   });
