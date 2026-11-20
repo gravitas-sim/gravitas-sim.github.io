@@ -11,16 +11,16 @@ The hand-written, human-reviewed acceptance map is
 [`lesson-acceptance.json`](lesson-acceptance.json); `npm run
 audit:scene:check` fails if it disagrees with what is generated here.
 
-Across 124 investigations and 1528 steps: 1420 steps
+Across 124 investigations and 1529 steps: 1421 steps
 declare a scene, 166 let a reader change one, 180 read the
 running integration, 1009 show a prescribed model result, 161 draw
 on a stored dataset, 878 put a self-contained panel beside the text,
 395 keep something, and 59 are prose.
-Of 197 prediction loops, 197 are returned to,
-197 produce a measurement before they are answered, and
+Of 198 prediction loops, 198 are returned to,
+198 produce a measurement before they are answered, and
 1 end in an explanation in the reader's own words.
-196 hold their marking until the experiment settles them.
-The canvas behind a step is stated as scene on 0, portrait on 7, quiet on 16; 1505 state none.
+197 hold their marking until the experiment settles them.
+The canvas behind a step is stated as scene on 0, portrait on 7, quiet on 16; 1506 state none.
 
 ## Kepler's Laws (`keplers-laws`)
 
@@ -178,14 +178,14 @@ The canvas behind a step is stated as scene on 0, portrait on 7, quiet on 16; 15
 
 ## When Orbits Lock (`when-orbits-lock`)
 
-- **Steps:** 34. Scene declared on 34; a reader can change something on 3; 31 declare a scene nobody on that step can touch.
+- **Steps:** 35. Scene declared on 35; a reader can change something on 3; 32 declare a scene nobody on that step can touch.
 - **Where the numbers come from:** 13 live engine, 0 prescribed model, 0 stored dataset, 0 self-contained panel.
-- **What students do:** read, commit-a-prediction, answer-in-words, run-the-simulation, tick-a-checklist, record-values, choose-an-option, open-a-body-inspector.
+- **What students do:** read, commit-a-prediction, answer-in-words, press-an-instrument-button, run-the-simulation, tick-a-checklist, record-values, choose-an-option, open-a-body-inspector.
 - **Objects the steps declare:** io, europa, ganymede, callisto.
 - **Instruments:** resonance-periods, resonance-conjunctions, resonance-angle, resonance-frame.
 - **Stored data:** none.
 - **Evidence kept:** notebook-fields.
-- **Prediction loops:** how-close-is-close → measure-the-four-periods, write-down-the-ratios → measure-the-four-periods; where-do-the-line-ups → watch-the-line-ups → watch-the-line-ups; the-laplace-argument → watch-the-laplace-argument, record-the-laplace-libration → watch-the-laplace-argument; one-percent → break-it, the-awkward-case, measure-pluto-s-resonance, record-pluto-s-libration, where-the-line-ups-happen, the-rotating-frame, record-the-tadpole, one-last-ratio → break-it.
+- **Prediction loops:** how-close-is-close → measure-the-four-periods, rank-the-three-pairs → measure-the-four-periods; where-do-the-line-ups → watch-the-line-ups → watch-the-line-ups; the-laplace-argument → watch-the-laplace-argument, capture-the-laplace-libration → watch-the-laplace-argument; one-percent → break-it, the-awkward-case, measure-pluto-s-resonance, capture-pluto-s-libration, where-the-line-ups-happen, the-rotating-frame, capture-the-tadpole → break-it; predict-the-wide-probe → one-last-ratio → one-last-ratio.
 - **Recovery:** wrong body: the step binds the object by name, so there is none; reset: rebuilds the scenario on arrival; ambiguous result: the check says in words how close is close enough; null result: the probe names what is missing.
 - **Scene rebuilds:** 9 step(s) on arrival (four-moons-and-a-suspicious, measure-the-four-periods, where-do-the-line-ups, break-it, the-awkward-case, the-orbit-that-crosses-and, measure-pluto-s-resonance, sixty-degrees-ahead, the-rotating-frame).
 - **Accepted central experiment** (reviewed 2026-09-11): object `europa`, control the sandbox: run, and the resonance panels read the scene, measures the Laplace argument, and the amplitude it librates through, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.

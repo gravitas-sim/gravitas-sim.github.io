@@ -1170,7 +1170,7 @@ const WHEN_ORBITS_LOCK = {
              \n\nThe theoretical small-amplitude tadpole period, from the
              linearized restricted three-body problem, is
              P<sub>Jupiter</sub> ÷ √(27μ/4) with μ Jupiter's share of the total
-             mass — which works out at 12.47 Jupiter years.`,
+             mass — which works out at 12.47 Jupiter years, about 148 years.`,
       fields: [
         reading(
           'tadpoleCenter',
@@ -1180,13 +1180,7 @@ const WHEN_ORBITS_LOCK = {
           'centre'
         ),
         reading('tadpoleAmplitude', 'amplitude', 'degrees', '24', 'amplitude'),
-        reading(
-          'tadpolePeriod',
-          'libration period',
-          'Jupiter years',
-          '13',
-          'period'
-        ),
+        reading('tadpolePeriod', 'libration period', 'years', '154', 'period'),
       ],
       validate: v => {
         if (!Number.isFinite(v.tadpoleCenter)) return null;
@@ -1219,18 +1213,18 @@ const WHEN_ORBITS_LOCK = {
         }
         if (
           Number.isFinite(v.tadpolePeriod) &&
-          (v.tadpolePeriod < 9 || v.tadpolePeriod > 18)
+          (v.tadpolePeriod < 107 || v.tadpolePeriod > 214)
         ) {
           return {
             level: 'warn',
             message:
-              'Expected about 13 Jupiter years, against a theoretical 12.47. A value near 1 means you have read Jupiter’s own orbital period instead.',
+              'Expected about 154 years (13 Jupiter years), against a theoretical 148. A value near 12 means you have read Jupiter’s own orbital period instead.',
           };
         }
         return {
           level: 'ok',
           message:
-            'That is the tadpole. The measured period sits within a few percent of the 12.47 Jupiter years the linear theory predicts, which is about as well as a 24° libration has any right to match a small-amplitude formula.',
+            'That is the tadpole. The measured period sits within a few percent of the 148 years (12.47 Jupiter years) the linear theory predicts, which is about as well as a 24° libration has any right to match a small-amplitude formula.',
         };
       },
     },
@@ -1307,9 +1301,9 @@ const WHEN_ORBITS_LOCK = {
       answer: 2,
       because: `The third. The wide probe sits 0.25% from 7:5, nearer than Pluto
                 is to 3:2 at 0.30%, and its angle circulates: it is in no
-                resonance at all. A ratio that near a small whole-number ratio is
-                what many pairs reach by chance, which is why the angle and not
-                the ratio is the evidence.`,
+                resonance at all. Being about four and a half times closer than
+                chance is not enough to count as evidence, which is why the
+                angle and not the ratio is the evidence.`,
     },
     {
       sid: 'one-last-ratio',

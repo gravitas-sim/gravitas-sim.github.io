@@ -206,13 +206,13 @@ describe('a reading taken too soon is refused, in words', () => {
       step('capture-the-tadpole').validate({
         tadpoleCenter: 296,
         tadpoleAmplitude: 24,
-        tadpolePeriod: 13,
+        tadpolePeriod: 154,
         ...o,
       });
     expect(t({}).level).toBe('ok');
     expect(t({ tadpoleCenter: 60 }).message).toMatch(/L4/);
     expect(t({ tadpoleAmplitude: 5 }).level).toBe('error');
-    expect(t({ tadpolePeriod: 1 }).message).toMatch(/Jupiter’s own/);
+    expect(t({ tadpolePeriod: 12 }).message).toMatch(/Jupiter’s own/);
   });
   test('the capture fields name instrument rows, and the tadpole step names its body', () => {
     for (const sid of [

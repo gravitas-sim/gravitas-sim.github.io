@@ -1435,7 +1435,9 @@
    "live": true,
    "controls": [],
    "presets": 0,
-   "buttons": [],
+   "buttons": [
+    "run"
+   ],
    "engineReads": [
     "clock"
    ],
@@ -1446,7 +1448,9 @@
    "live": true,
    "controls": [],
    "presets": 0,
-   "buttons": [],
+   "buttons": [
+    "run"
+   ],
    "engineReads": [
     "clock"
    ],
@@ -1457,7 +1461,9 @@
    "live": true,
    "controls": [],
    "presets": 0,
-   "buttons": [],
+   "buttons": [
+    "run"
+   ],
    "engineReads": [
     "clock"
    ],
@@ -1468,7 +1474,9 @@
    "live": true,
    "controls": [],
    "presets": 0,
-   "buttons": [],
+   "buttons": [
+    "run"
+   ],
    "engineReads": [
     "clock"
    ],
@@ -27193,6 +27201,7 @@
      ],
      "actions": [
       "answer-in-words",
+      "press-an-instrument-button",
       "run-the-simulation",
       "tick-a-checklist"
      ],
@@ -27243,10 +27252,10 @@
      ]
     },
     {
-     "sid": "write-down-the-ratios",
+     "sid": "rank-the-three-pairs",
      "index": 4,
      "type": "measure",
-     "title": "Write down the ratios",
+     "title": "Rank the three pairs",
      "declares": {
       "stage": null,
       "bound": [
@@ -27269,6 +27278,7 @@
      ],
      "actions": [
       "record-values",
+      "press-an-instrument-button",
       "run-the-simulation"
      ],
      "requires": [
@@ -27346,7 +27356,7 @@
       "choose-an-option"
      ],
      "requires": [
-      "write-down-the-ratios"
+      "rank-the-three-pairs"
      ],
      "reveal": null,
      "asks": {
@@ -27543,6 +27553,7 @@
      ],
      "actions": [
       "answer-in-words",
+      "press-an-instrument-button",
       "run-the-simulation",
       "tick-a-checklist"
      ],
@@ -27810,6 +27821,7 @@
      "actions": [
       "answer-in-words",
       "open-a-body-inspector",
+      "press-an-instrument-button",
       "run-the-simulation",
       "tick-a-checklist"
      ],
@@ -27925,10 +27937,10 @@
      ]
     },
     {
-     "sid": "record-the-laplace-libration",
+     "sid": "capture-the-laplace-libration",
      "index": 14,
      "type": "measure",
-     "title": "Record the Laplace libration",
+     "title": "Capture the Laplace libration",
      "declares": {
       "stage": null,
       "bound": [
@@ -27953,6 +27965,7 @@
      "actions": [
       "record-values",
       "open-a-body-inspector",
+      "press-an-instrument-button",
       "run-the-simulation"
      ],
      "requires": [
@@ -28164,6 +28177,7 @@
      "actions": [
       "answer-in-words",
       "open-a-body-inspector",
+      "press-an-instrument-button",
       "run-the-simulation",
       "tick-a-checklist"
      ],
@@ -28307,6 +28321,7 @@
      ],
      "actions": [
       "answer-in-words",
+      "press-an-instrument-button",
       "run-the-simulation",
       "tick-a-checklist"
      ],
@@ -28513,6 +28528,7 @@
      ],
      "actions": [
       "answer-in-words",
+      "press-an-instrument-button",
       "run-the-simulation",
       "tick-a-checklist"
      ],
@@ -28563,10 +28579,10 @@
      ]
     },
     {
-     "sid": "record-pluto-s-libration",
+     "sid": "capture-pluto-s-libration",
      "index": 23,
      "type": "measure",
-     "title": "Record Pluto’s libration",
+     "title": "Capture Pluto’s libration",
      "declares": {
       "stage": null,
       "bound": [
@@ -28589,6 +28605,7 @@
      ],
      "actions": [
       "record-values",
+      "press-an-instrument-button",
       "run-the-simulation"
      ],
      "requires": [
@@ -28665,6 +28682,7 @@
      ],
      "actions": [
       "answer-in-words",
+      "press-an-instrument-button",
       "run-the-simulation",
       "tick-a-checklist"
      ],
@@ -28868,6 +28886,7 @@
      ],
      "actions": [
       "answer-in-words",
+      "press-an-instrument-button",
       "run-the-simulation",
       "tick-a-checklist"
      ],
@@ -28918,10 +28937,10 @@
      ]
     },
     {
-     "sid": "record-the-tadpole",
+     "sid": "capture-the-tadpole",
      "index": 28,
      "type": "measure",
-     "title": "Record the tadpole",
+     "title": "Capture the tadpole",
      "declares": {
       "stage": null,
       "bound": [
@@ -28944,6 +28963,7 @@
      ],
      "actions": [
       "record-values",
+      "press-an-instrument-button",
       "run-the-simulation"
      ],
      "requires": [
@@ -29059,8 +29079,73 @@
      ]
     },
     {
-     "sid": "one-last-ratio",
+     "sid": "predict-the-wide-probe",
      "index": 30,
+     "type": "predict",
+     "title": "A body on a wider orbit",
+     "declares": {
+      "stage": null,
+      "bound": [
+       "io",
+       "europa",
+       "ganymede",
+       "callisto"
+      ],
+      "roles": [
+       "io",
+       "europa",
+       "ganymede",
+       "callisto"
+      ]
+     },
+     "kinds": [
+      "scene-declared"
+     ],
+     "actions": [
+      "commit-a-prediction"
+     ],
+     "requires": [],
+     "reveal": "one-last-ratio",
+     "asks": {
+      "choice": true,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": true,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "open",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "predict",
+      "actual": [
+       "predict",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [],
+     "recovery": [
+      "wrong body: the step binds the object by name, so there is none"
+     ]
+    },
+    {
+     "sid": "one-last-ratio",
+     "index": 31,
      "type": "explore",
      "title": "One last ratio",
      "declares": {
@@ -29084,6 +29169,7 @@
      ],
      "actions": [
       "answer-in-words",
+      "press-an-instrument-button",
       "run-the-simulation",
       "tick-a-checklist"
      ],
@@ -29132,7 +29218,7 @@
     },
     {
      "sid": "what-you-can-and-cannot",
-     "index": 31,
+     "index": 32,
      "type": "read",
      "title": "What you can and cannot conclude from a ratio",
      "declares": {
@@ -29196,7 +29282,7 @@
     },
     {
      "sid": "the-report-you-would-write",
-     "index": 32,
+     "index": 33,
      "type": "question",
      "title": "The report you would write",
      "declares": {
@@ -29260,7 +29346,7 @@
     },
     {
      "sid": "say-what-a-libration-shows",
-     "index": 33,
+     "index": 34,
      "type": "question",
      "title": "What a libration shows that a ratio does not",
      "declares": {
@@ -29285,7 +29371,7 @@
       "answer-in-words"
      ],
      "requires": [
-      "record-the-laplace-libration"
+      "capture-the-laplace-libration"
      ],
      "reveal": null,
      "asks": {
@@ -29326,7 +29412,7 @@
     },
     {
      "sid": "where-this-goes",
-     "index": 34,
+     "index": 35,
      "type": "read",
      "title": "Where this goes",
      "declares": {
@@ -29396,14 +29482,14 @@
      "heldUntil": "measure-the-four-periods",
      "experiment": [
       "measure-the-four-periods",
-      "write-down-the-ratios"
+      "rank-the-three-pairs"
      ],
      "measure": [
       "measure-the-four-periods",
-      "write-down-the-ratios"
+      "rank-the-three-pairs"
      ],
      "evidence": [
-      "write-down-the-ratios"
+      "rank-the-three-pairs"
      ],
      "interpret": "measure-the-four-periods",
      "measuredBeforeAnswering": true,
@@ -29436,14 +29522,14 @@
      "heldUntil": "watch-the-laplace-argument",
      "experiment": [
       "watch-the-laplace-argument",
-      "record-the-laplace-libration"
+      "capture-the-laplace-libration"
      ],
      "measure": [
       "watch-the-laplace-argument",
-      "record-the-laplace-libration"
+      "capture-the-laplace-libration"
      ],
      "evidence": [
-      "record-the-laplace-libration"
+      "capture-the-laplace-libration"
      ],
      "interpret": "watch-the-laplace-argument",
      "measuredBeforeAnswering": true,
@@ -29460,27 +29546,43 @@
       "break-it",
       "the-awkward-case",
       "measure-pluto-s-resonance",
-      "record-pluto-s-libration",
+      "capture-pluto-s-libration",
       "where-the-line-ups-happen",
       "the-rotating-frame",
-      "record-the-tadpole",
-      "one-last-ratio"
+      "capture-the-tadpole"
      ],
      "measure": [
       "break-it",
       "the-awkward-case",
       "measure-pluto-s-resonance",
-      "record-pluto-s-libration",
+      "capture-pluto-s-libration",
       "where-the-line-ups-happen",
       "the-rotating-frame",
-      "record-the-tadpole",
-      "one-last-ratio"
+      "capture-the-tadpole"
      ],
      "evidence": [
-      "record-pluto-s-libration",
-      "record-the-tadpole"
+      "capture-pluto-s-libration",
+      "capture-the-tadpole"
      ],
      "interpret": "break-it",
+     "measuredBeforeAnswering": true,
+     "explained": false,
+     "answeredByTheExperiment": true,
+     "closed": true,
+     "complete": true
+    },
+    {
+     "predict": "predict-the-wide-probe",
+     "predictCollects": true,
+     "heldUntil": "one-last-ratio",
+     "experiment": [
+      "one-last-ratio"
+     ],
+     "measure": [
+      "one-last-ratio"
+     ],
+     "evidence": [],
+     "interpret": "one-last-ratio",
      "measuredBeforeAnswering": true,
      "explained": false,
      "answeredByTheExperiment": true,
@@ -29489,8 +29591,8 @@
     }
    ],
    "totals": {
-    "steps": 34,
-    "declared": 34,
+    "steps": 35,
+    "declared": 35,
     "student": 3,
     "engine": 13,
     "model": 0,
@@ -29498,7 +29600,7 @@
     "diagram": 0,
     "evidence": 4,
     "computation": 0,
-    "declaredButInert": 31,
+    "declaredButInert": 32,
     "prose": 0,
     "mismatched": 0,
     "rebuilds": 9
@@ -120443,8 +120545,8 @@
   }
  ],
  "totals": {
-  "steps": 1528,
-  "declared": 1420,
+  "steps": 1529,
+  "declared": 1421,
   "student": 166,
   "engine": 180,
   "model": 1009,
@@ -120452,7 +120554,7 @@
   "diagram": 878,
   "evidence": 395,
   "computation": 14,
-  "declaredButInert": 1254,
+  "declaredButInert": 1255,
   "prose": 59,
   "mismatched": 8,
   "rebuilds": 81,
@@ -120460,13 +120562,13 @@
    "scene": 0,
    "portrait": 7,
    "quiet": 16,
-   "unstated": 1505
+   "unstated": 1506
   },
   "lessons": 124,
-  "loops": 197,
-  "closedLoops": 197,
+  "loops": 198,
+  "closedLoops": 198,
   "explainedLoops": 1,
-  "heldLoops": 196,
-  "completeLoops": 197
+  "heldLoops": 197,
+  "completeLoops": 198
  }
 }

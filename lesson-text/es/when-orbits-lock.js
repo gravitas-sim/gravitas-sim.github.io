@@ -767,11 +767,11 @@ export default {
              \n\nEl periodo teórico de renacuajo para amplitud pequeña, según el
              problema restringido de tres cuerpos linealizado, es
              P<sub>Júpiter</sub> ÷ √(27μ/4) con μ la fracción de masa que
-             corresponde a Júpiter, lo que da 12,47 años jovianos.`,
+             corresponde a Júpiter, lo que da 12,47 años jovianos, unos 148 años.`,
       fields: [
         { label: 'centro de libración, medido desde Júpiter', unit: 'grados' },
         { label: 'amplitud', unit: 'grados' },
-        { label: 'periodo de libración', unit: 'años jovianos' },
+        { label: 'periodo de libración', unit: 'años' },
       ],
     },
     'two-equilibria-one-survivor': {
@@ -833,9 +833,9 @@ export default {
       ],
       because: `La tercera. La sonda ancha está a un 0,25 % de 7:5, más cerca que
                 Plutón de 3:2, que está a un 0,30 %, y su ángulo circula: no está
-                en ninguna resonancia. Una razón tan próxima a una razón de
-                enteros pequeños es algo que muchos pares alcanzan por azar, y
-                por eso la prueba es el ángulo y no la razón.`,
+                en ninguna resonancia. Estar unas cuatro veces y media más cerca que
+                el azar no basta como prueba, y por eso la prueba es el ángulo y
+                no la razón.`,
     },
     'one-last-ratio': {
       title: 'Una última razón',

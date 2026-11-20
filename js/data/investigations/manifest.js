@@ -155,8 +155,8 @@ export const MANIFEST = [
     duration: '55-70 min',
     level: 'Introductory astronomy',
     thumbnail: 'images/scenarios/galilean-resonance.webp',
-    stepCount: 34,
-    gradedCount: 17,
+    stepCount: 35,
+    gradedCount: 18,
     objectiveCount: 6,
   },
   {

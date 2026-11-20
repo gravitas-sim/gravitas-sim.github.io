@@ -6854,8 +6854,8 @@
       "source": ["js/data/investigations/when-orbits-lock.js"],
       "shadows": ["js/data/investigations/es/when-orbits-lock.js"],
       "instrument_files": ["js/resonanceWidgets.js"],
-      "depths": { "core": 34, "quantitative": 0, "advanced": 0 },
-      "spanish_steps": { "core": 34, "deeper": 0 },
+      "depths": { "core": 35, "quantitative": 0, "advanced": 0 },
+      "spanish_steps": { "core": 35, "deeper": 0 },
       "languages": ["en", "es"],
       "sequences": [
         { "id": "gravity-and-orbits", "position": 8 },
@@ -6868,29 +6868,90 @@
       "limits": null,
       "open_items": [
         {
-          "ref": "D-R10-279-04",
+          "ref": "D-R4-349-04",
           "owner": 349,
-          "note": "The four resonance instruments start by themselves and have no Run control"
-        },
-        {
-          "ref": "D-R10-273-07",
-          "owner": 349,
-          "note": "Cited libration values fail their data check; a maintainer ruling of 2026-11-10 governs the wording"
+          "note": "For Carl: (a) keep the 0.064 degree Laplace amplitude with its citation and add the measured 0.033 degrees only after a person has read Lieske (1998); (b) confirm the 19,670-year Pluto period from Cohen and Hubbard (1965) or cite 19,900 years. Neither value was changed."
         }
       ],
-      "questions": { "Q1": "", "Q2": "", "Q3": "", "Q4": "", "Q5": "" },
-      "leak": {
-        "L1": "HOLDS: no field cue or step placeholder holds a numeral at any depth, in either language, and the panel renders none that does (tests/fieldCue.test.js); the expected value is the field's `want`, which no page reads.",
-        "L2": "",
-        "L3": "",
-        "L4": "",
-        "L5": ""
+      "questions": {
+        "Q1": "The student watches the Laplace angle refuse a verdict, then turn back, on the running Galilean system, ranks the period ratios against the figure that says how close chance would get, and reads the same instrument for Callisto, Pluto, a broken Laplace system, the Trojans and a wide probe: evidence a paragraph could not show.",
+        "Q2": "Each instrument opens held under Reduced motion and Step by step with a named Run button; the steps name the instrument, the control, what to watch and where a run takes about three and a half minutes (the Fast button shortens it); the app's inspector periods are said to be 1000 times too long.",
+        "Q3": "Scene, instrument, readout and prose name the same four moons, the same angle and the same units (days for the moons, years for Pluto and Patroclus), and the instrument converts the scale model while the inspector does not.",
+        "Q4": "The student ranks the three ratios, decides when the run is long enough to capture a centre, amplitude and period (an amplitude that is still a bound cannot be captured, and a small typed one is refused), converts Pluto's days to years, and predicts the wide probe before its readout; each can be done badly.",
+        "Q5": "Not applicable: the lesson has no deeper steps and none was added; the core already asks for the three-state verdict, the controlled pair of runs and the transfer to the wide probe."
       },
-      "task_rule_items": [],
-      "editorial": "OPEN",
-      "redesign": "OPEN",
-      "reason": "Corrections I reworded steps for factual consistency (register D-R4-300-13); editorial pass still OPEN.",
-      "step_revisions": [],
+      "leak": {
+        "L1": "HOLDS: no field cue or step placeholder holds a numeral, and the ranking fields hold ranks (the expected values are each field's `want`, which no page reads).",
+        "L2": "HOLDS: the instruments open without a verdict; under Reduced motion and Step by step they also open held.",
+        "L3": "HOLDS (349): the Laplace and wide-probe predictions come before their readouts and no earlier body, tip or explanation states the centre, the amplitude or the ratio verdict; the prediction before one-last-ratio is new.",
+        "L4": "HOLDS (349): which-is-the-impressive-one and the-best-ratio-in-the no longer state the offsets or which moon is resonant, the Laplace explanation gives no 180 or 26 before the capture step, and what-180-means no longer gives the algebra.",
+        "L5": "UNCHANGED (349): the answer-key rubrics are instructor-only; the readout rows added for capture are the instrument's own."
+      },
+      "task_rule_items": [
+        "T1: the ranking asks for a decision, not a retyped figure; the libration centre, amplitude and period are captured from the instrument (K1), with a bound refused; Pluto's period is the student's conversion.",
+        "T2: the Laplace and wide-probe predictions are held and revealed at the steps that run them.",
+        "T4: the wide probe is the transfer, predicted before it is read.",
+        "T5: authored feedback on the-best-ratio-in-the, why-the-sky-is-the and two-equilibria-one-survivor; the three capture steps refuse a reading taken too soon in words.",
+        "T6: the live scenario is the central medium; the instruments are the evidence.",
+        "TIME BAND: 55 to 70 minutes kept; two steps were added (the ranking replaced one) and the two long waits are unchanged."
+      ],
+      "editorial": "REVISED",
+      "redesign": "REVISED",
+      "reason": "FOCUSED: the instruments get a Run control, four steps are re-tasked, one prediction is inserted and three choice steps get feedback (register D-R4-349-01 to 06).",
+      "step_revisions": [
+        {
+          "sid": "rank-the-three-pairs",
+          "change": "REVISED: replaces write-down-the-ratios (retired); the student ranks the three pairs by the closer-than-chance figure instead of retyping the ratios."
+        },
+        {
+          "sid": "capture-the-laplace-libration",
+          "change": "REVISED: replaces record-the-laplace-libration (retired); centre, amplitude and period are captured, and an amplitude that is still a bound is refused."
+        },
+        {
+          "sid": "capture-pluto-s-libration",
+          "change": "REVISED: replaces record-pluto-s-libration (retired); centre and amplitude are captured, the period in years is the student's conversion of the days shown."
+        },
+        {
+          "sid": "capture-the-tadpole",
+          "change": "REVISED: replaces record-the-tadpole (retired); centre, amplitude and period are captured for Patroclus, and the period is in years (the instrument now reports it)."
+        },
+        {
+          "sid": "predict-the-wide-probe",
+          "change": "INSERTED: a held prediction before one-last-ratio, revealed after its readout."
+        },
+        {
+          "sid": "which-is-the-impressive-one",
+          "change": "REWORDED: the body asks instead of stating the offsets and the resonant status."
+        },
+        {
+          "sid": "the-best-ratio-in-the",
+          "change": "REWORDED: the body no longer gives the verdicts; K8 misconception added; the long-run circulation moved to the explanation."
+        },
+        {
+          "sid": "the-laplace-argument",
+          "change": "REWORDED: the option and the explanation no longer give 180 or 26."
+        },
+        {
+          "sid": "what-180-means",
+          "change": "REWORDED: the algebra is no longer given."
+        },
+        {
+          "sid": "measure-the-four-periods",
+          "change": "REWORDED: names Run, the inspector's 1000x scale and the Fast button."
+        },
+        {
+          "sid": "watch-the-laplace-argument",
+          "change": "REWORDED: names Run and the Fast button beside the three and a half minutes."
+        },
+        {
+          "sid": "why-the-sky-is-the",
+          "change": "K8: three misconceptions added."
+        },
+        {
+          "sid": "two-equilibria-one-survivor",
+          "change": "K8: three misconceptions added."
+        }
+      ],
       "walk": "NOT RUN",
       "pr": null,
       "hash": null
