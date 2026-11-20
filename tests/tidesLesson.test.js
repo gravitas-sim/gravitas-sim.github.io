@@ -358,7 +358,7 @@ describe('the hunt for the crossing', () => {
 
   test('the two swapped, or a crossing found at the wrong density, is refused with the reason', () => {
     expect(s().validate({ ice: 1.25, iron: 2.65 }).message).toMatch(
-      /closer in/
+      /swapped between/
     );
     expect(s().validate({ ice: 1.5, iron: 1.2 }).message).toMatch(/comet ice/);
     expect(s().validate({ ice: 2.65, iron: 1.5 }).message).toMatch(/iron/);

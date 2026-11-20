@@ -439,8 +439,8 @@ const TIDES = {
              across an object.</strong>
              \n\nNot the strength of gravity. The <em>difference</em> in it.
              This distinction does real work: strong gravity and strong tides
-             are not the same thing, and a few screens on you will test a case
-             where they come apart.
+             are not the same thing, and later you will test a case where they
+             come apart.
              \n\nThe same difference is at work everywhere gravity meets
              something with a size: the seas moving up a beach, a moon kept
              molten by being kneaded, a comet coming apart into a string of
@@ -1163,7 +1163,7 @@ const TIDES = {
           return {
             level: 'warn',
             message:
-              'The denser body should come apart closer in, and your two distances say the opposite. Check which density each distance was found at.',
+              'The two distances look swapped between the bodies. Check which density each one was found at.',
           };
         }
         if (Math.abs(v.ice - cross(600)) > 0.12) {
