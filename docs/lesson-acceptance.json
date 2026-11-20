@@ -159,7 +159,7 @@
         "scene"
       ],
       "quantity": "tidal stretch at four distances the student chooses, at least a factor of four apart, with the companion's mass held, and at three masses with the distance held; the stretch is taken from the panel, which gives one over the distance cubed and the mass once",
-      "evidence": "instrument-capture",
+      "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": [
         "bring-the-companion-closer",
