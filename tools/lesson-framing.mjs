@@ -177,6 +177,8 @@ export async function measureFramingInPage() {
   const frame = await import('/js/lessonFrame.js');
   const visuals = await import('/js/bodyVisuals.js');
   const canvas = document.getElementById('simulationCanvas');
+  // A body mid-orbit must not move between the fit and the reading.
+  ui.state.paused = true;
   const vw = window.innerWidth;
   const vh = window.innerHeight;
   const scale = canvas.width / canvas.clientWidth;
