@@ -119,7 +119,7 @@ test.describe('the central experiment of each investigation', () => {
     //    slider was not is refused in words; the right ones restore it.
     const evidence = { d1: 0.6, d2: 1.2, d3: 2.4 };
     const check = page.locator('#investigationBody [data-check-slot]');
-    await recordFields(page, id, measureSid, { d1: 0.9 });
+    await recordFields(page, id, measureSid, { d1: 0.9, d2: 1.2 });
     await expect(check).toContainText(/not where the slider was/);
     await recordFields(page, id, measureSid, evidence);
     await expect(check).toContainText(/Three readings, taken where you said/);
