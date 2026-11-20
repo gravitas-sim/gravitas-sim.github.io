@@ -11,16 +11,16 @@ The hand-written, human-reviewed acceptance map is
 [`lesson-acceptance.json`](lesson-acceptance.json); `npm run
 audit:scene:check` fails if it disagrees with what is generated here.
 
-Across 124 investigations and 1528 steps: 1420 steps
+Across 124 investigations and 1530 steps: 1420 steps
 declare a scene, 166 let a reader change one, 180 read the
 running integration, 1009 show a prescribed model result, 161 draw
 on a stored dataset, 878 put a self-contained panel beside the text,
-395 keep something, and 59 are prose.
-Of 197 prediction loops, 197 are returned to,
-197 produce a measurement before they are answered, and
+396 keep something, and 60 are prose.
+Of 198 prediction loops, 198 are returned to,
+198 produce a measurement before they are answered, and
 1 end in an explanation in the reader's own words.
-196 hold their marking until the experiment settles them.
-The canvas behind a step is stated as scene on 0, portrait on 7, quiet on 16; 1505 state none.
+197 hold their marking until the experiment settles them.
+The canvas behind a step is stated as scene on 0, portrait on 7, quiet on 34; 1489 state none.
 
 ## Kepler's Laws (`keplers-laws`)
 
@@ -794,17 +794,18 @@ The canvas behind a step is stated as scene on 0, portrait on 7, quiet on 16; 15
 
 ## Integrators in Practice (`integrators-in-practice`)
 
-- **Steps:** 8. Scene declared on 0; a reader can change something on 0; 0 declare a scene nobody on that step can touch.
+- **Steps:** 10. Scene declared on 0; a reader can change something on 0; 0 declare a scene nobody on that step can touch.
 - **Where the numbers come from:** 0 live engine, 0 prescribed model, 0 stored dataset, 0 self-contained panel.
 - **What students do:** read, commit-a-prediction, record-values, choose-an-option.
 - **Objects the steps declare:** none.
 - **Instruments:** none.
+- **Canvas:** quiet.
 - **Stored data:** none.
 - **Evidence kept:** notebook-fields.
-- **Prediction loops:** which-loses-most → four-drifts, halve-the-step, the-engine → four-drifts.
-- **Recovery:** reset: rebuilds the scenario on arrival; missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand; ambiguous result: the check says in words how close is close enough.
-- **Scene rebuilds:** 1 step(s) on arrival (one-system-four-steps).
-- **Accepted central experiment** (reviewed 2026-09-11): object `compute:integrators-compared`, control the compute page's steps-per-period setting (not a lesson widget), measures the energy drift of explicit Euler, symplectic Euler, velocity Verlet and Runge-Kutta 4 over three periods of the widest orbit, and how each changes when the step is halved, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+- **Prediction loops:** which-loses-most → four-drifts → four-drifts; predict-the-halving → choose-the-second-step, the-engine → the-engine.
+- **Recovery:** missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** none.
+- **Accepted central experiment** (reviewed 2026-09-11): object `compute:integrators-compared`, control the compute page's steps-per-period setting (not a lesson widget), and the second step count the student chooses from a menu in the lesson, measures the energy drift of explicit Euler, symplectic Euler, velocity Verlet and Runge-Kutta 4 over three periods of the widest orbit, and how velocity Verlet's and Runge-Kutta 4's drift change at the second step count the student chose, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 
 ## Extending an Experiment (`extending-an-experiment`)
 
@@ -813,12 +814,13 @@ The canvas behind a step is stated as scene on 0, portrait on 7, quiet on 16; 15
 - **What students do:** read, commit-a-prediction, record-values, choose-an-option.
 - **Objects the steps declare:** none.
 - **Instruments:** none.
+- **Canvas:** quiet.
 - **Stored data:** none.
 - **Evidence kept:** notebook-fields.
-- **Prediction loops:** how-well-can-twenty-place-an-edge → the-fit, a-uniform-population, move-the-definition → the-fit.
-- **Recovery:** reset: rebuilds the scenario on arrival; missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand; ambiguous result: the check says in words how close is close enough.
-- **Scene rebuilds:** 1 step(s) on arrival (twenty-planets).
-- **Accepted central experiment** (reviewed 2026-09-11): object `compute:population-at-scale`, control the compute page's cutoff and slope settings (not a lesson widget), measures the half-way starting distance and the bound fraction of the twenty trials and of the synthetic population, for the settings run, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+- **Prediction loops:** how-well-can-twenty-place-an-edge → the-fit, a-uniform-population, move-the-definition-yours, which-trial-moved → the-fit.
+- **Recovery:** missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** none.
+- **Accepted central experiment** (reviewed 2026-09-11): object `compute:population-at-scale`, control the compute page's cutoff and slope settings (not a lesson widget), and the cutoff the student chooses from a menu in the lesson, measures the half-way starting distance and the bound fraction of the twenty trials and of the synthetic population, for the settings run, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 
 ## Refitting a Transit (`refitting-a-transit`)
 

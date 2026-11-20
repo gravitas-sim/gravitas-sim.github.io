@@ -300,13 +300,8 @@ export default {
       },
       {
         from: 'the-engine',
-        to: 'phase-luck',
-        text: 'The same step as the application’s engine, and why one symplectic number is a point on a curve.',
-      },
-      {
-        from: 'trust-at-six-orbits',
         to: 'trust-at-six-orbits',
-        text: 'Six orbits: which drift is a size and which is a phase of a swing.',
+        text: 'The same step as the application’s engine, why one symplectic number is a point on a curve, and at six orbits which drift is a size and which a phase of a swing.',
       },
       {
         from: 'what-you-worked-out',
