@@ -269,6 +269,13 @@
       "reason": "Text or a readout updates on a timer; nothing on the page moves."
     },
     {
+      "file": "js/investigationsLoader.js",
+      "kind": "interval",
+      "treatment": "timer",
+      "what": "The lesson link's wait for its first screen, polled every 50 ms until the panel is shown",
+      "reason": "Nothing on the page moves: it holds the sandbox's frame loop back until the lesson panel is up, and ends there or after its backstop."
+    },
+    {
       "file": "js/lab3d/embed.js",
       "kind": "interval",
       "treatment": "timer",

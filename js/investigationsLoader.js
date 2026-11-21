@@ -15,6 +15,7 @@
 // resolves, so callers never have to think about ordering.
 // =============================================================================
 
+/* global addEventListener */
 import {
   loadFragment,
   mountFragment,
@@ -65,6 +66,54 @@ export function ensureInvestigations() {
 }
 
 /**
+ * Hold the sandbox's frame loop until a lesson link's first screen is up.
+ *
+ * Nothing the sandbox draws while a lesson link opens is wanted: the lesson
+ * stages its own world on its first step, and the canvas is not yet shown while
+ * the splash plays. On a throttled phone each of those frames costs a few
+ * hundred milliseconds and queues the lesson's own downloads and module
+ * evaluation behind it, which was most of the time a lesson link took to be
+ * usable. The promise resolves when the lesson's panel (or the chooser a link
+ * to no lesson falls back to) is shown, when the engine failed to load, or
+ * after a backstop, so the sandbox never stands still because a lesson did not
+ * arrive. A load that names no lesson, or whose panel is up within 4 s, resolves
+ * at once.
+ *
+ * @param {number} [ticks] - The longest the frames are held for a lesson that
+ *   does not arrive, in 50 ms polls (20 s)
+ * @param {number} [settleMs] - How long they wait, once it is up, for the
+ *   visitor's first click or key
+ * @returns {Promise<void>} Resolves when the loop may start
+ */
+export function whenLessonShown(ticks = 400, settleMs = 4000) {
+  if (!lessonInHash()) return Promise.resolve();
+  return new Promise(done => {
+    const release = shown => {
+      clearInterval(poll);
+      // A panel up within 4 s of the page starting to load is a machine the
+      // frames do not starve, and nothing is held for it.
+      if (!shown || performance.now() < 4000) return done();
+      // The panel is up: the frames wait a little longer for the first thing
+      // the visitor does, and 1.5 s after it, so that its answer is not
+      // queued behind the first frames.
+      setTimeout(done, settleMs);
+      for (const type of ['click', 'keydown'])
+        addEventListener(type, () => setTimeout(done, 1500), { once: true });
+    };
+    const poll = setInterval(
+      () =>
+        document.querySelector(
+          '#investigationPanel:not([hidden]),#investigationBrowser:not(.hidden)'
+        )
+          ? release(true)
+          : --ticks < 0 && release(false),
+      50
+    );
+    ensureInvestigations().catch(() => release(false));
+  });
+}
+
+/**
  * Unmount the engine's markup; the Lessons button loads it afresh.
  * @returns {Promise<boolean>} Whether it was mounted
  */
@@ -88,7 +137,7 @@ export async function unmountInvestigations() {
  * @returns {boolean} True for a `#investigation=<id>` fragment
  */
 export const lessonInHash = () =>
-  /^#investigation=[\w-]+(\/\w+)?$/.test(window.location.hash || '');
+  /^#investigation=[\w-]+(\/\w+)?$/.test(location.hash || '');
 
 /**
  * Whether the URL asks for the assignment builder.
@@ -100,7 +149,7 @@ export const lessonInHash = () =>
  * @returns {boolean} True when ?assign= is present
  */
 export const assignmentInUrl = () =>
-  /[?&]assign=[A-Za-z0-9_-]+/.test(window.location.href);
+  /[?&]assign=[A-Za-z0-9_-]+/.test(location.href);
 
 /**
  * Whether the address bar holds an assignment link a student has opened.
@@ -139,54 +188,51 @@ export function watchForAssignments() {
   // The engine first, then the bridge. Doing it in this order is what lets the
   // bridge import js/investigations.js directly: the panel it opens into has
   // been initialized by the time it runs, and the two modules do not have to
-  // reach for each other.
-  const open = () =>
+  // reach for each other. A pack link that cannot be opened says nothing.
+  const kinds = [
+    [
+      assignmentInHash,
+      () => import('./assignments/assignmentBridge.js'),
+      'openAssignmentFromUrl',
+      true,
+    ],
+    [
+      activityInHash,
+      () => import('./activities/activityBridge.js'),
+      'openActivityFromUrl',
+      true,
+    ],
+    [packInHash, () => import('./remix/open.js'), 'openPackFromUrl', false],
+  ];
+  const open = () => {
+    const kind = kinds.find(([isLink]) => isLink());
+    if (!kind) return;
+    const [, load, opener, loud] = kind;
     ensureInvestigations()
-      .then(() => import('./assignments/assignmentBridge.js'))
-      .then(m => m.openAssignmentFromUrl())
-      .catch(err =>
-        console.warn('That assignment link could not be opened:', err)
-      );
+      .then(load)
+      .then(m => m[opener]())
+      .catch(err => {
+        if (loud) console.warn('That link could not be opened:', err);
+      });
+  };
 
-  const openActivity = () =>
-    ensureInvestigations()
-      .then(() => import('./activities/activityBridge.js'))
-      .then(m => m.openActivityFromUrl())
-      .catch(err =>
-        console.warn('That activity link could not be opened:', err)
-      );
-
-  const openPack = () =>
-    ensureInvestigations()
-      .then(() => import('./remix/open.js'))
-      .then(m => m.openPackFromUrl())
-      .catch(() => {});
-
-  if (assignmentInHash()) open();
-  else if (activityInHash()) openActivity();
-  else if (packInHash()) openPack();
-
+  open();
   let last = location.hash;
-  window.addEventListener('hashchange', () => {
+  addEventListener('hashchange', () => {
     if (location.hash === last) return;
     last = location.hash;
-    if (assignmentInHash()) open();
-    else if (activityInHash()) openActivity();
-    else if (packInHash()) openPack();
+    open();
   });
 }
 
 export const authoringInUrl = () =>
-  /[?&#]author=[\w-]+/.test(window.location.href || '');
+  /[?&#]author=[\w-]+/.test(location.href || '');
 
 /** The Lessons button's first press loads the engine, then stands down. */
 function armLessonsButton() {
   const btn = document.getElementById('investigationsBtn');
   if (!btn) return;
-  const firstClick = async () => {
-    const mod = await ensureInvestigations();
-    mod.openBrowser();
-  };
+  const firstClick = () => ensureInvestigations().then(m => m.openBrowser());
   btn.addEventListener('click', firstClick);
   onFirstLoad.add(() => btn.removeEventListener('click', firstClick));
 }
@@ -212,31 +258,21 @@ export function watchForInvestigations() {
       ensureInvestigations().then(mod => mod.openBrowser());
   };
   browse();
-  window.addEventListener('hashchange', browse);
+  addEventListener('hashchange', browse);
 
-  // An assignment link names a lesson, so the system is needed immediately.
-  // initInvestigations() reads the hash itself and opens the right lesson.
-  if (lessonInHash()) ensureInvestigations();
-
-  // An authoring preview needs the system for the same reason and by the same
-  // route. Without this the lesson engine is never imported on a fresh
-  // ?author= load, so initInvestigations() never runs and the preview silently
-  // does nothing - which is exactly what happened the first time.
-  if (authoringInUrl()) ensureInvestigations();
-
-  // And the assignment builder, and a student opening an assignment link.
-  if (assignmentInUrl() || assignmentInHash()) ensureInvestigations();
-
-  // Pasting a lesson link into an already-open tab changes only the fragment,
-  // which navigates nothing.
-  window.addEventListener('hashchange', () => {
-    if (
-      lessonInHash() ||
-      authoringInUrl() ||
-      assignmentInUrl() ||
-      assignmentInHash()
-    ) {
-      ensureInvestigations();
-    }
+  // A lesson link, an authoring preview (without this the engine is never
+  // imported on a fresh ?author= load and the preview silently does nothing),
+  // the assignment builder and an assignment link all need the system at once:
+  // initInvestigations() reads the address itself and opens the right lesson.
+  // The same test runs again when a link is pasted into an open tab, which
+  // changes only the fragment and navigates nothing.
+  const wanted = () =>
+    lessonInHash() ||
+    authoringInUrl() ||
+    assignmentInUrl() ||
+    assignmentInHash();
+  if (wanted()) ensureInvestigations();
+  addEventListener('hashchange', () => {
+    if (wanted()) ensureInvestigations();
   });
 }
