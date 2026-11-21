@@ -227,6 +227,7 @@ document.addEventListener('DOMContentLoaded', () => {
    * where nobody can see them.
    */
   function revealInterface() {
+    armTouchTips();
     setTimeout(async () => {
       document.querySelector('.ui-container').classList.add('showUI');
       document.getElementById('overlay').classList.add('showUI');
@@ -254,8 +255,6 @@ document.addEventListener('DOMContentLoaded', () => {
         'objectInspector',
       ])
         document.getElementById(id)?.classList.add('showUI');
-
-      armTouchTips();
     }, 200);
   }
 
