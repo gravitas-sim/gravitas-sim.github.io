@@ -184,6 +184,9 @@ const TRANSITS = {
   title: 'Finding Planets by Their Shadows',
   subtitle:
     'Measure a transit, weigh what it tells you, and find what is hiding',
+  question:
+    'How can you find a planet you cannot see, and measure how big it is?',
+  medium: { kind: 'instrument', name: 'the light curve' },
   duration: '50-70 min',
   level: 'Introductory astronomy',
   audience: 'intro',
@@ -244,25 +247,11 @@ const TRANSITS = {
       sid: 'a-firefly-beside-a-lighthouse',
       bind: TRANSIT_PAIR,
       type: 'read',
-      title: 'A firefly beside a lighthouse',
-      body: `There are more than six thousand confirmed planets around other
-             stars. Fewer than a hundred have ever been photographed.
-             \n\nThe problem is not that they are far away, it is that they sit
-             next to something overwhelmingly brighter. Seen from thirty light
-             years, Jupiter is about a billion times fainter than the Sun and
-             sits half an arcsecond away from it: the angle a coin subtends
-             from four kilometers. Every telescope spreads a point of light out
-             into a small blur, and the star's blur is a billion times taller
-             than the planet is. Direct imaging works only in the rare corner of
-             parameter space where the planet is young enough to still glow with
-             its own heat, massive enough to glow brightly, and far enough out to
-             be clear of the glare: a young, enormous world on a wide orbit. That
-             is not what most planets are.
-             \n\nSo we look for the star instead. A planet cannot hide what it
-             does to its host: it pulls the star around, it bends the light of
-             stars behind it, and, if the geometry is right, it passes in front
-             of it and blocks some light. All three are measurements of the
-             <em>star</em>, and stars are bright and easy.
+      title: 'A planet you cannot see',
+      body: `How can you find a planet you cannot see, and measure how big it
+             is? You will watch a star dim as its planet crosses in front of
+             it, predict how deep the dip will be, then read the depth off the
+             light curve and turn it into a size.
              \n\nOn screen is <strong>HD 209458</strong>, a slightly hotter and
              more massive relative of the Sun about 160 light years away in
              Pegasus, with a planet on a three and a half day orbit. The star and
@@ -385,7 +374,17 @@ const TRANSITS = {
       bind: TRANSIT_PAIR,
       type: 'read',
       title: 'Where the depth comes from',
-      body: `A star is, to a photometer, a uniformly bright disk of radius
+      body: `Why measure the star at all? Fewer than a hundred of the six
+             thousand known planets have ever been photographed, because each
+             sits beside something overwhelmingly brighter: seen from thirty
+             light years, Jupiter is about a billion times fainter than the Sun
+             and half an arcsecond from it, inside the blur every telescope
+             makes of a star. A planet cannot hide what it does to its star,
+             though. It pulls the star around, it bends the light of stars
+             behind it, and, if the geometry is right, it blocks some of its
+             light, which is the dip you have just recorded. All three are
+             measurements of the <em>star</em>, and stars are bright and easy.
+             \n\nA star is, to a photometer, a uniformly bright disk of radius
              <em>R</em><sub>★</sub> and area π<em>R</em><sub>★</sub><sup>2</sup>. A planet in front
              of it is an opaque disk of radius <em>R</em><sub>p</sub> and area
              π<em>R</em><sub>p</sub><sup>2</sup>, and it blocks exactly its own area.
@@ -560,7 +559,7 @@ const TRANSITS = {
              and the orbit together, because they are all tangled up in the same
              curve.`,
       figure: {
-        src: 'images/transit-of-venus-2012.jpg',
+        src: 'images/transit-of-venus-2012.webp',
         alt: 'The Sun photographed in white light. Its disk is noticeably brighter in the middle and fades towards the rim. The small, hard-edged black disk of Venus sits near the upper right edge, and several sunspots are scattered across the middle.',
         caption: `Venus crossing the Sun on 5 June 2012, photographed from San
                   Francisco. This is the same measurement you have been making,
@@ -1426,25 +1425,15 @@ const TRANSITS = {
       bind: TRANSIT_PAIR,
       type: 'read',
       title: 'What you did, and where it goes next',
-      body: `You measured a transit depth and turned it into a planet radius, and
-             then made that radius more accurate three times over: once by
-             dividing out limb darkening, once by understanding the geometry that
-             sets the impact parameter, and once by correcting for a star nobody
-             could see. That sequence, measurement then correction then
-             correction, is what the field actually looks like from the inside.
-             \n\nThe method is not slowing down. TESS is surveying essentially the
-             whole sky for transits around bright, nearby stars, the ones worth
-             following up. JWST is taking transmission spectra of small planets
-             around cool stars, which is the only route to an atmosphere on
-             anything rocky with current technology. ESA's PLATO, due later this
-             decade, is built to find Earth-sized planets in year-long orbits
-             around Sun-like stars, the corner of parameter space Kepler could
-             only just reach. Ariel after it will do atmospheres at survey scale.
-             \n\nAnd behind all of them sits the unglamorous work you did in the
-             last three steps: somebody has to go and look at every host star with
-             a big enough telescope to find out what else is in the aperture.
-             Every one of those thousands of planet radii is only as good as the
-             answer.`,
+      body: `Every radius you found is a ratio to the star, made better
+             three times over, and each correction rested on something besides
+             the dip: how the star's edge darkens, how the orbit is tilted to
+             us, what else shines in the same aperture. A planet's radius is
+             only as good as those.
+             \n\nTESS, JWST and PLATO are measuring transits now, and behind
+             every one of their planets is the follow-up of the last three
+             steps: somebody has to look at the host star with a big enough
+             telescope to find out what else is there.`,
       tip: 'A note on numbers: the survey results quoted here come from the Robo-AO Kepler Survey and the SOAR TESS Survey, both of which set out to image every planet-candidate host they could reach. The Robo-AO census covers 3,857 Kepler hosts; the SOAR program has observed close to 3,000 TESS targets and finds a median primary-host radius correction of about 1.07, rising to 1.33 for the worst tenth.',
     },
   ],

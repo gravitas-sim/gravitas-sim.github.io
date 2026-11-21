@@ -77,24 +77,31 @@ export function scientific(text) {
   return value;
 }
 
+/** Runs in the page: the instrument's rows, label -> text. */
+const readRows = () =>
+  Object.fromEntries(
+    [...document.querySelectorAll('#investigationToolReadout .inv-tool-row')]
+      .map(r => [
+        r.querySelector('dt')?.textContent?.trim() ?? '',
+        r.querySelector('dd')?.textContent?.trim() ?? '',
+      ])
+      .filter(([k]) => k)
+  );
+
+/** Wait until the readout differs from `before` (a control was moved), up to 2 s. */
+const redrawn = (page, before) =>
+  page
+    .waitForFunction(
+      `JSON.stringify((${readRows})()) !== ${JSON.stringify(before)}`,
+      null,
+      { polling: 'raf', timeout: 2000 }
+    )
+    .catch(() => {});
+
 /** The instrument's rows on this step: label -> text, once they have stopped changing. */
 async function readout(page) {
   await page.locator('#investigationTool').waitFor({ state: 'visible' });
-  const rows = () =>
-    page.evaluate(() =>
-      Object.fromEntries(
-        [
-          ...document.querySelectorAll(
-            '#investigationToolReadout .inv-tool-row'
-          ),
-        ]
-          .map(r => [
-            r.querySelector('dt')?.textContent?.trim() ?? '',
-            r.querySelector('dd')?.textContent?.trim() ?? '',
-          ])
-          .filter(([k]) => k)
-      )
-    );
+  const rows = () => page.evaluate(readRows);
   // A slow page draws the instrument, then fills its rows: read until two
   // reads 400 ms apart agree and there is something in them.
   let last = JSON.stringify(await rows());
@@ -232,8 +239,9 @@ export const PILOTS = {
     measureSid: 'heating-at-two-eccentricities',
     async readings(page) {
       const take = async e => {
+        const before = JSON.stringify(await page.evaluate(readRows));
         await setTool(page, 'e', e);
-        await page.waitForTimeout(400);
+        await redrawn(page, before);
         const rows = await readout(page);
         return (rowValue(rows, /^heating/i) / 1e13).toFixed(2);
       };
@@ -251,15 +259,21 @@ export const PILOTS = {
     measureSid: 'match-the-recession',
     async readings(page) {
       let q = 40;
-      for (let i = 0; i < 4; i++) {
-        const rate = rowValue(await readout(page), /recession now/i);
+      let rows;
+      let settled = false;
+      for (let i = 0; i < 4 && !settled; i++) {
+        rows = await readout(page);
+        const rate = rowValue(rows, /recession now/i);
         const next = Math.max(5, Math.min(200, Math.round((q * rate) / 3.82)));
-        if (next === q) break;
+        settled = next === q;
+        if (settled) break;
         q = next;
+        const before = JSON.stringify(rows);
         await setTool(page, 'Q', q);
-        await page.waitForTimeout(400);
+        await redrawn(page, before);
       }
-      const rows = await readout(page);
+      // The last read is of the Q it settled on, and the day comes from it.
+      if (!settled) rows = await readout(page);
       return { q: String(q), day: String(rowValue(rows, /lengthening now/i)) };
     },
   },
@@ -287,6 +301,12 @@ const position = async page =>
 
 /** Answer whatever would hold Next up on this screen (the first thing offered). */
 async function nudge(page) {
+  // An estimate's box is fetched with its step (a line says so until it
+  // arrives) and Next waits for it: wait for the box, as a student does,
+  // before looking for it.
+  await page
+    .locator('#investigationBody [data-est-wait]')
+    .waitFor({ state: 'detached', timeout: 60_000 });
   const boxes = page.locator('#investigationBody input[type="checkbox"]');
   for (let i = 0; i < (await boxes.count()); i++) {
     const box = boxes.nth(i);

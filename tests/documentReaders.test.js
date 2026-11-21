@@ -86,6 +86,11 @@ const PARSES = {
   ],
   'js/evaluationKit.js': [1, 'none', OWN],
   'js/investigations/next.js': [1, 'none', OWN],
+  'js/lesson/opening.js': [
+    1,
+    'none',
+    OWN + "; one reading's source note, kept only if it is an object",
+  ],
   'js/myWork/made.js': [1, 'none', OWN + '; readMade checks it'],
   'js/myWork/composedReport.js': [
     1,

@@ -445,6 +445,9 @@ export const WHEN_THE_METHOD_MUST_REFUSE = {
 // Las investigaciones de imágenes (Prompt 191): tres más, paso a paso con el inglés.
 export const MEASURING_THE_MOON = {
   title: 'Medir la Luna',
+  question:
+    '¿Cuán grande es un accidente de la Luna, medido en una imagen que no tiene escala propia?',
+  medium: { name: 'la imagen de Galileo' },
   subtitle:
     'Marcas sobre una imagen real, una escala a partir de una longitud conocida y un tamaño en kilómetros',
   objectives: [
@@ -456,7 +459,7 @@ export const MEASURING_THE_MOON = {
   steps: {
     'a-picture-of-the-moon': {
       title: 'Una imagen real de la Luna',
-      body: 'Esta es una imagen <strong>real</strong>: la Luna, fotografiada por la sonda Galileo de la NASA el 7 de diciembre de 1992 al pasar junto a la Tierra camino de Júpiter. Es un compuesto en color realzado, mostrado aquí en gris. <em>Realzado</em> significa que se estiró el contraste para mostrar diferencias en el terreno, así que sus niveles de gris son para el ojo y no miden la luz que refleja la Luna. El Observatorio llama a una imagen así <strong>solo para mostrar</strong>: puedes marcarla y medirla en [[pixel|píxeles]], y nada más.\n\nUna imagen no tiene escala propia. Esta mide 496 píxeles de ancho, y un píxel no es un kilómetro. Los píxeles se numeran desde abajo a la izquierda, x hacia la derecha e y hacia arriba, y el disco está recortado muy justo: su borde derecho toca la última columna. En esta investigación das a la imagen una escala y tomas una medida de ella.',
+      body: '¿Cuán grande es un accidente de la Luna, medido en una imagen que no tiene escala propia? Decidirás qué da escala a la imagen de Galileo, y después marcarás en ella una llanura oscura y medirás su anchura en kilómetros.\n\nEsta es una imagen <strong>real</strong>: la Luna, fotografiada por la sonda Galileo de la NASA el 7 de diciembre de 1992 al pasar junto a la Tierra camino de Júpiter.',
     },
     'predict-the-scale': {
       title: '¿Qué da escala a una imagen?',
@@ -476,7 +479,7 @@ export const MEASURING_THE_MOON = {
     },
     'mark-the-disc-width': {
       title: 'Marca el ancho del disco',
-      body: 'El <strong>par de referencia</strong> es una línea a lo largo de la fila 245, por el centro del disco, y la herramienta toma que abarca el diámetro medio de la Luna, 3474,8 km. Dónde pongas sus dos extremos fija la escala.\n\nMueve <strong>Extremo izquierdo del par</strong> y <strong>Extremo derecho del par</strong> a los dos bordes de la Luna, y luego toma la longitud del par y la escala que da. El borde derecho toca la última columna, así que el disco puede ser uno o dos píxeles más ancho que la imagen: eso no está en la [[uncertainty|incertidumbre]] que indica la herramienta.',
+      body: 'La imagen mide 496 [[pixel|píxeles]] de ancho, numerados desde abajo a la izquierda, x hacia la derecha e y hacia arriba. Es un compuesto en color realzado mostrado en gris, con el contraste estirado para mostrar diferencias en el terreno, así que sus niveles de gris son para el ojo y no miden la luz que refleja la Luna: el Observatorio llama a una imagen así <strong>solo para mostrar</strong>, para marcarla y medirla en píxeles y nada más.\n\nEl <strong>par de referencia</strong> es una línea a lo largo de la fila 245, por el centro del disco, y la herramienta toma que abarca el diámetro medio de la Luna, 3474,8 km. Dónde pongas sus dos extremos fija la escala.\n\nMueve <strong>Extremo izquierdo del par</strong> y <strong>Extremo derecho del par</strong> a los dos bordes de la Luna, y luego toma la longitud del par y la escala que da. El borde derecho toca la última columna, así que el disco puede ser uno o dos píxeles más ancho que la imagen: eso no está en la [[uncertainty|incertidumbre]] que indica la herramienta.',
       fields: [
         { label: 'Longitud del par' },
         { label: 'Escala a partir del par, en km por píxel' },
@@ -549,7 +552,7 @@ export const MEASURING_THE_MOON = {
     },
     'what-you-worked-out': {
       title: 'Lo que has deducido',
-      body: 'Una imagen no tiene escala hasta que se la das, y la escala que le das es una medida tuya, apoyada en una longitud que supusiste y en dos marcas que colocaste. Con ella, un círculo sobre un accidente dio un tamaño en kilómetros, unos 634 km para la llanura, y la incertidumbre indicada por la herramienta cubría solo el redondeo de tus marcas. Lo suave del borde, el recorte a la derecha, el diámetro supuesto y la inclinación de la llanura (un 4 por ciento más estrecha a lo largo de la línea al centro) no están en ella. Y como la imagen es para mostrar, sus niveles de gris no son luz: mediste dónde están las cosas y cuán grandes son, y nada sobre su brillo.',
+      body: 'La incertidumbre que indica la herramienta cubre solo el redondeo de tus marcas. Lo suave del borde de la Luna, el recorte a la derecha, el diámetro que supusiste y la inclinación de la llanura no están en ella, así que la incertidumbre real es mayor que la impresa. Y como la imagen es para mostrar, sus niveles de gris no son luz: puede decir dónde están las cosas y cuán grandes son, y nada sobre su brillo.',
     },
   },
 };

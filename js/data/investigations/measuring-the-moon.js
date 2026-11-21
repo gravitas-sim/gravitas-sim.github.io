@@ -22,6 +22,9 @@ export const MEASURING_THE_MOON = {
   id: 'measuring-the-moon',
   thumbnail: 'images/investigations/measuring-the-moon.webp',
   title: 'Measuring the Moon',
+  question:
+    'How big is a feature on the Moon, measured from a picture that has no scale of its own?',
+  medium: { kind: 'image', name: 'the Galileo picture' },
   subtitle:
     'Marks on a real picture, a scale from a known length, and a size in kilometers',
   duration: '15-25 min',
@@ -65,19 +68,13 @@ export const MEASURING_THE_MOON = {
       sid: 'a-picture-of-the-moon',
       type: 'read',
       title: 'A real picture of the Moon',
-      body: `This is a <strong>real</strong> picture: the Moon, photographed by NASA&rsquo;s
-             Galileo spacecraft on 7 December 1992 as it flew past the Earth on
-             its way to Jupiter. It is an enhanced-color composite, shown here in
-             gray. <em>Enhanced</em> means the contrast was stretched to show
-             differences in the ground, so its gray levels are for the eye and are
-             not a measure of the light the Moon reflects. The Observatory calls such
-             a picture <strong>display-only</strong>: you may mark it and measure
-             it in [[pixel|pixels]], and nothing more.
-             \n\nA picture has no scale of its own. This one is 496 pixels across,
-             and a pixel is not a kilometer. The pixels are numbered from the lower
-             left, x to the right and y up, and the disc is cropped close: its right
-             edge touches the last column. In this investigation you give the picture a
-             scale and take one measurement off it.`,
+      body: `How big is a feature on the Moon, measured from a picture that has
+             no scale of its own? You will decide what gives the Galileo
+             picture a scale, then mark a dark plain on it and measure its width
+             in kilometers.
+             \n\nThis is a <strong>real</strong> picture: the Moon,
+             photographed by NASA&rsquo;s Galileo spacecraft on 7 December 1992
+             as it flew past the Earth on its way to Jupiter.`,
       tool: MM({}, ['x1', 'x2', 'cx', 'cy', 'r']),
     },
     {
@@ -106,7 +103,14 @@ export const MEASURING_THE_MOON = {
       sid: 'mark-the-disc-width',
       type: 'measure',
       title: 'Mark the width of the disc',
-      body: `The <strong>reference pair</strong> is a line along row 245, through the middle of
+      body: `The picture is 496 [[pixel|pixels]] across, numbered from the
+             lower left, x to the right and y up. It is an enhanced-color
+             composite shown in gray, its contrast stretched to show differences
+             in the ground, so its gray levels are for the eye and not a measure
+             of the light the Moon reflects: the Observatory calls such a picture
+             <strong>display-only</strong>, to be marked and measured in pixels
+             and nothing more.
+             \n\nThe <strong>reference pair</strong> is a line along row 245, through the middle of
              the disc, and the tool takes it to span the Moon&rsquo;s mean diameter,
              3,474.8 km. Where you put its two ends sets the scale.
              \n\nMove <strong>Left end of the pair</strong> and <strong>Right end of the
@@ -358,14 +362,13 @@ export const MEASURING_THE_MOON = {
       sid: 'what-you-worked-out',
       type: 'read',
       title: 'What you worked out',
-      body: `A picture has no scale until you give it one, and the scale you give it is
-             a measurement of yours, resting on a length you assumed and on two marks you
-             placed. With it, a circle on a feature gave a size in kilometers, about
-             634 km for the plain, and the tool&rsquo;s stated uncertainty covered only the
-             rounding of your marks. The softness of the edge, the crop at the right,
-             the assumed diameter and the slant of the plain (about 4 percent narrower along the line to the center) are not in it. And because the picture is a
-             display picture, its gray levels are not light: you measured where things
-             are and how big they are, and nothing about how bright.`,
+      body: `The uncertainty the tool states covers only the rounding of your
+             marks. The softness of the Moon&rsquo;s edge, the crop at the right,
+             the diameter you assumed and the slant of the plain are not in it,
+             so the real uncertainty is larger than the one printed. And because
+             the picture is a display picture, its gray levels are not light: it
+             can say where things are and how big they are, and nothing about how
+             bright.`,
       tool: MM({ x1: 3, x2: 496, cx: 289, cy: 306, r: 45 }, ['x1', 'x2']),
     },
   ],

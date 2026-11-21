@@ -13,6 +13,8 @@
 export default {
   title: 'Pesar las estrellas',
   subtitle: 'Usa una órbita para medir algo que no puedes poner en una balanza',
+  question: '¿Cómo se pesa una estrella que no se puede tocar?',
+  medium: { name: 'la vista en directo' },
   duration: '35-45 min',
   level: 'Astronomía introductoria',
   objectives: [
@@ -26,7 +28,7 @@ export default {
   steps: {
     'you-cannot-put-a-star': {
       title: 'No puedes poner una estrella en una balanza',
-      body: 'Una báscula de baño funciona empujando hacia arriba. Súbete a ella y mide con cuánta fuerza te está tirando la Tierra hacia abajo. No existe ninguna versión de eso para una estrella. Las estrellas son enormes, son inalcanzables, y la más cercana después del Sol está a cuarenta mil años a la velocidad de una nave espacial.\n\nY sin embargo, abre cualquier libro de texto de astronomía y te dirá la masa de decenas de estrellas, con dos decimales. Alguien las midió. ¿Cómo?\n\nLa respuesta es lo último que te mostró la investigación de Kepler. Kepler descubrió que el tamaño y la duración de una órbita van juntos. Newton descubrió que la <em>masa</em> de lo que tira también forma parte de esa relación, y una vez que sabes eso, una órbita se convierte en un instrumento de medida.\n\nEsta investigación trata de apuntar ese instrumento a un par de estrellas.',
+      body: '¿Cómo se pesa una estrella que no se puede tocar? Probarás un método en la vista en directo.\n\nUna báscula de baño funciona empujando hacia arriba: súbete a ella y mide con cuánta fuerza te está tirando la Tierra hacia abajo. No existe ninguna versión de eso para una estrella, y sin embargo cualquier libro de texto de astronomía da la masa de decenas de estrellas, con dos decimales.',
       tip: 'Aquí no hace falta álgebra. Leerás dos números de una pantalla y harás una división.',
     },
     'how-would-you-do-it': {
@@ -123,6 +125,7 @@ export default {
         'Sube la Estrella A a 3 M☉ y observa cómo se desplaza la cruz',
         'Pon la Estrella A en 4 M☉ y la Estrella B en 1 M☉',
         'Observa qué estrella hace ahora el círculo pequeño y cuál el grande',
+        'Selecciona la estrella pesada y comprueba que su tarjeta coincide con el deslizador',
         'Pruébalo al revés, con la Estrella B como la pesada',
       ],
       tip: 'La estrella más pesada no se queda quieta. Sigue moviéndose. Solo que se mueve en un círculo mucho menor, y se mueve más despacio, porque tiene menos recorrido que hacer en el mismo tiempo.',
@@ -261,7 +264,7 @@ export default {
       because:
         'Tamaño de la órbita y periodo. Son las dos únicas cosas de la fórmula, y ambas son cosas que puedes ver suceder. Todo lo demás sobre las estrellas, por interesante que sea, es irrelevante aquí.',
     },
-    'measurement-one-how-big-is': {
+    'take-the-orbit-readings': {
       title: 'Medida uno: ¿cómo de grande es la órbita?',
       body: 'El par del lienzo es ahora otro distinto: dos estrellas cuyas masas no te han dicho. El punto de equilibrio está marcado, con una línea discontinua hasta cada estrella, y el panel mide esas líneas por ti mientras el par gira.\n\nPausa el simulador si quieres mirar con calma, y toma las lecturas que vas a necesitar. Recuerda lo que decía el paso anterior: el tamaño de la órbita <strong>a</strong> es la distancia de una estrella <em>hasta la otra</em>. Cuál de tus lecturas es esa lo dices tú en el paso de pesar.',
       fields: [
@@ -278,7 +281,7 @@ export default {
         'Vuelve a ponerlo en marcha y comprueba que una lectura sigue valiendo una vuelta después',
       ],
     },
-    'measurement-two-how-long-does': {
+    'time-the-laps': {
       title: 'Medida dos: ¿cuánto dura una vuelta?',
       body: 'Ahora cronométralo. Pulsa <strong>Marcar</strong> cuando la Estrella A esté en un sitio fácil de reconocer: aparece una línea de puntos por esa posición. Mira a la Estrella A volver a la línea y pulsa <strong>Parar</strong> en el momento en que la cruce otra vez.\n\nTú decides cuántas vueltas cronometras. Tu tiempo de reacción es el mismo esperes lo que esperes, así que pesa menos en una medida más larga. Di cuántas vueltas cronometraste, toma la lectura del cronómetro, y la página calcula el periodo de una vuelta.\n\nPulsa <strong>Capturar esta órbita</strong> para registrar la separación, los dos brazos y tu cronometraje en tu cuaderno, marcado como cronometrado por ti y no tomado del modelo.',
       tool: {
@@ -357,7 +360,7 @@ export default {
       title: 'Detente y mira lo que acabas de hacer',
       body: 'Tienes la masa combinada de dos estrellas a las que nadie se ha acercado jamás, y la obtuviste de dos cosas que podías ver: lo separadas que están y cuánto tardan en dar la vuelta.\n\nEsta no es una versión simplificada de cómo se hace. Es cómo se hace. Las masas de los libros de texto salieron exactamente de este cálculo, aplicado a pares de estrellas que los astrónomos llevan fotografiando pacientemente siglo y medio.\n\nQueda una cosa. Sabes cuánto pesa el par <em>en conjunto</em>. Todavía no sabes cómo se reparte ese peso entre las dos, y para eso necesitas la otra idea de antes en esta investigación.',
     },
-    'back-to-the-balance-point': {
+    'compare-the-two-arms': {
       title: 'De vuelta al punto de equilibrio',
       body: 'El punto de equilibrio está otra vez en el lienzo. Esta vez lee las dos líneas discontinuas al revés: no para sumar las distancias, sino para compararlas.\n\nToma cuántas veces más lejos se aleja una estrella que la otra, y decide qué estrella tiene que ser la más pesada.',
       fields: [
@@ -382,7 +385,7 @@ export default {
       because:
         'La Estrella A es tres veces más pesada. Es el balancín otra vez: la Estrella B está tres veces más lejos, así que la Estrella A debe ser tres veces más pesada para equilibrarla. Ahora conoces la masa total y el cociente, que es suficiente para fijar ambas estrellas.',
     },
-    'now-weigh-each-one': {
+    'share-the-total-out': {
       title: 'Ahora pesa cada una',
       body: 'Conoces la masa total del par por el paso de pesar, y sabes cuánto más lejos se aleja una estrella que la otra. Reparte el total entre las dos estrellas.\n\nEl panel es el balancín otra vez: pon las dos distancias como tus lecturas y mira qué dice de las masas. Después escribe las dos masas abajo.',
       tool: {
@@ -426,7 +429,7 @@ export default {
       },
       tip: 'Esa es otra investigación. Esta habrá cumplido su función si sabes decir por qué se mueve la estrella.',
     },
-    'one-on-your-own': {
+    'weigh-a-new-pair': {
       title: 'Uno por tu cuenta',
       body: 'Un par nuevo, que no has visto. Las dos estrellas están a <strong>3 UA</strong> y tardan <strong>3 años</strong> en girar una alrededor de la otra.\n\nCalcula cuánto pesan entre las dos.',
       fields: [{ label: 'Masa total', unit: 'M☉' }],
@@ -454,8 +457,8 @@ export default {
         'La tercera ley de Kepler en la forma de Newton, M_A + M_B = a\u00b3/P\u00b2 con a en UA y P en a\u00f1os, convierte el tama\u00f1o de la \u00f3rbita y el periodo en la masa total. El punto de equilibrio la reparte: la distancia de cada estrella al baricentro es inversamente proporcional a su masa, as\u00ed que M_A/M_B = r_B/r_A, y las dos relaciones juntas dan ambas masas. Lo que hizo f\u00e1cil este par: la \u00f3rbita se ve de frente, as\u00ed que la separaci\u00f3n medida es la verdadera; una binaria real est\u00e1 inclinada un \u00e1ngulo desconocido y la separaci\u00f3n que mides es una proyecci\u00f3n, por lo que el trabajo real necesita la inclinaci\u00f3n o una correcci\u00f3n estad\u00edstica.',
     },
     'what-you-can-now-say': {
-      title: 'Lo que ahora puedes decir',
-      body: 'En palabras corrientes, sin memorizar nada:\n\n<strong>Cuando dos estrellas se orbitan mutuamente, ambas se mueven alrededor de un punto de equilibrio compartido. Cómo de grande es su órbita y cuánto tarda nos dicen su masa combinada. Lo lejos que está cada estrella del punto de equilibrio nos dice cómo se reparte esa masa entre ellas.</strong>\n\nPor eso importan tanto las estrellas binarias. Son la única manera directa que tenemos de pesar una estrella, y casi todo lo demás que decimos saber sobre masas estelares descansa en ellas. Cuando un libro de texto dice que el Sol es una estrella corriente, o que una estrella diez veces la masa del Sol se consume en unas decenas de millones de años, los números que hay detrás de esas afirmaciones se calibraron con pares de estrellas medidos exactamente como acabas de hacerlo tú.\n\nAlrededor de la mitad de las estrellas del cielo tienen compañera. Cada una de ellas anuncia calladamente su propia masa a quien observe el tiempo suficiente.',
+      title: 'Por qué importa',
+      body: 'Las estrellas binarias son la única manera directa que tenemos de pesar una estrella, y casi todo lo demás que decimos saber sobre masas estelares descansa en ellas. Cuando un libro de texto dice que una estrella diez veces la masa del Sol se consume en unas decenas de millones de años, las masas que hay detrás de esa afirmación se calibraron con pares de estrellas medidos como mediste tú este.\n\nAlrededor de la mitad de las estrellas del cielo tienen compañera. Cada una de ellas anuncia calladamente su propia masa a quien observe el tiempo suficiente.',
       tip: 'Bessel encontró Sirio B al advertir un bamboleo, décadas antes de que nadie la viera. Medir lo que no puedes ver observando lo que le hace a algo que sí puedes ver es uno de los trucos más antiguos de esta materia y sigue siendo de los mejores.',
     },
   },

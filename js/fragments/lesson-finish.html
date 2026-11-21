@@ -21,6 +21,45 @@
         ×
       </button>
     </div>
+    <!-- The ending (js/investigations/ending.js): the lesson's question and the
+         student's own answers and readings, for a lesson that states its
+         question; never a key or a mark. Both languages are here, as in
+         "What next", so the catalog does not carry them. -->
+    <section
+      id="investigationEnding"
+      class="inv-verdict"
+      aria-labelledby="investigationEndingTitle"
+      hidden
+      data-prediction-en="You predicted: {text}"
+      data-prediction-es="Predijiste: {text}"
+      data-estimate-en="You estimated: {text}"
+      data-estimate-es="Estimaste: {text}"
+      data-number-en="Your answer: {text}"
+      data-number-es="Tu respuesta: {text}"
+      data-words-en="In your words: {text}"
+      data-words-es="Con tus palabras: {text}"
+      data-reading-en="Your reading, {label}: {text}"
+      data-reading-es="Tu lectura, {label}: {text}"
+    >
+      <h4 id="investigationEndingTitle" class="inv-verdict-head">
+        <span class="gs-en">The question, and what you found</span
+        ><span class="gs-es" lang="es">La pregunta y lo que encontraste</span>
+      </h4>
+      <p id="investigationEndingQuestion" class="inv-verdict-mark"></p>
+      <ul
+        id="investigationEndingList"
+        class="inv-ending-list"
+        tabindex="0"
+        aria-labelledby="investigationEndingTitle"
+      ></ul>
+      <p id="investigationEndingNone" class="inv-verdict-mark" hidden>
+        <span class="gs-en"
+          >You have not recorded an answer or a reading here.</span
+        ><span class="gs-es" lang="es"
+          >No has registrado ninguna respuesta ni lectura aquí.</span
+        >
+      </p>
+    </section>
     <div id="investigationFinishSummary" class="inv-finish-summary"></div>
 
     <label class="inv-name-field" for="investigationName">

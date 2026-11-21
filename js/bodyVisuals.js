@@ -309,6 +309,12 @@ export function trailSpeedScale(trail) {
 // Slowest a trail point is drawn, as a fraction of full brightness.
 export const TRAIL_MIN_INTENSITY = 0.45;
 
+// At the low tier a glow trail blits at most this many sprites, spread over its span.
+export const LOW_GLOW_DOTS = 24;
+export function glowStride(points, tier) {
+  return tier === 'low' ? Math.max(1, Math.ceil(points / LOW_GLOW_DOTS)) : 1;
+}
+
 // --- Deterministic per-object variation --------------------------------------
 
 /**

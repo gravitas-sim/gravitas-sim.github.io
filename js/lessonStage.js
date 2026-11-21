@@ -54,6 +54,7 @@ import { populationOf, resolveStarSpec } from './stellarLab.js';
 import { brightSubset } from './stellar/population.js';
 import { applySelection } from './lesson/starState.js';
 import { state } from './appState.js';
+import { hideMasses } from './bodyLabels.js';
 
 export { SCALE };
 
@@ -303,6 +304,8 @@ export const loadStageKinds = async stage => {
  * @returns {{built: boolean, roles: Array<string>, problems: object}} What happened
  */
 export function applyStage(stage, { force = false } = {}) {
+  // `hideMasses`: no mass text on the canvas while the stage is in force.
+  hideMasses(stage?.hideMasses);
   // Two stars the engine really integrates.
   if (stage?.hole) {
     const key = JSON.stringify(['hole', stage.hole]);
@@ -1103,6 +1106,7 @@ export function placeBinary(
 
 /** Take the stage down and give the bodies back. */
 export function clearStage() {
+  hideMasses(false);
   if (!staged.length && !snapshots.length) {
     stagedKey = '';
     lastDeclaration = null;

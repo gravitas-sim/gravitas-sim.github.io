@@ -127,6 +127,16 @@ async function nudge(page) {
     const field = fields.nth(i);
     if (!(await field.inputValue())) await field.fill('1').catch(() => {});
   }
+  // An estimate's box is fetched with its step and Next holds until the
+  // estimate is committed: wait for the box, then commit as a student does.
+  await page
+    .locator('#investigationBody [data-est-wait]')
+    .waitFor({ state: 'detached', timeout: 30_000 });
+  const est = page.locator('#investigationBody [data-est]:not([readonly])');
+  if (await est.count()) {
+    await est.first().fill('1.5');
+    await page.locator('#investigationBody [data-est-commit]').click();
+  }
   const open = page.locator('#investigationBody .inv-option:not([disabled])');
   if (await open.count())
     await open

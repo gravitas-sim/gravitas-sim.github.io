@@ -96,7 +96,7 @@ describe('the orbit size and the period, in the weighing step', () => {
 });
 
 describe('a reading at another phase is the same reading', () => {
-  const rows = ctx => step('measurement-one-how-big-is').probe(ctx);
+  const rows = ctx => step('take-the-orbit-readings').probe(ctx);
 
   test('the arms and the separation do not depend on the phase of a circular pair', () => {
     const a = rows(pairAt(0));
@@ -106,7 +106,7 @@ describe('a reading at another phase is the same reading', () => {
   });
 
   test('three readings that fit together are accepted, whatever phase they were taken at', () => {
-    const v = step('measurement-one-how-big-is').validate;
+    const v = step('take-the-orbit-readings').validate;
     expect(v({ ra: 1, rb: 3, sep: 4 }).level).toBe('ok');
     expect(v({ ra: 1.0, rb: 3.01, sep: 4.0 }).level).toBe('ok');
     expect(v({ ra: 1, rb: 3, sep: 5 }).level).toBe('warn');
@@ -115,10 +115,8 @@ describe('a reading at another phase is the same reading', () => {
 });
 
 describe('the period from the laps timed', () => {
-  const p = step('measurement-two-how-long-does').fields.find(
-    f => f.id === 'p'
-  );
-  const check = step('measurement-two-how-long-does').validate;
+  const p = step('time-the-laps').fields.find(f => f.id === 'p');
+  const check = step('time-the-laps').validate;
 
   test('the page divides the stopwatch reading by the laps', () => {
     expect(p.compute({ t: 12, laps: 3 })).toBeCloseTo(4, 12);
@@ -211,5 +209,37 @@ describe('the stage a deeper step stands on', () => {
     const setup = { sid: 'c3', setup: { scenario: 's' } };
     expect(stageOf([core, bind, deep], deep)).toBeUndefined();
     expect(stageOf([core, setup, deep], deep)).toBeUndefined();
+  });
+});
+
+describe('the masses on the canvas', () => {
+  const hidden = lesson.steps.filter(s => s.stage?.hideMasses).map(s => s.sid);
+
+  test('stay off the canvas on every step that asks the student for a mass', () => {
+    for (const sid of [
+      'a-practice-run',
+      'the-mystery-pair',
+      'take-the-orbit-readings',
+      'time-the-laps',
+      'weigh-the-pair',
+      'compare-the-two-arms',
+      'splitting-them-up',
+      'share-the-total-out',
+      'weigh-a-new-pair',
+      'and-which-one-is-heavier',
+    ])
+      expect(hidden).toContain(sid);
+  });
+
+  test('come back on the step that tells the student the answer, on the same pair', () => {
+    const answer = step('the-answer');
+    expect(answer.stage.hideMasses).toBeUndefined();
+    expect(answer.stage.starPair).toEqual(
+      step('weigh-the-pair').stage.starPair
+    );
+    // Every step that shows masses runs on a pair that is not hidden, and the
+    // scene each one stands is the one the lesson means.
+    for (const s of lesson.steps.filter(x => x.stage && !x.stage.hideMasses))
+      expect(Object.keys(s.stage)).toEqual(['starPair']);
   });
 });

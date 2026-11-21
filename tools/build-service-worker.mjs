@@ -81,6 +81,9 @@ const SHADOW_LOCALES = LOCALES.map(l => l.id).filter(id => id !== 'en');
 
 const OUT = 'sw-manifest.js';
 
+/** Routes published from the build, present only in a staged deploy tree. */
+const OVERLAY_FILE = 'deploy-overlay.json';
+
 /**
  * Directories walked whole, with the extensions taken from each.
  *
@@ -175,10 +178,10 @@ const FILES = [
   { path: 'cosmology/coma-cluster-quoted.json', core: false },
   { path: 'favicon.ico', core: false },
   { path: 'favicon.png', core: false },
-  // images/transit-of-venus-2012.jpg (56 KB gzipped) is not installed: the figure on
-  // one read step of Transit Photometry is fetched with that step and kept by the
-  // service worker after that (the first-visit tier is at its data-budget ceiling,
-  // D-R4-329-05); the step's caption and alt text stand without it.
+  // The photograph on one read step of Transit Photometry, an 11 KB WebP at the
+  // size the step shows it. It was a 56 KB JPEG left out of the first-visit tier
+  // (D-R4-329-05) and comes back with the recompression (D-R4-329-09).
+  { path: 'images/transit-of-venus-2012.webp', core: false },
 ];
 
 /**
@@ -905,6 +908,32 @@ function applyCapabilityOffline(entries) {
 }
 
 /**
+ * Routes published from the build (tools/route-overlay.mjs), read from the
+ * staged tree the deploy assembles and never present in the committed one.
+ * Each route's start-up closure is installed in the tier the tree gives the
+ * route's page, and the sources it replaces leave the precache, so the overlay
+ * installs no more than the tree did. Its lazy chunks are published, not
+ * installed; the worker caches them on first use.
+ *
+ * @param {{path: string, core: boolean}[]} collected - Edited in place
+ */
+function applyOverlay(collected) {
+  if (!existsSync(OVERLAY_FILE)) return;
+  const { routes } = JSON.parse(readFileSync(OVERLAY_FILE, 'utf8'));
+  for (const route of routes) {
+    const page = FILES.find(f => f.path === route.page);
+    if (!page) throw new Error(`${route.page}: not a page the precache names`);
+    const replaced = new Set(route.replaced);
+    for (let i = collected.length - 1; i >= 0; i--)
+      if (replaced.has(collected[i].path)) collected.splice(i, 1);
+    for (const p of route.startup) {
+      if (!existsSync(p)) throw new Error(`${p}: named by the overlay, absent`);
+      collected.push({ path: p, core: page.core });
+    }
+  }
+}
+
+/**
  * The three lists a reader's browser caches, as the worker will receive them.
  * @returns {Promise<{core: string[], optional: string[], idle: string[], localeWarm: Map<string, string[]>}>}
  */
@@ -931,6 +960,7 @@ export async function buildManifest() {
         core: core && !OBSERVATORY_ONLY.has(path_),
       });
   }
+  applyOverlay(collected);
 
   const kept = applyCapabilityOffline(
     collected.filter(

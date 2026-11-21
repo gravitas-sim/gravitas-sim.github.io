@@ -28,6 +28,7 @@ import {
   fitCamera,
   rowLayout,
 } from '../js/lesson/stage.js';
+import { massesAreHidden } from '../js/bodyLabels.js';
 import {
   applyStage,
   becomeRemnant,
@@ -653,6 +654,23 @@ describe('two stars the engine is meant to move', () => {
     expect(stars).toHaveLength(2);
     for (const s of stars) expect(s.model_owned).toBe(false);
     expect(stars.map(s => s.name)).toEqual(['Star A', 'Star B']);
+  });
+
+  test('a stage can keep the masses off the canvas without restanding the pair', () => {
+    const pair = { m1: 3, m2: 1, separation: 400 };
+    applyStage({ starPair: pair, hideMasses: true });
+    expect(massesAreHidden()).toBe(true);
+    const star = stars[0];
+    // The same pair on the next step, masses shown again: the same bodies.
+    expect(applyStage({ starPair: pair }).built).toBe(false);
+    expect(massesAreHidden()).toBe(false);
+    expect(stars[0]).toBe(star);
+    applyStage({ starPair: pair, hideMasses: true });
+    expect(applyStage({ starPair: pair, hideMasses: true }).built).toBe(false);
+    expect(massesAreHidden()).toBe(true);
+    // Taking the stage down gives the masses back.
+    clearStage();
+    expect(massesAreHidden()).toBe(false);
   });
 
   test('the heavier star sits nearer the balance point', () => {

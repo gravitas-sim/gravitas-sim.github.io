@@ -21,10 +21,35 @@ export const setBoundTest = fn => {
   isBound = fn;
 };
 
+// A lesson step that asks for the masses to be worked out keeps them off the canvas.
+let massesHidden = false;
+export const hideMasses = on => {
+  massesHidden = on === true;
+};
+export const massesAreHidden = () => massesHidden;
+
+// CSS width kept by an observer: clientWidth in the frame forces a layout.
+let cssW = null;
+let watched = null;
+let watcher = null;
+function cssWidth(canvas) {
+  if (watched !== canvas) {
+    watcher?.disconnect();
+    watched = canvas;
+    cssW = null;
+    watcher =
+      typeof globalThis.ResizeObserver === 'function'
+        ? new globalThis.ResizeObserver(() => (cssW = canvas.clientWidth))
+        : null;
+    watcher?.observe(canvas);
+  }
+  return cssW ?? canvas.clientWidth;
+}
+
 export function frameScale(canvas) {
   queue = [];
   spots = [];
-  const w = canvas.clientWidth;
+  const w = cssWidth(canvas);
   return (k = w > 0 && canvas.width > 0 ? canvas.width / w : 1);
 }
 
@@ -50,7 +75,12 @@ export function bodyLabel(o, at, r, spec) {
 }
 
 /** What a label says: a name, null for its mass, false for nothing. */
-function say({ spec, chosen, o }, mode) {
+function say(q, mode) {
+  const word = sayMode(q, mode);
+  return word === null && massesHidden ? false : word;
+}
+
+function sayMode({ spec, chosen, o }, mode) {
   const mass = spec.text !== undefined || spec.value !== undefined;
   if (mode === 'names') {
     const name = spec.name ?? spec.known;

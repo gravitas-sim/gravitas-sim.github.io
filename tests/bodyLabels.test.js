@@ -17,6 +17,7 @@ import {
   drawBodyMarks,
   drawnLabels,
   frameScale,
+  hideMasses,
   labelFont,
   labelMode,
   nameSpots,
@@ -372,6 +373,38 @@ describe('what a label says', () => {
     state.selectedObject = null;
   });
 
+  test('hideMasses keeps every mass off the canvas, in each mode, and gives them back', () => {
+    const star = () => {
+      const s = new StarObject({ x: 0, y: 0 }, { x: 0, y: 0 }, 3);
+      s.alive = true;
+      s.radius = 9;
+      s.name = ''; // masses only: a name is not what is hidden
+      return s;
+    };
+    const mass = `${formatNumber(3)} M${SUN_SYMBOL}`;
+    expect(labelsOf(star(), 'all').join('')).toBe(mass);
+    hideMasses(true);
+    try {
+      for (const mode of LABEL_MODES)
+        expect(labelsOf(star(), mode).join('')).toBe('');
+      // The chosen star and a lesson's own are named by mass in names mode: still hidden.
+      const chosen = star();
+      state.selectedObject = { type: 'Star', object: chosen };
+      expect(labelsOf(chosen, 'names').join('')).toBe('');
+      state.selectedObject = null;
+      setBoundTest(() => true);
+      expect(labelsOf(star(), 'bound').join('')).toBe('');
+      setBoundTest(() => false);
+      // A name is not a mass: a Solar System body keeps it.
+      const sun = named(star(), 'Sun');
+      sun.isSolarSystemSun = true;
+      expect(labelsOf(sun, 'all').join('')).toBe('Sun');
+    } finally {
+      hideMasses(false);
+    }
+    expect(labelsOf(star(), 'all').join('')).toBe(mass);
+  });
+
   test('the text of what was drawn reaches the description', () => {
     const p = named(mkPlanet(), 'Eris');
     labelsOf(p, 'names');
@@ -404,5 +437,41 @@ describe('what a label says', () => {
     );
     recordBuild(null, {}, 0, []);
     expect(summaryText()).not.toContain('Reduced population');
+  });
+});
+
+describe('the canvas width is not read every frame', () => {
+  test('a resize observer keeps it, and the frame reads the kept value', () => {
+    const observers = [];
+    globalThis.ResizeObserver = class {
+      constructor(cb) {
+        this.cb = cb;
+        observers.push(this);
+      }
+      observe() {}
+      disconnect() {}
+    };
+    try {
+      let reads = 0;
+      let css = 400;
+      const canvas = {
+        width: 800,
+        get clientWidth() {
+          reads++;
+          return css;
+        },
+      };
+      expect(frameScale(canvas)).toBe(2);
+      observers[0].cb();
+      const before = reads;
+      for (let i = 0; i < 5; i++) expect(frameScale(canvas)).toBe(2);
+      expect(reads).toBe(before);
+      css = 200;
+      observers[0].cb();
+      expect(frameScale(canvas)).toBe(4);
+    } finally {
+      delete globalThis.ResizeObserver;
+      frameScale({ clientWidth: 1000, width: 1000 });
+    }
   });
 });

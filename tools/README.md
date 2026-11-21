@@ -210,6 +210,7 @@ current, and the orchestrator checks it.
 | `orbital-cases.mjs` | The orbital layer's validation group (Prompt 148) |  |
 | `orbital-validate.mjs` | npm run validate:orbital - the orbital layer's validation group | `npm run validate:orbital` |
 | `output-excerpt.mjs` | The part of a failing command's output worth printing |  |
+| `overlay-rehearsal.mjs` | Publish A, then B, then A again: the reader's cache must end coherent |  |
 | `overlay-validate.mjs` | Catalogue overlays, blink and compare against their committed thresholds (Prompt 182) | `npm run overlay:validate` |
 | `pending-acceptance.mjs` | Acceptance checks for features that are not built yet |  |
 | `perf-probe.mjs` | Frame-time probe | `npm run perf` |
@@ -223,7 +224,7 @@ current, and the orchestrator checks it.
 | `pr-class.mjs` | The pull-request class check (Roadmap III, Prompt 122) |  |
 | `precache-inventory.mjs` | What the service worker precaches, measured |  |
 | `precache-tour.mjs` | What a visit actually fetches, against what the precache holds (Prompt 112) |  |
-| `prepare-pages.mjs` | Assemble the tree that gets published |  |
+| `prepare-pages.mjs` | Assemble the tree that gets published | `npm run deploy:rehearse-overlay` |
 | `project-metadata.mjs` | The project's own description of itself |  |
 | `prose-whitespace.mjs` | Prose whitespace: write a lesson's line wrapping once, in the source only |  |
 | `pulsar-validate.mjs` | The pulsar kernel against its committed thresholds (Prompt 242, Part A) | `npm run pulsar:validate` |
@@ -239,6 +240,7 @@ current, and the orchestrator checks it.
 | `rotation-decomposition-validate.mjs` | The rotation-curve decomposition kernel against its committed thresholds (Prompt 236, Part A) | `npm run decomposition:validate` |
 | `route-budget.mjs` | What a fresh visitor downloads, route by route | `npm run budget:routes` |
 | `route-harness.mjs` | Student-route harness | `npm run perf:routes` |
+| `route-overlay.mjs` | Publish named routes from the build, over the committed tree |  |
 | `route-walks.mjs` | The walk from a lesson link to its first accepted reading | `npm run perf:walks` |
 | `scenario-stability.mjs` | Scenario stability probe | `npm run validate:scenarios` |
 | `scene-capture.mjs` | Capture a scene record at its exact simulated time | `npm run scene:capture` |

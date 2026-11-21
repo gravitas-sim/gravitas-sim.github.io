@@ -402,4 +402,372 @@ in `experimentSchedulerRealm.spec.js`, `assignmentLogic.spec.js` and
 with the browser suite. The workflow table does not count them as judged on the
 build.
 
+## Third run, part B (Roadmap IV, Prompt 315): the committed criteria
+
+Written on 2026-11-19 against `v4` at 87338a7a, **before any build of this run
+is made or measured**. The second run's verdict (C, D-R10-33) and the first's
+(B, D-DEPLOY-01) stand until this run is ratified. Nothing here changes the
+deploy job, and no switch is made by this run whatever its verdict.
+
+### The thresholds, unchanged in kind
+
+The same six as the first and second runs, measured against the tree as it is
+after the tree-weight work (Prompts 309 to 312, all merged into this base).
+
+- **T1 start-up.** The build cuts the front door's JavaScript by at least 50%
+  of its bytes and 30% of its requests, and each of the four measured lesson
+  routes (kepler, transit, power-law, largest-lesson) by at least 40% of its
+  bytes. Instrument: `node tools/route-budget.mjs --report` on both
+  configurations, JavaScript as served, cold cache, service worker blocked,
+  exactly as the second run measured it.
+- **T2 offline.** The build's service worker installs from its own precache,
+  and a reader who has opened it once can open it offline. Judged on the build
+  as `node build.js` produces it at this base.
+- **T3 committed artifacts.** The build needs no more committed generated
+  artifacts than the tree (`tools/generate-graph.mjs` outputs).
+- **T4 workflows.** At least 10 of the 11 workflows (S1 to S10 and the
+  instructor path I1 of `tools/conformance/product.json`) are judged on the
+  build: every spec the workflow names runs against `dist/` and passes there,
+  not in part. Instrument: `npm run e2e:dist:workflows` as committed at this
+  base, Chromium, the specs unchanged. A spec that is not DOM-level (part A's
+  table) leaves its workflow not judged. No spec is edited, skipped, made
+  conditional or loosened for this run.
+- **T5 instructor bundle.** The build publishes the encrypted instructor bundle
+  without the passphrase reaching any job but the one that publishes. The
+  passphrase is not read in this run.
+- **T6 updates.** In the build, a deploy changes the precache version exactly
+  when a published file changes.
+
+**Reported, never judged.** Time to usable, the harness routes `home` and
+`keplers-laws` on both configurations, by Prompt 298's harness
+(`tools/route-harness.mjs`, its `cold` load, profile `mid-range-phone` of
+`tools/perf-thresholds.json`, compressed transport), three runs per cell, sources and build interleaved,
+median with the range, labelled a proxy for a slow device. `uptime` is printed
+before and after, and nothing is timed while the one-minute load is above 24.
+A median that differs between the configurations by less than the spread of
+its own three runs is reported as not distinguishable. The test-count ratio of
+the first run, and route numbers other than T1's five, are reported beside the
+verdict and decide nothing except the B slice below.
+
+**The spike.** On a branch that is never merged (`spike/deploy-model-iii`): a
+generated precache of the second run's kind over a copy of `dist/`, with the
+offline open and the version behaviour run against it, and the harness pointed
+at `dist/` for the timings. That evidence decides whether T2 and T6 are a
+bounded task (A against B); it never turns the shipped build's T2 or T6 into a
+pass. A rollback is shown on the spike: the copy is replaced by the tree and the
+tree's own worker takes over a context the build's worker served.
+
+### Outcomes, fixed before measurement
+
+- **A.** T1, T3 and T5 met on the shipped build; the spike's precache installs,
+  serves the offline opens and changes its version exactly when a published
+  file changes (T2 and T6 shown to be a bounded task); and T4 met. Prompt 316
+  runs; then Carl's switch.
+- **B, the build for named routes.** T1 met, and the build cannot yet be judged
+  by the suite (T4) or kept offline (T2). A route is named when all three hold:
+  on the build it meets T1's bar for its kind (front door and sandbox: 50% of
+  bytes and 30% of requests; every other route: 40% of bytes); every spec of
+  every workflow mapped to it below passes against `dist/` unchanged; and the
+  spike's precache opens it offline. A route with no workflow mapped to it is
+  not named, because nothing judges it on the build. Prompt 316 prepares the
+  build for the named routes only.
+
+  | Route (`route-budgets.json`) | Workflows that open it |
+  |---|---|
+  | front-door | S1 |
+  | sandbox | S2, S10 |
+  | kepler, transit, power-law, largest-lesson | S3, S4, S8 |
+  | observatory | S5 |
+  | sky | S6 |
+  | experiments | S7 |
+  | my-work | S9 |
+  | instructors, teaching, adoption, teach-find, teach-kit | I1 |
+  | every other route | none |
+
+  If no route is named, B is not reached.
+- **C.** Otherwise. The tree stays published; Prompt 316 is recorded NOT RUN
+  with the register row of this run as its reason; the tree-level savings of
+  Prompts 309 to 313 are the answer.
+
+The second run's B-hybrid slice is not part of this run: Prompt 315 defines B
+as named routes only. An unmeasurable threshold fails the gate on that
+threshold and Carl resets it; no threshold or mapping above is changed after
+this section's commit.
+
+### The third run's measurements
+
+Measured on 2026-11-19 on `v4` at 87338a7a, after the criteria above were
+committed in e42f11d8 (Mac, Node 22.23, Chromium from the repository's
+Playwright, `dist/` from `node build.js` on this tree). The spike scripts and
+every raw result are on `spike/deploy-model-iii` (never merged), under
+`spike/deploy-iii/`. Bytes, requests, pass counts and offline results do not
+depend on load; the load average is stated where timing is involved.
+
+**T1, the shipped build against the tree** (`node tools/route-budget.mjs
+--report`, JavaScript as served, cold cache, service worker blocked; load 3.8
+before, 5.6 after). **Met.**
+
+| Route | Tree | Build | Cut (bytes, requests) | Bar |
+|---|---|---|---|---|
+| front door | 1921.9 KB, 109 | 544.8 KB, 58 | **71.7%**, **46.8%** | 50% and 30% |
+| kepler | 2671.7 KB, 142 | 933.4 KB, 77 | **65.1%** | 40% |
+| transit | 2677.5 KB, 142 | 941.6 KB, 77 | **64.8%** | 40% |
+| power-law | 2636.6 KB, 142 | 909.6 KB, 77 | **65.5%** | 40% |
+| largest lesson | 2926.4 KB, 150 | 1040.2 KB, 82 | **64.5%** | 40% |
+
+The routes of the B table, reported for the slice: sandbox as the front door
+(the same document); observatory 200.7 to 96.1 KB (52.1%); sky 114.9 to 43.7
+(62.0%); my-work 104.2 to 41.9 (59.8%); experiments 1081.9 to 297.1 (72.5%);
+instructors 2871.6 to 1994.9 (30.5%, under its 40% bar); teaching 245.7 to
+110.2 (55.1%); adoption 10.2 to 1.7 (83.3%); teach-find 13.0 to 2.8 (78.5%);
+teach-kit 56.9 to 34.9 (38.7%, under its bar).
+
+**T2 and T6, the shipped build.** Not met. `dist/` has no `sw.js` and no
+`sw-manifest.js`, as in the second run. **The spike's precache**
+(`dist-precache.mjs`, the second run's script and policy unchanged: a manifest
+over a copy of `dist/` plus the tree's `sw.js`): 3,371 files and 56,597,731
+bytes (3,198 core, 173 optional), untiered, against the tree's 1,185 files
+whose first-visit tier is about 5.4 MB. It installed all 3,371 files; with the
+network off it opened the front door, the sandbox scenario and the four lesson
+routes with the lesson panel shown, and the Observatory, with no failed
+request and no page error. Sky and My work loaded but each lacked data the
+policy does not precache (`sky/bright-stars.json` and `sky/ephemeris.json`,
+`library/library.json`, 504 from the worker). The experiments, instructor and
+teaching pages are not in the policy, and the worker sent each to the
+application's root, as it does for the tree, whose precache does not hold them
+either. The version tracked the content: unchanged files gave the same version,
+one changed precached file a new one, restoring it the first again, and an
+unprecached file left it alone. **Rollback**: the tree served at the same
+origin; its worker installed beside the build's and waited, as the worker is
+written to; once every tab had closed, a new tab got the tree's document and
+the build's cache was gone.
+
+**T3.** Met: the generate graph holds 29 nodes and 48 outputs for the tree; the
+build adds none (`dist/` is untracked; the spike's manifest is generated).
+
+**T5.** Met: `dist/instructors/materials.enc.json` is byte-identical to the
+committed file, and no workflow reads a secret. The passphrase was not used.
+
+**T4, workflows judged on the build.** Not met: **7 of 11**. The 28 specs on
+`dist/` (`npm run e2e:dist:workflows` as committed, on port 4843 instead of
+4174 because another checkout's server held 4174; two workers; load 5.0
+before, 24.2 after): **256 passed, 61 failed, 7 skipped.** Every failure is
+`Failed to fetch dynamically imported module`, in the four specs part A left
+reading modules: bodyPlacement 0 of 26, plotChart 0 of 10, chartParity 1 of 8,
+experiments 0 of 8, shareObserving 0 of 10. The other 23 specs pass completely
+(the 7 skipped tests are existing build-target skips: accessibilityParity 4,
+measure 2, observatory 1).
+
+| Workflow | Judged on the build |
+|---|---|
+| S1 front door, open an investigation | yes |
+| S2 sandbox | no (bodyPlacement) |
+| S3 work an investigation | yes |
+| S4 measure and read a plot | no (plotChart, chartParity) |
+| S5 Observatory | yes (one existing offline skip) |
+| S6 Sky Lab | yes |
+| S7 experiment | no (experiments) |
+| S8 report | yes |
+| S9 save and resume | yes |
+| S10 share | no (shareObserving) |
+| I1 instructor path | yes |
+
+Reported, judging nothing: the `dist` target lists 414 tests in 30 files, 10.2%
+of the 4,065 the source suite lists in Chromium.
+
+**Time to usable, reported** (Prompt 298's harness, `tools/route-harness.mjs`,
+cold load, profile `mid-range-phone`, compressed transport; three runs per
+cell, sources and build interleaved, median with the range; one-minute load
+4.8 to 9.4 across the runs; the build served by the spike's one-line root
+override of the harness). A proxy for a slow phone, not a phone.
+
+| Route | Tree | Build | Difference |
+|---|---|---|---|
+| front door (`home`) | 12,488 ms (11,673 to 15,916) | 5,919 ms (5,796 to 6,421) | 53% less |
+| Kepler's Laws (`keplers-laws`) | 14,084 ms (13,701 to 16,378) | 9,288 ms (9,210 to 9,352) | 34% less |
+
+Both differences lie far outside the spread of their own three runs.
+
+### Verdict: B (front door and Observatory)
+
+| Condition | Result |
+|---|---|
+| T1 front door and four lessons | met |
+| T3, T5 | met |
+| T2, T6 on the shipped build | not met; shown to be a bounded task on the spike |
+| T4, at least 10 of 11 workflows judged on the build | **7 of 11**: not met |
+| **A** | not reached (T4, and T2 and T6 on the shipped build) |
+| B-routes | **front-door** (bar met, S1 judged, opens offline) and **observatory** (bar met, S5 judged, opens offline). Not named: sandbox and the four lessons (S2, S4, S10 not judged); experiments (S7); sky and my-work (data not precached by the spike's policy); the five instructor routes (not offline under the policy; instructors and teach-kit also under their byte bar) |
+| **Outcome** | **B: Prompt 316 prepares the build for the front door and the Observatory only** |
+
+What this does not say. The front door, the sandbox scenario and the lesson
+routes are one document (`index.html`) and one service-worker scope: a build
+published for the front door is the build for the sandbox and every lesson as
+well, and those routes are not judged on the build (S2, S4, S10). The rule is
+applied as committed, so the slice is named; whether the front door can be
+prepared without the routes that share its document is the first thing 316
+must settle, and the Observatory (its own page and document) is the slice that
+stands alone. The sky and My work misses are the spike policy's, which this
+run did not change.
+
+**Ratified by Carl on 2026-11-19, as recorded** (D-R4-315-02). Prompt 316
+prepares the build for the front door and the Observatory only.
+
+Not verified: Node 20 (byte counts may differ by a few bytes); Firefox and
+WebKit; a real phone (the profile is a proxy); transfer sizes beyond the
+harness's compressed transport; the full `dist` suite beyond the 28 workflow
+specs.
+
+## Part B's candidate (Roadmap IV, Prompt 316): the Observatory from the build
+
+Prepared on 2026-11-19 on `perf/deploy-build-prereqs`, from the ratified third
+run (`v4` at 87338a7a plus D-R4-315-02). Nothing is switched: the published
+site is the tree, and the switch unit below is written down, not applied.
+
+### The front door stays with the tree
+
+The front door is `index.html`, and so are the sandbox scenario and every
+lesson: one document, one service-worker scope, one start-up closure. A build
+of the front door is the build of the sandbox and of all the lessons, and S2,
+S4 and S10 are not judged on the build. The front door therefore cannot be
+published from the build without publishing routes the gate did not name, and
+it is not prepared. The Observatory is its own page, with its own entry
+(`js/observatoryPage.js`) and its own document, and it stands alone. The
+candidate is the Observatory only. No threshold or mapping was changed to reach
+this: the front door is named and withheld, not judged again.
+
+### What the candidate is
+
+The tree, published as today, with the built Observatory laid over it
+(`tools/route-overlay.mjs`, the one list of routes published from the build):
+
+- `node build.js` now records, for every bundle, its entries, the outputs each
+  loads and each output's own source modules and static imports
+  (`dist/build-inputs.json`, from esbuild's metafile). `dist/` is not published
+  from, and the build job's `dist` artifact carries the record.
+- The deploy (`tools/prepare-pages.mjs --overlay dist`) copies the built page
+  and its whole output closure (143 files) under `observatory/js/`, so nothing
+  collides with the tree's module of the same name; links the tree's
+  stylesheets rather than the build's joined `css/app.css`; stamps the built
+  page with the commit like the tree's stamped pages; checks its content
+  policy (the built page keeps its inline scripts, so `tools/csp.mjs` finds its
+  hashes current); lets exactly those files through the guard that refuses any
+  other difference from the commit; and names the overlay in
+  `deployed-revision.json`.
+- The one precache generator (`tools/build-service-worker.mjs`) reads the
+  staged `deploy-overlay.json`: it installs the page's start-up closure (6
+  files, 96.1 KB) in the tier the tree gives the page (optional, the first
+  visit's pictures-and-pages tier), and drops the 8 sources (124.7 KB) that
+  only this closure was built from and no other bundle uses. The 137 lazy
+  chunks are published, not installed: precaching them would install built
+  copies of modules the tree installs already, about 1.3 MB beyond the tree's
+  tiers. The worker caches each on first use, as it does the tree's own
+  modules.
+- Without `--overlay`, the deploy is byte-for-byte today's.
+
+### The thresholds of the third run, on the candidate as committed
+
+Judged by the rule the third run committed for B: a named route meets its
+kind's T1 bar, every spec of its workflows passes against what is served, and
+it opens offline.
+
+| Threshold | Candidate | Result |
+|---|---|---|
+| T1, observatory (40% of bytes) | 200.7 KB and 18 requests to 96.1 KB and 6 (`node tools/route-budget.mjs`, the staged trees, cold cache, worker blocked) | **52.1%: met** |
+| T1, front door (50% and 30%) | not prepared (above); served from the tree, 1921.9 KB and 109 requests as before | withheld, not claimed |
+| T1, every other route | identical to the tree, byte for byte | unchanged |
+| T2 offline | the candidate's worker installs from its own precache; with the network off the front door, Kepler's Laws and the Observatory open in English and Spanish, no failed request, no page error | **met** |
+| T3 committed artifacts | none added (`dist/build-inputs.json` and `deploy-overlay.json` are generated, the latter only in the staged copy) | **met** |
+| T4, S5 for the Observatory | every spec S5 names passes against the candidate, served as staged, unchanged (`npm run e2e:dist:workflows`'s 28 specs with the staged tree as the root): observatory 8 passed and its one existing build-target skip (the offline open, which the rehearsal below makes), stellarSpectra 3 of 3 | **met** |
+| T5 instructor bundle | the staged `instructors/materials.enc.json` is the committed file, byte for byte; the overlay copies nothing outside the Observatory's closure, so CI's throwaway bundle cannot reach the site; no secret read | **met** |
+| T6 updates | the same commit deployed twice over the same build gives one version; a one-line change to a module only a lazy chunk loads (`js/observatory/skyPanel.js`) renames that chunk, changes the bytes of the entry that imports it by name, which is installed, and so gives a new version; the staged trees differ in exactly those two files, the manifest and the two deploy records | **met** |
+
+All 28 workflow specs against the candidate: 316 passed, 1 failed, 7 skipped
+(the existing build-target skips). The failure is chartParity's A4, the bench
+charts (S4): two `role="status"` elements where the test asks for one. That
+page is served from the tree, byte for byte the same in both staged trees, and
+the same test failed twice of two against the tree as published today (and
+once of two against the candidate) while the machine was loaded (one-minute
+load 85 to 145). It is the tree's, recorded here and not the candidate's.
+
+First visit: core 845 files, 13,764,342 bytes, to 837 and 13,636,675; optional
+128 and 1,010,552 to 134 and 1,108,960; idle 210 and 5,007,513, unchanged. A
+first visit installs 29,259 bytes less than the tree's.
+
+**Rollback rehearsal** (`tools/overlay-rehearsal.mjs`, a development run: one
+origin, one browser profile, the tree published, then the candidate, then the
+tree again). After each, once every tab had closed, the reader's worker took
+the new publication and exactly one cache was left, named as that
+publication's manifest names it; the Observatory was the one that publication
+serves, stamped as it should be; the offline opens above all passed; and once the tree was back, its cache held none of the built Observatory's files (the candidate's held its 6 installed start-up files). Run twice, the second time with that last check added; coherent both times.
+
+**Compatibility corpus.** `tests/compat/` passes on this branch: every record kind built and read by the current readers and by the 2.0.0 and 3.0 readers. The corpus runs the readers in Node from `js/`; the built Observatory is compiled from those same modules, and it reads saved observations in the browser in S5's specs, which run against the candidate above. Stored caches migrate by version: each publication's worker deletes every other `gravitas-` cache on activation (the rehearsal).
+
+### The switch unit, prepared and not applied
+
+One workflow change, one setting, the rollback. The change adds a step to the
+deploy job that downloads the build job's `dist` artifact from the same run,
+and passes `--overlay dist` to `tools/prepare-pages.mjs`; both only when the
+repository variable `DEPLOY_BUILT_ROUTES` is `on`. The deploy job still
+installs nothing and builds nothing. Merged with the variable unset, it
+publishes exactly what it publishes today.
+
+```diff
+--- a/.github/workflows/ci.yml
++++ b/.github/workflows/ci.yml
+@@ -1453,6 +1453,20 @@
+             echo "superseded=false" >> "$GITHUB_OUTPUT"
+           fi
+ 
++      # The routes published from the build (tools/route-overlay.mjs; the
++      # deploy-model gate, DEPLOY_MODEL_GATE.md). Off unless the repository
++      # variable DEPLOY_BUILT_ROUTES is "on". It is the build job's dist
++      # artifact from this same run, so this job still installs and builds
++      # nothing. The overlay takes the named pages and the files they load,
++      # never the throwaway instructor bundle that build makes, and
++      # prepare-pages.mjs refuses any other difference from the commit.
++      - name: Fetch the build for the routes it publishes
++        if: steps.tip.outputs.superseded == 'false' && vars.DEPLOY_BUILT_ROUTES == 'on'
++        uses: actions/download-artifact@v8
++        with:
++          name: dist
++          path: dist
++
+       - name: Prepare the publishable tree
+         if: steps.tip.outputs.superseded == 'false'
+         run: |
+@@ -1480,7 +1494,8 @@
+             --ref "${{ github.ref_name }}" \
+             --run-id "${{ github.run_id }}" \
+             --run-attempt "${{ github.run_attempt }}" \
+-            --workflow "${{ github.workflow }}"
++            --workflow "${{ github.workflow }}" \
++            ${{ vars.DEPLOY_BUILT_ROUTES == 'on' && '--overlay dist' || '' }}
+           grep -o 'name="gravitas-revision" content="[^"]*"' _site/index.html
+           grep -o "VERSION = '[^']*'" _site/sw-manifest.js || true
+           cat _site/deployed-revision.json
+```
+
+The setting: repository variable `DEPLOY_BUILT_ROUTES` = `on` (Settings,
+Secrets and variables, Actions, Variables). Carl alone sets it.
+
+**Ratified by delegation on 2026-11-19** (D-R4-316-01): the preparation, as
+recommended. The switch is not applied and the variable is unset. The
+workflow change lands as its own pull request after this one, off by default;
+the variable is set only after that pull request's CI shows the overlay deploy
+green on Linux.
+
+The rollback, either of:
+
+1. Set `DEPLOY_BUILT_ROUTES` to `off` (or delete it) and re-run the deploy job
+   of the latest run on `main`. The tree is published again; each reader's
+   worker takes it once their tabs close, and the built files leave their
+   cache (rehearsed above).
+2. `git revert -m 1` of the merge that brought the workflow change
+   (RELEASING.md), then the deploy that follows.
+
+Not verified: CI's Linux runner (byte counts may differ by a few bytes);
+Firefox and WebKit; a real phone; a deploy from GitHub Actions (the deploy
+sequence ran locally, as `tests/deployRehearsal.test.js` runs it).
+
 <!-- Listed in DOCUMENTS.md. -->
