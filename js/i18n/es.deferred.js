@@ -887,6 +887,7 @@ export const ES_DEFERRED = {
   'inv.token.save': 'Descargar como archivo de texto',
   'inv.token.failed':
     'No se pudo generar el código de entrega. El informe en PDF sigue incluyendo todas las respuestas.',
+  'inv.field.choose': 'Elige…',
   'inv.field.auto': 'calculado automáticamente',
   'inv.model.compare': 'Comparar con una respuesta modelo',
   'inv.model.writeFirst': 'Escribe primero tu propia respuesta.',
@@ -4245,4 +4246,18 @@ export const ES_DEFERRED = {
     'Comprueba el contraste. El cociente es 1 + F₂/F₁, así que resta uno antes de tomar el logaritmo: Δm = −2,5 log₁₀(cociente − 1).',
   'lessonFn.checkTheRadiusTheCorrectionMultiplies120':
     'Comprueba el radio. La corrección multiplica el radio mezclado por la raíz cuadrada del cociente, no por el cociente mismo.',
+  'lessonFn.chooseTheStepCountYouRan79':
+    'Elige primero en el menú el número de pasos que ejecutaste: lo correcto depende de él.',
+  'lessonFn.velocityVerletImprovedFourTimesWhich323':
+    'El Verlet de velocidad mejoró cuatro veces, que es un factor de dos al cuadrado: segundo orden. El Runge-Kutta 4 mejoró unas veintiséis veces, más que las dieciséis que da una ley limpia de cuarto orden: la potencia aparente del cociente de pasos es de unos 4,7, no 4, así que algo más que el término principal de su error sigue notándose con estos pasos.',
+  'lessonFn.chooseTheCutoffYouRanFrom75':
+    'Elige primero en el menú el umbral que ejecutaste: lo correcto depende de él.',
+  'lessonFn.aCutoffOf2MakesOne213':
+    'Un umbral de 2 hace que un ensayo deje de contar como ligado, así que 11 de los veinte están ligados en lugar de 12. El borde bajó de 0,255 a 0,233, y la fracción ligada de 0,596 a 0,529, con los mismos veinte planetas.',
+  'lessonFn.cutoffs46And10Give411':
+    'Los umbrales 4, 6 y 10 dan los mismos números: el borde subió de 0,255 a 0,289, y la fracción ligada de 0,596 a 0,701, con los mismos veinte planetas. La distancia media de ningún ensayo queda entre cuatro y diez de sus distancias iniciales, así que subir el umbral más allá de cuatro no cambia nada más. El cuaderno también advierte de que la transición es ahora un escalón limpio, así que su anchura no significa más que «más nítida que la rejilla».',
+  'lessonFn.chooseBothCutoffsFromTheMenus76':
+    'Elige primero ambos umbrales de los menús: lo correcto depende de la pareja.',
+  'lessonFn.youChoseTheSameCutoffTwice126':
+    'Has elegido el mismo umbral dos veces. Elige dos umbrales distintos: un ensayo solo puede cambiar de clase entre dos definiciones de ligado.',
 };

@@ -156,7 +156,7 @@ const INTEGRATORS_IN_PRACTICE = {
           return {
             level: 'ok',
             message:
-              'Explicit Euler has gained energy equal to half the size of the starting energy, which is not a small drift but a different orbit. Symplectic Euler and velocity Verlet are within a few thousandths of a percent, and Runge-Kutta 4 is a hundred thousand times better than either. All four took the same 10,722 steps.',
+              'Explicit Euler has gained energy equal to half the size of the starting energy, which is not a small drift but a different orbit. Symplectic Euler and velocity Verlet are within a few thousandths of a percent, and Runge-Kutta 4 is tens of thousands of times better than either. All four took the same 10,722 steps.',
           };
         }
         if (v.steps !== 10722 && near(v.steps, 10722, 0.1))
@@ -210,22 +210,25 @@ const INTEGRATORS_IN_PRACTICE = {
       sid: 'predict-the-halving',
       type: 'predict',
       reveal: 'the-engine',
-      title: 'Predict the halving',
-      body: `Your next run changes the step count. Before you choose it, think about
-             the clearest case: the step made half as long, 1000 steps per period
-             instead of 500, still over 3 periods. Velocity Verlet is a second-order
-             method and Runge-Kutta 4 a fourth-order one.`,
+      title: 'Predict the effect of the step',
+      body: `Your next run changes the step count: you will choose 250, 438, 750 or 1000
+             steps per period instead of 500, still over 3 periods. Call the new count
+             divided by 500 the <em>step ratio</em>: 2 for 1000 steps, and 0.5 for 250, which
+             is a longer step. The <em>improvement</em> of a method is its 500-step drift
+             divided by its new drift, so above one means the change helped and below one
+             means it hurt. Velocity Verlet is a second-order method and Runge-Kutta 4 a
+             fourth-order one.`,
       prompt:
-        'How much smaller will the drift of each of these two methods be after the step is halved?',
+        'How will each method’s improvement compare with the step ratio, whichever count you choose?',
       options: [
-        'Both about half as large: the step is half as long',
-        'Velocity Verlet about four times smaller, and Runge-Kutta 4 smaller by a much larger factor, tens of times',
-        'Velocity Verlet and Runge-Kutta 4 both about four times smaller',
+        'Both improve by about the step ratio itself: the drift is proportional to the step',
+        'Velocity Verlet by about the step ratio squared, and Runge-Kutta 4 by a much higher power of it, at least the fourth',
+        'Velocity Verlet and Runge-Kutta 4 both by about the step ratio squared',
         'Neither changes: the size of the drift is set by the method, not by the step',
       ],
       answer: 1,
       because:
-        'A method of order p has an error that scales as the step to the power p, so halving the step divides the error by two to the power p: four for a second-order method, and sixteen for a fourth-order one once the step is small enough that the leading term is all there is. At these steps the fourth-order method gains more than that.',
+        'A method of order p has an error that scales as the step to the power p, so a step count r times larger divides the error by r to the power p: r squared for a second-order method, and r to the fourth for a fourth-order one if the leading term were all there is. In these runs Runge-Kutta 4 gained somewhat more than that, with an apparent power near 4.8, so a smaller step helps it by a larger factor than the fourth power, and a larger step hurts it by one.',
     },
     {
       sid: 'choose-the-second-step',
@@ -242,8 +245,8 @@ const INTEGRATORS_IN_PRACTICE = {
              <strong>438</strong>, <strong>750</strong> or <strong>1000</strong> steps per
              period. On the compute page set <strong>steps</strong> to your choice, keep the
              periods at 3, and run again; a run takes longer the more steps it has. 1000 is
-             the halved step you just predicted, and 438 is the step the application takes
-             itself.
+             the halved step, and 438 is the step the application takes itself. Whichever
+             you choose tests your prediction.
              \n\nEnter your choice, the drifts that run gave for velocity Verlet and
              Runge-Kutta 4, and for each method the 500-step drift of the baseline run
              divided by this run's drift, as a positive ratio. A ratio above one means the
@@ -313,8 +316,8 @@ const INTEGRATORS_IN_PRACTICE = {
               level: 'ok',
               message:
                 n === 1000
-                  ? 'Velocity Verlet improved four times, which is a factor of two squared: second order. Runge-Kutta 4 improved by about twenty-six, more than the sixteen a clean fourth-order law gives, because at 500 steps it was still not in the regime where the leading term is all there is.'
-                  : `The ratio of your step count to the baseline's is ${n / 500}. Velocity Verlet's improvement, ${mine.ratioVerlet}, is that ratio squared, which is what second order means; Runge-Kutta 4's, ${mine.ratioRk4}, is not its fourth power, because at these steps its error is not yet only the leading term.`,
+                  ? 'Velocity Verlet improved four times, which is a factor of two squared: second order. Runge-Kutta 4 improved by about twenty-six, more than the sixteen a clean fourth-order law gives: the apparent power of the step ratio is about 4.7, not 4, so something beyond the leading term of its error is still showing at these steps.'
+                  : `The ratio of your step count to the baseline's is ${n / 500}. Velocity Verlet's improvement, ${mine.ratioVerlet}, is that ratio squared, which is what second order means; Runge-Kutta 4's, ${mine.ratioRk4}, is not simply its fourth power: its apparent power of the step ratio is near 4.8 rather than 4, so more than the leading term of its error shows at these steps.`,
             };
           }
           return {
@@ -348,7 +351,7 @@ const INTEGRATORS_IN_PRACTICE = {
         { step: 'choose-the-second-step', field: 'ratioRk4' },
       ],
       compare:
-        'These are the improvements for the step count you chose. The prediction was about 1000; for velocity Verlet the improvement is the square of the ratio of the step counts at whatever count you chose, and that is the order of the method showing itself.',
+        'These are the improvements for the step count you chose, set against your prediction. For velocity Verlet the improvement is the square of the step ratio, whichever count you chose: that is the order of the method showing itself. Runge-Kutta 4’s is a higher power of it.',
       body: `The notebook’s three schemes are the application’s three, so
              Gravitas’s own engine can be set against them. The engine takes its own
              step of 0.0278 time units, which is the tightest pair’s period divided by
@@ -446,7 +449,7 @@ const INTEGRATORS_IN_PRACTICE = {
       prompt:
         'Which method’s six-orbit drift would you still trust as a size of its error?',
       options: [
-        'Runge-Kutta 4’s: it is tiny and creeps up steadily with the length of the run, so its end value is a fair size of its error',
+        'Runge-Kutta 4’s: it is tiny and changes only modestly when the run is doubled, so its end value is a fair size of its error',
         'Velocity Verlet’s: it is smaller than at three orbits, and the smaller the drift the more accurate the method',
         'Symplectic Euler’s: its error is bounded, so its value at the end of any run represents it',
         'Explicit Euler’s: it is the only one that clearly keeps growing, so its number shows the real trend',
@@ -456,24 +459,24 @@ const INTEGRATORS_IN_PRACTICE = {
         {
           id: 'smallest-number-is-accurate',
           option: 1,
-          say: 'Its drift did fall, from 0.001768 % at three orbits to 0.0001587 % at six, but a longer run cannot make a method more accurate. Velocity Verlet is symplectic: its drift swings, and this run stopped near the bottom of a swing. A smaller number at one moment is not a more accurate method.',
+          say: 'If its drift fell when the run doubled, a longer run still cannot make a method more accurate. Velocity Verlet is symplectic: its drift swings, and this run stopped nearer the bottom of a swing. A smaller number at one moment is not a more accurate method.',
         },
         {
           id: 'bounded-is-representative',
           option: 2,
-          say: 'Bounded is not small or steady. Symplectic Euler’s drift went from −0.002317 % at three orbits to +0.08515 % at six, and changed sign, because its error swings. The end of one run is one point on the swing; its largest swing is the number to quote.',
+          say: 'Bounded is not small or steady. Put your two symplectic Euler drifts side by side: the sign changed and the size did not stay put, because its error swings. The end of one run is one point on the swing; its largest swing is the number to quote.',
         },
         {
           id: 'euler-trend',
           option: 3,
-          say: 'Explicit Euler’s drift does grow clearly, to about 60 % of the starting energy, but at that size the orbit is already a different one: its number says the method has failed, not how large its error is.',
+          say: 'Explicit Euler’s drift does grow clearly, to a large share of the starting energy, but at that size the orbit is already a different one: its number says the method has failed, not how large its error is.',
         },
       ],
       hints: [
         'For each method put the three-orbit and the six-orbit drift side by side, and ask which kind of change each shows: growing, swinging or falling.',
       ],
       because:
-        'Runge-Kutta 4’s drift is tiny and grows smoothly with the length of the run, about 6.473×10⁻⁸ % at three orbits and 1.046×10⁻⁷ % at six, so its end value is a fair size of its error at that length. The two symplectic methods keep their error bounded, but their end values are phases of a swing: when the run doubled Verlet’s fell elevenfold and symplectic Euler’s rose thirty-seven-fold, so for them the honest number is the largest swing in the notebook’s table.',
+        'Runge-Kutta 4’s drift is tiny and keeps its sign when the run doubles, changing by less than a factor of two, so its end value is a fair size of its error at that length; two lengths of run cannot show how its drift grows, only that it stays tiny. The two symplectic methods keep their error bounded, but their end values are phases of a swing: when the run doubled Verlet’s fell by about an order of magnitude and symplectic Euler’s changed sign and rose by more than an order of magnitude, so for them the honest number is the largest swing in the notebook’s table.',
     },
     {
       sid: 'what-you-worked-out',
@@ -482,10 +485,10 @@ const INTEGRATORS_IN_PRACTICE = {
       body: `Four integrators, one system, the same ten thousand steps. Explicit Euler
              gained about half the system’s energy; symplectic Euler and velocity
              Verlet kept it to a few thousandths of a percent and let it swing rather than
-             grow; Runge-Kutta 4 kept it to a hundred thousand times better. Changing the
+             grow; Runge-Kutta 4 kept it tens of thousands of times better. Changing the
              step moved velocity Verlet’s drift by the square of the ratio of the step
-             counts, whichever count you chose, and Runge-Kutta 4’s by more than the
-             fourth power; at the application’s own step the notebook and the engine gave
+             counts, whichever count you chose, and Runge-Kutta 4’s by a power a little
+             above the fourth; at the application’s own step the notebook and the engine gave
              the same numbers for the two methods whose end-of-run drift is a property.
              Doubling the run to six orbits showed which numbers are sizes and which are
              phases.

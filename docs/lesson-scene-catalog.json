@@ -77997,7 +77997,7 @@
      "sid": "predict-the-halving",
      "index": 5,
      "type": "predict",
-     "title": "Predict the halving",
+     "title": "Predict the effect of the step",
      "declares": {
       "stage": null,
       "bound": [],

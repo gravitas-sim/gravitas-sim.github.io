@@ -68,22 +68,22 @@ export default {
         'Un integrador simpléctico es el flujo exacto de un hamiltoniano cercano, así que conserva esa energía cercana para siempre, y la energía verdadera solo se desvía por la pequeña diferencia entre las dos. Por eso es el predeterminado para órbitas que deben avanzar millones de pasos.',
     },
     {
-      title: 'Predice la reducción a la mitad',
-      body: `Tu próxima ejecución cambia el número de pasos. Antes de elegirlo, piensa en el caso más claro: el paso reducido a la mitad, 1000 pasos por período en lugar de 500, siempre con 3 períodos. El Verlet de velocidad es un método de segundo orden y el Runge-Kutta 4 uno de cuarto orden.`,
+      title: 'Predice el efecto del paso',
+      body: `Tu próxima ejecución cambia el número de pasos: elegirás 250, 438, 750 o 1000 pasos por período en lugar de 500, siempre con 3 períodos. Llama <em>cociente de pasos</em> al nuevo número dividido entre 500: 2 para 1000 pasos, y 0,5 para 250, que es un paso más largo. La <em>mejora</em> de un método es su deriva de 500 pasos dividida por su nueva deriva, así que por encima de uno significa que el cambio ayudó y por debajo de uno, que perjudicó. El Verlet de velocidad es un método de segundo orden y el Runge-Kutta 4 uno de cuarto orden.`,
       prompt:
-        '¿Cuánto menor será la deriva de cada uno de estos dos métodos después de reducir el paso a la mitad?',
+        '¿Cómo se comparará la mejora de cada método con el cociente de pasos, cualquiera que sea el número que elijas?',
       options: [
-        'Las dos, la mitad aproximadamente: el paso es la mitad de largo',
-        'El Verlet de velocidad unas cuatro veces menor, y el Runge-Kutta 4 menor en un factor mucho mayor, de decenas de veces',
-        'El Verlet de velocidad y el Runge-Kutta 4 unas cuatro veces menores',
+        'Las dos mejoran aproximadamente según el propio cociente de pasos: la deriva es proporcional al paso',
+        'El Verlet de velocidad según el cuadrado del cociente de pasos, y el Runge-Kutta 4 según una potencia mucho mayor, al menos la cuarta',
+        'El Verlet de velocidad y el Runge-Kutta 4 según el cuadrado del cociente de pasos',
         'Ninguna cambia: el tamaño de la deriva lo fija el método, no el paso',
       ],
       because:
-        'Un método de orden p tiene un error que escala como el paso elevado a p, así que reducir el paso a la mitad divide el error por dos elevado a p: cuatro para un método de segundo orden, y dieciséis para uno de cuarto orden cuando el paso es tan pequeño que solo cuenta el término principal. Con estos pasos el método de cuarto orden gana más que eso.',
+        'Un método de orden p tiene un error que escala como el paso elevado a p, así que un número de pasos r veces mayor divide el error por r elevado a p: r al cuadrado para un método de segundo orden, y r a la cuarta para uno de cuarto orden si solo contara el término principal. En estas ejecuciones el Runge-Kutta 4 ganó algo más que eso, con una potencia aparente cercana a 4,8, así que un paso menor lo ayuda en un factor mayor que la cuarta potencia, y un paso mayor lo perjudica en uno.',
     },
     {
       title: 'Elige el segundo paso',
-      body: `Elige un segundo número de pasos del menú: <strong>250</strong>, <strong>438</strong>, <strong>750</strong> o <strong>1000</strong> pasos por período. En la página de cálculo pon <strong>pasos</strong> en tu elección, deja los períodos en 3 y ejecuta de nuevo; una ejecución tarda más cuantos más pasos tiene. 1000 es el paso reducido a la mitad que acabas de predecir, y 438 es el paso que da la propia aplicación.
+      body: `Elige un segundo número de pasos del menú: <strong>250</strong>, <strong>438</strong>, <strong>750</strong> o <strong>1000</strong> pasos por período. En la página de cálculo pon <strong>pasos</strong> en tu elección, deja los períodos en 3 y ejecuta de nuevo; una ejecución tarda más cuantos más pasos tiene. 1000 es el paso reducido a la mitad, y 438 es el paso que da la propia aplicación. Cualquiera que elijas pone a prueba tu predicción.
              \n\nIntroduce tu elección, las derivas que dio esa ejecución para el Verlet de velocidad y el Runge-Kutta 4, y para cada método la deriva de la ejecución de referencia de 500 pasos dividida por la deriva de esta ejecución, como cociente positivo. Un cociente mayor que uno significa que el paso menor ayudó; menor que uno, que perjudicó.`,
       fields: [
         { label: 'Pasos por período de tu segunda ejecución' },
@@ -96,7 +96,7 @@ export default {
     {
       title: 'Frente a la aplicación',
       compare:
-        'Estas son las mejoras para el número de pasos que elegiste. La predicción era sobre 1000; para el Verlet de velocidad la mejora es el cuadrado del cociente de los números de pasos, cualquiera que hayas elegido, y eso es el orden del método mostrándose.',
+        'Estas son las mejoras para el número de pasos que elegiste, frente a tu predicción. Para el Verlet de velocidad la mejora es el cuadrado del cociente de pasos, cualquiera que hayas elegido: eso es el orden del método mostrándose. La del Runge-Kutta 4 es una potencia mayor de él.',
       body: `Los tres esquemas del cuaderno son los tres de la aplicación, así que el propio motor de Gravitas puede compararse con ellos. El motor da su propio paso de 0,0278 unidades de tiempo, que es el período del par más cercano dividido por unos <strong>438</strong>. Pon <strong>pasos</strong> en 438, deja los períodos en 3 y ejecuta de nuevo; si elegiste 438 en el paso anterior, ya tienes esta ejecución. Introduce las derivas del Verlet de velocidad, del Runge-Kutta 4 y del Euler simpléctico.`,
       fields: [
         { label: 'Verlet de velocidad, 438 pasos' },
@@ -135,31 +135,31 @@ export default {
       prompt:
         '¿La deriva con seis órbitas de qué método seguirías creyendo como tamaño de su error?',
       options: [
-        'La del Runge-Kutta 4: es diminuta y sube de forma constante con la duración de la ejecución, así que su valor final es una buena medida de su error',
+        'La del Runge-Kutta 4: es diminuta y cambia solo moderadamente al duplicar la ejecución, así que su valor final es una buena medida de su error',
         'La del Verlet de velocidad: es menor que con tres órbitas, y cuanto menor la deriva, más exacto el método',
         'La del Euler simpléctico: su error está acotado, así que su valor al final de cualquier ejecución lo representa',
         'La del Euler explícito: es la única que claramente sigue creciendo, así que su número muestra la tendencia real',
       ],
       misconceptions: [
         {
-          say: 'Su deriva sí bajó, de 0,001768 % con tres órbitas a 0,0001587 % con seis, pero una ejecución más larga no puede hacer más exacto a un método. El Verlet de velocidad es simpléctico: su deriva oscila, y esta ejecución terminó cerca del fondo de una oscilación. Un número menor en un momento no es un método más exacto.',
+          say: 'Si su deriva bajó al duplicar la ejecución, una ejecución más larga sigue sin poder hacer más exacto a un método. El Verlet de velocidad es simpléctico: su deriva oscila, y esta ejecución terminó más cerca del fondo de una oscilación. Un número menor en un momento no es un método más exacto.',
         },
         {
-          say: 'Acotado no es pequeño ni constante. La deriva del Euler simpléctico pasó de −0,002317 % con tres órbitas a +0,08515 % con seis, y cambió de signo, porque su error oscila. El final de una ejecución es un punto de la oscilación; su mayor oscilación es el número que conviene citar.',
+          say: 'Acotado no es pequeño ni constante. Pon una junto a otra tus dos derivas del Euler simpléctico: el signo cambió y el tamaño no se quedó quieto, porque su error oscila. El final de una ejecución es un punto de la oscilación; su mayor oscilación es el número que conviene citar.',
         },
         {
-          say: 'La deriva del Euler explícito sí crece con claridad, hasta cerca del 60 % de la energía inicial, pero con ese tamaño la órbita ya es otra: su número dice que el método ha fallado, no cuán grande es su error.',
+          say: 'La deriva del Euler explícito sí crece con claridad, hasta una gran parte de la energía inicial, pero con ese tamaño la órbita ya es otra: su número dice que el método ha fallado, no cuán grande es su error.',
         },
       ],
       hints: [
         'Para cada método pon la deriva de tres órbitas y la de seis una junto a otra, y pregunta qué tipo de cambio muestra cada una: crecer, oscilar o bajar.',
       ],
       because:
-        'La deriva del Runge-Kutta 4 es diminuta y crece de forma suave con la duración de la ejecución, unos 6,473×10⁻⁸ % con tres órbitas y 1,046×10⁻⁷ % con seis, así que su valor final es una buena medida de su error con esa duración. Los dos métodos simplécticos mantienen su error acotado, pero sus valores finales son fases de una oscilación: al duplicar la ejecución la del Verlet bajó once veces y la del Euler simpléctico subió treinta y siete, así que para ellos el número honesto es la mayor oscilación de la tabla del cuaderno.',
+        'La deriva del Runge-Kutta 4 es diminuta y conserva su signo al duplicar la ejecución, cambiando en menos de un factor de dos, así que su valor final es una buena medida de su error con esa duración; dos duraciones de ejecución no pueden mostrar cómo crece su deriva, solo que sigue siendo diminuta. Los dos métodos simplécticos mantienen su error acotado, pero sus valores finales son fases de una oscilación: al duplicar la ejecución la del Verlet bajó en cerca de un orden de magnitud y la del Euler simpléctico cambió de signo y subió en más de un orden de magnitud, así que para ellos el número honesto es la mayor oscilación de la tabla del cuaderno.',
     },
     {
       title: 'Lo que calculaste',
-      body: `Cuatro integradores, un sistema, los mismos diez mil pasos. El Euler explícito ganó energía igual a la mitad del tamaño de la inicial; el Euler simpléctico y el Verlet de velocidad la mantuvieron en unas milésimas de porcentaje y la dejaron oscilar en lugar de crecer; el Runge-Kutta 4 la mantuvo cien mil veces mejor. Cambiar el paso movió la deriva del Verlet de velocidad según el cuadrado del cociente de los números de pasos, cualquiera que fuera el que elegiste, y la del Runge-Kutta 4 más que según la cuarta potencia; con el paso propio de la aplicación el cuaderno y el motor dieron los mismos números para los dos métodos cuya deriva final sí es una propiedad. Duplicar la ejecución a seis órbitas mostró qué números son tamaños y cuáles son fases.
+      body: `Cuatro integradores, un sistema, los mismos diez mil pasos. El Euler explícito ganó energía igual a la mitad del tamaño de la inicial; el Euler simpléctico y el Verlet de velocidad la mantuvieron en unas milésimas de porcentaje y la dejaron oscilar en lugar de crecer; el Runge-Kutta 4 la mantuvo decenas de miles de veces mejor. Cambiar el paso movió la deriva del Verlet de velocidad según el cuadrado del cociente de los números de pasos, cualquiera que fuera el que elegiste, y la del Runge-Kutta 4 según una potencia algo mayor que la cuarta; con el paso propio de la aplicación el cuaderno y el motor dieron los mismos números para los dos métodos cuya deriva final sí es una propiedad. Duplicar la ejecución a seis órbitas mostró qué números son tamaños y cuáles son fases.
              \n\nLo que la deriva no cubre: es un sistema, unas pocas duraciones y ningún encuentro cercano. El cuaderno no tiene suavizado, ni fusiones, ni relatividad, que la aplicación puede activar. Una deriva de energía pequeña no es una órbita exacta: un método puede conservar la energía y aun así poner un cuerpo en el lugar equivocado de su órbita. Y la deriva de un método que oscila no es un solo número, termine donde termine una ejecución. La ejecución es tuya: su cápsula registra el hash del cuaderno y el de la entrada, así que un informe puede citarla.`,
     },
   ],

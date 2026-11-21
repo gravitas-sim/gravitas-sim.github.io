@@ -389,10 +389,16 @@ const EXTENDING_AN_EXPERIMENT = {
                   'Choose both cutoffs from the menus first: what is right depends on the pair.',
               }
             : null;
+        if (v.from === v.to)
+          return {
+            level: 'warn',
+            message:
+              'You chose the same cutoff twice. Choose two different cutoffs: a trial can only change class between two definitions of bound.',
+          };
         if (!Number.isFinite(v.count) || (!word && !Number.isFinite(v.where)))
           return null;
         const pair = (a, b) => `${Math.min(a, b)}|${Math.max(a, b)}`;
-        const trials = (a, b) => (a === b ? [] : (MOVED[pair(a, b)] ?? []));
+        const trials = (a, b) => MOVED[pair(a, b)] ?? [];
         const mine = trials(v.from, v.to);
         const none = /^(none|ninguno|ninguna)$/i.test(word);
         const says = list =>

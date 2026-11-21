@@ -85,14 +85,14 @@ export default {
     'which-trial-moved': {
       title: 'Qué ensayo se movió',
       body: `Nada de los planetas cambia entre dos umbrales: los mismos veinte ensayos, el mismo motor, las mismas órbitas. Solo se mueve la definición de ligado, así que algún ensayo debe cambiar de clase entre ellos, o ninguno.
-             \n\nElige dos umbrales distintos de los menús, <strong>2</strong>, <strong>3</strong>, <strong>4</strong>, <strong>6</strong> o <strong>10</strong>; tu última elección y el 3 de la referencia son una pareja natural. Ejecuta cada uno en la página de cálculo si aún no lo has hecho, y pon la columna <em>bound trials</em> (ensayos ligados) de las dos tablas del cuaderno una junto a otra. La tabla tiene diez intervalos de distancia inicial, y su primera columna contiene el centro de cada uno. Introduce tus dos umbrales, cuántos ensayos cambian de clase entre ellos y el centro del intervalo más cercano a la estrella donde difiere el recuento de ligados. Si ningún intervalo difiere, introduce 0 y escribe <strong>ninguno</strong>.`,
+             \n\nElige dos umbrales distintos de los menús, <strong>2</strong>, <strong>3</strong>, <strong>4</strong>, <strong>6</strong> o <strong>10</strong>; tu última elección y el 3 de la referencia son una pareja natural. Ejecuta cada uno en la página de cálculo si aún no lo has hecho, y pon la columna <em>bound trials</em> (ensayos ligados) de las dos tablas del cuaderno una junto a otra. La tabla tiene diez tramos de distancia inicial, y su primera columna contiene el centro de cada uno. Introduce tus dos umbrales, cuántos ensayos cambian de clase entre ellos y el centro del tramo más cercano a la estrella donde difiere el recuento de ligados. Si ningún tramo difiere, introduce 0 y escribe <strong>ninguno</strong>.`,
       fields: [
         { label: 'Primer umbral' },
         { label: 'Segundo umbral' },
         { label: 'Ensayos que cambian de clase' },
         {
           label:
-            'Intervalo más cercano donde difiere el recuento (su centro), o ninguno',
+            'Tramo más cercano donde difiere el recuento (su centro), o ninguno',
         },
       ],
     },

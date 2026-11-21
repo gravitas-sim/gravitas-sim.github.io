@@ -890,6 +890,7 @@ export const EN_DEFERRED = {
   'inv.token.save': 'Download as a text file',
   'inv.token.failed':
     'The submission token could not be made. The PDF report still carries every answer.',
+  'inv.field.choose': 'Choose…',
   'inv.field.auto': 'worked out for you',
   'inv.model.compare': 'Compare with a model answer',
   'inv.model.writeFirst': 'Write your own answer first.',
