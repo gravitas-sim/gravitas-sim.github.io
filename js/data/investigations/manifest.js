@@ -276,8 +276,8 @@ export const MANIFEST = [
     duration: '80-100 min',
     level: 'Introductory astronomy',
     thumbnail: 'images/investigations/lives-of-stars.webp',
-    stepCount: 35,
-    gradedCount: 29,
+    stepCount: 33,
+    gradedCount: 27,
     objectiveCount: 7,
   },
   {

@@ -641,12 +641,8 @@ export default {
     'lives-of-stars': {
       'contraction-luminosity':
         'The radius falls from about 14.9 to about 0.88 solar radii across the pre-main-sequence stage, over 42 million years. Students sometimes read the two boxes in the wrong order; the validator catches it and says so.',
-      arriving:
-        'About 5,740 K and 0.80 solar luminosities at 457 million years - the zero-age main sequence.',
-      'the-sun-today':
-        'About 5,850 K, 1.11 solar luminosities, 1.03 solar radii at 4.6 Gyr. Worth pointing out that the real Sun is 5,772 K and 1.00 by definition, so the model is within a couple of per cent without having been fitted.',
-      'across-the-main-sequence':
-        'From 0.80 to 2.28 solar luminosities over 9.9 billion years - nearly three times - with the surface temperature almost unchanged.',
+      'compare-two-moments':
+        'Any two moments that differ; there is no single answer. On the Sun-like track: 0.457 Gyr, 0.797 solar luminosities, 0.904 solar radii, 5,736 K; 4.60 Gyr, 1.11, 1.03, 5,850 K; 9.92 Gyr, 2.28, 1.56, 5,683 K. Each moment must satisfy luminosity = radius squared times (temperature over 5,772 K) to the fourth, within 6 per cent.',
       'compare-young-and-old':
         'Radii of about 0.90 and 1.56 solar - a factor of 1.7 across ten billion years, and the smallest change in the investigation. Both versions are on the canvas at once, so a student can click either. Hold on to these: three screens later the same star is 173.',
       'the-interior':

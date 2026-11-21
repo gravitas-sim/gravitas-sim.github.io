@@ -4166,9 +4166,9 @@ export const INSTRUCTOR_CONTENT = {
     difficulty:
       'Introductory, conceptual. Arithmetic no harder than a ratio, and the readout does most of it',
     placement:
-      'Eighty to a hundred minutes, after "A Universe of Stars" if you have time for both - steps 1 to 7 recap enough of it that this one can stand alone if you do not. It works as the spine of a stellar-evolution unit, and steps 27 to 31 are a natural place to hand over to any nucleosynthesis material you teach afterwards. No calculus. Nothing needs sound.',
+      'Eighty to a hundred minutes, after "A Universe of Stars" if you have time for both - steps 1 to 6 recap enough of it that this one can stand alone if you do not. It works as the spine of a stellar-evolution unit, and steps 25 to 29 are a natural place to hand over to any nucleosynthesis material you teach afterwards. No calculus. Nothing needs sound.',
     overview: `Three stars are shown on the first screen and the student predicts which changes
-      fastest and how each ends. The next thirty-three screens follow them: a solar-mass model
+      fastest and how each ends. The next thirty-two screens follow them: a solar-mass model
       from a contracting cloud to a white dwarf, a ten solar-mass model to a neutron star, a
       forty solar-mass model to a black hole, and a red dwarf that does none of it on any
       timescale that has yet elapsed.
@@ -4180,17 +4180,17 @@ export const INSTRUCTOR_CONTENT = {
       \n\nThe second spine is where the models stop. Three tracks reach a white dwarf and say so;
       the massive ones stop at carbon ignition or earlier, and every statement about what
       follows is a published result quoted for that mass, with the paper named in the readout
-      and a "How this is known" row separating the two kinds of claim. Screen 29 asks the
-      student to notice that wording, and screen 31 asks them to notice three admissions the
+      and a "How this is known" row separating the two kinds of claim. Screen 27 asks the
+      student to notice that wording, and screen 29 asks them to notice three admissions the
       neutron-star case did not need.
-      \n\nThe third is that time on screen is not time. Screen 21 is entirely about the gap
+      \n\nThe third is that time on screen is not time. Screen 19 is entirely about the gap
       between the two, and the readout prints the real duration of every phase beside the share
       of the playback it gets.`,
     priorKnowledge: [
       'That stars differ in mass, size, temperature and brightness, and that these are four different things',
       'Reading a point off a graph with logarithmic axes, or willingness to be shown',
       'That gravity pulls everything towards everything else',
-      'Helpful but not required: "A Universe of Stars", which teaches the diagram this investigation moves across. Steps 1 to 7 recap what is needed.',
+      'Helpful but not required: "A Universe of Stars", which teaches the diagram this investigation moves across. Steps 1 to 6 recap what is needed.',
     ],
     keyConcepts: [
       {
@@ -4199,7 +4199,7 @@ export const INSTRUCTOR_CONTENT = {
       },
       {
         heading: 'Leaving the main sequence is a core event',
-        body: 'What runs out is hydrogen in the core, a few per cent of the star’s mass. Most of the hydrogen is still there in the envelope, never hot enough to fuse and never mixed down. That is why the star does not go out: a shell of that hydrogen ignites around the spent core and the star becomes far brighter than it ever was. Screens 10 to 12 are this, and it is the misconception with the longest reach - a student who thinks the fuel is gone cannot explain a red giant at all.',
+        body: 'What runs out is hydrogen in the core, a few per cent of the star’s mass. Most of the hydrogen is still there in the envelope, never hot enough to fuse and never mixed down. That is why the star does not go out: a shell of that hydrogen ignites around the spent core and the star becomes far brighter than it ever was. Screens 8 to 10 are this, and it is the misconception with the longest reach - a student who thinks the fuel is gone cannot explain a red giant at all.',
       },
       {
         heading: 'The diagram is a graph, not a map',
@@ -4211,11 +4211,11 @@ export const INSTRUCTOR_CONTENT = {
       },
       {
         heading: 'What a model output is, and what a quoted result is',
-        body: 'Three of the bundled tracks reach a white dwarf and those remnant masses are their own last samples. Everything beyond that - a neutron star at ten solar masses, a black hole at forty, the explicit uncertainty at twenty - is somebody else’s published work quoted for the nearest modeled progenitor. The readout keeps them apart with a "How this is known" row on every endpoint, and screens 29 and 31 make the distinction the subject rather than a footnote.',
+        body: 'Three of the bundled tracks reach a white dwarf and those remnant masses are their own last samples. Everything beyond that - a neutron star at ten solar masses, a black hole at forty, the explicit uncertainty at twenty - is somebody else’s published work quoted for the nearest modeled progenitor. The readout keeps them apart with a "How this is known" row on every endpoint, and screens 27 and 29 make the distinction the subject rather than a footnote.',
       },
       {
         heading: 'Duration on screen means nothing',
-        body: 'Paced by phase the playhead makes every stage reachable and stops being a clock: on a solar-mass star the thermally-pulsing AGB is a hundredth of a per cent of the life and takes a third of the playhead. The readout prints both numbers for whichever phase is showing, and screen 21 asks students to compare them deliberately. An animation that gave every phase equal time without saying so would teach that every phase takes equal time.',
+        body: 'Paced by phase the playhead makes every stage reachable and stops being a clock: on a solar-mass star the thermally-pulsing AGB is a hundredth of a per cent of the life and takes a third of the playhead. The readout prints both numbers for whichever phase is showing, and screen 19 asks students to compare them deliberately. An animation that gave every phase equal time without saying so would teach that every phase takes equal time.',
       },
     ],
     features: [
@@ -4236,7 +4236,7 @@ export const INSTRUCTOR_CONTENT = {
         text: 'The main scene carries the same model time the panel does. Before the track begins there is no star on the canvas at all - a contracting cloud with a brightening center stands where it will be, because MIST’s tracks start at a body that already has a photosphere and drawing one earlier would be the falsest thing in the investigation. On the AGB, dashed shells stand for the mass the track records being shed. At a core-collapse endpoint, expanding rings stand for an explosion the endpoint model expects and the remnant is a mark rather than a disc. All of it is bounded and seeded: fourteen blobs, three shells, three rings, the same every run, and none of it is a body the engine integrates. The readout names which of the four kinds of thing is on screen - a stored model row, an interpolation between two, a schematic, or a published prescription - on every screen.',
       },
       {
-        name: 'Freezing a moment, on screen 15',
+        name: 'Freezing a moment, on screen 13',
         text: 'One screen offers "Freeze this moment", which leaves a copy of the star as it is on the canvas, labeled with the age it was taken at, while the original goes on evolving beside it. The copy is model-owned and nothing writes to it again, so "then and now" is two objects a student can click rather than a number they have to remember. Copies are dropped when the step changes, so a class that freezes several will not carry them forward.',
       },
       {
@@ -4252,17 +4252,17 @@ export const INSTRUCTOR_CONTENT = {
       {
         claim: 'The Sun will explode as a supernova.',
         response:
-          'Widespread, and screen 18 is built around it. What the Sun does is shed roughly half its mass as a wind over hundreds of thousands of years at tens of kilometers per second - strong for a star, glacial for an explosion. A supernova needs a core massive enough to collapse; the Sun’s core ends at about 0.54 solar masses and electron degeneracy holds that up indefinitely.',
+          'Widespread, and screen 16 is built around it. What the Sun does is shed roughly half its mass as a wind over hundreds of thousands of years at tens of kilometers per second - strong for a star, glacial for an explosion. A supernova needs a core massive enough to collapse; the Sun’s core ends at about 0.54 solar masses and electron degeneracy holds that up indefinitely.',
       },
       {
         claim: 'A star leaves the main sequence when it runs out of hydrogen.',
         response:
-          'Only in the core. Most of the star’s hydrogen is still present, in the envelope, and a shell of it ignites around the spent core - which is why the star becomes a thousand times brighter rather than fading. A student who has not got this cannot explain the red giant at all, so screens 10 to 12 are worth not hurrying.',
+          'Only in the core. Most of the star’s hydrogen is still present, in the envelope, and a shell of it ignites around the spent core - which is why the star becomes a thousand times brighter rather than fading. A student who has not got this cannot explain the red giant at all, so screens 8 to 10 are worth not hurrying.',
       },
       {
         claim: 'Stars slide down the main sequence as they age and fade.',
         response:
-          'They do not move along it at all. A solar-mass star drifts slowly up and very slightly right across ten billion years - screen 8 measures a factor of 2.9 in luminosity - and then leaves the band sideways. The main sequence is a sequence in mass, not in time.',
+          'They do not move along it at all. A solar-mass star drifts slowly up and very slightly right across ten billion years - screen 6 shows a factor near 3 in luminosity - and then leaves the band sideways. The main sequence is a sequence in mass, not in time.',
       },
       {
         claim: 'A red giant is cooler, so it is a cooler star.',
@@ -4272,22 +4272,22 @@ export const INSTRUCTOR_CONTENT = {
       {
         claim: 'A planetary nebula has something to do with planets.',
         response:
-          'Nothing at all. Eighteenth-century observers thought the small round discs looked like planets and the name stuck. Screen 19 says so, and also says two things the model does not cover: when the nebula becomes visible, and how long it lasts.',
+          'Nothing at all. Eighteenth-century observers thought the small round discs looked like planets and the name stuck. Screen 17 says so, and also says two things the model does not cover: when the nebula becomes visible, and how long it lasts.',
       },
       {
         claim: 'A white dwarf is a small ordinary star.',
         response:
-          'It has no fusion anywhere in it. It shines because it is hot, and it is hot because it used to be the inside of a star; nothing holds it up except the resistance of its own electrons to being packed closer. Screen 20 has it at 1.6 solar luminosities with no energy source at all, which is the fact to stop on.',
+          'It has no fusion anywhere in it. It shines because it is hot, and it is hot because it used to be the inside of a star; nothing holds it up except the resistance of its own electrons to being packed closer. Screen 18 has it at 1.6 solar luminosities with no energy source at all, which is the fact to stop on.',
       },
       {
         claim: 'Every massive star explodes and leaves a neutron star.',
         response:
-          'Explodability is not a monotonic function of mass. The investigation gives ten solar masses as a confident neutron star, forty as a black hole probably without a bright supernova, and twenty as explicitly uncertain because the published engines disagree. Screen 31 is where a student meets a remnant mass given as a range spanning a factor of three, and that range is the honest answer rather than a missing one.',
+          'Explodability is not a monotonic function of mass. The investigation gives ten solar masses as a confident neutron star, forty as a black hole probably without a bright supernova, and twenty as explicitly uncertain because the published engines disagree. Screen 29 is where a student meets a remnant mass given as a range spanning a factor of three, and that range is the honest answer rather than a missing one.',
       },
       {
         claim: 'Small stars burn out quickly, or have already died.',
         response:
-          'The opposite, by a wide margin. A 0.2 solar-mass model changes by under four per cent in luminosity between 4.6 and 13.8 billion years, and its main sequence lasts 1.1 trillion years - so not one has ever finished, anywhere. Screen 22 exists because students are often taught to give small stars the Sun’s future in miniature.',
+          'The opposite, by a wide margin. A 0.2 solar-mass model changes by under four per cent in luminosity between 4.6 and 13.8 billion years, and its main sequence lasts 1.1 trillion years - so not one has ever finished, anywhere. Screen 20 exists because students are often taught to give small stars the Sun’s future in miniature.',
       },
       {
         claim: 'A black hole can be plotted on the H-R diagram somewhere.',
@@ -4296,26 +4296,26 @@ export const INSTRUCTOR_CONTENT = {
       },
     ],
     teachingNotes: [
-      'Screen 1 depends on students committing before anything is revealed. If asked which star is which, the honest answer is "that is what the next thirty-three screens are for".',
+      'Screen 1 depends on students committing before anything is revealed. If asked which star is which, the honest answer is "that is what the next thirty-two screens are for".',
       'Screen 2 shows a cloud with no numbers at all, and some students read the empty readout as a bug. It is not: a cloud has no photosphere, so it has no surface temperature or luminosity, and the readout says exactly that. It is worth reading aloud.',
-      'Screens 10 to 12 are the core of the investigation. If time is short, cut screens 15 and 26 rather than any of these three.',
-      'Screen 21 needs the phase pacing to have been noticed. Ask the class to switch the playhead to time pacing and watch everything after the main sequence collapse into a sliver - the contrast makes the point faster than the numbers do.',
-      'Screen 27 asks why iron ends the star and is the hardest written answer here. The rubric rejects "it runs out of fuel", which is the answer students reach for and which is wrong: an iron core is surrounded by plenty of unburnt material.',
-      'Screens 29 and 31 are a matched pair. The value in running both is the contrast in confidence, so if you demonstrate rather than assign, demonstrate both.',
-      'Screen 32 has "not enough information" as the right answer and students resist it. The lab will list all five models that pass near point A if they use the free cursor, which settles the argument better than assertion.',
+      'Screen 6 has each student choose two moments of the Sun-like track, so no two sets of numbers need agree; the page checks that each moment’s readings belong together, that the moments differ, and that ages are in Gyr. Screens 8 to 10 are the core of the investigation. If time is short, cut screens 13 and 24 rather than any of these three.',
+      'Screen 19 needs the phase pacing to have been noticed. Ask the class to switch the playhead to time pacing and watch everything after the main sequence collapse into a sliver - the contrast makes the point faster than the numbers do.',
+      'Screen 25 asks why iron ends the star and is the hardest written answer here. The rubric rejects "it runs out of fuel", which is the answer students reach for and which is wrong: an iron core is surrounded by plenty of unburnt material.',
+      'Screens 27 and 29 are a matched pair. The value in running both is the contrast in confidence, so if you demonstrate rather than assign, demonstrate both.',
+      'Screen 30 has "not enough information" as the right answer and students resist it. The lab will list all five models that pass near point A if they use the free cursor, which settles the argument better than assertion.',
       'Every phase is reachable with one button and the age is a typed number as well as a slider, so nothing in this investigation requires waiting for an animation. Under reduced motion nothing autoplays at all and the whole investigation still completes.',
       'The 40 solar-mass track was added to this project specifically so that the black-hole case would have a track behind it rather than an assertion. If a student asks why the bundle jumps from 20 to 40, that is the answer, and the reason is in the model documentation at /model/#stars.',
     ],
     discussion: [
       'The 0.2 solar-mass model is predicted to live for 1.1 trillion years. What would it take to check that? Is there any observation that could show the prediction is wrong?',
-      'Screen 31 gives a remnant mass as "somewhere between 10 and 35 solar masses". Is that a useful statement? What would make it more useful, and what would it cost to get there?',
+      'Screen 29 gives a remnant mass as "somewhere between 10 and 35 solar masses". Is that a useful statement? What would make it more useful, and what would it cost to get there?',
       'Every track in this investigation is a single star with no companion. Roughly half of stars have one. Which parts of what you have seen would change, and which would not?',
       'The investigation says the H-R diagram is a graph and not a map. What would a genuine map of these stars look like, and what would it tell you that the graph does not?',
       'A supernova enriches the interstellar medium with elements the star made. Every atom heavier than helium in your body came from one. Does anything in this investigation let you check that claim, or is it being asserted?',
     ],
     extensions: [
       'Have students find the age at which the Sun-like model reaches twice its present luminosity, and discuss what that would mean for the Earth. The answer is around 9 billion years, well before the star becomes a giant.',
-      'Compare the 10 and 20 solar-mass tracks at the same fraction of their main-sequence lives rather than at the same age, and write down which conclusions from screen 25 survive the change of comparison.',
+      'Compare the 10 and 20 solar-mass tracks at the same fraction of their main-sequence lives rather than at the same age, and write down which conclusions from screen 23 survive the change of comparison.',
       'Take the total mass returned to space by each of the eight models - the readout gives it on the endpoint - and work out what fraction of a star-forming region’s material gets recycled. Then ask what the prescriptions do not count, which is everything an explosion ejects.',
       'Look up one of the cited papers and find the figure that the 10 or 40 solar-mass outcome comes from. Discuss what the figure actually shows and how much of it the one-line summary in the readout carries.',
     ],
@@ -4333,7 +4333,7 @@ export const INSTRUCTOR_CONTENT = {
       the source on every quoted endpoint and flags it as not from the track.
       \n\nWhat is absent: rotation, binarity, magnetic fields, mass transfer, any composition but
       solar, core collapse itself, supernova hydrodynamics, nebular physics, and white-dwarf
-      cooling beyond the first few million years. The explosion drawn on screen 29 is an
+      cooling beyond the first few million years. The explosion drawn on screen 27 is an
       illustration of an event and not a calculation of one, and it is kept off the H-R diagram
       because a supernova's brightness is a transient rather than a photospheric luminosity.`,
   },

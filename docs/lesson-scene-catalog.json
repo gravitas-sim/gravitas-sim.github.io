@@ -48062,174 +48062,10 @@
      ]
     },
     {
-     "sid": "arriving",
+     "sid": "compare-two-moments",
      "index": 6,
      "type": "measure",
-     "title": "Arriving",
-     "declares": {
-      "stage": {
-       "objects": 1,
-       "kind": "named",
-       "scale": "display",
-       "fits": true,
-       "anonymous": false
-      },
-      "bound": [],
-      "roles": [
-       "star"
-      ]
-     },
-     "kinds": [
-      "scene-declared",
-      "student-changes-scene",
-      "engine-measurement",
-      "model-result",
-      "imported-data",
-      "captured-evidence"
-     ],
-     "actions": [
-      "record-values",
-      "change-a-scene-object",
-      "move-an-instrument-control",
-      "press-an-instrument-preset",
-      "press-an-instrument-button"
-     ],
-     "requires": [],
-     "reveal": null,
-     "asks": {
-      "choice": false,
-      "numeric": false,
-      "short": false,
-      "rubric": false,
-      "validated": true
-     },
-     "worldRunning": "inherited",
-     "affordances": {
-      "inspector": "whole lesson",
-      "placement": "locked",
-      "areaSweep": "whole lesson"
-     },
-     "loop": {
-      "declared": "measure",
-      "actual": [
-       "experiment",
-       "measure",
-       "interpret"
-      ],
-      "handTranscribed": false,
-      "mismatch": null
-     },
-     "scene": {
-      "nameMatches": [],
-      "readsSelection": false,
-      "importsFromSelection": false,
-      "engineReads": [],
-      "mutates": [],
-      "eventWatch": null
-     },
-     "instrument": {
-      "id": "stellar-evolution",
-      "capture": true
-     },
-     "evidence": [
-      "notebook-fields",
-      "instrument-capture"
-     ],
-     "reset": [
-      "lesson locks: placement"
-     ],
-     "recovery": [
-      "wrong body: the object list names what the step staged",
-      "ambiguous result: the check says in words how close is close enough"
-     ]
-    },
-    {
-     "sid": "the-sun-today",
-     "index": 7,
-     "type": "measure",
-     "title": "The Sun, today",
-     "declares": {
-      "stage": {
-       "objects": 1,
-       "kind": "named",
-       "scale": "display",
-       "fits": true,
-       "anonymous": false
-      },
-      "bound": [],
-      "roles": [
-       "star"
-      ]
-     },
-     "kinds": [
-      "scene-declared",
-      "student-changes-scene",
-      "engine-measurement",
-      "model-result",
-      "imported-data",
-      "captured-evidence"
-     ],
-     "actions": [
-      "record-values",
-      "change-a-scene-object",
-      "move-an-instrument-control",
-      "press-an-instrument-preset",
-      "press-an-instrument-button"
-     ],
-     "requires": [],
-     "reveal": null,
-     "asks": {
-      "choice": false,
-      "numeric": false,
-      "short": false,
-      "rubric": false,
-      "validated": true
-     },
-     "worldRunning": "inherited",
-     "affordances": {
-      "inspector": "whole lesson",
-      "placement": "locked",
-      "areaSweep": "whole lesson"
-     },
-     "loop": {
-      "declared": "measure",
-      "actual": [
-       "experiment",
-       "measure",
-       "interpret"
-      ],
-      "handTranscribed": false,
-      "mismatch": null
-     },
-     "scene": {
-      "nameMatches": [],
-      "readsSelection": false,
-      "importsFromSelection": false,
-      "engineReads": [],
-      "mutates": [],
-      "eventWatch": null
-     },
-     "instrument": {
-      "id": "stellar-evolution",
-      "capture": true
-     },
-     "evidence": [
-      "notebook-fields",
-      "instrument-capture"
-     ],
-     "reset": [
-      "lesson locks: placement"
-     ],
-     "recovery": [
-      "wrong body: the object list names what the step staged",
-      "ambiguous result: the check says in words how close is close enough"
-     ]
-    },
-    {
-     "sid": "across-the-main-sequence",
-     "index": 8,
-     "type": "measure",
-     "title": "Ten billion years, measured",
+     "title": "Two moments in one life",
      "declares": {
       "stage": {
        "objects": 1,
@@ -48309,7 +48145,7 @@
     },
     {
      "sid": "compare-young-and-old",
-     "index": 9,
+     "index": 7,
      "type": "measure",
      "title": "Then and now, side by side",
      "declares": {
@@ -48391,7 +48227,7 @@
     },
     {
      "sid": "predict-what-runs-out",
-     "index": 10,
+     "index": 8,
      "type": "predict",
      "title": "What exactly runs out?",
      "declares": {
@@ -48469,7 +48305,7 @@
     },
     {
      "sid": "the-interior",
-     "index": 11,
+     "index": 9,
      "type": "explore",
      "title": "What is burning now",
      "declares": {
@@ -48545,7 +48381,7 @@
     },
     {
      "sid": "core-in-envelope-out",
-     "index": 12,
+     "index": 10,
      "type": "measure",
      "title": "The core shrinks, the star swells",
      "declares": {
@@ -48627,7 +48463,7 @@
     },
     {
      "sid": "predict-direction",
-     "index": 13,
+     "index": 11,
      "type": "predict",
      "title": "Which way does it go?",
      "declares": {
@@ -48705,7 +48541,7 @@
     },
     {
      "sid": "measure-the-giant",
-     "index": 14,
+     "index": 12,
      "type": "measure",
      "title": "The giant, measured",
      "declares": {
@@ -48787,7 +48623,7 @@
     },
     {
      "sid": "true-size-then-and-now",
-     "index": 15,
+     "index": 13,
      "type": "explore",
      "title": "To scale, and beside itself",
      "declares": {
@@ -48863,9 +48699,9 @@
     },
     {
      "sid": "helium-and-the-loop",
-     "index": 16,
+     "index": 14,
      "type": "question",
-     "title": "It does not simply keep swelling",
+     "title": "After helium ignites",
      "declares": {
       "stage": {
        "objects": 1,
@@ -48940,7 +48776,7 @@
     },
     {
      "sid": "the-agb-and-the-wind",
-     "index": 17,
+     "index": 15,
      "type": "measure",
      "title": "Losing itself",
      "declares": {
@@ -49022,7 +48858,7 @@
     },
     {
      "sid": "not-a-supernova",
-     "index": 18,
+     "index": 16,
      "type": "predict",
      "title": "Is that an explosion?",
      "declares": {
@@ -49100,7 +48936,7 @@
     },
     {
      "sid": "planetary-nebula",
-     "index": 19,
+     "index": 17,
      "type": "read",
      "title": "A planetary nebula, which is not made of planets",
      "declares": {
@@ -49175,7 +49011,7 @@
     },
     {
      "sid": "white-dwarf-cooling",
-     "index": 20,
+     "index": 18,
      "type": "measure",
      "title": "The cinder",
      "declares": {
@@ -49257,7 +49093,7 @@
     },
     {
      "sid": "how-long-was-each-part",
-     "index": 21,
+     "index": 19,
      "type": "measure",
      "title": "How long each part really took",
      "declares": {
@@ -49339,7 +49175,7 @@
     },
     {
      "sid": "predict-the-red-dwarf",
-     "index": 22,
+     "index": 20,
      "type": "predict",
      "title": "The star that does none of this",
      "declares": {
@@ -49417,7 +49253,7 @@
     },
     {
      "sid": "the-same-age",
-     "index": 23,
+     "index": 21,
      "type": "measure",
      "title": "The same age, two stars",
      "declares": {
@@ -49499,7 +49335,7 @@
     },
     {
      "sid": "predict-massive-lifetime",
-     "index": 24,
+     "index": 22,
      "type": "predict",
      "title": "Twenty solar masses",
      "declares": {
@@ -49577,7 +49413,7 @@
     },
     {
      "sid": "massive-versus-sun",
-     "index": 25,
+     "index": 23,
      "type": "measure",
      "title": "What that costs",
      "declares": {
@@ -49659,7 +49495,7 @@
     },
     {
      "sid": "supergiant-and-burning",
-     "index": 26,
+     "index": 24,
      "type": "explore",
      "title": "A supergiant, and what is burning in it",
      "declares": {
@@ -49735,7 +49571,7 @@
     },
     {
      "sid": "why-iron-stops-it",
-     "index": 27,
+     "index": 25,
      "type": "question",
      "title": "Why it cannot keep going",
      "declares": {
@@ -49812,7 +49648,7 @@
     },
     {
      "sid": "predict-core-and-envelope",
-     "index": 28,
+     "index": 26,
      "type": "predict",
      "title": "Two different fates in one star",
      "declares": {
@@ -49890,7 +49726,7 @@
     },
     {
      "sid": "the-neutron-star",
-     "index": 29,
+     "index": 27,
      "type": "measure",
      "title": "A neutron star, and how we know",
      "declares": {
@@ -49972,7 +49808,7 @@
     },
     {
      "sid": "neutron-star-scale",
-     "index": 30,
+     "index": 28,
      "type": "question",
      "title": "How small, and why you might never see it",
      "declares": {
@@ -50049,7 +49885,7 @@
     },
     {
      "sid": "the-black-hole",
-     "index": 31,
+     "index": 29,
      "type": "measure",
      "title": "And one that probably does not explode",
      "declares": {
@@ -50131,7 +49967,7 @@
     },
     {
      "sid": "read-the-descriptions",
-     "index": 32,
+     "index": 30,
      "type": "question",
      "title": "What is this one?",
      "declares": {
@@ -50208,7 +50044,7 @@
     },
     {
      "sid": "design-a-comparison",
-     "index": 33,
+     "index": 31,
      "type": "measure",
      "title": "Your own comparison",
      "declares": {
@@ -50290,7 +50126,7 @@
     },
     {
      "sid": "the-lifecycle-argument",
-     "index": 34,
+     "index": 32,
      "type": "question",
      "title": "Back to the three stars",
      "declares": {
@@ -50371,7 +50207,7 @@
     },
     {
      "sid": "what-you-followed",
-     "index": 35,
+     "index": 33,
      "type": "read",
      "title": "What you followed",
      "declares": {
@@ -50475,24 +50311,18 @@
      "experiment": [
       "contraction-luminosity",
       "the-pms-track",
-      "arriving",
-      "the-sun-today",
-      "across-the-main-sequence",
+      "compare-two-moments",
       "compare-young-and-old"
      ],
      "measure": [
       "contraction-luminosity",
       "the-pms-track",
-      "arriving",
-      "the-sun-today",
-      "across-the-main-sequence",
+      "compare-two-moments",
       "compare-young-and-old"
      ],
      "evidence": [
       "contraction-luminosity",
-      "arriving",
-      "the-sun-today",
-      "across-the-main-sequence",
+      "compare-two-moments",
       "compare-young-and-old"
      ],
      "interpret": "contraction-luminosity",
@@ -50658,14 +50488,14 @@
     }
    ],
    "totals": {
-    "steps": 35,
-    "declared": 35,
-    "student": 35,
-    "engine": 35,
-    "model": 35,
-    "data": 35,
+    "steps": 33,
+    "declared": 33,
+    "student": 33,
+    "engine": 33,
+    "model": 33,
+    "data": 33,
     "diagram": 0,
-    "evidence": 17,
+    "evidence": 15,
     "computation": 0,
     "declaredButInert": 0,
     "prose": 0,
@@ -120443,14 +120273,14 @@
   }
  ],
  "totals": {
-  "steps": 1528,
-  "declared": 1420,
-  "student": 166,
-  "engine": 180,
-  "model": 1009,
-  "data": 161,
+  "steps": 1526,
+  "declared": 1418,
+  "student": 164,
+  "engine": 178,
+  "model": 1007,
+  "data": 159,
   "diagram": 878,
-  "evidence": 395,
+  "evidence": 393,
   "computation": 14,
   "declaredButInert": 1254,
   "prose": 59,
@@ -120460,7 +120290,7 @@
    "scene": 0,
    "portrait": 7,
    "quiet": 16,
-   "unstated": 1505
+   "unstated": 1503
   },
   "lessons": 124,
   "loops": 197,

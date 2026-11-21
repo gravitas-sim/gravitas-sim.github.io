@@ -348,13 +348,13 @@
       "centralExperimentId": "ce.lives-of-stars",
       "object": "sun",
       "control": "stellar-evolution/position",
-      "quantity": "radius and luminosity at a stated model age",
+      "quantity": "luminosity, radius and surface temperature at two ages of the Sun-like track that the student chooses, one frozen and one live, and at the tip of the giant branch",
       "evidence": "instrument-capture",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": ["predict-direction", "measure-the-giant", "why-iron-stops-it"],
+      "loop": ["compare-two-moments", "predict-direction", "measure-the-giant"],
       "evidenceFrom": "data",
-      "decision": "unreviewed",
-      "leakFree": false
+      "decision": "Which two moments of the Sun-like track to freeze and compare, so which stages of its life to claim a change across: two moments on the same stage that differ by less than ten per cent are told so, and readings that are not from one moment are told they do not belong together.",
+      "leakFree": true
     },
     "twelve-nights": {
       "centralExperimentId": "ce.twelve-nights",
