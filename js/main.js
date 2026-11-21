@@ -227,6 +227,10 @@ document.addEventListener('DOMContentLoaded', () => {
    * where nobody can see them.
    */
   function revealInterface() {
+    // Armed at once, not after the imports below: a touch made while they
+    // load is the visitor's first touch, and on a slow phone it came before
+    // the listener did and was lost.
+    armTouchTips();
     setTimeout(async () => {
       document.querySelector('.ui-container').classList.add('showUI');
       document.getElementById('overlay').classList.add('showUI');
@@ -254,8 +258,6 @@ document.addEventListener('DOMContentLoaded', () => {
         'objectInspector',
       ])
         document.getElementById(id)?.classList.add('showUI');
-
-      armTouchTips();
     }, 200);
   }
 
