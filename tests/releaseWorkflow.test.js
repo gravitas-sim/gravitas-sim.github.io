@@ -288,8 +288,10 @@ describe('the four ways it declines to publish', () => {
   });
 
   test('every publishing step is guarded by that check', () => {
-    const guarded = deploy.steps.filter(
-      s => String(s.if || '') === "steps.tip.outputs.superseded == 'false'"
+    // A step may add a condition of its own after the check (the built routes'
+    // download is also gated on DEPLOY_BUILT_ROUTES), never one in its place.
+    const guarded = deploy.steps.filter(s =>
+      String(s.if || '').startsWith("steps.tip.outputs.superseded == 'false'")
     );
     // Everything after the check except the checkout, the check itself, and
     // the message that explains a skipped deploy.

@@ -502,6 +502,16 @@ export const CHECKS = [
     ci: 'build',
     group: 'correctness',
   },
+  // The deploy with the built routes laid over the tree (DEPLOY_MODEL_GATE.md,
+  // the switch unit), staged into a scratch folder and checked, never published.
+  {
+    id: 'deploy-overlay',
+    label: 'deploy rehearsal with the built routes',
+    command: ['npm', 'run', 'deploy:rehearse-overlay'],
+    tier: 'slow',
+    ci: 'build',
+    group: 'correctness',
+  },
   // Two workers, no retries. Not a weaker run than CI's - a stricter one, and a
   // fairer one. `npm run e2e` leaves the worker count to Playwright, which
   // takes half the machine's cores; on a developer laptop that is six browsers,

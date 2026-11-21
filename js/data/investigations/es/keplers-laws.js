@@ -306,6 +306,12 @@ export default {
       body: 'Arriba están tu estimación, el periodo que da la ley a tu distancia y el planeta desde el que lo escalaste. Una ley es más que una curva que pasa por tus puntos: dice cuál tiene que ser el periodo a una distancia que nadie ha medido, y un planeta puesto ahí estaría obligado a cumplirla.\n\nSi tu estimación se desvió, fíjate en de dónde salió: de leer a ojo una gráfica curva. Enderezar la gráfica, o usar el exponente, es para lo que sirve la ley.',
     },
     {
+      stage: {
+        system: {
+          starName: 'Estrella de prueba',
+          planets: [{ name: 'Planeta de prueba' }],
+        },
+      },
       title: 'De qué depende la constante',
       body: 'Tus planetas tenían masas descabelladamente distintas, desde un pequeño mundo rocoso hasta un gigante gaseoso cientos de veces más pesado, y todos dieron el mismo <em>P</em>²/<em>a</em>³. ¿De qué depende entonces esa constante?\n\nAquí hay un planeta en una órbita circular a 1 UA. Pulsa <strong>Ejecutar A</strong> y lee su periodo; después <strong>Cambiar masa de la estrella</strong> y pulsa <strong>Ejecutar B</strong>: el mismo planeta a la misma distancia, alrededor de una estrella de doble masa. Las dos ejecuciones quedan en la tabla.',
       prompt:
@@ -353,7 +359,7 @@ export default {
     },
     {
       title: 'Pesar otra estrella',
-      body: 'Aquí está la recompensa. Kepler-10 es una estrella parecida al Sol a unos 600 años luz con un planeta de 2,4 radios terrestres, Kepler-10c, descubierto por [[transit|tránsito]]. Su órbita tiene un semieje mayor de unas 0,24 UA y un periodo de unos 45 días, que son 0,123 años.\n\nUsa la forma de Newton, tomando la masa del planeta como despreciable:\n\n<em>M</em> = <em>a</em>³ / <em>P</em>²  (en masas solares, con <em>a</em> en UA y <em>P</em> en años)\n\n<strong>Paso 1.</strong> Eleva la distancia al cubo: 0,24³ = 0,0138.\n\n<strong>Paso 2.</strong> Eleva el periodo al cuadrado: 0,123² = 0,0151.\n\n<strong>Paso 3.</strong> Divide.',
+      body: 'Aquí está la recompensa. Kepler-10 es una estrella parecida al Sol a unos 600 años luz con un planeta de 2,4 radios terrestres, Kepler-10c, descubierto por [[transit|tránsito]]. Su órbita tiene un semieje mayor de unas 0,24 UA y un periodo de unos 45 días, que son 0,123 años.\n\nUsa la forma de Newton, tomando la masa del planeta como despreciable:\n\n<em>M</em> = <em>a</em>³ / <em>P</em>²  (en masas solares, con <em>a</em> en UA y <em>P</em> en años)\n\n<strong>Primero:</strong> eleva la distancia al cubo: 0,24³ = 0,0138.\n\n<strong>Segundo:</strong> eleva el periodo al cuadrado: 0,123² = 0,0151.\n\n<strong>Tercero:</strong> divide.',
       prompt: 'Masa de Kepler-10, en masas solares',
       unit: 'M_sol',
       because:

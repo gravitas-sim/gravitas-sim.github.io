@@ -21,7 +21,7 @@
       ],
       "evidenceFrom": "engine",
       "decision": "Which two points of the orbit geometry panel to measure between, when to take the speed at each end of the orbit, which five or more planets to measure across the range, which distance to predict a period for and which planet to scale from, and when the uncertainty is small enough to stop taking readings.",
-      "leakFree": false
+      "leakFree": true
     },
     "retrograde-motion": {
       "centralExperimentId": "ce.retrograde-motion",
@@ -77,12 +77,12 @@
       "test": "e2e/centralExperiments.spec.js",
       "loop": [
         "which-pair-is-quicker",
-        "measurement-one-how-big-is",
-        "now-weigh-each-one",
+        "take-the-orbit-readings",
+        "share-the-total-out",
         "say-how-the-weighing-worked"
       ],
       "evidenceFrom": "engine",
-      "decision": "unreviewed",
+      "decision": "Which readings to take from the live pair (each star's distance from the balance point and the distance between the stars), which of them is the orbit size, how many laps to time before stopping the watch, and which reading to change to see what limits the mass.",
       "leakFree": true
     },
     "black-holes": {
@@ -871,7 +871,7 @@
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["predict-the-plain", "measure-the-plain"],
       "evidenceFrom": "model",
-      "decision": "unreviewed",
+      "decision": "Where to put the two ends of the reference pair so that it spans the Moon's whole disc, which sets the scale in kilometers per pixel, and then which radius and center make the circle follow the edge of the dark plain, in the core steps.",
       "leakFree": true
     },
     "how-far-is-that-star": {

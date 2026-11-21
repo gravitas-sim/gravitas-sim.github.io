@@ -14,7 +14,11 @@
 
 import { describe, test, expect, beforeEach } from '@jest/globals';
 import { sizeFacts, familyRows } from '../js/sizeFacts.js';
-import { DISPLAY_FACTOR } from '../js/bodyVisuals.js';
+import {
+  DISPLAY_FACTOR,
+  LOW_GLOW_DOTS,
+  glowStride,
+} from '../js/bodyVisuals.js';
 import { build as buildScenario } from '../tools/tides-scenarios.mjs';
 import * as enginePhysics from '../js/physics.js';
 import {
@@ -349,6 +353,24 @@ describe('comet activity', () => {
     for (const bad of [NaN, undefined, null, -3]) {
       expect(tailActivity(bad)).toBe(0);
     }
+  });
+});
+
+describe('glow trails at the low tier', () => {
+  test('a low-tier trail draws at most LOW_GLOW_DOTS sprites, spread over all its points', () => {
+    for (const points of [1, 2, 24, 25, 107, 214, 900]) {
+      const stride = glowStride(points, 'low');
+      const drawn = Math.ceil(points / stride);
+      expect(drawn).toBeLessThanOrEqual(LOW_GLOW_DOTS);
+      // The last drawn point is within one stride of the oldest: the dots
+      // still reach across the whole span the trail covers.
+      expect(points - 1 - (drawn - 1) * stride).toBeLessThan(stride);
+    }
+  });
+
+  test('the other tiers draw every point', () => {
+    for (const tier of ['full', 'ultra', 'auto'])
+      expect(glowStride(214, tier)).toBe(1);
   });
 });
 

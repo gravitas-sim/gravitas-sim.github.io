@@ -246,7 +246,7 @@ export default {
     },
     {
       sid: 'weigh-one-star-with-an-error-bar',
-      after: 'now-weigh-each-one',
+      after: 'share-the-total-out',
       depth: 'advanced',
       decides: 'How the two uncertainties combine for one star.',
       type: 'question',

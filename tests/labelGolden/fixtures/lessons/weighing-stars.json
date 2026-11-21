@@ -8,12 +8,12 @@
     ["steps.a-practice-run.fields.2.unit",""],
     ["steps.a-practice-run.fields.3.unit",""],
     ["steps.a-practice-run.fields.4.unit","M☉"],
-    ["steps.measurement-one-how-big-is.fields.0.unit","AU"],
-    ["steps.measurement-one-how-big-is.fields.1.unit","AU"],
-    ["steps.measurement-one-how-big-is.fields.2.unit","AU"],
-    ["steps.measurement-two-how-long-does.fields.0.unit",""],
-    ["steps.measurement-two-how-long-does.fields.1.unit","years"],
-    ["steps.measurement-two-how-long-does.fields.2.unit","years"],
+    ["steps.take-the-orbit-readings.fields.0.unit","AU"],
+    ["steps.take-the-orbit-readings.fields.1.unit","AU"],
+    ["steps.take-the-orbit-readings.fields.2.unit","AU"],
+    ["steps.time-the-laps.fields.0.unit",""],
+    ["steps.time-the-laps.fields.1.unit","years"],
+    ["steps.time-the-laps.fields.2.unit","years"],
     ["steps.weigh-the-pair.fields.0.unit","AU"],
     ["steps.weigh-the-pair.fields.1.unit","years"],
     ["steps.weigh-the-pair.fields.2.unit",""],
@@ -32,14 +32,14 @@
     ["steps.weigh-it-with-an-error-bar.unit","M☉"],
     ["steps.which-measurement-limits-you.fields.0.unit","M☉"],
     ["steps.which-measurement-limits-you.fields.1.unit","M☉"],
-    ["steps.back-to-the-balance-point.fields.0.unit",""],
-    ["steps.now-weigh-each-one.fields.0.unit","M☉"],
-    ["steps.now-weigh-each-one.fields.1.unit",""],
-    ["steps.now-weigh-each-one.fields.2.unit","M☉"],
-    ["steps.now-weigh-each-one.fields.3.unit","M☉"],
-    ["steps.now-weigh-each-one.fields.4.unit","M☉"],
+    ["steps.compare-the-two-arms.fields.0.unit",""],
+    ["steps.share-the-total-out.fields.0.unit","M☉"],
+    ["steps.share-the-total-out.fields.1.unit",""],
+    ["steps.share-the-total-out.fields.2.unit","M☉"],
+    ["steps.share-the-total-out.fields.3.unit","M☉"],
+    ["steps.share-the-total-out.fields.4.unit","M☉"],
     ["steps.weigh-one-star-with-an-error-bar.unit","M☉"],
-    ["steps.one-on-your-own.fields.0.unit","M☉"]
+    ["steps.weigh-a-new-pair.fields.0.unit","M☉"]
    ],
    "numbered": [
     ["steps.how-sure-is-the-total.fields.0.label","Timing 1, one lap"],
@@ -85,7 +85,7 @@
     2
    ],
    [
-    "measurement-two-how-long-does.p",
+    "time-the-laps.p",
     2
    ],
    [
@@ -133,15 +133,15 @@
     3
    ],
    [
-    "now-weigh-each-one.tot",
+    "share-the-total-out.tot",
     2
    ],
    [
-    "now-weigh-each-one.rat",
+    "share-the-total-out.rat",
     2
    ],
    [
-    "now-weigh-each-one.sum",
+    "share-the-total-out.sum",
     1
    ]
   ]
@@ -161,11 +161,11 @@
    "a-practice-run": {
     "validate": {"calls":242,"distinct":2,"digest":"1b2d230db3e04e5c","samples":[null,{"level":"warn","message":"For this practice run, put 2 in both boxes. You can experiment with other numbers afterwards."}]}
    },
-   "measurement-one-how-big-is": {
+   "take-the-orbit-readings": {
     "probe": [[{"id":"ra","label":"Star A to the balance point","value":"not on the canvas"},{"id":"rb","label":"Star B to the balance point","value":"not on the canvas"},{"id":"sep","label":"Star to star","value":"not on the canvas"}],[{"id":"ra","label":"Star A to the balance point","value":"1.00 AU"},{"id":"rb","label":"Star B to the balance point","value":"3.00 AU"},{"id":"sep","label":"Star to star","value":"4.00 AU"}],[{"id":"ra","label":"Star A to the balance point","value":"0.04 AU"},{"id":"rb","label":"Star B to the balance point","value":"0.04 AU"},{"id":"sep","label":"Star to star","value":"0.08 AU"}]],
     "validate": {"calls":242,"distinct":3,"digest":"564621c52ecfbe52","samples":[null,{"level":"warn","message":"These readings do not fit together: the two arms should add up to the star-to-star distance. Take them again."},{"level":"ok","message":"The two arms add up to the star-to-star distance, as they must. Keep these readings for the weighing step."}]}
    },
-   "measurement-two-how-long-does": {
+   "time-the-laps": {
     "validate": {"calls":242,"distinct":3,"digest":"a5dbae55da48cb48","samples":[null,{"level":"ok","message":"The period of one lap is your stopwatch reading divided by the number of laps. Keep it for the weighing step."},{"level":"error","message":"Count whole laps, and time at least one."}]}
    },
    "weigh-the-pair": {
@@ -177,13 +177,13 @@
    "which-measurement-limits-you": {
     "validate": {"calls":232,"distinct":2,"digest":"0d6a5303da30588f","samples":[null,{"level":"warn","message":"Answer with a or P."}]}
    },
-   "back-to-the-balance-point": {
+   "compare-the-two-arms": {
     "probe": [[{"id":"ratio","label":"How many times further out B is","value":"not on the canvas"}],[{"id":"ra","label":"Star A arm","value":"1.00 AU"},{"id":"rb","label":"Star B arm","value":"3.00 AU"},{"id":"ratio","label":"How many times further out B is","value":"3.00"}],[{"id":"ra","label":"Star A arm","value":"0.04 AU"},{"id":"rb","label":"Star B arm","value":"0.04 AU"},{"id":"ratio","label":"How many times further out B is","value":"1.00"}]]
    },
-   "now-weigh-each-one": {
-    "validate": {"calls":242,"distinct":146,"digest":"6ab68826336e60ec","samples":[null,{"level":"warn","message":"Those two add up to 2.0, and the pair you weighed has 1.0 solar masses in total. The two numbers have to add up to the total you measured."},{"level":"warn","message":"Those two add up to 4.3, and the pair you weighed has 1.0 solar masses in total. The two numbers have to add up to the total you measured."},{"level":"warn","message":"Those two add up to -3.0, and the pair you weighed has -1.5 solar masses in total. The two numbers have to add up to the total you measured."},{"level":"ok","message":"0.0 solar masses and 0.0. You have just weighed two individual stars, separately, using a ruler and a stopwatch."},{"level":"warn","message":"Those two add up to 2301.3, and the pair you weighed has 0.0 solar masses in total. The two numbers have to add up to the total you measured."},{"level":"warn","message":"Those two add up to 3112.4, and the pair you weighed has 1.7 solar masses in total. The two numbers have to add up to the total you measured."},{"level":"warn","message":"Those two add up to 2783.3, and the pair you weighed has 23.3 solar masses in total. The two numbers have to add up to the total you measured."},{"level":"warn","message":"Those two add up to 47.1, and the pair you weighed has 537.1 solar masses in total. The two numbers have to add up to the total you measured."},{"level":"warn","message":"Those two add up to 641.0, and the pair you weighed has 0.0 solar masses in total. The two numbers have to add up to the total you measured."},{"level":"warn","message":"Those two add up to 9.9, and the pair you weighed has 3588.0 solar masses in total. The two numbers have to add up to the total you measured."},{"level":"warn","message":"Those two add up to 16.6, and the pair you weighed has 35.7 solar masses in total. The two numbers have to add up to the total you measured."},{"level":"warn","message":"Those two add up to 49.8, and the pair you weighed has 35.7 solar masses in total. The two numbers have to add up to the total you measured."},{"level":"warn","message":"Those two add up to 2.2, and the pair you weighed has 14.1 solar masses in total. The two numbers have to add up to the total you measured."},{"level":"warn","message":"Those two add up to 1.0, and the pair you weighed has 35.7 solar masses in total. The two numbers have to add up to the total you measured."},{"level":"warn","message":"You have them the wrong way round. Star A is the one that stays close to the balance point, which makes it the heavier of the two."},{"level":"warn","message":"Those two add up to 38.1, and the pair you weighed has 1.8 solar masses in total. The two numbers have to add up to the total you measured."},{"level":"warn","message":"Those two add up to 38.3, and the pair you weighed has 0.4 solar masses in total. The two numbers have to add up to the total you measured."},{"level":"warn","message":"The two add up correctly, but not in the ratio your arm readings give. The star that swings further out is lighter by the same factor."}]}
+   "share-the-total-out": {
+    "validate": {"calls":242,"distinct":145,"digest":"756cdfdf42435a58","samples":[null,{"level":"warn","message":"Those two add up to 2.0, and the pair you weighed has 1.0 solar masses in total. The two numbers have to add up to the total you measured."},{"level":"warn","message":"Those two add up to 5.5, and the pair you weighed has 0.1 solar masses in total. The two numbers have to add up to the total you measured."},{"level":"warn","message":"Those two add up to -3.0, and the pair you weighed has -1.5 solar masses in total. The two numbers have to add up to the total you measured."},{"level":"ok","message":"0.0 solar masses and 0.0. You have just weighed two individual stars, separately, using a ruler and a stopwatch."},{"level":"warn","message":"The two add up correctly, but not in the ratio your arm readings give. The star that swings further out is lighter by the same factor."},{"level":"warn","message":"Those two add up to 12.5, and the pair you weighed has 0.1 solar masses in total. The two numbers have to add up to the total you measured."},{"level":"warn","message":"Those two add up to 34.2, and the pair you weighed has 0.1 solar masses in total. The two numbers have to add up to the total you measured."},{"level":"warn","message":"Those two add up to 932.1, and the pair you weighed has 0.4 solar masses in total. The two numbers have to add up to the total you measured."},{"level":"warn","message":"Those two add up to 708.0, and the pair you weighed has 0.3 solar masses in total. The two numbers have to add up to the total you measured."},{"level":"warn","message":"Those two add up to 1148.0, and the pair you weighed has 0.3 solar masses in total. The two numbers have to add up to the total you measured."},{"level":"warn","message":"Those two add up to 16.6, and the pair you weighed has 35.7 solar masses in total. The two numbers have to add up to the total you measured."},{"level":"warn","message":"Those two add up to 49.8, and the pair you weighed has 35.7 solar masses in total. The two numbers have to add up to the total you measured."},{"level":"warn","message":"Those two add up to 2.2, and the pair you weighed has 14.1 solar masses in total. The two numbers have to add up to the total you measured."},{"level":"warn","message":"Those two add up to 1.0, and the pair you weighed has 35.7 solar masses in total. The two numbers have to add up to the total you measured."},{"level":"warn","message":"You have them the wrong way round. Star A is the one that stays close to the balance point, which makes it the heavier of the two."}]}
    },
-   "one-on-your-own": {
+   "weigh-a-new-pair": {
     "validate": {"calls":97,"distinct":3,"digest":"5d846c6aa255fcf5","samples":[null,{"level":"warn","message":"Not quite. The formula is the orbit size cubed, divided by the period squared, with the orbit size in AU and the period in years."},{"level":"error","message":"A mass has to be a positive number."}]}
    }
   },
