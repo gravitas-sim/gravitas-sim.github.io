@@ -166,7 +166,7 @@ test.describe('the reset beside the progress bar', () => {
     await page.locator('#investigationResetScenario').click();
     await expect.poll(() => bodies(page), { timeout: 15_000 }).toEqual(before);
     await expect(said(page)).toHaveText(
-      'Scene back at the start of this step. Your answers are kept.'
+      'The scene is back at the start of this step. Your answers are not changed.'
     );
     expect((await stored(page)).responses[`${LESSON}:${NUMERIC}`]).toBe('0.91');
   });
@@ -192,7 +192,7 @@ test.describe('the reset beside the progress bar', () => {
       page.locator('#investigationTool [data-tool]').first()
     ).toHaveValue(start);
     await expect(said(page)).toHaveText(
-      'Scene and instrument back at the start of this step. Your answers are kept.'
+      'The scene and instrument are back at the start of this step. Your answers are not changed.'
     );
     expect((await stored(page, 'weighing-stars')).responses).toMatchObject({
       'weighing-stars:the-rule': 1,
@@ -203,7 +203,7 @@ test.describe('the reset beside the progress bar', () => {
     await openAt(page, app, LESSON, NUMERIC, {}, 'es');
     await page.locator('#investigationResetScenario').click();
     await expect(said(page)).toHaveText(
-      'La escena vuelve al inicio de este paso. Tus respuestas se conservan.'
+      'La escena vuelve al inicio de este paso. Tus respuestas no cambian.'
     );
   });
 });
@@ -230,7 +230,8 @@ test.describe('Restart asks first', () => {
     await openAt(page, app, LESSON, NUMERIC, answers);
     await ask(page);
     await expect(page.locator('#investigationRestartN')).toHaveText('2');
-    await expect(dialog(page).locator('.gs-en').first()).toBeVisible();
+    await expect(dialog(page)).toContainText('Start this investigation over?');
+    await expect(dialog(page)).toContainText('The scene is reset too');
     await expect(
       page.locator('#investigationRestart [value=cancel]')
     ).toBeFocused();
@@ -288,14 +289,181 @@ test.describe('Restart asks first', () => {
     await openAt(page, app, LESSON, NUMERIC, answers, 'es');
     await ask(page);
     await expect(page.locator('#investigationRestartN')).toHaveText('2');
-    await expect(dialog(page).locator('.gs-es').first()).toBeVisible();
-    await expect(dialog(page).locator('.gs-en').first()).toBeHidden();
-    await expect(page.locator('#investigationRestartGo .gs-es')).toBeVisible();
-    await expect(page.locator('#investigationRestartGo .gs-en')).toBeHidden();
+    await expect(dialog(page)).toContainText(
+      '¿Empezar esta investigación de nuevo?'
+    );
+    await expect(page.locator('#investigationRestartGo')).toHaveText(
+      'Descartar las respuestas y empezar de nuevo'
+    );
+    await expect(dialog(page)).not.toContainText('Start this investigation');
     const results = await new AxeBuilder({ page })
       .include('#investigationRestart')
       .analyze();
     expect(results.violations).toEqual([]);
+  });
+});
+
+test.describe('reset, restart and discard: one vocabulary', () => {
+  const answers = {
+    [`${LESSON}:${NUMERIC}`]: '0.91',
+    [`${LESSON}:where-kepler-s-version-breaks`]: '1',
+  };
+  const other = 'gravitas_investigation_missing-mass';
+  const raw = (page, key = `gravitas_investigation_${LESSON}`) =>
+    page.evaluate(k => localStorage.getItem(k), key);
+  const generation = page =>
+    page.evaluate(async () =>
+      (await import('/js/physics.js')).getWorldGeneration()
+    );
+  const step = page => page.locator('#investigationProgressText');
+
+  async function open(page, app, locale = 'en') {
+    await openAt(page, app, LESSON, NUMERIC, answers, locale);
+    await page.evaluate(
+      key =>
+        localStorage.setItem(
+          key,
+          JSON.stringify({ schema: 2, responses: { 'missing-mass:x': 'keep' } })
+        ),
+      other
+    );
+  }
+
+  test('a scene reset leaves every stored answer as it was and never restarts', async ({
+    page,
+    app,
+  }) => {
+    await open(page, app);
+    const before = await stored(page);
+    const place = await step(page).innerText();
+    const built = await generation(page);
+    await page.locator('#investigationResetScenario').click();
+    await expect.poll(() => generation(page)).toBeGreaterThan(built);
+    const after = await stored(page);
+    expect(after.responses).toEqual(before.responses);
+    expect(after.attempts).toEqual(before.attempts);
+    expect(await step(page).innerText()).toBe(place);
+    await expect(page.locator('#investigationUndo')).toBeHidden();
+    await expect(page.locator('#investigationRestart')).toBeHidden();
+  });
+
+  test('a restart removes exactly this investigation record, resets the scene, and undo brings it back', async ({
+    page,
+    app,
+  }) => {
+    await open(page, app);
+    const otherBefore = await raw(page, other);
+    // The panel resumes at the saved step; undo comes back to it.
+    await expect.poll(async () => (await stored(page)).stepSid).toBe(NUMERIC);
+    const place = (await stored(page)).stepSid;
+    const built = await generation(page);
+    await openMore(page);
+    await page.locator('#investigationReset').click();
+    await expect(page.locator('#investigationRestartN')).toHaveText('2');
+    await expect(page.locator('#investigationRestartParts')).toHaveText(
+      'Answers: 2. Readings: 0.'
+    );
+    await expect(page.locator('#investigationRestart')).toContainText(
+      'The scene is reset too'
+    );
+    await expect(page.locator('#investigationRestartAssigned')).toBeHidden();
+    await page.locator('#investigationRestartGo').click();
+
+    await expect.poll(async () => (await stored(page)).responses).toEqual({});
+    await expect.poll(() => generation(page)).toBeGreaterThan(built);
+    expect(await step(page).innerText()).toMatch(/^1 /);
+    expect(await raw(page, other)).toBe(otherBefore);
+    await expect(page.locator('#investigationUndo')).toContainText(
+      'Started over. 2 saved answers and readings were deleted.'
+    );
+
+    await page.locator('#investigationUndoGo').click();
+    await expect(page.locator('#investigationUndo')).toBeHidden();
+    await expect
+      .poll(async () => (await stored(page)).responses)
+      .toMatchObject(answers);
+    expect((await stored(page)).stepSid).toBe(place);
+    expect(await raw(page, other)).toBe(otherBefore);
+  });
+
+  test('the deleted record is gone for good once the investigation closes', async ({
+    page,
+    app,
+  }) => {
+    await open(page, app);
+    await openMore(page);
+    await page.locator('#investigationReset').click();
+    await page.locator('#investigationRestartGo').click();
+    await expect(page.locator('#investigationUndo')).toBeVisible();
+    await page.locator('#investigationClose').click();
+    await expect(page.locator('#investigationPanel')).toBeHidden();
+    await page.locator('#investigationsBtn').click();
+    await page.locator(`[data-investigation="${LESSON}"]`).click();
+    await expect(page.locator('#investigationPanel')).toBeVisible();
+    await expect(page.locator('#investigationUndo')).toBeHidden();
+    expect((await stored(page)).responses).toEqual({});
+  });
+
+  test('Reset the scene is off, with its reason as text, where a step has no scene', async ({
+    page,
+    app,
+  }) => {
+    await openAt(page, app, 'tides-that-move-the-moon', 'forward-predict', {});
+    const reset = page.locator('#investigationResetScenario');
+    await expect(reset).toBeDisabled();
+    await expect(page.locator('#investigationResetWhy')).toBeVisible();
+    await expect(page.locator('#investigationResetWhy')).toContainText(
+      'Reset the scene is off on this step'
+    );
+    await expect(reset).toHaveAccessibleDescription(/off on this step/);
+    await expect(reset).toHaveAccessibleName('Reset the scene');
+  });
+
+  test('the rail says it leaves the scene while an investigation is open, and only then', async ({
+    page,
+    app,
+  }) => {
+    await open(page, app);
+    for (const [id, text] of [
+      ['refreshScenarioBtn', 'Restart Scenario'],
+      ['resetAllBtn', 'Reset Settings and Scenario'],
+      ['cleanSimBtn', 'Clear All Bodies'],
+    ])
+      await expect(page.locator(`#${id}`)).toHaveText(
+        `Leave this investigation's scene: ${text}`
+      );
+    await page.locator('#investigationClose').click();
+    await expect(page.locator('#refreshScenarioBtn')).toHaveText(
+      'Restart Scenario'
+    );
+    await expect(page.locator('#cleanSimBtn')).toHaveText('Clear All Bodies');
+  });
+
+  test('in Spanish the control, the dialog and the undo are Spanish', async ({
+    page,
+    app,
+  }) => {
+    await open(page, app, 'es');
+    await expect(page.locator('#investigationResetScenario')).toHaveText(
+      /Restablecer la escena/
+    );
+    await expect(page.locator('#investigationResetScenario')).toHaveAttribute(
+      'title',
+      'Reconstruye la escena de este paso. Tus respuestas no cambian.'
+    );
+    await expect(page.locator('#investigationReset')).toHaveText(
+      'Empezar esta investigación de nuevo'
+    );
+    await openMore(page);
+    await page.locator('#investigationReset').click();
+    await expect(page.locator('#investigationRestartParts')).toHaveText(
+      'Respuestas: 2. Lecturas: 0.'
+    );
+    await page.locator('#investigationRestartGo').click();
+    await expect(page.locator('#investigationUndo')).toContainText(
+      'Has empezado de nuevo. Se borraron 2 respuestas y lecturas guardadas.'
+    );
+    await expect(page.locator('#investigationUndoGo')).toHaveText('Deshacer');
   });
 });
 

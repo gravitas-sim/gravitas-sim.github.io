@@ -4,7 +4,7 @@
 // it changes when they do and only when they do - which is what makes the old
 // cache safe to delete on activate and safe to keep otherwise.
 //
-// Split three ways, and the split is what install enforces. The 847 core
+// Split three ways, and the split is what install enforces. The 851 core
 // entries are the shell, the modules, the stylesheets and the self-hosted
 // fonts and libraries: if any one of them cannot be fetched the install fails
 // and this version never activates, because a half-cached build is the mixed
@@ -454,6 +454,7 @@ self.__GRAVITAS_PRECACHE_CORE = [
   './js/i18n/en.populations.js',
   './js/i18n/en.remix.js',
   './js/i18n/en.report.js',
+  './js/i18n/en.reset.js',
   './js/i18n/en.reveal.js',
   './js/i18n/en.settingsHelp.js',
   './js/i18n/en.sky.js',
@@ -497,6 +498,7 @@ self.__GRAVITAS_PRECACHE_CORE = [
   './js/i18n/es.populations.js',
   './js/i18n/es.remix.js',
   './js/i18n/es.report.js',
+  './js/i18n/es.reset.js',
   './js/i18n/es.reveal.js',
   './js/i18n/es.settingsHelp.js',
   './js/i18n/es.sky.js',
@@ -556,8 +558,10 @@ self.__GRAVITAS_PRECACHE_CORE = [
   './js/investigations/progressBackup.js',
   './js/investigations/progressSchema.js',
   './js/investigations/recovery.js',
+  './js/investigations/restart.js',
   './js/investigations/reveal.js',
   './js/investigations/stepView.js',
+  './js/investigations/vocabulary.js',
   './js/investigationsLoader.js',
   './js/kernels/cosmology/fit.js',
   './js/kernels/cosmology/flrw.js',
@@ -1837,6 +1841,7 @@ self.__GRAVITAS_PRECACHE = [
   './js/i18n/en.populations.js',
   './js/i18n/en.remix.js',
   './js/i18n/en.report.js',
+  './js/i18n/en.reset.js',
   './js/i18n/en.reveal.js',
   './js/i18n/en.settingsHelp.js',
   './js/i18n/en.sky.js',
@@ -1893,6 +1898,7 @@ self.__GRAVITAS_PRECACHE = [
   './js/i18n/es.populations.js',
   './js/i18n/es.remix.js',
   './js/i18n/es.report.js',
+  './js/i18n/es.reset.js',
   './js/i18n/es.reveal.js',
   './js/i18n/es.settingsHelp.js',
   './js/i18n/es.sky.js',
@@ -1977,8 +1983,10 @@ self.__GRAVITAS_PRECACHE = [
   './js/investigations/progressBackup.js',
   './js/investigations/progressSchema.js',
   './js/investigations/recovery.js',
+  './js/investigations/restart.js',
   './js/investigations/reveal.js',
   './js/investigations/stepView.js',
+  './js/investigations/vocabulary.js',
   './js/investigationsLoader.js',
   './js/kernels/cosmology/fit.js',
   './js/kernels/cosmology/flrw.js',

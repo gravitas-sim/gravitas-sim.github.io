@@ -1410,9 +1410,6 @@ export const ES = {
   // --- Tidal comparison table ------------------------------------------------
 
   // --- Lesson panel chrome ---------------------------------------------------
-  'inv.action.restart': 'Reiniciar',
-  'inv.action.restart.hint':
-    'Borrar todas las respuestas y volver a empezar esta investigación',
   'inv.action.back': 'Atrás',
   'inv.action.back.hint': 'Paso anterior (Mayús + flecha izquierda)',
   'inv.body.label': 'Paso de la investigación',

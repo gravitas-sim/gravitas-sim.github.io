@@ -4478,14 +4478,13 @@
 @layer components {
   .inv-reset-scenario {
     flex: none;
-    width: 26px;
-    height: 26px;
-    min-height: 0;
-    padding: 0;
-    display: grid;
-    place-items: center;
-    font-size: var(--text-md);
-    line-height: 1;
+    min-height: 26px;
+    padding: 0 var(--space-2);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    font-size: var(--text-xs);
+    white-space: nowrap;
     color: var(--text-secondary);
     background: transparent;
     border: 1px solid var(--border);
