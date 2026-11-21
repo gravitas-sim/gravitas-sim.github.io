@@ -365,11 +365,7 @@ export function draw(step, vals, { canvas, els, transformed, log, scene }) {
 function inside(st, m, b) {
   const xs = [st.x0, st.x1];
   if (m) xs.push((st.y0 - b) / m, (st.y1 - b) / m);
-  // Room for the last place of the line's own height, so a flat set of
-  // readings whose heights differ by one unit there still finds its line.
-  const tol =
-    1e-9 * (st.y1 - st.y0 || 1) +
-    1e-12 * Math.max(Math.abs(st.y0), Math.abs(st.y1));
+  const tol = 1e-9 * (st.y1 - st.y0 || 1) + 1e-12 * Math.abs(st.y1);
   const seen = xs
     .filter(
       x =>
