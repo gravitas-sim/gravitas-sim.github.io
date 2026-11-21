@@ -190,25 +190,25 @@ export function watchForAssignments() {
       assignmentInHash,
       () => import('./assignments/assignmentBridge.js'),
       'openAssignmentFromUrl',
-      'assignment',
+      true,
     ],
     [
       activityInHash,
       () => import('./activities/activityBridge.js'),
       'openActivityFromUrl',
-      'activity',
+      true,
     ],
-    [packInHash, () => import('./remix/open.js'), 'openPackFromUrl', ''],
+    [packInHash, () => import('./remix/open.js'), 'openPackFromUrl', false],
   ];
   const open = () => {
     const kind = kinds.find(([isLink]) => isLink());
     if (!kind) return;
-    const [, load, opener, what] = kind;
+    const [, load, opener, loud] = kind;
     ensureInvestigations()
       .then(load)
       .then(m => m[opener]())
       .catch(err => {
-        if (what) console.warn(`That ${what} link could not be opened:`, err);
+        if (loud) console.warn('That link could not be opened:', err);
       });
   };
 
