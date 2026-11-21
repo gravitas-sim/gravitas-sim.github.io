@@ -146,8 +146,8 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /*  nothing to show at first ↓  */
-  canvas.classList.remove('showCanvas');
-  starfieldCanvas.classList.remove('showCanvas');
+  const canvases = [canvas, starfieldCanvas];
+  for (const c of canvases) c.classList.remove('showCanvas');
 
   // The entire UI reveal used to hang on this one animationend event. If the
   // animation never runs — reduced-motion, a background tab at load, an
@@ -178,8 +178,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Update global flag
     window.isSplashActive = false;
 
-    canvas.classList.add('showCanvas'); // NOW fade the sim in
-    starfieldCanvas.classList.add('showCanvas');
+    // NOW fade the sim in
+    for (const c of canvases) c.classList.add('showCanvas');
 
     // Generate starfield after canvases are visible
     generateStarfield();

@@ -130,11 +130,11 @@
     },
     "build": {
       "front-door": {
-        "kb": 545.1,
+        "kb": 545.4,
         "requests": 58
       },
       "sandbox": {
-        "kb": 545.1,
+        "kb": 545.4,
         "requests": 58
       },
       "kepler": {
@@ -170,7 +170,7 @@
         "requests": 2
       },
       "figure": {
-        "kb": 681.2,
+        "kb": 681.5,
         "requests": 60
       },
       "experiments": {

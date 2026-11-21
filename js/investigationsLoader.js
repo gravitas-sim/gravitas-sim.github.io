@@ -77,16 +77,15 @@ export function ensureInvestigations() {
  * after a backstop, so the sandbox never stands still because a lesson did not
  * arrive. A load that names no lesson resolves at once.
  *
- * @param {number} [backstopMs] - The longest the frames are held for a lesson
- *   that does not arrive
+ * @param {number} [ticks] - The longest the frames are held for a lesson that
+ *   does not arrive, in 50 ms polls (20 s)
  * @param {number} [settleMs] - How long they wait, once it is up, for the
  *   visitor's first click or key
  * @returns {Promise<void>} Resolves when the loop may start
  */
-export function whenLessonShown(backstopMs = 20000, settleMs = 4000) {
+export function whenLessonShown(ticks = 400, settleMs = 4000) {
   if (!lessonInHash()) return Promise.resolve();
   return new Promise(done => {
-    let ticks = backstopMs / 50;
     const release = shown => {
       clearInterval(poll);
       if (!shown) return done();
@@ -99,7 +98,7 @@ export function whenLessonShown(backstopMs = 20000, settleMs = 4000) {
     const poll = setInterval(
       () =>
         document.querySelector(
-          '#investigationPanel:not([hidden]), #investigationBrowser:not(.hidden)'
+          '#investigationPanel:not([hidden]),#investigationBrowser:not(.hidden)'
         )
           ? release(true)
           : --ticks < 0 && release(false),

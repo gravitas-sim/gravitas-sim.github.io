@@ -63,7 +63,7 @@ describe('whenLessonShown', () => {
 
   test('holds while the lesson opens and releases when its panel is shown', async () => {
     window.location.hash = '#investigation=keplers-laws';
-    const held = whenLessonShown(5000, 40);
+    const held = whenLessonShown(100, 40);
     expect(await settled(held)).toBe(false);
     document.getElementById('investigationPanel').hidden = false;
     expect(await settled(held)).toBe(true);
@@ -71,7 +71,7 @@ describe('whenLessonShown', () => {
 
   test('answers the first click before it releases, once the panel is up', async () => {
     window.location.hash = '#investigation=keplers-laws';
-    const held = whenLessonShown(5000, 60000);
+    const held = whenLessonShown(100, 60000);
     document.getElementById('investigationPanel').hidden = false;
     expect(await settled(held, 5)).toBe(false);
     window.dispatchEvent(new Event('click'));
@@ -80,7 +80,7 @@ describe('whenLessonShown', () => {
 
   test('releases when the chooser is shown instead of a lesson', async () => {
     window.location.hash = '#investigation=keplers-laws';
-    const held = whenLessonShown(5000, 40);
+    const held = whenLessonShown(100, 40);
     expect(await settled(held)).toBe(false);
     document.getElementById('investigationBrowser').classList.remove('hidden');
     expect(await settled(held)).toBe(true);
@@ -88,7 +88,7 @@ describe('whenLessonShown', () => {
 
   test('never holds past its backstop', async () => {
     window.location.hash = '#investigation=keplers-laws';
-    const held = whenLessonShown(120);
+    const held = whenLessonShown(3);
     expect(await settled(held, 3)).toBe(false);
     await held;
   });

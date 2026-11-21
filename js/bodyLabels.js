@@ -28,10 +28,28 @@ export const hideMasses = on => {
 };
 export const massesAreHidden = () => massesHidden;
 
+// CSS width kept by an observer: clientWidth in the frame forces a layout.
+let cssW = null;
+let watched = null;
+let watcher = null;
+function cssWidth(canvas) {
+  if (watched !== canvas) {
+    watcher?.disconnect();
+    watched = canvas;
+    cssW = null;
+    watcher =
+      typeof globalThis.ResizeObserver === 'function'
+        ? new globalThis.ResizeObserver(() => (cssW = canvas.clientWidth))
+        : null;
+    watcher?.observe(canvas);
+  }
+  return cssW ?? canvas.clientWidth;
+}
+
 export function frameScale(canvas) {
   queue = [];
   spots = [];
-  const w = canvas.clientWidth;
+  const w = cssWidth(canvas);
   return (k = w > 0 && canvas.width > 0 ? canvas.width / w : 1);
 }
 
