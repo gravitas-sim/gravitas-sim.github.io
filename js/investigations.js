@@ -23,6 +23,7 @@ import {
   roleLabel,
   save,
   sessionProgress,
+  setEntryLink,
   slots,
   stepMarkup,
   storageKey,
@@ -132,7 +133,7 @@ import { normalizeSeed, formatSeed } from './rng.js';
 // dynamic-imports the loader, the loader dynamic-imports this - and although
 // every edge in it was lazy, a cycle that exists only because of a convenience
 // re-export is not one worth keeping.
-import { toast, announce, loadFailed } from './notify.js';
+import { toast, announce, loadFailed, refuseLink } from './notify.js';
 import { captureToNotebook, setEvidenceContext } from './widgetRuntime.js';
 // Lives in its own module so the instructor answer keys, which are generated
 // in Node, can grade with the identical function this page grades with.
@@ -287,6 +288,7 @@ bindPersistence({
   }),
   authoring: () => authoring,
   assigned: () => Boolean(assignment),
+  assignment: () => assignment,
   assignmentKey: () => assignmentKey,
   els: () => els,
   clock: () => clock(),
@@ -2071,11 +2073,10 @@ function peekDepth(id) {
  */
 export async function openInvestigation(id, opts = {}) {
   const generation = ++openGeneration;
-  // The one await in the panel's life. Everything below it runs against a
-  // lesson that is fully in hand, so no other code path had to learn that a
-  // lesson might not be there yet.
+  // The one await in the panel's life: below it, the lesson is fully in hand.
   let inv = await loadInvestigation(id);
-  if (!inv || generation !== openGeneration) return;
+  if (generation !== openGeneration) return;
+  if (!inv) return { ok: false, reason: 'noLesson' };
   // A question whose expected value is a formula over the student's own
   // measurements (js/formula/grade.js) is bound to read them, so every grader
   // below sees the number that student is owed; the module loads only for a
@@ -2128,12 +2129,9 @@ export async function openInvestigation(id, opts = {}) {
     throw new Error(`Unsafe step id: ${JSON.stringify(unsafe.sid)}`);
   }
 
-  // An assignment is the same lesson with most of its steps taken out. It is
-  // built here rather than being a second kind of thing the panel has to know
-  // about: everything below works on `active`, and `active.id` stays the
-  // lesson's, so a response key means the same question whether it was
-  // answered in the assignment or in the whole lesson.
+  // An assignment is the same lesson with steps taken out (`active.id` stays its).
   assignment = opts.assignment ?? null;
+  setEntryLink(opts.link);
   assignmentBinding = null;
   if (assignment) {
     assignmentBinding = stepBindings(assignment, inv, stepFingerprint);
@@ -2593,13 +2591,15 @@ function openInvestigationFromHash() {
   const [id, depth] = investigationFromHash();
   if (!id) return;
   if (!hasInvestigation(id)) {
-    toast(t('inv.link.unknown'));
+    refuseLink({ why: t('inv.link.unknown') });
     return;
   }
   if (active?.id === id) return;
-  openInvestigation(id, { depth }).catch(err =>
-    loadFailed(() => openInvestigation(id, { depth }).catch(() => {}), err)
-  );
+  openInvestigation(id, { depth })
+    .then(r => r?.ok === false && toast(t('inv.load.failed')))
+    .catch(err =>
+      loadFailed(() => openInvestigation(id, { depth }).catch(() => {}), err)
+    );
 }
 
 // A language change swaps the manifest the cards are drawn from, and rewrites

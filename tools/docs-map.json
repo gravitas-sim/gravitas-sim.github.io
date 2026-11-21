@@ -170,6 +170,14 @@
       "student": false
     },
     {
+      "file": "CLASSROOM_ENTRY.md",
+      "kind": "gate",
+      "purpose": "How every kind of link and every resume point lands on its task, before and after.",
+      "owner": 363,
+      "added": "2026-11-19",
+      "student": false
+    },
+    {
       "file": "CLASSROOM_SERVICE_GATE.md",
       "kind": "gate",
       "purpose": "Classroom services: product, privacy and service-boundary gate.",

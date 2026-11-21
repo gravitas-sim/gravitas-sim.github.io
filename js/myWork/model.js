@@ -14,6 +14,8 @@ import {
   KEY_STUDENT_NAME,
   KEY_TERMS,
   KEY_TEACHING_NOTES_PREFIX,
+  ENTRY_LINK,
+  isKeptLink,
 } from '../names.js';
 // =============================================================================
 // What a student has made, read from the records the writers keep
@@ -62,6 +64,7 @@ const GUIDE_KEYS = [
   [KEY_LAB3D_GUIDE_PREFIX, 'lab3d', '/3d/'],
   [KEY_MISSIONLAB_PREFIX, 'mission', '/mission/lab/'],
 ];
+export { ENTRY_LINK };
 const isObj = v => v && typeof v === 'object' && !Array.isArray(v);
 const count = v => (Array.isArray(v) ? new Set(v).size : 0);
 const iso = ms =>
@@ -147,6 +150,9 @@ export function describe(records, library = new Map()) {
       const e = entryOf(value?.lesson);
       out.assignments.push({
         key,
+        // The address the work was opened from (js/investigations/stepView.js,
+        // ENTRY_LINK holds the same shape): a record made before it has none.
+        ...(isKeptLink(value?.link) ? { href: `/${value.link}` } : {}),
         title: e?.title ?? value?.lesson ?? key,
         seen: count(value?.visited),
         answered: isObj(value?.responses)

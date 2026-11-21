@@ -419,6 +419,7 @@
     #investigationBrowser,
     #investigationFinish,
     #investigationRestart,
+    #linkNotice,
     #shareModal,
     #dataExport,
     #mobileInstructions {
@@ -492,6 +493,7 @@
     #investigationFinish,
   :is(body.investigation-open, body.investigation-browser-open)
     #investigationRestart,
+  :is(body.investigation-open, body.investigation-browser-open) #linkNotice,
   :is(body.investigation-open, body.investigation-browser-open) #shareModal,
   :is(body.investigation-open, body.investigation-browser-open) #dataExport,
   :is(body.investigation-open, body.investigation-browser-open)

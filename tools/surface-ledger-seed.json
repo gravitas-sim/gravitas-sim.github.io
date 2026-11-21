@@ -1635,6 +1635,24 @@
       "note": ""
     },
     {
+      "id": "dialog:link-notice",
+      "kind": "dialog",
+      "locator": {
+        "page": "index.html",
+        "element": "linkNotice",
+        "opener": "A link that cannot be opened (js/assignments/linkNotice.js, js/notify.js refuseLink)",
+        "native": true
+      },
+      "purpose": "Why an assignment, activity, pack or investigation link could not be opened, who can fix it, and the one way on: the investigation on its own, a reload or the Library.",
+      "audience": "student",
+      "primary_action": "Open the investigation on its own, reload the page or find it in the Library",
+      "job": "lesson",
+      "template": null,
+      "owner": 456,
+      "supporting": [],
+      "note": ""
+    },
+    {
       "id": "dialog:share",
       "kind": "dialog",
       "locator": {
@@ -1889,7 +1907,7 @@
       "kind": "not-a-surface",
       "locator": {
         "glob": "js/fragments/*.html",
-        "count": 10
+        "count": 11
       },
       "purpose": "Panel markup fetched into the sandbox page at run time; not pages.",
       "audience": "n/a",
