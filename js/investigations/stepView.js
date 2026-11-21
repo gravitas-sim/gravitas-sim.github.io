@@ -2,9 +2,8 @@
 // What a step looks like: its markup
 // -----------------------------------------------------------------------------
 // The part of renderStep that only reads: the step and the reader's state (in
-// `c`) in, the panel's markup out as strings. Below it: the saved record's
-// persistence and the answer boxes' listeners. Pure to import (no canvas, no
-// simulation), and folded in here to keep the lesson routes' request count.
+// `c`) in, markup out as strings; then the saved record and the answer boxes'
+// listeners. Folded in here to keep the lesson routes' request count.
 // =============================================================================
 
 import { formatNumber } from '../format.js';
@@ -63,12 +62,13 @@ export const misconceptionText = missed =>
 export const SHORT_ANSWER_MIN = 40;
 
 /**
- * Six places a lazy module adds to a step (an empty slot is the step as it was),
+ * Seven places a lazy module adds to a step (an empty slot is the step as it was),
  * filled when a lesson opens: field (importFromSelection, source, take, span),
- * runs (variation), reveal, time, canvas, feedback.
+ * menu (options), runs (variation), reveal, time, canvas, feedback.
  */
 export const slots = {
   field: null,
+  menu: null,
   runs: null,
   reveal: null,
   time: null,
@@ -411,12 +411,7 @@ export function stepMarkup(step, c) {
               <span class="inv-field-label">${prose(f.label)}${f.unit ? ` <span class="inv-field-unit">(${escape(f.unit)})</span>` : ''}${derived ? ` <span class="inv-field-auto">${escape(t('inv.field.auto'))}</span>` : ''}</span>
               ${
                 f.options
-                  ? `<select data-field="${attr(key)}"><option value="">${escape(t('inv.field.choose'))}</option>${f.options
-                      .map(
-                        o =>
-                          `<option${menuValue(responses[key]) === String(o) ? ' selected' : ''}>${escape(menuText(o))}</option>`
-                      )
-                      .join('')}</select>`
+                  ? slots.menu(key, f.options, responses[key])
                   : `<input type="text" ${f.kind === 'text' ? '' : 'inputmode="decimal"'}
                      data-field="${attr(key)}" value="${attr(responses[key] ?? '')}"
                      ${derived ? 'readonly tabindex="-1"' : ''}
@@ -881,14 +876,6 @@ export function bindStepInputs(h) {
 // Kept here and not in js/answerParse.js: that module is a source of the
 // instructor bundle, and changing it would need the bundle rebuilt.
 
-/** A menu option's text: a number in the reader's decimal mark ("9,21" in Spanish), anything else as written. */
-const menuText = o =>
-  typeof o === 'number'
-    ? String(o).replace('.', decimalSeparatorFor(getLocale()))
-    : String(o);
-/** A stored menu choice with a decimal comma read as a point, to compare with the option's own number. */
-const menuValue = r => String(r ?? '').replace(/^(\d+),(\d+)$/, '$1.$2');
-
 /** A field as a number: its own convention, trailing text NaN, ".5" kept. */
 export function parseFieldNumber(raw, locale) {
   const p = parseNumber(
@@ -914,8 +901,7 @@ export const formatFieldNumber = (value, decimals, locale) =>
  * What persistence needs of the engine: state() is {active, responses,
  * attempts, visited, stepIndex, startedAt, depthChoice, deepest, spent,
  * progressNotes}; authoring() and assigned() are booleans; assignmentKey() is
- * where an assignment's progress lives; els() the elements; clock() brings the
- * time spent up to date.
+ * where an assignment's progress lives; els() the elements; clock() the time spent.
  * @typedef {Object} PersistenceHost
  */
 /** @type {PersistenceHost} */
@@ -1240,15 +1226,11 @@ function read(id, lesson) {
 }
 
 /**
- * How far through an investigation a student is.
- *
- * `done` counts steps seen (the progress bar); `at` is the step a resume lands
- * on, which differs once a student has gone back to reread.
+ * How far through an investigation a student is: `done` counts steps seen (the
+ * progress bar); `at` is the step a resume lands on.
  *
  * @param {string} id - Investigation id
- * @param {number} total - Steps in it. The lesson browser reads this from the
- *   manifest, which the engine does not import: the browser asks for all of
- *   them before any is loaded.
+ * @param {number} total - Steps in it (the browser reads it from the manifest)
  * @returns {{done:number, total:number, started:boolean, at:number}} Progress
  */
 export function progressFor(id, total = 0) {

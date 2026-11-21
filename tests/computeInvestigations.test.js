@@ -1,7 +1,8 @@
 import { describe, test, expect } from '@jest/globals';
 import { readFileSync } from 'node:fs';
 import { setLocale } from '../js/i18n/index.js';
-import { stepMarkup } from '../js/investigations/stepView.js';
+import { slots, stepMarkup } from '../js/investigations/stepView.js';
+import { select } from '../js/investigations/menu.js';
 
 import INTEGRATORS from '../js/data/investigations/integrators-in-practice.js';
 import EXTENDING from '../js/data/investigations/extending-an-experiment.js';
@@ -1323,6 +1324,8 @@ describe('Sampling a Posterior', () => {
   });
 
   test('a numeric menu option is written in the reader’s decimal mark, and a stored choice in either mark is the selected one', async () => {
+    // The menu's markup is a lazy module the engine installs when a lesson opens.
+    slots.menu = select;
     const drawn = (responses, id = 'the-draws-at-your-ratio') =>
       stepMarkup(draws, {
         id,
