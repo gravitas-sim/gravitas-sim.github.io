@@ -1200,8 +1200,8 @@
         "js/data/investigations/planets-sequence.js"
       ],
       "instrument_files": [],
-      "depths": { "core": 9, "quantitative": 0, "advanced": 0 },
-      "spanish_steps": { "core": 9, "deeper": 0 },
+      "depths": { "core": 10, "quantitative": 0, "advanced": 0 },
+      "spanish_steps": { "core": 10, "deeper": 0 },
       "languages": ["en", "es"],
       "sequences": [{ "id": "planets-and-the-sun", "position": 9 }],
       "courses": [
@@ -3647,8 +3647,8 @@
         "js/data/investigations/planets-sequence.js"
       ],
       "instrument_files": ["js/jovianWidgets.js"],
-      "depths": { "core": 10, "quantitative": 0, "advanced": 0 },
-      "spanish_steps": { "core": 10, "deeper": 0 },
+      "depths": { "core": 11, "quantitative": 0, "advanced": 0 },
+      "spanish_steps": { "core": 11, "deeper": 0 },
       "languages": ["en", "es"],
       "sequences": [{ "id": "planets-and-the-sun", "position": 3 }],
       "courses": [
