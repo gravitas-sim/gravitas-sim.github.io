@@ -637,10 +637,7 @@ const A_UNIVERSE_OF_STARS = {
       kind: 'choice',
       body: `Now move the other way. Put the cursor at 1 solar luminosity and
              travel along that line, from the cool right-hand side to the hot
-             left-hand side, watching the radius.
-             \n\nAt a fixed luminosity, a hotter surface radiates far harder
-             per square meter — as the fourth power of the temperature — so
-             the star needs fewer square meters to put out the same light.`,
+             left-hand side, watching the radius.`,
       prompt:
         'Moving left along a line of constant luminosity, from 3,000 K to 30,000 K, the radius…',
       options: [
@@ -663,7 +660,7 @@ const A_UNIVERSE_OF_STARS = {
         },
       ],
       because:
-        'It shrinks by about a hundred. Ten times the temperature is ten to the fourth - ten thousand times - the output per square meter, and to hold the total light fixed the area must fall by the same ten thousand, which is a hundred in radius. Check it on the diagram: at 1 L(sun) the cool end is about 3.7 solar radii and the hot end about 0.037. That second number is white-dwarf territory, and step 20 comes back to it.',
+        'It shrinks by about a hundred. At a fixed luminosity a hotter surface radiates far harder per square meter, as the fourth power of the temperature, so the star needs fewer square meters to put out the same light. Ten times the temperature is ten to the fourth - ten thousand times - the output per square meter, and to hold the total light fixed the area must fall by the same ten thousand, which is a hundred in radius. Check it on the diagram: at 1 L(sun) the cool end is about 3.7 solar radii and the hot end about 0.037. That second number is white-dwarf territory, and step 20 comes back to it.',
       tool: lab({
         bind: 'cursor',
         mode: 'free',
@@ -1063,9 +1060,7 @@ const A_UNIVERSE_OF_STARS = {
              kelvin — more than four times the Sun&rsquo;s surface temperature
              — putting out a hundredth of the Sun&rsquo;s light.
              \n\nYou now have everything you need to say how big it is
-             without being told. Each square meter of a surface at 25,000 K
-             radiates far more than a square meter at 5,772 K; this star still
-             manages to be a hundred times fainter overall.
+             without being told.
              \n\nCommit before you measure.`,
       prompt: 'So how much surface can it have?',
       options: [
@@ -1178,8 +1173,8 @@ const A_UNIVERSE_OF_STARS = {
       title: 'More fuel, longer life?',
       body: `A twenty solar-mass star has a hundred times as much material as a
              0.2 solar-mass one. A hundred times the fuel.
-             \n\nYou also measured, in step 15, that it puts out something like
-             nine million times as much light — and light is the fuel leaving.
+             \n\nYou also measured, in step 13, that it puts out something like
+             nine million times as much light.
              \n\nCommit before you look it up.`,
       prompt:
         'The 20 M☉ star&rsquo;s main-sequence life, compared with the 0.2 M☉ star&rsquo;s, is…',
@@ -1191,7 +1186,7 @@ const A_UNIVERSE_OF_STARS = {
       ],
       answer: 2,
       because:
-        'Shorter by more than a hundred thousand. This is the single most useful consequence of the steep mass-luminosity relation, and it is worth stating as a ratio: how long the fuel lasts is how much there is divided by how fast it goes. The fuel goes as the mass, and the rate goes as the luminosity, which goes as roughly the mass to the 3.5. So the lifetime goes as mass divided by mass-to-the-3.5, which is one over mass-to-the-2.5. A hundred times the mass is a hundred to the power two and a half - a hundred thousand - times shorter. The next step measures it.',
+        'Shorter by more than a hundred thousand. This is the single most useful consequence of the steep mass-luminosity relation, and it is worth stating as a ratio: how long the fuel lasts is how much there is divided by how fast it goes. The fuel goes as the mass, and the rate goes as the luminosity, because light is the fuel leaving; the luminosity goes as roughly the mass to the 3.5. So the lifetime goes as mass divided by mass-to-the-3.5, which is one over mass-to-the-2.5. A hundred times the mass is a hundred to the power two and a half - a hundred thousand - times shorter. The next step measures it.',
       tool: lab({ mode: 'model', regions: true, compare: false }),
       tip: 'A car with a bigger tank does not necessarily go further. It depends what the engine does with it.',
     },

@@ -159,7 +159,7 @@ export default {
     'sideways-at-one-luminosity': {
       stage: { stars: [{ name: 'Tu estrella' }] },
       title: 'De lado, a una luminosidad',
-      body: 'Ahora en la otra dirección. Pon el cursor en 1 luminosidad solar y recorre esa línea, del lado frío de la derecha al lado caliente de la izquierda, mirando el radio.\n\nA luminosidad fija, una superficie más caliente radia muchísimo más por metro cuadrado —con la cuarta potencia de la temperatura—, así que la estrella necesita menos metros cuadrados para emitir la misma luz.',
+      body: 'Ahora en la otra dirección. Pon el cursor en 1 luminosidad solar y recorre esa línea, del lado frío de la derecha al lado caliente de la izquierda, mirando el radio.',
       prompt:
         'Moviéndose a la izquierda por una línea de luminosidad constante, de 3.000 K a 30.000 K, el radio…',
       options: [
@@ -177,7 +177,7 @@ export default {
         },
       ],
       because:
-        'Se reduce unas cien veces. Diez veces la temperatura son diez a la cuarta —diez mil veces— de emisión por metro cuadrado, y para mantener fija la luz total el área tiene que caer esas mismas diez mil, que son cien en radio. Compruébalo en el diagrama: a 1 L(sol) el extremo frío está en unos 3,7 radios solares y el caliente en unos 0,037. Ese segundo número es territorio de enana blanca, y el paso 20 vuelve sobre él.',
+        'Se reduce unas cien veces. A luminosidad fija, una superficie más caliente radia muchísimo más por metro cuadrado, con la cuarta potencia de la temperatura, así que la estrella necesita menos metros cuadrados para emitir la misma luz. Diez veces la temperatura son diez a la cuarta —diez mil veces— de emisión por metro cuadrado, y para mantener fija la luz total el área tiene que caer esas mismas diez mil, que son cien en radio. Compruébalo en el diagrama: a 1 L(sol) el extremo frío está en unos 3,7 radios solares y el caliente en unos 0,037. Ese segundo número es territorio de enana blanca, y el paso 20 vuelve sobre él.',
       tip: 'Los dos movimientos —hacia arriba y a lo largo del diagrama— son la misma relación usada en direcciones distintas. No se está introduciendo nada nuevo.',
     },
     'lines-of-constant-radius': {
@@ -351,9 +351,7 @@ export default {
              kelvin —más de cuatro veces la temperatura superficial del Sol—
              que emite una centésima de su luz.
              \n\nYa tienes todo lo que hace falta para decir su tamaño sin
-             que nadie te lo diga. Cada metro cuadrado de una superficie a
-             25.000 K radia muchísimo más que uno a 5.772 K; aun así, esta
-             estrella consigue ser cien veces más débil en total.
+             que nadie te lo diga.
              \n\nDecídete antes de medir.`,
       prompt: '¿Cuánta superficie puede tener entonces?',
       options: [
@@ -404,7 +402,7 @@ export default {
         stars: [{ name: '0,2 M☉' }, { name: '1 M☉' }, { name: '20 M☉' }],
       },
       title: '¿Más combustible, más vida?',
-      body: 'Una estrella de veinte masas solares tiene cien veces más material que una de 0,2. Cien veces el combustible.\n\nTambién has medido, en el paso 15, que emite algo así como nueve millones de veces más luz, y la luz es el combustible saliendo.\n\nComprométete antes de consultarlo.',
+      body: 'Una estrella de veinte masas solares tiene cien veces más material que una de 0,2. Cien veces el combustible.\n\nTambién has medido, en el paso 13, que emite algo así como nueve millones de veces más luz.\n\nComprométete antes de consultarlo.',
       prompt:
         'La vida en la secuencia principal de la estrella de 20 M☉, comparada con la de 0,2 M☉, es…',
       options: [
@@ -414,7 +412,7 @@ export default {
         'unas diez veces más corta',
       ],
       because:
-        'Más de cien mil veces más corta. Esta es la consecuencia más útil de lo pronunciada que es la relación masa-luminosidad, y conviene enunciarla como una razón: lo que dura el combustible es cuánto hay dividido por lo deprisa que se va. El combustible va con la masa y el ritmo va con la luminosidad, que va aproximadamente con la masa a la 3,5. Así que la vida va con la masa dividida por la masa a la 3,5, que es uno partido por la masa a la 2,5. Cien veces la masa son cien elevado a dos y medio —cien mil— veces menos. El paso siguiente lo mide.',
+        'Más de cien mil veces más corta. Esta es la consecuencia más útil de lo pronunciada que es la relación masa-luminosidad, y conviene enunciarla como una razón: lo que dura el combustible es cuánto hay dividido por lo deprisa que se va. El combustible va con la masa y el ritmo va con la luminosidad, porque la luz es el combustible saliendo; la luminosidad va aproximadamente con la masa a la 3,5. Así que la vida va con la masa dividida por la masa a la 3,5, que es uno partido por la masa a la 2,5. Cien veces la masa son cien elevado a dos y medio —cien mil— veces menos. El paso siguiente lo mide.',
       tip: 'Un coche con un depósito mayor no llega necesariamente más lejos. Depende de lo que haga el motor con él.',
     },
     'measure-the-lifetimes': {
