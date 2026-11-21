@@ -77594,6 +77594,10 @@
     "placement": true,
     "inspector": true
    },
+   "canvas": [
+    "quiet",
+    "scene"
+   ],
    "steps": [
     {
      "sid": "one-system-four-steps",
@@ -77606,6 +77610,7 @@
       "roles": []
      },
      "kinds": [],
+     "canvas": "quiet",
      "actions": [
       "read"
      ],
@@ -77618,7 +77623,7 @@
       "rubric": false,
       "validated": false
      },
-     "worldRunning": false,
+     "worldRunning": "inherited",
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
@@ -77643,12 +77648,10 @@
      "instrument": null,
      "evidence": [],
      "reset": [
-      "rebuilds: scenario \"Circumbinary Planet Lab\" seed binary",
+      "inherits the world already on screen",
       "lesson locks: placement, inspector"
      ],
-     "recovery": [
-      "reset: rebuilds the scenario on arrival"
-     ]
+     "recovery": []
     },
     {
      "sid": "which-loses-most",
@@ -77661,6 +77664,7 @@
       "roles": []
      },
      "kinds": [],
+     "canvas": "quiet",
      "actions": [
       "commit-a-prediction"
      ],
@@ -77673,7 +77677,7 @@
       "rubric": false,
       "validated": false
      },
-     "worldRunning": false,
+     "worldRunning": "inherited",
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
@@ -77717,6 +77721,7 @@
       "external-computation",
       "captured-evidence"
      ],
+     "canvas": "quiet",
      "actions": [
       "record-values"
      ],
@@ -77729,7 +77734,7 @@
       "rubric": false,
       "validated": true
      },
-     "worldRunning": false,
+     "worldRunning": "inherited",
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
@@ -77776,6 +77781,7 @@
       "roles": []
      },
      "kinds": [],
+     "canvas": "quiet",
      "actions": [
       "choose-an-option"
      ],
@@ -77788,7 +77794,7 @@
       "rubric": false,
       "validated": false
      },
-     "worldRunning": false,
+     "worldRunning": "inherited",
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
@@ -77818,10 +77824,64 @@
      "recovery": []
     },
     {
-     "sid": "halve-the-step",
+     "sid": "predict-the-halving",
      "index": 5,
+     "type": "predict",
+     "title": "Predict the effect of the step",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [],
+     "canvas": "quiet",
+     "actions": [
+      "commit-a-prediction"
+     ],
+     "requires": [],
+     "reveal": "the-engine",
+     "asks": {
+      "choice": true,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "predict",
+      "actual": [
+       "predict",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": []
+    },
+    {
+     "sid": "choose-the-second-step",
+     "index": 6,
      "type": "measure",
-     "title": "Halve the step",
+     "title": "Choose the second step",
      "declares": {
       "stage": null,
       "bound": [],
@@ -77831,6 +77891,7 @@
       "external-computation",
       "captured-evidence"
      ],
+     "canvas": "scene",
      "actions": [
       "record-values"
      ],
@@ -77872,16 +77933,18 @@
       "notebook-fields"
      ],
      "reset": [
+      "rebuilds: scenario \"Circumbinary Planet Lab\" seed binary",
       "lesson locks: placement, inspector"
      ],
      "recovery": [
       "missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand",
+      "reset: rebuilds the scenario on arrival",
       "ambiguous result: the check says in words how close is close enough"
      ]
     },
     {
      "sid": "the-engine",
-     "index": 6,
+     "index": 7,
      "type": "measure",
      "title": "Against the application",
      "declares": {
@@ -77893,6 +77956,7 @@
       "external-computation",
       "captured-evidence"
      ],
+     "canvas": "scene",
      "actions": [
       "record-values"
      ],
@@ -77943,7 +78007,7 @@
     },
     {
      "sid": "phase-luck",
-     "index": 7,
+     "index": 8,
      "type": "question",
      "title": "A number that is not a property",
      "declares": {
@@ -77952,6 +78016,60 @@
       "roles": []
      },
      "kinds": [],
+     "canvas": "scene",
+     "actions": [
+      "choose-an-option"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": true,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "interpret",
+      "actual": [
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": []
+    },
+    {
+     "sid": "trust-at-six-orbits",
+     "index": 9,
+     "type": "question",
+     "title": "Which number to trust at six orbits",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [],
+     "canvas": "scene",
      "actions": [
       "choose-an-option"
      ],
@@ -77995,7 +78113,7 @@
     },
     {
      "sid": "what-you-worked-out",
-     "index": 8,
+     "index": 10,
      "type": "read",
      "title": "What you worked out",
      "declares": {
@@ -78004,6 +78122,7 @@
       "roles": []
      },
      "kinds": [],
+     "canvas": "scene",
      "actions": [
       "read"
      ],
@@ -78053,16 +78172,32 @@
      "heldUntil": "four-drifts",
      "experiment": [],
      "measure": [
-      "four-drifts",
-      "halve-the-step",
+      "four-drifts"
+     ],
+     "evidence": [
+      "four-drifts"
+     ],
+     "interpret": "four-drifts",
+     "measuredBeforeAnswering": true,
+     "explained": false,
+     "answeredByTheExperiment": true,
+     "closed": true,
+     "complete": true
+    },
+    {
+     "predict": "predict-the-halving",
+     "predictCollects": true,
+     "heldUntil": "the-engine",
+     "experiment": [],
+     "measure": [
+      "choose-the-second-step",
       "the-engine"
      ],
      "evidence": [
-      "four-drifts",
-      "halve-the-step",
+      "choose-the-second-step",
       "the-engine"
      ],
-     "interpret": "four-drifts",
+     "interpret": "the-engine",
      "measuredBeforeAnswering": true,
      "explained": false,
      "answeredByTheExperiment": true,
@@ -78071,7 +78206,7 @@
     }
    ],
    "totals": {
-    "steps": 8,
+    "steps": 10,
     "declared": 0,
     "student": 0,
     "engine": 0,
@@ -78081,7 +78216,7 @@
     "evidence": 3,
     "computation": 3,
     "declaredButInert": 0,
-    "prose": 5,
+    "prose": 7,
     "mismatched": 0,
     "rebuilds": 1
    }
@@ -78093,6 +78228,10 @@
     "placement": true,
     "inspector": true
    },
+   "canvas": [
+    "quiet",
+    "scene"
+   ],
    "steps": [
     {
      "sid": "twenty-planets",
@@ -78105,6 +78244,7 @@
       "roles": []
      },
      "kinds": [],
+     "canvas": "quiet",
      "actions": [
       "read"
      ],
@@ -78117,7 +78257,7 @@
       "rubric": false,
       "validated": false
      },
-     "worldRunning": false,
+     "worldRunning": "inherited",
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
@@ -78142,12 +78282,10 @@
      "instrument": null,
      "evidence": [],
      "reset": [
-      "rebuilds: scenario \"Binary Planet Lab\" seed binary",
+      "inherits the world already on screen",
       "lesson locks: placement, inspector"
      ],
-     "recovery": [
-      "reset: rebuilds the scenario on arrival"
-     ]
+     "recovery": []
     },
     {
      "sid": "how-well-can-twenty-place-an-edge",
@@ -78160,6 +78298,7 @@
       "roles": []
      },
      "kinds": [],
+     "canvas": "quiet",
      "actions": [
       "commit-a-prediction"
      ],
@@ -78172,7 +78311,7 @@
       "rubric": false,
       "validated": false
      },
-     "worldRunning": false,
+     "worldRunning": "inherited",
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
@@ -78216,6 +78355,7 @@
       "external-computation",
       "captured-evidence"
      ],
+     "canvas": "quiet",
      "actions": [
       "record-values"
      ],
@@ -78228,7 +78368,7 @@
       "rubric": false,
       "validated": true
      },
-     "worldRunning": false,
+     "worldRunning": "inherited",
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
@@ -78278,6 +78418,7 @@
       "external-computation",
       "captured-evidence"
      ],
+     "canvas": "quiet",
      "actions": [
       "record-values"
      ],
@@ -78290,7 +78431,7 @@
       "rubric": false,
       "validated": true
      },
-     "worldRunning": false,
+     "worldRunning": "inherited",
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
@@ -78337,6 +78478,7 @@
       "roles": []
      },
      "kinds": [],
+     "canvas": "quiet",
      "actions": [
       "choose-an-option"
      ],
@@ -78349,7 +78491,7 @@
       "rubric": false,
       "validated": false
      },
-     "worldRunning": false,
+     "worldRunning": "inherited",
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
@@ -78379,7 +78521,7 @@
      "recovery": []
     },
     {
-     "sid": "move-the-definition",
+     "sid": "move-the-definition-yours",
      "index": 6,
      "type": "measure",
      "title": "Move the definition",
@@ -78392,6 +78534,7 @@
       "external-computation",
       "captured-evidence"
      ],
+     "canvas": "scene",
      "actions": [
       "record-values"
      ],
@@ -78433,35 +78576,40 @@
       "notebook-fields"
      ],
      "reset": [
+      "rebuilds: scenario \"Binary Planet Lab\" seed binary",
       "lesson locks: placement, inspector"
      ],
      "recovery": [
       "missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand",
+      "reset: rebuilds the scenario on arrival",
       "ambiguous result: the check says in words how close is close enough"
      ]
     },
     {
-     "sid": "what-moved-it",
+     "sid": "which-trial-moved",
      "index": 7,
-     "type": "question",
-     "title": "What moved the edge",
+     "type": "measure",
+     "title": "Which trial moved",
      "declares": {
       "stage": null,
       "bound": [],
       "roles": []
      },
-     "kinds": [],
+     "kinds": [
+      "captured-evidence"
+     ],
+     "canvas": "scene",
      "actions": [
-      "choose-an-option"
+      "record-values"
      ],
      "requires": [],
      "reveal": null,
      "asks": {
-      "choice": true,
+      "choice": false,
       "numeric": false,
       "short": false,
       "rubric": false,
-      "validated": false
+      "validated": true
      },
      "worldRunning": false,
      "affordances": {
@@ -78470,11 +78618,12 @@
       "areaSweep": "locked"
      },
      "loop": {
-      "declared": "interpret",
+      "declared": "measure",
       "actual": [
+       "measure",
        "interpret"
       ],
-      "handTranscribed": false,
+      "handTranscribed": true,
       "mismatch": null
      },
      "scene": {
@@ -78486,11 +78635,16 @@
       "eventWatch": null
      },
      "instrument": null,
-     "evidence": [],
+     "evidence": [
+      "notebook-fields"
+     ],
      "reset": [
       "lesson locks: placement, inspector"
      ],
-     "recovery": []
+     "recovery": [
+      "missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand",
+      "ambiguous result: the check says in words how close is close enough"
+     ]
     },
     {
      "sid": "what-you-worked-out",
@@ -78503,6 +78657,7 @@
       "roles": []
      },
      "kinds": [],
+     "canvas": "scene",
      "actions": [
       "read"
      ],
@@ -78554,12 +78709,14 @@
      "measure": [
       "the-fit",
       "a-uniform-population",
-      "move-the-definition"
+      "move-the-definition-yours",
+      "which-trial-moved"
      ],
      "evidence": [
       "the-fit",
       "a-uniform-population",
-      "move-the-definition"
+      "move-the-definition-yours",
+      "which-trial-moved"
      ],
      "interpret": "the-fit",
      "measuredBeforeAnswering": true,
@@ -78577,10 +78734,10 @@
     "model": 0,
     "data": 0,
     "diagram": 0,
-    "evidence": 3,
+    "evidence": 4,
     "computation": 3,
     "declaredButInert": 0,
-    "prose": 5,
+    "prose": 4,
     "mismatched": 0,
     "rebuilds": 1
    }
@@ -78592,6 +78749,9 @@
     "placement": true,
     "inspector": true
    },
+   "canvas": [
+    "quiet"
+   ],
    "steps": [
     {
      "sid": "same-model-another-route",
@@ -78604,6 +78764,7 @@
       "roles": []
      },
      "kinds": [],
+     "canvas": "quiet",
      "actions": [
       "read"
      ],
@@ -78616,7 +78777,7 @@
       "rubric": false,
       "validated": false
      },
-     "worldRunning": false,
+     "worldRunning": "inherited",
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
@@ -78641,12 +78802,10 @@
      "instrument": null,
      "evidence": [],
      "reset": [
-      "rebuilds: scenario \"Transit Lab\" seed transit-lab",
+      "inherits the world already on screen",
       "lesson locks: placement, inspector"
      ],
-     "recovery": [
-      "reset: rebuilds the scenario on arrival"
-     ]
+     "recovery": []
     },
     {
      "sid": "how-close",
@@ -78659,6 +78818,7 @@
       "roles": []
      },
      "kinds": [],
+     "canvas": "quiet",
      "actions": [
       "commit-a-prediction"
      ],
@@ -78671,7 +78831,7 @@
       "rubric": false,
       "validated": false
      },
-     "worldRunning": false,
+     "worldRunning": "inherited",
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
@@ -78715,6 +78875,7 @@
       "external-computation",
       "captured-evidence"
      ],
+     "canvas": "quiet",
      "actions": [
       "record-values"
      ],
@@ -78727,7 +78888,7 @@
       "rubric": false,
       "validated": true
      },
-     "worldRunning": false,
+     "worldRunning": "inherited",
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
@@ -78777,6 +78938,7 @@
       "external-computation",
       "captured-evidence"
      ],
+     "canvas": "quiet",
      "actions": [
       "record-values"
      ],
@@ -78789,7 +78951,7 @@
       "rubric": false,
       "validated": true
      },
-     "worldRunning": false,
+     "worldRunning": "inherited",
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
@@ -78836,6 +78998,7 @@
       "roles": []
      },
      "kinds": [],
+     "canvas": "quiet",
      "actions": [
       "choose-an-option"
      ],
@@ -78848,7 +79011,7 @@
       "rubric": false,
       "validated": false
      },
-     "worldRunning": false,
+     "worldRunning": "inherited",
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
@@ -78878,8 +79041,62 @@
      "recovery": []
     },
     {
-     "sid": "hold-the-limb-darkening",
+     "sid": "predict-the-shift",
      "index": 6,
+     "type": "predict",
+     "title": "How far will it move",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [],
+     "canvas": "quiet",
+     "actions": [
+      "commit-a-prediction"
+     ],
+     "requires": [],
+     "reveal": "shift-from-your-fit",
+     "asks": {
+      "choice": true,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "predict",
+      "actual": [
+       "predict",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": []
+    },
+    {
+     "sid": "shift-from-your-fit",
+     "index": 7,
      "type": "measure",
      "title": "Hold the limb darkening",
      "declares": {
@@ -78891,6 +79108,7 @@
       "external-computation",
       "captured-evidence"
      ],
+     "canvas": "quiet",
      "actions": [
       "record-values"
      ],
@@ -78903,7 +79121,7 @@
       "rubric": false,
       "validated": true
      },
-     "worldRunning": false,
+     "worldRunning": "inherited",
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
@@ -78941,7 +79159,7 @@
     },
     {
      "sid": "what-is-not-counted",
-     "index": 7,
+     "index": 8,
      "type": "question",
      "title": "What the sigmas do not count",
      "declares": {
@@ -78950,6 +79168,7 @@
       "roles": []
      },
      "kinds": [],
+     "canvas": "quiet",
      "actions": [
       "choose-an-option"
      ],
@@ -78962,7 +79181,7 @@
       "rubric": false,
       "validated": false
      },
-     "worldRunning": false,
+     "worldRunning": "inherited",
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
@@ -78993,7 +79212,7 @@
     },
     {
      "sid": "what-you-worked-out",
-     "index": 8,
+     "index": 9,
      "type": "read",
      "title": "What you worked out",
      "declares": {
@@ -79002,6 +79221,7 @@
       "roles": []
      },
      "kinds": [],
+     "canvas": "quiet",
      "actions": [
       "read"
      ],
@@ -79014,7 +79234,7 @@
       "rubric": false,
       "validated": false
      },
-     "worldRunning": false,
+     "worldRunning": "inherited",
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
@@ -79052,15 +79272,31 @@
      "experiment": [],
      "measure": [
       "the-fit",
-      "sigma-and-profile",
-      "hold-the-limb-darkening"
+      "sigma-and-profile"
      ],
      "evidence": [
       "the-fit",
-      "sigma-and-profile",
-      "hold-the-limb-darkening"
+      "sigma-and-profile"
      ],
      "interpret": "the-fit",
+     "measuredBeforeAnswering": true,
+     "explained": false,
+     "answeredByTheExperiment": true,
+     "closed": true,
+     "complete": true
+    },
+    {
+     "predict": "predict-the-shift",
+     "predictCollects": true,
+     "heldUntil": "shift-from-your-fit",
+     "experiment": [],
+     "measure": [
+      "shift-from-your-fit"
+     ],
+     "evidence": [
+      "shift-from-your-fit"
+     ],
+     "interpret": "shift-from-your-fit",
      "measuredBeforeAnswering": true,
      "explained": false,
      "answeredByTheExperiment": true,
@@ -79069,7 +79305,7 @@
     }
    ],
    "totals": {
-    "steps": 8,
+    "steps": 9,
     "declared": 0,
     "student": 0,
     "engine": 0,
@@ -79079,9 +79315,9 @@
     "evidence": 3,
     "computation": 3,
     "declaredButInert": 0,
-    "prose": 5,
+    "prose": 6,
     "mismatched": 0,
-    "rebuilds": 1
+    "rebuilds": 0
    }
   },
   {
@@ -79091,6 +79327,9 @@
     "placement": true,
     "inspector": true
    },
+   "canvas": [
+    "quiet"
+   ],
    "steps": [
     {
      "sid": "two-ways-to-look-for-a-period",
@@ -79103,6 +79342,7 @@
       "roles": []
      },
      "kinds": [],
+     "canvas": "quiet",
      "actions": [
       "read"
      ],
@@ -79115,7 +79355,7 @@
       "rubric": false,
       "validated": false
      },
-     "worldRunning": false,
+     "worldRunning": "inherited",
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
@@ -79140,12 +79380,10 @@
      "instrument": null,
      "evidence": [],
      "reset": [
-      "rebuilds: scenario \"Transit Lab\" seed transit-lab",
+      "inherits the world already on screen",
       "lesson locks: placement, inspector"
      ],
-     "recovery": [
-      "reset: rebuilds the scenario on arrival"
-     ]
+     "recovery": []
     },
     {
      "sid": "the-tallest-peak",
@@ -79158,6 +79396,7 @@
       "roles": []
      },
      "kinds": [],
+     "canvas": "quiet",
      "actions": [
       "commit-a-prediction"
      ],
@@ -79170,7 +79409,7 @@
       "rubric": false,
       "validated": false
      },
-     "worldRunning": false,
+     "worldRunning": "inherited",
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
@@ -79214,6 +79453,7 @@
       "external-computation",
       "captured-evidence"
      ],
+     "canvas": "quiet",
      "actions": [
       "record-values"
      ],
@@ -79226,7 +79466,7 @@
       "rubric": false,
       "validated": true
      },
-     "worldRunning": false,
+     "worldRunning": "inherited",
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
@@ -79273,6 +79513,7 @@
       "roles": []
      },
      "kinds": [],
+     "canvas": "quiet",
      "actions": [
       "choose-an-option"
      ],
@@ -79285,7 +79526,7 @@
       "rubric": false,
       "validated": false
      },
-     "worldRunning": false,
+     "worldRunning": "inherited",
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
@@ -79315,10 +79556,10 @@
      "recovery": []
     },
     {
-     "sid": "the-box",
+     "sid": "the-box-with-your-limit",
      "index": 5,
      "type": "measure",
-     "title": "The best box",
+     "title": "The best box, within your limit",
      "declares": {
       "stage": null,
       "bound": [],
@@ -79328,6 +79569,7 @@
       "external-computation",
       "captured-evidence"
      ],
+     "canvas": "quiet",
      "actions": [
       "record-values"
      ],
@@ -79340,7 +79582,7 @@
       "rubric": false,
       "validated": true
      },
-     "worldRunning": false,
+     "worldRunning": "inherited",
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
@@ -79377,7 +79619,7 @@
      ]
     },
     {
-     "sid": "against-the-fit",
+     "sid": "separation-from-your-period",
      "index": 6,
      "type": "measure",
      "title": "Against the fit",
@@ -79390,6 +79632,7 @@
       "external-computation",
       "captured-evidence"
      ],
+     "canvas": "quiet",
      "actions": [
       "record-values"
      ],
@@ -79402,7 +79645,7 @@
       "rubric": false,
       "validated": true
      },
-     "worldRunning": false,
+     "worldRunning": "inherited",
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
@@ -79449,6 +79692,7 @@
       "roles": []
      },
      "kinds": [],
+     "canvas": "quiet",
      "actions": [
       "choose-an-option"
      ],
@@ -79461,7 +79705,7 @@
       "rubric": false,
       "validated": false
      },
-     "worldRunning": false,
+     "worldRunning": "inherited",
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
@@ -79501,6 +79745,7 @@
       "roles": []
      },
      "kinds": [],
+     "canvas": "quiet",
      "actions": [
       "read"
      ],
@@ -79513,7 +79758,7 @@
       "rubric": false,
       "validated": false
      },
-     "worldRunning": false,
+     "worldRunning": "inherited",
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
@@ -79551,13 +79796,13 @@
      "experiment": [],
      "measure": [
       "the-two-periods",
-      "the-box",
-      "against-the-fit"
+      "the-box-with-your-limit",
+      "separation-from-your-period"
      ],
      "evidence": [
       "the-two-periods",
-      "the-box",
-      "against-the-fit"
+      "the-box-with-your-limit",
+      "separation-from-your-period"
      ],
      "interpret": "the-two-periods",
      "measuredBeforeAnswering": true,
@@ -79580,7 +79825,7 @@
     "declaredButInert": 0,
     "prose": 5,
     "mismatched": 0,
-    "rebuilds": 1
+    "rebuilds": 0
    }
   },
   {
@@ -79590,6 +79835,9 @@
     "placement": true,
     "inspector": true
    },
+   "canvas": [
+    "quiet"
+   ],
    "steps": [
     {
      "sid": "what-a-sampler-does",
@@ -79602,6 +79850,7 @@
       "roles": []
      },
      "kinds": [],
+     "canvas": "quiet",
      "actions": [
       "read"
      ],
@@ -79614,7 +79863,7 @@
       "rubric": false,
       "validated": false
      },
-     "worldRunning": false,
+     "worldRunning": "inherited",
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
@@ -79639,29 +79888,28 @@
      "instrument": null,
      "evidence": [],
      "reset": [
-      "rebuilds: scenario \"Transit Lab\" seed transit-lab",
+      "inherits the world already on screen",
       "lesson locks: placement, inspector"
      ],
-     "recovery": [
-      "reset: rebuilds the scenario on arrival"
-     ]
+     "recovery": []
     },
     {
-     "sid": "how-wide",
+     "sid": "pick-the-ratio-predict-the-width",
      "index": 2,
      "type": "predict",
-     "title": "How wide will it be",
+     "title": "Pick the orbit size, predict the width",
      "declares": {
       "stage": null,
       "bound": [],
       "roles": []
      },
      "kinds": [],
+     "canvas": "quiet",
      "actions": [
       "commit-a-prediction"
      ],
      "requires": [],
-     "reveal": "the-draws",
+     "reveal": "the-draws-at-your-ratio",
      "asks": {
       "choice": true,
       "numeric": false,
@@ -79669,7 +79917,7 @@
       "rubric": false,
       "validated": false
      },
-     "worldRunning": false,
+     "worldRunning": "inherited",
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
@@ -79700,10 +79948,10 @@
      "recovery": []
     },
     {
-     "sid": "the-draws",
+     "sid": "the-draws-at-your-ratio",
      "index": 3,
      "type": "measure",
-     "title": "Run it: the draws",
+     "title": "Run it: the draws at your orbit size",
      "declares": {
       "stage": null,
       "bound": [],
@@ -79713,6 +79961,7 @@
       "external-computation",
       "captured-evidence"
      ],
+     "canvas": "quiet",
      "actions": [
       "record-values"
      ],
@@ -79725,7 +79974,7 @@
       "rubric": false,
       "validated": true
      },
-     "worldRunning": false,
+     "worldRunning": "inherited",
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
@@ -79775,6 +80024,7 @@
       "external-computation",
       "captured-evidence"
      ],
+     "canvas": "quiet",
      "actions": [
       "record-values"
      ],
@@ -79787,7 +80037,7 @@
       "rubric": false,
       "validated": true
      },
-     "worldRunning": false,
+     "worldRunning": "inherited",
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
@@ -79834,6 +80084,7 @@
       "roles": []
      },
      "kinds": [],
+     "canvas": "quiet",
      "actions": [
       "choose-an-option"
      ],
@@ -79846,7 +80097,7 @@
       "rubric": false,
       "validated": false
      },
-     "worldRunning": false,
+     "worldRunning": "inherited",
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
@@ -79886,6 +80137,7 @@
       "roles": []
      },
      "kinds": [],
+     "canvas": "quiet",
      "actions": [
       "choose-an-option"
      ],
@@ -79898,7 +80150,7 @@
       "rubric": false,
       "validated": false
      },
-     "worldRunning": false,
+     "worldRunning": "inherited",
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
@@ -79938,6 +80190,7 @@
       "roles": []
      },
      "kinds": [],
+     "canvas": "quiet",
      "actions": [
       "choose-an-option"
      ],
@@ -79950,7 +80203,7 @@
       "rubric": false,
       "validated": false
      },
-     "worldRunning": false,
+     "worldRunning": "inherited",
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
@@ -79990,6 +80243,7 @@
       "roles": []
      },
      "kinds": [],
+     "canvas": "quiet",
      "actions": [
       "read"
      ],
@@ -80002,7 +80256,7 @@
       "rubric": false,
       "validated": false
      },
-     "worldRunning": false,
+     "worldRunning": "inherited",
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
@@ -80034,19 +80288,19 @@
    ],
    "loops": [
     {
-     "predict": "how-wide",
+     "predict": "pick-the-ratio-predict-the-width",
      "predictCollects": true,
-     "heldUntil": "the-draws",
+     "heldUntil": "the-draws-at-your-ratio",
      "experiment": [],
      "measure": [
-      "the-draws",
+      "the-draws-at-your-ratio",
       "did-it-converge"
      ],
      "evidence": [
-      "the-draws",
+      "the-draws-at-your-ratio",
       "did-it-converge"
      ],
-     "interpret": "the-draws",
+     "interpret": "the-draws-at-your-ratio",
      "measuredBeforeAnswering": true,
      "explained": false,
      "answeredByTheExperiment": true,
@@ -80067,7 +80321,7 @@
     "declaredButInert": 0,
     "prose": 6,
     "mismatched": 0,
-    "rebuilds": 1
+    "rebuilds": 0
    }
   },
   {
@@ -120273,30 +120527,30 @@
   }
  ],
  "totals": {
-  "steps": 1526,
+  "steps": 1529,
   "declared": 1418,
   "student": 164,
   "engine": 178,
   "model": 1007,
   "data": 159,
   "diagram": 878,
-  "evidence": 393,
+  "evidence": 394,
   "computation": 14,
   "declaredButInert": 1254,
-  "prose": 59,
+  "prose": 61,
   "mismatched": 8,
-  "rebuilds": 81,
+  "rebuilds": 78,
   "canvas": {
-   "scene": 0,
+   "scene": 8,
    "portrait": 7,
-   "quiet": 16,
-   "unstated": 1503
+   "quiet": 51,
+   "unstated": 1463
   },
   "lessons": 124,
-  "loops": 197,
-  "closedLoops": 197,
+  "loops": 199,
+  "closedLoops": 199,
   "explainedLoops": 1,
-  "heldLoops": 196,
-  "completeLoops": 197
+  "heldLoops": 198,
+  "completeLoops": 199
  }
 }
