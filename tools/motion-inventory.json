@@ -269,6 +269,13 @@
       "reason": "Text or a readout updates on a timer; nothing on the page moves."
     },
     {
+      "file": "js/investigations/vocabulary.js",
+      "kind": "interval",
+      "treatment": "timer",
+      "what": "The lesson panel's saved-status note, checked once a second while a lesson step is open for a change to the scene since it was drawn",
+      "reason": "Text updates on a timer; nothing on the page moves."
+    },
+    {
       "file": "js/investigationsLoader.js",
       "kind": "interval",
       "treatment": "timer",

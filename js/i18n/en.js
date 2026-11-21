@@ -1429,17 +1429,14 @@ export const EN = {
   // "inv.step.kind.ellipse" where a word should be. They are hands-on screens,
   // so they take the word the other hands-on screens already use rather than
   // introducing two more for a reader to learn.
-  'inv.action.restart': 'Restart',
-  'inv.action.restart.hint':
-    'Clear every answer and start this investigation again',
   'inv.action.back': 'Back',
   'inv.action.back.hint': 'Previous step (Shift + Left arrow)',
   'inv.body.label': 'Investigation step',
   'inv.backup.summary': 'Progress backup',
-  'inv.backup.download': 'Download progress backup',
+  'inv.backup.download': 'Download a backup of your answers',
   'inv.backup.download.hint':
     'Save a copy of your answers to a file you keep. The PDF report is still what you hand in.',
-  'inv.backup.restore': 'Restore progress backup',
+  'inv.backup.restore': 'Restore a backup of your answers',
   'inv.backup.restore.hint': 'Load answers back from a file you saved earlier.',
   'inv.probe.title': 'Live readout',
   'inv.stage.fit': 'Fit comparison',

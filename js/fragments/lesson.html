@@ -21,7 +21,7 @@
     </button>
   </header>
 
-<button
+  <button
     type="button"
     id="investigationSheet"
     class="inv-sheet-handle"
@@ -43,14 +43,9 @@
       <div id="investigationProgressBar"></div>
     </div>
     <span id="investigationProgressText"></span>
-    <button
-      id="investigationResetScenario"
-      class="inv-reset-scenario"
-      title="Put this step's scene and instrument back the way they started. Useful once objects have drifted, merged or left the view. Your answers are kept."
-      aria-label="Reset the scene and instrument for this step"
-      data-said="This step has no scene or instrument to reset. Your answers are kept.|Instrument back at the start of this step. Your answers are kept.|Scene back at the start of this step. Your answers are kept.|Scene and instrument back at the start of this step. Your answers are kept.|Este paso no tiene escena ni instrumento que restablecer. Tus respuestas se conservan.|El instrumento vuelve al inicio de este paso. Tus respuestas se conservan.|La escena vuelve al inicio de este paso. Tus respuestas se conservan.|La escena y el instrumento vuelven al inicio de este paso. Tus respuestas se conservan."
-    >
-      ↺
+    <button id="investigationResetScenario" class="inv-reset-scenario">
+      <span aria-hidden="true">↺</span>
+      <span data-i18n="reset.scene">Reset the scene</span>
     </button>
   </div>
 
@@ -99,6 +94,23 @@
         >Ningún instrumento está acoplado en este paso.</span
       >
     </p>
+    <h3 data-i18n="reset.help.title">Starting over</h3>
+    <ul class="inv-help-tools">
+      <li>
+        <b data-i18n="reset.scene">Reset the scene</b>:
+        <span data-i18n="reset.scene.hint"
+          >Rebuilds this step's scene. Your answers are not changed.</span
+        >
+      </li>
+      <li>
+        <b data-i18n="reset.restart">Start this investigation over</b>:
+        <span data-i18n="reset.restart.hint"
+          >Deletes this investigation's saved answers and starts again at step
+          1. It asks first, and you can undo it until you close this
+          investigation.</span
+        >
+      </li>
+    </ul>
     <h3>
       <span class="gs-en">Report a problem</span
       ><span class="gs-es" lang="es">Informar de un problema</span>
@@ -279,6 +291,21 @@
       aria-live="polite"
       hidden=""
     ></p>
+    <!-- Why Reset the scene is off on this step, as text. -->
+    <p id="investigationResetWhy" class="inv-save-status" hidden=""></p>
+    <!-- Start this investigation over, undone until the investigation closes
+         (js/investigations/restart.js). -->
+    <p id="investigationUndo" class="inv-save-status" hidden="">
+      <span id="investigationUndoText"></span>
+      <button
+        type="button"
+        id="investigationUndoGo"
+        class="ui-button"
+        data-i18n="reset.undo"
+      >
+        Undo
+      </button>
+    </p>
   </div>
 
   <!-- "More" (Prompt 167, the design system): what a step does not ask about
@@ -337,7 +364,7 @@
           data-i18n-title="inv.backup.download.hint"
           data-i18n="inv.backup.download"
         >
-          Download progress backup
+          Download a backup of your answers
         </button>
         <button
           id="investigationBackupRestore"
@@ -346,7 +373,7 @@
           data-i18n-title="inv.backup.restore.hint"
           data-i18n="inv.backup.restore"
         >
-          Restore progress backup
+          Restore a backup of your answers
         </button>
         <input
           id="investigationBackupFile"
@@ -358,11 +385,11 @@
       <button
         id="investigationReset"
         class="ui-button subtle"
-        title="Clear every answer and start this investigation again"
-        data-i18n-title="inv.action.restart.hint"
-        data-i18n="inv.action.restart"
+        title="Deletes this investigation's saved answers and starts again at step 1. It asks first, and you can undo it until you close this investigation."
+        data-i18n-title="reset.restart.hint"
+        data-i18n="reset.restart"
       >
-        Restart
+        Start this investigation over
       </button>
     </div>
   </details>

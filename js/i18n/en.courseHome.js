@@ -26,6 +26,7 @@ export const EN_COURSEHOME = {
   'courseHome.refused.heading': 'This course cannot be opened',
   'courseHome.refused.text':
     'The link or file is not a course Gravitas can read. It may have been cut short when it was copied. Ask for the link again, or for the course file.',
+  'courseHome.error.unknown': 'No course called “{id}” comes with Gravitas.',
   'courseHome.error.tooLarge': 'The file is larger than any course needs.',
   'courseHome.error.notJson': 'The file is not a course file.',
   'courseHome.path.core': 'The core',

@@ -56,7 +56,7 @@ Measured from the committed `sw-manifest.js` and the files it lists, by
 | Images | 121 | 830 KB |
 | Stylesheets | 10 | 500 KB |
 | Fonts | 9 | 140 KB |
-| Panel markup | 10 | 70 KB |
+| Panel markup | 11 | 80 KB |
 | Pages | 12 | 330 KB |
 | Other | 16 | 900 KB |
 | **Total** | **1186** | **18.9 MB** |

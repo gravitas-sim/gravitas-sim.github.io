@@ -147,7 +147,12 @@ describe('the fragments', () => {
       };
       const src = read(loaders[entry.owner] ?? entry.owner);
       expect(src).toContain(`'${host}'`);
-      expect(src).toMatch(/\bmountFragment\(/);
+      // The link notice fetches and inserts its own markup: pulling in the
+      // shared mount helper split a chunk every build route loads.
+      const selfMounted = entry.owner === 'js/assignments/linkNotice.js';
+      expect(src).toMatch(
+        selfMounted ? /template\[data-host=/ : /\bmountFragment\(/
+      );
     }
   );
 

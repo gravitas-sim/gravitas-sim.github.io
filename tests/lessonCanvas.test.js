@@ -128,7 +128,7 @@ describe('the acceptance map follows the declaration', () => {
 describe('the page', () => {
   const html = `
     <canvas id="simulationCanvas" role="img" aria-label="Gravitational simulation" aria-describedby="canvasSummary"></canvas>
-    <button id="investigationResetScenario" aria-label="Reset the scene and instrument for this step" title="long title"></button>
+    <button id="investigationResetScenario"></button>
     <div id="mainControls">
       <button class="rail-section-toggle" id="railScenario" aria-expanded="true"></button>
       <button class="rail-section-toggle" id="railState" aria-expanded="false"></button>
@@ -167,9 +167,6 @@ describe('the page', () => {
       'Picture of Jupiter and Io, not a measurement.'
     );
     expect(canvas().hasAttribute('aria-describedby')).toBe(false);
-    expect(reset().getAttribute('aria-label')).toBe(
-      'Reset the picture and instrument for this step'
-    );
     // A portrait changes nothing else: the rail is as it was, no bar toggle.
     expect(document.getElementById('railScenario').ariaExpanded).toBe('true');
     expect(more()).toBeNull();
@@ -179,7 +176,6 @@ describe('the page', () => {
       'Gravitational simulation'
     );
     expect(canvas().getAttribute('aria-describedby')).toBe('canvasSummary');
-    expect(reset().title).toBe('long title');
   });
 
   test('a scene and none stated leave the page alone', () => {
@@ -202,9 +198,6 @@ describe('the page', () => {
     expect(ownsWorld()).toBe(true);
     expect(canvas().getAttribute('aria-label')).toMatch(
       /No scene on this step/
-    );
-    expect(reset().getAttribute('aria-label')).toBe(
-      'Reset the instrument for this step'
     );
     // Stays empty across the next quiet step, but empties again on a reset.
     stars.push(new StarObject({ x: 0, y: 0 }, { x: 0, y: 0 }, 1000));

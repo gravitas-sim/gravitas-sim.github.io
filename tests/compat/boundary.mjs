@@ -657,6 +657,20 @@ export const BOUNDARY = [
     expect: 'ignored',
     note: 'not a boundary: 2.0.0 ignores a top-level field it does not know (unknownFields: ignored), so a record with a draft opens there with the same answers, attempts and position. The draft is never in `responses`, so no answer, check, report row, backup or submission token carries it. The schema stays 2.',
   },
+  {
+    id: 'progress-link',
+    prompt: 363,
+    kind: 'progress-store',
+    plans:
+      'the address a piece of work was opened from (an assignment, activity or pack link, `#a...`, `#activity=...` or `#i...`), kept as `link`, a top-level string of the progress record written only for work opened from one, so Home, the Library and My work open it again as that',
+    mutate: doc => ({
+      ...clone(doc),
+      link: '#activity=orbital-speed/guided',
+    }),
+    // 2.0.0 opens the record and reads nothing from the field.
+    expect: 'ignored',
+    note: 'not a boundary: 2.0.0 ignores a top-level field it does not know (unknownFields: ignored), so a record with a link opens there with the same answers, attempts and position, and saves again without it, which only means Home and the Library offer the bare investigation again. The link is not in `responses`, so no backup entry, report row or submission token carries it. The resume record (a key of its own) now accepts an address up to 4,000 characters instead of 240; an older build drops an item over 240 and keeps the rest. The schema stays 2.',
+  },
 ];
 
 /**

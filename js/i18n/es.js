@@ -1410,17 +1410,14 @@ export const ES = {
   // --- Tidal comparison table ------------------------------------------------
 
   // --- Lesson panel chrome ---------------------------------------------------
-  'inv.action.restart': 'Reiniciar',
-  'inv.action.restart.hint':
-    'Borrar todas las respuestas y volver a empezar esta investigación',
   'inv.action.back': 'Atrás',
   'inv.action.back.hint': 'Paso anterior (Mayús + flecha izquierda)',
   'inv.body.label': 'Paso de la investigación',
   'inv.backup.summary': 'Copia del progreso',
-  'inv.backup.download': 'Descargar copia del progreso',
+  'inv.backup.download': 'Descargar una copia de tus respuestas',
   'inv.backup.download.hint':
     'Guarda una copia de tus respuestas en un archivo tuyo. El informe PDF sigue siendo lo que se entrega.',
-  'inv.backup.restore': 'Restaurar copia del progreso',
+  'inv.backup.restore': 'Restaurar una copia de tus respuestas',
   'inv.backup.restore.hint':
     'Carga respuestas desde un archivo que guardaste antes.',
   'inv.probe.title': 'Lectura en vivo',

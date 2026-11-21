@@ -127,3 +127,24 @@ export const ID_SYSTEM3D = 'gravitas.system3d';
 export const ID_TESS_HD209458_S56 = 'gravitas.tess-hd209458-s56';
 
 export const DOM_TOAST = 'gravitasToast';
+
+// A link kept with work: shared by the resume record, Home, My work and the
+// lesson panel (a module of its own is a request on every route; four copies drift).
+/** The longest route a resume item may hold (the link and its leading slash). */
+export const RESUME_ROUTE_MAX = 4000;
+/** An assignment (#a), a pack (#i) or an activity (#activity=) link. */
+export const ENTRY_LINK =
+  /^#(?:[ai]\d+[zr][\w-]+|activity=[a-z0-9-]+(?:\/[a-z0-9-]+)?)$/i;
+/** A link worth keeping that fits the record. */
+export const isKeptLink = link =>
+  typeof link === 'string' &&
+  link.length < RESUME_ROUTE_MAX &&
+  ENTRY_LINK.test(link);
+/** A link of the right shape that is too long to keep. */
+export const isTooLongLink = link =>
+  typeof link === 'string' &&
+  link.length >= RESUME_ROUTE_MAX &&
+  ENTRY_LINK.test(link);
+/** On this site: one slash, then not another or a backslash (`/\host` is `//host`). */
+export const isSiteRoute = route =>
+  typeof route === 'string' && /^\/(?![\\/])/.test(route);

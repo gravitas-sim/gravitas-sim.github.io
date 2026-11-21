@@ -205,48 +205,72 @@
   </div>
 </div>
 
-<!-- Restart: asks before it erases the answers (js/investigations/finish.js).
-     A native modal dialog, as My work's delete is; both languages are here, as
-     in "What next", so the catalog does not carry them. -->
-<dialog id="investigationRestart" aria-labelledby="investigationRestartTitle">
+<!-- Start this investigation over: asks before it deletes the answers
+     (js/investigations/restart.js). A native modal dialog, as My work's delete
+     is; the words are js/i18n/en.reset.js. -->
+<dialog
+  id="investigationRestart"
+  aria-labelledby="investigationRestartTitle"
+  aria-describedby="investigationRestartSummary"
+>
   <form method="dialog">
     <div class="inv-finish-header">
-      <h3 id="investigationRestartTitle">
-        <span class="gs-en">Start this investigation over?</span
-        ><span class="gs-es" lang="es"
-          >¿Empezar esta investigación de nuevo?</span
-        >
+      <h3 id="investigationRestartTitle" data-i18n="reset.ask.title">
+        Start this investigation over?
       </h3>
     </div>
-    <div class="inv-finish-summary">
-      <p>
-        <span class="gs-en">Answers recorded here:</span
-        ><span class="gs-es" lang="es">Respuestas registradas aquí:</span>
+    <div class="inv-finish-summary" id="investigationRestartSummary">
+      <p id="investigationRestartCount">
+        <span data-i18n="reset.ask.count"
+          >Saved answers and readings that will be deleted:</span
+        >
         <b id="investigationRestartN"></b>
       </p>
-      <p class="gs-en">
-        Starting over erases them and returns you to step 1. Download a backup
-        first if you may want them back.
+      <p id="investigationRestartNone" hidden="" data-i18n="reset.ask.none">
+        Nothing is saved here yet, so no answers will be deleted.
       </p>
-      <p class="gs-es" lang="es">
-        Empezar de nuevo las borra y te devuelve al paso 1. Descarga antes una
-        copia si quieres poder recuperarlas.
+      <p id="investigationRestartParts"></p>
+      <p
+        id="investigationRestartAssigned"
+        hidden=""
+        data-i18n="reset.ask.assigned"
+      >
+        This is an activity: its saved answers go too. Your instructor's version
+        of the activity does not change.
+      </p>
+      <p data-i18n="reset.ask.scene">
+        The scene is reset too, from the start of step 1.
+      </p>
+      <p id="investigationRestartLost" data-i18n="reset.ask.lost">
+        Discarding removes them from this device. Download a backup first if you
+        may want them back. You can also undo until you close this
+        investigation.
       </p>
     </div>
     <div class="inv-finish-actions">
-      <button type="button" class="ui-button" id="investigationRestartBackup">
-        <span class="gs-en">Download a backup first</span
-        ><span class="gs-es" lang="es">Descargar una copia primero</span>
+      <button
+        type="button"
+        class="ui-button"
+        id="investigationRestartBackup"
+        data-i18n="reset.ask.backup"
+      >
+        Download a backup first
       </button>
-      <button type="button" class="ui-button" id="investigationRestartGo">
-        <span class="gs-en">Erase answers and start over</span
-        ><span class="gs-es" lang="es"
-          >Borrar respuestas y empezar de nuevo</span
-        >
+      <button
+        type="button"
+        class="ui-button"
+        id="investigationRestartGo"
+        data-i18n="reset.ask.go"
+      >
+        Discard answers and start over
       </button>
-      <button class="ui-button primary" value="cancel" autofocus>
-        <span class="gs-en">Cancel</span
-        ><span class="gs-es" lang="es">Cancelar</span>
+      <button
+        class="ui-button primary"
+        value="cancel"
+        autofocus
+        data-i18n="reset.ask.cancel"
+      >
+        Cancel
       </button>
     </div>
   </form>

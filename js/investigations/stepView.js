@@ -37,7 +37,15 @@ import {
   nextHintStage,
 } from '../answerFeedback.js';
 import { command, state } from '../appState.js';
-import { drop, get, noteLesson, put } from '../storage/local.js';
+import {
+  drop,
+  get,
+  noteLesson,
+  noteResume,
+  previewing,
+  put,
+} from '../storage/local.js';
+import { ENTRY_LINK, isKeptLink, isTooLongLink } from '../names.js';
 import { migrateSavedProgress } from '../platform/resolver.js';
 import { assignmentStorageKey, shortHash } from '../assignments/assignment.js';
 import {
@@ -46,7 +54,7 @@ import {
   stepKey,
   writeProgress,
 } from './progressSchema.js';
-import { KEY_INVESTIGATION_PREFIX } from '../names.js';
+import { KEY_ASSIGNMENT_PREFIX, KEY_INVESTIGATION_PREFIX } from '../names.js';
 import { isPeek, openSheet } from '../lessonFrame.js';
 const getAreaSweepWedges = command('getAreaSweepWedges');
 
@@ -896,13 +904,20 @@ export const formatFieldNumber = (value, decimals, locale) =>
 /**
  * What persistence needs of the engine: state() is {active, responses,
  * attempts, visited, stepIndex, startedAt, depthChoice, deepest, spent,
- * progressNotes}; authoring() and assigned() are booleans; assignmentKey() is
+ * progressNotes}; authoring() and assigned() are booleans, assignment() the one
+ * open; assignmentKey() is
  * where an assignment's progress lives; els() the elements; clock() brings the
  * time spent up to date.
  * @typedef {Object} PersistenceHost
  */
 /** @type {PersistenceHost} */
 let host = null;
+
+/** Which investigation is open, how many steps it has seen and where it is. */
+export const sceneContext = () => {
+  const s = host?.state();
+  return { id: s?.active?.id, n: s?.visited.size, i: s?.stepIndex };
+};
 
 /** Hand this module the engine's side, once, when the engine loads. */
 export const bindPersistence = h => {
@@ -951,19 +966,69 @@ export function keyForAssignment(a) {
   return key;
 }
 
-/** Whether the last write reached the disk: 'saved' | 'unavailable' | 'full' | 'authoring' | 'idle'. */
-let saveState = { status: 'idle', at: null };
+// What a link opened (an activity, an assignment or a pack), kept with the work
+// so Home, the Library and My work open it again as that, not as the bare
+// investigation. Set on every open (null for one that came from no link).
+let entry = null;
+let kept = null;
+export { ENTRY_LINK };
 
-function setSaveState(status) {
-  if (saveState.status === status) {
-    // Same outcome as last time: refresh the timestamp for a success so the
-    // reader sees it is still saving, but do not re-render a standing warning
-    // on every keystroke.
-    if (status === 'saved') saveState.at = Date.now();
-    else return;
-  } else {
-    saveState = { status, at: Date.now() };
+/**
+ * Remember the link this open came from.
+ *
+ * @param {?string} hash - The address fragment, or null for an open from none
+ * @returns {boolean} True where the link is the right shape but too long to
+ *   keep (a pack that carries its whole lesson): js/remix/open.js says so
+ */
+export const setEntryLink = hash => {
+  entry = isKeptLink(hash) ? hash : null;
+  kept = null;
+  return isTooLongLink(hash);
+};
+
+/**
+ * The link a record already holds, for work opened again without one (a pack's
+ * lesson is in no catalogue, so a bare open of it cannot happen; this keeps the
+ * link if it ever does). Read once per open: the record is only ever written
+ * with this link, so the first reading stays true.
+ */
+export function keptLink(key) {
+  if (kept?.key === key) return kept.link;
+  let link;
+  try {
+    const held = JSON.parse(get(key) ?? 'null')?.link;
+    link = isKeptLink(held) ? held : undefined;
+  } catch {
+    link = undefined;
   }
+  kept = { key, link };
+  return link;
+}
+
+/** The resume record's note for this work: its link when it has one. */
+function noteWork(active, step, link, key) {
+  if (!link) return noteLesson(active.id, step);
+  const a = host.assigned() ? host.assignment() : null;
+  const name = a?.t || active.title;
+  noteResume({
+    id: a
+      ? `assignment:${key.slice(KEY_ASSIGNMENT_PREFIX.length)}`
+      : `investigation:${active.id}`,
+    route: `/${link}`,
+    step,
+    // Under the language the name came from, not both: an instructor's words
+    // are not an English title for a Spanish reader or the other way round.
+    ...(name ? { title: { [getLocale() === 'es' ? 'es' : 'en']: name } } : {}),
+  });
+}
+
+/** Whether the last write reached the disk: 'saved' | 'unavailable' | 'full' | 'authoring' | 'foreign' | 'idle'. */
+let saveState = { status: 'idle', was: 'idle' };
+
+/** A change of state is said once; the same outcome again draws nothing. */
+function setSaveState(status) {
+  if (saveState.status !== status)
+    saveState = { status, was: saveState.status };
   renderSaveStatus();
 }
 
@@ -985,6 +1050,8 @@ export function save() {
     setSaveState('authoring');
     return;
   }
+  const key = progressKey(active.id);
+  const link = entry ?? keptLink(key);
   const payload = writeProgress({
     lesson: active,
     responses: s.responses,
@@ -996,19 +1063,19 @@ export function save() {
     deepest: s.deepest,
     spent: s.spent,
     earlier: earlierFor(active.id),
+    link,
   });
   if (Object.keys(typed).length) payload.drafts = typed;
   if (isPeek()) payload.sheet = 'peek';
 
   // This tab's copy, always, and before the disk is asked. It is what makes
   // closing and reopening the lesson safe when the write below fails.
-  const key = progressKey(active.id);
   sessionProgress.set(key, payload);
 
   try {
     put(key, JSON.stringify(payload), progressArea());
-    setSaveState('saved');
-    noteLesson(active.id, payload.stepSid);
+    setSaveState(previewing() ? 'preview' : 'saved');
+    noteWork(active, payload.stepSid, link, key);
   } catch (err) {
     // The answers stay in memory and the lesson keeps working; what changes is
     // that the reader is told, once, and given a way to take the work with
@@ -1046,43 +1113,57 @@ export function renderProgressNotice() {
 }
 
 /**
- * Show whether the work is safe: a polite live region, not a toast (one would
- * fire on every keystroke). Successes announce nothing: "saved" forty times
- * while typing an answer is worse than silence.
+ * Show whether the work is safe, in words: a status line, not a toast (one
+ * would fire on every keystroke). A change of state is drawn once (the text is
+ * redrawn only when the state or the language changes) and a refusal, a
+ * recovery from one and a record that cannot be written are also spoken once,
+ * through the page's status region: the line itself is drawn visible and in
+ * one go, which a reader may not announce. A refusal carries the backup button.
  */
 export function renderSaveStatus() {
   const el = host.els()?.saveStatus;
   if (!el) return;
-  const { status } = saveState;
-
-  const text = {
-    saved: t('inv.save.saved'),
-    full: t('inv.save.full'),
-    unavailable: t('inv.save.unavailable'),
-    authoring: t('inv.save.authoring'),
-    foreign: t('inv.save.foreign'),
-    idle: '',
-  }[status];
-
-  el.textContent = text || '';
-  // The block is a status and a way to everything saved on this device (My work).
-  if (text && ['saved', 'full', 'unavailable'].includes(status)) {
+  const { status, was } = saveState;
+  const key = `${status}${getLocale()}`;
+  if (el.dataset.shown === key) return;
+  const changed = el.dataset.state !== status;
+  const refused = status === 'full' || status === 'unavailable';
+  const focused = el.contains(document.activeElement);
+  const text = status === 'idle' ? '' : t(`inv.save.${status}`);
+  el.dataset.shown = key;
+  el.dataset.state = status;
+  el.textContent = text;
+  el.hidden = status === 'idle';
+  // A way out of a refusal, and a way to everything saved when saving works.
+  if (refused) {
+    const go = el.appendChild(document.createElement('button'));
+    go.type = 'button';
+    go.className = 'ui-button subtle';
+    go.textContent = t('inv.backup.download');
+    go.onclick = () => host.els()?.backupDownload?.click();
+  } else if (status === 'saved') {
     const link = document.createElement('a');
     link.href = '/my-work/';
     link.textContent = t('inv.save.link');
     el.append(' ', link);
   }
-  el.hidden = !text;
-  el.dataset.state = status;
-  // Only a problem interrupts. aria-live is set rather than removed so the
-  // element keeps its identity across renders.
-  el.setAttribute(
-    'aria-live',
-    status === 'full' || status === 'unavailable' || status === 'foreign'
-      ? 'polite'
-      : 'off'
-  );
+  // The button that had focus is gone: keep the reader's place on the line.
+  if (focused) ((el.tabIndex = -1), el.focus());
+  // Said a moment later: the step's own announcement (a grade, a hint) is made
+  // in the same turn as the save that failed, and the one region keeps only
+  // the last thing written to it.
+  clearTimeout(saidLater);
+  if (
+    changed &&
+    (status === 'foreign' ||
+      refused ||
+      (status === 'saved' && ['full', 'unavailable'].includes(was)))
+  )
+    saidLater = setTimeout(() => {
+      if (el.dataset.state === status) announce(text);
+    }, 1200);
 }
+let saidLater = 0;
 
 /** This tab's copy of every lesson's progress, written on every save. */
 export const sessionProgress = new Map();
@@ -1094,6 +1175,17 @@ export const sessionProgress = new Map();
  */
 let typed = {};
 export const forgetKept = id => ((typed = {}), id && keepEarlier(id));
+/** The typed-but-unchecked text, copied; given a table, put that back as well. */
+export const drafts = more =>
+  more ? Object.assign(typed, more) : { ...typed };
+
+/** What the panel holds of the open record (for the restart helper, which imports nothing from here). */
+export const persisted = () => host.state();
+/** Whether a write reaches the disk now; false when storage refuses or the record is not this reader's. */
+export const canSave = () =>
+  !['unavailable', 'full', 'foreign', 'authoring', 'preview'].includes(
+    saveState.status
+  );
 
 /** Per storage key: answers to steps it no longer has, written back on save. */
 const earlierKept = new Map();
@@ -1289,3 +1381,41 @@ export const estimateHolds = () =>
   !slots.reveal &&
   !lost &&
   (announce(t('inv.card.loading')), true);
+
+/**
+ * The "What am I looking at?" button of a docked panel.
+ *
+ * Its label and its closed state are set each time the panel is drawn for a
+ * step, so a region opened on one step is not left under the next. The words
+ * are a lazy module fetched on the first press (js/explainers.js).
+ *
+ * @param {?HTMLElement} button - The panel header's button
+ * @returns {void}
+ */
+export function resetExplainer(button) {
+  if (!button) return;
+  const host = button.closest('header');
+  if (host?.nextElementSibling?.classList.contains('explainer'))
+    host.nextElementSibling.remove();
+  button.setAttribute('aria-expanded', 'false');
+  button.removeAttribute('aria-controls');
+  button.textContent = t('inv.explain.open');
+}
+
+/**
+ * Wire a panel's explainer button once.
+ * @param {?HTMLElement} button - The button
+ * @param {(m: object) => ?string} keyOf - The explainer for what is showing now
+ * @param {object} [opts] - Listener options (the unmount signal)
+ */
+export function wireExplainer(button, keyOf, opts) {
+  button?.addEventListener(
+    'click',
+    async () => {
+      const m = await import('../explainers.js');
+      const key = keyOf(m);
+      if (key) m.toggleExplainer(button, key, button.closest('header'));
+    },
+    opts
+  );
+}
