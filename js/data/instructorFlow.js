@@ -191,9 +191,9 @@ export default {
         text: 'Run the notebook, read the edge and two fractions; a uniform population and why the sample differs from it.',
       },
       {
-        from: 'move-the-definition',
-        to: 'what-moved-it',
-        text: 'Change the cutoff and see one reclassified planet move the edge.',
+        from: 'move-the-definition-yours',
+        to: 'which-trial-moved',
+        text: 'Choose a cutoff, then find the trial that changed class.',
       },
       {
         from: 'what-you-worked-out',
@@ -294,14 +294,14 @@ export default {
         text: 'Run the notebook on Kepler-16 and read four drifts; why the symplectic one stays bounded.',
       },
       {
-        from: 'halve-the-step',
-        to: 'halve-the-step',
-        text: 'Halve the step: fourfold for second order, far more for fourth order.',
+        from: 'predict-the-halving',
+        to: 'choose-the-second-step',
+        text: 'Predict how the step changes each drift, then choose a second step.',
       },
       {
         from: 'the-engine',
-        to: 'phase-luck',
-        text: 'The same step as the application’s engine, and why one symplectic number is a point on a curve.',
+        to: 'trust-at-six-orbits',
+        text: 'The same step as the application’s engine; at six orbits, a size or a phase.',
       },
       {
         from: 'what-you-worked-out',

@@ -1,23 +1,56 @@
 // =============================================================================
 // Extending an Experiment
-// -----------------------------------------------------------------------------
-// Content only, no imports. The companion of the compute page's notebook
-// "population-at-scale" (Roadmap II Prompt 102, COMPUTE.md). There is no
-// instrument on this page: the student runs the reviewed notebook at /compute/
-// on an experiment result the experiment runner writes (twenty planets of the
-// Binary Planet Lab, each started at a seeded random distance from Star A and
-// run by the engine) and types back the numbers the capsule holds. Every number
-// here is a declared output of that notebook (js/compute/catalogueData.js),
-// checked by tests/computeInvestigations.test.js against the notebook's own
-// answer (tests/fixtures/compute/population-at-scale.answer.json). The runs are
-// seeded: two students get the same digits.
-//
-// The numbers (slope 1, 200,000 synthetic planets, cutoff 3 unless stated):
-//   a.crit 0.255 +/- 0.0243 (setting 0.12 to 0.42; the edge of the unbound),
-//   bound fraction in the trials 0.600 +/- 0.110, in the extension 0.596 +/-
-//   0.076; slope 0: 0.451 +/- 0.081; cutoff 6: a.crit 0.289 +/- 0.0096,
-//   extension 0.701 +/- 0.028.
+// Content only, no imports. The student runs the compute page's reviewed
+// notebook "population-at-scale" on twenty seeded planets of the Binary Planet
+// Lab and types back the numbers its capsule holds. tests/
+// computeInvestigations.test.js holds every literal here to the notebook's own
+// answer and to tests/fixtures/compute/investigation-runs.json, written by
+// tools/compute-answers.mjs. `move-the-definition-yours` and `which-trial-moved`
+// take menu choices, so their expected numbers are tables (CUTOFF, MOVED); a
+// check sees only its own step, so each menu is a field of its step.
 // =============================================================================
+
+/** The run of the-fit: cutoff 3, the baseline every cutoff is compared with. */
+const BASE = { edge: 0.255, extended: 0.596 };
+/** The notebook's half-way distance and synthetic bound fraction for each cutoff on the menu. */
+const CUTOFF = {
+  2: { edge: 0.233, extended: 0.5292 },
+  4: { edge: 0.289, extended: 0.7007 },
+  6: { edge: 0.289, extended: 0.7007 },
+  10: { edge: 0.289, extended: 0.7007 },
+};
+/**
+ * The trials that change class between two cutoffs (the smaller first), each
+ * as its starting distance and the centre of its bin in the notebook's table,
+ * nearest the star first.
+ */
+const MOVED = {
+  '2|3': [[0.2468, 0.255]],
+  '2|4': [
+    [0.2315, 0.225],
+    [0.2468, 0.255],
+  ],
+  '2|6': [
+    [0.2315, 0.225],
+    [0.2468, 0.255],
+  ],
+  '2|10': [
+    [0.2315, 0.225],
+    [0.2468, 0.255],
+  ],
+  '3|4': [[0.2315, 0.225]],
+  '3|6': [[0.2315, 0.225]],
+  '3|10': [[0.2315, 0.225]],
+  '4|6': [],
+  '4|10': [],
+  '6|10': [],
+};
+/** One field's value for each cutoff, for the answer key. */
+const byCutoff = field =>
+  Object.fromEntries(Object.entries(CUTOFF).map(([c, r]) => [c, r[field]]));
+/** A cutoff, or the group of cutoffs that give the same numbers, in words. */
+const named = c =>
+  [4, 6, 10].includes(Number(c)) ? 'cutoffs 4, 6 and 10' : `cutoff ${c}`;
 
 const EXTENDING_AN_EXPERIMENT = {
   id: 'extending-an-experiment',
@@ -31,7 +64,7 @@ const EXTENDING_AN_EXPERIMENT = {
   textbook: { chapter: 21, section: null },
   courseLevel: 'upper',
   mathematics: 'logarithms',
-  prerequisites: [],
+  prerequisites: ['binary-star-planets'],
   tags: ['exoplanets'],
   lock: { placement: true, inspector: true },
   objectives: [
@@ -44,9 +77,12 @@ const EXTENDING_AN_EXPERIMENT = {
     {
       sid: 'twenty-planets',
       type: 'read',
-      setup: { scenario: 'Binary Planet Lab', seed: 'binary', paused: true },
+      canvas: 'quiet',
       title: 'Twenty planets that the engine ran',
-      body: `The Binary Planet Lab puts a planet near one star of a pair that is ten
+      body: `How well can twenty planets that the engine ran say what a population of
+             two hundred thousand would do? The notebook on the compute page answers
+             with an interval, and you will see what that interval covers.
+             \n\nThe Binary Planet Lab puts a planet near one star of a pair that is ten
              astronomical units apart. An <strong>experiment</strong> on the
              experiment runner ran twenty trials of it: in each the planet started at
              a distance from its star drawn at random between 0.12 and 0.42 of the
@@ -71,9 +107,10 @@ const EXTENDING_AN_EXPERIMENT = {
       type: 'predict',
       reveal: 'the-fit',
       title: 'How well can twenty place an edge',
-      body: `Before you run it. Of the twenty planets, the ones that stayed bound
-             started closer than about 0.25, and those that did not started beyond
-             about 0.34, with nothing in between except a few close calls.`,
+      body: `Before you run it. The twenty planets started at random distances from
+             their star. The ones that stayed bound started close to it and the ones that
+             were thrown out started far from it, with a wide gap between the two groups
+             and a few close calls near its edge.`,
       prompt:
         'The notebook will report the starting distance where the chance of staying bound is one half, with an uncertainty. That uncertainty will be&hellip;',
       options: [
@@ -217,79 +254,192 @@ const EXTENDING_AN_EXPERIMENT = {
         'The sample fraction of twenty has a binomial error near 0.11, so 0.6 against 0.45 is under two of those errors: unremarkable. The population fraction is the model’s average over a uniform draw, and it is what the twenty were meant to estimate.',
     },
     {
-      sid: 'move-the-definition',
+      sid: 'move-the-definition-yours',
+      canvas: 'scene',
+      setup: { scenario: 'Binary Planet Lab', seed: 'binary', paused: true },
       compute: 'population-at-scale',
       type: 'measure',
       title: 'Move the definition',
-      body: `Put the <strong>slope</strong> back to <strong>1</strong> and set the
-             <strong>cutoff</strong> to <strong>6</strong>: a planet now counts as bound
-             if it stays within six starting distances, not three. (A distance cutoff, not the ejection test of the binary-star investigation.) Run again. Enter the
+      body: `The run of the <em>Run it</em> step, with a cutoff of 3, is the baseline.
+             Now change what <strong>bound</strong> means. Put the <strong>slope</strong>
+             back to <strong>1</strong>, choose a cutoff from the menu, <strong>2</strong>,
+             <strong>4</strong>, <strong>6</strong> or <strong>10</strong>, set
+             <strong>cutoff</strong> to it, and run again: a planet now counts as bound if it
+             stays within that many starting distances, not three. (A distance cutoff, not
+             the ejection test of the binary-star investigation.) Enter your cutoff, the
              new half-way distance, and the fraction of the synthetic population.`,
       fields: [
         {
-          id: 'edge',
-          label: 'Half-way distance, cutoff 6',
+          id: 'cutoff',
+          label: 'The cutoff you ran',
           unit: '',
-          want: '0.289',
+          options: [2, 4, 6, 10],
+          want: '6',
+        },
+        {
+          id: 'edge',
+          label: 'Half-way distance, your cutoff',
+          unit: '',
+          want: String(CUTOFF[6].edge),
+          by: byCutoff('edge'),
         },
         {
           id: 'extended',
-          label: 'Fraction bound, cutoff 6',
+          label: 'Fraction bound, your cutoff',
           unit: '',
-          want: '0.701',
+          want: String(CUTOFF[6].extended),
+          by: byCutoff('extended'),
         },
       ],
       validate: v => {
+        if (!Number.isFinite(v.cutoff))
+          return [v.edge, v.extended].some(Number.isFinite)
+            ? {
+                level: 'warn',
+                message:
+                  'Choose the cutoff you ran from the menu first: what is right depends on it.',
+              }
+            : null;
         if (![v.edge, v.extended].every(Number.isFinite)) return null;
-        if (
-          Math.abs(v.edge - 0.289) <= 0.004 &&
-          Math.abs(v.extended - 0.701) <= 0.02
-        ) {
+        const mine = CUTOFF[v.cutoff];
+        if (!mine) return null;
+        const matches = row =>
+          Math.abs(v.edge - row.edge) <= 0.004 &&
+          Math.abs(v.extended - row.extended) <= 0.02;
+        if (matches(mine)) {
           return {
             level: 'ok',
             message:
-              'The edge moved from 0.255 to 0.289, and the bound fraction from 0.596 to 0.701, with the same twenty planets. The notebook also warns that the transition is now a clean step, so its width means nothing beyond "sharper than the grid".',
+              v.cutoff === 2
+                ? 'A cutoff of 2 makes one trial stop counting as bound, so 11 of the twenty are bound instead of 12. The edge moved down from 0.255 to 0.233, and the bound fraction from 0.596 to 0.529, with the same twenty planets.'
+                : 'Cutoffs 4, 6 and 10 give the same numbers: the edge moved up from 0.255 to 0.289, and the bound fraction from 0.596 to 0.701, with the same twenty planets. No trial’s mean distance lies between four and ten of its starting distances, so raising the cutoff past four changes nothing more. The notebook also warns that the transition is now a clean step, so its width means nothing beyond "sharper than the grid".',
           };
         }
+        if (matches(BASE))
+          return {
+            level: 'error',
+            message: `Those are the numbers of the baseline run, cutoff 3. You chose ${v.cutoff}: set the cutoff to ${v.cutoff} on the compute page and run again.`,
+          };
+        const other = Object.keys(CUTOFF).find(
+          c => Number(c) !== v.cutoff && matches(CUTOFF[c])
+        );
+        if (other)
+          return {
+            level: 'error',
+            message: `Those are the numbers for ${named(other)}. You chose ${v.cutoff}: set the cutoff to ${v.cutoff} on the compute page and run again.`,
+          };
         return {
           level: 'error',
-          message:
-            'Set the slope to 1 and the cutoff to 6, keep 200,000 planets, run, and read the half-way distance and the fraction in the synthetic population.',
+          message: `Set the slope to 1 and the cutoff to ${v.cutoff}, keep 200,000 planets, run, and read the half-way distance and the fraction in the synthetic population.`,
         };
       },
     },
     {
-      sid: 'what-moved-it',
-      type: 'question',
-      kind: 'choice',
-      title: 'What moved the edge',
-      body: `Nothing about the planets changed between the two runs: the same twenty
-             trials, the same engine, the same orbits.`,
-      prompt: 'Why did the edge move from 0.255 to 0.289?',
-      options: [
-        'A planet whose mean distance was 3.8 times its starting distance was reclassified from unbound to bound: the definition of bound changed',
-        'The bootstrap found a different answer by chance',
-        'The engine gave different trials the second time',
-        'The synthetic population changed',
-      ],
-      answer: 0,
-      misconceptions: [
+      sid: 'which-trial-moved',
+      type: 'measure',
+      title: 'Which trial moved',
+      body: `Nothing about the planets changes between two cutoffs: the same twenty
+             trials, the same engine, the same orbits. Only the definition of bound moves,
+             so some trial must change class between them, or none.
+             \n\nChoose two different cutoffs from the menus, <strong>2</strong>,
+             <strong>3</strong>, <strong>4</strong>, <strong>6</strong> or
+             <strong>10</strong>; your last choice and the baseline's 3 are a natural pair.
+             Run each on the compute page if you have not, and set the <em>bound trials</em>
+             column of the notebook's two tables side by side. The table has ten bins of
+             starting distance, and its first column holds each bin's center.
+             Enter your two cutoffs, how many trials change class between them, and the
+             center of the bin nearest the star where the bound count differs. If no bin
+             differs, enter 0 and write <strong>none</strong>.`,
+      fields: [
         {
-          id: 'chance',
-          option: 1,
-          say: 'The bootstrap is seeded, so it does not vary between runs; the change comes from the classification.',
+          id: 'from',
+          label: 'First cutoff',
+          unit: '',
+          options: [2, 3, 4, 6, 10],
+          want: '3',
         },
         {
-          id: 'engine-again',
-          option: 2,
-          say: 'The trials are the file’s: the engine does not run again. Only the notebook’s reading of them changed.',
+          id: 'to',
+          label: 'Second cutoff',
+          unit: '',
+          options: [2, 3, 4, 6, 10],
+          want: '6',
+        },
+        {
+          id: 'count',
+          label: 'Trials that change class',
+          unit: '',
+          want: '1',
+        },
+        {
+          id: 'where',
+          label: 'Nearest bin where the count differs (its center), or none',
+          unit: '',
+          kind: 'text',
+          want: String(MOVED['3|6'][0][1]),
         },
       ],
-      hints: [
-        'Which planets are bound at a cutoff of six that were not at three?',
-      ],
-      because:
-        'One planet, at a starting distance of 0.2315, stayed at a mean distance of 3.8 times its start: unbound at a cutoff of three and bound at six. That one reclassification moves the edge by a third of the gap beside it. An outcome is a definition, and the uncertainty of the extension does not include the choice of it.',
+      validate: v => {
+        const word = String(v.where_text ?? '').trim();
+        if (![v.from, v.to].every(Number.isFinite))
+          return Number.isFinite(v.count) || word
+            ? {
+                level: 'warn',
+                message:
+                  'Choose both cutoffs from the menus first: what is right depends on the pair.',
+              }
+            : null;
+        if (v.from === v.to)
+          return {
+            level: 'warn',
+            message:
+              'You chose the same cutoff twice. Choose two different cutoffs: a trial can only change class between two definitions of bound.',
+          };
+        if (!Number.isFinite(v.count) || (!word && !Number.isFinite(v.where)))
+          return null;
+        const pair = (a, b) => `${Math.min(a, b)}|${Math.max(a, b)}`;
+        const trials = (a, b) => MOVED[pair(a, b)] ?? [];
+        const mine = trials(v.from, v.to);
+        const none = /^(none|ninguno|ninguna)$/i.test(word);
+        const says = list =>
+          list.length === 0
+            ? none && v.count === 0
+            : v.count === list.length &&
+              !none &&
+              Math.abs(v.where - list[0][1]) <= 0.005;
+        const lo = Math.min(v.from, v.to);
+        const hi = Math.max(v.from, v.to);
+        if (says(mine)) {
+          return {
+            level: 'ok',
+            message: !mine.length
+              ? `No trial changes class between cutoffs ${lo} and ${hi}: none has a mean distance between ${lo} and ${hi} of its starting distances, so the two tables agree in every bin.`
+              : mine.length === 1
+                ? `One trial changes class: the one that started at ${mine[0][0]}, in the bin centered on ${mine[0][1]}. Its mean distance is more than ${lo} and less than ${hi} of its starting distance, so it is unbound at the smaller cutoff and bound at the larger. One reclassification is enough to move the edge: an outcome is a definition, and the uncertainty of the extension does not include the choice of it.`
+                : `Two trials change class: the ones that started at ${mine[0][0]} and ${mine[1][0]}, in the bins centered on ${mine[0][1]} and ${mine[1][1]}. Each has a mean distance between ${lo} and ${hi} of its starting distance. An outcome is a definition, and the uncertainty of the extension does not include the choice of it.`,
+          };
+        }
+        // "None" for a pair that moves a trial is not the answer of another pair: say they differ.
+        const cutoffs = [2, 3, 4, 6, 10];
+        if (mine.length && none)
+          return {
+            level: 'error',
+            message: `The bound counts do differ between cutoffs ${lo} and ${hi}. Compare the bound trials column of the two tables bin by bin, count how many trials change class, and give the center of the bin nearest the star where they differ.`,
+          };
+        for (const a of cutoffs)
+          for (const b of cutoffs)
+            if (a < b && pair(a, b) !== pair(lo, hi) && says(trials(a, b)))
+              return {
+                level: 'error',
+                message: `That is the answer for cutoffs ${a} and ${b}, not ${lo} and ${hi}. Compare the bound column of the tables for the two cutoffs you chose.`,
+              };
+        return {
+          level: 'error',
+          message: mine.length
+            ? `The bound counts do differ between cutoffs ${lo} and ${hi}. Compare the bound trials column of the two tables bin by bin, count how many trials change class, and give the center of the bin nearest the star where they differ.`
+            : `No bound count differs between cutoffs ${lo} and ${hi}. If the tables agree in every bin, enter 0 and write none.`,
+        };
+      },
     },
     {
       sid: 'what-you-worked-out',
@@ -299,15 +449,38 @@ const EXTENDING_AN_EXPERIMENT = {
              about 0.255 &plusmn; 0.024 of the stars' separation. Extended to two hundred
              thousand synthetic planets, the bound fraction was 0.596 &plusmn; 0.076 for a
              population with equal numbers per factor of distance, and 0.451 &plusmn; 0.081
-             for a uniform one, which is where the sample's own 0.6 should have been.
-             \n\nWhat the numbers do not say: the interval counts the scatter of twenty
+             for a uniform one, which is where the sample's own 0.6 should have been. And
+             the definition of bound, the cutoff you chose, moved both the edge and the
+             fraction while every planet stayed the same: one trial changing class is
+             enough.
+             \n\nWhat the interval does not cover: it counts the scatter of twenty
              trials and nothing else. It does not count the choice of a logistic curve,
              the definition of bound, or the draw's range, outside of which no synthetic
              planet is made. A larger synthetic population has a smaller sampling error
-             and exactly the same assumptions. The run is yours to keep: its capsule
+             and exactly the same assumptions. "Bound" here is a distance cutoff of the
+             notebook, not the ejection test of the binary-star investigation, so the two
+             words are not the same claim. The run is yours to keep: its capsule
              records the notebook's hash and the result file's, so a report can cite it.`,
     },
   ],
+  retired: {
+    'move-the-definition': {
+      to: 'move-the-definition-yours',
+      release: '3.1',
+      was: {
+        en: 'Set the cutoff to 6, run again, and enter the new half-way distance and the fraction of the synthetic population.',
+        es: 'Poner el umbral en 6, ejecutar de nuevo e introducir la nueva distancia de mitad y la fracción de la población sintética.',
+      },
+    },
+    'what-moved-it': {
+      to: 'which-trial-moved',
+      release: '3.1',
+      was: {
+        en: 'Choose why the edge moved between a cutoff of 3 and a cutoff of 6.',
+        es: 'Elegir por qué se movió el borde entre un umbral de 3 y uno de 6.',
+      },
+    },
+  },
 };
 
 export default EXTENDING_AN_EXPERIMENT;

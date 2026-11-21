@@ -1,23 +1,23 @@
 {
-  "integrators-compared/steps1000": {
+  "integrators-compared/steps250": {
     "drift.euler": {
-      "value": 46.11633401702658,
+      "value": 59.732131161439206,
       "sigma": null
     },
     "drift.symplectic": {
-      "value": -0.0038641272531882596,
+      "value": 0.02120940372955237,
       "sigma": null
     },
     "drift.verlet": {
-      "value": 0.0004418868512697645,
+      "value": 0.0070737940128758345,
       "sigma": null
     },
     "drift.rk4": {
-      "value": -2.4426812673112033e-9,
+      "value": -0.0000018562774765643778,
       "sigma": null
     },
     "steps": {
-      "value": 21443,
+      "value": 5361,
       "sigma": null
     }
   },
@@ -40,6 +40,72 @@
     },
     "steps": {
       "value": 9392,
+      "sigma": null
+    }
+  },
+  "integrators-compared/steps750": {
+    "drift.euler": {
+      "value": 43.305012584260865,
+      "sigma": null
+    },
+    "drift.symplectic": {
+      "value": -0.0037969786328367096,
+      "sigma": null
+    },
+    "drift.verlet": {
+      "value": 0.0007856150391242073,
+      "sigma": null
+    },
+    "drift.rk4": {
+      "value": -9.407843696807513e-9,
+      "sigma": null
+    },
+    "steps": {
+      "value": 16082,
+      "sigma": null
+    }
+  },
+  "integrators-compared/steps1000": {
+    "drift.euler": {
+      "value": 46.11633401702658,
+      "sigma": null
+    },
+    "drift.symplectic": {
+      "value": -0.0038641272531882596,
+      "sigma": null
+    },
+    "drift.verlet": {
+      "value": 0.0004418868512697645,
+      "sigma": null
+    },
+    "drift.rk4": {
+      "value": -2.4426812673112033e-9,
+      "sigma": null
+    },
+    "steps": {
+      "value": 21443,
+      "sigma": null
+    }
+  },
+  "integrators-compared/orbits6": {
+    "drift.euler": {
+      "value": 60.072746423413136,
+      "sigma": null
+    },
+    "drift.symplectic": {
+      "value": 0.08514655943123733,
+      "sigma": null
+    },
+    "drift.verlet": {
+      "value": 0.000158719503735499,
+      "sigma": null
+    },
+    "drift.rk4": {
+      "value": -1.045779603472646e-7,
+      "sigma": null
+    },
+    "steps": {
+      "value": 21443,
       "sigma": null
     }
   },
@@ -69,7 +135,85 @@
       "sigma": null
     }
   },
+  "population-at-scale/cutoff2": {
+    "a.crit": {
+      "value": 0.23299999999999998,
+      "sigma": 0.016687213713012718
+    },
+    "a.width": {
+      "value": 0.0073680629972807735,
+      "sigma": 0.0035800367557797573
+    },
+    "bound.sample": {
+      "value": 0.55,
+      "sigma": 0.11124297730643495
+    },
+    "bound.extended": {
+      "value": 0.5291773868597937,
+      "sigma": 0.05350718406234506
+    },
+    "bound.count": {
+      "value": 105835.47737195872,
+      "sigma": 10701.436812469012
+    },
+    "trials": {
+      "value": 20,
+      "sigma": null
+    }
+  },
+  "population-at-scale/cutoff4": {
+    "a.crit": {
+      "value": 0.28900000000000003,
+      "sigma": 0.009564186277351033
+    },
+    "a.width": {
+      "value": 0.002,
+      "sigma": 4.342239886422062e-19
+    },
+    "bound.sample": {
+      "value": 0.65,
+      "sigma": 0.1066536450385077
+    },
+    "bound.extended": {
+      "value": 0.7007371428851061,
+      "sigma": 0.028092987717722263
+    },
+    "bound.count": {
+      "value": 140147.42857702123,
+      "sigma": 5618.5975435444525
+    },
+    "trials": {
+      "value": 20,
+      "sigma": null
+    }
+  },
   "population-at-scale/cutoff6": {
+    "a.crit": {
+      "value": 0.28900000000000003,
+      "sigma": 0.009564186277351033
+    },
+    "a.width": {
+      "value": 0.002,
+      "sigma": 4.342239886422062e-19
+    },
+    "bound.sample": {
+      "value": 0.65,
+      "sigma": 0.1066536450385077
+    },
+    "bound.extended": {
+      "value": 0.7007371428851061,
+      "sigma": 0.028092987717722263
+    },
+    "bound.count": {
+      "value": 140147.42857702123,
+      "sigma": 5618.5975435444525
+    },
+    "trials": {
+      "value": 20,
+      "sigma": null
+    }
+  },
+  "population-at-scale/cutoff10": {
     "a.crit": {
       "value": 0.28900000000000003,
       "sigma": 0.009564186277351033
@@ -136,5 +280,74 @@
       "value": 1882,
       "sigma": null
     }
+  },
+  "population-at-scale/moves": {
+    "2|3": [
+      {
+        "start": 0.24684824396856128,
+        "bin": 0.255,
+        "boundAt": 3
+      }
+    ],
+    "2|4": [
+      {
+        "start": 0.23147327644284815,
+        "bin": 0.225,
+        "boundAt": 4
+      },
+      {
+        "start": 0.24684824396856128,
+        "bin": 0.255,
+        "boundAt": 4
+      }
+    ],
+    "2|6": [
+      {
+        "start": 0.23147327644284815,
+        "bin": 0.225,
+        "boundAt": 6
+      },
+      {
+        "start": 0.24684824396856128,
+        "bin": 0.255,
+        "boundAt": 6
+      }
+    ],
+    "2|10": [
+      {
+        "start": 0.23147327644284815,
+        "bin": 0.225,
+        "boundAt": 10
+      },
+      {
+        "start": 0.24684824396856128,
+        "bin": 0.255,
+        "boundAt": 10
+      }
+    ],
+    "3|4": [
+      {
+        "start": 0.23147327644284815,
+        "bin": 0.225,
+        "boundAt": 4
+      }
+    ],
+    "3|6": [
+      {
+        "start": 0.23147327644284815,
+        "bin": 0.225,
+        "boundAt": 6
+      }
+    ],
+    "3|10": [
+      {
+        "start": 0.23147327644284815,
+        "bin": 0.225,
+        "boundAt": 10
+      }
+    ],
+    "4|6": [],
+    "4|10": [],
+    "6|10": []
   }
 }

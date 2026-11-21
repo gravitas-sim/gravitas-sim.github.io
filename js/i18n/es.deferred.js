@@ -887,6 +887,7 @@ export const ES_DEFERRED = {
   'inv.token.save': 'Descargar como archivo de texto',
   'inv.token.failed':
     'No se pudo generar el código de entrega. El informe en PDF sigue incluyendo todas las respuestas.',
+  'inv.field.choose': 'Elige…',
   'inv.field.auto': 'calculado automáticamente',
   'inv.model.compare': 'Comparar con una respuesta modelo',
   'inv.model.writeFirst': 'Escribe primero tu propia respuesta.',
@@ -1819,7 +1820,6 @@ export const ES_DEFERRED = {
     'No supone física previa y no hay nada que leer antes. Qué tiene que estar moviéndose, qué viaja, qué se estira y cómo lo nota un instrumento.',
   'inv.seq.gravity.listening-to-spacetime':
     'El mismo instrumento llevado mucho más lejos: medir una fuente a partir de su señal, y comparar un modelo con lo que dos detectores registraron de verdad. Mucho más fácil si has hecho la primera, pero no depende de ella.',
-
   'inv.seq.light.title': 'Luz y estrellas',
   'inv.seq.light.blurb':
     'Lo que lleva la luz de las estrellas: color y temperatura, líneas espectrales y movimiento, y luego qué son las estrellas, cómo se pesan, cómo funcionan por dentro y cómo terminan. Las trece primeras son el camino, y las tres primeras duran de 15 a 25 minutos; las doce de «En profundidad» van más lejos: espectros y gravedad, el diagrama HR, las vidas de las estrellas en números, masas y radios, poblaciones, rotación y erupciones, explosiones y las variables que miden distancias. Cada investigación dice lo que deja fuera.',
@@ -1849,7 +1849,6 @@ export const ES_DEFERRED = {
     'De la masa con que nace una estrella a lo que deja: una enana blanca, una estrella de neutrones o un agujero negro, con las probabilidades. Necesita antes El límite y Las vidas de las estrellas.',
   'inv.seq.light.cluster-membership':
     'Datos reales de un cúmulo real: qué estrellas pertenecen a él, según sus movimientos. Usa el diagrama y la idea de población.',
-
   'inv.seq.planets.title': 'Planetas y exoplanetas',
   'inv.seq.planets.blurb':
     'Los dos métodos que han encontrado casi todos los planetas conocidos, usados juntos en una estrella desconocida, y luego si algún lugar es habitable y qué hacen dos estrellas a un planeta. Investigaciones largas: planea dos sesiones o deja parte para casa. Mejor después de Gravedad y órbitas.',
@@ -1915,7 +1914,6 @@ export const ES_DEFERRED = {
     'La marea de Júpiter flexiona a Ío: el calor de una órbita, y por qué la fórmula da una cota.',
   'inv.seq.planets.binary-star-planets':
     'Estabilidad, resonancia y caos a la vez, decidiendo dónde puede sobrevivir un planeta alrededor de dos estrellas.',
-
   'inv.seq.solar.title': 'Planetas y el Sol',
   'inv.seq.solar.blurb':
     'El sistema solar como unidad: su escala, luego los mundos y sus atmósferas, los cráteres, las lunas, los anillos y las mareas, los cuerpos pequeños, los cometas y el Sol, y después las mismas investigaciones en las profundidades de especialidad y superior. Investigaciones cortas; las de curso general van primero. Aún no están aquí, con los motivos en el paquete de curso: cómo se comparan los mundos por dentro, marcar una superficie de Marte, el clima espacial y el ciclo de manchas solares, y las edades absolutas de los cráteres. Mejor tras Gravedad y órbitas.',
@@ -1957,7 +1955,6 @@ export const ES_DEFERRED = {
     'Lo que dice y lo que no dice el diámetro de un cráter, en la profundidad superior. Requiere ¿Qué superficie es más antigua?',
   'inv.seq.solar.when-orbits-lock':
     'El argumento de Laplace librando durante años: qué prueba una resonancia. Larga.',
-
   'inv.seq.galaxies.title': 'Galaxias y el universo',
   'inv.seq.galaxies.blurb':
     'Nuestro lugar en la Vía Láctea, la masa que no vemos, la luz curvada por la gravedad, la escalera de distancias desde las estrellas variables y el universo en expansión. Investigaciones cortas en tres grupos. Mejor después de Gravedad y órbitas y de Luz y estrellas.',
@@ -1995,7 +1992,6 @@ export const ES_DEFERRED = {
     'Ajusta la historia de la expansión para ver de qué está hecho el universo. La más cuantitativa del grupo.',
   'inv.seq.galaxies.where-galaxies-live':
     'La última vista: las galaxias en el espacio y lo que dice su agrupamiento. Necesita la expansión, no el ajuste.',
-
   'inv.seq.observing.title': 'Observar y medir',
   'inv.seq.observing.blurb':
     'Cómo aprender algo cierto con un telescopio: qué afirman una medición y su incertidumbre, elegir objetivos, programar una sesión, medir espectros y curvas de luz y preguntar qué deja fuera un sondeo. Usa la profundidad cuantitativa donde la hay. Mejor después de El cielo.',
@@ -2139,7 +2135,6 @@ export const ES_DEFERRED = {
   'inv.seq.depth.core': 'Profundidad básica',
   'inv.seq.depth.quantitative': 'Profundidad cuantitativa',
   'inv.seq.depth.advanced': 'Profundidad avanzada',
-
   'inv.summary.about': 'unas {h} horas',
   'inv.summary.range': '{l}–{h} horas',
   'inv.summary.work': '{hours} de trabajo',
@@ -2152,7 +2147,6 @@ export const ES_DEFERRED = {
   'inv.summary.complete': '{n} completada',
   'inv.summary.going': '{n} en curso',
   'inv.card.objectives': { one: '{n} objetivo', other: '{n} objetivos' },
-
   'inv.card.objectivesShow': 'Objetivos de aprendizaje',
   'inv.step.counter': 'Paso {n} de {total}',
   'inv.step.kind.read': 'lectura',
@@ -2273,7 +2267,6 @@ export const ES_DEFERRED = {
   'inv.formula.needs':
     'Esta respuesta se comprueba con tus propias medidas. Regístralas en los pasos anteriores y se podrá comprobar.',
   'inv.answer.check': 'Comprobar',
-
   'cr3bp.title': 'Modo de tres cuerpos restringido',
   'cr3bp.close': 'Ocultar la superposicion de tres cuerpos',
   'cr3bp.convention':
@@ -2328,7 +2321,6 @@ export const ES_DEFERRED = {
     'Que vaya a ir realmente: es otra cuestion, y esta superposicion no puede responderla. Un cuello abierto es un hueco en un muro, no una ruta a traves de el; el trazador puede orbitar para siempre a un lado de una abertura que nunca usa. Solo integrar la trayectoria lo resuelve.',
   'cr3bp.claims.stable':
     'Estable: una tercera cuestion distinta. Significa que un trazador desplazado ligeramente de un equilibrio vuelve en lugar de irse, y aqui solo es cierto de L4 y L5, y solo por debajo de la razon de masas de Routh. Nada en una curva de velocidad cero lo implica.',
-
   // --- The exoplanet lesson widgets ---------------------------------------------
   'exoW.whoIsActuallyMoving': '¿Quién se mueve de verdad?',
   'exoW.theStarAndThePlanet':
@@ -2447,7 +2439,6 @@ export const ES_DEFERRED = {
   'exoW.whatThatDoesNotSay': 'Lo que eso no dice',
   'exoW.excessScatterIsNotAPlanet':
     'Una dispersión mayor significa que la velocidad no es constante. No identifica un planeta, ni un periodo, ni una masa.',
-
   'rvsched.shape': 'Calendario',
   'rvsched.shape.regular': 'Cadencia regular',
   'rvsched.shape.irregular': 'Irregular',
@@ -2541,7 +2532,6 @@ export const ES_DEFERRED = {
   'rv.survey.waiting': 'Esperando a que avance el reloj de la simulación.',
   'rv.survey.coarse':
     'La simulación va demasiado rápido para esta cadencia: algunas medidas se leyeron entre fotogramas muy separados y sus extremos pueden quedar achatados. Reduce la velocidad y reinicia la campaña.',
-
   'binarySweep.title': 'Barrer el radio inicial',
   'binarySweep.hint':
     'La misma ejecucion que has hecho a mano, con cinco radios iniciales y todo lo demas fijo. Cada ensayo informa de lo que le paso al planeta, no de un promedio de donde estuvo.',
@@ -2589,7 +2579,6 @@ export const ES_DEFERRED = {
   'binarySweep.recheck.reason.unreliableRun':
     'una de las ejecuciones no es fiable',
   'binarySweep.recheck.reason.notFinished': 'una de las ejecuciones no termino',
-
   // --- El barrido binario, guardado como prueba --------------------------------
   'nb.binarySweep.title': 'Barrido del radio inicial ({scenario})',
   'nb.binarySweep.trials': 'Ensayos',
@@ -3003,7 +2992,6 @@ export const ES_DEFERRED = {
     'El ejemplo es un chirrido modelado de agujeros negros, desplazado hacia arriba para que lo reproduzca el altavoz de un portátil. No es el sonido propio de la simulación, ni una grabación de nada.',
   'sound.lesson.link': 'Escuchar el espacio-tiempo: descubrir una fusión',
   'sound.shortcut': 'Silenciar o activar el sonido',
-
   // --- Textos de instrumentos sacados de la descarga inicial. Véase en.deferred.js. ---
   'dmW.mondTitle': 'La misma curva, dos explicaciones',
   'dmW.mondNote':
@@ -3379,7 +3367,6 @@ export const ES_DEFERRED = {
   'gwW.row.notDetection': 'Lo que eso no es',
   'gwW.value.notDetection':
     'Un solapamiento normalizado, y nada más. No es una relación señal-ruido, ni una probabilidad, ni evidencia de que se haya detectado algo: establecer eso requiere un banco de plantillas, una estimación del fondo y un factor de ensayos, y aquí no hay ninguno.',
-
   // --- Más textos sacados de la descarga inicial. Véase en.deferred.js. ---
   'export.empty': 'Todavía no hay nada registrado que exportar.',
   'export.failed': 'No se pudo generar ese archivo.',
@@ -4142,7 +4129,6 @@ export const ES_DEFERRED = {
   'gwE.row.limits': 'Qué son cinco eventos',
   'gwE.value.limits':
     'Cinco eventos, elegidos porque sus chirridos son visibles. No son una muestra del catálogo, y nada de esto es una detección, una significación ni una estimación de parámetros.',
-
   // -- Cuatro espectros observados (js/stellarSpectraWidgets.js) --------------
   'specW.compare.title': 'Cuatro espectros',
   'specW.compare.note':
@@ -4245,4 +4231,18 @@ export const ES_DEFERRED = {
     'Comprueba el contraste. El cociente es 1 + F₂/F₁, así que resta uno antes de tomar el logaritmo: Δm = −2,5 log₁₀(cociente − 1).',
   'lessonFn.checkTheRadiusTheCorrectionMultiplies120':
     'Comprueba el radio. La corrección multiplica el radio mezclado por la raíz cuadrada del cociente, no por el cociente mismo.',
+  'lessonFn.chooseTheStepCountYouRan79':
+    'Elige primero en el menú el número de pasos que ejecutaste: lo correcto depende de él.',
+  'lessonFn.velocityVerletImprovedFourTimesWhich323':
+    'El Verlet de velocidad mejoró cuatro veces, que es un factor de dos al cuadrado: segundo orden. El Runge-Kutta 4 mejoró unas veintiséis veces, más que las dieciséis que da una ley limpia de cuarto orden: la potencia aparente del cociente de pasos es de unos 4,7, no 4, así que algo más que el término principal de su error sigue notándose con estos pasos.',
+  'lessonFn.chooseTheCutoffYouRanFrom75':
+    'Elige primero en el menú el umbral que ejecutaste: lo correcto depende de él.',
+  'lessonFn.aCutoffOf2MakesOne213':
+    'Un umbral de 2 hace que un ensayo deje de contar como ligado, así que 11 de los veinte están ligados en lugar de 12. El borde bajó de 0,255 a 0,233, y la fracción ligada de 0,596 a 0,529, con los mismos veinte planetas.',
+  'lessonFn.cutoffs46And10Give411':
+    'Los umbrales 4, 6 y 10 dan los mismos números: el borde subió de 0,255 a 0,289, y la fracción ligada de 0,596 a 0,701, con los mismos veinte planetas. La distancia media de ningún ensayo queda entre cuatro y diez de sus distancias iniciales, así que subir el umbral más allá de cuatro no cambia nada más. El cuaderno también advierte de que la transición es ahora un escalón limpio, así que su anchura no significa más que «más nítida que la rejilla».',
+  'lessonFn.chooseBothCutoffsFromTheMenus76':
+    'Elige primero ambos umbrales de los menús: lo correcto depende de la pareja.',
+  'lessonFn.youChoseTheSameCutoffTwice126':
+    'Has elegido el mismo umbral dos veces. Elige dos umbrales distintos: un ensayo solo puede cambiar de clase entre dos definiciones de ligado.',
 };

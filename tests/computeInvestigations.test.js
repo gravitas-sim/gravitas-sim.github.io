@@ -11,6 +11,9 @@ import SAMPLING from '../js/data/investigations/sampling-a-posterior.js';
 import REFITTING_ES from '../js/data/investigations/es/refitting-a-transit.js';
 import PERIODOGRAMS_ES from '../js/data/investigations/es/two-periodograms.js';
 import SAMPLING_ES from '../js/data/investigations/es/sampling-a-posterior.js';
+import { ES_DEFERRED } from '../js/i18n/es.deferred.js';
+import { lessonKey } from '../js/i18n/lesson.js';
+import { stepFingerprint } from '../js/investigations/progressBackup.js';
 import {
   mergeTranslation,
   translationCoverage,
@@ -41,10 +44,113 @@ const byId = list => Object.fromEntries(list.map(q => [q.id, q]));
 const step = (lesson, sid) => lesson.steps.find(s => s.sid === sid);
 const verdict = (lesson, sid, values) => step(lesson, sid).validate(values);
 
+const fingerprint = step => stepFingerprint(step);
+const cut = (lesson, from, to) =>
+  JSON.stringify(
+    lesson.steps.slice(
+      lesson.steps.findIndex(s => s.sid === from),
+      lesson.steps.findIndex(s => s.sid === to)
+    )
+  );
+// What a lesson says before its first measuring step must not hold a number the
+// notebook returns (Prompt 299's rule and L4): digits of an output, to four places.
+const outputs = values => values.map(x => String(x));
+// A reworded step keeps the fingerprint it had (progressBackup.js:70); the two
+// opening steps lose only their scenario, because a quiet canvas stages nothing
+// and they are read steps that store no answer.
+const BASELINE_FINGERPRINTS = {
+  integrators: {
+    'which-loses-most': 'predict|-|-|-|-|4|a=0;c=0',
+    'four-drifts': 'measure|-|-|-|euler+symplectic+verlet+rk4+steps|-|-',
+    'why-bounded': 'question|choice|-|-|-|4|a=0;c=0',
+    'the-engine': 'measure|-|-|-|verlet+rk4+symplectic|-|-',
+    'phase-luck': 'question|choice|-|-|-|4|a=0;c=0',
+    'what-you-worked-out': 'read|-|-|-|-|-|-',
+  },
+  extending: {
+    'how-well-can-twenty-place-an-edge': 'predict|-|-|-|-|4|a=1;c=1',
+    'the-fit': 'measure|-|-|-|edge+edgeSigma+sample+extended|-|-',
+    'a-uniform-population': 'measure|-|-|-|extended+gap|-|-',
+    'why-the-sample-differs': 'question|choice|-|-|-|4|a=0;c=0',
+    'what-you-worked-out': 'read|-|-|-|-|-|-',
+  },
+};
+
 describe('Integrators in Practice', () => {
   const main = byId(answer('integrators-compared'));
-  const half = RUNS['integrators-compared/steps1000'];
-  const app = RUNS['integrators-compared/steps438'];
+  const choices = {
+    250: RUNS['integrators-compared/steps250'],
+    438: RUNS['integrators-compared/steps438'],
+    750: RUNS['integrators-compared/steps750'],
+    1000: RUNS['integrators-compared/steps1000'],
+  };
+  const six = RUNS['integrators-compared/orbits6'];
+  const second = step(INTEGRATORS, 'choose-the-second-step');
+  const field = id => second.fields.find(f => f.id === id);
+  /** What a student who chose `n` types, as four significant digits. */
+  const typed = n => ({
+    second: n,
+    verlet: four(choices[n]['drift.verlet'].value),
+    rk4: four(choices[n]['drift.rk4'].value),
+    ratioVerlet: four(
+      main['drift.verlet'].value / choices[n]['drift.verlet'].value
+    ),
+    ratioRk4: four(main['drift.rk4'].value / choices[n]['drift.rk4'].value),
+  });
+
+  test('accounts for every step of the matrix, in order', () => {
+    expect(INTEGRATORS.steps.map(s => s.sid)).toEqual([
+      'one-system-four-steps',
+      'which-loses-most',
+      'four-drifts',
+      'why-bounded',
+      'predict-the-halving',
+      'choose-the-second-step',
+      'the-engine',
+      'phase-luck',
+      'trust-at-six-orbits',
+      'what-you-worked-out',
+    ]);
+    expect(INTEGRATORS.steps[0].canvas).toBe('quiet');
+    expect(INTEGRATORS.steps[0].setup).toBeUndefined();
+  });
+
+  test('reworded steps keep their fingerprint and the revised one gets a new id', () => {
+    for (const [sid, fp] of Object.entries(BASELINE_FINGERPRINTS.integrators))
+      expect(fingerprint(step(INTEGRATORS, sid))).toBe(fp);
+    expect(fingerprint(second)).not.toBe(
+      'measure|-|-|-|verlet+rk4+ratioVerlet+ratioRk4|-|-'
+    );
+    expect(second.sid).not.toBe('halve-the-step');
+    expect(step(INTEGRATORS, 'halve-the-step')).toBeUndefined();
+    expect(INTEGRATORS.retired['halve-the-step']).toMatchObject({
+      to: 'choose-the-second-step',
+      release: '3.1',
+    });
+    expect(INTEGRATORS.retired['halve-the-step'].was.es).toBeTruthy();
+  });
+
+  test('no notebook output is stated before the step that measures it', () => {
+    const before = cut(INTEGRATORS, 'one-system-four-steps', 'four-drifts');
+    for (const n of outputs([
+      '49.75',
+      '0.002317',
+      '0.001768',
+      '6.47',
+      '10722',
+      '10,722',
+    ]))
+      expect(before).not.toContain(n);
+    // Nor in the bodies of the runs that follow: the engine's two figures are in
+    // the check that follows the run, not in the instruction to make it.
+    for (const sid of ['choose-the-second-step', 'the-engine']) {
+      const text = JSON.stringify(step(INTEGRATORS, sid).body);
+      for (const n of ['0.002299', '1.217', '26.5', '0.000442'])
+        expect(text).not.toContain(n);
+    }
+    // The menu choices and fixed settings are instructions, not outputs.
+    expect(step(INTEGRATORS, 'the-engine').body).toContain('0.0278');
+  });
 
   test('accepts the four drifts the notebook returns, and refuses a changed one', () => {
     const v = {
@@ -64,44 +170,169 @@ describe('Integrators in Practice', () => {
       verdict(INTEGRATORS, 'four-drifts', { ...v, steps: 10000 }).level
     ).toBe('warn');
     expect(verdict(INTEGRATORS, 'four-drifts', { ...v, rk4: NaN })).toBeNull();
+    // The baseline run says it is the reference every later choice is compared with.
+    expect(step(INTEGRATORS, 'four-drifts').body).toMatch(/baseline run/);
   });
 
-  test('accepts the halved-step run and the improvements worked from the two runs', () => {
-    const v = {
-      verlet: four(half['drift.verlet'].value),
-      rk4: four(half['drift.rk4'].value),
-      ratioVerlet: four(
-        main['drift.verlet'].value / half['drift.verlet'].value
-      ),
-      ratioRk4: four(main['drift.rk4'].value / half['drift.rk4'].value),
-    };
-    expect(verdict(INTEGRATORS, 'halve-the-step', v).level).toBe('ok');
-    // Second order is a factor of four; the lesson's claim, from the numbers.
-    expect(v.ratioVerlet).toBeGreaterThan(3.8);
-    expect(v.ratioVerlet).toBeLessThan(4.2);
+  test('the menu is the fixtures: one run per choice, each literal copied from it', () => {
+    expect(field('second').options).toEqual([250, 438, 750, 1000]);
+    for (const n of field('second').options) {
+      const run = choices[n];
+      const v = typed(n);
+      expect(field('verlet').by[n]).toBe(v.verlet);
+      expect(field('rk4').by[n]).toBe(v.rk4);
+      expect(field('ratioVerlet').by[n]).toBe(v.ratioVerlet);
+      expect(field('ratioRk4').by[n]).toBe(v.ratioRk4);
+      // The run is the one the choice names: n steps per period of the tightest pair.
+      expect(run.steps.value).toBeGreaterThan(0);
+    }
+    // The 500-step run the ratios are taken against is the baseline's.
+    expect(four(main['drift.verlet'].value)).toBe(0.001768);
+    expect(four(main['drift.rk4'].value)).toBe(-6.473e-8);
+    // Each choice's step count is in proportion to the run's: more steps, more steps.
+    const counts = [250, 438, 750, 1000].map(n => choices[n].steps.value);
+    expect(counts).toEqual([...counts].sort((x, y) => x - y));
+    // The check's key lists the choices, so an instructor reads them all.
+    expect(Object.keys(field('verlet').by)).toEqual([
+      '250',
+      '438',
+      '750',
+      '1000',
+    ]);
+  });
+
+  test('accepts each menu choice with its own results', () => {
+    for (const n of [250, 438, 750, 1000]) {
+      expect(
+        verdict(INTEGRATORS, 'choose-the-second-step', typed(n)).level
+      ).toBe('ok');
+    }
+    // The halving is the one the prediction was about.
     expect(
-      verdict(INTEGRATORS, 'halve-the-step', { ...v, ratioVerlet: 2 }).level
-    ).toBe('error');
+      verdict(INTEGRATORS, 'choose-the-second-step', typed(1000)).message
+    ).toMatch(/second order/);
+  });
+
+  test('a number from another setting fails with feedback that names the setting', () => {
+    for (const n of [250, 438, 750, 1000]) {
+      for (const m of [250, 438, 750, 1000].filter(x => x !== n)) {
+        const wrong = verdict(INTEGRATORS, 'choose-the-second-step', {
+          ...typed(m),
+          second: n,
+        });
+        expect(wrong.level).toBe('error');
+        expect(wrong.message).toContain(`${m}-step run`);
+        expect(wrong.message).toContain(`You chose ${n}`);
+      }
+      // The default's numbers, typed after choosing something else.
+      const baseline = verdict(INTEGRATORS, 'choose-the-second-step', {
+        ...typed(n),
+        verlet: four(main['drift.verlet'].value),
+        rk4: four(main['drift.rk4'].value),
+      });
+      expect(baseline.level).toBe('error');
+      expect(baseline.message).toMatch(/baseline run, 500 steps/);
+    }
+    // Drifts right, ratio the wrong way round: the old number over the new.
+    const inverted = verdict(INTEGRATORS, 'choose-the-second-step', {
+      ...typed(750),
+      ratioVerlet: four(1 / typed(750).ratioVerlet),
+    });
+    expect(inverted.level).toBe('error');
+    expect(inverted.message).toMatch(/old number over the new/);
+    // No choice yet.
+    expect(
+      verdict(INTEGRATORS, 'choose-the-second-step', {
+        ...typed(750),
+        second: NaN,
+      }).level
+    ).toBe('warn');
+    expect(verdict(INTEGRATORS, 'choose-the-second-step', {})).toBeNull();
+  });
+
+  test('velocity Verlet improves by the square of the ratio of step counts at every choice', () => {
+    // The sentence on the reveal step says so; the fixtures hold it to a tenth of a percent.
+    for (const n of [250, 438, 750, 1000]) {
+      const ratio =
+        main['drift.verlet'].value / choices[n]['drift.verlet'].value;
+      expect(Math.abs(ratio / (n / 500) ** 2 - 1)).toBeLessThan(0.001);
+    }
+    expect(step(INTEGRATORS, 'the-engine').compare).toMatch(
+      /square of the step ratio/
+    );
+  });
+
+  test('the prediction is about the step ratio, so every menu choice tests it, and it claims neither sixteen for Runge-Kutta 4 nor its own answer in an earlier step', () => {
+    const predict = step(INTEGRATORS, 'predict-the-halving');
+    expect(predict.type).toBe('predict');
+    expect(predict.reveal).toBe('the-engine');
+    expect(predict.options).toHaveLength(4);
+    expect(predict.options.join(' ')).not.toMatch(/\b16\b|sixteen/i);
+    // The right option says the square for Verlet and a higher power for Runge-Kutta 4;
+    // every choice of the menu bears it out (the improvement is old drift over new).
+    expect(predict.options[predict.answer]).toMatch(
+      /squared.*higher power.*at least the fourth/
+    );
+    for (const n of [250, 438, 750, 1000]) {
+      const t = typed(n);
+      const r = n / 500;
+      expect(t.ratioVerlet / r ** 2).toBeGreaterThan(0.99);
+      expect(t.ratioVerlet / r ** 2).toBeLessThan(1.01);
+      expect(Math.log(t.ratioRk4) / Math.log(r)).toBeGreaterThan(4);
+    }
+    // The compare sentence is about the choice made, not about 1000.
+    expect(step(INTEGRATORS, 'the-engine').compare).not.toMatch(/about 1000/);
+    // Nothing earlier states the improvement: the objectives, the first body and the tips.
+    const earlier = JSON.stringify([
+      INTEGRATORS.objectives,
+      INTEGRATORS.steps.slice(0, 4),
+    ]);
+    expect(earlier).not.toMatch(/fourfold|four times|squared|sixteen/);
+    expect(JSON.stringify(INTEGRATORS_ES.objectives)).not.toMatch(
+      /cuatro veces/
+    );
+  });
+
+  test('no step claims Runge-Kutta 4 is a hundred thousand times better', () => {
+    // 0.001768 over 6.47e-8 is about 27,000, and symplectic Euler's 0.002317 gives about 36,000.
+    const ratio = Math.abs(
+      main['drift.verlet'].value / main['drift.rk4'].value
+    );
+    expect(ratio).toBeGreaterThan(2e4);
+    expect(ratio).toBeLessThan(5e4);
+    expect(JSON.stringify([INTEGRATORS, INTEGRATORS_ES])).not.toMatch(
+      /hundred thousand|cien mil/
+    );
   });
 
   test('accepts the 438-step run, which is the application’s own step', () => {
+    const app = choices[438];
     const v = {
       verlet: four(app['drift.verlet'].value),
       rk4: four(app['drift.rk4'].value),
       symplectic: four(app['drift.symplectic'].value),
     };
     expect(verdict(INTEGRATORS, 'the-engine', v).level).toBe('ok');
-    // The engine's own figures, quoted in the step: within a half percent for
-    // velocity Verlet and RK4 (tests/computeCurriculum.test.js ran the engine).
+    // The engine's own figures, quoted in the check that follows the run: within
+    // a half percent for velocity Verlet and RK4 (tests/computeCurriculum.test.js
+    // ran the engine).
     expect(Math.abs(app['drift.verlet'].value / 0.002299 - 1)).toBeLessThan(
       0.005
     );
     expect(Math.abs(app['drift.rk4'].value / -1.217e-7 - 1)).toBeLessThan(
       0.005
     );
+    const ok = verdict(INTEGRATORS, 'the-engine', v).message;
+    expect(ok).toContain('0.002299');
+    expect(ok).toContain('1.217');
     expect(
       verdict(INTEGRATORS, 'the-engine', { ...v, verlet: v.verlet * 2 }).level
     ).toBe('error');
+    // The reveal step sets the prediction beside the student's own improvements.
+    expect(step(INTEGRATORS, 'the-engine').evidence).toEqual([
+      { step: 'choose-the-second-step', field: 'ratioVerlet' },
+      { step: 'choose-the-second-step', field: 'ratioRk4' },
+    ]);
   });
 
   test('says "the application’s step is the tightest pair’s period over about 438"', () => {
@@ -109,12 +340,130 @@ describe('Integrators in Practice', () => {
     expect(12.1772 / 438).toBeCloseTo(0.0278, 4);
     expect(step(INTEGRATORS, 'the-engine').body).toContain('0.0278');
   });
+
+  test('the six-orbit run: the feedback does not print the numbers the student is to read off their own run', () => {
+    const trust = step(INTEGRATORS, 'trust-at-six-orbits');
+    const say = id => trust.misconceptions.find(m => m.id === id).say;
+    const d = (run, k) => run[`drift.${k}`].value;
+    // What the feedback claims, held to the notebook's own runs.
+    expect(Math.abs(d(six, 'rk4'))).toBeGreaterThan(Math.abs(d(main, 'rk4')));
+    expect(Math.abs(d(six, 'rk4'))).toBeLessThan(2 * Math.abs(d(main, 'rk4')));
+    expect(Math.sign(d(six, 'rk4'))).toBe(Math.sign(d(main, 'rk4')));
+    expect(Math.abs(d(six, 'verlet'))).toBeLessThan(
+      Math.abs(d(main, 'verlet'))
+    );
+    expect(d(main, 'verlet') / d(six, 'verlet')).toBeGreaterThan(5);
+    expect(Math.sign(d(six, 'symplectic'))).not.toBe(
+      Math.sign(d(main, 'symplectic'))
+    );
+    expect(
+      Math.abs(d(six, 'symplectic') / d(main, 'symplectic'))
+    ).toBeGreaterThan(10);
+    expect(Math.round(d(six, 'euler'))).toBe(60);
+    // No six-orbit number, and no digit at all, in what a wrong answer is told, or in the
+    // options: the student reads those off their own run.
+    for (const id of [
+      'smallest-number-is-accurate',
+      'bounded-is-representative',
+      'euler-trend',
+    ])
+      expect(say(id)).not.toMatch(/\d/);
+    expect(trust.options.join(' ')).not.toMatch(/%/);
+    // The Runge-Kutta 4 claim is the two-point one: tiny and within a factor of two, not "steadily".
+    expect(JSON.stringify([trust, INTEGRATORS_ES.steps])).not.toMatch(
+      /steadily|de forma constante|pre-asymptotic/
+    );
+    // Authored feedback exists for the plausible wrong turns, one per wrong option, and the
+    // smallest-number mistake is among them.
+    expect(trust.answer).toBe(0);
+    expect(trust.misconceptions.map(m => m.option).sort()).toEqual([1, 2, 3]);
+  });
+
+  test('the Spanish feedback of the six-orbit step prints no six-orbit number either', () => {
+    const es = mergeTranslation(INTEGRATORS, INTEGRATORS_ES).steps.find(
+      s => s.sid === 'trust-at-six-orbits'
+    );
+    for (const m of es.misconceptions) expect(m.say).not.toMatch(/\d/);
+    expect(es.options.join(' ')).not.toMatch(/%/);
+  });
 });
 
 describe('Extending an Experiment', () => {
   const main = byId(answer('population-at-scale'));
   const uniform = RUNS['population-at-scale/slope0'];
-  const six = RUNS['population-at-scale/cutoff6'];
+  const runs = {
+    2: RUNS['population-at-scale/cutoff2'],
+    4: RUNS['population-at-scale/cutoff4'],
+    6: RUNS['population-at-scale/cutoff6'],
+    10: RUNS['population-at-scale/cutoff10'],
+  };
+  const moves = RUNS['population-at-scale/moves'];
+  const yours = step(EXTENDING, 'move-the-definition-yours');
+  const moved = step(EXTENDING, 'which-trial-moved');
+  const typedCut = c => ({
+    cutoff: c,
+    edge: four(runs[c]['a.crit'].value),
+    extended: four(runs[c]['bound.extended'].value),
+  });
+  const pairKey = (a, b) => `${Math.min(a, b)}|${Math.max(a, b)}`;
+  /** What a student who compared cutoffs a and b types, from the fixture's trial list. */
+  const typedPair = (a, b) => {
+    const list = moves[pairKey(a, b)];
+    return {
+      from: a,
+      to: b,
+      count: list.length,
+      where: list.length ? list[0].bin : NaN,
+      where_text: list.length ? String(list[0].bin) : 'none',
+    };
+  };
+
+  test('accounts for every step of the matrix, in order', () => {
+    expect(EXTENDING.steps.map(s => s.sid)).toEqual([
+      'twenty-planets',
+      'how-well-can-twenty-place-an-edge',
+      'the-fit',
+      'a-uniform-population',
+      'why-the-sample-differs',
+      'move-the-definition-yours',
+      'which-trial-moved',
+      'what-you-worked-out',
+    ]);
+    expect(EXTENDING.steps[0].canvas).toBe('quiet');
+    expect(EXTENDING.steps[0].setup).toBeUndefined();
+    expect(EXTENDING.prerequisites).toContain('binary-star-planets');
+    expect(
+      readFileSync('js/data/investigations/binary-star-planets.js', 'utf8')
+    ).toContain("id: 'binary-star-planets'");
+    const last = step(EXTENDING, 'what-you-worked-out').body;
+    expect(last).toMatch(
+      /not the ejection test of the binary-star investigation/
+    );
+  });
+
+  test('reworded steps keep their fingerprint and each revised step gets a new id', () => {
+    for (const [sid, fp] of Object.entries(BASELINE_FINGERPRINTS.extending))
+      expect(fingerprint(step(EXTENDING, sid))).toBe(fp);
+    expect(fingerprint(yours)).not.toBe('measure|-|-|-|edge+extended|-|-');
+    expect(fingerprint(moved)).not.toBe('question|choice|-|-|-|4|a=0;c=0');
+    for (const [old, to] of [
+      ['move-the-definition', 'move-the-definition-yours'],
+      ['what-moved-it', 'which-trial-moved'],
+    ]) {
+      expect(step(EXTENDING, old)).toBeUndefined();
+      expect(EXTENDING.retired[old]).toMatchObject({ to, release: '3.1' });
+      expect(EXTENDING.retired[old].was.es).toBeTruthy();
+    }
+  });
+
+  test('the edge of the bound region is not stated before the run that finds it', () => {
+    const second = step(EXTENDING, 'how-well-can-twenty-place-an-edge').body;
+    expect(second).not.toMatch(/0\.25|0\.34/);
+    expect(JSON.stringify(step(EXTENDING, 'twenty-planets'))).not.toMatch(
+      /0\.255|0\.289/
+    );
+    expect(JSON.stringify(EXTENDING_ES.steps[1])).not.toMatch(/0,25|0,34/);
+  });
 
   test('accepts the edge, its uncertainty and the two fractions', () => {
     const v = {
@@ -147,18 +496,187 @@ describe('Extending an Experiment', () => {
     ).toBe('error');
   });
 
-  test('accepts the cutoff-6 run and says the edge moved by a third of its gap', () => {
-    const v = {
-      edge: four(six['a.crit'].value),
-      extended: four(six['bound.extended'].value),
-    };
-    expect(verdict(EXTENDING, 'move-the-definition', v).level).toBe('ok');
-    const moved = six['a.crit'].value - main['a.crit'].value;
-    expect(moved / (0.3443 - 0.2468)).toBeGreaterThan(0.3);
-    expect(moved / (0.3443 - 0.2468)).toBeLessThan(0.4);
+  test('the cutoff menu is the fixtures: one run per choice, each literal copied from it', () => {
+    const field = id => yours.fields.find(f => f.id === id);
+    expect(field('cutoff').options).toEqual([2, 4, 6, 10]);
+    for (const c of field('cutoff').options) {
+      expect(field('edge').by[c]).toBe(typedCut(c).edge);
+      expect(field('extended').by[c]).toBe(typedCut(c).extended);
+    }
+    // The baseline the check names for a number from the default's run: cutoff 3.
+    expect(four(main['a.crit'].value)).toBe(0.255);
+    expect(four(main['bound.extended'].value)).toBe(0.5959);
+    // Cutoffs 4, 6 and 10 classify the twenty trials the same way, so they give one result.
+    expect(runs[4]).toEqual(runs[6]);
+    expect(runs[6]).toEqual(runs[10]);
+    expect(runs[2]['bound.sample'].value).toBe(0.55);
+    expect(main['bound.sample'].value).toBe(0.6);
+    expect(runs[6]['bound.sample'].value).toBe(0.65);
+  });
+
+  test('accepts each cutoff on the menu with its own results', () => {
+    for (const c of [2, 4, 6, 10])
+      expect(
+        verdict(EXTENDING, 'move-the-definition-yours', typedCut(c)).level
+      ).toBe('ok');
     expect(
-      verdict(EXTENDING, 'move-the-definition', { ...v, edge: 0.255 }).level
+      verdict(EXTENDING, 'move-the-definition-yours', typedCut(6)).message
+    ).toMatch(/4, 6 and 10 give the same numbers/);
+    // The edge moved the way the numbers say.
+    expect(runs[2]['a.crit'].value).toBeLessThan(main['a.crit'].value);
+    expect(runs[6]['a.crit'].value).toBeGreaterThan(main['a.crit'].value);
+    expect(four(runs[6]['bound.extended'].value)).toBe(0.7007);
+  });
+
+  test('a number from another cutoff fails with feedback that names the cutoff', () => {
+    const wrong = (chose, numbers) =>
+      verdict(EXTENDING, 'move-the-definition-yours', {
+        ...typedCut(numbers),
+        cutoff: chose,
+      });
+    expect(wrong(6, 2).level).toBe('error');
+    expect(wrong(6, 2).message).toContain('cutoff 2');
+    expect(wrong(2, 6).message).toContain('cutoffs 4, 6 and 10');
+    // The baseline's numbers (cutoff 3), typed after choosing another cutoff.
+    const baseline = verdict(EXTENDING, 'move-the-definition-yours', {
+      cutoff: 6,
+      edge: four(main['a.crit'].value),
+      extended: four(main['bound.extended'].value),
+    });
+    expect(baseline.level).toBe('error');
+    expect(baseline.message).toMatch(/baseline run, cutoff 3/);
+    expect(baseline.message).toContain('You chose 6');
+    // Numbers that are neither, and no choice made yet.
+    expect(
+      verdict(EXTENDING, 'move-the-definition-yours', {
+        cutoff: 6,
+        edge: 0.5,
+        extended: 0.1,
+      }).level
     ).toBe('error');
+    expect(
+      verdict(EXTENDING, 'move-the-definition-yours', {
+        ...typedCut(6),
+        cutoff: NaN,
+      }).level
+    ).toBe('warn');
+    expect(verdict(EXTENDING, 'move-the-definition-yours', {})).toBeNull();
+  });
+
+  test('the trials that move are the experiment’s own, for every pair of cutoffs', () => {
+    const MOVED = JSON.parse(
+      readFileSync('js/data/investigations/extending-an-experiment.js', 'utf8')
+        .match(/const MOVED = (\{[\s\S]*?\n\});/)[1]
+        .replace(/'/g, '"')
+        .replace(/,\s*([}\]])/g, '$1')
+    );
+    expect(Object.keys(MOVED).sort()).toEqual(Object.keys(moves).sort());
+    const bound = { 2: 11, 3: 12, 4: 13, 6: 13, 10: 13 };
+    for (const [pair, list] of Object.entries(moves)) {
+      // Each literal in the step is the fixture's trial, to the four places a student sees.
+      expect(MOVED[pair]).toEqual(
+        list.map(m => [Number(m.start.toFixed(4)), m.bin])
+      );
+      // The notebook's own bound counts agree: the pair moves exactly the difference.
+      const [a, b] = pair.split('|').map(Number);
+      expect(list).toHaveLength(Math.abs(bound[a] - bound[b]));
+    }
+    expect(bound[3]).toBe(Math.round(main['bound.sample'].value * 20));
+    expect(bound[2]).toBe(Math.round(runs[2]['bound.sample'].value * 20));
+    expect(bound[6]).toBe(Math.round(runs[6]['bound.sample'].value * 20));
+    // The trial the lesson used to name, 0.2315, is the one that moves between 3 and 6.
+    expect(moves['3|6']).toHaveLength(1);
+    expect(moves['3|6'][0].start.toFixed(4)).toBe('0.2315');
+  });
+
+  test('accepts the trial that moved for every pair, and a pair that moves none only with "none"', () => {
+    const cutoffs = [2, 3, 4, 6, 10];
+    for (const a of cutoffs)
+      for (const b of cutoffs.filter(x => x !== a)) {
+        expect(
+          verdict(EXTENDING, 'which-trial-moved', typedPair(a, b)).level
+        ).toBe('ok');
+      }
+    const none = typedPair(4, 6);
+    expect(none).toMatchObject({ count: 0, where_text: 'none' });
+    expect(verdict(EXTENDING, 'which-trial-moved', none).level).toBe('ok');
+    expect(
+      verdict(EXTENDING, 'which-trial-moved', {
+        ...none,
+        where_text: 'Ninguno',
+      }).level
+    ).toBe('ok');
+    // Zero is not enough, and neither is a number.
+    expect(
+      verdict(EXTENDING, 'which-trial-moved', {
+        ...none,
+        where_text: '0',
+        where: 0,
+      }).level
+    ).toBe('error');
+    expect(
+      verdict(EXTENDING, 'which-trial-moved', { ...none, where_text: '' })
+    ).toBeNull();
+    expect(
+      verdict(EXTENDING, 'which-trial-moved', { ...none, count: 1 }).level
+    ).toBe('error');
+    // Saying "none" for a pair that moves one is told so.
+    const refused = verdict(EXTENDING, 'which-trial-moved', {
+      ...typedPair(3, 6),
+      count: 0,
+      where: NaN,
+      where_text: 'none',
+    });
+    expect(refused.level).toBe('error');
+    expect(refused.message).toMatch(/do differ/);
+    // The answer for another pair is named.
+    const other = verdict(EXTENDING, 'which-trial-moved', {
+      ...typedPair(2, 3),
+      from: 3,
+      to: 6,
+    });
+    expect(other.level).toBe('error');
+    expect(other.message).toContain('cutoffs 2 and 3');
+    // The same cutoff twice is not a comparison: a warning, whatever else is typed.
+    for (const c of [2, 3, 4, 6, 10]) {
+      const twice = verdict(EXTENDING, 'which-trial-moved', {
+        from: c,
+        to: c,
+        count: 0,
+        where: NaN,
+        where_text: 'none',
+      });
+      expect(twice.level).toBe('warn');
+      expect(twice.message).toMatch(/same cutoff twice/);
+    }
+    // No pair chosen yet.
+    expect(
+      verdict(EXTENDING, 'which-trial-moved', { ...typedPair(3, 6), from: NaN })
+        .level
+    ).toBe('warn');
+    expect(verdict(EXTENDING, 'which-trial-moved', {})).toBeNull();
+  });
+
+  test('both bins show where the two moved trials stand in the notebook’s table', () => {
+    // The notebook's ten bins are 0.03 wide from 0.12; the trial at 0.2315 is in the bin
+    // centred on 0.225 and the one at 0.2468 in the bin centred on 0.255.
+    const bin = x =>
+      Number((0.12 + (Math.floor((x - 0.12) / 0.03) + 0.5) * 0.03).toFixed(3));
+    for (const list of Object.values(moves))
+      for (const m of list) expect(m.bin).toBe(bin(m.start));
+    // And the table the notebook returns holds the bound counts the lesson tells them to compare.
+    const table = JSON.parse(
+      JSON.parse(
+        readFileSync(
+          'tests/fixtures/compute/population-at-scale.answer.json',
+          'utf8'
+        )
+      ).table
+    );
+    expect(table.columns.find(c => c.id === 'bound').name).toBe('bound trials');
+    const bound = table.columns.find(c => c.id === 'bound').values;
+    expect(bound[3]).toBe(1);
+    expect(bound[4]).toBe(1);
   });
 
   test('the numbers quoted in the prose are the notebook’s', () => {
@@ -166,7 +684,10 @@ describe('Extending an Experiment', () => {
     expect(text).toContain('0.255');
     expect(text).toContain('0.451');
     expect(text).toContain('0.289');
-    expect(four(six['bound.extended'].value)).toBe(0.7007);
+    expect(text).toContain('0.233');
+    expect(four(runs[6]['bound.extended'].value)).toBe(0.7007);
+    expect(four(runs[2]['bound.extended'].value)).toBe(0.5292);
+    expect(four(runs[2]['a.crit'].value)).toBe(0.233);
     expect(four(main['bound.extended'].uncertainty.sigma)).toBe(0.07597);
   });
 });
@@ -365,5 +886,51 @@ describe.each([
     const prose = JSON.stringify([lesson.steps, es.steps]);
     expect(prose).not.toMatch(/\blessons?\b/i);
     expect(prose).not.toMatch(/\blabelled\b|\bcolour\b/);
+  });
+});
+
+describe('The Spanish of the static check messages', () => {
+  // A check's sentence is translated by what it says (js/i18n/lesson.js). The ones that
+  // carry a number from the student's choice are English until they are enumerated.
+  const cutoff = c => ({
+    cutoff: c,
+    edge: c === 2 ? 0.233 : 0.289,
+    extended: c === 2 ? 0.5292 : 0.7007,
+  });
+  const messages = [
+    verdict(INTEGRATORS, 'choose-the-second-step', {
+      second: NaN,
+      verlet: 1,
+      rk4: 1,
+    }),
+    verdict(INTEGRATORS, 'choose-the-second-step', {
+      second: 1000,
+      verlet: 0.0004419,
+      rk4: -2.443e-9,
+      ratioVerlet: 4.0,
+      ratioRk4: 26.5,
+    }),
+    verdict(EXTENDING, 'move-the-definition-yours', {
+      cutoff: NaN,
+      edge: 1,
+      extended: 1,
+    }),
+    verdict(EXTENDING, 'move-the-definition-yours', cutoff(2)),
+    verdict(EXTENDING, 'move-the-definition-yours', cutoff(6)),
+    verdict(EXTENDING, 'which-trial-moved', { count: 1, from: NaN, to: NaN }),
+    verdict(EXTENDING, 'which-trial-moved', {
+      from: 3,
+      to: 3,
+      count: 0,
+      where_text: 'none',
+      where: NaN,
+    }),
+  ].map(r => r.message);
+
+  test('each is in the Spanish catalog', () => {
+    expect(messages).toHaveLength(7);
+    for (const m of messages) {
+      expect(ES_DEFERRED[lessonKey(m)]).toBeTruthy();
+    }
   });
 });

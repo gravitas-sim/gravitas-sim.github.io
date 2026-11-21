@@ -109,8 +109,10 @@ export default {
         'Slope 1, 200,000 planets, cutoff 3: half-way distance 0.255 (within 0.003), its uncertainty 0.0243 (within 0.004), 0.6 of the trials bound (within 0.01) and 0.596 of the synthetic population (within 0.02).',
       'a-uniform-population':
         'Slope 0: 0.451 bound in the synthetic population (within 0.02), 0.149 below the trials’ 0.6 (within 0.03).',
-      'move-the-definition':
-        'Slope 1, cutoff 6: half-way distance 0.289 (within 0.004) and 0.701 of the synthetic population bound (within 0.02).',
+      'move-the-definition-yours':
+        'Slope 1, cutoff 6 (4, 10 alike): 0.289 (within 0.004), 0.701 bound (within 0.02); cutoff 2: 0.233, 0.529.',
+      'which-trial-moved':
+        'By pair: 2 and 3, one trial, bin 0.255; 3 with 4, 6 or 10, one, 0.225; 2 with 4, 6 or 10, two, nearest 0.225; among 4, 6, 10, none (0, none).',
     },
     'refitting-a-transit': {
       'the-fit':
@@ -137,8 +139,8 @@ export default {
     'integrators-in-practice': {
       'four-drifts':
         'Kepler-16, 3 periods, 500 steps: explicit Euler +49.75 percent (within 0.5), symplectic Euler -0.002317, velocity Verlet +0.001768, Runge-Kutta 4 -6.47e-8 (each within 3 percent, with the sign) and 10,722 steps. Explicit Euler is about 50 because its orbit has changed, not because its error is small.',
-      'halve-the-step':
-        '1000 steps: velocity Verlet +0.000442 (within 5 percent) and Runge-Kutta 4 -2.44e-9; the improvement is 4.0 for Verlet (within 10 percent) and 26.5 for Runge-Kutta 4 (within 15).',
+      'choose-the-second-step':
+        'Per step count in the key; drifts within 5 percent.',
       'the-engine':
         '438 steps: velocity Verlet +0.002304 (within 5 percent), Runge-Kutta 4 -1.22e-7 (within 5) and symplectic Euler -0.0001646 (within 10); the application’s engine gave +0.002299 and -1.217e-7.',
     },

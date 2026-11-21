@@ -126,7 +126,7 @@ export const INSTRUCTOR_CONTENT = {
       },
     ],
     teachingNotes: [
-      'The runs are seeded and deterministic: every student should get the digits in the answer key.',
+      'The runs are seeded and deterministic: every student should get the digits in the answer key, which lists each menu choice.',
       'The half-way distance with the cutoff at 6 comes with a warning that the fitted width is at the grid’s floor: the data are a clean step.',
       'The cold download is about 19 MB because the notebook plots. Capsule files open without the runtime.',
       'The example has only twenty trials because an experiment’s parameter has at most twenty values and the lab’s outcome does not depend on the seed; the limit is the point of the investigation.',

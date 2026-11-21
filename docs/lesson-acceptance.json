@@ -762,31 +762,33 @@
       "leakFree": true
     },
     "integrators-in-practice": {
+      "canvas": ["quiet", "scene"],
       "centralExperimentId": "ce.integrators-in-practice",
       "object": "compute:integrators-compared",
-      "control": "the compute page's steps-per-period setting (not a lesson widget)",
-      "quantity": "the energy drift of explicit Euler, symplectic Euler, velocity Verlet and Runge-Kutta 4 over three periods of the widest orbit, and how each changes when the step is halved",
+      "control": "the compute page's steps-per-period setting (not a lesson widget), and the second step count the student chooses from a menu in the lesson",
+      "quantity": "the energy drift of explicit Euler, symplectic Euler, velocity Verlet and Runge-Kutta 4 over three periods of the widest orbit, and how velocity Verlet's and Runge-Kutta 4's drift change at the second step count the student chose",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": ["which-loses-most", "four-drifts", "halve-the-step"],
+      "loop": ["which-loses-most", "four-drifts", "choose-the-second-step"],
       "evidenceFrom": "computation",
-      "decision": "unreviewed",
+      "decision": "Which second step count to run (250, 438, 750 or 1000 steps per period) and compare with the baseline. The six-orbit comparison that follows is a choice question the student answers from their own run; its readings are not recorded in a notebook field.",
       "leakFree": true
     },
     "extending-an-experiment": {
+      "canvas": ["quiet", "scene"],
       "centralExperimentId": "ce.extending-an-experiment",
       "object": "compute:population-at-scale",
-      "control": "the compute page's cutoff and slope settings (not a lesson widget)",
+      "control": "the compute page's cutoff and slope settings (not a lesson widget), and the cutoff the student chooses from a menu in the lesson",
       "quantity": "the half-way starting distance and the bound fraction of the twenty trials and of the synthetic population, for the settings run",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": [
         "how-well-can-twenty-place-an-edge",
         "the-fit",
-        "move-the-definition"
+        "move-the-definition-yours"
       ],
       "evidenceFrom": "computation",
-      "decision": "unreviewed",
+      "decision": "Which cutoff to define bound by (2, 4, 6 or 10) and run against the baseline of 3, and which two cutoffs to compare to find the trial that changes class between them.",
       "leakFree": true
     },
     "refitting-a-transit": {
