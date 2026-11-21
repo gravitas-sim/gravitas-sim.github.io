@@ -85,15 +85,15 @@ The browser half takes about seven minutes on the private port.
 | 3 | `the-saturated-star` | 15: `depth-step:advanced/measure`, `depth-step:advanced/predict`, `depth-step:advanced/read`, `depth-step:quantitative/read`, `key:measure.stage`, `key:measure.tool`, … |
 | 4 | `binary-star-planets` | 8: `key:explore.requires`, `key:explore.setup`, `key:predict.tip`, `key:question.requires`, `key:question.tip`, `key:read.motion`, … |
 | 5 | `weighing-stars` | 5: `key:explore.showBarycenter`, `key:explore.stage`, `key:measure.showBarycenter`, `key:read.showBarycenter`, `math:arithmetic` |
-| 6 | `black-holes` | 3: `key:question.checklist`, `key:read.explainView`, `lock:{"placement":true,"inspector":false,"areaSweep":false}` |
-| 7 | `butterfly-effect` | 3: `key:explore.rubric`, `key:predict.requires`, `lock:null` |
-| 8 | `measuring-the-moon` | 3: `key:question.maxUncertainty`, `key:question.minUncertainty`, `key:question.valueWithin` |
-| 9 | `missing-mass` | 2: `key:predict.setup`, `key:question.restates` |
-| 10 | `propose-an-observation` | 2: `key:measure.plan`, `key:question.rubricCriteria` |
-| 11 | `what-is-a-gravitational-wave` | 2: `audience:beginner`, `key:read.checklist` |
-| 12 | `a-night-at-the-telescope` | 1: `key:question.reflect` |
-| 13 | `counts-to-magnitudes` | 1: `depth-step:quantitative/predict` |
-| 14 | `detect-this-planet` | 1: `key:read.allowInspector` |
+| 6 | `tides` | 4: `key:explore.canvas`, `key:predict.misconceptions`, `key:question.canvas`, `key:read.allowInspector` |
+| 7 | `black-holes` | 3: `key:question.checklist`, `key:read.explainView`, `lock:{"placement":true,"inspector":false,"areaSweep":false}` |
+| 8 | `butterfly-effect` | 3: `key:explore.rubric`, `key:predict.requires`, `lock:null` |
+| 9 | `measuring-the-moon` | 3: `key:question.maxUncertainty`, `key:question.minUncertainty`, `key:question.valueWithin` |
+| 10 | `missing-mass` | 2: `key:predict.setup`, `key:question.restates` |
+| 11 | `propose-an-observation` | 2: `key:measure.plan`, `key:question.rubricCriteria` |
+| 12 | `what-is-a-gravitational-wave` | 2: `audience:beginner`, `key:read.checklist` |
+| 13 | `a-night-at-the-telescope` | 1: `key:question.reflect` |
+| 14 | `counts-to-magnitudes` | 1: `depth-step:quantitative/predict` |
 | 15 | `extending-an-experiment` | 1: `key:measure.compute` |
 | 16 | `power-law-gravity` | 1: `key:question.explain` |
 | 17 | `retrograde-motion` | 1: `lock:{"placement":true,"inspector":false}` |
