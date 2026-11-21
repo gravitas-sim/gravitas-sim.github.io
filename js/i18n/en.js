@@ -656,7 +656,7 @@ export const EN = {
     '{section} back to its defaults; they take effect on Apply & Restart.',
   'settings.button.indivBhMasses': 'Set Individual BH Masses',
   'settings.label.gravitationalConstant': 'Gravitational Constant',
-  'settings.label.mutualGravity': 'Mutual Gravity (Planets and Asteroids)',
+  'settings.label.mutualGravity': 'Mutual Gravity (All)',
   'settings.label.simSpeed': 'Simulation Speed',
   'settings.label.simSize': 'Simulation Size',
   'settings.label.placement': 'Placement',

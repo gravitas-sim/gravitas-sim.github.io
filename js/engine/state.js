@@ -204,6 +204,7 @@ const SOURCE_ORDER = [
   ['white_dwarfs', 'WhiteDwarf', 1],
   ['planets', 'Planet', 2],
   ['asteroids', 'Asteroid', 2],
+  ['comets', 'Comet', 3],
 ];
 
 /**
@@ -236,6 +237,24 @@ export const oneWayPairs = (kinds, s) => {
   return kinds.flatMap(a =>
     kinds.filter(b => pulls(a, b) && !pulls(b, a)).map(b => [a, b])
   );
+};
+
+/** @returns {string[]} The kinds with a live body in the scene (debris aside) */
+export const presentKinds = () => {
+  const l = {
+    bh_list,
+    stars,
+    galaxies,
+    gas_giants,
+    neutron_stars,
+    white_dwarfs,
+    planets,
+    asteroids,
+    comets,
+  };
+  return SOURCE_ORDER.filter(r =>
+    l[r[0]].some(b => b && b.alive !== false)
+  ).map(r => r[1]);
 };
 
 /** The lists the step sums as sources, in its order (js/engine/sources.js). */
