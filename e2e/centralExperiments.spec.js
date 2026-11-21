@@ -3740,7 +3740,9 @@ test.describe('the central experiment of each investigation', () => {
     Number(String(await box.inputValue()).replace(/[^0-9.eE+-]/g, ''));
   const take = async (page, f) => {
     await page.locator(`#investigationBody [data-take="${f}"]`).click();
-    await page.waitForTimeout(150);
+    await expect(
+      page.locator(`#investigationBody input[data-field$=":${f}"]`)
+    ).not.toHaveValue('');
   };
 
   test('the-scale-of-the-solar-system: Neptune is 30 astronomical units out, four hours of light, and any marble puts it 353,000 Earths away @accepts:ce.the-scale-of-the-solar-system', async ({
@@ -3883,6 +3885,10 @@ test.describe('the central experiment of each investigation', () => {
     await openInvestigation(page, app, id);
     const plan = await lessonPlan(page, id);
 
+    // The prediction is held, so the readings open only once it is made.
+    const periodsGuess = await walkToSid(page, plan, 'three-periods-predict');
+    await commitPredictionHeld(page, periodsGuess);
+
     // The three periods are taken from the instrument, one moon at a time.
     await walkToSid(page, plan, 'three-periods');
     for (const [moon, f, v] of [
@@ -3916,6 +3922,12 @@ test.describe('the central experiment of each investigation', () => {
 
     // The sampling is the student's decision: the tool opens on one frame a night.
     const sum = 'how-sure-is-the-sum';
+    const combinationGuess = await walkToSid(
+      page,
+      plan,
+      'the-laplace-combination'
+    );
+    await commitPredictionHeld(page, combinationGuess);
     await walkToSid(page, plan, sum);
     const six = async () => {
       for (const [moon, q, e] of [
