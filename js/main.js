@@ -30,6 +30,7 @@ import {
   assignmentInHash,
   packInHash,
   watchForAssignments,
+  whenLessonShown,
 } from './investigationsLoader.js';
 import { initExportBridge } from './exportBridge.js';
 import { watchForManeuver } from './inspectorGate.js';
@@ -229,10 +230,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setTimeout(async () => {
       document.querySelector('.ui-container').classList.add('showUI');
       document.getElementById('overlay').classList.add('showUI');
-      const sonificationPanel = document.getElementById('sonificationControl');
-      if (sonificationPanel) {
-        sonificationPanel.classList.add('showUI');
-      }
+      document.getElementById('sonificationControl')?.classList.add('showUI');
 
       // Set up overlay minimize functionality
       const { setupOverlayMinimize } = await import('./ui.js');
@@ -243,32 +241,19 @@ document.addEventListener('DOMContentLoaded', () => {
       const { collapseReadoutOnSmallScreens } = await import('./controls.js');
       collapseReadoutOnSmallScreens();
 
-      // Show the narrow-screen menu button. The rail itself *is* the menu it
-      // opens, so there is no separate dropdown to reveal.
-      document.getElementById('mobileMenuToggle')?.classList.add('showUI');
-
-      // Fade in the transport bar with the rest of the UI
-      const timelineBar = document.getElementById('timelineBar');
-      if (timelineBar) {
-        timelineBar.classList.add('showUI');
-      }
-
-      // Fade in the tutorial button with the rest of the UI
-      const tutorialBtn = document.getElementById('tutorialBtn');
-      if (tutorialBtn) {
-        tutorialBtn.classList.add('showUI');
-      }
-      // Fade in the attribution text with the rest of the UI
-      const attribution = document.getElementById('attribution');
-      if (attribution) {
-        attribution.classList.add('showUI');
-      }
-
-      // Show object inspector after splash ends (it will be hidden by default)
-      const objectInspector = document.getElementById('objectInspector');
-      if (objectInspector) {
-        objectInspector.classList.add('showUI');
-      }
+      // The rest of the interface fades in with it: the narrow-screen menu
+      // button (the rail itself *is* the menu it opens, so there is no separate
+      // dropdown to reveal), the transport bar, the tutorial button, the
+      // attribution and, last, the object inspector (hidden until the splash
+      // ends).
+      for (const id of [
+        'mobileMenuToggle',
+        'timelineBar',
+        'tutorialBtn',
+        'attribution',
+        'objectInspector',
+      ])
+        document.getElementById(id)?.classList.add('showUI');
 
       armTouchTips();
     }, 200);
@@ -423,8 +408,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // Placing a body is an interaction of its own. The long press that arms it is
   // already too long to be a tap, but the release that drops the object must
   // not pair with whatever comes next either.
-  window.addEventListener(EV_PLACEMENT_ARMED, () => doubleTap.cancel());
-  window.addEventListener(EV_OBJECT_PLACED, () => doubleTap.cancel());
+  for (const type of [EV_PLACEMENT_ARMED, EV_OBJECT_PLACED])
+    window.addEventListener(type, () => doubleTap.cancel());
 
   // Initialize with error handling
   try {
@@ -455,10 +440,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Ensure inspector is hidden on page load
     const inspector = document.getElementById('objectInspector');
-    if (inspector) {
-      inspector.style.display = 'none';
-      inspector.classList.remove('visible');
-    }
+    inspector?.classList.remove('visible');
+    if (inspector) inspector.style.display = 'none';
 
     initShare();
     initExportBridge();
@@ -587,18 +570,22 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     // 'Step by step' (js/quality.js): the world is built but does not start.
     if (stepMotion()) setPlaying(false);
-    requestAnimationFrame(gameLoop);
+    // A lesson link waits for its first screen (whenLessonShown); any other
+    // load goes straight on.
+    whenLessonShown().then(() => {
+      requestAnimationFrame(gameLoop);
 
-    // Offline support, after the first frame rather than during boot: the
-    // install fetches 5.5MB and there is no reason for that to compete with
-    // building the first world. The case it exists for is the second half of a
-    // lesson, not the first second of one.
-    requestAnimationFrame(() => {
-      import('./offline.js')
-        .then(m => m.initOffline())
-        .catch(() => {
-          /* offline support is an enhancement; its absence is not an error */
-        });
+      // Offline support, after the first frame rather than during boot: the
+      // install fetches 5.5MB and there is no reason for that to compete with
+      // building the first world. The case it exists for is the second half of
+      // a lesson, not the first second of one.
+      requestAnimationFrame(() => {
+        import('./offline.js')
+          .then(m => m.initOffline())
+          .catch(() => {
+            /* offline support is an enhancement, not an error to report */
+          });
+      });
     });
   } catch (error) {
     console.error('Initialization failed:', error);
