@@ -26,6 +26,7 @@ import {
 import { physicsSettings } from './engine/state.js';
 import { sceneRoles, bodyRoles } from './engine/sources.js';
 import { timeUnitSeconds } from './units.js';
+import { decimal } from './format.js';
 import { dominantPrimary } from './orbital.js';
 import { barycenterOf, drawBarycenterCross } from './lesson/barycenter.js';
 import { frameState, WORLD, BARYCENTER, OBJECT } from './referenceFrame.js';
@@ -160,7 +161,7 @@ export function rolesSentences(counts, settings, locale = getLocale()) {
   if (r.staticHoles) out.push(t('sources.staticHoles'));
   const G = settings?.gravitational_constant;
   if (out.length && G > 100) {
-    const days = (timeUnitSeconds() / 86400).toPrecision(4);
+    const days = decimal(timeUnitSeconds() / 86400, 4, locale);
     out.push(t('sources.schematic', { g: G, days }));
   }
   return out;
