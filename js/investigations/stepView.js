@@ -37,7 +37,14 @@ import {
   nextHintStage,
 } from '../answerFeedback.js';
 import { command, state } from '../appState.js';
-import { drop, get, noteLesson, noteResume, put } from '../storage/local.js';
+import {
+  drop,
+  get,
+  noteLesson,
+  noteResume,
+  previewing,
+  put,
+} from '../storage/local.js';
 import { ENTRY_LINK, isKeptLink, isTooLongLink } from '../names.js';
 import { migrateSavedProgress } from '../platform/resolver.js';
 import { assignmentStorageKey, shortHash } from '../assignments/assignment.js';
@@ -906,6 +913,12 @@ export const formatFieldNumber = (value, decimals, locale) =>
 /** @type {PersistenceHost} */
 let host = null;
 
+/** Which investigation is open, how many steps it has seen and where it is. */
+export const sceneContext = () => {
+  const s = host?.state();
+  return { id: s?.active?.id, n: s?.visited.size, i: s?.stepIndex };
+};
+
 /** Hand this module the engine's side, once, when the engine loads. */
 export const bindPersistence = h => {
   host = h;
@@ -1009,19 +1022,13 @@ function noteWork(active, step, link, key) {
   });
 }
 
-/** Whether the last write reached the disk: 'saved' | 'unavailable' | 'full' | 'authoring' | 'idle'. */
-let saveState = { status: 'idle', at: null };
+/** Whether the last write reached the disk: 'saved' | 'unavailable' | 'full' | 'authoring' | 'foreign' | 'idle'. */
+let saveState = { status: 'idle', was: 'idle' };
 
+/** A change of state is said once; the same outcome again draws nothing. */
 function setSaveState(status) {
-  if (saveState.status === status) {
-    // Same outcome as last time: refresh the timestamp for a success so the
-    // reader sees it is still saving, but do not re-render a standing warning
-    // on every keystroke.
-    if (status === 'saved') saveState.at = Date.now();
-    else return;
-  } else {
-    saveState = { status, at: Date.now() };
-  }
+  if (saveState.status !== status)
+    saveState = { status, was: saveState.status };
   renderSaveStatus();
 }
 
@@ -1067,7 +1074,7 @@ export function save() {
 
   try {
     put(key, JSON.stringify(payload), progressArea());
-    setSaveState('saved');
+    setSaveState(previewing() ? 'preview' : 'saved');
     noteWork(active, payload.stepSid, link, key);
   } catch (err) {
     // The answers stay in memory and the lesson keeps working; what changes is
@@ -1106,43 +1113,57 @@ export function renderProgressNotice() {
 }
 
 /**
- * Show whether the work is safe: a polite live region, not a toast (one would
- * fire on every keystroke). Successes announce nothing: "saved" forty times
- * while typing an answer is worse than silence.
+ * Show whether the work is safe, in words: a status line, not a toast (one
+ * would fire on every keystroke). A change of state is drawn once (the text is
+ * redrawn only when the state or the language changes) and a refusal, a
+ * recovery from one and a record that cannot be written are also spoken once,
+ * through the page's status region: the line itself is drawn visible and in
+ * one go, which a reader may not announce. A refusal carries the backup button.
  */
 export function renderSaveStatus() {
   const el = host.els()?.saveStatus;
   if (!el) return;
-  const { status } = saveState;
-
-  const text = {
-    saved: t('inv.save.saved'),
-    full: t('inv.save.full'),
-    unavailable: t('inv.save.unavailable'),
-    authoring: t('inv.save.authoring'),
-    foreign: t('inv.save.foreign'),
-    idle: '',
-  }[status];
-
-  el.textContent = text || '';
-  // The block is a status and a way to everything saved on this device (My work).
-  if (text && ['saved', 'full', 'unavailable'].includes(status)) {
+  const { status, was } = saveState;
+  const key = `${status}${getLocale()}`;
+  if (el.dataset.shown === key) return;
+  const changed = el.dataset.state !== status;
+  const refused = status === 'full' || status === 'unavailable';
+  const focused = el.contains(document.activeElement);
+  const text = status === 'idle' ? '' : t(`inv.save.${status}`);
+  el.dataset.shown = key;
+  el.dataset.state = status;
+  el.textContent = text;
+  el.hidden = status === 'idle';
+  // A way out of a refusal, and a way to everything saved when saving works.
+  if (refused) {
+    const go = el.appendChild(document.createElement('button'));
+    go.type = 'button';
+    go.className = 'ui-button subtle';
+    go.textContent = t('inv.backup.download');
+    go.onclick = () => host.els()?.backupDownload?.click();
+  } else if (status === 'saved') {
     const link = document.createElement('a');
     link.href = '/my-work/';
     link.textContent = t('inv.save.link');
     el.append(' ', link);
   }
-  el.hidden = !text;
-  el.dataset.state = status;
-  // Only a problem interrupts. aria-live is set rather than removed so the
-  // element keeps its identity across renders.
-  el.setAttribute(
-    'aria-live',
-    status === 'full' || status === 'unavailable' || status === 'foreign'
-      ? 'polite'
-      : 'off'
-  );
+  // The button that had focus is gone: keep the reader's place on the line.
+  if (focused) ((el.tabIndex = -1), el.focus());
+  // Said a moment later: the step's own announcement (a grade, a hint) is made
+  // in the same turn as the save that failed, and the one region keeps only
+  // the last thing written to it.
+  clearTimeout(saidLater);
+  if (
+    changed &&
+    (status === 'foreign' ||
+      refused ||
+      (status === 'saved' && ['full', 'unavailable'].includes(was)))
+  )
+    saidLater = setTimeout(() => {
+      if (el.dataset.state === status) announce(text);
+    }, 1200);
 }
+let saidLater = 0;
 
 /** This tab's copy of every lesson's progress, written on every save. */
 export const sessionProgress = new Map();
@@ -1162,7 +1183,9 @@ export const drafts = more =>
 export const persisted = () => host.state();
 /** Whether a write reaches the disk now; false when storage refuses or the record is not this reader's. */
 export const canSave = () =>
-  !['unavailable', 'full', 'foreign', 'authoring'].includes(saveState.status);
+  !['unavailable', 'full', 'foreign', 'authoring', 'preview'].includes(
+    saveState.status
+  );
 
 /** Per storage key: answers to steps it no longer has, written back on save. */
 const earlierKept = new Map();

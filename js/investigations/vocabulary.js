@@ -2,11 +2,28 @@
 // control beside the progress bar, its reason when it is off, and the sandbox's
 // own rail controls while an investigation is open. The two actions are
 // "Reset the scene" (answers untouched) and "Start this investigation over"
-// (js/investigations/restart.js); nothing else here is a third.
+// (js/investigations/restart.js); nothing else here is a third. It also says
+// where the scene is not kept: the record holds answers, readings, slider
+// settings and hints, and a scene is rebuilt from the start of its step. The
+// note shows when the student has paused the run or added, removed or merged a
+// body on a step that has a scene, and on coming back to one.
 
 import { onLocaleChange, registerMessages, t } from '../i18n/index.js';
 import { EN_RESET } from '../i18n/en.reset.js';
 import { ES_RESET } from '../i18n/es.reset.js';
+import { state } from '../appState.js';
+import { EV_OBJECT_PLACED } from '../names.js';
+import {
+  asteroids,
+  bh_list,
+  comets,
+  gas_giants,
+  neutron_stars,
+  planets,
+  stars,
+  white_dwarfs,
+} from '../physics.js';
+import { sceneContext } from './stepView.js';
 
 registerMessages('en', EN_RESET);
 registerMessages('es', ES_RESET);
@@ -55,6 +72,107 @@ export function railLeavesScene(on) {
   bound.clear();
 }
 
+/** How many bodies are in the world. */
+const bodies = () =>
+  [
+    stars,
+    planets,
+    gas_giants,
+    asteroids,
+    comets,
+    bh_list,
+    neutron_stars,
+    white_dwarfs,
+  ].reduce((n, l) => n + l.length, 0);
+
+/**
+ * The scene as a step drew it: the run paused or not, how many bodies, whether
+ * the student placed one, and whether they touched anything outside the lesson
+ * panel since (a lesson that pauses the run itself, or bodies that merge on
+ * their own, are not the student's doing).
+ */
+let start = { paused: false, count: 0, at: 0, placed: false, acted: false };
+/** An instrument settling in puts bodies in the scene for a moment: only later changes are the student's. */
+const SETTLE_MS = 3000;
+const acted = e => {
+  if (!e.target?.closest?.('#investigationPanel')) start.acted = true;
+};
+window.addEventListener(EV_OBJECT_PLACED, () => (start.placed = true));
+window.addEventListener('pointerdown', acted, true);
+window.addEventListener('keydown', acted, true);
+const changed = () =>
+  start.placed ||
+  (start.acted &&
+    (state.paused !== start.paused ||
+      (Date.now() - start.at > SETTLE_MS && bodies() !== start.count)));
+const rebase = () =>
+  (start = {
+    paused: state.paused,
+    count: bodies(),
+    at: Date.now(),
+    placed: false,
+    acted: false,
+  });
+
+let timer = 0;
+let open = null;
+let at = -1;
+let has = false;
+let said = '';
+let el = null;
+
+const draw = () => {
+  if (!el) return;
+  el.textContent = said && t(said);
+  el.hidden = !said;
+};
+
+const say = key => {
+  said = key;
+  if (!el?.isConnected)
+    el = document
+      .getElementById('investigationSaveStatus')
+      ?.insertAdjacentElement(
+        'afterend',
+        Object.assign(document.createElement('p'), {
+          className: 'inv-save-status',
+          hidden: true,
+        })
+      );
+  el?.setAttribute('role', 'status');
+  el?.setAttribute('data-state', 'scene');
+  draw();
+};
+
+function tick() {
+  if (!sceneContext().id) {
+    clearInterval(timer);
+    timer = open = 0;
+    say('');
+  } else if (has && !said && changed()) say('saved.scene.leave');
+  // The scene is back as it was drawn (a reset): nothing left to warn of.
+  else if (said === 'saved.scene.leave' && !changed()) say('');
+  if (Date.now() - start.at <= SETTLE_MS) start.count = bodies();
+}
+
+/**
+ * A step was drawn: take its scene as the one to compare against, and say so
+ * if this is a return to a step that has one. Drawn again (an instrument
+ * arriving, a language) it is the same step: what was said stands.
+ * @param {{scene: boolean}} step - What the step has
+ */
+function noteScene({ scene }) {
+  const { id, n, i } = sceneContext();
+  const again = id === open && i === at;
+  const back = id !== open && (i > 0 || n > 1);
+  open = id;
+  at = i;
+  has = scene;
+  if (!again || !said) rebase();
+  if (!again) say(scene && back ? 'saved.scene.back' : '');
+  timer ||= setInterval(tick, 1000);
+}
+
 /** The last step state handed to syncReset, for a change of language. */
 let shown = null;
 
@@ -65,9 +183,19 @@ let shown = null;
  */
 export function syncReset(step) {
   shown = step;
+  noteScene(step);
+  paintReset(step);
+}
+
+function paintReset(step) {
   const button = $('investigationResetScenario');
   const why = $('investigationResetWhy');
   if (!button) return;
+  // Resetting the scene puts it back as drawn: nothing left to warn of.
+  if (!button.dataset.noted) {
+    button.dataset.noted = 1;
+    button.addEventListener('click', () => (rebase(), say('')));
+  }
   const off = !step.scene && !step.tool;
   button.disabled = off;
   const kind = step.kind === 'portrait' || step.kind === 'quiet';
@@ -86,6 +214,7 @@ export const resetSaid = step =>
   t(`reset.did.${step.scene ? (step.tool ? 'both' : 'scene') : 'tool'}`);
 
 onLocaleChange(() => {
-  if (shown) syncReset(shown);
+  draw();
+  if (shown) paintReset(shown);
   if (leaving) railWords();
 });

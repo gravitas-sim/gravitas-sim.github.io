@@ -7252,6 +7252,19 @@
     border-radius: var(--radius-sm, 4px);
   }
 
+  /* The backup button a refusal offers, on its own line; the note that the
+     scene is rebuilt (js/investigations/vocabulary.js) is marked by a rule too. */
+  .inv-save-status .ui-button {
+    display: block;
+    margin-top: var(--space-2, 8px);
+  }
+
+  .inv-save-status[data-state='scene'] {
+    color: var(--text-primary);
+    border-left: 3px solid var(--border-subtle);
+    padding-left: var(--space-2, 8px);
+  }
+
   /* The two backup buttons, behind one disclosure. An authoring preview
      hides the disclosure itself: it has nothing to back up. */
   .inv-backup > summary {

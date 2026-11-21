@@ -45,4 +45,8 @@ export const EN_RESET = {
   'reset.leave': "Leave this investigation's scene: {what}",
   'reset.leave.hint': "Leaves this investigation's scene. {what}",
   'reset.help.title': 'Starting over',
+  'saved.scene.leave':
+    'The scene you set up is not saved. When you come back, it is rebuilt from the start of this step.',
+  'saved.scene.back':
+    'The scene is rebuilt from the start of this step. The scene you set up last time is not kept.',
 };
