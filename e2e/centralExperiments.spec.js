@@ -1283,7 +1283,6 @@ test.describe('the central experiment of each investigation', () => {
     // 3. The prediction, which opens at the start of the track and says
     //    nothing, is committed and held.
     const predict = await walkToSid(page, plan, predictSid);
-    await page.waitForTimeout(300);
     await expect(page.locator('#investigationToolReadout')).toContainText(
       /collapsing cloud/i
     );
@@ -1295,7 +1294,6 @@ test.describe('the central experiment of each investigation', () => {
     //    touching it. Seeking while it runs is a race this test cannot win, so
     //    the reader's own Pause button is the way out.
     await walkToSid(page, plan, measureSid);
-    await page.waitForTimeout(400);
     await pausePlayback(page);
     await expectStill(page);
     const { after } = await setControl(page, control, giant.at);

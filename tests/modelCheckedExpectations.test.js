@@ -231,7 +231,8 @@ describe('the instructor expectations record', () => {
     // 551 after the two Gaia investigations (Prompt 233 Part B): 4 more over 547.
     // 556 over v4's 552: the new steps of Weighing the Stars, Transit Photometry and Kepler's Laws, net of the ones they retire.
     // 557 over that: the new steps of Integrators in Practice and Extending an Experiment, net of the ones they retire.
-    expect(total).toBe(557);
+    // 555 over that: Lives of Stars replaces three read-a-number steps with one comparison step (3 retired, 1 new).
+    expect(total).toBe(555);
     // 542 after How Many Earths? (Prompt 229): 3 more over 539.
     // 547 after the four exoplanet closeout investigations (Prompt 231): 5 more over 542.
   });
