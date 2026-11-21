@@ -11,8 +11,10 @@
 
 import { afterEach, beforeEach, describe, expect, test } from '@jest/globals';
 import { readFileSync, readdirSync } from 'node:fs';
-import { EN_RESET } from '../js/i18n/en.reset.js';
-import { ES_RESET } from '../js/i18n/es.reset.js';
+import { EN } from '../js/i18n/en.js';
+import { ES } from '../js/i18n/es.js';
+import { EN_RESET as EN_LATE } from '../js/i18n/en.reset.js';
+import { ES_RESET as ES_LATE } from '../js/i18n/es.reset.js';
 import { EN_CANVAS } from '../js/i18n/en.canvas.js';
 import { ES_CANVAS } from '../js/i18n/es.canvas.js';
 import {
@@ -25,16 +27,18 @@ import {
   save,
   sessionProgress,
 } from '../js/investigations/stepView.js';
-import {
-  railLeavesScene,
-  resetSaid,
-  syncReset,
-} from '../js/investigations/vocabulary.js';
+import { railLeavesScene, resetSaid, syncReset } from '../js/lessonFrame.js';
 import { setLocale } from '../js/i18n/index.js';
 // Registers the canvas kinds' words, as a lesson that declares a canvas does.
 import '../js/lessonCanvas.js';
 import { countSaved, ask, forget } from '../js/investigations/restart.js';
 
+// The control's own words are in the base catalogs; the rest arrive late
+// (js/investigations/vocabulary.js). Together they are the one reset vocabulary.
+const own = c =>
+  Object.fromEntries(Object.entries(c).filter(([k]) => k.startsWith('reset.')));
+const EN_RESET = { ...own(EN), ...EN_LATE };
+const ES_RESET = { ...own(ES), ...ES_LATE };
 const SCENE = 'Reset the scene';
 const OVER = 'Start this investigation over';
 const lessonHtml = readFileSync('js/fragments/lesson.html', 'utf8');
@@ -128,7 +132,9 @@ describe('the words, one key set in both languages', () => {
 });
 
 describe('the markup takes its words from the keys', () => {
-  const used = html => [...html.matchAll(/data-i18n(?:-title)?="([^"]+)"/g)];
+  const used = html => [
+    ...html.matchAll(/data-(?:i18n|late)(?:-title)?="([^"]+)"/g),
+  ];
 
   test('every key the fragments name exists in both languages', () => {
     for (const [, key] of [...used(lessonHtml), ...used(finishHtml)].filter(
@@ -151,14 +157,14 @@ describe('the markup takes its words from the keys', () => {
 
   test('the restart control, the help and the dialog use the two phrases', () => {
     expect(lessonHtml).toMatch(
-      /id="investigationReset"[\s\S]*?data-i18n-title="reset\.restart\.hint"[\s\S]*?data-i18n="reset\.restart"/
+      /id="investigationReset"[\s\S]*?data-late-title="reset\.restart\.hint"[\s\S]*?data-late="reset\.restart"/
     );
     const help = lessonHtml.slice(lessonHtml.indexOf('reset.help.title'));
     expect(help).toContain('data-i18n="reset.scene"');
-    expect(help).toContain('data-i18n="reset.restart"');
-    expect(finishHtml).toContain('data-i18n="reset.ask.title"');
-    expect(finishHtml).toContain('data-i18n="reset.ask.backup"');
-    expect(finishHtml).toContain('data-i18n="reset.ask.go"');
+    expect(help).toContain('data-late="reset.restart"');
+    expect(finishHtml).toContain('data-late="reset.ask.title"');
+    expect(finishHtml).toContain('data-late="reset.ask.backup"');
+    expect(finishHtml).toContain('data-late="reset.ask.go"');
   });
 
   test('the progress row keeps the reason as text where the control is off', () => {
@@ -601,14 +607,14 @@ describe('the reset control and the rail, named for what they touch', () => {
     expect(button().textContent).toContain(SCENE);
   });
 
-  test('what it did is said as the scene, the instrument or both', () => {
-    expect(resetSaid({ scene: true, tool: false })).toBe(
+  test('what it did is said as the scene, the instrument or both', async () => {
+    expect(await resetSaid({ scene: true, tool: false })).toBe(
       EN_RESET['reset.did.scene']
     );
-    expect(resetSaid({ scene: false, tool: true })).toBe(
+    expect(await resetSaid({ scene: false, tool: true })).toBe(
       EN_RESET['reset.did.tool']
     );
-    expect(resetSaid({ scene: true, tool: true })).toBe(
+    expect(await resetSaid({ scene: true, tool: true })).toBe(
       EN_RESET['reset.did.both']
     );
   });

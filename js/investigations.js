@@ -36,11 +36,6 @@ import {
 // The public readers of the saved record, as they were exported from here.
 export { getStudentName } from './investigations/progressSchema.js';
 import { getLocale, t, onLocaleChange } from './i18n/index.js';
-import {
-  railLeavesScene,
-  resetSaid,
-  syncReset,
-} from './investigations/vocabulary.js';
 import { lessonText } from './i18n/lesson.js';
 import {
   ENTITIES,
@@ -182,7 +177,15 @@ import {
   stagePresence,
   stagedStars,
 } from './lesson/stageGate.js';
-import { closeSheet, frameScene, initSheet, takeFit } from './lessonFrame.js';
+import {
+  closeSheet,
+  frameScene,
+  initSheet,
+  railLeavesScene,
+  resetSaid,
+  syncReset,
+  takeFit,
+} from './lessonFrame.js';
 import {
   allBodies,
   bindRoles,
@@ -2093,10 +2096,7 @@ export async function openInvestigation(id, opts = {}) {
   // An assignment is the same lesson with steps taken out (`active.id` stays its).
   assignment = opts.assignment ?? null;
   // An undo belongs to the record it was taken from.
-  restartMod?.then(
-    m => m.forget(),
-    () => {}
-  );
+  restartMod?.then(m => m.forget()).catch(() => {});
   setEntryLink(opts.link);
   assignmentBinding = null;
   if (assignment) {
@@ -2231,10 +2231,7 @@ export function closeInvestigation() {
   els.panel.classList.remove('is-open');
   document.body.classList.remove('investigation-open');
   railLeavesScene(false);
-  restartMod?.then(
-    m => m.forget(),
-    () => {}
-  );
+  restartMod?.then(m => m.forget()).catch(() => {});
   closeSheet();
   slots.runs?.release();
   stopProbeLoop();
@@ -2503,7 +2500,7 @@ function resetStepScene() {
   for (const k in responses)
     if (k.startsWith(`${stepId(stepIndex)}:tool:`)) delete responses[k];
   goToStep(stepIndex, { rebuild: true });
-  toast(resetSaid(kit));
+  resetSaid(kit).then(toast, () => {});
 }
 
 // --- Wiring -------------------------------------------------------------------

@@ -84,11 +84,7 @@ export function toast(message, action) {
   toastTimer = setTimeout(hide, action ? 10000 : 2200);
 }
 
-/**
- * A link could not be opened: the dialog that says why and what to do, loaded
- * when one is refused; the toast where the page has no dialog.
- * @param {object} what - See js/assignments/linkNotice.js
- */
+/** A link was refused: the dialog (js/assignments/linkNotice.js), or a toast without one. */
 export const refuseLink = what =>
   import('./assignments/linkNotice.js')
     .then(m => m.refuseLink(what))

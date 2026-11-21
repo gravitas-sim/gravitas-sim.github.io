@@ -4,7 +4,12 @@ Two actions put an investigation back, and each is named by what it touches.
 Every control, accessible name, tooltip, dialog line and help line that speaks
 of either takes its words from `js/i18n/en.reset.js` and `js/i18n/es.reset.js`
 (one key set, the same keys in both languages; `tests/resetVocabulary.test.js`
-holds them). Later work that names either action (the report, the instructor's
+holds them). The words a lesson shows the moment it opens (the control's name
+and tooltip, why it is off, the two scene notes, the rail's wording) are keys
+`reset.*` and `saved.scene.*` in the base catalogs `en.js` and `es.js`; the rest
+arrive with `js/investigations/vocabulary.js` the first time they are needed
+(the toast after a reset, starting over, and at once in Spanish), and the
+markup that names them carries `data-late` until then. Later work that names either action (the report, the instructor's
 kit, the interface-wide pass) reads the same keys and adds no third phrase.
 
 ## The two actions
@@ -43,7 +48,7 @@ because until the investigation closes they can come back.
 - **The sandbox's rail** inside an open investigation: its three controls are
   named "Leave this investigation's scene: ..." (`reset.leave`, tooltip
   `reset.leave.hint`) and handed back unchanged when the investigation closes
-  (`railLeavesScene` in `js/investigations/vocabulary.js`). Outside an
+  (`railLeavesScene` in `js/lessonFrame.js`). Outside an
   investigation nothing about the rail changes here.
 
 ## What the record does

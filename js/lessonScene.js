@@ -422,19 +422,11 @@ export function resetLessonSceneForTests() {
   setBodySelector(null);
 }
 
-/**
- * Put the reader's own world back, if it is still theirs: the world on screen is the one the lesson built
- * (a stage was up, or the generation has not moved past the lesson's rebuilds). A loaded scenario or followed link was deliberate.
- * @param {object} saved - The pairs handed back by leaveLessonScope()
- * @returns {boolean} Whether the sandbox was put back
- */
+/** Put the reader's own world back (the pairs from leaveLessonScope()); true if it was. */
 export function restoreSandbox(saved) {
   const payload = saved?.sandbox;
   if (!payload) return false;
-  // A world with nothing in it is not worth restoring over, and restoring an
-  // empty capture would blank a scene the reader may want. Both directions of
-  // that are covered by refusing to act on an empty payload. The bodies ride
-  // under `b` - see packBody() and the payload shape in js/shareState.js.
+  // An empty capture is never restored (the bodies ride under `b`, js/shareState.js).
   if (!Array.isArray(payload.b) || payload.b.length === 0) return false;
   try {
     command('applyShareState')(JSON.parse(JSON.stringify(payload)));
@@ -445,15 +437,7 @@ export function restoreSandbox(saved) {
   }
 }
 
-/**
- * Put the reader's selection back on the body it was on, by id, only after a
- * successful restore (the restored world carries the ids it was saved with).
- * Silent when the body is not there: selecting something arbitrary instead
- * would be worse than nothing.
- *
- * @param {?object} selection - {id} as saved on entry
- * @returns {boolean} Whether a body was reselected
- */
+/** Reselect the body {id} the reader had, after a restore; silent when it is gone. */
 export function restoreSelection(selection) {
   const id = selection?.id;
   if (!Number.isFinite(id)) return false;

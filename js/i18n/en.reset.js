@@ -3,11 +3,6 @@
 // over" deletes them. Every control, name, tooltip, dialog and help line that
 // speaks of either takes its words from here.
 export const EN_RESET = {
-  'reset.scene': 'Reset the scene',
-  'reset.scene.hint':
-    "Rebuilds this step's scene. Your answers are not changed.",
-  'reset.scene.none':
-    'Reset the scene is off on this step: it has no scene or instrument to rebuild.',
   'reset.did.scene':
     'The scene is back at the start of this step. Your answers are not changed.',
   'reset.did.tool':
@@ -42,11 +37,5 @@ export const EN_RESET = {
     'Started over. Nothing had been saved, so only your place was reset. You can undo until you close this investigation.',
   'reset.undo': 'Undo',
   'reset.undo.done': 'Your answers and readings are back.',
-  'reset.leave': "Leave this investigation's scene: {what}",
-  'reset.leave.hint': "Leaves this investigation's scene. {what}",
   'reset.help.title': 'Starting over',
-  'saved.scene.leave':
-    'The scene you set up is not saved. When you come back, it is rebuilt from the start of this step.',
-  'saved.scene.back':
-    'The scene is rebuilt from the start of this step. The scene you set up last time is not kept.',
 };

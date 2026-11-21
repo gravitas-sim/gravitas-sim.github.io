@@ -1,6 +1,7 @@
 // Frames the scene in what a lesson's panels leave clear: sheets up to 900 px
 // (so the inset has a top and a bottom), the side panels beyond. A fit is asked
 // for and taken on the panel's tick; a reader who touches the view owns it.
+// It also holds the reset control and the note that a scene is not kept.
 
 import { SETTINGS, state } from './appState.js';
 import { allBodies, boundRoles, roleBody } from './lessonScene.js';
@@ -10,7 +11,8 @@ import {
   insetFromBoxes,
   placedOf,
 } from './lesson/stage.js';
-import { getLocale } from './i18n/index.js';
+import { getLocale, onLocaleChange, t } from './i18n/index.js';
+import { EV_OBJECT_PLACED } from './names.js';
 import { stagedStars } from './lesson/stageGate.js';
 
 const MAX_FIT_ATTEMPTS = 24;
@@ -130,15 +132,13 @@ export function boundPoints() {
 
 let pending = false;
 let attempts = 0;
-// A scene's own fit may be retaken this many times as panels settle; the
-// reader's own choices (the sheet handle) are not counted.
+// A scene's own fit is retaken at most this often as panels settle.
 const MAX_REFITS = 4;
 let refits = 0;
-// Ticks after a fit in which panels that open late are still picked up.
+// Ticks after a fit in which late-opening panels are picked up.
 const WATCH_TICKS = 24;
 let watchTicks = 0;
-// What a shelf's stars looked like at the last fit: a tool that resizes them
-// after the fit (the star's track reaching its end) asks for another.
+// The shelf's stars at the last fit: a tool that resizes them asks for another.
 let fittedStars = '';
 const starsKey = () =>
   stagedStars()
@@ -197,8 +197,7 @@ export function fitNow(points, maxZoom = 3) {
   return true;
 }
 
-// A fit taken before an instrument or plot finished opening is taken again when
-// a panel changes size (while the reader has not touched the view).
+// A panel that changes size after a fit asks for another (until the reader moves the view).
 let watcher = null;
 function watchLayout() {
   if (!window.ResizeObserver) return;
@@ -209,7 +208,7 @@ function watchLayout() {
     watcher.observe(el);
 }
 
-/** The nearest nine tenths of a crowd of points, so one far body does not set the view. */
+/** The nearest nine tenths of a crowd, so one far body does not set the view. */
 function nearest(points) {
   if (points.length <= CROWD_POINTS) return points;
   const mid = k => {
@@ -224,12 +223,9 @@ function nearest(points) {
 }
 
 /**
- * What to frame, and how far in it may go. A shelf of staged stars stops at a
- * zoom of 3; bound bodies fill their room, to the application's own limit,
- * unless there is one role or the bodies lie within a few radii of one another
- * (a probe beside its planet), which stop at 3 as a lone body does; a step that
- * binds nothing frames the world it loads, less the farthest tenth of a crowd.
- *
+ * What to frame and how far in: staged stars stop at zoom 3; bound bodies fill
+ * their room unless there is one role or they lie within a few radii of one
+ * another (zoom 3); a step that binds nothing frames the world, less a far tenth.
  * @param {{stars: Array, bound: Array, roles: number, world: Array}} scene
  * @returns {{points: Array, maxZoom: number}}
  */
@@ -365,3 +361,203 @@ export function closeSheet() {
   peek = false;
   paint();
 }
+
+// --- Reset the scene, and the note that a scene is not kept -------------------
+// The control, the note and the rail speak from the base catalog; the other reset
+// words (the toast, starting over, Spanish markup) are js/investigations/vocabulary.js.
+
+const $ = id => document.getElementById(id);
+const resetWords = () => import('./investigations/vocabulary.js');
+/** Spanish takes the late words at once: the markup carries English until then. */
+const lateWords = () =>
+  getLocale() !== 'en' &&
+  resetWords().then(
+    m => m.activate(),
+    () => {}
+  );
+
+/** The rail controls an open investigation does not own, by element id and message key. */
+const RAIL = {
+  refreshScenarioBtn: 'rail.refreshScenario',
+  resetAllBtn: 'rail.resetAll',
+  cleanSimBtn: 'rail.cleanSim',
+};
+/** What each was bound to, so closing hands it back exactly. */
+const bound = new Map();
+let leaving = false;
+
+function railWords() {
+  for (const [id, key] of Object.entries(RAIL)) {
+    const el = $(id);
+    if (!el) continue;
+    if (!bound.has(id)) bound.set(id, { ...el.dataset });
+    delete el.dataset.i18n;
+    delete el.dataset.i18nTitle;
+    el.textContent = t('reset.leave', { what: t(key) });
+    el.title = t('reset.leave.hint', { what: t(`${key}.hint`) });
+  }
+}
+
+/**
+ * Name the rail's sandbox controls for what they do to an open investigation:
+ * they leave its scene. Outside one they are as they always were.
+ * @param {boolean} on - An investigation is open
+ */
+export function railLeavesScene(on) {
+  leaving = on;
+  if (on) {
+    lateWords();
+    return railWords();
+  }
+  for (const [id, key] of Object.entries(RAIL)) {
+    const el = $(id);
+    const was = bound.get(id);
+    if (!el || !was) continue;
+    Object.assign(el.dataset, { i18n: was.i18n, i18nTitle: was.i18nTitle });
+    el.textContent = t(key);
+    el.title = t(`${key}.hint`);
+  }
+  bound.clear();
+}
+
+/** Which investigation is open, how many steps it has seen, where it is (stepView.js hands it over). */
+let sceneNow = () => ({});
+export const bindSceneContext = fn => (sceneNow = fn);
+
+// The scene as a step drew it: paused or not, how many bodies, whether the
+// student placed one, and whether they touched anything outside the lesson
+// panel since (a lesson that pauses the run, or bodies that merge, are not theirs).
+let start = { paused: false, count: 0, at: 0, placed: false, acted: false };
+/** An instrument settling in puts bodies in the scene for a moment: only later changes are the student's. */
+const SETTLE_MS = 3000;
+const acted = e => {
+  if (!e.target?.closest?.('#investigationPanel')) start.acted = true;
+};
+let armed = false;
+const bodies = () => allBodies().length;
+const changed = () =>
+  start.placed ||
+  (start.acted &&
+    (state.paused !== start.paused ||
+      (Date.now() - start.at > SETTLE_MS && bodies() !== start.count)));
+const rebase = () =>
+  (start = {
+    paused: state.paused,
+    count: bodies(),
+    at: Date.now(),
+    placed: false,
+    acted: false,
+  });
+
+let timer = 0;
+let open = null;
+let at = -1;
+let has = false;
+let said = '';
+let el = null;
+
+/** Say a note by message id, or clear it with ''. */
+const say = key => {
+  said = key;
+  if (!el?.isConnected)
+    el = $('investigationSaveStatus')?.insertAdjacentElement(
+      'afterend',
+      Object.assign(document.createElement('p'), {
+        className: 'inv-save-status',
+        hidden: true,
+      })
+    );
+  el?.setAttribute('role', 'status');
+  el?.setAttribute('data-state', 'scene');
+  draw();
+};
+const draw = () => {
+  if (!el) return;
+  el.textContent = said && t(said);
+  el.hidden = !said;
+};
+
+function tick() {
+  if (!sceneNow().id) {
+    clearInterval(timer);
+    timer = open = 0;
+    say('');
+  } else if (has && !said && changed()) say('saved.scene.leave');
+  // The scene is back as it was drawn (a reset): nothing left to warn of.
+  else if (said === 'saved.scene.leave' && !changed()) say('');
+  if (Date.now() - start.at <= SETTLE_MS) start.count = bodies();
+}
+
+/**
+ * A step was drawn: take its scene as the one to compare against, and say so
+ * if this is a return to a step that has one. Drawn again (an instrument
+ * arriving, a language) it is the same step: what was said stands.
+ * @param {{scene: boolean}} step - What the step has
+ */
+function noteScene({ scene }) {
+  if (!armed) {
+    armed = true;
+    window.addEventListener(EV_OBJECT_PLACED, () => (start.placed = true));
+    window.addEventListener('pointerdown', acted, true);
+    window.addEventListener('keydown', acted, true);
+  }
+  const { id, n, i } = sceneNow();
+  const again = id === open && i === at;
+  const back = id !== open && (i > 0 || n > 1);
+  open = id;
+  at = i;
+  has = scene;
+  if (!again || !said) rebase();
+  if (!again) say(scene && back ? 'saved.scene.back' : '');
+  timer ||= setInterval(tick, 1000);
+}
+
+/** The last step state handed to syncReset, for a change of language. */
+let shown = null;
+
+/**
+ * Name the reset control for the step in force; off, with the reason as text,
+ * where there is nothing to rebuild (no scene and no instrument).
+ * @param {{scene: boolean, tool: boolean, kind?: string}} step - what the step has
+ */
+export function syncReset(step) {
+  shown = step;
+  noteScene(step);
+  paintReset(step);
+}
+
+function paintReset(step) {
+  const button = $('investigationResetScenario');
+  const why = $('investigationResetWhy');
+  if (!button) return;
+  // Resetting the scene puts it back as drawn: nothing left to warn of.
+  if (!button.dataset.noted) {
+    button.dataset.noted = 1;
+    button.addEventListener('click', () => (rebase(), say('')));
+  }
+  const off = !step.scene && !step.tool;
+  button.disabled = off;
+  const kind = step.kind === 'portrait' || step.kind === 'quiet';
+  button.title = t(kind ? `inv.canvas.reset.${step.kind}` : 'reset.scene.hint');
+  button.querySelector('[data-i18n]').textContent = t('reset.scene');
+  if (off) button.setAttribute('aria-describedby', 'investigationResetWhy');
+  else button.removeAttribute('aria-describedby');
+  if (why) {
+    why.textContent = off ? t('reset.scene.none') : '';
+    why.hidden = !off;
+  }
+}
+
+/**
+ * The toast that says what a reset did: the scene, the instrument or both.
+ * @param {{scene: boolean, tool: boolean}} step - What the reset rebuilt
+ * @returns {Promise<string>} The words, once they have arrived
+ */
+export const resetSaid = step => resetWords().then(m => m.resetSaid(step));
+
+onLocaleChange(() => {
+  draw();
+  if (shown) paintReset(shown);
+  if (leaving) railWords();
+  lateWords();
+});

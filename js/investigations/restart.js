@@ -7,6 +7,7 @@
 
 import { t } from '../i18n/index.js';
 import { announce } from '../notify.js';
+import { activate } from './vocabulary.js';
 
 /** What a saved key says about a step rather than answering it. */
 const META = /^(shown|locale|help|hint)$|^tool:|:(locale|src)$/;
@@ -197,6 +198,7 @@ async function go(host) {
  * @param {object} host - investigations.js: state(), put(progress), go(index, rebuild), kept
  */
 export function ask(host) {
+  activate();
   const dialog = $('investigationRestart');
   const s = host.state();
   const now = countSaved(

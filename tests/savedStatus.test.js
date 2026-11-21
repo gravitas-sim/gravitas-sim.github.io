@@ -19,8 +19,8 @@ import {
 import { readFileSync } from 'node:fs';
 import { EN_DEFERRED } from '../js/i18n/en.deferred.js';
 import { ES_DEFERRED } from '../js/i18n/es.deferred.js';
-import { EN_RESET } from '../js/i18n/en.reset.js';
-import { ES_RESET } from '../js/i18n/es.reset.js';
+import { EN } from '../js/i18n/en.js';
+import { ES } from '../js/i18n/es.js';
 import { registerMessages, setLocale, t } from '../js/i18n/index.js';
 import {
   bindPersistence,
@@ -29,7 +29,7 @@ import {
   save,
   sessionProgress,
 } from '../js/investigations/stepView.js';
-import { syncReset } from '../js/investigations/vocabulary.js';
+import { syncReset } from '../js/lessonFrame.js';
 import { state } from '../js/appState.js';
 import { setPreview } from '../js/storage/local.js';
 
@@ -240,7 +240,7 @@ describe('the note that the scene is rebuilt', () => {
     jest.advanceTimersByTime(1100);
     expect(note().hidden).toBe(false);
     expect(note().getAttribute('role')).toBe('status');
-    expect(note().textContent).toBe(EN_RESET['saved.scene.leave']);
+    expect(note().textContent).toBe(EN['saved.scene.leave']);
     at = 1;
     syncReset(scene);
     expect(note().hidden).toBe(true);
@@ -258,7 +258,7 @@ describe('the note that the scene is rebuilt', () => {
     visited = new Set(['intro', 'guess']);
     syncReset(scene);
     expect(note().hidden).toBe(false);
-    expect(note().textContent).toBe(EN_RESET['saved.scene.back']);
+    expect(note().textContent).toBe(EN['saved.scene.back']);
     jest.advanceTimersByTime(3000);
   });
 
@@ -280,18 +280,18 @@ describe('the note that the scene is rebuilt', () => {
     visited = new Set(['intro', 'guess']);
     syncReset(scene);
     syncReset(scene);
-    expect(note().textContent).toBe(EN_RESET['saved.scene.back']);
+    expect(note().textContent).toBe(EN['saved.scene.back']);
     jest.advanceTimersByTime(3000);
     expect(note().hidden).toBe(false);
   });
 
   test('both languages have both sentences, and the second claims nothing is saved', () => {
     for (const k of ['saved.scene.leave', 'saved.scene.back']) {
-      expect(typeof ES_RESET[k]).toBe('string');
-      expect(t(k)).toBe(EN_RESET[k]);
+      expect(typeof ES[k]).toBe('string');
+      expect(t(k)).toBe(EN[k]);
     }
-    expect(EN_RESET['saved.scene.back']).not.toMatch(/answers/);
-    expect(ES_RESET['saved.scene.back']).not.toMatch(/respuestas/);
+    expect(EN['saved.scene.back']).not.toMatch(/answers/);
+    expect(ES['saved.scene.back']).not.toMatch(/respuestas/);
   });
 
   test('a lesson that pauses the run itself is not the student changing the scene', () => {

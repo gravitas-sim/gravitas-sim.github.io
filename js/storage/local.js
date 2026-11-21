@@ -110,8 +110,7 @@ export const RESUME_MAX = 6;
 const words = (v, max) =>
   typeof v === 'string' && v.length > 0 && v.length <= max;
 
-// The longest address an item may hold, and the link shape and on-site route
-// tests, are in ../names.js (shared with Home, My work and the lesson panel).
+// The link limits are in ../names.js.
 export { RESUME_ROUTE_MAX };
 
 /** One entry, cleaned to the shape the record allows, or null. */

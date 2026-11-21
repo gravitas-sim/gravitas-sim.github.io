@@ -55,7 +55,7 @@ import {
   writeProgress,
 } from './progressSchema.js';
 import { KEY_ASSIGNMENT_PREFIX, KEY_INVESTIGATION_PREFIX } from '../names.js';
-import { isPeek, openSheet } from '../lessonFrame.js';
+import { bindSceneContext, isPeek, openSheet } from '../lessonFrame.js';
 const getAreaSweepWedges = command('getAreaSweepWedges');
 
 /** Escape for use inside a double-quoted attribute. */
@@ -904,8 +904,7 @@ export const formatFieldNumber = (value, decimals, locale) =>
 /**
  * What persistence needs of the engine: state() is {active, responses,
  * attempts, visited, stepIndex, startedAt, depthChoice, deepest, spent,
- * progressNotes}; authoring() and assigned() are booleans, assignment() the one
- * open; assignmentKey() is
+ * progressNotes}; authoring() and assigned() are booleans, assignmentKey() is
  * where an assignment's progress lives; els() the elements; clock() brings the
  * time spent up to date.
  * @typedef {Object} PersistenceHost
@@ -913,11 +912,12 @@ export const formatFieldNumber = (value, decimals, locale) =>
 /** @type {PersistenceHost} */
 let host = null;
 
-/** Which investigation is open, how many steps it has seen and where it is. */
+/** The open investigation, steps seen and place. */
 export const sceneContext = () => {
   const s = host?.state();
   return { id: s?.active?.id, n: s?.visited.size, i: s?.stepIndex };
 };
+bindSceneContext(sceneContext);
 
 /** Hand this module the engine's side, once, when the engine loads. */
 export const bindPersistence = h => {
@@ -966,32 +966,19 @@ export function keyForAssignment(a) {
   return key;
 }
 
-// What a link opened (an activity, an assignment or a pack), kept with the work
-// so Home, the Library and My work open it again as that, not as the bare
-// investigation. Set on every open (null for one that came from no link).
+// The link this open came from (activity, assignment or pack), kept with the work.
 let entry = null;
 let kept = null;
 export { ENTRY_LINK };
 
-/**
- * Remember the link this open came from.
- *
- * @param {?string} hash - The address fragment, or null for an open from none
- * @returns {boolean} True where the link is the right shape but too long to
- *   keep (a pack that carries its whole lesson): js/remix/open.js says so
- */
+/** Remember the link; true where it is too long to keep (js/remix/open.js says so). */
 export const setEntryLink = hash => {
   entry = isKeptLink(hash) ? hash : null;
   kept = null;
   return isTooLongLink(hash);
 };
 
-/**
- * The link a record already holds, for work opened again without one (a pack's
- * lesson is in no catalogue, so a bare open of it cannot happen; this keeps the
- * link if it ever does). Read once per open: the record is only ever written
- * with this link, so the first reading stays true.
- */
+/** The link a record already holds, read once per open, for work opened without one. */
 export function keptLink(key) {
   if (kept?.key === key) return kept.link;
   let link;
@@ -1016,8 +1003,7 @@ function noteWork(active, step, link, key) {
       : `investigation:${active.id}`,
     route: `/${link}`,
     step,
-    // Under the language the name came from, not both: an instructor's words
-    // are not an English title for a Spanish reader or the other way round.
+    // Under the language the name came from only.
     ...(name ? { title: { [getLocale() === 'es' ? 'es' : 'en']: name } } : {}),
   });
 }
@@ -1113,12 +1099,9 @@ export function renderProgressNotice() {
 }
 
 /**
- * Show whether the work is safe, in words: a status line, not a toast (one
- * would fire on every keystroke). A change of state is drawn once (the text is
- * redrawn only when the state or the language changes) and a refusal, a
- * recovery from one and a record that cannot be written are also spoken once,
- * through the page's status region: the line itself is drawn visible and in
- * one go, which a reader may not announce. A refusal carries the backup button.
+ * Show whether the work is safe, in words, on a status line. It is drawn once
+ * per state and language; a refusal, a recovery and a foreign record are also
+ * spoken once. A refusal carries the backup button.
  */
 export function renderSaveStatus() {
   const el = host.els()?.saveStatus;
@@ -1149,9 +1132,7 @@ export function renderSaveStatus() {
   }
   // The button that had focus is gone: keep the reader's place on the line.
   if (focused) ((el.tabIndex = -1), el.focus());
-  // Said a moment later: the step's own announcement (a grade, a hint) is made
-  // in the same turn as the save that failed, and the one region keeps only
-  // the last thing written to it.
+  // Said a moment later: the region keeps only the last thing written to it.
   clearTimeout(saidLater);
   if (
     changed &&
@@ -1175,13 +1156,13 @@ export const sessionProgress = new Map();
  */
 let typed = {};
 export const forgetKept = id => ((typed = {}), id && keepEarlier(id));
-/** The typed-but-unchecked text, copied; given a table, put that back as well. */
+/** The typed-but-unchecked text, copied; given a table, put that back too. */
 export const drafts = more =>
   more ? Object.assign(typed, more) : { ...typed };
 
-/** What the panel holds of the open record (for the restart helper, which imports nothing from here). */
+/** What the panel holds of the open record (for restart.js). */
 export const persisted = () => host.state();
-/** Whether a write reaches the disk now; false when storage refuses or the record is not this reader's. */
+/** Whether a write reaches the disk now. */
 export const canSave = () =>
   !['unavailable', 'full', 'foreign', 'authoring', 'preview'].includes(
     saveState.status
@@ -1382,16 +1363,7 @@ export const estimateHolds = () =>
   !lost &&
   (announce(t('inv.card.loading')), true);
 
-/**
- * The "What am I looking at?" button of a docked panel.
- *
- * Its label and its closed state are set each time the panel is drawn for a
- * step, so a region opened on one step is not left under the next. The words
- * are a lazy module fetched on the first press (js/explainers.js).
- *
- * @param {?HTMLElement} button - The panel header's button
- * @returns {void}
- */
+/** Reset a docked panel's "What am I looking at?" button for the step drawn (words: js/explainers.js). */
 export function resetExplainer(button) {
   if (!button) return;
   const host = button.closest('header');
@@ -1402,12 +1374,7 @@ export function resetExplainer(button) {
   button.textContent = t('inv.explain.open');
 }
 
-/**
- * Wire a panel's explainer button once.
- * @param {?HTMLElement} button - The button
- * @param {(m: object) => ?string} keyOf - The explainer for what is showing now
- * @param {object} [opts] - Listener options (the unmount signal)
- */
+/** Wire a panel's explainer button once; keyOf names the explainer for what is showing. */
 export function wireExplainer(button, keyOf, opts) {
   button?.addEventListener(
     'click',

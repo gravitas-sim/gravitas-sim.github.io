@@ -4,11 +4,6 @@
 // información emergente, cuadro y línea de ayuda que hable de alguna toma sus
 // palabras de aquí.
 export const ES_RESET = {
-  'reset.scene': 'Restablecer la escena',
-  'reset.scene.hint':
-    'Reconstruye la escena de este paso. Tus respuestas no cambian.',
-  'reset.scene.none':
-    'Restablecer la escena no está disponible en este paso: no tiene escena ni instrumento que reconstruir.',
   'reset.did.scene':
     'La escena vuelve al inicio de este paso. Tus respuestas no cambian.',
   'reset.did.tool':
@@ -45,11 +40,5 @@ export const ES_RESET = {
     'Has empezado de nuevo. No había nada guardado, así que solo se restableció tu posición. Puedes deshacerlo hasta que cierres esta investigación.',
   'reset.undo': 'Deshacer',
   'reset.undo.done': 'Tus respuestas y lecturas han vuelto.',
-  'reset.leave': 'Salir de la escena de esta investigación: {what}',
-  'reset.leave.hint': 'Sale de la escena de esta investigación. {what}',
-  'saved.scene.leave':
-    'La escena que preparaste no se guarda. Cuando vuelvas, se reconstruye desde el inicio de este paso.',
-  'saved.scene.back':
-    'La escena se reconstruye desde el inicio de este paso. La escena que preparaste la última vez no se conserva.',
   'reset.help.title': 'Empezar de nuevo',
 };
