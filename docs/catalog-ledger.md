@@ -18,7 +18,7 @@ Rows by kind: activity 6, course 6, experiment 4, investigation 146, sequence 11
 
 Baseline (measured at f9277ff8): 146 investigations (124 lessons, 10 Observatory, 9 3-D, 3 mission), 6 activity entries, 4 bench labs, 7 courses (6 rows and 1 out of scope), 11 sequences, 69 scenarios (61 sandbox, 8 3-D lab), 16 datasets.
 
-Editorial: OPEN 168, REVISED 5. Redesign: OPEN 168, REVISED 5. Scenario dispositions: OPEN 69.
+Editorial: OPEN 167, REVISED 6. Redesign: OPEN 168, REVISED 5. Scenario dispositions: OPEN 69.
 
 Scene class of the lessons: portrait or backdrop 94, setup scenario 26, engine-integrated stage 2, model-owned stage 2.
 
@@ -35,7 +35,7 @@ Scene class of the lessons: portrait or backdrop 94, setup scenario 26, engine-i
 | `investigation:a-lens-passing-by`                    | lesson      |   400 | FOCUSED  | portrait or backdrop    | OPEN      | OPEN     | NOT RUN      | -                                     |          0 |
 | `investigation:a-night-at-the-telescope`             | lesson      |   408 | FOCUSED  | portrait or backdrop    | OPEN      | OPEN     | NOT RUN      | -                                     |          0 |
 | `investigation:a-stars-life-in-numbers`              | lesson      |   382 | FOCUSED  | portrait or backdrop    | OPEN      | OPEN     | NOT RUN      | -                                     |          0 |
-| `investigation:a-universe-of-stars`                  | lesson      |   359 | STRONG   | portrait or backdrop    | OPEN      | OPEN     | NOT RUN      | -                                     |          0 |
+| `investigation:a-universe-of-stars`                  | lesson      |   359 | STRONG   | portrait or backdrop    | REVISED   | OPEN     | NOT RUN      | -                                     |          0 |
 | `investigation:a-variable-star-from-frames`          | lesson      |   406 | STRONG   | portrait or backdrop    | OPEN      | OPEN     | NOT RUN      | synthetic frames                      |          0 |
 | `investigation:architectures`                        | lesson      |   395 | FOCUSED  | portrait or backdrop    | OPEN      | OPEN     | NOT RUN      | -                                     |          0 |
 | `investigation:bending-light`                        | lesson      |   400 | FOCUSED  | portrait or backdrop    | OPEN      | OPEN     | NOT RUN      | -                                     |          0 |
