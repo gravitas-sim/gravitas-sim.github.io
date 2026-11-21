@@ -20,6 +20,9 @@ import ES from '../js/data/investigations/es/when-orbits-lock.js';
 import { matchMisconception } from '../js/answerFeedback.js';
 import { readProgress } from '../js/investigations/progressSchema.js';
 import { earlierAnswers, wasIn } from '../js/investigations/stepView.js';
+import { SCENARIO_PRESETS, scenarioId } from '../js/scenarios.js';
+import { DT } from '../js/physics.js';
+import { MAX_SUBSTEPS, frameAdvance, substepPlan } from '../js/timestep.js';
 
 const LESSON = INVESTIGATIONS.find(l => l.id === 'when-orbits-lock');
 const step = sid => LESSON.steps.find(s => s.sid === sid);
@@ -135,7 +138,7 @@ describe('the reworded steps ask and do not tell', () => {
     expect(step('measure-the-four-periods').body).toMatch(/inspector/);
     expect(step('measure-the-four-periods').body).not.toMatch(/Press/);
     expect(step('watch-the-laplace-argument').body).toMatch(
-      /three and a half minutes[\s\S]*Fast button/
+      /ten minutes[\s\S]*Fast button/
     );
   });
 
@@ -293,5 +296,57 @@ describe('authored feedback on the three choice steps', () => {
       expect(
         step(sid).misconceptions.some(m => m.option === step(sid).answer)
       ).toBe(false);
+  });
+});
+
+describe('the Galilean stages integrate at one step on every frame rate', () => {
+  const GALILEAN = LESSON.steps.filter(s =>
+    ['Galilean Resonance', 'Broken Laplace Resonance'].includes(
+      s.setup?.scenario
+    )
+  );
+  const settingsOf = s => ({
+    ...SCENARIO_PRESETS[scenarioId(s.setup.scenario)],
+    ...s.setup.settings,
+  });
+  // Frame rates the page can run at; 20 fps is the 0.05 s frame clamp.
+  const RATES = [20, 30, 60, 120];
+
+  test('five steps use the slowed Galilean stage', () => {
+    expect(GALILEAN.length).toBe(5);
+  });
+  test.each(RATES)('%i fps is never capped, at any Galilean step', fps => {
+    for (const s of GALILEAN) {
+      const set = settingsOf(s);
+      const dtSim = frameAdvance(1 / fps, set.sim_speed, DT);
+      const plan = substepPlan(dtSim, set.max_timestep);
+      expect(plan.capped).toBe(false);
+      expect(plan.step).toBeLessThanOrEqual(set.max_timestep);
+    }
+  });
+  test('the 60 fps count leaves room for the 20 fps clamp', () => {
+    for (const s of GALILEAN) {
+      const set = settingsOf(s);
+      const at60 = substepPlan(
+        frameAdvance(1 / 60, set.sim_speed, DT),
+        set.max_timestep
+      );
+      expect(at60.substeps * 3).toBeLessThanOrEqual(MAX_SUBSTEPS + 2);
+      const at20 = substepPlan(
+        frameAdvance(1 / 20, set.sim_speed, DT),
+        set.max_timestep
+      );
+      expect(at20.substeps).toBeLessThanOrEqual(MAX_SUBSTEPS);
+    }
+  });
+  test('slower frames take the same size of step, not a larger one', () => {
+    for (const s of GALILEAN) {
+      const set = settingsOf(s);
+      const step = fps =>
+        substepPlan(frameAdvance(1 / fps, set.sim_speed, DT), set.max_timestep)
+          .step;
+      for (const fps of [20, 30]) expect(step(fps)).toBeCloseTo(step(60), 2);
+      expect(step(120)).toBeLessThanOrEqual(step(60) + 1e-9);
+    }
   });
 });

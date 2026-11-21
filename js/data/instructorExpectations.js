@@ -390,11 +390,11 @@ export default {
       'watch-the-line-ups':
         'The sky dial should be a broad arc rather than a tight clump, and the arrow short. Most students predicted clustering at step 7, so this is the moment the investigation turns; do not rescue it too quickly.',
       'watch-the-laplace-argument':
-        'Three verdicts in order over about three and a half minutes: confined, then one reversal, then libration. If a class has less time, the first two are enough to make the argument as long as the paired control at step 17 is also run.',
+        'Three verdicts in order over about ten minutes: confined, then one reversal, then libration. If a class has less time, the first two are enough to make the argument as long as the paired control at step 17 is also run.',
       'capture-the-laplace-libration':
         'A center within a degree or two of 180, an amplitude near 26 degrees and a period near 2,100 days. A smaller amplitude or a much shorter period was taken too soon, from one swing; the check refuses it: leave it running.',
       'break-it':
-        'CIRCULATION within about ten seconds, with a period near 47 Io orbits. Worth remarking on how much faster this verdict arrives than the libration one, and why: one completed circuit proves circulation, while ruling out a slow circulation takes as long as it takes.',
+        'CIRCULATION within about half a minute, with a period near 47 Io orbits. Worth remarking on how much faster this verdict arrives than the libration one, and why: one completed circuit proves circulation, while ruling out a slow circulation takes as long as it takes.',
       'the-awkward-case':
         'Never LIBRATION. The verdict passes through confined, then either "the center is moving" or "it has turned back once", and the reported amplitude grows through the run. The growing amplitude is the specific evidence and is what step 20 asks about.',
       'measure-pluto-s-resonance':

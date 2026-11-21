@@ -86,7 +86,7 @@ export default {
              propia aplicación los muestra mil veces demasiado largos, por el
              modelo a escala.
 
-             \n\nDale medio minuto, que son unas 150 órbitas de Ío (el botón
+             \n\nDale minuto y medio, que son unas 150 órbitas de Ío (el botón
              Rápido de la barra de transporte acorta la espera), y luego lee
              la tabla. Informa de cada periodo, de la razón entre cada luna y la
              de dentro, y de la razón de enteros pequeños más cercana a esa
@@ -197,7 +197,7 @@ export default {
     'watch-the-line-ups': {
       title: 'Observa las alineaciones',
       tip: 'Con Movimiento en Reducido o en Paso a paso el mundo empieza en pausa: pulsa Ejecutar para ponerlo en marcha.',
-      body: `Déjalo correr un minuto o así. Cada punto del disco de la izquierda
+      body: `Déjalo correr tres minutos o así. Cada punto del disco de la izquierda
              es una conjunción Ío–Europa, situada según la dirección en la que
              ocurrió vista desde Júpiter. El disco de la derecha sitúa las
              mismas conjunciones según dónde estaba Europa en su propia órbita
@@ -317,14 +317,14 @@ export default {
                 da la vuelta entera. Dónde está ese valor, cuánto se abre la
                 oscilación y cuánto dura es cosa tuya leerlo en el instrumento
                 unos pasos más adelante. El instrumento se negará a confirmarlo
-                durante el primer minuto y medio, y el motivo de esa negativa es
+                durante los cuatro primeros minutos y medio, y el motivo de esa negativa es
                 lo siguiente que merece la pena entender.`,
     },
     'watch-the-laplace-argument': {
       title: 'Observa el argumento de Laplace',
       tip: 'Con Movimiento en Reducido o en Paso a paso el mundo empieza en pausa: pulsa Ejecutar para ponerlo en marcha.',
       body: `<strong>Déjalo correr.</strong>
-             A velocidad normal este tarda unos tres minutos y medio (el botón
+             A velocidad normal este tarda unos diez minutos (el botón
              Rápido de la barra de transporte acorta la espera), y la forma en
              que cambia de opinión es lo importante.
 
@@ -346,8 +346,8 @@ export default {
              \n\n<strong>Libración.</strong> Se dio la vuelta, regresó y volvió
              al punto de partida. Ahora sí está establecido.
 
-             \n\nEl primer cambio llega hacia los ochenta segundos y el segundo a
-             los tres minutos y medio. Lee los dos pasos siguientes mientras
+             \n\nEl primer cambio llega hacia los cuatro minutos y el segundo a
+             los diez minutos. Lee los dos pasos siguientes mientras
              esperas, y vuelve luego.`,
       checklist: [
         'Pon en marcha la ejecución y anota el primer veredicto',
@@ -471,8 +471,8 @@ export default {
 
              \n\nEn el gráfico plegado el ángulo barre ahora todos los valores en
              vez de quedarse rondando. En el desplegado es una rampa en lugar de
-             una onda. El veredicto debería decir CIRCULACIÓN en unos diez
-             segundos, lo que conviene comparar con los tres minutos y medio que
+             una onda. El veredicto debería decir CIRCULACIÓN en alrededor de
+             medio minuto, lo que conviene comparar con los diez minutos que
              necesitó el caso resonante antes de comprometerse.
 
              \n\nEsa asimetría no es un defecto. La circulación es fácil de
@@ -484,7 +484,7 @@ export default {
         'Compara la forma de ambos gráficos con la del caso resonante',
       ],
       rubric: `Se espera CIRCULACIÓN con un periodo cercano a 47 órbitas de Ío,
-               informado en los primeros segundos de la ejecución. Puntuación
+               informado en el primer medio minuto de la ejecución. Puntuación
                completa por contrastar la rapidez con que llega este veredicto
                frente a lo que tardó el de libración, y por explicar por qué.`,
     },
@@ -528,11 +528,11 @@ export default {
              \n\nCoeficientes 7 − 3 − 4 = 0, como debe ser. Esto es exactamente
              lo que harías si creyeras en la razón.
 
-             \n\nDéjalo correr dos o tres minutos y observa qué hace el
+             \n\nDéjalo correr de seis a nueve minutos y observa qué hace el
              veredicto. Después lee la lectura con atención, sobre todo la línea
              que dice qué falta.`,
       checklist: [
-        'Déjalo correr al menos dos minutos',
+        'Déjalo correr al menos seis minutos',
         'Anota todos los veredictos que dé, en orden',
         'Lee la cota que da sobre cualquier circulación',
         'Anota la amplitud, y si el instrumento la llama una cota',

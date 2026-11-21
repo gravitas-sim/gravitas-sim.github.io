@@ -60,14 +60,15 @@ const laplaceRows = ctx => {
   ];
 };
 
-// A captured amplitude below these is a bound taken before the instrument had
-// seen the angle turn back. Each sits about 3 degrees under the lowest
-// converged amplitude measured at 60 and 120 frames a second (Laplace 24.4 to
-// 26.2, Pluto 80.0 to 80.3, tadpole about 24): the integration step follows
-// the frame rate, so the figure a student reads moves a little with it.
+// A captured amplitude below these is a bound taken before the angle turned
+// back. Each is about 3 degrees under the lowest converged value measured at 20
+// to 120 frames a second (Laplace 26.4 to 26.5, Pluto 80.0 to 80.3).
 const AMPLITUDE_FLOOR = 21;
 const PLUTO_FLOOR = 77;
 const TADPOLE_FLOOR = 15;
+// At 60 frames a second the Galilean scenarios use all 64 substeps, so 30 doubled
+// the step. At this speed it is 21 and even 20 frames a second fits in 64.
+const SLOWED = { sim_speed: 250 };
 // Every instrument step re-holds the world under Reduced motion and Step by step.
 const HELD =
   'Under Reduced motion or Step by step the world starts paused: press Run to start it.';
@@ -143,6 +144,7 @@ const WHEN_ORBITS_LOCK = {
       setup: {
         scenario: 'Galilean Resonance',
         seed: 'resonance-lab',
+        settings: SLOWED,
         paused: true,
       },
       body: `On screen are the four moons Galileo saw in January 1610: Io,
@@ -203,6 +205,7 @@ const WHEN_ORBITS_LOCK = {
       setup: {
         scenario: 'Galilean Resonance',
         seed: 'resonance-lab',
+        settings: SLOWED,
         paused: false,
       },
       tool: { id: 'resonance-periods' },
@@ -213,7 +216,7 @@ const WHEN_ORBITS_LOCK = {
              orbits. Read the periods here: the app's own inspector shows them a
              thousand times too long, because of the scale model.
 
-             \n\nGive it about half a minute, which is around 150 Io orbits (the
+             \n\nGive it about a minute and a half, which is around 150 Io orbits (the
              Fast button in the transport bar shortens the wait), and then read
              the table. It reports each period, the ratio of each moon
              to the one inside it, and the nearest ratio of small whole numbers
@@ -360,6 +363,7 @@ const WHEN_ORBITS_LOCK = {
       setup: {
         scenario: 'Galilean Resonance',
         seed: 'resonance-lab',
+        settings: SLOWED,
         paused: false,
       },
       body: `Io and Europa line up about every 3.5 days. Over a run of a hundred
@@ -386,7 +390,7 @@ const WHEN_ORBITS_LOCK = {
       title: 'Watch the line-ups',
       tool: { id: 'resonance-conjunctions', inner: 'Io', outer: 'Europa' },
       tip: HELD,
-      body: `Let it run for a minute or so. Each dot on the left dial is one
+      body: `Let it run for three minutes or so. Each dot on the left dial is one
              Io–Europa conjunction, plotted by the direction it happened in as
              seen from Jupiter. The right dial plots the same conjunctions by
              where Europa was on its own orbit at the time.
@@ -524,7 +528,7 @@ const WHEN_ORBITS_LOCK = {
                 never goes all the way round. Where that value sits, how wide the
                 swing is and how long it takes are yours to read off the
                 instrument a few steps on. The instrument will refuse to confirm
-                it for the first minute and a half, and the reason it refuses is
+                it for the first four and a half minutes, and the reason it refuses is
                 the next thing worth understanding.`,
     },
     {
@@ -537,7 +541,7 @@ const WHEN_ORBITS_LOCK = {
       tool: { id: 'resonance-angle', argument: 'laplace' },
       tip: HELD,
       body: `<strong>Leave it running.</strong>
-             At normal speed this one takes about three and a half minutes (the
+             At normal speed this one takes about ten minutes (the
              Fast button in the transport bar shortens the wait), and the way it
              changes its mind is the point.
 
@@ -559,8 +563,8 @@ const WHEN_ORBITS_LOCK = {
              \n\n<strong>Libration.</strong> It turned, came back, and returned
              to where it started. Now it is established.
 
-             \n\nThe first change comes at about eighty seconds and the second at
-             about three and a half minutes. Read the next two steps while you
+             \n\nThe first change comes at about four minutes and the second at
+             about ten minutes. Read the next two steps while you
              wait, and come back to it.`,
       checklist: [
         'Start the run and note the first verdict',
@@ -745,6 +749,7 @@ const WHEN_ORBITS_LOCK = {
       setup: {
         scenario: 'Broken Laplace Resonance',
         seed: 'resonance-lab',
+        settings: SLOWED,
         paused: false,
       },
       tool: { id: 'resonance-angle', argument: 'laplace' },
@@ -754,9 +759,9 @@ const WHEN_ORBITS_LOCK = {
 
              \n\nOn the wrapped plot the angle now sweeps through every value
              instead of hovering. On the unwrapped plot it is a ramp instead of
-             a wave. The verdict should read CIRCULATION within about ten
-             seconds — which is worth comparing with the three and a half
-             minutes the resonant case needed before it would commit.
+             a wave. The verdict should read CIRCULATION within about half a
+             minute — which is worth comparing with the ten minutes the
+             resonant case needed before it would commit.
 
              \n\nThat asymmetry is not a defect. Circulation is easy to prove:
              one completed circuit does it. Libration takes longer because
@@ -767,7 +772,7 @@ const WHEN_ORBITS_LOCK = {
         'Compare the shape of both plots with the resonant case',
       ],
       rubric: `Expect CIRCULATION with a period near 47 Io orbits, reported
-               within the first few seconds of the run. Full credit for
+               within the first half minute of the run. Full credit for
                contrasting how quickly this verdict arrives with how long the
                libration verdict took, and for saying why.`,
     },
@@ -808,6 +813,7 @@ const WHEN_ORBITS_LOCK = {
       setup: {
         scenario: 'Galilean Resonance',
         seed: 'resonance-lab',
+        settings: SLOWED,
         paused: false,
       },
       tool: {
@@ -829,11 +835,11 @@ const WHEN_ORBITS_LOCK = {
              \n\nCoefficients 7 − 3 − 4 = 0, as they must. This is exactly what
              you would do if you believed the ratio.
 
-             \n\nRun it for two or three minutes and watch what the verdict
+             \n\nRun it for six to nine minutes and watch what the verdict
              does. Then read the readout carefully — particularly the line that
              says what is missing.`,
       checklist: [
-        'Let it run for at least two minutes',
+        'Let it run for at least six minutes',
         'Note every verdict it reports, in order',
         'Read the bound it gives on any circulation',
         'Note the amplitude, and whether the instrument calls it a bound',

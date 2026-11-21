@@ -27103,7 +27103,7 @@
      "instrument": null,
      "evidence": [],
      "reset": [
-      "rebuilds: scenario \"Galilean Resonance\" seed resonance-lab"
+      "rebuilds: scenario \"Galilean Resonance\" seed resonance-lab + settings"
      ],
      "recovery": [
       "wrong body: the step binds the object by name, so there is none",
@@ -27244,7 +27244,7 @@
      },
      "evidence": [],
      "reset": [
-      "rebuilds: scenario \"Galilean Resonance\" seed resonance-lab"
+      "rebuilds: scenario \"Galilean Resonance\" seed resonance-lab + settings"
      ],
      "recovery": [
       "wrong body: the step binds the object by name, so there is none",
@@ -27520,7 +27520,7 @@
      "instrument": null,
      "evidence": [],
      "reset": [
-      "rebuilds: scenario \"Galilean Resonance\" seed resonance-lab"
+      "rebuilds: scenario \"Galilean Resonance\" seed resonance-lab + settings"
      ],
      "recovery": [
       "wrong body: the step binds the object by name, so there is none",
@@ -28223,7 +28223,7 @@
      },
      "evidence": [],
      "reset": [
-      "rebuilds: scenario \"Broken Laplace Resonance\" seed resonance-lab"
+      "rebuilds: scenario \"Broken Laplace Resonance\" seed resonance-lab + settings"
      ],
      "recovery": [
       "wrong body: the step binds the object by name, so there is none",
@@ -28364,7 +28364,7 @@
      },
      "evidence": [],
      "reset": [
-      "rebuilds: scenario \"Galilean Resonance\" seed resonance-lab"
+      "rebuilds: scenario \"Galilean Resonance\" seed resonance-lab + settings"
      ],
      "recovery": [
       "wrong body: the step binds the object by name, so there is none",
