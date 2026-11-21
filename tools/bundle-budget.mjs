@@ -53,7 +53,7 @@ const BUDGETS = [
   {
     id: 'initial',
     label: 'Initial download (CSS + eager JS)',
-    limit: 743.5,
+    limit: 743.6,
     reason:
       'Was 743 KB when this budget was first asked for. The application had ' +
       'already grown to 771 KB on its own - the extracted state module, the ' +
@@ -121,7 +121,8 @@ const BUDGETS = [
       '\n\nLesson openings and endings, merged with the masses kept off the weighing steps (D-R4-456-06): raised from 741.4 to 741.5 KB, the measurement of the combined tree on a Node 22.23.4 build: 759,287 bytes (741.49 KB), rounded up to 0.1 KB. Each change fitted alone; together they are 149 bytes above the last measurement. Under the standing approval of 2026-10-10.' +
       '\n\nThe lesson walk repairs taken together (D-R4-TRAIN-08): raised from 741.5 to 741.6 KB, the measurement by CI of the combined branch (bf32e882f): 759,371 bytes (741.57 KB), rounded up to 0.1 KB. Under the standing approval of 2026-10-10.' +
       '\n\nThe low-tier frame cost repair (D-R4-COI-02): fewer glow sprites per trail at the low tier and the canvas width kept by an observer; raised from 741.6 to 741.9 KB, the measurement by CI of the branch merged with v4 ef760870 (run 44844706105): 759,694 bytes (741.89 KB), rounded up to 0.1 KB. Under the standing approval of 2026-10-10.' +
-      '\n\nThe combined lesson framing, links, reset and saving branch (D-R4-TRAINA-03): raised from 741.9 to 743.5 KB, the measurement by CI of the branch (head f51518237): 761,259 bytes (743.42 KB), rounded up to 0.1 KB. Under the standing approval of 2026-10-10.',
+      '\n\nThe combined lesson framing, links, reset and saving branch (D-R4-TRAINA-03): raised from 741.9 to 743.5 KB, the measurement by CI of the branch (head f51518237): 761,259 bytes (743.42 KB), rounded up to 0.1 KB. Under the standing approval of 2026-10-10.' +
+      '\n\nThe same branch after the lesson sheet and status block repairs (D-R4-TRAINA-03): raised from 743.5 to 743.6 KB, the measurement by CI (head 51ee3a090): 761,442 bytes (743.60 KB), rounded up to 0.1 KB. Under the standing approval of 2026-10-10.',
   },
   {
     id: 'deferred',
