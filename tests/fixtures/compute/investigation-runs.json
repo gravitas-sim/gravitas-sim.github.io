@@ -281,6 +281,368 @@
       "sigma": null
     }
   },
+  "periodograms/limit2": {
+    "ls.period": {
+      "value": 1.7689053410893705,
+      "sigma": null
+    },
+    "ls.power": {
+      "value": 0.0723270909274195,
+      "sigma": null
+    },
+    "ls.fap": {
+      "value": 1.2972221464763617e-29,
+      "sigma": null
+    },
+    "bls.period": {
+      "value": 3.5240742360679045,
+      "sigma": null
+    },
+    "bls.epoch": {
+      "value": 2826.7833333333333,
+      "sigma": null
+    },
+    "bls.duration": {
+      "value": 2,
+      "sigma": null
+    },
+    "bls.depth": {
+      "value": 15243.952932694367,
+      "sigma": 147.03135750465734
+    },
+    "bls.snr": {
+      "value": 103.67824382095841,
+      "sigma": null
+    },
+    "period.ratio": {
+      "value": 0.5019489439198311,
+      "sigma": null
+    }
+  },
+  "periodograms/limit3": {
+    "ls.period": {
+      "value": 1.7689053410893705,
+      "sigma": null
+    },
+    "ls.power": {
+      "value": 0.0723270909274195,
+      "sigma": null
+    },
+    "ls.fap": {
+      "value": 1.2972221464763617e-29,
+      "sigma": null
+    },
+    "bls.period": {
+      "value": 3.5238095692781792,
+      "sigma": null
+    },
+    "bls.epoch": {
+      "value": 2826.7833333333333,
+      "sigma": null
+    },
+    "bls.duration": {
+      "value": 2.6,
+      "sigma": null
+    },
+    "bls.depth": {
+      "value": 14405.238479348774,
+      "sigma": 69.10731559575746
+    },
+    "bls.snr": {
+      "value": 208.44737427817444,
+      "sigma": null
+    },
+    "period.ratio": {
+      "value": 0.5019866443724185,
+      "sigma": null
+    }
+  },
+  "periodograms/limit4": {
+    "ls.period": {
+      "value": 1.7689053410893705,
+      "sigma": null
+    },
+    "ls.power": {
+      "value": 0.0723270909274195,
+      "sigma": null
+    },
+    "ls.fap": {
+      "value": 1.2972221464763617e-29,
+      "sigma": null
+    },
+    "bls.period": {
+      "value": 3.523958475735776,
+      "sigma": null
+    },
+    "bls.epoch": {
+      "value": 2826.7854166666666,
+      "sigma": null
+    },
+    "bls.duration": {
+      "value": 2.5,
+      "sigma": null
+    },
+    "bls.depth": {
+      "value": 14581.801026000436,
+      "sigma": 76.27127463369673
+    },
+    "bls.snr": {
+      "value": 191.1833923850301,
+      "sigma": null
+    },
+    "period.ratio": {
+      "value": 0.5019654326999515,
+      "sigma": null
+    }
+  },
+  "periodograms/limit8": {
+    "ls.period": {
+      "value": 1.7689053410893705,
+      "sigma": null
+    },
+    "ls.power": {
+      "value": 0.0723270909274195,
+      "sigma": null
+    },
+    "ls.fap": {
+      "value": 1.2972221464763617e-29,
+      "sigma": null
+    },
+    "bls.period": {
+      "value": 3.5238095692781792,
+      "sigma": null
+    },
+    "bls.epoch": {
+      "value": 2826.7854166666666,
+      "sigma": null
+    },
+    "bls.duration": {
+      "value": 2.7,
+      "sigma": null
+    },
+    "bls.depth": {
+      "value": 13982.090435749242,
+      "sigma": 77.21914683325865
+    },
+    "bls.snr": {
+      "value": 181.0702527695772,
+      "sigma": null
+    },
+    "period.ratio": {
+      "value": 0.5019866443724185,
+      "sigma": null
+    }
+  },
+  "posterior-sampling/aRs8": {
+    "k": {
+      "value": 0.12258285856048057,
+      "sigma": null,
+      "lo": 0.12243983396251981,
+      "hi": 0.12272575007312285
+    },
+    "b": {
+      "value": 0.6223823226841778,
+      "sigma": null,
+      "lo": 0.6209233937865791,
+      "hi": 0.6237974337215678
+    },
+    "k.profile": {
+      "value": 0.1225825,
+      "sigma": null,
+      "lo": 0.12243683402918114,
+      "hi": 0.12272885199097994
+    },
+    "b.profile": {
+      "value": 0.6225578125000001,
+      "sigma": null,
+      "lo": 0.6209288625364476,
+      "hi": 0.6238532939563102
+    },
+    "k.width.ratio": {
+      "value": 0.9791045346725442,
+      "sigma": null
+    },
+    "b.width.ratio": {
+      "value": 0.9827687924115468,
+      "sigma": null
+    },
+    "grid.offset": {
+      "value": 0.006586788004721836,
+      "sigma": null
+    },
+    "rhat.max": {
+      "value": 1.013004100705139,
+      "sigma": null
+    },
+    "ess.min": {
+      "value": 2743.9356379454434,
+      "sigma": null
+    },
+    "tau.max": {
+      "value": 46.648324483238106,
+      "sigma": null
+    },
+    "acceptance": {
+      "value": 0.71395703125,
+      "sigma": null
+    },
+    "chi2.reduced": {
+      "value": 8.474349535898313,
+      "sigma": null
+    },
+    "steps": {
+      "value": 8000,
+      "sigma": null
+    }
+  },
+  "posterior-sampling/aRs8.5": {
+    "k": {
+      "value": 0.12111882237416131,
+      "sigma": null,
+      "lo": 0.12097837178116626,
+      "hi": 0.12125710376816544
+    },
+    "b": {
+      "value": 0.5543496513851784,
+      "sigma": null,
+      "lo": 0.5525651299559652,
+      "hi": 0.5561085342424981
+    },
+    "k.profile": {
+      "value": 0.121128125,
+      "sigma": null,
+      "lo": 0.12097845412412676,
+      "hi": 0.12125683746243968
+    },
+    "b.profile": {
+      "value": 0.5542500000000001,
+      "sigma": null,
+      "lo": 0.5525468366904631,
+      "hi": 0.5561025826891387
+    },
+    "k.width.ratio": {
+      "value": 1.0012524050052045,
+      "sigma": null
+    },
+    "b.width.ratio": {
+      "value": 0.9965290793697577,
+      "sigma": null
+    },
+    "grid.offset": {
+      "value": 0.017492179547638213,
+      "sigma": null
+    },
+    "rhat.max": {
+      "value": 1.0138503214267238,
+      "sigma": null
+    },
+    "ess.min": {
+      "value": 4334.4009358245785,
+      "sigma": null
+    },
+    "tau.max": {
+      "value": 29.53118594591878,
+      "sigma": null
+    },
+    "acceptance": {
+      "value": 0.7156328125,
+      "sigma": null
+    },
+    "chi2.reduced": {
+      "value": 8.116751004181397,
+      "sigma": null
+    },
+    "steps": {
+      "value": 8000,
+      "sigma": null
+    }
+  },
+  "posterior-sampling/aRs10": {
+    "k": {
+      "value": 0.11746692579363069,
+      "sigma": null,
+      "lo": 0.11733640732464351,
+      "hi": 0.11759709175586332
+    },
+    "b": {
+      "value": 0.19400188951975977,
+      "sigma": null,
+      "lo": 0.18713627979224726,
+      "hi": 0.20059910500864656
+    },
+    "k.profile": {
+      "value": 0.11748406250000001,
+      "sigma": null,
+      "lo": 0.11733987231879876,
+      "hi": 0.11760408404431609
+    },
+    "b.profile": {
+      "value": 0.1938125,
+      "sigma": null,
+      "lo": 0.18711019674395954,
+      "hi": 0.20075643039349408
+    },
+    "k.width.ratio": {
+      "value": 0.9866497435319586,
+      "sigma": null
+    },
+    "b.width.ratio": {
+      "value": 0.986559776283656,
+      "sigma": null
+    },
+    "grid.offset": {
+      "value": 0.024423205685271624,
+      "sigma": null
+    },
+    "rhat.max": {
+      "value": 1.0103945271949795,
+      "sigma": null
+    },
+    "ess.min": {
+      "value": 3688.0100892186574,
+      "sigma": null
+    },
+    "tau.max": {
+      "value": 34.70706340370075,
+      "sigma": null
+    },
+    "acceptance": {
+      "value": 0.71609375,
+      "sigma": null
+    },
+    "chi2.reduced": {
+      "value": 8.07923952670591,
+      "sigma": null
+    },
+    "steps": {
+      "value": 8000,
+      "sigma": null
+    }
+  },
+  "posterior-sampling/refusals": {
+    "1000": {
+      "refused": true,
+      "message": "ValueError: the run is refused, so no interval is reported: parameter 0: R-hat 1.077 is not under 1.05; parameter 0: 27 autocorrelation times after the burn-in are fewer than 50; parameter 1: R-hat 1.072 is not under 1.05; parameter 1: 32 autocorrelation times after the burn-in are fewer than 50. Raise the number of steps."
+    },
+    "2000": {
+      "refused": true,
+      "message": "ValueError: the run is refused, so no interval is reported: parameter 0: 39 autocorrelation times after the burn-in are fewer than 50; parameter 1: R-hat 1.088 is not under 1.05; parameter 1: 22 autocorrelation times after the burn-in are fewer than 50. Raise the number of steps."
+    },
+    "3000": {
+      "refused": true,
+      "message": "ValueError: the run is refused, so no interval is reported: parameter 0: 39 autocorrelation times after the burn-in are fewer than 50; parameter 1: 46 autocorrelation times after the burn-in are fewer than 50. Raise the number of steps."
+    },
+    "4000": {
+      "refused": true,
+      "message": "ValueError: the run is refused, so no interval is reported: parameter 0: 49 autocorrelation times after the burn-in are fewer than 50. Raise the number of steps."
+    },
+    "5000": {
+      "refused": false,
+      "rhat.max": 1.0292447944358452,
+      "ess.min": 1883.3311448894028,
+      "tau.max": 42.477925465783095
+    }
+  },
   "population-at-scale/moves": {
     "2|3": [
       {

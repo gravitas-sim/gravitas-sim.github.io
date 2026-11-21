@@ -1,7 +1,7 @@
 // =============================================================================
 // Two Periodograms
 // -----------------------------------------------------------------------------
-// Content only, no imports. The companion of the compute page's notebook
+// Content only (one import: the number formatter). The companion of the compute page's notebook
 // "periodograms" (Roadmap II Prompt 102, COMPUTE.md). There is no instrument on
 // this page: the student runs the reviewed notebook at /compute/ on the TESS
 // light curve of HD 209458 that the Observatory's box search reads, and types
@@ -11,7 +11,11 @@
 // (tests/fixtures/compute/periodograms.answer.json) and, in
 // tests/computeCurriculum.test.js, against the Observatory's box search and a
 // Lomb-Scargle written again. The runs are deterministic: two students get the
-// same digits.
+// same digits. `the-box-with-your-limit` takes a menu choice (the longest box
+// duration the search may try), so its expected numbers are one set per choice
+// (BOX) and the menu is a field of the step, since a check sees only its own
+// step. The numbers of each choice come from the generated runs in
+// tests/fixtures/compute/investigation-runs.json and a test copies them.
 //
 // The numbers (default settings: periods to 15 days, durations to 6 hours):
 //   Lomb-Scargle best period 1.7689 d (power 0.0723), box least squares best
@@ -21,6 +25,27 @@
 //   Lomb-Scargle power at the harmonics of 3.52454 d: 0.056 at P, 0.073 at P/2,
 //   0.071 at P/3 and P/4.
 // =============================================================================
+
+import { fixed } from '../../format.js';
+
+/**
+ * The box search for each longest duration a student may allow (hours): the best
+ * box's duration, depth (ppm) and signal-to-noise ratio, the best period, and
+ * whether the best duration is the limit itself. Limit 6 is the default.
+ */
+const BOX = {
+  2: { duration: 2.0, depth: 15244, snr: 103.7, period: 3.52407, edge: 1 },
+  3: { duration: 2.6, depth: 14405, snr: 208.4, period: 3.52381, edge: 0 },
+  4: { duration: 2.5, depth: 14582, snr: 191.2, period: 3.52396, edge: 0 },
+  6: { duration: 2.5, depth: 14582, snr: 191.2, period: 3.52396, edge: 0 },
+  8: { duration: 2.7, depth: 13982, snr: 181.1, period: 3.52381, edge: 0 },
+};
+/** One field's value for each choice, for the answer key. */
+const byLimit = field =>
+  Object.fromEntries(Object.entries(BOX).map(([n, r]) => [n, r[field]]));
+/** A limit, or the limits that give the same numbers, in words. */
+const named = n =>
+  [4, 6].includes(Number(n)) ? 'limits 4 and 6' : `limit ${n}`;
 
 const TWO_PERIODOGRAMS = {
   id: 'two-periodograms',
@@ -47,10 +72,11 @@ const TWO_PERIODOGRAMS = {
     {
       sid: 'two-ways-to-look-for-a-period',
       type: 'read',
-      setup: { scenario: 'Transit Lab', seed: 'transit-lab', paused: true },
+      canvas: 'quiet',
       title: 'Two ways to look for a period',
-      body: `A light curve that dips every few days has a period in it, and there are two
-             standard ways to ask for it. A <strong>Lomb-Scargle periodogram</strong>
+      body: `How do you find the period of a planet from a light curve, and how much
+             should you trust the number? A light curve that dips every few days has a
+             period in it, and there are two standard ways to ask for it. A <strong>Lomb-Scargle periodogram</strong>
              fits a sine wave at each trial frequency, weighted by the error bars, and
              reports how much of the variation each one explains. It was made for unevenly
              spaced data and for signals that are sinusoids: a spotted star turning, a
@@ -71,7 +97,7 @@ const TWO_PERIODOGRAMS = {
       reveal: 'the-two-periods',
       title: 'Where the tallest peak will be',
       body: `The planet transits every 3.52 days; the light curve is 27.9 days long. The
-             notebook will search periods from half a day to fifteen.`,
+             notebook will compute a Lomb-Scargle periodogram of it.`,
       prompt: 'The Lomb-Scargle periodogram’s tallest peak will be at&hellip;',
       options: [
         'the planet’s period, about 3.5 days',
@@ -167,78 +193,186 @@ const TWO_PERIODOGRAMS = {
         'A narrow dip repeating every P is a sum of sine waves at P, P/2, P/3 and so on, with similar strengths. Lomb-Scargle fits one sine at a time, so each of these is a peak and any of them may be the tallest. Its tallest peak says there is a periodic signal and gives a period that divides the real one; it does not say which.',
     },
     {
-      sid: 'the-box',
+      sid: 'the-box-with-your-limit',
       compute: 'periodograms',
       type: 'measure',
-      title: 'The best box',
-      body: `The box search returns more than a period: the duration and depth of the box
-             that fits best, and the depth's signal-to-noise ratio, where the depth's
-             error bar is scaled up because the points scatter about 2.8 times their
-             error bars. Enter the duration, the depth and the signal-to-noise ratio.`,
+      title: 'The best box, within your limit',
+      body: `The box search tries boxes of several durations, up to a longest one that is
+             one of the notebook's two settings. The run you made earlier allowed 6 hours,
+             and is the reference. Choose a longest box duration from the menu:
+             <strong>2</strong>, <strong>3</strong>, <strong>4</strong>, <strong>6</strong>
+             or <strong>8</strong> hours. On the compute page set <strong>Longest box
+             duration tried</strong> to your choice, keep the longest period at 15, and run
+             again.
+             \n\nThe search returns more than a period: the duration and depth of the box
+             that fits best, and the depth's signal-to-noise ratio, where the depth's error
+             bar is scaled up because the points scatter about 2.8 times their error bars.
+             Enter your limit, the duration, the depth and the signal-to-noise ratio, and
+             then say whether the best box is as long as the limit you allowed: enter
+             <strong>1</strong> if it is, <strong>0</strong> if it is shorter. A best box
+             as long as the limit sits at the edge of the range the search was allowed.`,
       fields: [
-        { id: 'duration', label: 'Box duration', unit: 'h', want: '2.5' },
-        { id: 'depth', label: 'Box depth', unit: 'ppm', want: '14582' },
-        { id: 'snr', label: 'Depth S/N', unit: '', want: '191' },
+        {
+          id: 'limit',
+          label: 'Longest box duration you allowed',
+          unit: 'h',
+          options: [2, 3, 4, 6, 8],
+          want: '2',
+        },
+        {
+          id: 'duration',
+          label: 'Best box duration',
+          unit: 'h',
+          want: String(BOX[2].duration),
+          by: byLimit('duration'),
+        },
+        {
+          id: 'depth',
+          label: 'Best box depth',
+          unit: 'ppm',
+          want: String(BOX[2].depth),
+          by: byLimit('depth'),
+        },
+        {
+          id: 'snr',
+          label: 'Depth S/N',
+          unit: '',
+          want: String(BOX[2].snr),
+          by: byLimit('snr'),
+        },
+        {
+          id: 'edge',
+          label: 'Best box as long as your limit (1 yes, 0 no)',
+          unit: '',
+          options: [0, 1],
+          want: '1',
+          by: byLimit('edge'),
+        },
       ],
       validate: v => {
-        if (![v.duration, v.depth, v.snr].every(Number.isFinite)) return null;
-        if (
-          Math.abs(v.duration - 2.5) <= 0.3 &&
-          Math.abs(v.depth - 14582) <= 400 &&
-          Math.abs(v.snr - 191) <= 30
-        ) {
+        const typed = [v.duration, v.depth, v.snr];
+        if (!Number.isFinite(v.limit))
+          return typed.some(Number.isFinite) || Number.isFinite(v.edge)
+            ? {
+                level: 'warn',
+                message:
+                  'Choose the longest box duration you allowed from the menu first: what is right depends on it.',
+              }
+            : null;
+        if (!typed.every(Number.isFinite) || !Number.isFinite(v.edge))
+          return null;
+        const mine = BOX[v.limit];
+        if (!mine) return null;
+        const matches = row =>
+          Math.abs(v.duration - row.duration) <= 0.06 &&
+          Math.abs(v.depth - row.depth) <= 100 &&
+          Math.abs(v.snr - row.snr) <= 4;
+        if (matches(mine)) {
+          if (v.edge !== mine.edge)
+            return {
+              level: 'error',
+              message: mine.edge
+                ? `Your best box is ${mine.duration} hours long and your limit was ${v.limit}: the search could not try a longer box, so it is at the edge of the range. Enter 1.`
+                : `Your best box is ${mine.duration} hours long and your limit was ${v.limit}: it is shorter than the limit, so the search had room for a longer box and did not choose one. Enter 0.`,
+            };
           return {
             level: 'ok',
-            message:
-              'The box is 2.5 hours long and 14,600 parts per million deep, detected at a signal-to-noise ratio of about 190. It is a box: the real transit has sloped ingress and egress and a limb-darkened floor, so the box is an average of it.',
+            message: mine.edge
+              ? `With the limit at 2 hours the best box is 2.0 hours long: the limit itself. The search could not try a longer box, so what it reports is the longest box it was allowed, and a longer one might fit better. A box that is too short covers only the deepest part of the transit, so its depth is greater (${mine.depth.toLocaleString('en-US')} ppm) but it rests on fewer points, and its signal-to-noise ratio (${mine.snr}) is the lowest of the menu.`
+              : `With the limit at ${v.limit} hours the best box is ${mine.duration} hours long, inside the range: the search had room for a longer box and did not choose one. That duration is 2.5 to 2.7 hours whichever limit you allow, a little different each time because the search refines its durations on a grid of 21 values from 1 hour to the limit. The box is an average of the real transit, which has sloped ingress and egress and a limb-darkened floor.`,
           };
         }
+        for (const [n, row] of Object.entries(BOX))
+          if (Number(n) !== v.limit && matches(row))
+            return {
+              level: 'error',
+              message: `Those are the numbers of ${named(n)}. You chose ${v.limit}: set Longest box duration tried to ${v.limit} on the compute page and run again.`,
+            };
         return {
           level: 'error',
-          message:
-            'Read the box duration, the box depth and its signal-to-noise ratio from the table of numbers. They are rows of the table, in hours and in parts per million.',
+          message: `Set Longest box duration tried to ${v.limit}, run, and read the box duration, the box depth and its signal-to-noise ratio from the table of numbers. They are rows of the table, in hours and in parts per million.`,
         };
       },
     },
     {
-      sid: 'against-the-fit',
+      sid: 'separation-from-your-period',
       compute: 'periodograms',
       type: 'measure',
       title: 'Against the fit',
       body: `The Observatory's fit panel, which fits a transit to this light curve rather
              than a box, gives a period of <strong>3.52454</strong> days with an
-             uncertainty of 0.00003. Subtract it from the box search's period, and say
-             how many of the fit's uncertainties apart they are.`,
+             uncertainty of 0.00003. Enter the box least squares period of your latest
+             run, and how many of the fit's uncertainties apart the two periods are,
+             without regard to which is the larger.
+             \n\nThe panel also reports that this light curve's noise is correlated in
+             time, which makes its uncertainties too small by a factor of about 1.7 (the panel's red-noise factor, 1.66, measured on the residuals by the time-averaging method of Winn et al. 2008), the usual simplification for red noise. Enter
+             the separation again in units of the uncertainty made 1.7 times larger. Then
+             decide: does the box period still differ from the fit's by more than three of
+             those larger uncertainties (three is a convention)? Enter <strong>1</strong> for yes,
+             <strong>0</strong> for no.`,
       fields: [
         {
-          id: 'difference',
-          label: 'Box period minus fitted period',
+          id: 'period',
+          label: 'Your box period',
           unit: 'd',
-          want: '-0.00058',
+          want: '3.52396',
         },
         {
           id: 'sigmas',
-          label: 'In the fit’s uncertainties',
+          label: 'Separation, in the fit’s uncertainties',
           unit: '',
-          want: '-19',
+          want: '19',
+        },
+        {
+          id: 'corrected',
+          label: 'Separation, with the uncertainty made 1.7 times larger',
+          unit: '',
+          want: '11',
+        },
+        {
+          id: 'survives',
+          label: 'Still beyond three of them (1 yes, 0 no)',
+          unit: '',
+          options: [0, 1],
+          want: '1',
         },
       ],
       validate: v => {
-        if (![v.difference, v.sigmas].every(Number.isFinite)) return null;
         if (
-          Math.abs(v.difference - -0.00058) <= 0.0003 &&
-          Math.abs(v.sigmas - -19.4) <= 7
-        ) {
+          ![v.period, v.sigmas, v.corrected, v.survives].every(Number.isFinite)
+        )
+          return null;
+        // Any box period the notebook gives, at any limit on the menu, is near 3.5238 to 3.5241.
+        if (v.period < 3.5237 || v.period > 3.5242)
           return {
-            level: 'ok',
+            level: 'error',
             message:
-              'The box period is 0.0006 day below the fitted one, about 19 of the fit’s uncertainties, or more than 10 with the panel’s red-noise factor of 1.66. That is not a mistake of the box search: its period is the best point of a grid of boxes, and it was never a number with an error bar of 0.00003.',
+              'Read the box least squares period from the table of your latest run: it is a little under 3.5241 days at every setting the menu allows.',
           };
-        }
+        const apart = Math.abs(v.period - 3.52454) / 0.00003;
+        if (Math.abs(Math.abs(v.sigmas) - apart) > Math.max(1.5, 0.08 * apart))
+          return {
+            level: 'error',
+            message:
+              'Subtract your period from 3.52454, and divide by 0.00003, the fit’s uncertainty.',
+          };
+        const s = Math.abs(v.sigmas);
+        if (Math.abs(v.corrected) < s / 1.8 || Math.abs(v.corrected) > s / 1.55)
+          return {
+            level: 'error',
+            message:
+              v.corrected > s
+                ? 'Correlated noise makes the real uncertainty larger, so the same separation is fewer of them: divide by 1.7, not multiply.'
+                : 'Make the uncertainty 1.7 times larger, which makes the separation 1.7 times smaller: divide your first separation by 1.7.',
+          };
+        if (v.survives !== 1)
+          return {
+            level: 'error',
+            message: `The separation is about ${Math.round(Math.abs(v.corrected))} of the larger uncertainties, well beyond three: the difference survives the correction. Enter 1.`,
+          };
         return {
-          level: 'error',
-          message:
-            'Subtract 3.52454 from the box least squares period, and divide by 0.00003.',
+          level: 'ok',
+          message: `Your box period is ${fixed(apart, 0)} of the fit's uncertainties from the fitted one, about ${fixed(apart / 1.7, 0)} with the panel's correlated-noise factor, so the difference survives it. That is not a mistake of the box search: its period is the best point of a grid of boxes, and it was never a number with an error bar of 0.00003.`,
         };
       },
     },
@@ -252,7 +386,7 @@ const TWO_PERIODOGRAMS = {
              across the peak, which has a step of 3e-7 day.`,
       prompt: 'What is wrong with that?',
       options: [
-        'The grid step is how finely the periods were sampled, not how well the data fix the period: this period is 19 of the fit’s uncertainties from the fit’s, so its real uncertainty is far larger than the step',
+        'The grid step is how finely the periods were sampled, not how well the data fix the period: this period is more than ten of the fit’s uncertainties from the fit’s, so its real uncertainty is far larger than the step',
         'The grid step is too small and should be made larger',
         'A box search cannot find a period at all',
         'The uncertainty should be the signal-to-noise ratio',
@@ -283,15 +417,39 @@ const TWO_PERIODOGRAMS = {
       body: `Two periodograms of one light curve disagree by a factor of two, and both
              are right about what they were asked. Lomb-Scargle found the strongest
              sine wave, at 1.769 days, a harmonic of the planet's period. The box search
-             found a dip, at 3.524 days, 2.5 hours long and 14,600 parts per million
-             deep, and it matches the fit's period to 0.0006 day.
+             found a dip, at 3.524 days, about 2.5 hours long and 14,600 parts per million
+             deep when its limit left it room, and its period is within 0.0007 day of the
+             fit's.
              \n\nA periodogram answers "is there a period here, and roughly where", and
              not "what is it, to what precision". The second needs a model, a fit and an
              uncertainty, which the previous investigation did and this one did not.
-             The run is yours to keep: its capsule records the notebook's hash and the
-             light curve's, so a report can cite it.`,
+             \n\nWhat the box search does not cover: it fits one shape of dip, so its
+             duration and depth are an average of the real transit, and the longest box you
+             allow decides whether the search can even reach the best one. Its period is a
+             grid point, and with the fit's uncertainties widened for correlated noise the
+             box period still sits several of them away. The run is yours to keep: its
+             capsule records the notebook's hash and the light curve's, so a report can cite
+             it.`,
     },
   ],
+  retired: {
+    'the-box': {
+      to: 'the-box-with-your-limit',
+      release: '3.1',
+      was: {
+        en: 'Read the best box from the run with the longest box duration at 6 hours and enter its duration, depth and signal-to-noise ratio.',
+        es: 'Leer la mejor caja de la ejecución con la duración máxima de caja en 6 horas e introducir su duración, profundidad y relación señal-ruido.',
+      },
+    },
+    'against-the-fit': {
+      to: 'separation-from-your-period',
+      release: '3.1',
+      was: {
+        en: 'Subtract the fit panel’s period, 3.52454 days, from the box search’s period and enter the difference and how many of the fit’s uncertainties it is.',
+        es: 'Restar el período del panel de ajuste, 3,52454 días, del período de la búsqueda de caja e introducir la diferencia y a cuántas incertidumbres del ajuste equivale.',
+      },
+    },
+  },
 };
 
 export default TWO_PERIODOGRAMS;

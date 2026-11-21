@@ -3,10 +3,11 @@
  "static": {
   "en": {
    "units": [
-    ["steps.the-draws.fields.0.unit",""],
-    ["steps.the-draws.fields.1.unit",""],
-    ["steps.the-draws.fields.2.unit",""],
-    ["steps.the-draws.fields.3.unit",""],
+    ["steps.the-draws-at-your-ratio.fields.0.unit",""],
+    ["steps.the-draws-at-your-ratio.fields.1.unit",""],
+    ["steps.the-draws-at-your-ratio.fields.2.unit",""],
+    ["steps.the-draws-at-your-ratio.fields.3.unit",""],
+    ["steps.the-draws-at-your-ratio.fields.4.unit",""],
     ["steps.did-it-converge.fields.0.unit",""],
     ["steps.did-it-converge.fields.1.unit",""],
     ["steps.did-it-converge.fields.2.unit",""]
@@ -25,8 +26,8 @@
  "precision": [],
  "steps": {
   "en": {
-   "the-draws": {
-    "validate": {"calls":242,"distinct":2,"digest":"bed47c76ade3d9fb","samples":[null,{"level":"error","message":"Run the notebook with its settings as they are. Read each median from the Value column, and subtract the low end of its interval from the high end for its width."}]}
+   "the-draws-at-your-ratio": {
+    "validate": {"calls":254,"distinct":4,"digest":"06dca23d78ad41f2","samples":[null,{"level":"ok","message":"With a/R* held at 8, Rp/R* is 0.1226 with a 68 percent interval 0.00029 wide: as narrow as with the fit panel’s own value. But the median is 0.0033 from the panel’s 0.1193, 23 times the interval’s half-width and 2.1 of the panel’s uncertainties: a narrow interval around a different value. The width comes from the data once a/R* is held; where the interval sits comes from the value you held."},{"level":"ok","message":"a/R* 9.21 is the value the fit panel found, so Rp/R* comes out where the panel put it, 0.1193, with an interval 0.00026 wide, plus or minus 0.00013. That is about twelve times narrower than the panel’s 0.0016, which you will account for below."},{"level":"error","message":"Those are the medians of the run with a/R* 8. You chose 10: set a/R* to 10 on the compute page and run again."}]}
    },
    "did-it-converge": {
     "validate": {"calls":242,"distinct":2,"digest":"de11f65f782229fc","samples":[null,{"level":"error","message":"Read the largest R-hat, the smallest effective sample size and the acceptance fraction from the table of numbers. R-hat is a little above 1, and the sample size is in the thousands."}]}

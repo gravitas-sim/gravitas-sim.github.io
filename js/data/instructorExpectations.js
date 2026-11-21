@@ -119,20 +119,20 @@ export default {
         'Setting 1: period 3.52454 (within 0.00005), Rp/R* 0.11926 (within 0.0004), a/R* 9.21 (within 0.08), impact parameter 0.430 (within 0.012), reduced chi-square 7.98 (within 0.06).',
       'sigma-and-profile':
         'Rp/R* sigma 0.00164 (within 0.0002), profile 0.11797 to 0.12043 (each within 0.0003); impact parameter profile 0.368 to 0.476 (each within 0.012).',
-      'hold-the-limb-darkening':
-        'Setting 0: Rp/R* 0.11767 (within 0.0004), sigma 0.00050 (within 0.00012), a shift of 3.2 new sigmas (within 0.6).',
+      'shift-from-your-fit':
+        'Setting 0: Rp/R* 0.11767 (within 0.0004), sigma 0.00050 (0.00012), shift worked out from their own two values and their own sigma (3.2 for these numbers).',
     },
     'two-periodograms': {
       'the-two-periods':
         'Lomb-Scargle 1.7689 d (within 0.01), box 3.524 d (within 0.002), ratio 0.502 (within 0.004).',
-      'the-box':
-        'Duration 2.5 h (within 0.3), depth 14,582 ppm (within 400), S/N 191 (within 30).',
-      'against-the-fit':
-        'Box minus fitted period -0.00058 d (within 0.0003), -19.4 fit sigmas (within 7).',
+      'the-box-with-your-limit':
+        'Per limit in the key (2 h sits at the edge); within 0.06 h, 100 ppm, S/N 4.',
+      'separation-from-your-period':
+        'Their box period, 3.5238 to 3.5241 d: 15 to 24 fit sigmas, 9 to 14 at 1.7x.',
     },
     'sampling-a-posterior': {
-      'the-draws':
-        'Defaults: Rp/R* median 0.11926 (within 0.0003), interval width 0.00026 (within 0.00006); impact parameter 0.430 (within 0.008), width 0.0051 (within 0.0012).',
+      'the-draws-at-your-ratio':
+        'Per a/R* in the key; medians within 0.0003 (Rp/R*) and 0.008 (b), widths 0.00006 and 0.0012.',
       'did-it-converge':
         'Largest R-hat between 0.99 and 1.05, smallest effective sample size between 400 and 40,000, acceptance 0.72 (within 0.1).',
     },

@@ -42,6 +42,12 @@ const PYTHON = process.env.GRAVITAS_PYTHON || 'python3';
 const ids = process.argv.slice(2).filter(a => !a.startsWith('--'));
 const runsMode = process.argv.includes('--runs');
 const samplerMode = process.argv.includes('--sampler');
+// --only=<notebook id>,... with --runs: run only those notebooks' entries and
+// keep the rest of the file, in the order of the RUNS list.
+const only = process.argv
+  .find(a => a.startsWith('--only='))
+  ?.slice(7)
+  .split(',');
 if (!ids.length && !runsMode && !samplerMode) {
   console.error(
     'Usage: node tools/compute-answers.mjs <notebook id> ... | --runs | --sampler'
@@ -87,8 +93,14 @@ function answerFor(e, set = {}) {
 
 /** The runs the investigations ask for: notebook, name, settings. */
 // One entry per menu choice: the second step count of integrators-in-practice
-// (250, 438, 750, 1000), its six-orbit run, and the cutoffs of
-// extending-an-experiment (2, 4, 6, 10; the default 3 is the main answer).
+// (250, 438, 750, 1000), its six-orbit run, the cutoffs of
+// extending-an-experiment (2, 4, 6, 10; the default 3 is the main answer), the
+// longest box duration of two-periodograms (2, 3, 4, 8 hours; the default 6 is
+// the main answer), refitting-a-transit's held limb darkening, and the a/R*
+// held by sampling-a-posterior (8, 8.5, 10; the default 9.21 is the main
+// answer; 11 stops the notebook, "a walker starts outside the prior", because the
+// impact parameter would have to be negative; its refusals by step count are
+// recorded beside).
 const RUNS = [
   ['integrators-compared', 'steps250', { steps: 250 }],
   ['integrators-compared', 'steps438', { steps: 438 }],
@@ -101,7 +113,21 @@ const RUNS = [
   ['population-at-scale', 'cutoff6', { cutoff: 6 }],
   ['population-at-scale', 'cutoff10', { cutoff: 10 }],
   ['refit-transit', 'limb0', { limb: 0 }],
+  ['periodograms', 'limit2', { max_duration: 2 }],
+  ['periodograms', 'limit3', { max_duration: 3 }],
+  ['periodograms', 'limit4', { max_duration: 4 }],
+  ['periodograms', 'limit8', { max_duration: 8 }],
+  ['posterior-sampling', 'aRs8', { aRs: 8 }],
+  ['posterior-sampling', 'aRs8.5', { aRs: 8.5 }],
+  ['posterior-sampling', 'aRs10', { aRs: 10 }],
 ];
+
+/**
+ * The step counts the refusal question of sampling-a-posterior is about. Each is
+ * run with the notebook's other settings as they are; a run that is refused
+ * raises, and its last line is what a student reads.
+ */
+const REFUSAL_STEPS = [1000, 2000, 3000, 4000, 5000];
 
 /** The cutoffs a student may compare in extending-an-experiment, the default first. */
 const CUTOFFS = [2, 3, 4, 6, 10];
@@ -172,11 +198,21 @@ function trialMoves(example, boundByCutoff) {
 }
 
 if (runsMode) {
+  const file = path.join(
+    ROOT,
+    'tests/fixtures/compute/investigation-runs.json'
+  );
+  const kept = only ? JSON.parse(readFileSync(file, 'utf8')) : {};
   const out = {};
   for (const [id, name, set] of RUNS) {
+    const key = `${id}/${name}`;
+    if (only && !only.includes(id)) {
+      out[key] = kept[key];
+      continue;
+    }
     const e = CATALOGUE_DATA.find(x => x.id === id);
     const env = JSON.parse(JSON.parse(answerFor(e, set)).envelope);
-    out[`${id}/${name}`] = Object.fromEntries(
+    out[key] = Object.fromEntries(
       env.quantities.map(q => [
         q.id,
         {
@@ -212,14 +248,40 @@ if (runsMode) {
       out[`population-at-scale/cutoff${c}`]['bound.sample'].value *
         quantity('trials')
     );
-  out['population-at-scale/moves'] = trialMoves(
-    pop.input.example.path,
-    boundBy
-  );
-  writeFileSync(
-    path.join(ROOT, 'tests/fixtures/compute/investigation-runs.json'),
-    `${JSON.stringify(out, null, 2)}\n`
-  );
+  const sampler = CATALOGUE_DATA.find(x => x.id === 'posterior-sampling');
+  if (only && !only.includes('posterior-sampling'))
+    out['posterior-sampling/refusals'] = kept['posterior-sampling/refusals'];
+  else {
+    const refusals = {};
+    for (const steps of REFUSAL_STEPS) {
+      try {
+        const env = JSON.parse(
+          JSON.parse(answerFor(sampler, { steps })).envelope
+        );
+        const q = id => env.quantities.find(x => x.id === id).value;
+        refusals[steps] = {
+          refused: false,
+          'rhat.max': q('rhat.max'),
+          'ess.min': q('ess.min'),
+          'tau.max': q('tau.max'),
+        };
+      } catch (err) {
+        refusals[steps] = {
+          refused: true,
+          message: String(err.stderr ?? err.message)
+            .trim()
+            .split('\n')
+            .at(-1),
+        };
+      }
+    }
+    out['posterior-sampling/refusals'] = refusals;
+  }
+  out['population-at-scale/moves'] =
+    only && !only.includes('population-at-scale')
+      ? kept['population-at-scale/moves']
+      : trialMoves(pop.input.example.path, boundBy);
+  writeFileSync(file, `${JSON.stringify(out, null, 2)}\n`);
   console.log(`${Object.keys(out).length} runs`);
 }
 

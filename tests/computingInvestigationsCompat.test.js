@@ -2,12 +2,12 @@
  * @jest-environment jsdom
  */
 // =============================================================================
-// Saved work under the steps Integrators in Practice and Extending an Experiment
-// retired
+// Saved work under the steps the five computing investigations retired
 // -----------------------------------------------------------------------------
-// A progress record made when the two lessons asked for one fixed second run
-// (answers under `halve-the-step`, `move-the-definition` and `what-moved-it`) is
-// read by the revised lessons: the answers under the retired steps are kept as
+// A progress record made when the lessons asked for one fixed second run
+// (answers under `halve-the-step`, `move-the-definition`, `what-moved-it`,
+// `hold-the-limb-darkening`, `the-box`, `against-the-fit`, `how-wide` and
+// `the-draws`) is read by the revised lessons: the answers under the retired steps are kept as
 // answers from an earlier version, named with the step they went to, and never
 // read as an answer to a live step; the steps that kept their task keep their
 // answers; and saving after reading loses no key. The reader and the rule are
@@ -132,6 +132,160 @@ describe('Extending an Experiment', () => {
     expect(wasIn(rows[0].r.was, 'en')).toMatch(/cutoff to 6/);
     expect(wasIn(rows[0].r.was, 'es')).toMatch(/umbral en 6/);
     for (const r of rows) expect(L.steps.map(s => s.sid)).toContain(r.r.to);
+  });
+
+  test('saving after reading loses no saved key', () => {
+    const back = writeProgress({ lesson: L, ...read, depth: 'core' });
+    expect(Object.keys(back.responses).sort()).toEqual(
+      Object.keys(SAVED.responses).sort()
+    );
+  });
+});
+
+describe('Refitting a Transit', () => {
+  const L = lessonOf('refitting-a-transit');
+  const P = 'refitting-a-transit';
+  const SAVED = record(P, 'what-is-not-counted', {
+    [`${P}:how-close`]: 1,
+    [`${P}:the-fit:k`]: '0.11926',
+    [`${P}:sigma-and-profile:kSigma`]: '0.00164',
+    [`${P}:why-they-differ`]: 0,
+    [`${P}:hold-the-limb-darkening:k`]: '0.11767',
+    [`${P}:hold-the-limb-darkening:kSigma`]: '0.0005',
+    [`${P}:hold-the-limb-darkening:shift`]: '3.2',
+    [`${P}:what-is-not-counted`]: 0,
+  });
+  const read = readProgress(SAVED, L);
+
+  test('the held-limb-darkening answers are an earlier version; every other answer is kept', () => {
+    for (const key of [
+      `${P}:how-close`,
+      `${P}:the-fit:k`,
+      `${P}:sigma-and-profile:kSigma`,
+      `${P}:why-they-differ`,
+      `${P}:what-is-not-counted`,
+    ])
+      expect(read.responses[key]).toBe(SAVED.responses[key]);
+    expect(Object.keys(read.earlier.responses).sort()).toEqual(
+      Object.keys(SAVED.responses)
+        .filter(k => k.includes(':hold-the-limb-darkening:'))
+        .sort()
+    );
+    expect(
+      Object.keys(read.responses).filter(k => k.includes('shift-from-your-fit'))
+    ).toEqual([]);
+  });
+
+  test('the earlier answer names its successor and says in both languages what it asked', () => {
+    const rows = earlierAnswers(L, read.earlier.responses);
+    expect(rows.map(r => [r.id, r.r.to])).toEqual([
+      ['hold-the-limb-darkening', 'shift-from-your-fit'],
+    ]);
+    expect(wasIn(rows[0].r.was, 'en')).toMatch(/limb darkening held/);
+    expect(wasIn(rows[0].r.was, 'es')).toMatch(/oscurecimiento del limbo fijo/);
+    expect(L.steps.map(s => s.sid)).toContain(rows[0].r.to);
+  });
+
+  test('saving after reading loses no saved key', () => {
+    const back = writeProgress({ lesson: L, ...read, depth: 'core' });
+    expect(Object.keys(back.responses).sort()).toEqual(
+      Object.keys(SAVED.responses).sort()
+    );
+  });
+});
+
+describe('Two Periodograms', () => {
+  const L = lessonOf('two-periodograms');
+  const P = 'two-periodograms';
+  const SAVED = record(P, 'what-a-grid-step-is', {
+    [`${P}:the-tallest-peak`]: 1,
+    [`${P}:the-two-periods:ls`]: '1.7689',
+    [`${P}:why-half`]: 0,
+    [`${P}:the-box:duration`]: '2.5',
+    [`${P}:the-box:depth`]: '14582',
+    [`${P}:the-box:snr`]: '191',
+    [`${P}:against-the-fit:difference`]: '-0.00058',
+    [`${P}:against-the-fit:sigmas`]: '-19',
+    [`${P}:what-a-grid-step-is`]: 0,
+  });
+  const read = readProgress(SAVED, L);
+
+  test('the two retired steps’ answers are set aside; every other answer is kept', () => {
+    for (const key of [
+      `${P}:the-tallest-peak`,
+      `${P}:the-two-periods:ls`,
+      `${P}:why-half`,
+      `${P}:what-a-grid-step-is`,
+    ])
+      expect(read.responses[key]).toBe(SAVED.responses[key]);
+    expect(
+      [
+        ...new Set(
+          Object.keys(read.earlier.responses).map(k => k.split(':')[1])
+        ),
+      ].sort()
+    ).toEqual(['against-the-fit', 'the-box']);
+  });
+
+  test('each earlier answer names its successor, in both languages', () => {
+    const rows = earlierAnswers(L, read.earlier.responses);
+    expect(rows.map(r => [r.id, r.r.to]).sort()).toEqual([
+      ['against-the-fit', 'separation-from-your-period'],
+      ['the-box', 'the-box-with-your-limit'],
+    ]);
+    for (const r of rows) {
+      expect(wasIn(r.r.was, 'en')).toBeTruthy();
+      expect(wasIn(r.r.was, 'es')).toBeTruthy();
+      expect(L.steps.map(s => s.sid)).toContain(r.r.to);
+    }
+  });
+
+  test('saving after reading loses no saved key', () => {
+    const back = writeProgress({ lesson: L, ...read, depth: 'core' });
+    expect(Object.keys(back.responses).sort()).toEqual(
+      Object.keys(SAVED.responses).sort()
+    );
+  });
+});
+
+describe('Sampling a Posterior', () => {
+  const L = lessonOf('sampling-a-posterior');
+  const P = 'sampling-a-posterior';
+  const SAVED = record(P, 'did-it-converge', {
+    [`${P}:how-wide`]: 1,
+    [`${P}:the-draws:k`]: '0.11926',
+    [`${P}:the-draws:kWidth`]: '0.00026',
+    [`${P}:the-draws:b`]: '0.430',
+    [`${P}:the-draws:bWidth`]: '0.0051',
+    [`${P}:did-it-converge:rhat`]: '1.01',
+    [`${P}:why-narrower`]: 0,
+  });
+  const read = readProgress(SAVED, L);
+
+  test('the prediction and the draws are an earlier version; the convergence answers are kept', () => {
+    for (const key of [`${P}:did-it-converge:rhat`, `${P}:why-narrower`])
+      expect(read.responses[key]).toBe(SAVED.responses[key]);
+    expect(
+      [
+        ...new Set(
+          Object.keys(read.earlier.responses).map(k => k.split(':')[1])
+        ),
+      ].sort()
+    ).toEqual(['how-wide', 'the-draws']);
+    expect(read.responses[`${P}:how-wide`]).toBeUndefined();
+  });
+
+  test('each earlier answer names its successor, in both languages', () => {
+    const rows = earlierAnswers(L, read.earlier.responses);
+    expect(rows.map(r => [r.id, r.r.to]).sort()).toEqual([
+      ['how-wide', 'pick-the-ratio-predict-the-width'],
+      ['the-draws', 'the-draws-at-your-ratio'],
+    ]);
+    for (const r of rows) {
+      expect(wasIn(r.r.was, 'en')).toBeTruthy();
+      expect(wasIn(r.r.was, 'es')).toBeTruthy();
+      expect(L.steps.map(s => s.sid)).toContain(r.r.to);
+    }
   });
 
   test('saving after reading loses no saved key', () => {

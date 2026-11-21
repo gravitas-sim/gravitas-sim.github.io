@@ -1,7 +1,7 @@
 // =============================================================================
 // Refitting a Transit
 // -----------------------------------------------------------------------------
-// Content only, no imports. The companion of the compute page's notebook
+// Content only (one import: the number formatter). The companion of the compute page's notebook
 // "refit-transit" (Roadmap II Prompt 102, COMPUTE.md). There is no instrument on
 // this page: the student runs the reviewed notebook at /compute/ on the TESS
 // light curve of HD 209458 that the Observatory's fit panel fits, and types back
@@ -20,6 +20,8 @@
 //   Limb darkening held at q1 0.36, q2 0.30: Rp/R* 0.11767 +/- 0.00050 (3.2 of
 //   its new sigmas from the fitted value), b 0.341 +/- 0.050.
 // =============================================================================
+
+import { fixed } from '../../format.js';
 
 const REFITTING_A_TRANSIT = {
   id: 'refitting-a-transit',
@@ -46,22 +48,24 @@ const REFITTING_A_TRANSIT = {
     {
       sid: 'same-model-another-route',
       type: 'read',
-      setup: { scenario: 'Transit Lab', seed: 'transit-lab', paused: true },
+      canvas: 'quiet',
       title: 'The same model, another route',
-      body: `The Observatory's fit panel fits a transit to the TESS light curve of
+      body: `How much of a fitted transit's answer belongs to the route that found it?
+             The Observatory's fit panel fits a transit to the TESS light curve of
              HD 209458: a circular orbit, a limb-darkened star, a baseline, and seven
-             numbers searched within bounds. It starts from a box search, refines with a
-             bounded Levenberg-Marquardt and reports each number's uncertainty three
-             ways. This investigation fits the <strong>same model to the same 1,882
-             points</strong> with a different optimizer, so that anything that differs
-             can be traced to the route and not to the model.
+             numbers searched within bounds. Open the panel on that light curve first and
+             read what it reports; you will set this investigation's numbers beside it. This
+             investigation fits the <strong>same model to the same 1,882 points</strong>
+             with a different optimizer, so that anything that differs can be traced to
+             the route and not to the model.
              \n\nThe notebook starts from the transits it finds with
              <strong>scipy.ndimage</strong>, fits with
-             <strong>scipy.optimize.least_squares</strong>, takes each uncertainty from
-             the covariance at the minimum, and finds the profile interval of the
-             planet's size and the impact parameter with a root finder. Its transit
-             model was written again in NumPy and agrees with the application's to the
-             last digit of a double.
+             <strong>scipy.optimize.least_squares</strong> (the numbers that make the sum
+             of squared residuals smallest, each kept within bounds), takes each
+             uncertainty from the <em>covariance</em> at the minimum (how chi-square curves
+             around it), and finds the profile interval of the planet's size and the impact
+             parameter with a root finder. Its transit model was written again in NumPy
+             and agrees with the application's to the last digit of a double.
              \n\nOpen the compute page at <strong>/compute/</strong> of this site. It is
              online only and downloads about 23 MB of Python the first time, when you
              press the button. Choose the notebook <strong>Refit a transit with
@@ -194,9 +198,11 @@ const REFITTING_A_TRANSIT = {
       type: 'question',
       kind: 'choice',
       title: 'Why the interval is lopsided',
-      body: `The impact parameter's sigma is 0.071, symmetric by construction. Its
-             profile interval is from 0.368 to 0.476, 0.062 below the best value and
-             0.046 above it.`,
+      body: `Take the profile interval of the impact parameter that you entered, and the
+             best value you entered in the first run. Measure how far each end of the
+             interval is from the best value. A covariance sigma is symmetric about the
+             best value by construction, so a symmetric interval would give the same
+             distance on both sides. These do not.`,
       prompt: 'What is the best account of the difference?',
       options: [
         'The covariance describes chi-square as a symmetric parabola at the minimum; the valley that the impact parameter shares with a/R* and the limb darkening is curved, and the profile follows the curve',
@@ -219,7 +225,7 @@ const REFITTING_A_TRANSIT = {
         {
           id: 'bound',
           option: 3,
-          say: 'The low end, 0.368, is far from zero: nothing cuts it off. The lopsidedness comes from the shape of the valley.',
+          say: 'The low end you entered is far from zero: nothing cuts it off. The lopsidedness comes from the shape of the valley.',
         },
       ],
       hints: [
@@ -229,15 +235,41 @@ const REFITTING_A_TRANSIT = {
         'The covariance is the curvature of chi-square at the minimum, so it is symmetric and describes a parabola. The valley the impact parameter lies in, with a/R* and the limb darkening, is curved, and the profile refits the others at each value and follows it. The profile is the more honest number where the two differ.',
     },
     {
-      sid: 'hold-the-limb-darkening',
+      sid: 'predict-the-shift',
+      type: 'predict',
+      reveal: 'shift-from-your-fit',
+      title: 'How far will it move',
+      body: `Your next run holds the limb darkening at fixed, plausible values instead of
+             fitting it. Earlier you entered the sigma of Rp/R*, the planet's size.`,
+      prompt:
+        'Compared with that sigma, holding the limb darkening will move Rp/R* by&hellip;',
+      options: [
+        'nothing, because limb darkening changes the shape of the dip and not its depth',
+        'about that sigma, because the sigma already includes the freedom of the limb darkening',
+        'several times that sigma, because the held values are guesses',
+        'a tiny fraction of it, because both fits find the same minimum',
+      ],
+      answer: 1,
+      because:
+        'The fitted sigma is how far Rp/R* can move when the others are free, and the limb darkening is one of them. A held value within the fit’s own range moves the result by about its sigma, not by several of them. Measured here: about one sigma (0.97). The shift is a fixed amount, and the new, smaller sigma will measure it in a different unit.',
+    },
+    {
+      sid: 'shift-from-your-fit',
       compute: 'refit-transit',
       type: 'measure',
       title: 'Hold the limb darkening',
       body: `Set the notebook's one setting to <strong>0</strong>, which holds the limb
              darkening at q1 = 0.36 and q2 = 0.30 instead of fitting it, and run again.
-             Enter the new Rp/R*, its new sigma, and how many of its new sigmas it
-             moved from the value you found with the limb darkening fitted, 0.11926.`,
+             Enter your own Rp/R* from the fit with the limb darkening free (your answer
+             to <em>Run it</em>), the new Rp/R*, its new sigma, and how many of its new
+             sigmas it moved from your own value.`,
       fields: [
+        {
+          id: 'yours',
+          label: 'Your Rp/R*, limb darkening fitted',
+          unit: '',
+          want: '0.11926',
+        },
         {
           id: 'k',
           label: 'Rp/R*, limb darkening held',
@@ -253,22 +285,45 @@ const REFITTING_A_TRANSIT = {
         },
       ],
       validate: v => {
-        if (![v.k, v.kSigma, v.shift].every(Number.isFinite)) return null;
+        if (![v.yours, v.k, v.kSigma, v.shift].every(Number.isFinite))
+          return null;
+        // The fitted run: the value of the previous measurement, to its tolerance.
+        if (Math.abs(v.yours - 0.11926) > 0.0004)
+          return {
+            level: 'error',
+            message:
+              'Your own value is the one from the run with the setting at 1, the limb darkening fitted. Enter that one first, then run with the setting at 0.',
+          };
+        if (Math.abs(v.k - 0.11926) <= 0.0004)
+          return {
+            level: 'error',
+            message:
+              'That is the fitted run again. Set the setting to 0 to hold the limb darkening, run, and read the new Rp/R*.',
+          };
+        // The shift is worked out here from what the student entered: a run
+        // entered with a sigma of 0.00040 has a shift of 4, not the 3.2 the
+        // notebook's own numbers give, and both are right for their entries.
+        const mine = Math.abs(v.k - v.yours) / v.kSigma;
         if (
           Math.abs(v.k - 0.11767) <= 0.0004 &&
           Math.abs(v.kSigma - 0.0005) <= 0.00012 &&
-          Math.abs(Math.abs(v.shift) - 3.2) <= 0.6
+          Math.abs(Math.abs(v.shift) - mine) <= Math.max(0.3, 0.1 * mine)
         ) {
           return {
             level: 'ok',
             message:
-              'Holding the limb darkening cut Rp/R*’s sigma from 0.0016 to 0.0005, and moved Rp/R* from 0.1193 to 0.1177, which is 3.2 of its new sigmas. The smaller error bar does not include the cost of assuming the limb darkening, and the assumption moved the answer by more than the bar.',
+              'Holding the limb darkening cut Rp/R*’s sigma from 0.0016 to 0.0005, and moved Rp/R* from 0.1193 to 0.1177: a move of 0.0016, about one old sigma (0.97), which is 3.2 of its new sigmas. The smaller error bar does not include the cost of assuming the limb darkening, and the assumption moved the answer by more than the bar.',
           };
         }
+        if (Math.abs(v.k - 0.11767) <= 0.0004)
+          return {
+            level: 'error',
+            message: `The run is right. The shift is the difference between the two values, yours with the limb darkening fitted and the new one, divided by the new sigma. From your own entries your shift should be about ${fixed(mine, 1)}.`,
+          };
         return {
           level: 'error',
           message:
-            'Set the setting to 0, run, read Rp/R* and its sigma, and divide the difference from 0.11926 by the new sigma.',
+            'Set the setting to 0, run, read Rp/R* and its sigma, and divide the difference from your own value by the new sigma.',
         };
       },
     },
@@ -320,11 +375,22 @@ const REFITTING_A_TRANSIT = {
              \n\nThe other point is what a fit holds fixed. Holding the limb darkening
              cut Rp/R*'s error bar to a third and moved the value by three of the new
              bars: the fixed number's uncertainty did not disappear, it left the table.
-             And the sigmas count white noise only, in a light curve whose noise is not.
-             The run is yours to keep: its capsule records the notebook's hash and the
+             And the sigmas count white noise only, in a light curve whose noise is not:
+             what the interval does not cover is correlated noise and everything the model
+             assumes. The run is yours to keep: its capsule records the notebook's hash and the
              light curve's, so a report can cite it.`,
     },
   ],
+  retired: {
+    'hold-the-limb-darkening': {
+      to: 'shift-from-your-fit',
+      release: '3.1',
+      was: {
+        en: 'Run the notebook with the limb darkening held and enter the new Rp/R*, its sigma, and the shift in new sigmas from 0.11926.',
+        es: 'Ejecutar el cuaderno con el oscurecimiento del limbo fijo e introducir el nuevo Rp/R*, su sigma y el desplazamiento en sigmas nuevos desde 0,11926.',
+      },
+    },
+  },
 };
 
 export default REFITTING_A_TRANSIT;

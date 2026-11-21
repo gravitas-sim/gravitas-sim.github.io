@@ -294,7 +294,7 @@ export const INSTRUCTOR_CONTENT = {
     teachingNotes: [
       'The runs are deterministic: every student gets the digits in the answer key.',
       'A run takes a few seconds once the runtime has loaded.',
-      "Students who check the box period against the panel will see 3.524 and 3.5245: they agree to a thousandth of a day and not to the fit's error bar, which is the point of the last question.",
+      "Students who check the box period against the panel see 3.524 and 3.5245: they differ by far more than the fit's error bar.",
       'Capsule files open again without the runtime.',
     ],
     discussion: [
