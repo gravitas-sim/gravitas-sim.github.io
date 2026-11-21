@@ -622,14 +622,12 @@ function bindStepRoles(force, fresh) {
     return;
   }
   clearStage();
-  if (!step?.bind) {
-    releaseModelOwnership();
-    return;
-  }
-  const { problems } = bindRoles(step.bind, {
-    modelOwned: step.prescribes || [],
-  });
-  warn(problems, 'unbound role');
+  if (step?.bind) {
+    const { problems } = bindRoles(step.bind, {
+      modelOwned: step.prescribes || [],
+    });
+    warn(problems, 'unbound role');
+  } else releaseModelOwnership();
   if (fresh) frameScene();
 }
 
