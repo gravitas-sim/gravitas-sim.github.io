@@ -1,7 +1,7 @@
 // =============================================================================
 // Refitting a Transit
 // -----------------------------------------------------------------------------
-// Content only, no imports. The companion of the compute page's notebook
+// Content only (one import: the number formatter). The companion of the compute page's notebook
 // "refit-transit" (Roadmap II Prompt 102, COMPUTE.md). There is no instrument on
 // this page: the student runs the reviewed notebook at /compute/ on the TESS
 // light curve of HD 209458 that the Observatory's fit panel fits, and types back
@@ -20,6 +20,8 @@
 //   Limb darkening held at q1 0.36, q2 0.30: Rp/R* 0.11767 +/- 0.00050 (3.2 of
 //   its new sigmas from the fitted value), b 0.341 +/- 0.050.
 // =============================================================================
+
+import { fixed } from '../../format.js';
 
 const REFITTING_A_TRANSIT = {
   id: 'refitting-a-transit',
@@ -316,7 +318,7 @@ const REFITTING_A_TRANSIT = {
         if (Math.abs(v.k - 0.11767) <= 0.0004)
           return {
             level: 'error',
-            message: `The run is right. The shift is the difference between the two values, yours with the limb darkening fitted and the new one, divided by the new sigma. From your own entries your shift should be about ${mine.toFixed(1)}.`,
+            message: `The run is right. The shift is the difference between the two values, yours with the limb darkening fitted and the new one, divided by the new sigma. From your own entries your shift should be about ${fixed(mine, 1)}.`,
           };
         return {
           level: 'error',

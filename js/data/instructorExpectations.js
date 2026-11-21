@@ -120,7 +120,7 @@ export default {
       'sigma-and-profile':
         'Rp/R* sigma 0.00164 (within 0.0002), profile 0.11797 to 0.12043 (each within 0.0003); impact parameter profile 0.368 to 0.476 (each within 0.012).',
       'shift-from-your-fit':
-        'Setting 0: Rp/R* 0.11767 (within 0.0004), sigma 0.00050 (0.00012), shift 3.2 (0.6) from their own value.',
+        'Setting 0: Rp/R* 0.11767 (within 0.0004), sigma 0.00050 (0.00012), shift worked out from their own two values and their own sigma (3.2 for these numbers).',
     },
     'two-periodograms': {
       'the-two-periods':

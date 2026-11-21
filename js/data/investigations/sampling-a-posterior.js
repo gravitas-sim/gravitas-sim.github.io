@@ -1,7 +1,7 @@
 // =============================================================================
 // Sampling a Posterior
 // -----------------------------------------------------------------------------
-// Content only, no imports. The companion of the compute page's notebook
+// Content only (one import: the number formatter). The companion of the compute page's notebook
 // "posterior-sampling" (Roadmap II Prompt 102, COMPUTE.md; the route Prompt 103's
 // gate left open for sampling, SAMPLER_GATE.md). There is no instrument on this
 // page: the student runs the reviewed notebook at /compute/ on the TESS light
@@ -27,6 +27,8 @@
 //   everything free is 0.0016, twelve times these intervals' half-width. A
 //   1,000-step run is refused.
 // =============================================================================
+
+import { fixed, roundSig } from '../../format.js';
 
 /**
  * The draws for each a/R* a student may hold (the menu; 9.21 is the notebook's
@@ -194,7 +196,7 @@ const SAMPLING_A_POSTERIOR = {
             message:
               v.ratio === 9.21
                 ? 'a/R* 9.21 is the value the fit panel found, so Rp/R* comes out where the panel put it, 0.1193, with an interval 0.00026 wide, plus or minus 0.00013. That is about twelve times narrower than the panel’s 0.0016, which you will account for below.'
-                : `With a/R* held at ${v.ratio}, Rp/R* is ${mine.k} with a 68 percent interval ${Number(mine.kWidth.toPrecision(2))} wide: as narrow as with the fit panel’s own value. But the median is ${away.toFixed(4)} from the panel’s 0.1193, ${(away / (mine.kWidth / 2)).toFixed(0)} times the interval’s half-width and ${(away / PANEL.sigma).toFixed(1)} of the panel’s uncertainties: a narrow interval around a different value. The width comes from the data once a/R* is held; where the interval sits comes from the value you held.`,
+                : `With a/R* held at ${v.ratio}, Rp/R* is ${mine.k} with a 68 percent interval ${roundSig(mine.kWidth, 2)} wide: as narrow as with the fit panel’s own value. But the median is ${fixed(away, 4)} from the panel’s 0.1193, ${fixed(away / (mine.kWidth / 2), 0)} times the interval’s half-width and ${fixed(away / PANEL.sigma, 1)} of the panel’s uncertainties: a narrow interval around a different value. The width comes from the data once a/R* is held; where the interval sits comes from the value you held.`,
           };
         }
         for (const [n, row] of Object.entries(DRAWS))

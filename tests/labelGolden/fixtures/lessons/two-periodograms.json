@@ -6,17 +6,29 @@
     ["steps.the-two-periods.fields.0.unit","d"],
     ["steps.the-two-periods.fields.1.unit","d"],
     ["steps.the-two-periods.fields.2.unit",""],
-    ["steps.the-box.fields.0.unit","h"],
-    ["steps.the-box.fields.1.unit","ppm"],
-    ["steps.the-box.fields.2.unit",""],
-    ["steps.against-the-fit.fields.0.unit","d"],
-    ["steps.against-the-fit.fields.1.unit",""]
+    ["steps.the-box-with-your-limit.fields.0.unit","h"],
+    ["steps.the-box-with-your-limit.fields.1.unit","h"],
+    ["steps.the-box-with-your-limit.fields.2.unit","ppm"],
+    ["steps.the-box-with-your-limit.fields.3.unit",""],
+    ["steps.the-box-with-your-limit.fields.4.unit",""],
+    ["steps.separation-from-your-period.fields.0.unit","d"],
+    ["steps.separation-from-your-period.fields.1.unit",""],
+    ["steps.separation-from-your-period.fields.2.unit",""],
+    ["steps.separation-from-your-period.fields.3.unit",""]
    ],
-   "numbered": []
+   "numbered": [
+    ["steps.the-box-with-your-limit.fields.4.label","Best box as long as your limit (1 yes, 0 no)"],
+    ["steps.separation-from-your-period.fields.2.label","Separation, with the uncertainty made 1.7 times larger"],
+    ["steps.separation-from-your-period.fields.3.label","Still beyond three of them (1 yes, 0 no)"]
+   ]
   },
   "es": {
    "units": [],
-   "numbered": []
+   "numbered": [
+    ["steps.the-box-with-your-limit.fields.4.label","Mejor caja tan larga como tu límite (1 sí, 0 no)"],
+    ["steps.separation-from-your-period.fields.2.label","Separación, con la incertidumbre 1,7 veces mayor"],
+    ["steps.separation-from-your-period.fields.3.label","Aún más allá de tres de ellas (1 sí, 0 no)"]
+   ]
   }
  },
  "numeric": {
@@ -29,11 +41,11 @@
    "the-two-periods": {
     "validate": {"calls":242,"distinct":2,"digest":"6f83cbddc2bec7d6","samples":[null,{"level":"error","message":"Run the notebook with its settings at 15 and 6, and read the two best periods and their ratio from the table of numbers it returns."}]}
    },
-   "the-box": {
-    "validate": {"calls":242,"distinct":2,"digest":"849231fe72606924","samples":[null,{"level":"error","message":"Read the box duration, the box depth and its signal-to-noise ratio from the table of numbers. They are rows of the table, in hours and in parts per million."}]}
+   "the-box-with-your-limit": {
+    "validate": {"calls":242,"distinct":1,"digest":"1d8fc6ceb1f94c63","samples":[null]}
    },
-   "against-the-fit": {
-    "validate": {"calls":232,"distinct":2,"digest":"342067efb1a70294","samples":[null,{"level":"error","message":"Subtract 3.52454 from the box least squares period, and divide by 0.00003."}]}
+   "separation-from-your-period": {
+    "validate": {"calls":250,"distinct":4,"digest":"69e65143c9a464d4","samples":[null,{"level":"error","message":"Read the box least squares period from the table of your latest run: it is a little under 3.5241 days at every setting the menu allows."},{"level":"ok","message":"Your box period is 19 of the fit's uncertainties from the fitted one, about 11 with the panel's correlated-noise factor, so the difference survives it. That is not a mistake of the box search: its period is the best point of a grid of boxes, and it was never a number with an error bar of 0.00003."},{"level":"error","message":"The separation is about 11 of the larger uncertainties, well beyond three: the difference survives the correction. Enter 1."}]}
    }
   },
   "es": "same"

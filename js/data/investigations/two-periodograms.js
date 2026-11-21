@@ -1,7 +1,7 @@
 // =============================================================================
 // Two Periodograms
 // -----------------------------------------------------------------------------
-// Content only, no imports. The companion of the compute page's notebook
+// Content only (one import: the number formatter). The companion of the compute page's notebook
 // "periodograms" (Roadmap II Prompt 102, COMPUTE.md). There is no instrument on
 // this page: the student runs the reviewed notebook at /compute/ on the TESS
 // light curve of HD 209458 that the Observatory's box search reads, and types
@@ -25,6 +25,8 @@
 //   Lomb-Scargle power at the harmonics of 3.52454 d: 0.056 at P, 0.073 at P/2,
 //   0.071 at P/3 and P/4.
 // =============================================================================
+
+import { fixed } from '../../format.js';
 
 /**
  * The box search for each longest duration a student may allow (hours): the best
@@ -370,7 +372,7 @@ const TWO_PERIODOGRAMS = {
           };
         return {
           level: 'ok',
-          message: `Your box period is ${apart.toFixed(0)} of the fit's uncertainties from the fitted one, about ${(apart / 1.7).toFixed(0)} with the panel's correlated-noise factor, so the difference survives it. That is not a mistake of the box search: its period is the best point of a grid of boxes, and it was never a number with an error bar of 0.00003.`,
+          message: `Your box period is ${fixed(apart, 0)} of the fit's uncertainties from the fitted one, about ${fixed(apart / 1.7, 0)} with the panel's correlated-noise factor, so the difference survives it. That is not a mistake of the box search: its period is the best point of a grid of boxes, and it was never a number with an error bar of 0.00003.`,
         };
       },
     },
