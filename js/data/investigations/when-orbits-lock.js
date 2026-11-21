@@ -61,10 +61,12 @@ const laplaceRows = ctx => {
 };
 
 // A captured amplitude below these is a bound taken before the instrument had
-// seen the angle turn back. They sit just under the converged values (about
-// 25.6, 80.1 and 24), because the bounds climb to within a degree of them.
-const AMPLITUDE_FLOOR = 25;
-const PLUTO_FLOOR = 79.8;
+// seen the angle turn back. Each sits about 3 degrees under the lowest
+// converged amplitude measured at 60 and 120 frames a second (Laplace 24.4 to
+// 26.2, Pluto 80.0 to 80.3, tadpole about 24): the integration step follows
+// the frame rate, so the figure a student reads moves a little with it.
+const AMPLITUDE_FLOOR = 21;
+const PLUTO_FLOOR = 77;
 const TADPOLE_FLOOR = 15;
 // Every instrument step re-holds the world under Reduced motion and Step by step.
 const HELD =
@@ -1339,7 +1341,7 @@ const WHEN_ORBITS_LOCK = {
              little as the run goes on, so read them when the verdict arrives.
 
              \n\nThen look at the verdict. If it says the run is still too short, let
-             it go on.`,
+             it go on until “Watched for” reads about twenty conjunction cycles.`,
       checklist: [
         'Read the nearest small-integer ratio and the percentage offset',
         'Set the closer-than-chance figure beside the moons’ and Pluto’s',

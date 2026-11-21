@@ -861,7 +861,8 @@ export default {
              léelos cuando llegue el veredicto.
 
              \n\nDespués mira el veredicto. Si dice que la ejecución aún es corta,
-             déjala seguir.`,
+             déjala seguir hasta que «Observado durante» marque unos veinte
+             ciclos de conjunción.`,
       checklist: [
         'Lee la razón de enteros pequeños más cercana y el desfase porcentual',
         'Pon la cifra de «más cerca que el azar» junto a la de las lunas y la de Plutón',

@@ -212,7 +212,8 @@ describe('a reading taken too soon is refused, in words', () => {
   test('an amplitude that is still a bound is refused, a converged one passes', () => {
     expect(laplace({ amplitude: 7.7 }).level).toBe('error');
     expect(laplace({ amplitude: 7.7 }).message).toMatch(/lower bound|growing/);
-    expect(laplace({ amplitude: 24.3 }).level).toBe('error');
+    expect(laplace({ amplitude: 20 }).level).toBe('error');
+    expect(laplace({ amplitude: 24.4 }).level).toBe('ok');
     expect(laplace({ amplitude: 25.5 }).level).toBe('ok');
     expect(laplace({ amplitude: 26 }).level).toBe('ok');
   });
@@ -231,7 +232,8 @@ describe('a reading taken too soon is refused, in words', () => {
       });
     expect(p({}).level).toBe('ok');
     expect(p({ plutoAmplitude: 40 }).level).toBe('error');
-    expect(p({ plutoAmplitude: 79.5 }).level).toBe('error');
+    expect(p({ plutoAmplitude: 70 }).level).toBe('error');
+    expect(p({ plutoAmplitude: 79.5 }).level).toBe('ok');
     expect(p({ plutoAmplitude: 80.1 }).level).toBe('ok');
     expect(p({ plutoPeriod: 7_160_000 }).level).toBe('warn');
     expect(p({ plutoPeriod: 7_160_000 }).message).toMatch(/365\.25/);
