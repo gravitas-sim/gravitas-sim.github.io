@@ -32,7 +32,7 @@ export const ES_SCENE = {
   'roles.pullsNone': 'Aquí no atrae a nada.',
   'roles.fixedHole':
     'Un agujero negro estático: fijo, no lo atrae nada (uno recién formado sigue moviéndose un momento).',
-  'roles.modelOwned': 'Lo mueve el modelo de la lección, no la gravedad.',
+  'roles.modelOwned': 'Lo mueve el modelo de la investigación, no la gravedad.',
   'summary.barycenter.system':
     'Marcador del baricentro: la posición media de todo el sistema ponderada por la masa, {n} cuerpos.',
   'summary.barycenter.pair':

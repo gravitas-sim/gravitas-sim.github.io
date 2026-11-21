@@ -30,7 +30,7 @@ export const EN_SCENE = {
   'roles.pullsNone': 'Pulls on nothing here.',
   'roles.fixedHole':
     'A static black hole: fixed, pulled by nothing (a newly formed one keeps moving briefly).',
-  'roles.modelOwned': "Moved by the lesson's model, not by gravity.",
+  'roles.modelOwned': "Moved by the investigation's model, not by gravity.",
   'summary.barycenter.system':
     'Barycenter marker: the mass-weighted mean position of the whole system, {n} bodies.',
   'summary.barycenter.pair':
