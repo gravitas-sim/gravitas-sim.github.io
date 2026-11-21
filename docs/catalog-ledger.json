@@ -3474,8 +3474,8 @@
         "js/data/investigations/es/missing-mass.js"
       ],
       "instrument_files": ["js/darkMatterWidgets.js", "js/galacticWidgets.js"],
-      "depths": { "core": 33, "quantitative": 2, "advanced": 4 },
-      "spanish_steps": { "core": 33, "deeper": 6 },
+      "depths": { "core": 31, "quantitative": 2, "advanced": 8 },
+      "spanish_steps": { "core": 31, "deeper": 10 },
       "languages": ["en", "es"],
       "sequences": [{ "id": "galaxies-and-the-universe", "position": 4 }],
       "courses": [

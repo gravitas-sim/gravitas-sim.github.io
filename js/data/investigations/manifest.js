@@ -120,7 +120,7 @@ export const MANIFEST = [
     level: 'Introductory astronomy',
     thumbnail: 'images/scenarios/milky-way-rotation.webp',
     depths: 3,
-    stepCount: 33,
+    stepCount: 31,
     gradedCount: 17,
     objectiveCount: 8,
   },
