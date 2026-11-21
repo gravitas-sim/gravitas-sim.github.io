@@ -414,7 +414,7 @@ export function stepMarkup(step, c) {
                   ? `<select data-field="${attr(key)}"><option value="">${escape(t('inv.field.choose'))}</option>${f.options
                       .map(
                         o =>
-                          `<option${String(responses[key]) === String(o) ? ' selected' : ''}>${escape(o)}</option>`
+                          `<option${menuValue(responses[key]) === String(o) ? ' selected' : ''}>${escape(menuText(o))}</option>`
                       )
                       .join('')}</select>`
                   : `<input type="text" ${f.kind === 'text' ? '' : 'inputmode="decimal"'}
@@ -880,6 +880,14 @@ export function bindStepInputs(h) {
 // --- Measured values ----------------------------------------------------------
 // Kept here and not in js/answerParse.js: that module is a source of the
 // instructor bundle, and changing it would need the bundle rebuilt.
+
+/** A menu option's text: a number in the reader's decimal mark ("9,21" in Spanish), anything else as written. */
+const menuText = o =>
+  typeof o === 'number'
+    ? String(o).replace('.', decimalSeparatorFor(getLocale()))
+    : String(o);
+/** A stored menu choice with a decimal comma read as a point, to compare with the option's own number. */
+const menuValue = r => String(r ?? '').replace(/^(\d+),(\d+)$/, '$1.$2');
 
 /** A field as a number: its own convention, trailing text NaN, ".5" kept. */
 export function parseFieldNumber(raw, locale) {

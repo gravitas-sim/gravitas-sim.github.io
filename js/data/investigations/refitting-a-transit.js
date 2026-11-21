@@ -298,13 +298,13 @@ const REFITTING_A_TRANSIT = {
             message:
               'That is the fitted run again. Set the setting to 0 to hold the limb darkening, run, and read the new Rp/R*.',
           };
-        // The shift is worked out here from what the student entered, and the
-        // fixed 3.2 stays the accepted value.
+        // The shift is worked out here from what the student entered: a run
+        // entered with a sigma of 0.00040 has a shift of 4, not the 3.2 the
+        // notebook's own numbers give, and both are right for their entries.
         const mine = Math.abs(v.k - v.yours) / v.kSigma;
         if (
           Math.abs(v.k - 0.11767) <= 0.0004 &&
           Math.abs(v.kSigma - 0.0005) <= 0.00012 &&
-          Math.abs(Math.abs(v.shift) - 3.2) <= 0.6 &&
           Math.abs(Math.abs(v.shift) - mine) <= Math.max(0.3, 0.1 * mine)
         ) {
           return {
@@ -316,8 +316,7 @@ const REFITTING_A_TRANSIT = {
         if (Math.abs(v.k - 0.11767) <= 0.0004)
           return {
             level: 'error',
-            message:
-              'The run is right. The shift is the difference between the two values, yours with the limb darkening fitted and the new one, divided by the new sigma.',
+            message: `The run is right. The shift is the difference between the two values, yours with the limb darkening fitted and the new one, divided by the new sigma. From your own entries your shift should be about ${mine.toFixed(1)}.`,
           };
         return {
           level: 'error',

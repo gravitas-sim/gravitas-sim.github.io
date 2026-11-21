@@ -103,7 +103,7 @@ export default {
     },
     'refuse-a-short-run': {
       title: 'Una ejecución demasiado corta',
-      body: `El cuaderno acepta cualquier número de pasos de 1000 a 10000. Antes de ejecutar ninguno, decide para cuáles se negará a dar un intervalo. Luego comprueba tu predicción con dos ejecuciones: pon los <strong>pasos</strong> en un número que esperes que rechace y ejecútalo, y después en uno que esperes que acepte y ejecútalo. Una ejecución rechazada es rápida; una aceptada tarda aproximadamente un minuto.`,
+      body: `El cuaderno acepta cualquier número de pasos de 1000 a 10000. Antes de ejecutar ninguno, decide para cuáles se negará a dar un intervalo. Luego comprueba tu predicción con dos ejecuciones: pon los <strong>pasos</strong> en un número que esperes que rechace y ejecútalo, y después en uno que esperes que acepte y ejecútalo. Antes de ambas, devuelve <strong>a/R*</strong> a 9,21, el valor por defecto del cuaderno: dónde cae el límite depende de él. Una ejecución rechazada es rápida; una aceptada tarda aproximadamente un minuto.`,
       prompt: '¿Para qué números de pasos se negará el cuaderno?',
       options: [
         'Las ejecuciones cortas: una cadena demasiado corta no ha olvidado de dónde partió, así que incumple un límite de convergencia y el cuaderno no da ningún intervalo, diciendo qué límite falló',
@@ -123,7 +123,7 @@ export default {
         'Lee el mensaje que muestra la página tras las palabras sobre que el cuaderno se detuvo con un error: nombra el límite que falló.',
       ],
       because:
-        'El cuaderno somete cada ejecución a límites: los conjuntos deben coincidir (R-hat menor que 1,05), debe haber al menos 400 muestras efectivas, y la cadena tras su calentamiento debe tener al menos 50 tiempos de autocorrelación. Aquí un tiempo de autocorrelación son unos 40 pasos, así que el cuaderno rechaza 1.000, 2.000, 3.000 y 4.000 pasos y da un intervalo desde 5.000: devuelve los diagnósticos y ningún intervalo para una cadena que no ha convergido, porque ese intervalo es un número sin nada detrás.',
+        'El cuaderno somete cada ejecución a límites: los conjuntos deben coincidir (R-hat menor que 1,05), debe haber al menos 400 muestras efectivas, y la cadena tras su calentamiento debe tener al menos 50 tiempos de autocorrelación. Aquí un tiempo de autocorrelación son unos 40 pasos, así que una cadena necesita unos 2.000 pasos tras su calentamiento, la primera mitad de una ejecución, es decir, unos cuatro mil pasos en total, para pasar el último límite, y el cuaderno rechaza las ejecuciones que no llegan: devuelve los diagnósticos y ningún intervalo para una cadena que no ha convergido, porque ese intervalo es un número sin nada detrás. Dónde cae el límite depende de a/R* y de la versión de Python, así que un número cercano puede rechazarse en una máquina y aceptarse en otra. Con 9,21 y la versión comprobada, 1.000 y 2.000 pasos se rechazan con holgura, 3.000 y 4.000 por unos pocos tiempos de autocorrelación o por uno (49 frente a 50 con 4.000), y 5.000 pasos se aceptan.',
     },
     'what-you-worked-out': {
       title: 'Lo que has deducido',

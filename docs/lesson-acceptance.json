@@ -1,5 +1,5 @@
 {
-  "reviewed": "2026-09-11",
+  "reviewed": "2026-11-21",
   "reviewer": "repository maintainer",
   "note": "Hand-written and human-reviewed. One central experiment per investigation: the object a reader acts on, the control they move, the quantity that comes back, where the evidence lands, the steps of the loop, and the browser test that drives it end to end. `npm run audit:scene:check` refuses to pass if any of those six names something the lesson no longer has. It cannot judge whether the experiment is a good one, and does not claim to. Nothing here is a claim about learning gains: no study has been run.",
   "objectForms": "A role the lesson binds or stages, the literal \"the selected body\", or \"panel:<widget-id>\" for a lesson whose central experiment is a panel model with nothing on the canvas. It can also be \"compute:<notebook id>\" for a lesson whose experiment is run on the compute page; some step must then declare the same notebook with `compute: \"<notebook id>\"` (Roadmap II Prompt 102).",
@@ -801,7 +801,7 @@
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["how-close", "the-fit", "shift-from-your-fit"],
       "evidenceFrom": "computation",
-      "decision": "How far Rp/R* will move when the limb darkening is held, against the sigma of the fit with it free, and whether to trust the smaller sigma that results.",
+      "decision": "How far Rp/R* will move when the limb darkening is held, against the sigma of the fit with it free, and how many of the new, smaller sigmas that move is. Whether to trust the smaller sigma is a choice step outside this loop.",
       "leakFree": true
     },
     "two-periodograms": {
@@ -818,7 +818,7 @@
         "separation-from-your-period"
       ],
       "evidenceFrom": "computation",
-      "decision": "Which longest box duration to allow (2, 3, 4, 6 or 8 hours) and whether the best box then sits at the edge of the range, and whether the box period still differs from the fit's after the correlated-noise factor.",
+      "decision": "Which longest box duration to allow (2, 3, 4, 6 or 8 hours) and whether the best box then sits at the edge of the range. The last entry, whether the box period still differs from the fit's after the correlated-noise factor (the panel's 1.66, Winn et al. 2008), is 1 for every limit on the menu: a check of the arithmetic against a three-sigma convention, not a choice that can come out the other way.",
       "leakFree": true
     },
     "sampling-a-posterior": {
@@ -835,7 +835,7 @@
         "did-it-converge"
       ],
       "evidenceFrom": "computation",
-      "decision": "Which a/R* to hold (8, 8.5, 9.21 or 10), how wide the interval will be, and which step counts the notebook will refuse.",
+      "decision": "Which a/R* to hold (8, 8.5, 9.21 or 10) and how wide the interval will be, then whether the run converged well enough to quote. Which step counts the notebook refuses is asked in a choice step outside this loop (its answer depends on a/R* and on the Python build, so it is not graded against a count).",
       "leakFree": true
     },
     "what-is-a-measurement": {

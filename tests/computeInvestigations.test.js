@@ -1,5 +1,7 @@
 import { describe, test, expect } from '@jest/globals';
 import { readFileSync } from 'node:fs';
+import { setLocale } from '../js/i18n/index.js';
+import { stepMarkup } from '../js/investigations/stepView.js';
 
 import INTEGRATORS from '../js/data/investigations/integrators-in-practice.js';
 import EXTENDING from '../js/data/investigations/extending-an-experiment.js';
@@ -843,6 +845,21 @@ describe('Refitting a Transit', () => {
       verdict(REFITTING, 'shift-from-your-fit', { ...typedShift(), shift: 1 })
         .level
     ).toBe('error');
+    // The textbook 3.2 with the student's own, smaller sigma is not a valid entry; the shift worked out from that sigma is,
+    // and the error says what the student's own entries give.
+    const small = { ...typedShift(), kSigma: 0.0004 };
+    const own = Math.abs(held.k.value - main.k.value) / 0.0004;
+    expect(Math.abs(own - 3.2)).toBeGreaterThan(0.5);
+    expect(
+      verdict(REFITTING, 'shift-from-your-fit', { ...small, shift: four(own) })
+        .level
+    ).toBe('ok');
+    const textbook = verdict(REFITTING, 'shift-from-your-fit', {
+      ...small,
+      shift: 3.2,
+    });
+    expect(textbook.level).toBe('error');
+    expect(textbook.message).toContain(`about ${own.toFixed(1)}`);
     // The fitted run typed as the held one, and an own value from some other run.
     expect(
       verdict(REFITTING, 'shift-from-your-fit', {
@@ -1285,10 +1302,17 @@ describe('Sampling a Posterior', () => {
     for (const n of refused)
       expect(refusals[n].message).toMatch(/the run is refused/);
     const q = step(SAMPLING, 'refuse-a-short-run');
-    const list = refused.map(n => n.toLocaleString('en-US'));
-    expect(q.because).toContain(
-      `${list.slice(0, -1).join(', ')} and ${list.at(-1)} steps`
-    );
+    // The text names the generated refusals as one checked build's at a/R* 9.21, and says the line depends on both.
+    expect(refused).toEqual(expect.arrayContaining([1000, 2000]));
+    for (const n of [1000, 2000, 3000, 4000, 5000])
+      expect(q.because).toContain(n.toLocaleString('en-US'));
+    expect(q.because).toMatch(/depends on a\/R\* and on the Python build/);
+    expect(q.because).toMatch(/At 9\.21 on the checked build/);
+    // The knife-edge count is stated as measured (49 against 50), never as a rule.
+    expect(refusals[4000].message).toMatch(/49 autocorrelation times/);
+    expect(q.because).toContain('49 against 50 at 4,000');
+    // The student is told to reset a/R* to 9.21 before the two runs, the setting the refusals were generated at.
+    expect(q.body).toMatch(/Reset <strong>a\/R\*<\/strong> to 9\.21/);
     // "An autocorrelation time here is about 40 steps": the notebook's own, at the accepted run.
     expect(refusals[Math.min(...accepted)]['tau.max']).toBeGreaterThan(35);
     expect(refusals[Math.min(...accepted)]['tau.max']).toBeLessThan(45);
@@ -1296,6 +1320,51 @@ describe('Sampling a Posterior', () => {
     expect(q.options[q.answer]).toMatch(/^The short runs/);
     // The question is asked before the two runs, and does not state its own answer.
     expect(q.body).not.toContain(Math.min(...accepted).toLocaleString('en-US'));
+  });
+
+  test('a numeric menu option is written in the reader’s decimal mark, and a stored choice in either mark is the selected one', async () => {
+    const drawn = (responses, id = 'the-draws-at-your-ratio') =>
+      stepMarkup(draws, {
+        id,
+        saved: undefined,
+        active: null,
+        responses,
+        visited: new Set(),
+        shown: () => [draws],
+        predictionAnsweredHere: () => false,
+        recomputeFields: () => {},
+      }).join('');
+    const options = html =>
+      [...html.matchAll(/<option([^>]*)>([^<]*)<\/option>/g)].map(m => [
+        m[2],
+        /selected/.test(m[1]),
+      ]);
+    await setLocale('en', { persist: false });
+    // (The blank first option's text is a deferred string, not loaded here.)
+    expect(options(drawn({})).slice(1)).toEqual([
+      ['8', false],
+      ['8.5', false],
+      ['9.21', false],
+      ['10', false],
+    ]);
+    await setLocale('es', { persist: false });
+    try {
+      // The Spanish menu reads like the Spanish body ("9,21"), not "9.21".
+      const es = options(
+        drawn({ 'the-draws-at-your-ratio:ratio': '9.21' })
+      ).map(o => o[0]);
+      expect(es.slice(1)).toEqual(['8', '8,5', '9,21', '10']);
+      // A choice stored under English reads as chosen in Spanish, and so does one stored with the comma.
+      for (const stored of ['9.21', '9,21'])
+        expect(
+          options(drawn({ 'the-draws-at-your-ratio:ratio': stored })).filter(
+            o => o[1]
+          )
+        ).toEqual([['9,21', true]]);
+      expect(options(drawn({})).filter(o => o[1])).toEqual([]);
+    } finally {
+      await setLocale('en', { persist: false });
+    }
   });
 
   test('the numbers quoted in the prose are the notebook’s', () => {

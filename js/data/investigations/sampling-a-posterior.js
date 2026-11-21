@@ -345,8 +345,10 @@ const SAMPLING_A_POSTERIOR = {
       body: `The notebook accepts any step count from 1000 to 10000. Before you run any,
              decide which of them it will refuse to report an interval for. Then test your
              prediction with two runs: set <strong>steps</strong> to a count you expect it
-             to refuse and run it, then to a count you expect it to accept and run it. A
-             refused run is quick; an accepted one takes about a minute.`,
+             to refuse and run it, then to a count you expect it to accept and run it.
+             Reset <strong>a/R*</strong> to 9.21, the notebook's default, before both runs:
+             where the line falls depends on it. A refused run is quick; an accepted one
+             takes about a minute.`,
       prompt: 'Which step counts will the notebook refuse?',
       options: [
         'The short runs: a chain that is too short has not forgotten where it started, so it fails a convergence limit and the notebook reports no interval, saying which limit failed',
@@ -371,7 +373,7 @@ const SAMPLING_A_POSTERIOR = {
         'Read the message the page shows after the words "The notebook stopped with an error": it names the limit that failed.',
       ],
       because:
-        'The notebook holds every run to limits: the ensembles must agree (R-hat under 1.05), there must be at least 400 effective samples, and the chain after its burn-in must be at least 50 autocorrelation times long. An autocorrelation time here is about 40 steps, so the notebook refuses 1,000, 2,000, 3,000 and 4,000 steps and reports an interval from 5,000: it returns the diagnostics and no interval for a chain that has not converged, because such an interval is a number with nothing behind it.',
+        'The notebook holds every run to limits: the ensembles must agree (R-hat under 1.05), there must be at least 400 effective samples, and the chain after its burn-in must be at least 50 autocorrelation times long. An autocorrelation time here is about 40 steps, so a chain needs about 2,000 steps after its burn-in, the first half of a run, which is roughly four thousand steps in all, to pass the last limit, and the notebook refuses the runs that fall short: it returns the diagnostics and no interval for a chain that has not converged, because such an interval is a number with nothing behind it. Where the line falls depends on a/R* and on the Python build, so a count near it can be refused on one machine and accepted on another. At 9.21 on the checked build, 1,000 and 2,000 steps are refused with room to spare, 3,000 and 4,000 by a few autocorrelation times or one (49 against 50 at 4,000), and 5,000 steps are accepted.',
     },
     {
       sid: 'what-you-worked-out',
