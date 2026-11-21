@@ -829,7 +829,7 @@ const A_UNIVERSE_OF_STARS = {
         pace: 'phase',
         pinStaged: ['m020', 'm100', 'm2000'],
       }),
-      tip: 'The luminosities are in the list under the picture, and in your notebook if you saved the last step.',
+      tip: 'The three luminosities are on the card in the instrument panel, and in your notebook if you chose Save to notebook and Keep it in the last step.',
     },
     {
       sid: 'the-whole-sequence',

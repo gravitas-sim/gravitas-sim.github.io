@@ -258,7 +258,7 @@ export default {
       options: ['1: proporcional', '2', '3,5', '10'],
       because:
         'Aproximadamente a 3,5, y esta medida da 3,5 casi exactamente: nueve millones son cien elevado a 3,5, y cien elevado a 3,5 es diez elevado a siete, diez millones: bastante cerca de nueve millones para una relación tan aproximada. No es una ley de la naturaleza —es un resumen de lo que producen los cálculos de estructura estelar para estrellas sostenidas como lo están las de la secuencia principal— y el exponente no es realmente constante: es más pronunciado cerca de una masa solar y más suave en el extremo alto. Lo que importa para el resto de la investigación es que es muy pronunciado. Una estrella con diez veces la masa no emite diez veces la luz; emite miles de veces más.',
-      tip: 'Las luminosidades están en la lista bajo la imagen, y en tu cuaderno si guardaste el paso anterior.',
+      tip: 'Las tres luminosidades están en la ficha del panel del instrumento, y en tu cuaderno si en el paso anterior elegiste Guardar en el cuaderno y luego Guardarla.',
     },
     'the-whole-sequence': {
       stage: {
