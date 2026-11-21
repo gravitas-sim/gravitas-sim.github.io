@@ -748,7 +748,7 @@ const DARK_MATTER = {
       // the range that fits.
       tool: {
         id: 'dm-fit',
-        values: { ...HELD_DISC, haloVFlat: 0, haloCore: 12 },
+        values: { ...HELD_DISC, haloVFlat: 0, haloCore: 10.5 },
         hide: ['discMass', 'discScale'],
         presets: false,
       },
@@ -776,7 +776,7 @@ const DARK_MATTER = {
       title: 'Record the fit that works',
       tool: {
         id: 'dm-fit',
-        values: { ...HELD_DISC, haloVFlat: 0, haloCore: 12 },
+        values: { ...HELD_DISC, haloVFlat: 0, haloCore: 10.5 },
         hide: ['discMass', 'discScale'],
         presets: false,
       },
@@ -871,7 +871,7 @@ const DARK_MATTER = {
       kind: 'numeric',
       tool: {
         id: 'dm-fit',
-        values: { ...HELD_DISC, haloVFlat: 0, haloCore: 12 },
+        values: { ...HELD_DISC, haloVFlat: 0, haloCore: 10.5 },
         hide: ['discMass', 'discScale'],
         presets: false,
       },
@@ -935,14 +935,15 @@ const DARK_MATTER = {
       options: [
         'keep orbiting as before: the stars were already moving, and nothing touches them directly',
         'fall inward toward the bulge, because there is less mass holding the galaxy together',
-        'drift outward, the outer stars first, and come apart from the outside in',
+        'drift outward onto wider paths, and most of the disc comes apart; only the stars deep in the bulge’s pull stay near it',
         'speed up and spin faster, because nothing is pulling on the stars from outside',
       ],
       answer: 2,
       because: `The stars keep the speed they had, but the pull that held them at
                 that speed is gone, so they move out onto wider paths. The halo
                 supplies most of the mass at large radius and very little near the
-                centre, so the outer orbits lose the most and leave first. Taking
+                centre, so only the stars close to the bulge keep a pull strong
+                enough to hold them; the rest drift away. Taking
                 away mass reduces the pull; it does not add one, which is why the
                 disc does not fall inward, and a star that is not pulled harder
                 does not speed up.`,
@@ -980,7 +981,7 @@ const DARK_MATTER = {
           },
         ];
       },
-      tip: 'The stars do not stop suddenly. They keep the speed they had and simply stop being held, so the disc unwinds from the outside in.',
+      tip: 'The stars do not stop suddenly. They keep the speed they had and simply stop being held, so the disc comes apart everywhere the bulge cannot hold it.',
     },
 
     // --- Part 6: Zwicky got there first -------------------------------------

@@ -83,7 +83,7 @@ export default {
       title: 'Give the ratio an error bar from your own fits',
       tool: {
         id: 'dm-fit',
-        values: { discMass: 0, haloVFlat: 0, haloCore: 12 },
+        values: { discMass: 0, haloVFlat: 0, haloCore: 10.5 },
         presets: false,
       },
       body: `Your fit gave one value of the ratio of halo to visible mass. Other

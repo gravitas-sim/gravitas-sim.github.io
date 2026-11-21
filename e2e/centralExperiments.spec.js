@@ -836,13 +836,48 @@ test.describe('the central experiment of each investigation', () => {
       'the outer stars outrun the Keplerian prediction'
     ).toBeGreaterThan(1.2);
 
+    // The ratio is the student's own reading of a star they chose: select the
+    // lesson's outer star on the canvas and take the ratio beside the field.
+    const chosen = await page.evaluate(async () => {
+      const ls = await import('/js/lessonScene.js');
+      const p = await import('/js/physics.js');
+      const ui = await import('/js/ui.js');
+      const body = ls.roleBody('outer');
+      const hit =
+        body && p.findObjectAtPosition({ x: body.pos.x, y: body.pos.y });
+      if (hit) ui.showObjectInspector(hit.object, hit.type);
+      return hit ? body.name : null;
+    });
+    expect(chosen, 'the outer star is on the canvas to be chosen').toBeTruthy();
+    const take = page.locator('#investigationBody [data-take="obs_gap"]');
+    await expect(take).toBeEnabled();
+    await expect
+      .poll(async () => {
+        await take.click();
+        return page
+          .locator('#investigationBody [data-field$=":obs_gap"]')
+          .inputValue();
+      })
+      .not.toBe('');
+    const taken = Number(
+      await page
+        .locator('#investigationBody [data-field$=":obs_gap"]')
+        .inputValue()
+    );
+    expect(
+      taken,
+      'the star outruns what its visible mass predicts'
+    ).toBeGreaterThan(1);
+    expect(taken).toBeLessThan(3);
     const evidence = {
       obs_slope: slope.toFixed(2),
       obs_shape: 'flat',
-      obs_gap: gap.toFixed(1),
     };
     await recordFields(page, id, measureSid, evidence);
-    await expectEvidenceRetained(page, id, measureSid, evidence);
+    await expectEvidenceRetained(page, id, measureSid, {
+      ...evidence,
+      obs_gap: taken.toFixed(2),
+    });
 
     await expectVerdictRevealed(page, plan, predict);
 

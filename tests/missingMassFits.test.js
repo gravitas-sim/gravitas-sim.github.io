@@ -261,8 +261,8 @@ describe('the central experiment: stars alone miss, and the halo fits', () => {
     const accepted = [];
     for (const discMass of grid(2.64, 3.96, 0.33))
       for (const discScale of grid(1, 8, 1))
-        for (const haloVFlat of grid(100, 220, 10))
-          for (const haloCore of grid(1, 20, 1)) {
+        for (const haloVFlat of grid(100, 220, 4))
+          for (const haloCore of grid(1, 20, 0.5)) {
             const f = compute({ discMass, discScale, haloVFlat, haloCore });
             if (f.good) accepted.push(f.ratio);
           }

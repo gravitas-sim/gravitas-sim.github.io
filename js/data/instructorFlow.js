@@ -722,17 +722,17 @@ export default {
       {
         from: 'now-do-what-the-astronomers',
         to: 'why-a-heavier-disc-cannot',
-        text: 'The fitting exercise begins, and this is the heart of the investigation. Students are handed a measured curve with error bars and a stellar disc with two free parameters, and asked to reproduce the data. They cannot. Step 15 has them record their own best attempt, and step 16 asks why a heavier disc does not rescue it: the shortfall is the wrong shape, not the wrong size.',
+        text: 'The fitting exercise begins, and this is the heart of the investigation. Students are handed a measured curve with error bars and a stellar disc with two free parameters, both sliders opening at zero, and asked to reproduce the data. They cannot. Step 15 has them record their own best attempt, and step 16 asks why a heavier disc does not rescue it: the shortfall is the wrong shape, not the wrong size.',
       },
       {
         from: 'now-add-the-halo',
         to: 'how-much-of-it-is',
-        text: 'The halo goes in. Two more sliders, a fit that closes to within the measurement errors, and a numeric step in which students divide their own fitted halo mass by their own visible mass. The answer, about 3.4, is a number they produced rather than received.',
+        text: 'The halo goes in. Two more sliders, a fit that closes to within the measurement errors, a comparison table that sets their two recorded fits side by side, and a numeric step in which students divide their own fitted halo mass by their own visible mass. The answer, about 3.4, is a number they produced rather than received.',
       },
       {
         from: 'what-the-halo-is-holding',
         to: 'take-the-halo-away-from',
-        text: 'What the halo is holding. A single star is launched on a circular orbit at the speed a real galaxy gives it and the halo is switched off underneath it; then the same experiment runs on ninety stars in the live simulation and the disc unwinds from the outside in.',
+        text: 'What the halo is holding. A single star is launched on a circular orbit at the speed a real galaxy gives it and the halo is switched off underneath it; then the same experiment runs on ninety stars in the live simulation and the disc comes apart everywhere the bulge cannot hold it.',
       },
       {
         from: 'forty-years-earlier',
@@ -743,11 +743,6 @@ export default {
         from: 'weigh-the-cluster-by-its',
         to: 'now-compare',
         text: 'The cluster calculation. Two numeric steps take students from the virial theorem to a dynamical mass and then to its ratio against the visible mass.',
-      },
-      {
-        from: 'a-different-way-to-read',
-        to: 'does-the-curve-decide',
-        text: 'The other explanation, in four screens. MOND is introduced as what it is - an empirical observation that rotation curves stop falling at a particular acceleration, turned into a law - and then put on the same twelve measurements the halo was fitted to. Students discover that both reproduce the curve inside its error bars, that the halo spent three fitted numbers doing it and MOND spent one, and that the two disagree about how heavy the stellar disc is. A numeric step has them apply v⁴ = G M a₀ by hand, and a short-answer step asks what the curve can and cannot settle. Expect the question "so which one is right?" here; the honest answer is that this measurement does not say, and the step exists to make that a finding rather than a dodge. Nothing in the investigation asserts that either explanation is correct, and the answer key credits students who reach for evidence outside rotation curves.',
       },
       {
         from: 'what-have-you-actually-shown',

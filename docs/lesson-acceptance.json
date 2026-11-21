@@ -144,10 +144,10 @@
       "loop": [
         "now-a-galaxy",
         "measure-the-real-curve",
-        "does-the-curve-decide"
+        "what-have-you-actually-shown"
       ],
       "evidenceFrom": "engine",
-      "decision": "unreviewed",
+      "decision": "Which outer disc star to take the speed ratio from, with how much mass to give the disc and how far to spread it while trying to fit the points with stars alone, how to set the two halo sliders once the disc is held at what its light implies, which of the student's two saved fits describes the points within the data's error bars, and, on the quantitative path, which fits to accept (FITTED, with the visible mass inside what the light allows) and so how wide the ratio's range is.",
       "leakFree": true
     },
     "tides": {

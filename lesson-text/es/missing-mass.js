@@ -289,11 +289,11 @@ export default {
       options: [
         'seguirá orbitando como antes: las estrellas ya se estaban moviendo y nada las toca directamente',
         'caerá hacia el bulbo, porque hay menos masa que mantenga unida la galaxia',
-        'se alejará hacia fuera, con las estrellas exteriores primero, y se deshará de fuera hacia dentro',
+        'se alejará hacia fuera por órbitas más amplias, y la mayor parte del disco se deshará; solo las estrellas muy dentro del tirón del bulbo se quedarán cerca de él',
         'acelerará y girará más rápido, porque nada tira de las estrellas desde fuera',
       ],
       because:
-        'Las estrellas conservan la velocidad que tenían, pero la atracción que las sujetaba a esa velocidad ha desaparecido, así que salen hacia órbitas más amplias. El halo aporta la mayor parte de la masa a radios grandes y muy poca cerca del centro, así que las órbitas exteriores son las que más pierden y las primeras en irse. Quitar masa reduce la atracción; no añade ninguna, y por eso el disco no cae hacia dentro, y una estrella a la que no se tira con más fuerza no acelera.',
+        'Las estrellas conservan la velocidad que tenían, pero la atracción que las sujetaba a esa velocidad ha desaparecido, así que salen hacia órbitas más amplias. El halo aporta la mayor parte de la masa a radios grandes y muy poca cerca del centro, así que solo las estrellas cercanas al bulbo conservan una atracción suficiente para sujetarlas; las demás se alejan. Quitar masa reduce la atracción; no añade ninguna, y por eso el disco no cae hacia dentro, y una estrella a la que no se tira con más fuerza no acelera.',
     },
     'take-the-halo-away-from': {
       title: 'Quítale el halo a la galaxia entera',
@@ -304,7 +304,7 @@ export default {
         'Observa cómo los puntos medidos se separan de la línea continua y el disco se deshace',
         'Vuelve a activar el halo y recarga el escenario para restaurarlo',
       ],
-      tip: 'Las estrellas no se detienen de golpe. Conservan la velocidad que tenían y simplemente dejan de estar sujetas, así que el disco se deshila de fuera hacia dentro.',
+      tip: 'Las estrellas no se detienen de golpe. Conservan la velocidad que tenían y simplemente dejan de estar sujetas, así que el disco se deshace en todas partes donde el bulbo no puede sujetarlo.',
     },
     'forty-years-earlier': {
       title: 'Cuarenta años antes',
