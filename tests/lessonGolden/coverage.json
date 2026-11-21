@@ -7,6 +7,7 @@
     "weighing-stars",
     "black-holes",
     "butterfly-effect",
+    "extending-an-experiment",
     "measuring-the-moon",
     "missing-mass",
     "propose-an-observation",
@@ -14,7 +15,6 @@
     "a-night-at-the-telescope",
     "counts-to-magnitudes",
     "detect-this-planet",
-    "extending-an-experiment",
     "power-law-gravity",
     "retrograde-motion"
   ],
@@ -189,6 +189,11 @@
       "key:predict.requires",
       "lock:null"
     ],
+    "extending-an-experiment": [
+      "key:measure.canvas",
+      "key:measure.compute",
+      "key:read.canvas"
+    ],
     "measuring-the-moon": [
       "key:question.maxUncertainty",
       "key:question.minUncertainty",
@@ -214,9 +219,6 @@
     ],
     "detect-this-planet": [
       "key:read.allowInspector"
-    ],
-    "extending-an-experiment": [
-      "key:measure.compute"
     ],
     "power-law-gravity": [
       "key:question.explain"
@@ -294,14 +296,14 @@
   ],
   "totals": {
     "investigations": 124,
-    "steps": 1989,
+    "steps": 1992,
     "activityCuts": 6,
-    "lessonTokens": 171,
+    "lessonTokens": 173,
     "activityTokens": 29,
     "stepTypes": {
       "read": 377,
-      "predict": 200,
-      "measure": 518,
+      "predict": 202,
+      "measure": 519,
       "ellipse": 1,
       "question": 751,
       "explore": 141,
