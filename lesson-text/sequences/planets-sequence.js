@@ -28,7 +28,7 @@ export const MOONS_OF_THE_GIANTS_ES = {
         'Divide el periodo de Europa entre el de Ío, y el de Ganímedes entre el de Europa, cuando los tengas.',
       ],
       because:
-        'Casi el doble cada uno: 2,006 y 2,013. La tercera ley de Kepler permitiría que una órbita 1,5 veces más ancha tardara 1,84 veces más, pero estos cocientes están más cerca de 2, y esa cercanía es el tema del resto.',
+        'Casi el doble cada uno: 2,007 y 2,013. La tercera ley de Kepler permitiría que una órbita 1,5 veces más ancha tardara 1,84 veces más, pero estos cocientes están más cerca de 2, y esa cercanía es el tema del resto.',
     },
     'three-periods': {
       title: 'Tres periodos',
@@ -90,14 +90,14 @@ export const MOONS_OF_THE_GIANTS_ES = {
       ],
     },
     'a-hint-is-not-proof': {
-      title: '¿Qué dice 2,006?',
-      body: 'Europa tarda 2,006 veces lo que Ío; Ganímedes, 2,013 veces lo que Europa. Ninguno es exactamente 2.',
+      title: '¿Qué dice 2,007?',
+      body: 'Europa tarda 2,007 veces lo que Ío; Ganímedes, 2,013 veces lo que Europa. Ninguno es exactamente 2.',
       prompt:
         '¿Qué se deduce de unos cocientes cercanos a 2 pero no iguales a 2?',
       options: [
         'Nada queda decidido: un cociente cercano a 2 es un indicio, y hay que contrastar los tres movimientos juntos',
         'Las lunas no pueden estar en resonancia, porque una resonancia necesita que el cociente sea exactamente 2',
-        'Las lunas están sin duda enlazadas, porque 2,006 se redondea a 2',
+        'Las lunas están sin duda enlazadas, porque 2,007 se redondea a 2',
         'Los periodos deben de estar mal medidos',
       ],
       misconceptions: [
@@ -197,7 +197,7 @@ export const MOONS_OF_THE_GIANTS_ES = {
     },
     'what-you-worked-out': {
       title: 'Lo que has deducido',
-      body: 'Tres periodos de imágenes sintéticas, 1,7682, 3,5480 y 7,1413 días; cocientes de 2,006 y 2,013, cerca de 2 y no iguales a 2, lo cual es un indicio y no una prueba; y una combinación de los tres movimientos que salió menor que su propia incertidumbre, cuando cada movimiento es miles de veces mayor. El muestreo importó: con una imagen por noche, el periodo de Ío es un alias y la combinación queda a decenas de grados por día de cero. Calisto, con un cociente de 2,33, queda fuera de la cadena. Lo que las imágenes no pueden mostrar es el ángulo mismo manteniéndose durante años, que <em>Cuando las órbitas se enlazan</em> sigue en un modelo. Otros gigantes tienen familias propias (las lunas de Saturno, las de Urano), y este conjunto solo cubre las de Júpiter.',
+      body: 'Tres periodos de imágenes sintéticas, 1,7682, 3,5480 y 7,1413 días; cocientes de 2,007 y 2,013, cerca de 2 y no iguales a 2, lo cual es un indicio y no una prueba; y una combinación de los tres movimientos que salió menor que su propia incertidumbre, cuando cada movimiento es miles de veces mayor. El muestreo importó: con una imagen por noche, el periodo de Ío es un alias y la combinación queda a decenas de grados por día de cero. Calisto, con un cociente de 2,33, queda fuera de la cadena. Lo que las imágenes no pueden mostrar es el ángulo mismo manteniéndose durante años, que <em>Cuando las órbitas se enlazan</em> sigue en un modelo. Otros gigantes tienen familias propias (las lunas de Saturno, las de Urano), y este conjunto solo cubre las de Júpiter.',
     },
   },
 };
@@ -262,7 +262,7 @@ export const THE_SCALE_OF_THE_SOLAR_SYSTEM_ES = {
         'La luz tarda lo mismo en cruzar cada unidad astronómica. ¿Cuántas hay hasta Neptuno?',
       ],
       because:
-        'Unas cuatro horas: Neptuno está a 30,07 UA y la luz cruza una UA en 499 segundos, así que 30,07 por 499 segundos son 15 005 segundos, 4,17 horas. Un mensaje de una nave en Neptuno tardaría eso en llegar, en cada sentido.',
+        'Unas cuatro horas: la luz tarda lo mismo en cruzar cada unidad astronómica, así que Neptuno, treinta veces más lejos que la Tierra, está a treinta veces más minutos. Un mensaje de una nave en Neptuno tardaría eso en llegar, en cada sentido.',
     },
     'light-time': {
       title: 'El tiempo de la luz hasta Neptuno',
@@ -340,7 +340,7 @@ export const COMETS_AND_THE_SUN_ES = {
   steps: {
     'a-dirty-snowball': {
       title: 'Una bola de nieve sucia',
-      body: 'Un cometa son unos kilómetros de hielo y polvo en una órbita larga. Lejos del Sol está oscuro e inerte. Cerca del Sol el hielo pasa a gas, y el gas y el polvo escapan y forman una <strong>coma</strong> y dos colas. El sandbox tiene el Sol, los ocho planetas y doce cometas. Llevan los nombres de cometas famosos, pero el sandbox coloca cada uno a la distancia de su órbita media con el 70 por ciento de la velocidad de una órbita circular, así que son <strong>cometas modelo en órbitas propias</strong>, no las órbitas reales.',
+      body: 'Un cometa son unos kilómetros de hielo y polvo en una órbita larga. Lejos del Sol está oscuro e inerte. Cerca del Sol el hielo pasa a gas, y el gas y el polvo escapan y forman una <strong>coma</strong> y dos colas. El sandbox tiene el Sol, los ocho planetas y cometas. Llevan los nombres de cometas famosos, pero el sandbox coloca cada uno a la distancia de su órbita media con el 70 por ciento de la velocidad de una órbita circular, así que son <strong>cometas modelo en órbitas propias</strong>, no las órbitas reales.',
       tip: 'Los cometas se mueven deprisa. Pausa para leer un número; reanuda para ver las colas.',
     },
     'tail-predict': {
@@ -359,7 +359,7 @@ export const COMETS_AND_THE_SUN_ES = {
     },
     'watch-the-tails': {
       title: 'Mira las colas',
-      body: 'Las colas solo se ven donde un cometa está a menos de unas 3 UA del Sol, y la lectura dice cuándo lo está el cometa que seleccionas. Halley, el primer cometa de la lectura, se queda más allá de 5,8 UA. Wild 2 y Hartley 2 llegan a 1,1 UA y Shoemaker-Levy 9 a 2,1 (tenue; en un equipo más lento, el único). Pausa la escena, haz clic en un cometa y vuelve a reanudarla.',
+      body: 'Las colas solo se ven donde un cometa está a menos de unas 3 UA del Sol, y la lectura dice cuándo lo está el cometa que seleccionas. Halley se queda más allá de 5,8 UA. Wild 2 y Hartley 2 llegan a 1,1 UA y Shoemaker-Levy 9 a 2,1 (tenue; en un equipo más lento, el único). Pausa la escena, haz clic en un cometa y vuelve a reanudarla.',
       checklist: [
         'Selecciona un cometa que llegue a menos de 3 UA y acércate a él',
         'Páusalo en tres puntos que elijas: de camino hacia el Sol, cerca de su máxima aproximación y de camino hacia fuera',

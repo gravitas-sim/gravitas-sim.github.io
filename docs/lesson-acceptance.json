@@ -1057,7 +1057,7 @@
     "moons-of-the-giants": {
       "centralExperimentId": "ce.moons-of-the-giants",
       "object": "panel:moon-fit",
-      "control": "moon-fit/cadence",
+      "control": "moon-fit/moon",
       "quantity": "the period a sinusoid fitted to one moon's measured distances from Jupiter gives, with its uncertainty, from which the Laplace combination of three motions follows: Io 1.7682, Europa 3.5480 and Ganymede 7.1413 days, a combination of 0.022 against an uncertainty of 0.025 degrees a day on the designed sampling, and about -47 on one frame a night, where Io's period is an alias",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",

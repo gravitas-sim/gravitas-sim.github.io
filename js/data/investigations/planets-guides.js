@@ -96,7 +96,7 @@ const CONTENT = {
     placement:
       'In a survey course after the investigation of the scale of the Solar System and the unit on orbits, and before a unit on small bodies; it needs no earlier investigation. It supports OpenStax Astronomy 2e chapter 13 (comets); the citation is the author’s statement of the match, checked against the table of contents.',
     overview:
-      'Students watch the sandbox’s twelve model comets, predict which way the tail points, pause a comet that comes inside 3 AU at three points of their choosing to read its tail against the line to the Sun, take the chosen comet’s two distances from the Sun, see its temperature at each end, predict and then read the temperature of the real Halley, and say why the tail grows near the Sun. The comets are model comets: the sandbox gives them the names of famous comets and starts each at the distance of its average orbit at 70 percent of circular speed, so the one named Halley comes no closer than 5.79 AU and goes out to 17.84 AU, while Wild 2 and Hartley 2 come in to 1.1 AU. The real Halley (0.586 AU) is a transfer case.',
+      'Students watch the sandbox’s model comets, predict which way the tail points, pause a comet that comes inside 3 AU at three points of their choosing to read its tail against the line to the Sun, take the chosen comet’s two distances from the Sun, see its temperature at each end, predict and then read the temperature of the real Halley, and say why the tail grows near the Sun. The comets are model comets: the sandbox gives them the names of famous comets and starts each at the distance of its average orbit at 70 percent of circular speed, so the one named Halley comes no closer than 5.79 AU and goes out to 17.84 AU, while Wild 2 and Hartley 2 come in to 1.1 AU. The real Halley (0.586 AU) is a transfer case.',
     priorKnowledge: [
       'An orbit is an ellipse with the Sun at a focus',
       'The inverse-square law for light',
@@ -119,7 +119,7 @@ const CONTENT = {
     features: [
       {
         name: 'The sandbox, no instrument',
-        text: 'The Solar System scenario with twelve model comets and the asteroids off; a readout names the selected comet, its two distances, its distance now, whether it is moving toward or away from the Sun and whether the sandbox draws its tail.',
+        text: 'The Solar System scenario with its model comets and the asteroids off; a readout names the selected comet, its two distances, its distance now, whether it is moving toward or away from the Sun and whether the sandbox draws its tail.',
       },
       {
         name: 'Live checking',
@@ -172,12 +172,12 @@ const CONTENT = {
   },
   'moons-of-the-giants': {
     topic:
-      'The periods of Io, Europa and Ganymede fitted from synthetic frames, their ratios (2.006 and 2.013), the Laplace combination of the three motions with its uncertainty for a sampling the student chooses (0.022 ± 0.025 degrees a day on the designed sampling, and 47 degrees a day off zero on one frame a night), and Callisto outside the chain (2.33, predicted first).',
+      'The periods of Io, Europa and Ganymede fitted from synthetic frames, their ratios (2.007 and 2.013), the Laplace combination of the three motions with its uncertainty for a sampling the student chooses (0.022 ± 0.025 degrees a day on the designed sampling, and 47 degrees a day off zero on one frame a night), and Callisto outside the chain (2.33, predicted first).',
     difficulty: 'Introductory (a division, and a combination of three numbers)',
     placement:
       'In a survey course after the unit on the giant planets and their moons, and before When Orbits Lock if both are set; it needs no earlier investigation, though Weighing Jupiter From Its Moons makes the frames familiar. It supports OpenStax Astronomy 2e chapter 12 (section 12.2, the Galilean moons); the citation is the author’s statement of the match, checked against the table of contents.',
     overview:
-      'Students predict and then take the periods of three moons from the instrument of the Jupiter investigation (1.7682, 3.5480 and 7.1413 days), see them divided (2.006 and 2.013), are asked what a near-miss of 2 can establish, choose the sampling and take the periods and uncertainties again to form the combination of the three motions with its uncertainty, and predict and then test Callisto. The frames are synthetic, made from the real ephemeris, and the investigation says so.',
+      'Students predict and then take the periods of three moons from the instrument of the Jupiter investigation (1.7682, 3.5480 and 7.1413 days), see them divided (2.007 and 2.013), are asked what a near-miss of 2 can establish, choose the sampling and take the periods and uncertainties again to form the combination of the three motions with its uncertainty, and predict and then test Callisto. The frames are synthetic, made from the real ephemeris, and the investigation says so.',
     priorKnowledge: [
       'A period is the time for one orbit',
       'A rate is an angle divided by a time',
@@ -186,7 +186,7 @@ const CONTENT = {
     keyConcepts: [
       {
         heading: 'A ratio near 2 is where to look',
-        body: 'Europa takes 2.006 times as long as Io and Ganymede 2.013 times as long as Europa. Unrelated periods fall this near a whole-number ratio often enough that the ratio cannot decide; a resonance is a relation between angles that holds on average, so the periods need not give an exact ratio.',
+        body: 'Europa takes 2.007 times as long as Io and Ganymede 2.013 times as long as Europa. Unrelated periods fall this near a whole-number ratio often enough that the ratio cannot decide; a resonance is a relation between angles that holds on average, so the periods need not give an exact ratio.',
       },
       {
         heading: 'The combination that cancels what the moons share',
@@ -219,7 +219,7 @@ const CONTENT = {
           'It needs a relation between angles to hold on average while the orbits slowly turn, so the measured periods differ a little from the ratio.',
       },
       {
-        claim: 'A ratio of 2.006 is a ratio of 2.',
+        claim: 'A ratio of 2.007 is a ratio of 2.',
         response:
           'It is within half a percent of 2, which is what a hint looks like; many unrelated pairs are that close. The test is the combination of all three motions, with its uncertainty.',
       },
@@ -310,7 +310,7 @@ const FLOW = {
     {
       from: 'the-ratios',
       to: 'a-hint-is-not-proof',
-      text: 'The ratios, 2.006 and 2.013, and why a near-miss of 2 is a hint.',
+      text: 'The ratios, 2.007 and 2.013, and why a near-miss of 2 is a hint.',
     },
     {
       from: 'the-laplace-combination',
@@ -332,7 +332,7 @@ const EXPECTATIONS = {
     'light-time':
       'A light time to Neptune of 4.17 hours (within 0.1), computed from the distance taken in the step before.',
     'choose-your-marble':
-      'Any marble size: Neptune at 30.07 times the model’s astronomical unit, within 2 percent (3,531 meters for a one-centimeter marble).',
+      'Any marble size: Neptune at 30.07 times the model’s astronomical unit, within 2 percent (3,530 meters for a one-centimeter marble).',
   },
   'comets-and-the-sun': {
     'orbit-ends':

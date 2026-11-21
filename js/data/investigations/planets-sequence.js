@@ -134,7 +134,7 @@ export const MOONS_OF_THE_GIANTS = {
         'Divide Europa’s period by Io’s, and Ganymede’s by Europa’s, once you have them.',
       ],
       because:
-        'About twice each: 2.006 and 2.013. Kepler’s third law would let an orbit 1.5 times as far across take 1.84 times as long, but these ratios are nearer 2 than that, and it is that closeness that is the subject of the rest.',
+        'About twice each: 2.007 and 2.013. Kepler’s third law would let an orbit 1.5 times as far across take 1.84 times as long, but these ratios are nearer 2 than that, and it is that closeness that is the subject of the rest.',
     },
     {
       sid: 'three-periods',
@@ -224,7 +224,7 @@ export const MOONS_OF_THE_GIANTS = {
           id: 'r12',
           label: 'Europa’s period over Io’s',
           unit: '',
-          want: '2.006',
+          want: '2.007',
         },
         {
           id: 'r23',
@@ -240,7 +240,7 @@ export const MOONS_OF_THE_GIANTS = {
           return {
             level: 'ok',
             message:
-              '2.006 and 2.013: each within about a half of one percent of 2, and not equal to it. A ratio of small whole numbers is a hint that two orbits might be locked together; a mismatch this small is also what many unrelated pairs would show by accident, so the ratio cannot decide.',
+              '2.007 and 2.013: each within about a half of one percent of 2, and not equal to it. A ratio of small whole numbers is a hint that two orbits might be locked together; a mismatch this small is also what many unrelated pairs would show by accident, so the ratio cannot decide.',
           };
         }
         return {
@@ -255,15 +255,15 @@ export const MOONS_OF_THE_GIANTS = {
       sid: 'a-hint-is-not-proof',
       type: 'question',
       kind: 'choice',
-      title: 'What does 2.006 say?',
-      body: `Europa takes 2.006 times as long as Io; Ganymede 2.013 times as long as
+      title: 'What does 2.007 say?',
+      body: `Europa takes 2.007 times as long as Io; Ganymede 2.013 times as long as
              Europa. Neither is exactly 2.`,
       prompt:
         'What follows from ratios that are close to 2 but not equal to it?',
       options: [
         'Nothing is settled: a ratio near 2 is a hint, and the three motions have to be tested together',
         'The moons cannot be in a resonance, because a resonance needs the ratio to be exactly 2',
-        'The moons are certainly locked, because 2.006 rounds to 2',
+        'The moons are certainly locked, because 2.007 rounds to 2',
         'The periods must have been measured wrongly',
       ],
       answer: 0,
@@ -541,7 +541,7 @@ export const MOONS_OF_THE_GIANTS = {
       type: 'read',
       title: 'What you worked out',
       body: `Three periods from synthetic frames, 1.7682, 3.5480 and 7.1413 days; ratios
-             of 2.006 and 2.013, close to 2 and not equal to it, which is a hint and not
+             of 2.007 and 2.013, close to 2 and not equal to it, which is a hint and not
              a test; and a combination of the three motions that came out smaller than
              its own uncertainty, when each motion is some thousands of times larger. The
              sampling mattered: once a night, Io&rsquo;s period is an alias and the
@@ -734,7 +734,7 @@ export const THE_SCALE_OF_THE_SOLAR_SYSTEM = {
         'Light takes the same time to cross every astronomical unit. How many are there to Neptune?',
       ],
       because:
-        'About four hours: Neptune is 30.07 AU out and light crosses an AU in 499 seconds, so 30.07 times 499 seconds is 15,005 seconds, 4.17 hours. A message from a spacecraft at Neptune would take that long to arrive, each way.',
+        'About four hours: light takes the same time to cross every astronomical unit, so Neptune, thirty times as far out as the Earth, is thirty times as many minutes away. A message from a spacecraft at Neptune would take that long to arrive, each way.',
     },
     {
       sid: 'light-time',
@@ -834,7 +834,7 @@ export const THE_SCALE_OF_THE_SOLAR_SYSTEM = {
           id: 'nep_m',
           label: 'Neptune’s distance from the Sun in your model',
           unit: 'm',
-          want: '3531',
+          want: '3530',
         },
       ],
       validate: v => {
@@ -997,7 +997,7 @@ export const COMETS_AND_THE_SUN = {
       body: `A comet is a few kilometers of ice and dust on a long orbit. Far from the Sun
              it is dark and inert. Near the Sun the ice turns to gas, the gas and dust
              escape and make a <strong>coma</strong> and two tails. The sandbox here has
-             the Sun, the eight planets and twelve comets. They carry the names of famous
+             the Sun, the eight planets and comets. They carry the names of famous
              comets, but the sandbox starts each one at the distance of its average orbit
              with 70 percent of the speed of a circular orbit, so they are
              <strong>model comets on orbits of their own</strong>, not the real orbits.`,
@@ -1030,8 +1030,7 @@ export const COMETS_AND_THE_SUN = {
       type: 'explore',
       title: 'Watch the tails',
       body: `Tails show only where a comet is closer to the Sun than about 3 AU, and the
-             readout says when the comet you select is. Halley, the readout&rsquo;s first
-             comet, stays beyond 5.8 AU. Wild 2 and Hartley 2 come in to 1.1 AU and
+             readout says when the comet you select is. Halley stays beyond 5.8 AU. Wild 2 and Hartley 2 come in to 1.1 AU and
              Shoemaker-Levy 9 to 2.1 (faint; the only one on a slower device). Pause the
              scene, click a comet, and run it again.`,
       checklist: [
@@ -1307,7 +1306,7 @@ export const MOONS_OF_THE_GIANTS_ES = {
         'Divide el periodo de Europa entre el de Ío, y el de Ganímedes entre el de Europa, cuando los tengas.',
       ],
       because:
-        'Casi el doble cada uno: 2,006 y 2,013. La tercera ley de Kepler permitiría que una órbita 1,5 veces más ancha tardara 1,84 veces más, pero estos cocientes están más cerca de 2, y esa cercanía es el tema del resto.',
+        'Casi el doble cada uno: 2,007 y 2,013. La tercera ley de Kepler permitiría que una órbita 1,5 veces más ancha tardara 1,84 veces más, pero estos cocientes están más cerca de 2, y esa cercanía es el tema del resto.',
     },
     {
       title: 'Tres periodos',
@@ -1369,14 +1368,14 @@ export const MOONS_OF_THE_GIANTS_ES = {
       ],
     },
     {
-      title: '¿Qué dice 2,006?',
-      body: 'Europa tarda 2,006 veces lo que Ío; Ganímedes, 2,013 veces lo que Europa. Ninguno es exactamente 2.',
+      title: '¿Qué dice 2,007?',
+      body: 'Europa tarda 2,007 veces lo que Ío; Ganímedes, 2,013 veces lo que Europa. Ninguno es exactamente 2.',
       prompt:
         '¿Qué se deduce de unos cocientes cercanos a 2 pero no iguales a 2?',
       options: [
         'Nada queda decidido: un cociente cercano a 2 es un indicio, y hay que contrastar los tres movimientos juntos',
         'Las lunas no pueden estar en resonancia, porque una resonancia necesita que el cociente sea exactamente 2',
-        'Las lunas están sin duda enlazadas, porque 2,006 se redondea a 2',
+        'Las lunas están sin duda enlazadas, porque 2,007 se redondea a 2',
         'Los periodos deben de estar mal medidos',
       ],
       misconceptions: [
@@ -1476,7 +1475,7 @@ export const MOONS_OF_THE_GIANTS_ES = {
     },
     {
       title: 'Lo que has deducido',
-      body: 'Tres periodos de imágenes sintéticas, 1,7682, 3,5480 y 7,1413 días; cocientes de 2,006 y 2,013, cerca de 2 y no iguales a 2, lo cual es un indicio y no una prueba; y una combinación de los tres movimientos que salió menor que su propia incertidumbre, cuando cada movimiento es miles de veces mayor. El muestreo importó: con una imagen por noche, el periodo de Ío es un alias y la combinación queda a decenas de grados por día de cero. Calisto, con un cociente de 2,33, queda fuera de la cadena. Lo que las imágenes no pueden mostrar es el ángulo mismo manteniéndose durante años, que <em>Cuando las órbitas se enlazan</em> sigue en un modelo. Otros gigantes tienen familias propias (las lunas de Saturno, las de Urano), y este conjunto solo cubre las de Júpiter.',
+      body: 'Tres periodos de imágenes sintéticas, 1,7682, 3,5480 y 7,1413 días; cocientes de 2,007 y 2,013, cerca de 2 y no iguales a 2, lo cual es un indicio y no una prueba; y una combinación de los tres movimientos que salió menor que su propia incertidumbre, cuando cada movimiento es miles de veces mayor. El muestreo importó: con una imagen por noche, el periodo de Ío es un alias y la combinación queda a decenas de grados por día de cero. Calisto, con un cociente de 2,33, queda fuera de la cadena. Lo que las imágenes no pueden mostrar es el ángulo mismo manteniéndose durante años, que <em>Cuando las órbitas se enlazan</em> sigue en un modelo. Otros gigantes tienen familias propias (las lunas de Saturno, las de Urano), y este conjunto solo cubre las de Júpiter.',
     },
   ],
 };
@@ -1541,7 +1540,7 @@ export const THE_SCALE_OF_THE_SOLAR_SYSTEM_ES = {
         'La luz tarda lo mismo en cruzar cada unidad astronómica. ¿Cuántas hay hasta Neptuno?',
       ],
       because:
-        'Unas cuatro horas: Neptuno está a 30,07 UA y la luz cruza una UA en 499 segundos, así que 30,07 por 499 segundos son 15 005 segundos, 4,17 horas. Un mensaje de una nave en Neptuno tardaría eso en llegar, en cada sentido.',
+        'Unas cuatro horas: la luz tarda lo mismo en cruzar cada unidad astronómica, así que Neptuno, treinta veces más lejos que la Tierra, está a treinta veces más minutos. Un mensaje de una nave en Neptuno tardaría eso en llegar, en cada sentido.',
     },
     {
       title: 'El tiempo de la luz hasta Neptuno',
@@ -1619,7 +1618,7 @@ export const COMETS_AND_THE_SUN_ES = {
   steps: [
     {
       title: 'Una bola de nieve sucia',
-      body: 'Un cometa son unos kilómetros de hielo y polvo en una órbita larga. Lejos del Sol está oscuro e inerte. Cerca del Sol el hielo pasa a gas, y el gas y el polvo escapan y forman una <strong>coma</strong> y dos colas. El sandbox tiene el Sol, los ocho planetas y doce cometas. Llevan los nombres de cometas famosos, pero el sandbox coloca cada uno a la distancia de su órbita media con el 70 por ciento de la velocidad de una órbita circular, así que son <strong>cometas modelo en órbitas propias</strong>, no las órbitas reales.',
+      body: 'Un cometa son unos kilómetros de hielo y polvo en una órbita larga. Lejos del Sol está oscuro e inerte. Cerca del Sol el hielo pasa a gas, y el gas y el polvo escapan y forman una <strong>coma</strong> y dos colas. El sandbox tiene el Sol, los ocho planetas y cometas. Llevan los nombres de cometas famosos, pero el sandbox coloca cada uno a la distancia de su órbita media con el 70 por ciento de la velocidad de una órbita circular, así que son <strong>cometas modelo en órbitas propias</strong>, no las órbitas reales.',
       tip: 'Los cometas se mueven deprisa. Pausa para leer un número; reanuda para ver las colas.',
     },
     {
@@ -1638,7 +1637,7 @@ export const COMETS_AND_THE_SUN_ES = {
     },
     {
       title: 'Mira las colas',
-      body: 'Las colas solo se ven donde un cometa está a menos de unas 3 UA del Sol, y la lectura dice cuándo lo está el cometa que seleccionas. Halley, el primer cometa de la lectura, se queda más allá de 5,8 UA. Wild 2 y Hartley 2 llegan a 1,1 UA y Shoemaker-Levy 9 a 2,1 (tenue; en un equipo más lento, el único). Pausa la escena, haz clic en un cometa y vuelve a reanudarla.',
+      body: 'Las colas solo se ven donde un cometa está a menos de unas 3 UA del Sol, y la lectura dice cuándo lo está el cometa que seleccionas. Halley se queda más allá de 5,8 UA. Wild 2 y Hartley 2 llegan a 1,1 UA y Shoemaker-Levy 9 a 2,1 (tenue; en un equipo más lento, el único). Pausa la escena, haz clic en un cometa y vuelve a reanudarla.',
       checklist: [
         'Selecciona un cometa que llegue a menos de 3 UA y acércate a él',
         'Páusalo en tres puntos que elijas: de camino hacia el Sol, cerca de su máxima aproximación y de camino hacia fuera',
