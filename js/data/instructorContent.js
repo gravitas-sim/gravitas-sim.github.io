@@ -3254,13 +3254,12 @@ export const INSTRUCTOR_CONTENT = {
       \n\nThe center of the investigation is a fitting exercise. Students are handed a rotation curve built
       from NGC 3198's published parameters, labeled as synthetic on the panel, and a model with a
       stellar disc and a dark halo, and asked to reproduce the points. They try the disc alone first,
-      starting from a disc with no mass and with both of its parameters free, and cannot do it: the best possible stars-only fit misses by
+      from a disc of no mass with both parameters free, and cannot do it: the best possible stars-only fit misses by
       about 15 km/s against error bars of about 5, and it misses worst at
       the outer edge. A choice step draws out why - the shortfall is the wrong shape, not merely the
       wrong size - and then the halo goes in, with the disc held at the mass its light implies, and
-      the fit closes. Their two saved fits are set side by side in a table. Students read off how much
-      dark mass per unit of visible mass their own fit implies; the advanced path gives that ratio an
-      error bar from the spread among the fits they accept.
+      the fit closes. Their two fits sit side by side in a table. Students read off how much dark mass
+      per unit of visible mass their own fit implies; a deeper step gives that an error bar.
       \n\nThe rest is consequence and context. A single star is launched on a circular orbit and the
       halo is removed underneath it; then the same experiment is run on ninety stars in the live
       simulation and the disc comes apart. Zwicky's 1933 cluster measurement follows, first on the real
@@ -3332,7 +3331,7 @@ export const INSTRUCTOR_CONTENT = {
       },
       {
         name: 'Fit a real galaxy (steps 13-20)',
-        text: 'The centerpiece. A synthetic rotation curve with error bars, built from NGC 3198’s published parameters and labeled as synthetic on the canvas, and a four-slider model: disc mass, disc scale length, halo strength and halo core radius. It scores the fit as an RMS residual in km/s and states the mean error bar alongside it, so a student can tell a good fit from a lucky one, and it names the radius of the worst single miss and whether the model is too fast or too slow there. The plot marks FITTED when the residual drops below the errors. Steps 14-16 hide the two halo sliders so the disc has to be tried on its own first, and open with no mass in the disc and no presets; step 17 holds the disc at the mass its light implies and leaves the halo to the student.',
+        text: 'The centerpiece. A synthetic rotation curve with error bars, built from NGC 3198’s published parameters and labeled as synthetic on the canvas, and a four-slider model: disc mass, disc scale length, halo strength and halo core radius. It scores the fit as an RMS residual in km/s and states the mean error bar alongside it, so a student can tell a good fit from a lucky one, and it names the radius of the worst single miss and whether the model is too fast or too slow there. The plot marks FITTED when the residual drops below the errors. Steps 14-16 hide the two halo sliders so the disc has to be tried on its own first, and open with the disc at zero; step 17 holds the disc and leaves the halo to the student.',
       },
       {
         name: 'What the halo is holding (step 21)',
@@ -3441,7 +3440,7 @@ export const INSTRUCTOR_CONTENT = {
     ],
     extensions: [
       'Have students look up a published rotation curve for a real galaxy, NGC 3198 and NGC 2403 are the classic cases, and compare its shape with the two Gravitas scenarios. The published figures usually plot the stellar, gas and halo contributions separately, which is exactly the decomposition the panel draws.',
-      'Ask students to quantify the degeneracy they met at step 17. The advanced path asks for this as an error bar built from their own accepted fits. Have them find three different pairs of halo strength and core radius that all fit, record the halo mass inside 30 kpc for each, and compare the spread in the parameters with the spread in the mass. The parameters vary by tens of per cent; the mass barely moves. This is why papers quote the derived mass rather than the fitted parameters.',
+      'Ask students to quantify the degeneracy they met at step 17. A deeper step asks for this as an error bar. Have them find three different pairs of halo strength and core radius that all fit, record the halo mass inside 30 kpc for each, and compare the spread in the parameters with the spread in the mass. The parameters vary by tens of per cent; the mass barely moves. This is why papers quote the derived mass rather than the fitted parameters.',
       'Have students repeat the step 14 sweep systematically rather than by feel: fix the scale length, step the disc mass across its whole range, and tabulate the average miss. The curve of residual against disc mass has a shallow minimum around 8.5, well above the mass the light implies and still three times worse than the errors. Plotting that curve turns "I could not fit it" into "no disc mass fits, and here is the proof".',
       'Have students read about the Bullet Cluster and explain, in a paragraph, why the separation of the lensing mass from the X-ray gas is difficult for modified-gravity explanations to accommodate.',
       'For a mathematically prepared class, derive M(<r) proportional to r from the flat-curve condition, then integrate to show the implied density falls as r to the power -2 and that the total mass diverges. Ask what that divergence means physically, and connect it back to step 8 where students measured that proportionality directly.',

@@ -561,19 +561,6 @@
    "mutates": [],
    "datasets": []
   },
-  "dm-mond": {
-   "live": false,
-   "controls": [
-    "model",
-    "discMass",
-    "haloVFlat"
-   ],
-   "presets": 2,
-   "buttons": [],
-   "engineReads": [],
-   "mutates": [],
-   "datasets": []
-  },
   "dm-shapes": {
    "live": false,
    "controls": [
@@ -21456,7 +21443,7 @@
       "numeric": false,
       "short": false,
       "rubric": false,
-      "validated": false
+      "validated": true
      },
      "worldRunning": true,
      "affordances": {
@@ -21468,7 +21455,8 @@
       "declared": "measure",
       "actual": [
        "experiment",
-       "measure"
+       "measure",
+       "interpret"
       ],
       "handTranscribed": false,
       "mismatch": null
@@ -21495,7 +21483,7 @@
       "wrong body: the step binds the object by name, so there is none",
       "missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand",
       "null result: the probe names what is missing",
-      "ambiguous result: nothing marks these, they are a record"
+      "ambiguous result: the check says in words how close is close enough"
      ]
     },
     {
@@ -21958,6 +21946,7 @@
       "notebook-fields"
      ],
      "reset": [
+      "stamps instrument values",
       "lesson locks: placement"
      ],
      "recovery": [
@@ -21966,8 +21955,84 @@
      ]
     },
     {
-     "sid": "how-much-of-it-is",
+     "sid": "compare-your-two-fits",
      "index": 19,
+     "type": "measure",
+     "title": "Your two fits, side by side",
+     "declares": {
+      "stage": null,
+      "bound": [
+       "bulge",
+       "inner",
+       "middle",
+       "outer"
+      ],
+      "roles": [
+       "bulge",
+       "inner",
+       "middle",
+       "outer"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "captured-evidence"
+     ],
+     "actions": [
+      "record-values",
+      "run-the-simulation"
+     ],
+     "requires": [
+      "record-your-best-stars-only",
+      "record-the-fit-that-works"
+     ],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": true,
+     "affordances": {
+      "inspector": "whole lesson",
+      "placement": "locked",
+      "areaSweep": "whole lesson"
+     },
+     "loop": {
+      "declared": "measure",
+      "actual": [
+       "experiment",
+       "measure"
+      ],
+      "handTranscribed": true,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [
+      "notebook-fields"
+     ],
+     "reset": [
+      "lesson locks: placement"
+     ],
+     "recovery": [
+      "wrong body: the step binds the object by name, so there is none",
+      "missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand",
+      "ambiguous result: nothing marks these, they are a record"
+     ]
+    },
+    {
+     "sid": "how-much-of-it-is",
+     "index": 20,
      "type": "question",
      "title": "How much of it is dark?",
      "declares": {
@@ -22034,6 +22099,7 @@
      },
      "evidence": [],
      "reset": [
+      "stamps instrument values",
       "lesson locks: placement"
      ],
      "recovery": [
@@ -22042,7 +22108,7 @@
     },
     {
      "sid": "what-the-halo-is-holding",
-     "index": 20,
+     "index": 21,
      "type": "explore",
      "title": "What the halo is holding",
      "declares": {
@@ -22117,8 +22183,77 @@
      ]
     },
     {
+     "sid": "predict-the-disc-without-its-halo",
+     "index": 22,
+     "type": "predict",
+     "title": "What happens to the disc without its halo?",
+     "declares": {
+      "stage": null,
+      "bound": [
+       "bulge",
+       "inner",
+       "middle",
+       "outer"
+      ],
+      "roles": [
+       "bulge",
+       "inner",
+       "middle",
+       "outer"
+      ]
+     },
+     "kinds": [
+      "scene-declared"
+     ],
+     "actions": [
+      "commit-a-prediction"
+     ],
+     "requires": [],
+     "reveal": "take-the-halo-away-from",
+     "asks": {
+      "choice": true,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": true,
+     "affordances": {
+      "inspector": "whole lesson",
+      "placement": "locked",
+      "areaSweep": "whole lesson"
+     },
+     "loop": {
+      "declared": "predict",
+      "actual": [
+       "predict",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [
+      "rebuilds: scenario \"Milky Way Rotation\" seed missing-mass",
+      "lesson locks: placement"
+     ],
+     "recovery": [
+      "wrong body: the step binds the object by name, so there is none",
+      "reset: rebuilds the scenario on arrival"
+     ]
+    },
+    {
      "sid": "take-the-halo-away-from",
-     "index": 21,
+     "index": 23,
      "type": "explore",
      "title": "Take the halo away from the whole galaxy",
      "declares": {
@@ -22194,7 +22329,7 @@
     },
     {
      "sid": "forty-years-earlier",
-     "index": 22,
+     "index": 24,
      "type": "read",
      "title": "Forty years earlier",
      "declares": {
@@ -22249,7 +22384,7 @@
     },
     {
      "sid": "zwicky-s-arithmetic-and-the",
-     "index": 23,
+     "index": 25,
      "type": "explore",
      "title": "Zwicky’s arithmetic, and the two ways to get it wrong",
      "declares": {
@@ -22310,7 +22445,7 @@
     },
     {
      "sid": "measure-the-simulated-cluster",
-     "index": 24,
+     "index": 26,
      "type": "measure",
      "title": "Measure the simulated cluster",
      "declares": {
@@ -22369,7 +22504,7 @@
     },
     {
      "sid": "weigh-the-cluster-by-its",
-     "index": 25,
+     "index": 27,
      "type": "question",
      "title": "Weigh the cluster by its motion",
      "declares": {
@@ -22421,7 +22556,7 @@
     },
     {
      "sid": "now-compare",
-     "index": 26,
+     "index": 28,
      "type": "question",
      "title": "Now compare",
      "declares": {
@@ -22472,244 +22607,8 @@
      "recovery": []
     },
     {
-     "sid": "a-different-way-to-read",
-     "index": 27,
-     "type": "read",
-     "title": "A different way to read the same curve",
-     "declares": {
-      "stage": null,
-      "bound": [],
-      "roles": []
-     },
-     "kinds": [
-      "model-result",
-      "panel-diagram"
-     ],
-     "actions": [
-      "move-an-instrument-control",
-      "press-an-instrument-preset"
-     ],
-     "requires": [],
-     "reveal": null,
-     "asks": {
-      "choice": false,
-      "numeric": false,
-      "short": false,
-      "rubric": false,
-      "validated": false
-     },
-     "worldRunning": false,
-     "affordances": {
-      "inspector": "whole lesson",
-      "placement": "locked",
-      "areaSweep": "whole lesson"
-     },
-     "loop": {
-      "declared": "read",
-      "actual": [
-       "experiment",
-       "measure"
-      ],
-      "handTranscribed": false,
-      "mismatch": null
-     },
-     "scene": {
-      "nameMatches": [],
-      "readsSelection": false,
-      "importsFromSelection": false,
-      "engineReads": [],
-      "mutates": [],
-      "eventWatch": null
-     },
-     "instrument": {
-      "id": "dm-mond",
-      "capture": false
-     },
-     "evidence": [],
-     "reset": [
-      "stamps instrument values",
-      "lesson locks: placement"
-     ],
-     "recovery": []
-    },
-    {
-     "sid": "fit-it-both-ways",
-     "index": 28,
-     "type": "explore",
-     "title": "Fit it both ways",
-     "declares": {
-      "stage": null,
-      "bound": [],
-      "roles": []
-     },
-     "kinds": [
-      "model-result",
-      "panel-diagram"
-     ],
-     "actions": [
-      "move-an-instrument-control",
-      "press-an-instrument-preset",
-      "tick-a-checklist"
-     ],
-     "requires": [],
-     "reveal": null,
-     "asks": {
-      "choice": false,
-      "numeric": false,
-      "short": false,
-      "rubric": false,
-      "validated": false
-     },
-     "worldRunning": false,
-     "affordances": {
-      "inspector": "whole lesson",
-      "placement": "locked",
-      "areaSweep": "whole lesson"
-     },
-     "loop": {
-      "declared": "experiment",
-      "actual": [
-       "experiment",
-       "measure"
-      ],
-      "handTranscribed": false,
-      "mismatch": null
-     },
-     "scene": {
-      "nameMatches": [],
-      "readsSelection": false,
-      "importsFromSelection": false,
-      "engineReads": [],
-      "mutates": [],
-      "eventWatch": null
-     },
-     "instrument": {
-      "id": "dm-mond",
-      "capture": false
-     },
-     "evidence": [],
-     "reset": [
-      "lesson locks: placement"
-     ],
-     "recovery": []
-    },
-    {
-     "sid": "the-prediction-mond-makes",
-     "index": 29,
-     "type": "question",
-     "title": "The prediction MOND makes",
-     "declares": {
-      "stage": null,
-      "bound": [],
-      "roles": []
-     },
-     "kinds": [
-      "model-result",
-      "panel-diagram"
-     ],
-     "actions": [
-      "move-an-instrument-control",
-      "press-an-instrument-preset"
-     ],
-     "requires": [],
-     "reveal": null,
-     "asks": {
-      "choice": false,
-      "numeric": true,
-      "short": false,
-      "rubric": false,
-      "validated": false
-     },
-     "worldRunning": false,
-     "affordances": {
-      "inspector": "whole lesson",
-      "placement": "locked",
-      "areaSweep": "whole lesson"
-     },
-     "loop": {
-      "declared": "interpret",
-      "actual": [
-       "experiment",
-       "measure",
-       "interpret"
-      ],
-      "handTranscribed": false,
-      "mismatch": null
-     },
-     "scene": {
-      "nameMatches": [],
-      "readsSelection": false,
-      "importsFromSelection": false,
-      "engineReads": [],
-      "mutates": [],
-      "eventWatch": null
-     },
-     "instrument": {
-      "id": "dm-mond",
-      "capture": false
-     },
-     "evidence": [],
-     "reset": [
-      "stamps instrument values",
-      "lesson locks: placement"
-     ],
-     "recovery": []
-    },
-    {
-     "sid": "does-the-curve-decide",
-     "index": 30,
-     "type": "question",
-     "title": "Does the curve decide?",
-     "declares": {
-      "stage": null,
-      "bound": [],
-      "roles": []
-     },
-     "kinds": [],
-     "actions": [
-      "answer-in-words"
-     ],
-     "requires": [],
-     "reveal": null,
-     "asks": {
-      "choice": false,
-      "numeric": false,
-      "short": true,
-      "rubric": true,
-      "validated": false
-     },
-     "worldRunning": false,
-     "affordances": {
-      "inspector": "whole lesson",
-      "placement": "locked",
-      "areaSweep": "whole lesson"
-     },
-     "loop": {
-      "declared": "interpret",
-      "actual": [
-       "interpret"
-      ],
-      "handTranscribed": false,
-      "mismatch": null
-     },
-     "scene": {
-      "nameMatches": [],
-      "readsSelection": false,
-      "importsFromSelection": false,
-      "engineReads": [],
-      "mutates": [],
-      "eventWatch": null
-     },
-     "instrument": null,
-     "evidence": [],
-     "reset": [
-      "lesson locks: placement"
-     ],
-     "recovery": []
-    },
-    {
      "sid": "what-have-you-actually-shown",
-     "index": 31,
+     "index": 29,
      "type": "question",
      "title": "What have you actually shown?",
      "declares": {
@@ -22761,7 +22660,7 @@
     },
     {
      "sid": "how-much-of-the-universe",
-     "index": 32,
+     "index": 30,
      "type": "read",
      "title": "How much of the universe is this?",
      "declares": {
@@ -22821,7 +22720,7 @@
     },
     {
      "sid": "where-it-stands",
-     "index": 33,
+     "index": 31,
      "type": "read",
      "title": "Where it stands",
      "declares": {
@@ -22886,14 +22785,9 @@
       "why-a-heavier-disc-cannot",
       "now-add-the-halo",
       "record-the-fit-that-works",
+      "compare-your-two-fits",
       "how-much-of-it-is",
-      "what-the-halo-is-holding",
-      "take-the-halo-away-from",
-      "zwicky-s-arithmetic-and-the",
-      "a-different-way-to-read",
-      "fit-it-both-ways",
-      "the-prediction-mond-makes",
-      "how-much-of-the-universe"
+      "what-the-halo-is-holding"
      ],
      "measure": [
       "measure-the-expected-curve",
@@ -22904,24 +22798,43 @@
       "why-a-heavier-disc-cannot",
       "now-add-the-halo",
       "record-the-fit-that-works",
+      "compare-your-two-fits",
       "how-much-of-it-is",
-      "what-the-halo-is-holding",
-      "take-the-halo-away-from",
-      "zwicky-s-arithmetic-and-the",
-      "measure-the-simulated-cluster",
-      "a-different-way-to-read",
-      "fit-it-both-ways",
-      "the-prediction-mond-makes",
-      "how-much-of-the-universe"
+      "what-the-halo-is-holding"
      ],
      "evidence": [
       "measure-the-expected-curve",
       "measure-the-real-curve",
       "record-your-best-stars-only",
       "record-the-fit-that-works",
-      "measure-the-simulated-cluster"
+      "compare-your-two-fits"
      ],
      "interpret": "measure-the-expected-curve",
+     "measuredBeforeAnswering": true,
+     "explained": false,
+     "answeredByTheExperiment": true,
+     "closed": true,
+     "complete": true
+    },
+    {
+     "predict": "predict-the-disc-without-its-halo",
+     "predictCollects": true,
+     "heldUntil": "take-the-halo-away-from",
+     "experiment": [
+      "take-the-halo-away-from",
+      "zwicky-s-arithmetic-and-the",
+      "how-much-of-the-universe"
+     ],
+     "measure": [
+      "take-the-halo-away-from",
+      "zwicky-s-arithmetic-and-the",
+      "measure-the-simulated-cluster",
+      "how-much-of-the-universe"
+     ],
+     "evidence": [
+      "measure-the-simulated-cluster"
+     ],
+     "interpret": "take-the-halo-away-from",
      "measuredBeforeAnswering": true,
      "explained": false,
      "answeredByTheExperiment": true,
@@ -22930,19 +22843,19 @@
     }
    ],
    "totals": {
-    "steps": 33,
-    "declared": 21,
+    "steps": 31,
+    "declared": 23,
     "student": 2,
     "engine": 4,
-    "model": 18,
+    "model": 15,
     "data": 0,
-    "diagram": 18,
-    "evidence": 6,
+    "diagram": 15,
+    "evidence": 7,
     "computation": 0,
-    "declaredButInert": 19,
-    "prose": 6,
+    "declaredButInert": 21,
+    "prose": 5,
     "mismatched": 0,
-    "rebuilds": 5
+    "rebuilds": 6
    }
   },
   {
@@ -120443,30 +120356,30 @@
   }
  ],
  "totals": {
-  "steps": 1528,
-  "declared": 1420,
+  "steps": 1526,
+  "declared": 1422,
   "student": 166,
   "engine": 180,
-  "model": 1009,
+  "model": 1006,
   "data": 161,
-  "diagram": 878,
-  "evidence": 395,
+  "diagram": 875,
+  "evidence": 396,
   "computation": 14,
-  "declaredButInert": 1254,
-  "prose": 59,
+  "declaredButInert": 1256,
+  "prose": 58,
   "mismatched": 8,
-  "rebuilds": 81,
+  "rebuilds": 82,
   "canvas": {
    "scene": 0,
    "portrait": 7,
    "quiet": 16,
-   "unstated": 1505
+   "unstated": 1503
   },
   "lessons": 124,
-  "loops": 197,
-  "closedLoops": 197,
+  "loops": 198,
+  "closedLoops": 198,
   "explainedLoops": 1,
-  "heldLoops": 196,
-  "completeLoops": 197
+  "heldLoops": 197,
+  "completeLoops": 198
  }
 }

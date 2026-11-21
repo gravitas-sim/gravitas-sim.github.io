@@ -3483,26 +3483,93 @@
         { "id": "upper-level-modules", "position": 2 }
       ],
       "owner": 358,
-      "audit": "FOCUSED",
+      "audit": "STRONG",
       "scene_class": "setup scenario",
       "limits": null,
-      "open_items": [],
-      "questions": { "Q1": "", "Q2": "", "Q3": "", "Q4": "", "Q5": "" },
+      "open_items": [
+        {
+          "ref": "D-R4-358-06",
+          "owner": 358,
+          "note": "Computed validate messages of the new fit-comparison, error-bar and outer-ratio steps are English only (line ceilings on the deferred catalogues)."
+        },
+        {
+          "ref": "D-R4-358-05",
+          "owner": 358,
+          "note": "dm-mond is no longer in the core path, so the preview legibility sweep does not reach its canvas; walk it in the deeper path."
+        },
+        {
+          "ref": "D-R4-358-10",
+          "owner": 358,
+          "note": "Proposed: compare-your-two-fits stays a derived-field table (K6 has no controlled run for a dm-fit stage)."
+        },
+        {
+          "ref": "D-R4-358-08",
+          "owner": 358,
+          "note": "Size ceilings raised provisionally under the 2026-10-10 standing approval; the queue sets CI-exact values."
+        }
+      ],
+      "questions": {
+        "Q1": "The reader fits the measured curve with stars alone, then with a halo, compares their own two records and divides their own halo mass by their visible mass: a result a paragraph could state but not let the reader move.",
+        "Q2": "try-it-with-stars-alone and now-add-the-halo name the two sliders each opens with and what the readout means; compare-your-two-fits names the records it reads.",
+        "Q3": "The checked values come from the dm-fit compute() at the held disc and the same measured curve (3.4, range 2.9 to 3.9); the outer-star ratio is read from the selected tracer.",
+        "Q4": "The reader selects an outer star and takes its measured ratio (measure-the-real-curve), moves the sliders from a neutral opening (try-it-with-stars-alone, now-add-the-halo) and records the fit that works.",
+        "Q5": "error-bar-from-your-fits (quantitative) asks for the spread of the dark fraction among fits the light allows; the advanced path holds the MOND comparison and does-the-curve-decide."
+      },
       "leak": {
         "L1": "HOLDS: no field cue or step placeholder holds a numeral at any depth, in either language, and the panel renders none that does (tests/fieldCue.test.js); the expected value is the field's `want`, which no page reads.",
-        "L2": "",
-        "L3": "",
-        "L4": "",
-        "L5": ""
+        "L2": "HOLDS: dm-fit opens with discMass 0 and haloVFlat 0 on the fit steps, presets off, and the halo sliders hidden on the stars-only steps; no step text prints a target value.",
+        "L3": "HOLDS: the stars-only miss, the halo fit and the dark fraction come before any text states them; the answer 3.4 and the 2.9 to 3.9 range are in the BECAUSE only.",
+        "L4": "HOLDS: the ratio on measure-the-real-curve is read from the student's selected star; the predict step comes before the halo-off run and states no outcome.",
+        "L5": "HOLDS: the retired-step text and answer keys are instructor content or after-the-fact BECAUSE text; no placeholder or hint holds a figure."
       },
-      "task_rule_items": [],
-      "editorial": "OPEN",
-      "redesign": "OPEN",
-      "reason": "",
-      "step_revisions": [],
+      "task_rule_items": [
+        "T1: the fits are the reader's own records, compared in a table the reader's two fits fill.",
+        "T3: the disc and halo sliders are opened one pair at a time, from a neutral state.",
+        "T5: the outer-star reading and the error bar refuse a ratio the rules rule out, in words."
+      ],
+      "editorial": "REVISED",
+      "redesign": "REVISED",
+      "reason": "The task changed: the reader now produces the ratios, the fits and the comparison instead of reading them, and the MOND reading moves to the advanced path.",
+      "step_revisions": [
+        {
+          "sid": "measure-the-real-curve",
+          "from": "measure-the-real-curve",
+          "change": "REWORDED: the gap ratio is captured from a selected outer star; field ids kept."
+        },
+        {
+          "sid": "compare-your-two-fits",
+          "from": null,
+          "change": "NEW: a table of the reader's two recorded fits."
+        },
+        {
+          "sid": "how-much-of-it-is",
+          "from": "how-much-of-it-is",
+          "change": "REWORDED: answer, tolerance and unit unchanged; the worked values moved to the BECAUSE."
+        },
+        {
+          "sid": "predict-the-disc-without-its-halo",
+          "from": null,
+          "change": "NEW: a held prediction with reveal before the halo is removed."
+        },
+        {
+          "sid": "measure-the-simulated-cluster",
+          "from": "measure-the-simulated-cluster",
+          "change": "REWORDED: scale model, and the buttons named."
+        },
+        {
+          "sid": "error-bar-from-your-fits",
+          "from": "dark-fraction-with-an-error-bar",
+          "change": "REVISED: the error bar is built from the reader's own fits (retired map)."
+        },
+        {
+          "sid": "a-different-way-to-read",
+          "from": "a-different-way-to-read",
+          "change": "MOVED: the four MOND steps now sit in the advanced path."
+        }
+      ],
       "walk": "NOT RUN",
       "pr": null,
-      "hash": null
+      "hash": "ca29955c613ba3a943a3b6059e831455933b3f7d9e2c089daa0b8d6e39be875f"
     },
     {
       "id": "investigation:ml-cruise",

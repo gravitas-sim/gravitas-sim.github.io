@@ -11,16 +11,16 @@ The hand-written, human-reviewed acceptance map is
 [`lesson-acceptance.json`](lesson-acceptance.json); `npm run
 audit:scene:check` fails if it disagrees with what is generated here.
 
-Across 124 investigations and 1528 steps: 1420 steps
+Across 124 investigations and 1526 steps: 1422 steps
 declare a scene, 166 let a reader change one, 180 read the
-running integration, 1009 show a prescribed model result, 161 draw
-on a stored dataset, 878 put a self-contained panel beside the text,
-395 keep something, and 59 are prose.
-Of 197 prediction loops, 197 are returned to,
-197 produce a measurement before they are answered, and
+running integration, 1006 show a prescribed model result, 161 draw
+on a stored dataset, 875 put a self-contained panel beside the text,
+396 keep something, and 58 are prose.
+Of 198 prediction loops, 198 are returned to,
+198 produce a measurement before they are answered, and
 1 end in an explanation in the reader's own words.
-196 hold their marking until the experiment settles them.
-The canvas behind a step is stated as scene on 0, portrait on 7, quiet on 16; 1505 state none.
+197 hold their marking until the experiment settles them.
+The canvas behind a step is stated as scene on 0, portrait on 7, quiet on 16; 1503 state none.
 
 ## Kepler's Laws (`keplers-laws`)
 
@@ -136,16 +136,16 @@ The canvas behind a step is stated as scene on 0, portrait on 7, quiet on 16; 15
 
 ## The Missing Mass (`missing-mass`)
 
-- **Steps:** 33. Scene declared on 21; a reader can change something on 2; 19 declare a scene nobody on that step can touch.
-- **Where the numbers come from:** 4 live engine, 18 prescribed model, 0 stored dataset, 18 self-contained panel.
+- **Steps:** 31. Scene declared on 23; a reader can change something on 2; 21 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 4 live engine, 15 prescribed model, 0 stored dataset, 15 self-contained panel.
 - **What students do:** read, move-an-instrument-control, press-an-instrument-preset, run-the-simulation, tick-a-checklist, choose-an-option, open-a-body-inspector, record-values, build-a-plot, commit-a-prediction, select-a-body, press-an-instrument-button, answer-in-words.
 - **Objects the steps declare:** sun, mercury, earth, jupiter, neptune, bulge, inner, middle, outer.
-- **Instruments:** dm-shapes, dm-enclosed, dm-fit, dm-flyby, dm-virial, dm-mond, dm-budget.
+- **Instruments:** dm-shapes, dm-enclosed, dm-fit, dm-flyby, dm-virial, dm-budget.
 - **Stored data:** none.
 - **Evidence kept:** notebook-fields, plot.
-- **Prediction loops:** now-a-galaxy → measure-the-expected-curve, measure-the-real-curve, now-do-what-the-astronomers, try-it-with-stars-alone, record-your-best-stars-only, why-a-heavier-disc-cannot, now-add-the-halo, record-the-fit-that-works, how-much-of-it-is, what-the-halo-is-holding, take-the-halo-away-from, zwicky-s-arithmetic-and-the, measure-the-simulated-cluster, a-different-way-to-read, fit-it-both-ways, the-prediction-mond-makes, how-much-of-the-universe → measure-the-expected-curve.
-- **Recovery:** wrong body: the step binds the object by name, so there is none; reset: rebuilds the scenario on arrival; null result: guarded, but the fallback is not spelled out; ambiguous result: nothing marks these, they are a record; reset: rebuilds the scenario, discarding the previous step's scene; missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand; null result: the probe names what is missing.
-- **Scene rebuilds:** 5 step(s) on arrival (two-ways-to-weigh-a, now-a-galaxy, what-rubin-and-ford-found, take-the-halo-away-from, forty-years-earlier).
+- **Prediction loops:** now-a-galaxy → measure-the-expected-curve, measure-the-real-curve, now-do-what-the-astronomers, try-it-with-stars-alone, record-your-best-stars-only, why-a-heavier-disc-cannot, now-add-the-halo, record-the-fit-that-works, compare-your-two-fits, how-much-of-it-is, what-the-halo-is-holding → measure-the-expected-curve; predict-the-disc-without-its-halo → take-the-halo-away-from, zwicky-s-arithmetic-and-the, measure-the-simulated-cluster, how-much-of-the-universe → take-the-halo-away-from.
+- **Recovery:** wrong body: the step binds the object by name, so there is none; reset: rebuilds the scenario on arrival; null result: guarded, but the fallback is not spelled out; ambiguous result: nothing marks these, they are a record; reset: rebuilds the scenario, discarding the previous step's scene; missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand; null result: the probe names what is missing; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** 6 step(s) on arrival (two-ways-to-weigh-a, now-a-galaxy, what-rubin-and-ford-found, predict-the-disc-without-its-halo, take-the-halo-away-from, forty-years-earlier).
 - **Accepted central experiment** (reviewed 2026-09-11): object `outer`, control dm-fit/haloVFlat, measures orbital speed against radius, measured and then fitted, evidence `plot`, covered by `e2e/centralExperiments.spec.js`.
 
 ## Tides (`tides`)

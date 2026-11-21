@@ -613,7 +613,7 @@ const DARK_MATTER = {
         }
         return {
           level: 'ok',
-          message: `That is a reading for one star. The outer stars in this scene run from ${lo.toFixed(1)} to ${hi.toFixed(1)} times the prediction, so a second star gives a different number: what do they have in common?`,
+          message: `That is a reading for one star. The outer stars in this scene run from ${Math.round(lo * 10) / 10} to ${Math.round(hi * 10) / 10} times the prediction, so a second star gives a different number: what do they have in common?`,
         };
       },
     },
@@ -820,8 +820,8 @@ const DARK_MATTER = {
         },
         {
           id: 'cmp_so_disc',
-          label: 'Stars only: disc mass',
-          unit: '× 10¹⁰ M☉',
+          label: 'Stars only: disc mass (× 10¹⁰ M☉)',
+          unit: '',
           compute: (v, e) => e('record-your-best-stars-only', 'so_disc'),
           decimals: 1,
         },
@@ -834,15 +834,15 @@ const DARK_MATTER = {
         },
         {
           id: 'cmp_halo_disc',
-          label: 'With the halo: visible mass',
-          unit: '× 10¹⁰ M☉',
+          label: 'With the halo: visible mass (× 10¹⁰ M☉)',
+          unit: '',
           compute: (v, e) => e('record-the-fit-that-works', 'fit_visible'),
           decimals: 2,
         },
         {
           id: 'cmp_halo_mass',
-          label: 'With the halo: halo mass inside 30 kpc',
-          unit: '× 10¹⁰ M☉',
+          label: 'With the halo: halo mass inside 30 kpc (× 10¹⁰ M☉)',
+          unit: '',
           compute: (v, e) => e('record-the-fit-that-works', 'fit_halo'),
           decimals: 1,
         },
@@ -942,7 +942,7 @@ const DARK_MATTER = {
       because: `The stars keep the speed they had, but the pull that held them at
                 that speed is gone, so they move out onto wider paths. The halo
                 supplies most of the mass at large radius and very little near the
-                centre, so only the stars close to the bulge keep a pull strong
+                center, so only the stars close to the bulge keep a pull strong
                 enough to hold them; the rest drift away. Taking
                 away mass reduces the pull; it does not add one, which is why the
                 disc does not fall inward, and a star that is not pulled harder

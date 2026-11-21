@@ -239,12 +239,12 @@ export default {
       body: 'Guardaste dos ajustes: tu mejor ajuste solo con estrellas y tu ajuste con halo. La tabla de abajo se copia de lo que anotaste, y de nada más, para que los dos queden en un solo lugar.\n\nLos datos son buenos hasta unos pocos km/s en cada punto, y el instrumento indica cuántos. Di cuál de tus dos ajustes describe los puntos dentro de eso, y qué te lo indica en la tabla.',
       fields: [
         { label: 'Solo estrellas: error medio', unit: 'km/s' },
-        { label: 'Solo estrellas: masa del disco', unit: '× 10¹⁰ M☉' },
+        { label: 'Solo estrellas: masa del disco (× 10¹⁰ M☉)', unit: '' },
         { label: 'Con halo: error medio', unit: 'km/s' },
-        { label: 'Con halo: masa visible', unit: '× 10¹⁰ M☉' },
+        { label: 'Con halo: masa visible (× 10¹⁰ M☉)', unit: '' },
         {
-          label: 'Con halo: masa del halo dentro de 30 kpc',
-          unit: '× 10¹⁰ M☉',
+          label: 'Con halo: masa del halo dentro de 30 kpc (× 10¹⁰ M☉)',
+          unit: '',
         },
         {
           label: '¿Qué ajuste describe los puntos y qué te lo indica?',

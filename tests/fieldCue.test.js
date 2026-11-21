@@ -281,7 +281,7 @@ describe('every lesson, depth and language', () => {
     expect(found.leaks).toEqual([]);
   });
 
-  test('the ten numeric steps with their own cue say the form, in both languages', async () => {
+  test('the nine numeric steps with their own cue say the form, in both languages', async () => {
     for (const locale of ['en', 'es']) {
       for (const [id, sid] of [
         ['keplers-laws', 'predict-with-an-error-bar'],
@@ -290,7 +290,6 @@ describe('every lesson, depth and language', () => {
         ['transit-photometry', 'forward-model-the-dip'],
         ['weighing-stars', 'weigh-it-with-an-error-bar'],
         ['weighing-stars', 'weigh-one-star-with-an-error-bar'],
-        ['missing-mass', 'dark-fraction-with-an-error-bar'],
         ['what-is-a-measurement', 'a-position-with-an-error-bar'],
         ['measuring-the-moon', 'a-diameter-with-the-squeeze'],
         ['weighing-jupiter', 'jupiters-mass'],

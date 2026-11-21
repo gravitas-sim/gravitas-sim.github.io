@@ -20,6 +20,7 @@ import DEEPER from '../js/data/investigations/depth/missing-mass.js';
 import LESSON_ES from '../lesson-text/es/missing-mass.js';
 import DEEPER_ES from '../lesson-text/depth-es/missing-mass.js';
 import { DARK_MATTER_WIDGETS } from '../js/darkMatterWidgets.js';
+import { asymptoticSpeed, A0_GALACTIC } from '../js/mond.js';
 import { whenWidgetsReady } from '../js/widgets.js';
 import { stepFingerprint } from '../js/investigations/progressBackup.js';
 import { checkAnswer } from '../js/answerCheck.js';
@@ -330,5 +331,15 @@ describe('the outer-star reading accepts any outer star', () => {
         'warn'
       );
     expect(s.validate({ obs_gap: NaN }, ctxFor(stars[60]))).toBeNull();
+  });
+});
+
+describe('the MOND prediction step, now deeper, still matches the kernel', () => {
+  test('the-prediction-mond-makes agrees with js/mond.js', () => {
+    const s = deeper('the-prediction-mond-makes');
+    const v = asymptoticSpeed(2.15e10, A0_GALACTIC);
+    expect(Math.abs(v - s.answer)).toBeLessThanOrEqual(s.tolerance);
+    // Written to the digits the kernel gives, not a looser one.
+    expect(Math.round(v)).toBe(s.answer);
   });
 });

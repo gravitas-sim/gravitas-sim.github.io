@@ -722,17 +722,17 @@ export default {
       {
         from: 'now-do-what-the-astronomers',
         to: 'why-a-heavier-disc-cannot',
-        text: 'The fitting exercise begins, and this is the heart of the investigation. Students are handed a measured curve with error bars and a stellar disc with two free parameters, both sliders opening at zero, and asked to reproduce the data. They cannot. Step 15 has them record their own best attempt, and step 16 asks why a heavier disc does not rescue it: the shortfall is the wrong shape, not the wrong size.',
+        text: 'The fitting exercise begins, and this is the heart of the investigation. Students are handed a measured curve with error bars and a stellar disc with two free parameters, and asked to reproduce the data. They cannot. Step 15 has them record their own best attempt, and step 16 asks why a heavier disc does not rescue it: the shortfall is the wrong shape, not the wrong size.',
       },
       {
         from: 'now-add-the-halo',
         to: 'how-much-of-it-is',
-        text: 'The halo goes in. Two more sliders, a fit that closes to within the measurement errors, a comparison table that sets their two recorded fits side by side, and a numeric step in which students divide their own fitted halo mass by their own visible mass. The answer, about 3.4, is a number they produced rather than received.',
+        text: 'The halo goes in. Two more sliders, a fit that closes to within the measurement errors, a table of their two recorded fits, and a numeric step in which students divide their own fitted halo mass by their own visible mass. The answer, about 3.4, is a number they produced rather than received.',
       },
       {
         from: 'what-the-halo-is-holding',
         to: 'take-the-halo-away-from',
-        text: 'What the halo is holding. A single star is launched on a circular orbit at the speed a real galaxy gives it and the halo is switched off underneath it; then the same experiment runs on ninety stars in the live simulation and the disc comes apart everywhere the bulge cannot hold it.',
+        text: 'What the halo is holding. A single star is launched on a circular orbit at the speed a real galaxy gives it and the halo is switched off underneath it; then the same experiment runs on ninety stars in the live simulation and the disc comes apart.',
       },
       {
         from: 'forty-years-earlier',
