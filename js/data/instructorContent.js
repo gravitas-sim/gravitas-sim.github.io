@@ -3257,9 +3257,8 @@ export const INSTRUCTOR_CONTENT = {
       from a disc of no mass with both parameters free, and cannot do it: the best possible stars-only fit misses by
       about 15 km/s against error bars of about 5, and it misses worst at
       the outer edge. A choice step draws out why - the shortfall is the wrong shape, not merely the
-      wrong size - and then the halo goes in, with the disc held at the mass its light implies, and
-      the fit closes. Their two fits sit side by side in a table. Students read off how much dark mass
-      per unit of visible mass their own fit implies; a deeper step gives that an error bar.
+      wrong size - and then the halo goes in and the fit closes. Students read off how much dark mass
+      per unit of visible mass their fit implies; a deeper step gives it an error bar.
       \n\nThe rest is consequence and context. A single star is launched on a circular orbit and the
       halo is removed underneath it; then the same experiment is run on ninety stars in the live
       simulation and the disc comes apart. Zwicky's 1933 cluster measurement follows, first on the real

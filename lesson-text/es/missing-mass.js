@@ -293,7 +293,7 @@ export default {
         'acelerará y girará más rápido, porque nada tira de las estrellas desde fuera',
       ],
       because:
-        'Las estrellas conservan la velocidad que tenían, pero la atracción que las sujetaba a esa velocidad ha desaparecido, así que salen hacia órbitas más amplias. El halo aporta la mayor parte de la masa a radios grandes y muy poca cerca del centro, así que solo las estrellas cercanas al bulbo conservan una atracción suficiente para sujetarlas; las demás se alejan. Quitar masa reduce la atracción; no añade ninguna, y por eso el disco no cae hacia dentro, y una estrella a la que no se tira con más fuerza no acelera.',
+        'Las estrellas conservan la velocidad que tenían, pero la atracción que las sujetaba a esa velocidad ha desaparecido, así que salen hacia órbitas más amplias. El halo aporta la mayor parte de la masa a radios grandes y muy poca cerca del centro, así que solo las estrellas próximas al bulbo conservan una atracción suficiente para sujetarlas; las demás se alejan. Quitar masa reduce la atracción; no añade ninguna, y por eso el disco no cae hacia dentro, y una estrella a la que no se tira con más fuerza no acelera.',
     },
     'take-the-halo-away-from': {
       title: 'Quítale el halo a la galaxia entera',
