@@ -2075,22 +2075,32 @@
     #investigationSubtitle {
       display: none;
     }
-    /* Its own row under the title: the reset control carries its words
-       (Reset the scene), which would leave the title a few letters. */
     .investigation-panel > .inv-progress {
-      grid-row: 3;
-      padding-top: 0;
+      grid-column: 3;
+      grid-row: 2;
+      padding: 0 var(--space-2) 0 0;
       border: 0;
-      /* At 320 px in Spanish the three would leave the bar a few pixels:
-         the control drops to its own line instead. */
-      flex-wrap: wrap;
-      row-gap: var(--space-1);
     }
     .inv-progress-track {
-      min-width: calc(var(--space-8) * 2);
+      flex: 0 0 var(--space-8);
     }
+    /* On the sheet the reset control is its icon: the title row has no room
+       for its words. They stay its name (read aloud) and its tooltip. */
     .inv-reset-scenario {
-      margin-inline-start: auto;
+      position: relative;
+      width: 26px;
+      padding: 0;
+      justify-content: center;
+      font-size: var(--text-md);
+      line-height: 1;
+    }
+    .inv-reset-scenario > [data-i18n] {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
     }
     .investigation-panel > .inv-body {
       border-top: 1px solid var(--border-subtle);
