@@ -1,6 +1,6 @@
 {
   "version": "November 2026",
-  "generated": "2026-11-20",
+  "generated": "2026-11-21",
   "documents": 1222,
   "inventory": {
     "documents": 1222,
@@ -24,10 +24,10 @@
     }
   },
   "sourceFiles": 309,
-  "sourceDigest": "dc9757f7083704ad48645ae6b7fe42a3ed615780d36582673dfaf0de4f56b724",
+  "sourceDigest": "9b0f626d105e711d7afecb129930ce27a5c1f6c4960f6a8f6552765c806a0732",
   "sources": {
     "js/activities/activities.js": "af9b7e121b9a72c2a5cc18e07331d6ee841934d402b030294d25c442628881ef",
-    "js/activities/activityBridge.js": "67a82aff98e0ed935d6b8b0f0f654c6ad4332ee929cb3604e896a7f790a6fdc1",
+    "js/activities/activityBridge.js": "ddd8015bf88938d98d967942048bc34e30a0099344b1055bd45a0459ec0333fe",
     "js/activityDocs.js": "72671561d52bff51ad7b15e68ce8312e666a0d952963ac3b35d0a311c551def3",
     "js/answerCheck.js": "4c1857fd39ec06421df169156b60437c0c97265fbfbfaa059bf8d08629d10ab7",
     "js/answerFeedback.js": "58d9af7f55c57d0b19c7fba6b9d44266899d6998b3caf9d6f7eb6bfeb8724370",
@@ -292,8 +292,8 @@
     "js/guideDocs.js": "42e7d3a67604184660e98fd6f72072371a58d911abcff70c806f63a3ee7c7f5e",
     "js/i18n/en.activities.js": "f20cf171d13a956aed5e7f15319f7ef93a918ccbc803fd441e5b08394488d5d5",
     "js/i18n/en.exoplanet.js": "a87e5ac1dae771959915b86b2c4caee978f5c47facb593ca5371bda37e0528b3",
-    "js/i18n/en.guides.js": "482b5aaccc499a1b462a640361061e5cd866822258ffa8eb268d22adba1692c5",
-    "js/i18n/en.js": "b3611ec12595368e5fa7854845d30c2ce9c1db20e68275236c12da091b856f30",
+    "js/i18n/en.guides.js": "3efd940f28be491ee11813467d62a2931b79a331e91afd9e5aa7475bfd5965f6",
+    "js/i18n/en.js": "c511515f4861d5fc82dd11c8c44f09e05444d04a92af1f816a315488c9ef92a4",
     "js/i18n/en.lab3dGuides.js": "16c0b1b8e69ec216b5a57a361e90aa854e3fef39b86242612370c7c71aaf7520",
     "js/i18n/en.missionLabGuides.js": "6c859aefad385c14245218a4d53514fb35ce1443c1fcb3b055575137a6a6d086",
     "js/i18n/en.populations.js": "eaa01b4655a6c8bd59ee9a60da0dcbbab605f586944bb0642fab26679b557cf4",
