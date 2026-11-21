@@ -835,7 +835,7 @@ The canvas behind a step is stated as scene on 8, portrait on 7, quiet on 51; 14
 - **Prediction loops:** how-close → the-fit, sigma-and-profile → the-fit; predict-the-shift → shift-from-your-fit → shift-from-your-fit.
 - **Recovery:** missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand; ambiguous result: the check says in words how close is close enough.
 - **Scene rebuilds:** none.
-- **Accepted central experiment** (reviewed 2026-09-11): object `compute:refit-transit`, control the compute page's limb-darkening setting (not a lesson widget), measures the fitted period, planet-to-star radius ratio, orbit size, impact parameter and reduced chi-square, the covariance sigma and profile intervals, and how far the radius ratio moves, in its new sigmas, from the student's own fitted value when the limb darkening is held fixed, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+- **Accepted central experiment** (reviewed 2026-11-21): object `compute:refit-transit`, control the compute page's limb-darkening setting (not a lesson widget), measures the fitted period, planet-to-star radius ratio, orbit size, impact parameter and reduced chi-square, the covariance sigma and profile intervals, and how far the radius ratio moves, in its new sigmas, from the student's own fitted value when the limb darkening is held fixed, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 
 ## Two Periodograms (`two-periodograms`)
 
@@ -850,7 +850,7 @@ The canvas behind a step is stated as scene on 8, portrait on 7, quiet on 51; 14
 - **Prediction loops:** the-tallest-peak → the-two-periods, the-box-with-your-limit, separation-from-your-period → the-two-periods.
 - **Recovery:** missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand; ambiguous result: the check says in words how close is close enough.
 - **Scene rebuilds:** none.
-- **Accepted central experiment** (reviewed 2026-09-11): object `compute:periodograms`, control the compute page's maximum period and maximum duration settings (not a lesson widget), and the longest box duration the student chooses from a menu in the lesson, measures the best period of a Lomb-Scargle and of a box least squares periodogram of one light curve, their ratio, the best box for the longest duration the student allowed, and the box period against the fitted period in the fit's uncertainties, with and without the red-noise factor, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+- **Accepted central experiment** (reviewed 2026-11-21): object `compute:periodograms`, control the compute page's maximum period and maximum duration settings (not a lesson widget), and the longest box duration the student chooses from a menu in the lesson, measures the best period of a Lomb-Scargle and of a box least squares periodogram of one light curve, their ratio, the best box for the longest duration the student allowed, and the box period against the fitted period in the fit's uncertainties, with and without the red-noise factor, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 
 ## Sampling a Posterior (`sampling-a-posterior`)
 
@@ -865,7 +865,7 @@ The canvas behind a step is stated as scene on 8, portrait on 7, quiet on 51; 14
 - **Prediction loops:** pick-the-ratio-predict-the-width → the-draws-at-your-ratio, did-it-converge → the-draws-at-your-ratio.
 - **Recovery:** missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand; ambiguous result: the check says in words how close is close enough.
 - **Scene rebuilds:** none.
-- **Accepted central experiment** (reviewed 2026-09-11): object `compute:posterior-sampling`, control the compute page's steps and a/R* settings (not a lesson widget), and the a/R* the student chooses from a menu in the lesson, measures the median and 68 percent interval width of the planet-to-star radius ratio and the impact parameter from an ensemble sampler with a/R* held at the student's choice, and the convergence diagnostics that let the interval be quoted, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+- **Accepted central experiment** (reviewed 2026-11-21): object `compute:posterior-sampling`, control the compute page's steps and a/R* settings (not a lesson widget), and the a/R* the student chooses from a menu in the lesson, measures the median and 68 percent interval width of the planet-to-star radius ratio and the impact parameter from an ensemble sampler with a/R* held at the student's choice, and the convergence diagnostics that let the interval be quoted, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 
 ## What Is a Measurement? (`what-is-a-measurement`)
 
