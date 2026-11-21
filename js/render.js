@@ -54,6 +54,7 @@ import {
 import {
   LOD_POINT_MAX_PX,
   TRAIL_MIN_INTENSITY,
+  glowStride,
   hitRadius,
   starColor,
   trailSpeedScale,
@@ -1166,14 +1167,13 @@ const drawScene = () => {
           }
           ctx.stroke();
         } else if (SETTINGS.trail_style === 'Glow') {
-          // Draw glowing trail from a cached sprite. The gradient's shape is
-          // identical for every point - only color, alpha and radius vary - so
-          // building it per point was pure waste. globalAlpha reproduces the
-          // old per-stop alphas exactly (sprite bakes 0.8/0.3/0, multiplied by
-          // intensity here).
+          // One cached sprite per point (globalAlpha scales its baked 0.8/0.3/0
+          // stops); the low tier blits fewer, spread over the whole trail, so the
+          // stated span is kept (glowStride, js/bodyVisuals.js).
           const sprite = getGlowSprite(rgb.r, rgb.g, rgb.b);
           const prevAlpha = ctx.globalAlpha;
-          for (let i = 0; i < trail.length; i++) {
+          const stride = glowStride(trail.length, currentTier());
+          for (let i = 0; i < trail.length; i += stride) {
             const age_factor = 1 - trail[i].age / q('trail_length');
             const velocity_factor = Math.max(
               TRAIL_MIN_INTENSITY,
