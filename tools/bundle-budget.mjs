@@ -53,7 +53,7 @@ const BUDGETS = [
   {
     id: 'initial',
     label: 'Initial download (CSS + eager JS)',
-    limit: 741.9,
+    limit: 743.5,
     reason:
       'Was 743 KB when this budget was first asked for. The application had ' +
       'already grown to 771 KB on its own - the extracted state module, the ' +
@@ -120,12 +120,13 @@ const BUDGETS = [
       '\n\nBarycenter marker, frame and source statement, and lesson figures drawn from the model, taken together (D-R4-TRAIN-04): raised from 740.2 to 741.4 KB, the measurement by CI of the combined branch (run 44415955830): 759,138 bytes (741.35 KB), rounded up to 0.1 KB. The share of the lesson figures is 69 bytes, the hook that loads them. Under the standing approval of 2026-10-10; that share was adopted as a maintainer decision of 2026-11-18 (D-R4-457-03).' +
       '\n\nLesson openings and endings, merged with the masses kept off the weighing steps (D-R4-456-06): raised from 741.4 to 741.5 KB, the measurement of the combined tree on a Node 22.23.4 build: 759,287 bytes (741.49 KB), rounded up to 0.1 KB. Each change fitted alone; together they are 149 bytes above the last measurement. Under the standing approval of 2026-10-10.' +
       '\n\nThe lesson walk repairs taken together (D-R4-TRAIN-08): raised from 741.5 to 741.6 KB, the measurement by CI of the combined branch (bf32e882f): 759,371 bytes (741.57 KB), rounded up to 0.1 KB. Under the standing approval of 2026-10-10.' +
-      '\n\nThe low-tier frame cost repair (D-R4-COI-02): fewer glow sprites per trail at the low tier and the canvas width kept by an observer; raised from 741.6 to 741.9 KB, the measurement by CI of the branch merged with v4 ef760870 (run 44844706105): 759,694 bytes (741.89 KB), rounded up to 0.1 KB. Under the standing approval of 2026-10-10.',
+      '\n\nThe low-tier frame cost repair (D-R4-COI-02): fewer glow sprites per trail at the low tier and the canvas width kept by an observer; raised from 741.6 to 741.9 KB, the measurement by CI of the branch merged with v4 ef760870 (run 44844706105): 759,694 bytes (741.89 KB), rounded up to 0.1 KB. Under the standing approval of 2026-10-10.' +
+      '\n\nThe combined lesson framing, links, reset and saving branch (D-R4-TRAINA-03): raised from 741.9 to 743.5 KB, the measurement by CI of the branch (head f51518237): 761,259 bytes (743.42 KB), rounded up to 0.1 KB. Under the standing approval of 2026-10-10.',
   },
   {
     id: 'deferred',
     label: 'Deferred JavaScript (lazy chunks, gzipped)',
-    limit: 3226.3,
+    limit: 3233.3,
     reason:
       'Jumped from 1369 KB to 2105 KB when three.js and Chart.js stopped being ' +
       'CDN requests and became bundled chunks. That is the point of the change ' +
@@ -734,7 +735,8 @@ const BUDGETS = [
       "\n\nKepler's Laws, the transit lesson and Weighing the Stars taken together (D-R4-TRAIN-06): the limit is raised from 3215.8 to 3225.7 KB, the exact overrun of a Node 22 build over v4 c5705767f (3,303,045 bytes gzipped, 3225.63 KB) rounded up to 0.1 KB, under the standing approval of 2026-10-10. This replaces the separate raises the three branches recorded (D-R4-328-05, D-R4-329-05, D-R4-332-08). CI then measured 3,303,165 bytes (3225.75 KB, run 44551414337) after the answer key learned estimate steps, so the limit is 3225.8." +
       '\n\nThe lesson walk repairs taken together (D-R4-TRAIN-08): raised from 3225.8 to 3226.1 KB, the measurement by CI of the combined branch (bf32e882f): 3,303,516 bytes gzipped (3226.09 KB), rounded up to 0.1 KB. Under the standing approval of 2026-10-10.' +
       '\n\nThe low-tier frame cost repair (D-R4-COI-02): raised from 3226.1 to 3226.2 KB, the measurement by CI of the branch merged with v4 ef760870 (run 44844706105): 3,303,620 bytes gzipped (3226.19 KB), rounded up to 0.1 KB. Under the standing approval of 2026-10-10.' +
-      "\n\nThe lesson link's frame hold (D-R4-439-04): raised from 3226.2 to 3226.3 KB, the measurement by CI of the branch merged with v4 c34f4c9a (run 44864250726): 3,303,635 bytes gzipped (3226.206 KB), rounded up to 0.1 KB. Under the standing approval of 2026-10-10.",
+      "\n\nThe lesson link's frame hold (D-R4-439-04): raised from 3226.2 to 3226.3 KB, the measurement by CI of the branch merged with v4 c34f4c9a (run 44864250726): 3,303,635 bytes gzipped (3226.206 KB), rounded up to 0.1 KB. Under the standing approval of 2026-10-10." +
+      '\n\nThe combined lesson framing, links, reset and saving branch (D-R4-TRAINA-03): raised from 3226.3 to 3233.3 KB, the measurement by CI of the branch (head f51518237): 3,310,838 bytes gzipped (3233.24 KB), rounded up to 0.1 KB. Under the standing approval of 2026-10-10.',
   },
 ];
 
