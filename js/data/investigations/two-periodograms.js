@@ -1,7 +1,7 @@
 // =============================================================================
 // Two Periodograms
 // -----------------------------------------------------------------------------
-// Content only (one import: the number formatter). The companion of the compute page's notebook
+// Content only, no imports. The companion of the compute page's notebook
 // "periodograms" (Roadmap II Prompt 102, COMPUTE.md). There is no instrument on
 // this page: the student runs the reviewed notebook at /compute/ on the TESS
 // light curve of HD 209458 that the Observatory's box search reads, and types
@@ -26,7 +26,11 @@
 //   0.071 at P/3 and P/4.
 // =============================================================================
 
-import { fixed } from '../../format.js';
+/** Fixed decimals, written without toFixed: a lesson imports nothing. */
+const fixed = (x, d) => {
+  const s = String(Math.round(Math.abs(x) * 10 ** d)).padStart(d + 1, '0');
+  return (x < 0 ? '\u2212' : '') + (d ? `${s.slice(0, -d)}.${s.slice(-d)}` : s);
+};
 
 /**
  * The box search for each longest duration a student may allow (hours): the best
@@ -49,7 +53,7 @@ const named = n =>
 
 const TWO_PERIODOGRAMS = {
   id: 'two-periodograms',
-  thumbnail: 'images/scenarios/transit-lab.webp',
+  thumbnail: 'images/investigations/two-periodograms.webp',
   title: 'Two Periodograms',
   subtitle:
     'A Lomb-Scargle and a box least squares periodogram of the same light curve, computed with Astropy in Python, and what a period from a periodogram can claim',
@@ -62,6 +66,8 @@ const TWO_PERIODOGRAMS = {
   prerequisites: ['transit-photometry'],
   tags: ['exoplanets'],
   lock: { placement: true, inspector: true },
+  // No instrument and no scene: the notebook is the subject, so nothing is staged behind it.
+  canvas: 'quiet',
   objectives: [
     'Compute a Lomb-Scargle and a box least squares periodogram of a light curve with Astropy and read each one’s best period',
     'Explain why the Lomb-Scargle peak of a transit light curve is at a harmonic of the planet’s period',

@@ -1,7 +1,7 @@
 // =============================================================================
 // Sampling a Posterior
 // -----------------------------------------------------------------------------
-// Content only (one import: the number formatter). The companion of the compute page's notebook
+// Content only, no imports. The companion of the compute page's notebook
 // "posterior-sampling" (Roadmap II Prompt 102, COMPUTE.md; the route Prompt 103's
 // gate left open for sampling, SAMPLER_GATE.md). There is no instrument on this
 // page: the student runs the reviewed notebook at /compute/ on the TESS light
@@ -28,7 +28,18 @@
 //   1,000-step run is refused.
 // =============================================================================
 
-import { fixed, roundSig } from '../../format.js';
+/** Fixed decimals, written without toFixed: a lesson imports nothing. */
+const fixed = (x, d) => {
+  const s = String(Math.round(Math.abs(x) * 10 ** d)).padStart(d + 1, '0');
+  return (x < 0 ? '\u2212' : '') + (d ? `${s.slice(0, -d)}.${s.slice(-d)}` : s);
+};
+/** Significant figures, written without toPrecision. */
+const roundSig = (x, n) => {
+  const k = Math.floor(Math.log10(Math.abs(x))) - (n - 1);
+  return k >= 0
+    ? Math.round(x / 10 ** k) * 10 ** k
+    : Math.round(x * 10 ** -k) / 10 ** -k;
+};
 
 /**
  * The draws for each a/R* a student may hold (the menu; 9.21 is the notebook's
@@ -49,7 +60,7 @@ const PANEL = { k: 0.1193, sigma: 0.0016 };
 
 const SAMPLING_A_POSTERIOR = {
   id: 'sampling-a-posterior',
-  thumbnail: 'images/scenarios/transit-lab.webp',
+  thumbnail: 'images/investigations/sampling-a-posterior.webp',
   title: 'Sampling a Posterior',
   subtitle:
     'A transit’s planet size and impact parameter sampled in Python, checked for convergence, and compared with the profile interval of the same problem',
@@ -62,6 +73,8 @@ const SAMPLING_A_POSTERIOR = {
   prerequisites: ['transit-photometry', 'refitting-a-transit'],
   tags: ['exoplanets'],
   lock: { placement: true, inspector: true },
+  // No instrument and no scene: the notebook is the subject, so nothing is staged behind it.
+  canvas: 'quiet',
   objectives: [
     'Run an ensemble sampler on a transit’s posterior and read its convergence diagnostics',
     'Say what a posterior interval and a profile interval are, and when they nearly coincide',

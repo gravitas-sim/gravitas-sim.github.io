@@ -1,7 +1,7 @@
 // =============================================================================
 // Refitting a Transit
 // -----------------------------------------------------------------------------
-// Content only (one import: the number formatter). The companion of the compute page's notebook
+// Content only, no imports. The companion of the compute page's notebook
 // "refit-transit" (Roadmap II Prompt 102, COMPUTE.md). There is no instrument on
 // this page: the student runs the reviewed notebook at /compute/ on the TESS
 // light curve of HD 209458 that the Observatory's fit panel fits, and types back
@@ -21,11 +21,15 @@
 //   its new sigmas from the fitted value), b 0.341 +/- 0.050.
 // =============================================================================
 
-import { fixed } from '../../format.js';
+/** Fixed decimals, written without toFixed: a lesson imports nothing. */
+const fixed = (x, d) => {
+  const s = String(Math.round(Math.abs(x) * 10 ** d)).padStart(d + 1, '0');
+  return (x < 0 ? '\u2212' : '') + (d ? `${s.slice(0, -d)}.${s.slice(-d)}` : s);
+};
 
 const REFITTING_A_TRANSIT = {
   id: 'refitting-a-transit',
-  thumbnail: 'images/scenarios/transit-lab.webp',
+  thumbnail: 'images/investigations/refitting-a-transit.webp',
   title: 'Refitting a Transit',
   subtitle:
     'The same model and the same light curve as the Observatory’s fit panel, fitted again by a different route in Python, to see what the route changes',
@@ -38,6 +42,8 @@ const REFITTING_A_TRANSIT = {
   prerequisites: ['transit-photometry'],
   tags: ['exoplanets'],
   lock: { placement: true, inspector: true },
+  // No instrument and no scene: the notebook is the subject, so nothing is staged behind it.
+  canvas: 'quiet',
   objectives: [
     'Fit a transit model to a light curve with SciPy’s bounded least squares and read the covariance’s sigma and the profile interval',
     'Say what two correct fits of the same model to the same points can and cannot disagree about',
