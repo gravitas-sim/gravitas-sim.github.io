@@ -3941,7 +3941,9 @@ test.describe('the central experiment of each investigation', () => {
       }
     };
     await six();
-    await expectDerived(page, id, sum, { q1: 2.3018 }, 0.001);
+    expect(
+      Math.abs((await numberIn(field(page, id, sum, 'q1'))) - 2.3018)
+    ).toBeLessThan(0.001);
     await expect(
       page.locator('#investigationBody .inv-check.is-error')
     ).toContainText(/alias/);
@@ -3949,13 +3951,10 @@ test.describe('the central experiment of each investigation', () => {
 
     await setControl(page, 'cadence', 1);
     await six();
-    await expectDerived(
-      page,
-      id,
-      sum,
-      { q1: 1.7682, laplace: 0.022, sig: 0.025 },
-      0.06
-    );
+    expect(
+      Math.abs((await numberIn(field(page, id, sum, 'q1'))) - 1.7682)
+    ).toBeLessThan(0.001);
+    await expectDerived(page, id, sum, { laplace: 0.022, sig: 0.025 }, 0.06);
     await expect(
       page.locator('#investigationBody .inv-check.is-ok')
     ).toBeVisible();

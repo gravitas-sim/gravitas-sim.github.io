@@ -1055,6 +1055,7 @@
       "leakFree": true
     },
     "moons-of-the-giants": {
+      "canvas": ["quiet"],
       "centralExperimentId": "ce.moons-of-the-giants",
       "object": "panel:moon-fit",
       "control": "moon-fit/moon",
