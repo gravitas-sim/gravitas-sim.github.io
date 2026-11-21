@@ -5,17 +5,17 @@ export const MOONS_OF_THE_GIANTS_ES = {
   objectives: [
     'Leer los periodos de Ío, Europa y Ganímedes en imágenes ajustadas y formar sus cocientes',
     'Decir por qué un cociente cercano a 2 es un indicio de resonancia y no una prueba, y qué añade la combinación de los tres movimientos',
-    'Hallar la combinación de Laplace de los tres movimientos, con su incertidumbre, y decir qué muestra y qué no un valor compatible con cero',
-    'Decir por qué Calisto no forma parte de la cadena, con la misma aritmética',
+    'Elegir el muestreo, hallar la combinación de Laplace de los tres movimientos con su incertidumbre, y decir qué muestra y qué no un valor compatible con cero',
+    'Predecir, y luego comprobar con la misma aritmética, si Calisto forma parte de la cadena',
   ],
   steps: {
     'a-family-of-moons': {
       title: 'Una familia de lunas',
-      body: 'Un planeta gigante lleva consigo una familia. Júpiter tiene cuatro lunas grandes que se ven con unos prismáticos, Ío, Europa, Ganímedes y Calisto, y las tres interiores tienen una costumbre curiosa: cada una tarda casi el doble que la de dentro en dar una vuelta. Esta investigación lo mide a partir de imágenes.\n\nLas imágenes son las <strong>sintéticas</strong> de <em>Pesar a Júpiter con sus lunas</em>: hechas con las posiciones reales de las lunas en noviembre y diciembre de 2025 (JPL Horizons), con el disco de Júpiter, el desenfoque y el ruido añadidos. Nadie observó estas fotografías. Las distancias que lees son las medidas del instrumento; la superposición marca dónde pone el efemérides a cada luna.',
+      body: 'Un planeta gigante lleva consigo una familia. Júpiter tiene cuatro lunas grandes que se ven con unos prismáticos, Ío, Europa, Ganímedes y Calisto. Esta investigación pregunta si sus periodos, el tiempo que tardan en dar una vuelta, siguen algún patrón, y los mide a partir de imágenes.\n\nLas imágenes son las <strong>sintéticas</strong> de <em>Pesar a Júpiter con sus lunas</em>: hechas con las posiciones reales de las lunas en noviembre y diciembre de 2025 (JPL Horizons), con el disco de Júpiter, el desenfoque y el ruido añadidos. Nadie observó estas fotografías. Las distancias que lees son las medidas del instrumento; la superposición marca dónde pone el efemérides a cada luna.',
     },
     'three-periods-predict': {
       title: '¿Cómo se comparan los tres periodos?',
-      body: 'Ío tarda unos 1,77 días en dar una vuelta. El instrumento ajusta una sinusoide a la distancia de cada luna a Júpiter en las 51 imágenes y lee el periodo de ella.',
+      body: 'Ío tarda unos 1,77 días en dar una vuelta. Europa y Ganímedes están más lejos. El instrumento ajustará una sinusoide a la distancia de cada luna a Júpiter en las 51 imágenes y leerá el periodo de ella.',
       prompt:
         'El periodo de Europa, y luego el de Ganímedes, serán cada uno aproximadamente&hellip;',
       options: [
@@ -32,16 +32,55 @@ export const MOONS_OF_THE_GIANTS_ES = {
     },
     'three-periods': {
       title: 'Tres periodos',
-      body: 'Con el muestreo en <strong>1</strong>, la secuencia diseñada de imágenes, lee el <strong>periodo</strong> de Ío, de Europa y de Ganímedes en días. Usa los cuatro decimales que da el instrumento: la aritmética siguiente es sensible a ellos.',
+      body: 'Pon el muestreo en <strong>1</strong>, la secuencia diseñada de imágenes. Luego elige cada luna por turno con <strong>Luna</strong> (1 Ío, 2 Europa, 3 Ganímedes) y pulsa <strong>Tomar la lectura</strong> junto a su periodo. Las lecturas conservan los cuatro decimales que da el instrumento: la aritmética siguiente es sensible a ellos.',
       fields: [
-        { label: 'Periodo de Ío' },
-        { label: 'Periodo de Europa' },
-        { label: 'Periodo de Ganímedes' },
+        {
+          label: 'Periodo de Ío',
+          misconceptions: [
+            {
+              say: 'Esa lectura se tomó con otra luna seleccionada. Pon Luna en 1 para Ío, 2 para Europa y 3 para Ganímedes, y toma el periodo otra vez.',
+            },
+            {
+              say: 'Esa lectura se tomó con otra luna seleccionada. Pon Luna en 1 para Ío, 2 para Europa y 3 para Ganímedes, y toma el periodo otra vez.',
+            },
+            {
+              say: 'Esa lectura usó el muestreo de una vez por noche (0). Este paso pide el muestreo diseñado, 1.',
+            },
+          ],
+        },
+        {
+          label: 'Periodo de Europa',
+          misconceptions: [
+            {
+              say: 'Esa lectura se tomó con otra luna seleccionada. Pon Luna en 1 para Ío, 2 para Europa y 3 para Ganímedes, y toma el periodo otra vez.',
+            },
+            {
+              say: 'Esa lectura se tomó con otra luna seleccionada. Pon Luna en 1 para Ío, 2 para Europa y 3 para Ganímedes, y toma el periodo otra vez.',
+            },
+            {
+              say: 'Esa lectura usó el muestreo de una vez por noche (0). Este paso pide el muestreo diseñado, 1.',
+            },
+          ],
+        },
+        {
+          label: 'Periodo de Ganímedes',
+          misconceptions: [
+            {
+              say: 'Esa lectura se tomó con otra luna seleccionada. Pon Luna en 1 para Ío, 2 para Europa y 3 para Ganímedes, y toma el periodo otra vez.',
+            },
+            {
+              say: 'Esa lectura se tomó con otra luna seleccionada. Pon Luna en 1 para Ío, 2 para Europa y 3 para Ganímedes, y toma el periodo otra vez.',
+            },
+            {
+              say: 'Esa lectura usó el muestreo de una vez por noche (0). Este paso pide el muestreo diseñado, 1.',
+            },
+          ],
+        },
       ],
     },
     'the-ratios': {
       title: 'Cocientes que no llegan a dos',
-      body: 'Escribe otra vez los tres periodos y el instrumento los dividirá: el de Europa entre el de Ío, y el de Ganímedes entre el de Europa.',
+      body: 'Los periodos que tomaste están en la lista. Divídelos con tres decimales: el de Europa entre el de Ío, y el de Ganímedes entre el de Europa.',
       fields: [
         { label: 'Periodo de Ío' },
         { label: 'Periodo de Europa' },
@@ -90,48 +129,67 @@ export const MOONS_OF_THE_GIANTS_ES = {
         'Los coeficientes suman cero por una razón: mira qué hace con ellos un desplazamiento común.',
       ],
       because:
-        'Cero. Donde las tres se mueven al paso, la relación se cumple exactamente para los movimientos medios, y el paso siguiente pone en ella los medidos, con la incertidumbre que dan los ajustes.',
+        'Cero. Donde las tres se mueven al paso, la relación se cumple exactamente para los movimientos medios; los medidos entran en ella con la incertidumbre que dan los ajustes.',
     },
-    'the-motions-together': {
-      title: 'Los tres movimientos juntos',
-      body: 'Escribe otra vez los tres periodos. El instrumento convierte cada uno en un movimiento en grados por día y forma el de Ío menos tres veces el de Europa más dos veces el de Ganímedes. Para tener una escala: las incertidumbres de los tres ajustes se combinan en unos <strong>&plusmn;0,025</strong> grados por día.',
+    'how-sure-is-the-sum': {
+      title: '¿Qué seguridad tiene la suma?',
+      body: 'Elige el <strong>Muestreo</strong> en el que confías: 0 es una imagen por noche, 1 la secuencia diseñada con tres noches horarias. Luego toma cada luna por turno con <strong>Luna</strong>, y pulsa <strong>Tomar la lectura</strong> junto a su periodo y junto a su incertidumbre. La página convierte cada periodo en un movimiento, forma el de Ío menos tres veces el de Europa más dos veces el de Ganímedes, y combina las tres incertidumbres: la de cada movimiento es 360&deg; × la incertidumbre del periodo ÷ el periodo al cuadrado, y las tres se suman en cuadratura, con pesos 1, 3 y 2.',
       fields: [
         { label: 'Periodo de Ío' },
+        { label: 'Incertidumbre del periodo de Ío' },
         { label: 'Periodo de Europa' },
+        { label: 'Incertidumbre del periodo de Europa' },
         { label: 'Periodo de Ganímedes' },
+        { label: 'Incertidumbre del periodo de Ganímedes' },
         { label: 'Movimiento de Ío, grados por día' },
         { label: 'Movimiento de Europa, grados por día' },
         { label: 'Movimiento de Ganímedes, grados por día' },
         { label: 'Ío − 3 × Europa + 2 × Ganímedes, grados por día' },
+        { label: 'Su incertidumbre, grados por día' },
       ],
     },
     'consistent-with-zero': {
-      title: '¿Es 0,015 cero?',
-      body: 'La combinación salió 0,015 grados por día, con una incertidumbre de unos 0,025.',
+      title: '¿Es cero?',
+      body: 'Tu combinación de los tres movimientos y su incertidumbre están en el recuadro de abajo.',
       prompt: '¿Qué dice eso sobre si vale cero?',
       options: [
         'Es compatible con cero: es menor que su propia incertidumbre, que es lo más cerca que pueden decir estas imágenes',
         'No es cero, así que las lunas no están en resonancia',
         'Es exactamente cero, así que las lunas están sin duda enlazadas',
-        'No significa nada, porque 0,015 no es un número entero',
+        'No significa nada, porque no es un número entero',
       ],
       misconceptions: [
         {
-          say: 'Un valor menor que su incertidumbre no se distingue de cero con estas imágenes. No ser exactamente 0 es lo que hace toda medida.',
+          say: 'Un valor menor que su incertidumbre no se distingue de cero con estas imágenes. No ser exactamente 0 es lo que hace toda medida. Si el tuyo es mucho mayor que su incertidumbre, revisa el muestreo que elegiste.',
         },
         {
           say: 'Compatible con cero no es lo mismo que exactamente cero, y ninguna de las dos cosas prueba que las lunas estén enlazadas: la relación entre los movimientos es una condición necesaria. Lo que las imágenes no pueden mostrar es si el propio ángulo libra.',
         },
       ],
+      hints: ['Compara la combinación con la incertidumbre que tiene al lado.'],
+      because:
+        'Compatible con cero. La combinación es miles de veces menor que el movimiento de Ío, y está dentro de su incertidumbre. Esa es la relación necesaria, observada. La parte suficiente, que el ángulo <em>libra</em> y no circula, necesita años de observación del ángulo; <em>Cuando las órbitas se enlazan</em> lo sigue en un modelo.',
+    },
+    'callisto-predict': {
+      title: '¿Pertenece Calisto?',
+      body: 'Calisto es la cuarta luna, y la más lejana. El periodo de Ganímedes es el que tomaste en el paso 3, y la órbita de Calisto es unas 1,76 veces más ancha que la de Ganímedes.',
+      prompt:
+        'El periodo de Calisto, dividido entre el de Ganímedes, será aproximadamente&hellip;',
+      options: [
+        'unos 2,3, que no está cerca del 2 de los otros pares',
+        'unos 2, como en los otros pares',
+        'unos 3',
+        'unos 1,5',
+      ],
       hints: [
-        'Compara 0,015 con el ±0,025 que dan las incertidumbres del instrumento.',
+        'La tercera ley de Kepler convirtió 1,5 en 1,84 en la primera predicción: haz lo mismo con 1,76.',
       ],
       because:
-        'Compatible con cero. La combinación es unas 14 mil veces menor que el movimiento de Ío, y está dentro de su incertidumbre. Esa es la relación necesaria, observada. La parte suficiente, que el ángulo <em>libra</em> y no circula, necesita años de observación del ángulo; <em>Cuando las órbitas se enlazan</em> lo sigue en un modelo.',
+        'Unos 2,33: 1,76 elevado a 1,5 es 2,33, muy lejos del 2 que mantiene al paso a las tres primeras.',
     },
     'callisto-is-not-in-the-chain': {
       title: '¿Y Calisto?',
-      body: 'Calisto es la cuarta luna, y la más lejana. Pon el instrumento en la <strong>luna 4</strong> y lee su periodo. Luego divídelo entre el de Ganímedes, 7,1413 días.',
+      body: 'Elige la <strong>Luna</strong> 4, con el muestreo en 1, y toma su periodo. La página lo divide entre el periodo de Ganímedes del paso 3.',
       fields: [
         { label: 'Periodo de Calisto' },
         { label: 'Periodo de Calisto entre el de Ganímedes' },
@@ -139,7 +197,7 @@ export const MOONS_OF_THE_GIANTS_ES = {
     },
     'what-you-worked-out': {
       title: 'Lo que has deducido',
-      body: 'Tres periodos de imágenes sintéticas, 1,7682, 3,5480 y 7,1413 días; cocientes de 2,006 y 2,013, cerca de 2 y no iguales a 2, lo cual es un indicio y no una prueba; y una combinación de los tres movimientos, 0,015 grados por día frente a una incertidumbre de 0,025, compatible con cero cuando cada movimiento es cientos de veces mayor. Calisto, con un cociente de 2,33, queda fuera de la cadena. Lo que las imágenes no pueden mostrar es el ángulo mismo manteniéndose durante años, que <em>Cuando las órbitas se enlazan</em> sigue en un modelo. Otros gigantes tienen familias propias (las lunas de Saturno, las de Urano), y este conjunto solo cubre las de Júpiter.',
+      body: 'Tres periodos de imágenes sintéticas, 1,7682, 3,5480 y 7,1413 días; cocientes de 2,006 y 2,013, cerca de 2 y no iguales a 2, lo cual es un indicio y no una prueba; y una combinación de los tres movimientos que salió menor que su propia incertidumbre, cuando cada movimiento es miles de veces mayor. El muestreo importó: con una imagen por noche, el periodo de Ío es un alias y la combinación queda a decenas de grados por día de cero. Calisto, con un cociente de 2,33, queda fuera de la cadena. Lo que las imágenes no pueden mostrar es el ángulo mismo manteniéndose durante años, que <em>Cuando las órbitas se enlazan</em> sigue en un modelo. Otros gigantes tienen familias propias (las lunas de Saturno, las de Urano), y este conjunto solo cubre las de Júpiter.',
     },
   },
 };
@@ -151,43 +209,64 @@ export const THE_SCALE_OF_THE_SOLAR_SYSTEM_ES = {
   objectives: [
     'Leer las distancias de la Tierra, Júpiter y Neptuno al Sol en unidades astronómicas, en el sandbox dibujado a escala verdadera',
     'Convertir una distancia en el tiempo que tarda la luz en recorrerla',
-    'Construir una maqueta en la que la Tierra es una canica, y decir dónde caen el Sol y Neptuno',
+    'Construir una maqueta en la que la Tierra es una canica del tamaño que elijas, y decir dónde caen el Sol y Neptuno',
     'Decir qué hace mal un diagrama del sistema solar en una sola página, y qué conserva',
   ],
   steps: {
     'a-picture-you-have-seen': {
       title: 'Una imagen que ya has visto',
-      body: 'Todo diagrama del sistema solar tiene el Sol, ocho planetas en fila y planetas dibujados lo bastante grandes para verse. Esta investigación usa en cambio el sandbox, donde las <strong>distancias son verdaderas</strong>: 100 unidades por unidad astronómica, la distancia de la Tierra al Sol. Los planetas se dibujan más grandes que su tamaño real para que se vean, y la vista llega al menos a Saturno, porque una más amplia dejaría invisibles los planetas interiores. Desplázate para alejar la vista y encuentra a Neptuno.',
+      body: 'Todo diagrama del sistema solar tiene el Sol, ocho planetas en fila y planetas dibujados lo bastante grandes para verse. Esta investigación usa en cambio el sandbox, donde las <strong>distancias son verdaderas</strong>: 100 unidades por unidad astronómica, la distancia de la Tierra al Sol. Los planetas se dibujan más grandes que su tamaño real para que se vean, y la vista llega al menos a Saturno, porque una más amplia dejaría invisibles los planetas interiores. Neptuno está más lejos de lo que muestra la primera vista.',
       tip: 'Las distancias de la lectura vienen del sandbox, no de una tabla; los pasos siguientes las comparan con los números que conoces.',
     },
     'three-distances': {
       title: 'Tres distancias',
-      body: 'Lee la distancia de la <strong>Tierra</strong>, <strong>Júpiter</strong> y <strong>Neptuno</strong> al Sol en unidades astronómicas, en la lectura.',
+      body: 'Aleja la vista con el botón <strong>Alejar</strong>, la rueda del ratón o un gesto de pellizco hasta que Neptuno aparezca en pantalla. Luego selecciona <strong>la Tierra</strong>, <strong>Júpiter</strong> y <strong>Neptuno</strong> por turno, haciendo clic en el planeta o eligiéndolo en la lista de objetos, y pulsa <strong>Tomar la lectura</strong> junto a la distancia de cada uno al Sol.',
       fields: [
-        { label: 'Distancia de la Tierra al Sol' },
-        { label: 'Distancia de Júpiter al Sol' },
-        { label: 'Distancia de Neptuno al Sol' },
+        {
+          label: 'Distancia de la Tierra al Sol',
+          misconceptions: [
+            {
+              say: 'Esa lectura es de otro planeta. Selecciona el planeta que nombra esta casilla, haciendo clic en él o eligiéndolo en la lista de objetos, y toma la lectura otra vez.',
+            },
+          ],
+        },
+        {
+          label: 'Distancia de Júpiter al Sol',
+          misconceptions: [
+            {
+              say: 'Esa lectura es de otro planeta. Selecciona el planeta que nombra esta casilla, haciendo clic en él o eligiéndolo en la lista de objetos, y toma la lectura otra vez.',
+            },
+          ],
+        },
+        {
+          label: 'Distancia de Neptuno al Sol',
+          misconceptions: [
+            {
+              say: 'Esa lectura es de otro planeta. Selecciona el planeta que nombra esta casilla, haciendo clic en él o eligiéndolo en la lista de objetos, y toma la lectura otra vez.',
+            },
+          ],
+        },
       ],
     },
     'light-time-predict': {
       title: '¿Cuánto tarda la luz?',
-      body: 'La luz cruza una unidad astronómica en unos 8 minutos y 20 segundos, 499 segundos: es el retraso entre que algo ocurre en el Sol y lo vemos.',
+      body: 'La luz del Sol tarda unos minutos en llegar a la Tierra. Neptuno está mucho más lejos, a la distancia que tomaste.',
       prompt: 'La luz del Sol tarda en llegar a Neptuno unos&hellip;',
       options: [
         'cuatro horas',
         'treinta minutos',
-        'ocho minutos, lo mismo que hasta la Tierra',
+        'el mismo tiempo que hasta la Tierra',
         'cuatro días',
       ],
       hints: [
-        'Neptuno está treinta veces más lejos que la Tierra: multiplica el tiempo.',
+        'La luz tarda lo mismo en cruzar cada unidad astronómica. ¿Cuántas hay hasta Neptuno?',
       ],
       because:
-        'Unas cuatro horas: 30,07 por 499 segundos son 15 004 segundos, 4,17 horas. Un mensaje de una nave en Neptuno tardaría eso en llegar, en cada sentido.',
+        'Unas cuatro horas: Neptuno está a 30,07 UA y la luz cruza una UA en 499 segundos, así que 30,07 por 499 segundos son 15 005 segundos, 4,17 horas. Un mensaje de una nave en Neptuno tardaría eso en llegar, en cada sentido.',
     },
     'light-time': {
       title: 'El tiempo de la luz hasta Neptuno',
-      body: 'Escribe la distancia de Neptuno de la lectura. El tiempo de la luz es la distancia por 499 segundos, que el instrumento convierte en horas.',
+      body: 'La luz cruza una unidad astronómica en unos 8 minutos y 19 segundos, 499 segundos: es el retraso entre que algo ocurre en el Sol y lo vemos. Multiplícalo por la distancia que tomaste hasta Neptuno, y convierte los segundos en horas.',
       fields: [
         { label: 'Distancia de Neptuno al Sol' },
         { label: 'Tiempo de la luz del Sol a Neptuno' },
@@ -196,26 +275,27 @@ export const THE_SCALE_OF_THE_SOLAR_SYSTEM_ES = {
     'earth-as-a-marble': {
       title: 'La Tierra como una canica',
       body: 'Construye una maqueta en la que la Tierra es una canica de un centímetro. La Tierra mide 12 742 kilómetros de diámetro y está a 149,6 millones de kilómetros del Sol.',
-      prompt: 'En esa maqueta el Sol es aproximadamente&hellip;',
+      prompt: 'En esa maqueta el Sol es&hellip;',
       options: [
-        'una bola de un metro de ancho, a unos 117 metros de la canica',
-        'una bola de unos centímetros de ancho, a un metro de la canica',
-        'una bola de diez metros de ancho, a 10 metros de la canica',
-        'del mismo tamaño que la canica',
+        'una bola de unos 1 metro de ancho, a unos 120 metros de la canica',
+        'una bola de unos 10 centímetros de ancho, a unos 1 metro de la canica',
+        'una bola de unos 10 metros de ancho, a unos 10 metros de la canica',
+        'una bola casi tan ancha como la canica, a unos 10 centímetros de ella',
       ],
       hints: [
         'Divide la distancia Tierra–Sol entre el diámetro de la Tierra; ese número de canicas cabe entre ellos.',
       ],
       because:
-        'El Sol mide 109 diámetros terrestres, así que 109 centímetros, y entre él y la Tierra caben 11 741 canicas: 117 metros. Neptuno está treinta veces más lejos.',
+        'El Sol mide 109 diámetros terrestres, así que 109 centímetros, y entre él y la Tierra caben 11 741 canicas: 117 metros.',
     },
-    'scale-model': {
-      title: 'Dónde está Neptuno en la maqueta de la canica',
-      body: 'Un centímetro de canica son 12 742 kilómetros. Calcula a qué distancia está la Tierra del Sol en la maqueta, en metros, y a qué distancia Neptuno, en kilómetros, con la distancia de Neptuno en unidades astronómicas.',
+    'choose-your-marble': {
+      title: 'Elige tu canica',
+      body: 'Ahora elige el tamaño de tu propia Tierra, en centímetros de ancho: un guisante, una canica, un balón. Una unidad astronómica son el mismo número de Tierras de ancho, elijas lo que elijas. La página calcula a qué distancia del Sol queda la Tierra en tu maqueta. La distancia de Neptuno es la que tomaste, en unidades astronómicas: halla dónde cae Neptuno en tu maqueta, en metros.',
       fields: [
+        { label: 'Diámetro de tu Tierra en la maqueta' },
+        { label: 'Una unidad astronómica en tu maqueta' },
         { label: 'Distancia de Neptuno al Sol' },
-        { label: 'De la Tierra al Sol en la maqueta' },
-        { label: 'De Neptuno al Sol en la maqueta' },
+        { label: 'Distancia de Neptuno al Sol en tu maqueta' },
       ],
     },
     'what-a-diagram-gets-wrong': {
@@ -234,13 +314,15 @@ export const THE_SCALE_OF_THE_SOLAR_SYSTEM_ES = {
           say: 'Es al revés: los cuerpos son diminutos frente al espacio que los separa, y para que se vean se dibujan muchas veces más grandes. El sandbox conserva las distancias verdaderas y muestra los planetas mayores de lo real por la misma razón.',
         },
       ],
-      hints: ['Piensa en la canica y el campo de fútbol.'],
+      hints: [
+        'Piensa en tu propia maqueta y en lo separadas que quedaban sus piezas.',
+      ],
       because:
         'Los tamaños están exagerados: a la escala verdadera de las distancias los planetas serían motas. El diagrama conserva el orden y, más o menos, el espaciado relativo; el sandbox conserva las distancias verdaderas y agranda los planetas para poder verlos.',
     },
     'what-you-worked-out': {
       title: 'Lo que has deducido',
-      body: 'La Tierra, Júpiter y Neptuno a 1,00, 5,20 y 30,07 unidades astronómicas; luz del Sol que tarda 8 minutos en llegar a nosotros y 4,17 horas en llegar a Neptuno; y una Tierra de canica con el Sol de un metro de ancho a 117 metros y Neptuno a 3,5 kilómetros. Los tamaños de los planetas son lo único que el sandbox no muestra a escala verdadera; las investigaciones siguientes, sobre las lunas de los gigantes y sobre los cometas, parten de estas distancias.',
+      body: 'La Tierra, Júpiter y Neptuno a 1,00, 5,20 y 30,07 unidades astronómicas, cada una tomada del propio planeta; luz del Sol que tarda 8 minutos en llegar a nosotros y 4,17 horas en llegar a Neptuno; y una maqueta del tamaño que elegiste, en la que una Tierra de un centímetro tiene el Sol, de un metro de ancho, a 117 metros y Neptuno a 3,5 kilómetros. Los tamaños de los planetas son lo único que el sandbox no muestra a escala verdadera; las investigaciones siguientes, sobre las lunas de los gigantes y sobre los cometas, parten de estas distancias.',
     },
   },
 };
@@ -250,7 +332,7 @@ export const COMETS_AND_THE_SUN_ES = {
   subtitle:
     'La órbita de un cometa modelo en el sandbox, cuánto se calienta en cada extremo, el Halley real como caso de transferencia y hacia dónde apuntan sus colas',
   objectives: [
-    'Leer la distancia mínima y máxima de un cometa al Sol en su órbita del sandbox',
+    'Leer la distancia mínima y máxima al Sol de un cometa que elijas, en su órbita del sandbox',
     'Estimar la temperatura de un núcleo cometario desnudo en cada extremo de su órbita, con la temperatura de emisión y su ley de la raíz cuadrada inversa',
     'Decir hacia dónde apunta la cola de iones de un cometa, venga o vaya, y por qué no es como la estela del humo',
     'Decir qué deja fuera la estimación de temperatura, y dónde el hielo empieza a hacerse gas',
@@ -258,7 +340,7 @@ export const COMETS_AND_THE_SUN_ES = {
   steps: {
     'a-dirty-snowball': {
       title: 'Una bola de nieve sucia',
-      body: 'Un cometa son unos kilómetros de hielo y polvo en una órbita larga. Lejos del Sol está oscuro e inerte. Cerca del Sol el hielo pasa a gas, y el gas y el polvo escapan y forman una <strong>coma</strong> y dos colas. El sandbox tiene el Sol, los ocho planetas y cometas. Llevan los nombres de cometas famosos, pero el sandbox coloca cada uno a la distancia de su órbita media con el 70 por ciento de la velocidad de una órbita circular, así que son <strong>cometas modelo en órbitas propias</strong>, no las órbitas reales.',
+      body: 'Un cometa son unos kilómetros de hielo y polvo en una órbita larga. Lejos del Sol está oscuro e inerte. Cerca del Sol el hielo pasa a gas, y el gas y el polvo escapan y forman una <strong>coma</strong> y dos colas. El sandbox tiene el Sol, los ocho planetas y doce cometas. Llevan los nombres de cometas famosos, pero el sandbox coloca cada uno a la distancia de su órbita media con el 70 por ciento de la velocidad de una órbita circular, así que son <strong>cometas modelo en órbitas propias</strong>, no las órbitas reales.',
       tip: 'Los cometas se mueven deprisa. Pausa para leer un número; reanuda para ver las colas.',
     },
     'tail-predict': {
@@ -277,11 +359,11 @@ export const COMETS_AND_THE_SUN_ES = {
     },
     'watch-the-tails': {
       title: 'Mira las colas',
-      body: 'Las colas solo se ven a menos de unas 3 UA. Halley, el cometa de la lectura, se queda más allá de 5,8 UA. Wild 2 y Hartley 2 llegan a 1,1 UA, Shoemaker-Levy 9 a 2,1 (tenue; en un equipo más lento, el único): busca uno, acércate y compara su cola con la dirección del Sol.',
+      body: 'Las colas solo se ven donde un cometa está a menos de unas 3 UA del Sol, y la lectura dice cuándo lo está el cometa que seleccionas. Halley, el primer cometa de la lectura, se queda más allá de 5,8 UA. Wild 2 y Hartley 2 llegan a 1,1 UA y Shoemaker-Levy 9 a 2,1 (tenue; en un equipo más lento, el único). Pausa la escena, haz clic en un cometa y vuelve a reanudarla.',
       checklist: [
-        'Busca un cometa cerca del Sol y acércate',
-        'Ve la cola estrecha de iones apuntar lejos del Sol',
-        'Ve el mismo cometa mientras se aleja del Sol: ¿dónde está ahora su cola?',
+        'Selecciona un cometa que llegue a menos de 3 UA y acércate a él',
+        'Páusalo en tres puntos que elijas: de camino hacia el Sol, cerca de su máxima aproximación y de camino hacia fuera',
+        'En cada punto compara la cola estrecha con la línea del Sol a través de la cabeza del cometa: ¿hacia dónde apunta, y hacia dónde va el cometa?',
       ],
     },
     'going-out': {
@@ -305,7 +387,7 @@ export const COMETS_AND_THE_SUN_ES = {
     },
     'orbit-ends': {
       title: 'Los dos extremos de la órbita',
-      body: 'Lee la <strong>mínima distancia</strong> y la <strong>máxima distancia</strong> del primer cometa al Sol, en unidades astronómicas, en la lectura. Son los dos extremos de la órbita, el perihelio y el afelio.',
+      body: 'Selecciona el cometa que observaste, u otro. Pulsa <strong>Tomar la lectura</strong> junto a su <strong>mínima distancia</strong> y junto a su <strong>máxima distancia</strong> al Sol, en unidades astronómicas. Son los dos extremos de la órbita, el perihelio y el afelio.',
       fields: [
         { label: 'Mínima distancia al Sol' },
         { label: 'Máxima distancia al Sol' },
@@ -313,7 +395,7 @@ export const COMETS_AND_THE_SUN_ES = {
     },
     'heat-at-the-ends': {
       title: '¿Cuánto calor en cada extremo?',
-      body: 'Un núcleo desnudo y oscuro (albedo de Bond 0,04) que reparte la luz solar que absorbe por toda su superficie irradia a su <strong>temperatura de emisión</strong>, 275,5 K a 1 UA. Cae como uno sobre la raíz cuadrada de la distancia. Escribe las dos distancias del paso anterior y el instrumento da la temperatura en cada extremo. Es una estimación de cuerpo desnudo: un cometa pierde energía al pasar el hielo a gas y un núcleo real no es uniforme.',
+      body: 'Un núcleo desnudo y oscuro (albedo de Bond 0,04) que reparte la luz solar que absorbe por toda su superficie irradia a su <strong>temperatura de emisión</strong>, 275,5 K a 1 UA. Cae como uno sobre la raíz cuadrada de la distancia. Calcula la temperatura a las dos distancias que tomaste. Es una estimación de cuerpo desnudo: un cometa pierde energía al pasar el hielo a gas y un núcleo real no es uniforme.',
       fields: [
         { label: 'Mínima distancia al Sol' },
         { label: 'Máxima distancia al Sol' },
@@ -321,9 +403,20 @@ export const COMETS_AND_THE_SUN_ES = {
         { label: 'Temperatura en la máxima distancia' },
       ],
     },
+    'halley-heat-predict': {
+      title: '¿Cuánto calor hace en el Halley real?',
+      body: 'El cometa que el sandbox llama Halley no está en la órbita de Halley. El cometa real se acerca a unos <strong>0,586 UA</strong> del Sol en su punto más cercano, dentro de la órbita de Venus.',
+      prompt: 'A esa distancia un núcleo desnudo está a unos&hellip;',
+      options: ['120 K', '200 K', '360 K', '700 K'],
+      hints: [
+        'Más cerca del Sol que 1 UA significa más caliente que la temperatura a 1 UA.',
+      ],
+      because:
+        'Unos 360 K: la temperatura a 1 UA dividida entre la raíz cuadrada de 0,586 es 360 K, muy por encima de los 160 K a los que el hielo pasa a gas.',
+    },
     'the-real-halley': {
       title: 'El Halley real',
-      body: 'El cometa que el sandbox llama Halley no está en la órbita de Halley. El cometa real se acerca a unos <strong>0,586 UA</strong> del Sol en su punto más cercano, dentro de la órbita de Venus. Usa la misma estimación para la aproximación mínima real.',
+      body: 'Aplica la misma estimación a la aproximación mínima real de Halley, la distancia del paso anterior, y compárala con tu predicción.',
       fields: [
         { label: 'La aproximación mínima del Halley real' },
         { label: 'Temperatura en la aproximación mínima real' },
@@ -345,14 +438,14 @@ export const COMETS_AND_THE_SUN_ES = {
         },
       ],
       hints: [
-        'Los 360 K del Halley real superan con mucho los 160 K.',
+        'Compara la temperatura en el extremo cercano de un cometa que echó una cola con los 160 K a los que el hielo pasa a gas.',
       ],
       because:
-        'El calor. La temperatura del núcleo sube como uno sobre la raíz cuadrada de la distancia; el hielo pasa a gas hacia los 160 K, y el gas y el polvo que escapan forman la coma y las colas: el viento solar barre el gas lejos del Sol y la luz empuja el polvo.',
+        'El calor. La temperatura del núcleo sube como uno sobre la raíz cuadrada de la distancia; el hielo pasa a gas hacia los 160 K, que un núcleo desnudo alcanza a unas 3 UA, y el gas y el polvo que escapan forman la coma y las colas: el viento solar barre el gas lejos del Sol y la luz empuja el polvo.',
     },
     'what-you-worked-out': {
       title: 'Lo que has deducido',
-      body: 'La órbita de un cometa tiene dos extremos, aquí leídos en el sandbox; un núcleo desnudo está más caliente, en el extremo cercano, en la raíz cuadrada del cociente de esas distancias; el Halley modelo se queda por debajo de los 160 K a los que el hielo pasa a gas, y el Halley real, a 0,586 UA, llega a 360 K; y la cola de iones apunta siempre lejos del Sol, así que un cometa vuela con la cola por delante al alejarse. Un cometa real añade lo que esta estimación deja fuera: su reflectividad, la energía gastada en pasar el hielo a gas y su giro.',
+      body: 'La órbita de un cometa tiene dos extremos, aquí leídos en el sandbox; un núcleo desnudo está más caliente, en el extremo cercano, en la raíz cuadrada del cociente de esas distancias; el hielo pasa a gas hacia los 160 K, que un núcleo desnudo alcanza a unas 3 UA, donde el sandbox empieza a dibujar colas. El Halley modelo, a 5,79 UA y 114 K, se queda por debajo, un cometa que llega a menos de 3 UA sube por encima, y el Halley real, a 0,586 UA, llega a 360 K. La cola de iones apunta siempre lejos del Sol, así que un cometa vuela con la cola por delante al alejarse. Un cometa real añade lo que esta estimación deja fuera: su reflectividad, la energía gastada en pasar el hielo a gas y su giro.',
     },
   },
 };

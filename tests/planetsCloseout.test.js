@@ -10,9 +10,9 @@ import { fileURLToPath } from 'node:url';
 import { INVESTIGATIONS } from '../js/data/investigations.js';
 import { SEQUENCES } from '../js/data/investigations/sequences.js';
 import PLANETS, {
-  INSTRUCTOR,
   SHADOWS,
 } from '../js/data/investigations/planets-sequence.js';
+import { INSTRUCTOR } from '../js/data/investigations/planets-guides.js';
 import { openGalilean } from '../js/satellites/galilean.js';
 import {
   equilibriumTemperature,
