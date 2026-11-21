@@ -9,6 +9,7 @@
 // =============================================================================
 
 import {
+  afterEach,
   beforeAll,
   beforeEach,
   describe,
@@ -50,11 +51,15 @@ async function settled(promise, turns = 8) {
 }
 
 describe('whenLessonShown', () => {
+  let now;
   beforeEach(() => {
+    now = jest.spyOn(performance, 'now').mockReturnValue(9000);
     window.location.hash = '';
     document.getElementById('investigationPanel')?.setAttribute('hidden', '');
     document.getElementById('investigationBrowser')?.classList.add('hidden');
   });
+
+  afterEach(() => now.mockRestore());
 
   test('resolves at once when the address names no lesson', async () => {
     window.location.hash = '#home';
@@ -75,7 +80,17 @@ describe('whenLessonShown', () => {
     document.getElementById('investigationPanel').hidden = false;
     expect(await settled(held, 5)).toBe(false);
     window.dispatchEvent(new Event('click'));
-    expect(await settled(held, 2)).toBe(true);
+    expect(await settled(held, 2)).toBe(false);
+    expect(await settled(held, 80)).toBe(true);
+  });
+
+  test('holds nothing when the panel came up quickly', async () => {
+    now.mockReturnValue(900);
+    window.location.hash = '#investigation=keplers-laws';
+    const held = whenLessonShown(100, 60000);
+    expect(await settled(held)).toBe(false);
+    document.getElementById('investigationPanel').hidden = false;
+    expect(await settled(held)).toBe(true);
   });
 
   test('releases when the chooser is shown instead of a lesson', async () => {

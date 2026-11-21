@@ -15,6 +15,7 @@
 // resolves, so callers never have to think about ordering.
 // =============================================================================
 
+/* global addEventListener */
 import {
   loadFragment,
   mountFragment,
@@ -75,7 +76,8 @@ export function ensureInvestigations() {
  * usable. The promise resolves when the lesson's panel (or the chooser a link
  * to no lesson falls back to) is shown, when the engine failed to load, or
  * after a backstop, so the sandbox never stands still because a lesson did not
- * arrive. A load that names no lesson resolves at once.
+ * arrive. A load that names no lesson, or whose panel is up within 4 s, resolves
+ * at once.
  *
  * @param {number} [ticks] - The longest the frames are held for a lesson that
  *   does not arrive, in 50 ms polls (20 s)
@@ -88,12 +90,15 @@ export function whenLessonShown(ticks = 400, settleMs = 4000) {
   return new Promise(done => {
     const release = shown => {
       clearInterval(poll);
-      if (!shown) return done();
+      // A panel up within 4 s of the page starting to load is a machine the
+      // frames do not starve, and nothing is held for it.
+      if (!shown || performance.now() < 4000) return done();
       // The panel is up: the frames wait a little longer for the first thing
-      // the visitor does, so that it is answered before they start.
+      // the visitor does, and 1.5 s after it, so that its answer is not
+      // queued behind the first frames.
       setTimeout(done, settleMs);
       for (const type of ['click', 'keydown'])
-        window.addEventListener(type, done, { once: true });
+        addEventListener(type, () => setTimeout(done, 1500), { once: true });
     };
     const poll = setInterval(
       () =>
@@ -132,7 +137,7 @@ export async function unmountInvestigations() {
  * @returns {boolean} True for a `#investigation=<id>` fragment
  */
 export const lessonInHash = () =>
-  /^#investigation=[\w-]+(\/\w+)?$/.test(window.location.hash || '');
+  /^#investigation=[\w-]+(\/\w+)?$/.test(location.hash || '');
 
 /**
  * Whether the URL asks for the assignment builder.
@@ -144,7 +149,7 @@ export const lessonInHash = () =>
  * @returns {boolean} True when ?assign= is present
  */
 export const assignmentInUrl = () =>
-  /[?&]assign=[A-Za-z0-9_-]+/.test(window.location.href);
+  /[?&]assign=[A-Za-z0-9_-]+/.test(location.href);
 
 /**
  * Whether the address bar holds an assignment link a student has opened.
@@ -213,7 +218,7 @@ export function watchForAssignments() {
 
   open();
   let last = location.hash;
-  window.addEventListener('hashchange', () => {
+  addEventListener('hashchange', () => {
     if (location.hash === last) return;
     last = location.hash;
     open();
@@ -221,7 +226,7 @@ export function watchForAssignments() {
 }
 
 export const authoringInUrl = () =>
-  /[?&#]author=[\w-]+/.test(window.location.href || '');
+  /[?&#]author=[\w-]+/.test(location.href || '');
 
 /** The Lessons button's first press loads the engine, then stands down. */
 function armLessonsButton() {
@@ -253,7 +258,7 @@ export function watchForInvestigations() {
       ensureInvestigations().then(mod => mod.openBrowser());
   };
   browse();
-  window.addEventListener('hashchange', browse);
+  addEventListener('hashchange', browse);
 
   // A lesson link, an authoring preview (without this the engine is never
   // imported on a fresh ?author= load and the preview silently does nothing),
@@ -267,7 +272,7 @@ export function watchForInvestigations() {
     assignmentInUrl() ||
     assignmentInHash();
   if (wanted()) ensureInvestigations();
-  window.addEventListener('hashchange', () => {
+  addEventListener('hashchange', () => {
     if (wanted()) ensureInvestigations();
   });
 }
