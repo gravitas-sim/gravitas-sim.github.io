@@ -9,6 +9,8 @@ import {
   physicsSettings,
   minInteractionDistance,
   activeIntegrator,
+  gravityRoles,
+  canMoveNow,
 } from './state.js';
 import { haloAcceleration } from '../darkMatter.js';
 import { a0InSimUnits, mondVector } from '../mond.js';
@@ -29,8 +31,12 @@ export const cachedMajorSources = [];
  * @returns {Array} The sources, excluding the body itself
  */
 export const gravitySourcesFor = body => {
-  if (!body) return [];
-  return cachedMajorSources.filter(s => s && s.id !== body.id);
+  // The relation, so a hole lists only the holes it feels; a fixed hole, none.
+  if (!body || (body.kind === 'BlackHole' && !canMoveNow(body))) return [];
+  const { pulls } = gravityRoles(physicsSettings);
+  return cachedMajorSources.filter(
+    s => s && s.id !== body.id && pulls(s.kind, body.kind)
+  );
 };
 
 /**

@@ -13,6 +13,7 @@ import {
 } from './forces.js';
 import {
   accretion_disk_particles,
+  canMoveNow,
   nextPhysicsObjectId,
   physicsSettings,
   paintBody,
@@ -169,10 +170,7 @@ export class BlackHole {
    * @returns {boolean} True when the hole integrates its own motion
    */
   can_move() {
-    return (
-      physicsSettings.bh_behavior === 'Orbiting' ||
-      (this.isNewlyCreated && this.graceUsed < this.movementGracePeriod)
-    );
+    return canMoveNow(this, physicsSettings);
   }
 
   /**

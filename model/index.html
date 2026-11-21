@@ -427,13 +427,19 @@ try {
       </p>
       <ul>
         <li>
-          <span class="gs-en"><strong>Not every object pulls.</strong> Every object always
-          <em>feels</em> gravity. Which objects <em>exert</em> it depends on the
-          scenario settings: black holes and stars always do; gas giants,
-          neutron stars and white dwarfs do unless star-only gravity is on;
-          planets and asteroids do only when mutual gravity is enabled. A scene
-          of a hundred asteroids runs at a usable frame rate because the
-          asteroids are not pulling on each other.</span><span class="gs-es" lang="es"><strong>No todo objeto atrae.</strong> Todo objeto siempre <em>siente</em> la gravedad. Qué objetos la <em>ejercen</em> depende de los ajustes del escenario: los agujeros negros y las estrellas siempre lo hacen; los gigantes gaseosos, las estrellas de neutrones y las enanas blancas lo hacen salvo que esté activada la gravedad solo de estrellas; los planetas y asteroides lo hacen únicamente cuando la gravedad mutua está habilitada. Una escena de cien asteroides corre a una velocidad de cuadros utilizable porque los asteroides no se atraen entre sí.</span>
+          <span class="gs-en"><strong>Not every object pulls.</strong> Which objects <em>exert</em>
+          gravity depends on the scenario settings: black holes, stars and
+          galaxies always do; gas giants, neutron stars and white dwarfs do
+          unless star-only gravity is on; planets and asteroids do only when
+          mutual gravity is enabled; comets never do. Every object except a
+          black hole <em>feels</em> all of them. A black hole feels only other
+          black holes, even when holes orbit, and a static black hole is fixed
+          (a newly formed one keeps moving briefly). Where one body pulls
+          another and is not pulled back, total momentum is not conserved, by
+          the model, and the conservation readout says so. The scene statement
+          and the inspector&rsquo;s Gravity row say which bodies pull which in
+          the scene on screen. A scene of a hundred asteroids runs at a usable
+          frame rate because the asteroids are not pulling on each other.</span><span class="gs-es" lang="es"><strong>No todo objeto atrae.</strong> Qué objetos <em>ejercen</em> la gravedad depende de los ajustes del escenario: los agujeros negros, las estrellas y las galaxias siempre lo hacen; los gigantes gaseosos, las estrellas de neutrones y las enanas blancas lo hacen salvo que esté activada la gravedad solo de estrellas; los planetas y asteroides lo hacen únicamente cuando la gravedad mutua está habilitada; los cometas nunca. Todo objeto salvo un agujero negro <em>siente</em> a todos ellos. Un agujero negro solo siente a otros agujeros negros, aunque los agujeros orbiten, y un agujero negro estático queda fijo (uno recién formado sigue moviéndose un momento). Donde un cuerpo atrae a otro sin ser atraído, el momento total no se conserva, por el modelo, y la lectura de conservación lo dice. La descripción de la escena y la fila Gravedad del inspector dicen qué cuerpos atraen a cuáles en la escena en pantalla. Una escena de cien asteroides corre a una velocidad de cuadros utilizable porque los asteroides no se atraen entre sí.</span>
         </li>
         <li>
           <span class="gs-en"><strong>Close encounters are softened.</strong> The separation used in

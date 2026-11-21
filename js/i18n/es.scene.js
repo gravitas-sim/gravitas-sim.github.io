@@ -19,6 +19,20 @@ export const ES_SCENE = {
   'sources.item': '{kind} ({n})',
   'sources.pulling': 'Atraen a los demás: {list}.',
   'sources.feeling': 'Sienten la gravedad sin atraer: {list}.',
+  'sources.holesOnly':
+    'Los agujeros negros solo sienten a otros agujeros negros.',
+  'sources.staticHoles':
+    'Los agujeros negros estáticos quedan fijos (uno recién formado sigue moviéndose un momento).',
+  'sources.schematic':
+    'Aquí G vale {g}, así que las unidades describen una escala esquemática: una unidad de tiempo son {days} días.',
+  'roles.label': 'Gravedad',
+  'roles.pulledBy': 'Lo atraen: {list}.',
+  'roles.pulledByNone': 'Aquí no lo atrae nada.',
+  'roles.pulls': 'Atrae a: {list}.',
+  'roles.pullsNone': 'Aquí no atrae a nada.',
+  'roles.fixedHole':
+    'Un agujero negro estático: fijo, no lo atrae nada (uno recién formado sigue moviéndose un momento).',
+  'roles.modelOwned': 'Lo mueve el modelo de la lección, no la gravedad.',
   'summary.barycenter.system':
     'Marcador del baricentro: la posición media de todo el sistema ponderada por la masa, {n} cuerpos.',
   'summary.barycenter.pair':

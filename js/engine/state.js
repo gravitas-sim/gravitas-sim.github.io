@@ -190,14 +190,73 @@ export let physicsSettings = {
 // free to disagree with the integrator's.
 // =============================================================================
 
+// What pulls on what (docs/gravity-roles.md). Holes, stars and galaxies always
+// pull; giants, neutron stars and white dwarfs unless only stars pull; planets
+// and asteroids only with mutual gravity on and star-only gravity off; comets
+// and debris never. A hole is pulled by holes only (and the halo or MOND),
+// whatever it is near. The step's order is the summation order.
+const SOURCE_ORDER = [
+  ['bh_list', 'BlackHole', 0],
+  ['stars', 'StarObject', 0],
+  ['galaxies', 'Galaxy', 0],
+  ['gas_giants', 'GasGiant', 1],
+  ['neutron_stars', 'NeutronStar', 1],
+  ['white_dwarfs', 'WhiteDwarf', 1],
+  ['planets', 'Planet', 2],
+  ['asteroids', 'Asteroid', 2],
+];
+
+/**
+ * Which kind pulls on which under these settings. Whether a given body moves
+ * at all is canMoveNow's, per body and per moment; the two are read together.
+ * @param {object} s - Settings (mutual_gravity, star_only_gravity, bh_behavior)
+ * @returns {{pulls: function(string, string): boolean, staticHoles: boolean}}
+ *   `pulls(sourceKind, targetKind)` and whether holes are Static
+ */
+export const gravityRoles = s => {
+  const only = s?.star_only_gravity === true;
+  const tier = only ? 0 : s?.mutual_gravity ? 2 : 1;
+  const src = new Set(SOURCE_ORDER.filter(r => r[2] <= tier).map(r => r[1]));
+  return {
+    pulls: (source, target) =>
+      src.has(source) && (target !== 'BlackHole' || source === 'BlackHole'),
+    staticHoles: s?.bh_behavior !== 'Orbiting',
+  };
+};
+
+/**
+ * The ordered pairs of these kinds where the first pulls the second and is not
+ * pulled back: where total momentum is not conserved, by the model.
+ * @param {string[]} kinds - Body kinds present
+ * @param {object} s - Settings
+ * @returns {Array<[string, string]>} [source, target] pairs
+ */
+export const oneWayPairs = (kinds, s) => {
+  const { pulls } = gravityRoles(s);
+  return kinds.flatMap(a =>
+    kinds.filter(b => pulls(a, b) && !pulls(b, a)).map(b => [a, b])
+  );
+};
+
 /** The lists the step sums as sources, in its order (js/engine/sources.js). */
 export const sourceLists = s => {
-  const only = s?.star_only_gravity === true;
-  const lists = ['bh_list', 'stars', 'galaxies'];
-  if (!only) lists.push('gas_giants', 'neutron_stars', 'white_dwarfs');
-  if (s?.mutual_gravity && !only) lists.push('planets', 'asteroids');
-  return lists;
+  const { pulls } = gravityRoles(s);
+  return SOURCE_ORDER.filter(r => pulls(r[1], 'Planet')).map(r => r[0]);
 };
+
+/**
+ * Whether this body integrates its own motion now. A prescribed model moves
+ * the body it owns; a Static hole is fixed once its grace period, in simulated
+ * time, has run out, so a merger product does not freeze in flight.
+ * @param {object} b - A body
+ * @param {object} [s] - Settings (bh_behavior)
+ * @returns {boolean} True when the engine moves it
+ */
+export const canMoveNow = (b, s = physicsSettings) =>
+  !b?.model_owned &&
+  (b?.kind !== 'BlackHole' ||
+    s?.bh_behavior === 'Orbiting' ||
+    (Boolean(b.isNewlyCreated) && b.graceUsed < b.movementGracePeriod));
 
 export let simulationTime = 0;
 

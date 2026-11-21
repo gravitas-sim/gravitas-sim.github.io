@@ -378,7 +378,7 @@ export const ES = {
 
   // --- Settings: labels ------------------------------------------------------
   'settings.label.gravitationalConstant': 'Constante gravitatoria',
-  'settings.label.mutualGravity': 'Gravedad mutua (todos)',
+  'settings.label.mutualGravity': 'Gravedad mutua (planetas y asteroides)',
   'settings.label.simSpeed': 'Velocidad de simulación',
   'settings.label.simSize': 'Tamaño de la simulación',
   'settings.label.placement': 'Disposición',

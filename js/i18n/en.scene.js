@@ -18,6 +18,19 @@ export const EN_SCENE = {
   'sources.item': '{kind} ({n})',
   'sources.pulling': 'Pulling on others: {list}.',
   'sources.feeling': 'Feeling gravity, not pulling: {list}.',
+  'sources.holesOnly': 'Black holes feel only other black holes.',
+  'sources.staticHoles':
+    'Static black holes stay fixed (a newly formed one keeps moving briefly).',
+  'sources.schematic':
+    'G is {g} here, so the units describe a schematic scale: one time unit is {days} days.',
+  'roles.label': 'Gravity',
+  'roles.pulledBy': 'Pulled by {list}.',
+  'roles.pulledByNone': 'Pulled by nothing here.',
+  'roles.pulls': 'Pulls on {list}.',
+  'roles.pullsNone': 'Pulls on nothing here.',
+  'roles.fixedHole':
+    'A static black hole: fixed, pulled by nothing (a newly formed one keeps moving briefly).',
+  'roles.modelOwned': "Moved by the lesson's model, not by gravity.",
   'summary.barycenter.system':
     'Barycenter marker: the mass-weighted mean position of the whole system, {n} bodies.',
   'summary.barycenter.pair':

@@ -121,3 +121,32 @@ which reads the built world of all 61 presets.
 | core | when-orbits-lock | the-rotating-frame | Jupiter Trojans | jupiter-trojans | true | false | Static | 2 |
 | core | why-rings | a-pass-inside-the-limit | Roche Pass | roche-pass | true | false | Static | 3000 |
 | core | why-rings | a-ring-with-a-resonance | Ring Gap | ring-gap | true | false | Static | 10000 |
+
+## Momentum
+
+The reference cases' momentum checks (R3 and R4 in
+`tests/fixtures/reference-cases/thresholds.json`, 445) stay as committed: they
+hold to round-off because their pairs pull both ways. Momentum is not tested,
+and is not conserved, wherever the relation is one-way: a black hole beside
+any other kind, a static black hole past its grace period, and any body that
+feels gravity without pulling (comets and debris always; planets and asteroids
+without mutual gravity; gas giants, neutron stars and white dwarfs under
+star-only gravity). `tests/gravityRoles.test.js` requires momentum to
+round-off of a reciprocal pair only, and of a one-way pair that the source
+does not move and the target's change is G M dt / r^2.
+
+## Where it is read
+
+- The step's source list: `sourceLists`, from `gravityRoles` (`js/engine/state.js`).
+- A hole's motion: `BlackHole.can_move` is `canMoveNow`.
+- The conservation caveat "one-way gravity": the relation over the kinds present (`js/engine/conservation.js`).
+- The acceleration readout's sources: `gravitySourcesFor` (`js/engine/forces.js`).
+- The two-body model: `feels` (`js/twoBodyModel.js`).
+- The radial-velocity panel's "star held fixed": do planets pull the star (`js/radialVelocity.js`).
+- The scene statement and the inspector's Gravity row: `sceneRoles` and `bodyRoles` (`js/engine/sources.js`), worded in `js/sceneStatement.js`.
+- The model page, Gravity and motion.
+
+Not read from it, on purpose: whether an absorption gives its host a recoil
+(`js/engine/bodies.js`, `absorptionMovesHole` and `absorptionMovesStar`) is a
+rule about collisions with the same two settings, checked by the validation
+groups, and is 460's to state.
