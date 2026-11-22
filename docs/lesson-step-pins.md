@@ -9,7 +9,7 @@ on a 60 Hz screen, a 144 Hz screen and a throttled tab. A reading step
 that holds the clock (`holdsClock` in `js/timestep.js`) does not run and
 is not pinned. Closing the lesson lifts the pin.
 
-581 steps in 25 lessons run on an integrated scene; 458 are pinned and 123 hold the clock.
+580 steps in 25 lessons run on an integrated scene; 457 are pinned and 123 hold the clock.
 
 | Lesson | Step | Id | Type | Scene | Own scene | Pinned step |
 |---|---|---|---|---|---|---|
@@ -284,21 +284,19 @@ is not pinned. Closing the lesson lifts the pin.
 | missing-mass | 16 | why-a-heavier-disc-cannot | question | Milky Way Rotation | inherited | 1/60 s |
 | missing-mass | 17 | now-add-the-halo | explore | Milky Way Rotation | inherited | 1/60 s |
 | missing-mass | 18 | record-the-fit-that-works | measure | Milky Way Rotation | inherited | 1/60 s |
-| missing-mass | 19 | how-much-of-it-is | question | Milky Way Rotation | inherited | 1/60 s |
-| missing-mass | 20 | what-the-halo-is-holding | explore | Milky Way Rotation | inherited | 1/60 s |
-| missing-mass | 21 | take-the-halo-away-from | explore | Milky Way Rotation | yes | 1/60 s |
-| missing-mass | 22 | forty-years-earlier | read | Coma Cluster | yes | none (holds the clock) |
-| missing-mass | 23 | zwicky-s-arithmetic-and-the | explore | Coma Cluster | inherited | 1/60 s |
-| missing-mass | 24 | measure-the-simulated-cluster | measure | Coma Cluster | inherited | 1/60 s |
-| missing-mass | 25 | weigh-the-cluster-by-its | question | Coma Cluster | inherited | 1/60 s |
-| missing-mass | 26 | now-compare | question | Coma Cluster | inherited | 1/60 s |
-| missing-mass | 27 | a-different-way-to-read | read | Coma Cluster | inherited | 1/60 s |
-| missing-mass | 28 | fit-it-both-ways | explore | Coma Cluster | inherited | 1/60 s |
-| missing-mass | 29 | the-prediction-mond-makes | question | Coma Cluster | inherited | 1/60 s |
-| missing-mass | 30 | does-the-curve-decide | question | Coma Cluster | inherited | 1/60 s |
-| missing-mass | 31 | what-have-you-actually-shown | question | Coma Cluster | inherited | 1/60 s |
-| missing-mass | 32 | how-much-of-the-universe | read | Coma Cluster | inherited | 1/60 s |
-| missing-mass | 33 | where-it-stands | read | Coma Cluster | inherited | none (holds the clock) |
+| missing-mass | 19 | compare-your-two-fits | measure | Milky Way Rotation | inherited | 1/60 s |
+| missing-mass | 20 | how-much-of-it-is | question | Milky Way Rotation | inherited | 1/60 s |
+| missing-mass | 21 | what-the-halo-is-holding | explore | Milky Way Rotation | inherited | 1/60 s |
+| missing-mass | 22 | predict-the-disc-without-its-halo | predict | Milky Way Rotation | yes | 1/60 s |
+| missing-mass | 23 | take-the-halo-away-from | explore | Milky Way Rotation | yes | 1/60 s |
+| missing-mass | 24 | forty-years-earlier | read | Coma Cluster | yes | none (holds the clock) |
+| missing-mass | 25 | zwicky-s-arithmetic-and-the | explore | Coma Cluster | inherited | 1/60 s |
+| missing-mass | 26 | measure-the-simulated-cluster | measure | Coma Cluster | inherited | 1/60 s |
+| missing-mass | 27 | weigh-the-cluster-by-its | question | Coma Cluster | inherited | 1/60 s |
+| missing-mass | 28 | now-compare | question | Coma Cluster | inherited | 1/60 s |
+| missing-mass | 29 | what-have-you-actually-shown | question | Coma Cluster | inherited | 1/60 s |
+| missing-mass | 30 | how-much-of-the-universe | read | Coma Cluster | inherited | 1/60 s |
+| missing-mass | 31 | where-it-stands | read | Coma Cluster | inherited | none (holds the clock) |
 | tides | 1 | twice-a-day-everywhere | read | Earth-Moon System | yes | none (holds the clock) |
 | tides | 2 | is-the-pull-the-same | predict | Earth-Moon System | inherited | 1/60 s |
 | tides | 3 | three-points-three-pulls | read | Earth-Moon System | inherited | 1/60 s |
@@ -582,7 +580,7 @@ is not pinned. Closing the lesson lifts the pin.
 | the-scale-of-the-solar-system | 3 | light-time-predict | predict | Solar System | inherited | 1/60 s |
 | the-scale-of-the-solar-system | 4 | light-time | measure | Solar System | inherited | 1/60 s |
 | the-scale-of-the-solar-system | 5 | earth-as-a-marble | predict | Solar System | inherited | 1/60 s |
-| the-scale-of-the-solar-system | 6 | scale-model | measure | Solar System | inherited | 1/60 s |
+| the-scale-of-the-solar-system | 6 | choose-your-marble | measure | Solar System | inherited | 1/60 s |
 | the-scale-of-the-solar-system | 7 | what-a-diagram-gets-wrong | question | Solar System | inherited | 1/60 s |
 | the-scale-of-the-solar-system | 8 | what-you-worked-out | read | Solar System | inherited | none (holds the clock) |
 | comets-and-the-sun | 1 | a-dirty-snowball | read | Solar System | yes | none (holds the clock) |
@@ -591,6 +589,7 @@ is not pinned. Closing the lesson lifts the pin.
 | comets-and-the-sun | 4 | going-out | question | Solar System | inherited | 1/60 s |
 | comets-and-the-sun | 5 | orbit-ends | measure | Solar System | inherited | 1/60 s |
 | comets-and-the-sun | 6 | heat-at-the-ends | measure | Solar System | inherited | 1/60 s |
-| comets-and-the-sun | 7 | the-real-halley | measure | Solar System | inherited | 1/60 s |
-| comets-and-the-sun | 8 | why-a-tail-near-the-sun | question | Solar System | inherited | 1/60 s |
-| comets-and-the-sun | 9 | what-you-worked-out | read | Solar System | inherited | none (holds the clock) |
+| comets-and-the-sun | 7 | halley-heat-predict | predict | Solar System | inherited | 1/60 s |
+| comets-and-the-sun | 8 | the-real-halley | measure | Solar System | inherited | 1/60 s |
+| comets-and-the-sun | 9 | why-a-tail-near-the-sun | question | Solar System | inherited | 1/60 s |
+| comets-and-the-sun | 10 | what-you-worked-out | read | Solar System | inherited | none (holds the clock) |
