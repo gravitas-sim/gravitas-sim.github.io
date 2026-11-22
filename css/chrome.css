@@ -2824,9 +2824,11 @@
     }
   }
 
-  /* The instrument takes the rail's width; static, as a resized panel stretches its picture. */
+  /* The instrument takes the rail's width; static, as a resized panel stretches its picture.
+     The tabs keep their own width: at a laptop they share a row with the Menu
+     button, and a full-width strip would lie under it. */
   @media (min-width: 901px) {
-    body[data-lesson-canvas='quiet'] :is(.inv-plot-panel, .inv-dock-tabs) {
+    body[data-lesson-canvas='quiet'] .inv-plot-panel {
       width: min(calc(100vw - var(--lesson-width) - var(--space-3) * 3), 1100px);
     }
   }
