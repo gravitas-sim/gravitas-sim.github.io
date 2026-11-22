@@ -256,6 +256,7 @@ const EXTENDING_AN_EXPERIMENT = {
     {
       sid: 'move-the-definition-yours',
       canvas: 'scene',
+      time: { speed: 750, paused: true },
       setup: { scenario: 'Binary Planet Lab', seed: 'binary', paused: true },
       compute: 'population-at-scale',
       type: 'measure',

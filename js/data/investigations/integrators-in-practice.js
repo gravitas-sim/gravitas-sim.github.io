@@ -233,6 +233,7 @@ const INTEGRATORS_IN_PRACTICE = {
     {
       sid: 'choose-the-second-step',
       canvas: 'scene',
+      time: { speed: 1500, paused: true },
       setup: {
         scenario: 'Circumbinary Planet Lab',
         seed: 'binary',
