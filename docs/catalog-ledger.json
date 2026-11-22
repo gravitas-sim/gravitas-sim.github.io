@@ -3826,7 +3826,7 @@
       ],
       "walk": "NOT RUN",
       "pr": null,
-      "hash": null
+      "hash": "40a0d4c887ada7413323fd8197fff045132f6cd5b39e37ead8280a548d7ffdee"
     },
     {
       "id": "investigation:phases-and-albedo",
@@ -4414,7 +4414,7 @@
       ],
       "walk": "NOT RUN",
       "pr": null,
-      "hash": null
+      "hash": "4fda1544c47c633d21f7129e18c21d76523030925d16d4a1bd74d9ce6ecb47bb"
     },
     {
       "id": "investigation:propose-an-observation",

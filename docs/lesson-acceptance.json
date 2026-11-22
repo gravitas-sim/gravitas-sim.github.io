@@ -373,6 +373,7 @@
       "leakFree": true
     },
     "power-law-gravity": {
+      "canvas": ["quiet"],
       "centralExperimentId": "ce.power-law-gravity",
       "object": "panel:power-law-precession",
       "control": "power-law-precession/n",
