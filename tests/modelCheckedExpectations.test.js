@@ -234,7 +234,8 @@ describe('the instructor expectations record', () => {
     // 555 over that: Lives of Stars replaces three read-a-number steps with one comparison step (3 retired, 1 new).
     // 553 with Why Mars Goes Backwards (Prompt 346) and the Goldilocks Question's distance steps (three-distances-yours):
     // each retires one expectation, from 555.
-    expect(total).toBe(553);
+    // 554 with the second half of the Goldilocks Question (Prompt 356): two-runs-one-orbit adds one.
+    expect(total).toBe(554);
     // 542 after How Many Earths? (Prompt 229): 3 more over 539.
     // 547 after the four exoplanet closeout investigations (Prompt 231): 5 more over 542.
   });

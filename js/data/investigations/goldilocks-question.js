@@ -1210,8 +1210,8 @@ const GOLDILOCKS = {
       title: 'Take the readings yourself',
       body: `Rather than being told which planets fall where, read it off the
              instrument. The panel opens on the optimistic zone definition.
-             Set it to the conservative one, the definition this lesson uses
-             for its edges, before you read anything.
+             Set it to the conservative one, the definition the edges have meant
+             so far, before you read anything.
              \n\nWork down the list under the picture and record the starlight
              each of the three middle planets receives, in Earths. Then record
              where the zone begins and ends. Those two are an estimate, because

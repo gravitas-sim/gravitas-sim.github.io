@@ -10,7 +10,6 @@
 // periapsis needs the number to be exactly right and exactly repeatable. The
 // eccentric orbit solves Kepler's equation, so the planet dawdles through its
 // cold outer year and hurries through its hot periapsis: that is the section.
-//
 // Accessibility note: habitable-zone status is never carried by color alone.
 // Every band is labeled, the two edges use different dash patterns as well as
 // different colors, and the readout says in words where a planet sits.

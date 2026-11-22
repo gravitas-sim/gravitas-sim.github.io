@@ -467,7 +467,7 @@ export default {
     },
     'take-the-readings-yourself': {
       title: 'Toma tú mismo las lecturas',
-      body: 'En lugar de que te digan qué planetas caen dónde, léelo en el instrumento. El panel se abre con la definición optimista de la zona. Ponlo en la conservadora, la definición que usa esta lección para sus bordes, antes de leer nada.\n\nRecorre la lista de debajo de la imagen y anota la luz estelar que recibe cada uno de los tres planetas centrales, en Tierras. Después anota dónde empieza y dónde acaba la zona. Esos dos son una estimación, porque el ajuste se mantiene en 2600 K, la estrella más fría que cubre.',
+      body: 'En lugar de que te digan qué planetas caen dónde, léelo en el instrumento. El panel se abre con la definición optimista de la zona. Ponlo en la conservadora, la definición que han significado los bordes hasta ahora, antes de leer nada.\n\nRecorre la lista de debajo de la imagen y anota la luz estelar que recibe cada uno de los tres planetas centrales, en Tierras. Después anota dónde empieza y dónde acaba la zona. Esos dos son una estimación, porque el ajuste se mantiene en 2600 K, la estrella más fría que cubre.',
       fields: [
         { label: 'TRAPPIST-1e recibe', unit: 'Tierras' },
         { label: 'TRAPPIST-1f recibe', unit: 'Tierras' },
