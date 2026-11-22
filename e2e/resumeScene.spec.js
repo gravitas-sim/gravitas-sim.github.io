@@ -14,7 +14,7 @@
 // velocities when both screens are at the same simulation time; the stage and
 // its roles; the canvas kind; the clock a step states itself; the instrument's
 // controls. The sampling rule is sampleSteps there; RESUME_ALL=1 compares
-// every step, RESUME_LESSONS=a,b limits the lessons.
+// every step, RESUME_LESSONS=a,b limits the lessons and RESUME_EVERY=n takes every n-th.
 // =============================================================================
 
 import { test, expect } from './fixtures.js';
@@ -37,18 +37,21 @@ test.skip(
 
 const ONLY = (process.env.RESUME_LESSONS || '').split(',').filter(Boolean);
 const ALL = process.env.RESUME_ALL === '1';
+// A local run may take every n-th lesson; CI takes them all.
+const EVERY = Number(process.env.RESUME_EVERY || 1);
 
 test.describe('opening a step from its saved record gives the scene walking there gives', () => {
-  for (const entry of MANIFEST) {
+  for (const [at, entry] of MANIFEST.entries()) {
     if (ONLY.length && !ONLY.includes(entry.id)) continue;
+    if (at % EVERY) continue;
     // The deepest path holds every step of the lessons it contains, so two
     // walks cover a lesson: the core path a student takes by default, and the
     // path through everything.
     const depths = entry.depths ? ['core', 'deepest'] : ['core'];
     for (const named of depths) {
-      test(`${entry.id}, ${named}`, async ({ page, gravitas }) => {
+      test(`${entry.id}, ${named}`, async ({ page, app }) => {
         test.setTimeout(180_000);
-        await gravitas.boot();
+        await app.boot();
         // The panel mounts on the first open; after that the engine is driven directly.
         await page.locator('#investigationsBtn').click();
         await page.locator(`[data-investigation="${entry.id}"]`).click();
@@ -82,8 +85,8 @@ test.describe('a reading taken from a scene the student changed says so', () => 
   const STEP = 'fast-and-slow-in-numbers';
 
   /** Open the lesson on the measure step, from a saved record, and fill every field it asks for. */
-  async function atMeasureStep(page, gravitas) {
-    await gravitas.boot();
+  async function atMeasureStep(page, app) {
+    await app.boot();
     const lesson = await loadInvestigation(LESSON);
     const record = writeProgress({
       lesson,
@@ -101,9 +104,9 @@ test.describe('a reading taken from a scene the student changed says so', () => 
     await page.locator('#investigationsBtn').click();
     await page.locator(`[data-investigation="${LESSON}"]`).click();
     await expect(page.locator('#investigationPanel')).toBeVisible();
-    await expect(page.locator('#investigationBody')).toContainText(
-      'Fast and slow, in numbers'
-    );
+    await expect(
+      page.locator('#investigationBody [data-altered]')
+    ).toBeAttached();
   }
 
   async function fill(page) {
@@ -122,9 +125,9 @@ test.describe('a reading taken from a scene the student changed says so', () => 
 
   test('placing a body outside the panel raises the line; Reset the scene clears it; nothing is blocked', async ({
     page,
-    gravitas,
+    app,
   }) => {
-    await atMeasureStep(page, gravitas);
+    await atMeasureStep(page, app);
     const line = page.locator('#investigationBody [data-altered]');
     await expect(line).toBeHidden();
     // The student's own action on the scene: a press on the canvas, then a placed body.
@@ -148,9 +151,9 @@ test.describe('a reading taken from a scene the student changed says so', () => 
 
   test('running and pausing the clock is the measurement, not a change', async ({
     page,
-    gravitas,
+    app,
   }) => {
-    await atMeasureStep(page, gravitas);
+    await atMeasureStep(page, app);
     await page.mouse.click(300, 300);
     await page.keyboard.press('Space');
     await fill(page);
@@ -159,11 +162,11 @@ test.describe('a reading taken from a scene the student changed says so', () => 
     ).toBeHidden();
   });
 
-  test('the Spanish line and action', async ({ page, gravitas }) => {
+  test('the Spanish line and action', async ({ page, app }) => {
     await page.addInitScript(() =>
       localStorage.setItem('gravitas_locale', 'es')
     );
-    await atMeasureStep(page, gravitas);
+    await atMeasureStep(page, app);
     await page.mouse.click(300, 300);
     await page.evaluate(() =>
       window.dispatchEvent(new window.CustomEvent('gravitasObjectPlaced'))
@@ -180,9 +183,9 @@ test.describe('a reading taken from a scene the student changed says so', () => 
 test.describe('an assignment resumes as the assignment', () => {
   test('its depth, its steps and its title survive leaving and coming back', async ({
     page,
-    gravitas,
+    app,
   }) => {
-    await gravitas.boot({ firstVisit: true });
+    await app.boot({ firstVisit: true });
     const link = await page.evaluate(async () => {
       const reg = await import('/js/data/investigations/registry.js');
       const A = await import('/js/assignments/assignment.js');
@@ -211,7 +214,7 @@ test.describe('an assignment resumes as the assignment', () => {
       return new URL((await L.assignmentLink(built)).url).hash;
     });
     await page.goto('about:blank');
-    await gravitas.boot({ url: `/${link}` });
+    await app.boot({ url: `/${link}` });
     const where = page.locator('#investigationWhere');
     await expect(page.locator('#investigationTitle')).toHaveText('Week 5', {
       timeout: 60_000,
@@ -229,7 +232,7 @@ test.describe('an assignment resumes as the assignment', () => {
     );
     expect(route).toBe(`/${link}`);
     await page.goto('about:blank');
-    await gravitas.boot({ url: route });
+    await app.boot({ url: route });
     await expect(page.locator('#investigationTitle')).toHaveText('Week 5', {
       timeout: 60_000,
     });

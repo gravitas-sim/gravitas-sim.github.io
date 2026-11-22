@@ -75,6 +75,14 @@ describe('compare', () => {
     expect(compare(screen(), moved, {}).differences[0]).toMatch(
       /^planets\/Planet\/A x/
     );
+    // A running scene is not compared on positions even at the same time.
+    expect(
+      compare(
+        screen({ paused: false }),
+        screen({ paused: false, bodies: moved.bodies }),
+        {}
+      ).differences
+    ).toEqual([]);
     // A scene that ran for a while has moved: not a difference.
     expect(compare(screen({ time: 5 }), moved, {}).differences).toEqual([]);
     // To the rounding a step's own arithmetic leaves.
@@ -109,6 +117,13 @@ describe('compare', () => {
       type: 'read',
     });
     expect(differences[0]).toMatch(/^bodies: walked 0, resumed 2/);
+  });
+
+  test('a step whose instrument moves itself is not compared on its bodies', () => {
+    const moving = screen({ animated: true, bodies: [] });
+    const { differences, carried } = compare(moving, screen(), {});
+    expect(differences).toEqual([]);
+    expect(carried).toContain('animated instrument');
   });
 
   test('the clock counts only where the step states it', () => {

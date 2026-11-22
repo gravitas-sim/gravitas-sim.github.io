@@ -122,6 +122,9 @@ export async function installProbe(page) {
           ([name, value], i) => again[i]?.[0] === name && again[i][1] === value
         );
         return {
+          // An instrument that moves itself (its controls changed while looked at)
+          // moves the scene with it, so the scene is a function of dwell time.
+          animated: first.length > instrument.length,
           bodies,
           time: E.getSimulationTime(),
           paused: Boolean(A.state.paused),
@@ -292,6 +295,8 @@ export function compare(walked, resumed, step) {
     );
   const sig = b => `${b.list}/${b.kind}/${b.name}`;
   const sameTime = Math.abs(walked.time - resumed.time) <= SAME_TIME;
+  if (walked.animated || resumed.animated)
+    return { differences: out, carried: [...carried, 'animated instrument'] };
   const wb = walked.bodies.map(sig);
   const rb = resumed.bodies.map(sig);
   // A scene that ran has lost the comets and debris the engine culls or
@@ -304,7 +309,12 @@ export function compare(walked, resumed, step) {
     out.push(
       `bodies: walked ${wb.length}, resumed ${rb.length}; only walked ${JSON.stringify(lost.slice(0, 4))}, only resumed ${JSON.stringify(extra.slice(0, 4))}`
     );
-  } else if (sameTime && wb.length === rb.length) {
+  } else if (
+    sameTime &&
+    walked.paused &&
+    resumed.paused &&
+    wb.length === rb.length
+  ) {
     for (let i = 0; i < walked.bodies.length; i++) {
       const a = walked.bodies[i];
       const b = resumed.bodies[i];

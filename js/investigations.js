@@ -2548,8 +2548,8 @@ onLocaleChange(() => {
   if (els?.browser && !els.browser.classList.contains('hidden'))
     renderBrowser();
   if (active && els?.panel && !els.panel.hidden) {
-    els.title.textContent = active.title;
-    els.subtitle.textContent = active.subtitle;
+    els.title.textContent = assignment?.t || active.title;
+    if (!assignment) els.subtitle.textContent = active.subtitle;
     renderStep();
   }
 });
