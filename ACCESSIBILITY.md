@@ -11,7 +11,7 @@ The scoped conformance report, a status for each WCAG 2.1 and 2.2 A and AA crite
 <!-- a11y-shard:table -->
 | Check | Covers |
 | --- | --- |
-| `e2e/accessibility.spec.js` | axe-core over every page of the navigation inventory and the application's own surfaces and states: <!--fact:axeSurfaces-->60<!--/fact--> surfaces × <!--fact:locales-->2<!--/fact--> languages × <!--fact:axeAllThemes-->4<!--/fact--> themes (Midnight, Deep space, Observatory red, Daylight) — <!--fact:axeRuns-->480<!--/fact--> runs; a page added to the inventory with no named surface gets a run of its own |
+| `e2e/accessibility.spec.js` | axe-core over every page of the navigation inventory and the application's own surfaces and states: <!--fact:axeSurfaces-->61<!--/fact--> surfaces × <!--fact:locales-->2<!--/fact--> languages × <!--fact:axeAllThemes-->4<!--/fact--> themes (Midnight, Deep space, Observatory red, Daylight) — <!--fact:axeRuns-->488<!--/fact--> runs; a page added to the inventory with no named surface gets a run of its own |
 | `e2e/accessibilityManual.spec.js` | Focus order, focus traps, Escape, focus restoration, heading order, landmarks, reflow, reduced motion, and the canvas description |
 | `e2e/a11ySweep.spec.js` | Sweep I (Prompt 278): every surface of the walk inventory by keyboard and by single presses, in both languages (no trap, every stop named and on screen, every pressable control reached, the primary task done by its key); the view pads, the windows moved and sized without a drag, the observer's angle, a run of rows in the Observatory |
 | `e2e/a11ySweepII.spec.js` | Sweep II (Prompt 279): every page's outline against a record, in both languages; one test for each focus pattern; every page at rest with reduced motion, by the system and by the reader's own setting; every page at 320 CSS pixels; every page under forced colors; no checkbox or radio under 24 px |
@@ -743,7 +743,7 @@ listed there and run as pending acceptance checks.
 links in a sentence, which WCAG 2.5.8 explicitly exempts. Enlarging them would
 mean changing a line of running text into a row of buttons.
 
-**Automated checks are a floor, not a ceiling.** <!--fact:axeRuns-->480<!--/fact--> clean axe runs mean no
+**Automated checks are a floor, not a ceiling.** <!--fact:axeRuns-->488<!--/fact--> clean axe runs mean no
 machine-detectable violation on those surfaces in those states. They do not
 mean the application is pleasant to use with a screen reader, and nothing here
 substitutes for testing with one. Nothing in this pass was made to pass by
@@ -791,7 +791,7 @@ only route to the material.
 
 ```bash
 npm run a11y            # all of them
-npm run a11y:axe        # axe only, all <!--fact:axeRuns-->480<!--/fact--> combinations
+npm run a11y:axe        # axe only, all <!--fact:axeRuns-->488<!--/fact--> combinations
 npm run a11y:manual     # keyboard, focus, reflow, reduced motion, the canvas
 npm run a11y:sweep2     # outlines, focus patterns, motion, 320 px reflow, forced colors, target size
 node tools/design-ratchet.mjs   # contrast in the four themes (and the colour, !important counts)
