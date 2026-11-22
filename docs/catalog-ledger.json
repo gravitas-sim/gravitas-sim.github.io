@@ -1622,7 +1622,7 @@
       ],
       "walk": "NOT RUN",
       "pr": null,
-      "hash": null
+      "hash": "b54039ef7ce08c45c6f730d674ef8e2356abb7bf56296f8fdf6001475feeca5c"
     },
     {
       "id": "investigation:detect-this-planet",
@@ -1688,7 +1688,7 @@
       ],
       "walk": "NOT RUN",
       "pr": null,
-      "hash": null
+      "hash": "ea02f9d1bc29e6d9024d002a3176b258d351f6ce48ac3b92061653583eb4c636"
     },
     {
       "id": "investigation:einstein-rings-and-arcs",
@@ -6218,7 +6218,7 @@
       ],
       "walk": "NOT RUN",
       "pr": null,
-      "hash": null
+      "hash": "8e21a9fd1b082e83602dea8185f9fe14a5b32fbaf196c5c4e7bba5da2be870f4"
     },
     {
       "id": "investigation:two-clusters-two-ages",
