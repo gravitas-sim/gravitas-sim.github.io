@@ -21,10 +21,16 @@
 // fails the same way and offers a reload.
 // =============================================================================
 
-import { BINARY_SCALE, SCALE, sceneIntegrated, stageOf } from './stage.js';
+import {
+  BINARY_SCALE,
+  SCALE,
+  carriedStage,
+  sceneIntegrated,
+  stageOf,
+} from './stage.js';
 import { STEP_SECONDS, holdsClock, setFixedStep } from '../timestep.js';
 
-export { BINARY_SCALE, SCALE, stageOf };
+export { BINARY_SCALE, SCALE, carriedStage, stageOf };
 
 /**
  * Pin the integration step for a lesson step that runs a scene the integrator

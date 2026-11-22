@@ -37,5 +37,8 @@ export const EN_RESET = {
     'Started over. Nothing had been saved, so only your place was reset. You can undo until you close this investigation.',
   'reset.undo': 'Undo',
   'reset.undo.done': 'Your answers and readings are back.',
+  'scene.altered':
+    'You changed the scene. Reset the scene to measure from the start of this step.',
+  'scene.back': "Back to this investigation's scene",
   'reset.help.title': 'Starting over',
 };
