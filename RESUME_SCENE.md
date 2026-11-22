@@ -77,7 +77,26 @@ Six lessons, five kinds of difference:
 | lives-of-stars, what-is-a-gravitational-wave, a-universe-of-stars | 18 steps | an instrument's moving cursor or position, and one control drawn late | check rule: moving controls are left out; the late control waits for its panel |
 | keplers-laws | fast-and-slow-in-numbers, why-the-speed-changes, equal-areas-however-you-slice | running when walked (watch-it-happen runs the clock), paused when resumed | not a difference: the step states no clock; reported as carried |
 
-## One more defect found on the way
+## Differences understood and left
+
+`e2e/resumeScene.spec.js` holds a short list, by lesson and step, of
+differences it reports and does not fail on:
+
+- `lives-of-stars` / `read-the-descriptions`: walking leaves the black hole an
+  earlier instrument made. The step declares the same stage as the one before
+  it, and a stage whose key is unchanged is not rebuilt, so the remnant stays;
+  opening the step shows the star the stage declares. Changing it would rebuild
+  stages on every step and discard what a student did with an instrument between
+  two steps; it is left for the lesson's owner.
+
+## More defects found on the way
+
+An instrument that stands a remnant (the stellar evolution instrument) kept a
+memo of the remnant it had stood, so reopening an investigation in the same tab
+at such a step (white-dwarf-cooling, neutron-star-scale in Lives of Stars)
+rebuilt the scene without the remnant: the instrument read "end" and the canvas
+showed the star. It now stands the remnant again whenever the role does not hold
+one.
 
 An activity resumed from its address showed the investigation's title instead
 of the activity's after a language change (the locale handler rewrote the title
