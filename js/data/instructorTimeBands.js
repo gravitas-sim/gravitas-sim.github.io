@@ -134,7 +134,7 @@ export const LESSON_BANDS = Object.freeze({
   'black-holes': { core: 'medium' },
   'radial-velocity': { core: 'long', advanced: 'long' },
   'goldilocks-question': {
-    core: 'medium',
+    core: 'long',
     quantitative: 'long',
     advanced: 'long',
   },

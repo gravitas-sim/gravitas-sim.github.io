@@ -2047,8 +2047,8 @@
         "js/habitabilityLimitsWidgets.js",
         "js/habitabilityWidgets.js"
       ],
-      "depths": { "core": 36, "quantitative": 7, "advanced": 4 },
-      "spanish_steps": { "core": 36, "deeper": 11 },
+      "depths": { "core": 38, "quantitative": 7, "advanced": 4 },
+      "spanish_steps": { "core": 38, "deeper": 11 },
       "languages": ["en", "es"],
       "sequences": [
         { "id": "planets-and-exoplanets", "position": 4 },
@@ -2069,19 +2069,86 @@
           "note": "The tool clamps where the kernel refuses; the model-star label"
         }
       ],
-      "questions": { "Q1": "", "Q2": "", "Q3": "", "Q4": "", "Q5": "" },
-      "leak": {
-        "L1": "HOLDS: no field cue or step placeholder holds a numeral at any depth, in either language, and the panel renders none that does (tests/fieldCue.test.js); the expected value is the field's `want`, which no page reads.",
-        "L2": "",
-        "L3": "",
-        "L4": "",
-        "L5": ""
+      "questions": {
+        "Q1": "The student finds the inverse-square law from three starlight readings of their own, finds how far a planet must sit from a dim star by moving it, runs one orbit as a circle and as an ellipse at one average distance and takes the fraction of the year inside the zone from each, reads TRAPPIST-1 against the model, and weighs three candidates: evidence a paragraph could state but not let the reader move.",
+        "Q2": "Each instrument opens on a position that is no reading the step asks for (1.5 AU, the Sun at 1 AU, 0.2 eccentricity, the optimistic definition); the steps name the control to move and the row to take; the zone calculator's 2600 to 7200 K range and what to do outside it are said where a zone is shown.",
+        "Q3": "Starlight, distance, eccentricity and the fraction of the year are the panel's own printed rows, taken with provenance; the orbit panel's fraction matches the time between the two edges computed from Kepler's equation to a whole percent (tests/goldilocksLesson.test.js).",
+        "Q4": "The student chooses three distances (one twice another), picks the eccentric run and the semi-major axis they share, sets the zone definition for the real system, and decides which candidate to observe; each can be done badly and gets authored feedback.",
+        "Q5": "Quantitative: the dim-star limit is estimated in AU before it is read; the model star at three ages is read as a model star; advanced keeps the model-limit steps (the zone at three ages, Earth in the model star's zone, why this is not a climate history)."
       },
-      "task_rule_items": [],
-      "editorial": "OPEN",
-      "redesign": "OPEN",
-      "reason": "",
-      "step_revisions": [],
+      "leak": {
+        "L1": "HOLDS: no field cue or step placeholder holds a numeral at any depth, in either language, and the panel renders none that does (tests/fieldCue.test.js); the five TRAPPIST readings and the six free-choice fields carry no expected value.",
+        "L2": "HOLDS: the starlight panel opens at 1.5 AU, the star comparison on the Sun at 1 AU, the orbit panel at 0.2, the real-system readings on the optimistic definition, and none of those is the reading asked for.",
+        "L3": "HOLDS: the doubling, the dim-star limit and the time inside the zone are predicted and held before any panel prints them; no body, tip or checklist before a reading states 1, 4, 9, 16, a band edge, the factor of fifty, 56 percent or three quarters.",
+        "L4": "HOLDS: the tips of the reading steps locate and never compute; the prediction before TRAPPIST-1 gives the luminosity and not its conversion.",
+        "L5": "UNCHANGED: the answer-key rubrics are instructor-only."
+      },
+      "task_rule_items": [
+        "T1: starlight and the fraction of the year are taken from the panel with provenance (K1); distances and eccentricities are the student's own, any three agreeing readings pass.",
+        "T2: the doubling, the dim-star limit and the time inside the zone are held predictions revealed beside the student's readings (K3).",
+        "T3: two runs of one orbit, circular and eccentric, in a table (K6 in its fallback form: two captured readings, see D-R4-356-06).",
+        "T5: authored feedback for repeated or too-close distances, a missing doubling, an eccentric run that never leaves the zone, two semi-major axes, and the wrong turn inside-means-habitable.",
+        "TIME BAND: INFERRED, not measured with a student, 60 to 70 minutes for the core path (header was 40 to 50); about 36 minutes for the first half and 31 for the second at one, one and a half and four minutes by step type. Lengthened and said so here (D-R4-356-06)."
+      ],
+      "editorial": "REVISED",
+      "redesign": "REVISED",
+      "reason": "The task changed (retired steps with successors): the student finds the law, the dim-star shift and the time inside the zone from their own readings (register D-R4-356-01 to 06).",
+      "step_revisions": [
+        {
+          "sid": "three-distances-yours",
+          "from": "three-distances",
+          "change": "REVISED: the student picks three distances (one twice another) and takes each starlight; three-distances and write-the-three-down are retired."
+        },
+        {
+          "sid": "move-it-twice-as-far",
+          "change": "REWORDED: the reveal sets the prediction beside the student's readings."
+        },
+        {
+          "sid": "the-star-is-not-running",
+          "change": "REWORDED: the areas 1, 4, 9, 16 are out of the body and checklist."
+        },
+        {
+          "sid": "writing-it-down-then-using",
+          "change": "REWORDED: the worked square is out."
+        },
+        {
+          "sid": "so-where-would-a-planet",
+          "change": "REWORDED: the instrument opens neutral; the band edges and the factor of fifty are out of the tip."
+        },
+        {
+          "sid": "estimate-the-dim-limit",
+          "change": "NEW (deeper): the dim-star limit is estimated before it is read."
+        },
+        {
+          "sid": "the-estimate-and-the-limit",
+          "change": "NEW (deeper): the estimate beside the panel's limit."
+        },
+        {
+          "sid": "predict-the-fraction",
+          "change": "NEW: how long an eccentric orbit spends inside the zone, held until the two runs."
+        },
+        {
+          "sid": "two-runs-one-orbit",
+          "change": "NEW: two runs at one average distance, circular and eccentric, the fraction taken from the panel."
+        },
+        {
+          "sid": "fraction-of-your-run",
+          "from": "reading-the-fraction",
+          "change": "REVISED: the student's own fraction replaces a stated 56 percent; an authored slip names inside-means-habitable; reading-the-fraction is retired."
+        },
+        {
+          "sid": "a-real-system-forty-light",
+          "change": "REWORDED: the conversion of the luminosity is out of the body."
+        },
+        {
+          "sid": "all-seven-planets",
+          "change": "REWORDED: the zone is an estimate at 2566 K and the calculator covers 2600 to 7200 K only; the s25 and s36 findings are settled by wording."
+        },
+        {
+          "sid": "take-the-readings-yourself",
+          "change": "REWORDED: opens on the optimistic definition, carries no expected values, the edges are said to be an estimate."
+        }
+      ],
       "walk": "NOT RUN",
       "pr": null,
       "hash": null

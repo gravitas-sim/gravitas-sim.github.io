@@ -519,11 +519,11 @@ describe('what the fraction says: a held prediction, the reader’s own runs, an
       'fraction-of-your-run',
     ]) {
       const x = step(sid);
+      // A prediction's options are the candidates, so they may be fractions.
       const before = [
         x.body,
         x.tip,
-        x.prompt,
-        ...(x.options || []),
+        ...(x.type === 'predict' ? [] : [x.prompt, ...(x.options || [])]),
         ...(x.checklist || []),
       ].join(' ');
       expect(before).not.toMatch(

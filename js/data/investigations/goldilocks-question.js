@@ -162,7 +162,7 @@ const GOLDILOCKS = {
   title: 'The Goldilocks Question',
   subtitle:
     "Move a planet, change its star, and decide what 'habitable' really means",
-  duration: '40-50 min',
+  duration: '60-70 min',
   level: 'Introductory astronomy',
   audience: 'intro',
   textbook: { chapter: 30, section: null },

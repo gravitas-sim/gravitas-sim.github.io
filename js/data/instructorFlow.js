@@ -684,8 +684,8 @@ export default {
       },
       {
         from: 'a-year-on-a-circular',
-        to: 'reading-the-fraction',
-        text: 'Orbits. A circular year gives a flat starlight curve; an eccentric one does not. Students watch the planet cross a zone boundary and interpret the fraction of the year spent inside.',
+        to: 'fraction-of-your-run',
+        text: 'Orbits. A circular year gives a flat starlight curve; an eccentric one does not. Students predict how long the eccentric planet is inside the zone, watch it cross a zone boundary, take the fraction of the year inside from two runs of their own at one average distance, and say what that fraction does not tell them about the surface.',
       },
       {
         from: 'a-real-system-forty-light',

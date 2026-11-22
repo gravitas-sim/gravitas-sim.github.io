@@ -305,6 +305,8 @@ export default {
         'At a = 1.2 AU and e = 0.45 the planet swings between 0.66 and 1.74 AU, receiving 2.30 and 0.33 Earths. The starlight peak is narrow and the trough is wide, because the planet moves fastest at periapsis.',
       'crossing-the-edges':
         'At e = 0.45 the planet spends about 56% of its year inside the conservative zone; at e = 0.3 about 78%; on a circular orbit at the same semi-major axis, 100%. Wanderer swings between 0.66 AU at closest approach and 1.74 AU at furthest, so its starlight varies by a factor of about seven over one year. Arm the watch at periapsis, read the insolation, then let it run to apoapsis and read it again. Being inside the zone for part of a year is not the same as being habitable, and the next screen is where to say so.',
+      'two-runs-one-orbit':
+        'Any two runs at one semi-major axis, one circular (100% of the year inside the zone at 1.2 AU) and one eccentric enough to leave it, with the fraction taken from the panel. At 1.2 AU: e 0.2 gives 89%, 0.3 gives 78%, 0.45 gives 56%, 0.6 gives 38%. The check names a typed eccentricity that is not where the control was and readings at two semi-major axes.',
       'all-seven-planets':
         'Insolations: b 4.18, c 2.22, d 1.11, e 0.65, f 0.37, g 0.25, h 0.14 Earths. The conservative zone runs 0.0254 to 0.0499 AU, putting e, f and g inside. Switching to optimistic brings d in as well.',
       'watch-it-run':
