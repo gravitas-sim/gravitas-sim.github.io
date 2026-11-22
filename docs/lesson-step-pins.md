@@ -9,7 +9,7 @@ on a 60 Hz screen, a 144 Hz screen and a throttled tab. A reading step
 that holds the clock (`holdsClock` in `js/timestep.js`) does not run and
 is not pinned. Closing the lesson lifts the pin.
 
-613 steps in 28 lessons run on an integrated scene; 482 are pinned and 131 hold the clock.
+581 steps in 25 lessons run on an integrated scene; 458 are pinned and 123 hold the clock.
 
 | Lesson | Step | Id | Type | Scene | Own scene | Pinned step |
 |---|---|---|---|---|---|---|
@@ -567,46 +567,14 @@ is not pinned. Closing the lesson lifts the pin.
 | power-law-gravity | 19 | near-three | read | Solar System | inherited | none (holds the clock) |
 | power-law-gravity | 20 | closing-question | question | Solar System | inherited | 1/60 s |
 | power-law-gravity | 21 | the-honest-caveat | read | Solar System | inherited | none (holds the clock) |
-| integrators-in-practice | 1 | one-system-four-steps | read | Circumbinary Planet Lab | yes | none (holds the clock) |
-| integrators-in-practice | 2 | which-loses-most | predict | Circumbinary Planet Lab | inherited | 1/60 s |
-| integrators-in-practice | 3 | four-drifts | measure | Circumbinary Planet Lab | inherited | 1/60 s |
-| integrators-in-practice | 4 | why-bounded | question | Circumbinary Planet Lab | inherited | 1/60 s |
-| integrators-in-practice | 5 | halve-the-step | measure | Circumbinary Planet Lab | inherited | 1/60 s |
-| integrators-in-practice | 6 | the-engine | measure | Circumbinary Planet Lab | inherited | 1/60 s |
-| integrators-in-practice | 7 | phase-luck | question | Circumbinary Planet Lab | inherited | 1/60 s |
-| integrators-in-practice | 8 | what-you-worked-out | read | Circumbinary Planet Lab | inherited | none (holds the clock) |
-| extending-an-experiment | 1 | twenty-planets | read | Binary Planet Lab | yes | none (holds the clock) |
-| extending-an-experiment | 2 | how-well-can-twenty-place-an-edge | predict | Binary Planet Lab | inherited | 1/60 s |
-| extending-an-experiment | 3 | the-fit | measure | Binary Planet Lab | inherited | 1/60 s |
-| extending-an-experiment | 4 | a-uniform-population | measure | Binary Planet Lab | inherited | 1/60 s |
-| extending-an-experiment | 5 | why-the-sample-differs | question | Binary Planet Lab | inherited | 1/60 s |
-| extending-an-experiment | 6 | move-the-definition | measure | Binary Planet Lab | inherited | 1/60 s |
-| extending-an-experiment | 7 | what-moved-it | question | Binary Planet Lab | inherited | 1/60 s |
+| integrators-in-practice | 6 | choose-the-second-step | measure | Circumbinary Planet Lab | yes | 1/60 s |
+| integrators-in-practice | 7 | the-engine | measure | Circumbinary Planet Lab | inherited | 1/60 s |
+| integrators-in-practice | 8 | phase-luck | question | Circumbinary Planet Lab | inherited | 1/60 s |
+| integrators-in-practice | 9 | trust-at-six-orbits | question | Circumbinary Planet Lab | inherited | 1/60 s |
+| integrators-in-practice | 10 | what-you-worked-out | read | Circumbinary Planet Lab | inherited | none (holds the clock) |
+| extending-an-experiment | 6 | move-the-definition-yours | measure | Binary Planet Lab | yes | 1/60 s |
+| extending-an-experiment | 7 | which-trial-moved | measure | Binary Planet Lab | inherited | 1/60 s |
 | extending-an-experiment | 8 | what-you-worked-out | read | Binary Planet Lab | inherited | none (holds the clock) |
-| refitting-a-transit | 1 | same-model-another-route | read | Transit Lab | yes | none (holds the clock) |
-| refitting-a-transit | 2 | how-close | predict | Transit Lab | inherited | 1/60 s |
-| refitting-a-transit | 3 | the-fit | measure | Transit Lab | inherited | 1/60 s |
-| refitting-a-transit | 4 | sigma-and-profile | measure | Transit Lab | inherited | 1/60 s |
-| refitting-a-transit | 5 | why-they-differ | question | Transit Lab | inherited | 1/60 s |
-| refitting-a-transit | 6 | hold-the-limb-darkening | measure | Transit Lab | inherited | 1/60 s |
-| refitting-a-transit | 7 | what-is-not-counted | question | Transit Lab | inherited | 1/60 s |
-| refitting-a-transit | 8 | what-you-worked-out | read | Transit Lab | inherited | none (holds the clock) |
-| two-periodograms | 1 | two-ways-to-look-for-a-period | read | Transit Lab | yes | none (holds the clock) |
-| two-periodograms | 2 | the-tallest-peak | predict | Transit Lab | inherited | 1/60 s |
-| two-periodograms | 3 | the-two-periods | measure | Transit Lab | inherited | 1/60 s |
-| two-periodograms | 4 | why-half | question | Transit Lab | inherited | 1/60 s |
-| two-periodograms | 5 | the-box | measure | Transit Lab | inherited | 1/60 s |
-| two-periodograms | 6 | against-the-fit | measure | Transit Lab | inherited | 1/60 s |
-| two-periodograms | 7 | what-a-grid-step-is | question | Transit Lab | inherited | 1/60 s |
-| two-periodograms | 8 | what-you-worked-out | read | Transit Lab | inherited | none (holds the clock) |
-| sampling-a-posterior | 1 | what-a-sampler-does | read | Transit Lab | yes | none (holds the clock) |
-| sampling-a-posterior | 2 | how-wide | predict | Transit Lab | inherited | 1/60 s |
-| sampling-a-posterior | 3 | the-draws | measure | Transit Lab | inherited | 1/60 s |
-| sampling-a-posterior | 4 | did-it-converge | measure | Transit Lab | inherited | 1/60 s |
-| sampling-a-posterior | 5 | profile-and-posterior | question | Transit Lab | inherited | 1/60 s |
-| sampling-a-posterior | 6 | why-narrower | question | Transit Lab | inherited | 1/60 s |
-| sampling-a-posterior | 7 | refuse-a-short-run | question | Transit Lab | inherited | 1/60 s |
-| sampling-a-posterior | 8 | what-you-worked-out | read | Transit Lab | inherited | none (holds the clock) |
 | why-rings | 5 | a-pass-inside-the-limit | read | Roche Pass | yes | 1/60 s |
 | why-rings | 7 | a-ring-with-a-resonance | read | Ring Gap | yes | none (holds the clock) |
 | the-scale-of-the-solar-system | 1 | a-picture-you-have-seen | read | Solar System | yes | none (holds the clock) |

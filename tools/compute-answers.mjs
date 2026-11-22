@@ -42,6 +42,12 @@ const PYTHON = process.env.GRAVITAS_PYTHON || 'python3';
 const ids = process.argv.slice(2).filter(a => !a.startsWith('--'));
 const runsMode = process.argv.includes('--runs');
 const samplerMode = process.argv.includes('--sampler');
+// --only=<notebook id>,... with --runs: run only those notebooks' entries and
+// keep the rest of the file, in the order of the RUNS list.
+const only = process.argv
+  .find(a => a.startsWith('--only='))
+  ?.slice(7)
+  .split(',');
 if (!ids.length && !runsMode && !samplerMode) {
   console.error(
     'Usage: node tools/compute-answers.mjs <notebook id> ... | --runs | --sampler'
@@ -86,20 +92,127 @@ function answerFor(e, set = {}) {
 }
 
 /** The runs the investigations ask for: notebook, name, settings. */
+// One entry per menu choice: the second step count of integrators-in-practice
+// (250, 438, 750, 1000), its six-orbit run, the cutoffs of
+// extending-an-experiment (2, 4, 6, 10; the default 3 is the main answer), the
+// longest box duration of two-periodograms (2, 3, 4, 8 hours; the default 6 is
+// the main answer), refitting-a-transit's held limb darkening, and the a/R*
+// held by sampling-a-posterior (8, 8.5, 10; the default 9.21 is the main
+// answer; 11 stops the notebook, "a walker starts outside the prior", because the
+// impact parameter would have to be negative; its refusals by step count are
+// recorded beside).
 const RUNS = [
-  ['integrators-compared', 'steps1000', { steps: 1000 }],
+  ['integrators-compared', 'steps250', { steps: 250 }],
   ['integrators-compared', 'steps438', { steps: 438 }],
+  ['integrators-compared', 'steps750', { steps: 750 }],
+  ['integrators-compared', 'steps1000', { steps: 1000 }],
+  ['integrators-compared', 'orbits6', { orbits: 6 }],
   ['population-at-scale', 'slope0', { slope: 0 }],
+  ['population-at-scale', 'cutoff2', { cutoff: 2 }],
+  ['population-at-scale', 'cutoff4', { cutoff: 4 }],
   ['population-at-scale', 'cutoff6', { cutoff: 6 }],
+  ['population-at-scale', 'cutoff10', { cutoff: 10 }],
   ['refit-transit', 'limb0', { limb: 0 }],
+  ['periodograms', 'limit2', { max_duration: 2 }],
+  ['periodograms', 'limit3', { max_duration: 3 }],
+  ['periodograms', 'limit4', { max_duration: 4 }],
+  ['periodograms', 'limit8', { max_duration: 8 }],
+  ['posterior-sampling', 'aRs8', { aRs: 8 }],
+  ['posterior-sampling', 'aRs8.5', { aRs: 8.5 }],
+  ['posterior-sampling', 'aRs10', { aRs: 10 }],
 ];
 
+/**
+ * The step counts the refusal question of sampling-a-posterior is about. Each is
+ * run with the notebook's other settings as they are; a run that is refused
+ * raises, and its last line is what a student reads.
+ */
+const REFUSAL_STEPS = [1000, 2000, 3000, 4000, 5000];
+
+/** The cutoffs a student may compare in extending-an-experiment, the default first. */
+const CUTOFFS = [2, 3, 4, 6, 10];
+
+/**
+ * The trials that change class between two cutoffs, from the experiment result
+ * itself (the notebook returns ten bins of counts and no per-trial list). The
+ * rule is the notebook's: a trial is bound when it finished and its mean
+ * distance stayed within cutoff x scale x its starting distance, where scale is
+ * the median of distance / start over the nearest fifth of the trials. The
+ * bound counts are checked against what the notebook returned for the same
+ * cutoff, so a drift between this mirror and the notebook stops the generator.
+ */
+function trialMoves(example, boundByCutoff) {
+  const doc = JSON.parse(readFileSync(path.join(ROOT, example), 'utf8'));
+  const vary = doc.manifest.vary[0];
+  const [lo, hi] = [vary.distribution.min, vary.distribution.max];
+  const rows = doc.trials
+    .filter(
+      t =>
+        ['ok', 'lostBody'].includes(t.status) &&
+        (t.results.distance_to_primary != null || t.status === 'lostBody')
+    )
+    .map(t => ({
+      start: Number(t.params[vary.parameter]),
+      status: t.status,
+      d: t.results.distance_to_primary ?? null,
+    }))
+    .sort((p, q) => p.start - q.start);
+  const near = rows.slice(0, Math.max(3, Math.floor(rows.length / 5)));
+  const ratios = near
+    .filter(r => r.status === 'ok' && r.d != null)
+    .map(r => r.d / r.start)
+    .sort((p, q) => p - q);
+  const mid = ratios.length >> 1;
+  const scale =
+    ratios.length % 2 ? ratios[mid] : (ratios[mid - 1] + ratios[mid]) / 2;
+  const bin = x =>
+    Math.min(9, Math.max(0, Math.floor(((x - lo) / (hi - lo)) * 10)));
+  const centre = i => lo + ((i + 0.5) * (hi - lo)) / 10;
+  const bound = cut =>
+    rows.map(
+      r => r.status === 'ok' && r.d != null && r.d <= cut * scale * r.start
+    );
+  const sets = Object.fromEntries(CUTOFFS.map(c => [c, bound(c)]));
+  for (const c of CUTOFFS) {
+    const n = sets[c].filter(Boolean).length;
+    if (n !== boundByCutoff[c])
+      throw new Error(
+        `cutoff ${c}: ${n} bound here, ${boundByCutoff[c]} in the notebook`
+      );
+  }
+  const out = {};
+  for (const [i, a] of CUTOFFS.entries())
+    for (const b of CUTOFFS.slice(i + 1))
+      out[`${a}|${b}`] = rows.flatMap((r, k) =>
+        sets[a][k] === sets[b][k]
+          ? []
+          : [
+              {
+                start: r.start,
+                bin: Number(centre(bin(r.start)).toFixed(3)),
+                boundAt: sets[a][k] ? a : b,
+              },
+            ]
+      );
+  return out;
+}
+
 if (runsMode) {
+  const file = path.join(
+    ROOT,
+    'tests/fixtures/compute/investigation-runs.json'
+  );
+  const kept = only ? JSON.parse(readFileSync(file, 'utf8')) : {};
   const out = {};
   for (const [id, name, set] of RUNS) {
+    const key = `${id}/${name}`;
+    if (only && !only.includes(id)) {
+      out[key] = kept[key];
+      continue;
+    }
     const e = CATALOGUE_DATA.find(x => x.id === id);
     const env = JSON.parse(JSON.parse(answerFor(e, set)).envelope);
-    out[`${id}/${name}`] = Object.fromEntries(
+    out[key] = Object.fromEntries(
       env.quantities.map(q => [
         q.id,
         {
@@ -112,10 +225,63 @@ if (runsMode) {
       ])
     );
   }
-  writeFileSync(
-    path.join(ROOT, 'tests/fixtures/compute/investigation-runs.json'),
-    `${JSON.stringify(out, null, 2)}\n`
-  );
+  // The trials that change class between each pair of cutoffs a student may
+  // compare, checked against the notebook's own bound counts.
+  const pop = CATALOGUE_DATA.find(x => x.id === 'population-at-scale');
+  const main = JSON.parse(
+    JSON.parse(
+      readFileSync(
+        path.join(
+          ROOT,
+          'tests/fixtures/compute/population-at-scale.answer.json'
+        ),
+        'utf8'
+      )
+    ).envelope
+  ).quantities;
+  const quantity = id => main.find(q => q.id === id).value;
+  const boundBy = {
+    3: Math.round(quantity('bound.sample') * quantity('trials')),
+  };
+  for (const c of CUTOFFS.filter(x => x !== 3))
+    boundBy[c] = Math.round(
+      out[`population-at-scale/cutoff${c}`]['bound.sample'].value *
+        quantity('trials')
+    );
+  const sampler = CATALOGUE_DATA.find(x => x.id === 'posterior-sampling');
+  if (only && !only.includes('posterior-sampling'))
+    out['posterior-sampling/refusals'] = kept['posterior-sampling/refusals'];
+  else {
+    const refusals = {};
+    for (const steps of REFUSAL_STEPS) {
+      try {
+        const env = JSON.parse(
+          JSON.parse(answerFor(sampler, { steps })).envelope
+        );
+        const q = id => env.quantities.find(x => x.id === id).value;
+        refusals[steps] = {
+          refused: false,
+          'rhat.max': q('rhat.max'),
+          'ess.min': q('ess.min'),
+          'tau.max': q('tau.max'),
+        };
+      } catch (err) {
+        refusals[steps] = {
+          refused: true,
+          message: String(err.stderr ?? err.message)
+            .trim()
+            .split('\n')
+            .at(-1),
+        };
+      }
+    }
+    out['posterior-sampling/refusals'] = refusals;
+  }
+  out['population-at-scale/moves'] =
+    only && !only.includes('population-at-scale')
+      ? kept['population-at-scale/moves']
+      : trialMoves(pop.input.example.path, boundBy);
+  writeFileSync(file, `${JSON.stringify(out, null, 2)}\n`);
   console.log(`${Object.keys(out).length} runs`);
 }
 
