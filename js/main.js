@@ -229,18 +229,18 @@ document.addEventListener('DOMContentLoaded', () => {
   function revealInterface() {
     armTouchTips();
     setTimeout(async () => {
-      document.querySelector('.ui-container').classList.add('showUI');
-      document.getElementById('overlay').classList.add('showUI');
-      document.getElementById('sonificationControl')?.classList.add('showUI');
-
       // Set up overlay minimize functionality
       const { setupOverlayMinimize } = await import('./ui.js');
       setupOverlayMinimize();
 
-      // On a phone the readout starts collapsed — expanded it covers most of
-      // the screen, and the simulation is the point.
+      // On a phone the readout starts collapsed, before it is shown: open, it
+      // catches a first tap meant for the scene.
       const { collapseReadoutOnSmallScreens } = await import('./controls.js');
       collapseReadoutOnSmallScreens();
+
+      document.querySelector('.ui-container').classList.add('showUI');
+      document.getElementById('overlay').classList.add('showUI');
+      document.getElementById('sonificationControl')?.classList.add('showUI');
 
       // The rest of the interface fades in with it: the narrow-screen menu
       // button (the rail itself *is* the menu it opens, so there is no separate
