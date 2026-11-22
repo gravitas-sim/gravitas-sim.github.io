@@ -113,11 +113,17 @@ export function frameAdvance(seconds, simSpeed, dt) {
 
 /**
  * Whether a lesson step holds the clock: a reading step with nothing to watch
- * (no `motion`, instrument, `pauseAt` or `time`). js/appState.js holdClock()
- * pauses for it, and a held step is never pinned (js/lesson/stageGate.js).
+ * (no `motion`, instrument or `pauseAt`, and no `time` unless it starts
+ * paused). js/appState.js holdClock() pauses for it and lets go on the next
+ * step, and a held step is never pinned (js/lesson/stageGate.js).
  * @param {?object} step - The step on screen
  * @returns {boolean} Whether it holds
  */
 export const holdsClock = step =>
   step?.type === 'read' &&
-  !(step.motion || step.tool || step.pauseAt || step.time);
+  !(
+    step.motion ||
+    step.tool ||
+    step.pauseAt ||
+    (step.time && step.time.paused !== true)
+  );

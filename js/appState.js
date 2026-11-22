@@ -423,7 +423,7 @@ let held = null;
 /**
  * A lesson's reading step holds the clock, so nothing runs behind the panels,
  * unless it says `motion: true` or carries an instrument, a `pauseAt` watch or
- * its own `time`, which need the clock (or set it). The next step releases what this held. `world` is what
+ * its own `time` that does not start paused, which need the clock (or set it). The next step releases what this held. `world` is what
  * the scene was built from: a rebuild owns the clock again.
  *
  * @param {object|undefined} step - The step now on screen

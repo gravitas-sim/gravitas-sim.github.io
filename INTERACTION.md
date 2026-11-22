@@ -335,7 +335,9 @@ A step can use the same two actions on its own event
   the reader's pause and speed back when the lesson closes. Every step that
   builds a scenario declares both (Prompt 342), with the speed of its setup
   and the start state it had; `tests/lessonStepPins.test.js` holds them to it.
-  A step that declares `time` does not hold the clock.
+  A step that declares `time` does not hold the clock, except a reading step
+  whose time starts paused: it holds it as it did before, and the next step
+  lets go.
 - A step whose scene the integrator moves (a scenario setup, or a stage of
   kind `starPair`, `hole`, `equalMass` or `system`) and that does not hold the
   clock runs with the frame time pinned to the bench's 1/60 s

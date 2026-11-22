@@ -9,11 +9,11 @@ on a 60 Hz screen, a 144 Hz screen and a throttled tab. A reading step
 that holds the clock (`holdsClock` in `js/timestep.js`) does not run and
 is not pinned. Closing the lesson lifts the pin.
 
-613 steps in 28 lessons run on an integrated scene; 517 are pinned and 96 hold the clock.
+613 steps in 28 lessons run on an integrated scene; 482 are pinned and 131 hold the clock.
 
 | Lesson | Step | Id | Type | Scene | Own scene | Pinned step |
 |---|---|---|---|---|---|---|
-| keplers-laws | 1 | eight-minutes-of-arc | read | Kepler's 2nd Law | yes | 1/60 s |
+| keplers-laws | 1 | eight-minutes-of-arc | read | Kepler's 2nd Law | yes | none (holds the clock) |
 | keplers-laws | 2 | what-you-are-looking-at | read | Kepler's 2nd Law | inherited | none (holds the clock) |
 | keplers-laws | 3 | where-is-the-star | predict | Kepler's 2nd Law | inherited | 1/60 s |
 | keplers-laws | 4 | find-the-foci | measure | Kepler's 2nd Law | inherited | 1/60 s |
@@ -25,7 +25,7 @@ is not pinned. Closing the lesson lifts the pin.
 | keplers-laws | 10 | fast-and-slow-in-numbers | measure | Kepler's 2nd Law | inherited | 1/60 s |
 | keplers-laws | 11 | why-the-speed-changes | question | Kepler's 2nd Law | inherited | 1/60 s |
 | keplers-laws | 12 | equal-areas-however-you-slice | wedges | Kepler's 2nd Law | inherited | 1/60 s |
-| keplers-laws | 13 | kepler-s-third-law | read | Solar System | yes | 1/60 s |
+| keplers-laws | 13 | kepler-s-third-law | read | Solar System | yes | none (holds the clock) |
 | keplers-laws | 14 | measure-four-planets | measure | Solar System | inherited | 1/60 s |
 | keplers-laws | 15 | work-the-law-out-step | measure | Solar System | inherited | 1/60 s |
 | keplers-laws | 16 | pick-a-distance | measure | Solar System | inherited | 1/60 s |
@@ -33,13 +33,13 @@ is not pinned. Closing the lesson lifts the pin.
 | keplers-laws | 18 | check-the-estimate | measure | Solar System | inherited | 1/60 s |
 | keplers-laws | 19 | compare-the-estimate | read | Solar System | inherited | none (holds the clock) |
 | keplers-laws | 20 | what-the-constant-depends-on | question | stage: system | yes | 1/60 s |
-| keplers-laws | 21 | what-newton-added | read | TRAPPIST-1 System | yes | 1/60 s |
+| keplers-laws | 21 | what-newton-added | read | TRAPPIST-1 System | yes | none (holds the clock) |
 | keplers-laws | 22 | the-same-laws-forty-light | explore | TRAPPIST-1 System | inherited | 1/60 s |
 | keplers-laws | 23 | weigh-trappist-1-yourself | measure | TRAPPIST-1 System | inherited | 1/60 s |
 | keplers-laws | 24 | weighing-another-star | question | TRAPPIST-1 System | inherited | 1/60 s |
 | keplers-laws | 25 | where-kepler-s-version-breaks | question | TRAPPIST-1 System | inherited | 1/60 s |
 | keplers-laws | 26 | where-this-leaves-you | read | TRAPPIST-1 System | inherited | none (holds the clock) |
-| retrograde-motion | 1 | the-wandering-stars | read | Retrograde Mars | yes | 1/60 s |
+| retrograde-motion | 1 | the-wandering-stars | read | Retrograde Mars | yes | none (holds the clock) |
 | retrograde-motion | 2 | what-you-are-looking-at | read | Retrograde Mars | inherited | 1/60 s |
 | retrograde-motion | 3 | against-the-fixed-stars | read | Retrograde Mars | inherited | none (holds the clock) |
 | retrograde-motion | 4 | watch-from-outside-first | explore | Retrograde Mars | inherited | 1/60 s |
@@ -72,7 +72,7 @@ is not pinned. Closing the lesson lifts the pin.
 | retrograde-motion | 31 | how-long-does-a-loop | measure | Retrograde Mars | inherited | 1/60 s |
 | retrograde-motion | 32 | mars-or-jupiter | question | Retrograde Mars | inherited | 1/60 s |
 | retrograde-motion | 33 | what-you-did | read | Retrograde Mars | inherited | none (holds the clock) |
-| transit-photometry | 1 | a-firefly-beside-a-lighthouse | read | Transit Lab | yes | 1/60 s |
+| transit-photometry | 1 | a-firefly-beside-a-lighthouse | read | Transit Lab | yes | none (holds the clock) |
 | transit-photometry | 2 | five-ways-to-find-a | read | Transit Lab | inherited | none (holds the clock) |
 | transit-photometry | 3 | estimate-the-dip | predict | Transit Lab | inherited | 1/60 s |
 | transit-photometry | 4 | your-first-transit | explore | Transit Lab | inherited | 1/60 s |
@@ -102,7 +102,7 @@ is not pinned. Closing the lesson lifts the pin.
 | transit-photometry | 28 | find-the-hidden-companion | measure | Blended Binary | inherited | 1/60 s |
 | transit-photometry | 29 | what-it-does-to-a | question | Blended Binary | inherited | 1/60 s |
 | transit-photometry | 30 | what-you-did-and-where | read | Blended Binary | inherited | none (holds the clock) |
-| orbital-energy | 1 | how-hard-would-you-have | read | Kepler's 2nd Law | yes | 1/60 s |
+| orbital-energy | 1 | how-hard-would-you-have | read | Kepler's 2nd Law | yes | none (holds the clock) |
 | orbital-energy | 2 | load-it-lightly | predict | Kepler's 2nd Law | inherited | 1/60 s |
 | orbital-energy | 3 | fire-it | explore | Kepler's 2nd Law | inherited | 1/60 s |
 | orbital-energy | 4 | load-it-heavily | predict | Kepler's 2nd Law | inherited | 1/60 s |
@@ -191,7 +191,7 @@ is not pinned. Closing the lesson lifts the pin.
 | black-holes | 28 | a-mystery-black-hole-temperature | question | stage: hole | yes | 1/60 s |
 | black-holes | 29 | say-what-scales-with-what | question | stage: hole | yes | 1/60 s |
 | black-holes | 30 | it-has-a-name | read | stage: hole | yes | 1/60 s |
-| radial-velocity | 1 | the-planet-you-already-measured | read | Exoplanet Characterization Lab | yes | 1/60 s |
+| radial-velocity | 1 | the-planet-you-already-measured | read | Exoplanet Characterization Lab | yes | none (holds the clock) |
 | radial-velocity | 2 | how-does-an-invisible-planet | question | Exoplanet Characterization Lab | inherited | 1/60 s |
 | radial-velocity | 3 | which-one-moves | predict | Exoplanet Characterization Lab | yes | 1/60 s |
 | radial-velocity | 4 | both-of-them-go-round | explore | Exoplanet Characterization Lab | inherited | 1/60 s |
@@ -229,7 +229,7 @@ is not pinned. Closing the lesson lifts the pin.
 | radial-velocity | 36 | what-would-you-still-want | question | Exoplanet Characterization Lab | inherited | 1/60 s |
 | radial-velocity | 37 | the-point-of-all-this | question | Exoplanet Characterization Lab | inherited | 1/60 s |
 | radial-velocity | 38 | what-you-can-now-say | read | Exoplanet Characterization Lab | inherited | none (holds the clock) |
-| goldilocks-question | 1 | what-does-earth-get-from | read | Solar System | yes | 1/60 s |
+| goldilocks-question | 1 | what-does-earth-get-from | read | Solar System | yes | none (holds the clock) |
 | goldilocks-question | 2 | one-earth-of-starlight | read | Solar System | inherited | 1/60 s |
 | goldilocks-question | 3 | move-it-twice-as-far | predict | Solar System | inherited | 1/60 s |
 | goldilocks-question | 4 | three-distances | explore | Solar System | inherited | 1/60 s |
@@ -266,7 +266,7 @@ is not pinned. Closing the lesson lifts the pin.
 | goldilocks-question | 35 | which-one-would-you-observe | question | TRAPPIST-1 System | inherited | 1/60 s |
 | goldilocks-question | 36 | one-more-and-then-you | question | TRAPPIST-1 System | inherited | 1/60 s |
 | goldilocks-question | 37 | what-you-worked-out | read | TRAPPIST-1 System | inherited | none (holds the clock) |
-| missing-mass | 1 | two-ways-to-weigh-a | read | Solar System | yes | 1/60 s |
+| missing-mass | 1 | two-ways-to-weigh-a | read | Solar System | yes | none (holds the clock) |
 | missing-mass | 2 | put-the-mass-somewhere | explore | Solar System | inherited | 1/60 s |
 | missing-mass | 3 | which-arrangement-gives-a-flat | question | Solar System | inherited | 1/60 s |
 | missing-mass | 4 | the-solar-system-plotted | explore | Solar System | inherited | 1/60 s |
@@ -276,7 +276,7 @@ is not pinned. Closing the lesson lifts the pin.
 | missing-mass | 8 | measure-the-enclosed-mass-yourself | measure | Solar System | inherited | 1/60 s |
 | missing-mass | 9 | now-a-galaxy | predict | Spiral Galaxy | yes | 1/60 s |
 | missing-mass | 10 | measure-the-expected-curve | measure | Spiral Galaxy | inherited | 1/60 s |
-| missing-mass | 11 | what-rubin-and-ford-found | read | Milky Way Rotation | yes | 1/60 s |
+| missing-mass | 11 | what-rubin-and-ford-found | read | Milky Way Rotation | yes | none (holds the clock) |
 | missing-mass | 12 | measure-the-real-curve | measure | Milky Way Rotation | inherited | 1/60 s |
 | missing-mass | 13 | now-do-what-the-astronomers | read | Milky Way Rotation | inherited | 1/60 s |
 | missing-mass | 14 | try-it-with-stars-alone | explore | Milky Way Rotation | inherited | 1/60 s |
@@ -287,7 +287,7 @@ is not pinned. Closing the lesson lifts the pin.
 | missing-mass | 19 | how-much-of-it-is | question | Milky Way Rotation | inherited | 1/60 s |
 | missing-mass | 20 | what-the-halo-is-holding | explore | Milky Way Rotation | inherited | 1/60 s |
 | missing-mass | 21 | take-the-halo-away-from | explore | Milky Way Rotation | yes | 1/60 s |
-| missing-mass | 22 | forty-years-earlier | read | Coma Cluster | yes | 1/60 s |
+| missing-mass | 22 | forty-years-earlier | read | Coma Cluster | yes | none (holds the clock) |
 | missing-mass | 23 | zwicky-s-arithmetic-and-the | explore | Coma Cluster | inherited | 1/60 s |
 | missing-mass | 24 | measure-the-simulated-cluster | measure | Coma Cluster | inherited | 1/60 s |
 | missing-mass | 25 | weigh-the-cluster-by-its | question | Coma Cluster | inherited | 1/60 s |
@@ -299,7 +299,7 @@ is not pinned. Closing the lesson lifts the pin.
 | missing-mass | 31 | what-have-you-actually-shown | question | Coma Cluster | inherited | 1/60 s |
 | missing-mass | 32 | how-much-of-the-universe | read | Coma Cluster | inherited | 1/60 s |
 | missing-mass | 33 | where-it-stands | read | Coma Cluster | inherited | none (holds the clock) |
-| tides | 1 | twice-a-day-everywhere | read | Earth-Moon System | yes | 1/60 s |
+| tides | 1 | twice-a-day-everywhere | read | Earth-Moon System | yes | none (holds the clock) |
 | tides | 2 | is-the-pull-the-same | predict | Earth-Moon System | inherited | 1/60 s |
 | tides | 3 | three-points-three-pulls | read | Earth-Moon System | inherited | 1/60 s |
 | tides | 4 | how-different-are-they | question | Earth-Moon System | inherited | 1/60 s |
@@ -329,17 +329,17 @@ is not pinned. Closing the lesson lifts the pin.
 | tides | 28 | a-star-and-a-black | read | Tidal Disruption Event | inherited | 1/60 s |
 | tides | 29 | the-whole-lesson-in-three | question | Tidal Disruption Event | inherited | 1/60 s |
 | tides | 30 | what-you-worked-out | read | Tidal Disruption Event | inherited | none (holds the clock) |
-| butterfly-effect | 1 | a-word-that-has-been | read | Three-Body Sensitivity Lab | yes | 1/60 s |
+| butterfly-effect | 1 | a-word-that-has-been | read | Three-Body Sensitivity Lab | yes | none (holds the clock) |
 | butterfly-effect | 2 | the-same-numbers-twice | predict | Three-Body Sensitivity Lab | inherited | 1/60 s |
 | butterfly-effect | 3 | how-to-run-the-same | read | Three-Body Sensitivity Lab | inherited | none (holds the clock) |
 | butterfly-effect | 4 | the-reproducibility-control | explore | Three-Body Sensitivity Lab | inherited | 1/60 s |
 | butterfly-effect | 5 | what-zero-proves | question | Three-Body Sensitivity Lab | inherited | 1/60 s |
-| butterfly-effect | 6 | a-control-before-the-interesting | read | Binary Pair | yes | 1/60 s |
+| butterfly-effect | 6 | a-control-before-the-interesting | read | Binary Pair | yes | none (holds the clock) |
 | butterfly-effect | 7 | nudge-one-star-in-a | predict | Binary Pair | inherited | 1/60 s |
 | butterfly-effect | 8 | measure-the-binary | explore | Binary Pair | inherited | 1/60 s |
 | butterfly-effect | 9 | the-instrument-refused | question | Binary Pair | inherited | 1/60 s |
 | butterfly-effect | 10 | linear-in-numbers | question | Binary Pair | inherited | 1/60 s |
-| butterfly-effect | 11 | back-to-the-triangle | read | Three-Body Sensitivity Lab | yes | 1/60 s |
+| butterfly-effect | 11 | back-to-the-triangle | read | Three-Body Sensitivity Lab | yes | none (holds the clock) |
 | butterfly-effect | 12 | the-same-nudge-three-bodies | predict | Three-Body Sensitivity Lab | inherited | 1/60 s |
 | butterfly-effect | 13 | measure-the-triple | explore | Three-Body Sensitivity Lab | inherited | 1/60 s |
 | butterfly-effect | 14 | write-down-what-you-measured | measure | Three-Body Sensitivity Lab | inherited | 1/60 s |
@@ -357,7 +357,7 @@ is not pinned. Closing the lesson lifts the pin.
 | butterfly-effect | 26 | what-this-is-a-model | read | Three-Body Sensitivity Lab | inherited | none (holds the clock) |
 | butterfly-effect | 27 | where-these-results-come-from | read | Three-Body Sensitivity Lab | inherited | none (holds the clock) |
 | butterfly-effect | 28 | what-you-established | read | Three-Body Sensitivity Lab | inherited | none (holds the clock) |
-| when-orbits-lock | 1 | four-moons-and-a-suspicious | read | Galilean Resonance | yes | 1/60 s |
+| when-orbits-lock | 1 | four-moons-and-a-suspicious | read | Galilean Resonance | yes | none (holds the clock) |
 | when-orbits-lock | 2 | how-close-is-close | predict | Galilean Resonance | inherited | 1/60 s |
 | when-orbits-lock | 3 | measure-the-four-periods | explore | Galilean Resonance | yes | 1/60 s |
 | when-orbits-lock | 4 | write-down-the-ratios | measure | Galilean Resonance | inherited | 1/60 s |
@@ -377,12 +377,12 @@ is not pinned. Closing the lesson lifts the pin.
 | when-orbits-lock | 18 | what-the-pair-of-runs | question | Broken Laplace Resonance | inherited | 1/60 s |
 | when-orbits-lock | 19 | the-awkward-case | explore | Galilean Resonance | yes | 1/60 s |
 | when-orbits-lock | 20 | the-best-ratio-in-the | question | Galilean Resonance | inherited | 1/60 s |
-| when-orbits-lock | 21 | the-orbit-that-crosses-and | read | Pluto and Neptune | yes | 1/60 s |
+| when-orbits-lock | 21 | the-orbit-that-crosses-and | read | Pluto and Neptune | yes | none (holds the clock) |
 | when-orbits-lock | 22 | measure-pluto-s-resonance | explore | Pluto and Neptune | yes | 1/60 s |
 | when-orbits-lock | 23 | record-pluto-s-libration | measure | Pluto and Neptune | inherited | 1/60 s |
 | when-orbits-lock | 24 | where-the-line-ups-happen | explore | Pluto and Neptune | inherited | 1/60 s |
 | when-orbits-lock | 25 | why-180-protects-pluto | question | Pluto and Neptune | inherited | 1/60 s |
-| when-orbits-lock | 26 | sixty-degrees-ahead | read | Jupiter Trojans | yes | 1/60 s |
+| when-orbits-lock | 26 | sixty-degrees-ahead | read | Jupiter Trojans | yes | none (holds the clock) |
 | when-orbits-lock | 27 | the-rotating-frame | explore | Jupiter Trojans | yes | 1/60 s |
 | when-orbits-lock | 28 | record-the-tadpole | measure | Jupiter Trojans | inherited | 1/60 s |
 | when-orbits-lock | 29 | two-equilibria-one-survivor | question | Jupiter Trojans | inherited | 1/60 s |
@@ -391,7 +391,7 @@ is not pinned. Closing the lesson lifts the pin.
 | when-orbits-lock | 32 | the-report-you-would-write | question | Jupiter Trojans | inherited | 1/60 s |
 | when-orbits-lock | 33 | say-what-a-libration-shows | question | Jupiter Trojans | inherited | 1/60 s |
 | when-orbits-lock | 34 | where-this-goes | read | Jupiter Trojans | inherited | none (holds the clock) |
-| detect-this-planet | 1 | twelve-nights | read | Exoplanet Characterization Lab | yes | 1/60 s |
+| detect-this-planet | 1 | twelve-nights | read | Exoplanet Characterization Lab | yes | none (holds the clock) |
 | detect-this-planet | 2 | what-decides-whether-you-find | predict | Exoplanet Characterization Lab | inherited | 1/60 s |
 | detect-this-planet | 3 | schedule-a-twelve-nights-one | explore | Exoplanet Characterization Lab | inherited | 1/60 s |
 | detect-this-planet | 4 | write-down-what-schedule-a | measure | Exoplanet Characterization Lab | inherited | 1/60 s |
@@ -417,7 +417,7 @@ is not pinned. Closing the lesson lifts the pin.
 | detect-this-planet | 24 | the-edge-of-what-tess-can-do | explore | Exoplanet Characterization Lab | inherited | 1/60 s |
 | detect-this-planet | 25 | what-would-it-take | question | Exoplanet Characterization Lab | inherited | 1/60 s |
 | detect-this-planet | 26 | what-you-decided-before-you | read | Exoplanet Characterization Lab | inherited | none (holds the clock) |
-| design-the-schedule | 1 | eight-nights | read | Exoplanet Characterization Lab | yes | 1/60 s |
+| design-the-schedule | 1 | eight-nights | read | Exoplanet Characterization Lab | yes | none (holds the clock) |
 | design-the-schedule | 2 | set-the-run-up | explore | Exoplanet Characterization Lab | yes | 1/60 s |
 | design-the-schedule | 3 | predict-the-comb | predict | Exoplanet Characterization Lab | inherited | 1/60 s |
 | design-the-schedule | 4 | run-both-schedules | explore | Exoplanet Characterization Lab | yes | 1/60 s |
@@ -458,7 +458,7 @@ is not pinned. Closing the lesson lifts the pin.
 | binary-star-planets | 24 | which-answer-is-right | question | Binary Planet Lab | inherited | 1/60 s |
 | binary-star-planets | 25 | convergence-is-the-test | read | Binary Planet Lab | inherited | none (holds the clock) |
 | binary-star-planets | 26 | report-it | question | Binary Planet Lab | inherited | 1/60 s |
-| binary-star-planets | 27 | around-both | read | Circumbinary Planet Lab | yes | 1/60 s |
+| binary-star-planets | 27 | around-both | read | Circumbinary Planet Lab | yes | none (holds the clock) |
 | binary-star-planets | 28 | which-way-round | predict | Circumbinary Planet Lab | inherited | 1/60 s |
 | binary-star-planets | 29 | run-the-circumbinary | explore | Circumbinary Planet Lab | yes | 1/60 s |
 | binary-star-planets | 30 | no-encounter-at-all | measure | Circumbinary Planet Lab | inherited | 1/60 s |
@@ -469,7 +469,7 @@ is not pinned. Closing the lesson lifts the pin.
 | binary-star-planets | 35 | who-is-wrong | question | Circumbinary Planet Lab | inherited | 1/60 s |
 | binary-star-planets | 36 | the-strongest-claim | question | Circumbinary Planet Lab | inherited | 1/60 s |
 | binary-star-planets | 37 | what-you-can-say | read | Circumbinary Planet Lab | inherited | none (holds the clock) |
-| gravity-assist | 1 | voyager-left-faster | read | Gravity Assist Lab | yes | 1/60 s |
+| gravity-assist | 1 | voyager-left-faster | read | Gravity Assist Lab | yes | none (holds the clock) |
 | gravity-assist | 2 | the-simplest-possible-flyby | read | Gravity Assist Lab | inherited | none (holds the clock) |
 | gravity-assist | 3 | which-side-gains | predict | Gravity Assist Lab | inherited | 1/60 s |
 | gravity-assist | 4 | fly-the-gaining-pass | explore | Gravity Assist Lab | yes | 1/60 s |
@@ -487,11 +487,11 @@ is not pinned. Closing the lesson lifts the pin.
 | gravity-assist | 16 | read-the-sweep | measure | Gravity Assist Lab | inherited | 1/60 s |
 | gravity-assist | 17 | strongest-turn-biggest-gain | question | Gravity Assist Lab | inherited | 1/60 s |
 | gravity-assist | 18 | explain-the-sweep | question | Gravity Assist Lab | inherited | 1/60 s |
-| gravity-assist | 19 | now-with-a-sun | read | Gravity Assist: Heliocentric | yes | 1/60 s |
+| gravity-assist | 19 | now-with-a-sun | read | Gravity Assist: Heliocentric | yes | none (holds the clock) |
 | gravity-assist | 20 | fly-it-heliocentric | explore | Gravity Assist: Heliocentric | yes | 1/60 s |
 | gravity-assist | 21 | what-the-residual-means | question | Gravity Assist: Heliocentric | inherited | 1/60 s |
 | gravity-assist | 22 | what-this-leaves-out | read | Gravity Assist: Heliocentric | inherited | none (holds the clock) |
-| hohmann-transfer | 1 | the-problem | read | Orbital Transfer Lab | yes | 1/60 s |
+| hohmann-transfer | 1 | the-problem | read | Orbital Transfer Lab | yes | none (holds the clock) |
 | hohmann-transfer | 2 | predict-point-at-it | predict | Orbital Transfer Lab | inherited | 1/60 s |
 | hohmann-transfer | 3 | try-radial | explore | Orbital Transfer Lab | inherited | 1/60 s |
 | hohmann-transfer | 4 | transverse-is-the-lever | read | Orbital Transfer Lab | inherited | none (holds the clock) |
@@ -513,7 +513,7 @@ is not pinned. Closing the lesson lifts the pin.
 | hohmann-transfer | 20 | both-burns-forward | question | Orbital Transfer Lab | inherited | 1/60 s |
 | hohmann-transfer | 21 | say-why-sideways | question | Orbital Transfer Lab | inherited | 1/60 s |
 | hohmann-transfer | 22 | when-this-is-true | read | Orbital Transfer Lab | inherited | none (holds the clock) |
-| lagrange-points | 1 | two-stars-and-a-speck | read | Lagrange Point Lab | yes | 1/60 s |
+| lagrange-points | 1 | two-stars-and-a-speck | read | Lagrange Point Lab | yes | none (holds the clock) |
 | lagrange-points | 2 | the-rotating-frame | read | Lagrange Point Lab | inherited | none (holds the clock) |
 | lagrange-points | 3 | predict-forbidden | predict | Lagrange Point Lab | inherited | 1/60 s |
 | lagrange-points | 4 | the-jacobi-constant | read | Lagrange Point Lab | inherited | none (holds the clock) |
@@ -533,7 +533,7 @@ is not pinned. Closing the lesson lifts the pin.
 | lagrange-points | 18 | which-assumption | question | Lagrange Point Lab | inherited | 1/60 s |
 | lagrange-points | 19 | say-what-jacobi-cannot-tell-you | question | Lagrange Point Lab | inherited | 1/60 s |
 | lagrange-points | 20 | three-claims | read | Lagrange Point Lab | inherited | none (holds the clock) |
-| twelve-nights | 1 | the-allocation | read | Exoplanet Characterization Lab | yes | 1/60 s |
+| twelve-nights | 1 | the-allocation | read | Exoplanet Characterization Lab | yes | none (holds the clock) |
 | twelve-nights | 2 | look-at-the-windows | explore | Exoplanet Characterization Lab | yes | 1/60 s |
 | twelve-nights | 3 | measure-the-window | measure | Exoplanet Characterization Lab | inherited | 1/60 s |
 | twelve-nights | 4 | predict-the-comb | predict | Exoplanet Characterization Lab | inherited | 1/60 s |
@@ -546,7 +546,7 @@ is not pinned. Closing the lesson lifts the pin.
 | twelve-nights | 11 | sixty-nights-would-not-help | question | Exoplanet Characterization Lab | inherited | 1/60 s |
 | twelve-nights | 12 | what-would-actually-fix-it | question | Exoplanet Characterization Lab | inherited | 1/60 s |
 | twelve-nights | 13 | what-the-sky-decided | read | Exoplanet Characterization Lab | inherited | none (holds the clock) |
-| power-law-gravity | 1 | the-exactly | read | Solar System | yes | 1/60 s |
+| power-law-gravity | 1 | the-exactly | read | Solar System | yes | none (holds the clock) |
 | power-law-gravity | 2 | why-there-is-a-reference-distance | read | Solar System | inherited | none (holds the clock) |
 | power-law-gravity | 3 | predict-does-small-matter | predict | Solar System | inherited | 1/60 s |
 | power-law-gravity | 4 | first-look-at-the-orbit | explore | Solar System | inherited | 1/60 s |
@@ -567,7 +567,7 @@ is not pinned. Closing the lesson lifts the pin.
 | power-law-gravity | 19 | near-three | read | Solar System | inherited | none (holds the clock) |
 | power-law-gravity | 20 | closing-question | question | Solar System | inherited | 1/60 s |
 | power-law-gravity | 21 | the-honest-caveat | read | Solar System | inherited | none (holds the clock) |
-| integrators-in-practice | 1 | one-system-four-steps | read | Circumbinary Planet Lab | yes | 1/60 s |
+| integrators-in-practice | 1 | one-system-four-steps | read | Circumbinary Planet Lab | yes | none (holds the clock) |
 | integrators-in-practice | 2 | which-loses-most | predict | Circumbinary Planet Lab | inherited | 1/60 s |
 | integrators-in-practice | 3 | four-drifts | measure | Circumbinary Planet Lab | inherited | 1/60 s |
 | integrators-in-practice | 4 | why-bounded | question | Circumbinary Planet Lab | inherited | 1/60 s |
@@ -575,7 +575,7 @@ is not pinned. Closing the lesson lifts the pin.
 | integrators-in-practice | 6 | the-engine | measure | Circumbinary Planet Lab | inherited | 1/60 s |
 | integrators-in-practice | 7 | phase-luck | question | Circumbinary Planet Lab | inherited | 1/60 s |
 | integrators-in-practice | 8 | what-you-worked-out | read | Circumbinary Planet Lab | inherited | none (holds the clock) |
-| extending-an-experiment | 1 | twenty-planets | read | Binary Planet Lab | yes | 1/60 s |
+| extending-an-experiment | 1 | twenty-planets | read | Binary Planet Lab | yes | none (holds the clock) |
 | extending-an-experiment | 2 | how-well-can-twenty-place-an-edge | predict | Binary Planet Lab | inherited | 1/60 s |
 | extending-an-experiment | 3 | the-fit | measure | Binary Planet Lab | inherited | 1/60 s |
 | extending-an-experiment | 4 | a-uniform-population | measure | Binary Planet Lab | inherited | 1/60 s |
@@ -583,7 +583,7 @@ is not pinned. Closing the lesson lifts the pin.
 | extending-an-experiment | 6 | move-the-definition | measure | Binary Planet Lab | inherited | 1/60 s |
 | extending-an-experiment | 7 | what-moved-it | question | Binary Planet Lab | inherited | 1/60 s |
 | extending-an-experiment | 8 | what-you-worked-out | read | Binary Planet Lab | inherited | none (holds the clock) |
-| refitting-a-transit | 1 | same-model-another-route | read | Transit Lab | yes | 1/60 s |
+| refitting-a-transit | 1 | same-model-another-route | read | Transit Lab | yes | none (holds the clock) |
 | refitting-a-transit | 2 | how-close | predict | Transit Lab | inherited | 1/60 s |
 | refitting-a-transit | 3 | the-fit | measure | Transit Lab | inherited | 1/60 s |
 | refitting-a-transit | 4 | sigma-and-profile | measure | Transit Lab | inherited | 1/60 s |
@@ -591,7 +591,7 @@ is not pinned. Closing the lesson lifts the pin.
 | refitting-a-transit | 6 | hold-the-limb-darkening | measure | Transit Lab | inherited | 1/60 s |
 | refitting-a-transit | 7 | what-is-not-counted | question | Transit Lab | inherited | 1/60 s |
 | refitting-a-transit | 8 | what-you-worked-out | read | Transit Lab | inherited | none (holds the clock) |
-| two-periodograms | 1 | two-ways-to-look-for-a-period | read | Transit Lab | yes | 1/60 s |
+| two-periodograms | 1 | two-ways-to-look-for-a-period | read | Transit Lab | yes | none (holds the clock) |
 | two-periodograms | 2 | the-tallest-peak | predict | Transit Lab | inherited | 1/60 s |
 | two-periodograms | 3 | the-two-periods | measure | Transit Lab | inherited | 1/60 s |
 | two-periodograms | 4 | why-half | question | Transit Lab | inherited | 1/60 s |
@@ -599,7 +599,7 @@ is not pinned. Closing the lesson lifts the pin.
 | two-periodograms | 6 | against-the-fit | measure | Transit Lab | inherited | 1/60 s |
 | two-periodograms | 7 | what-a-grid-step-is | question | Transit Lab | inherited | 1/60 s |
 | two-periodograms | 8 | what-you-worked-out | read | Transit Lab | inherited | none (holds the clock) |
-| sampling-a-posterior | 1 | what-a-sampler-does | read | Transit Lab | yes | 1/60 s |
+| sampling-a-posterior | 1 | what-a-sampler-does | read | Transit Lab | yes | none (holds the clock) |
 | sampling-a-posterior | 2 | how-wide | predict | Transit Lab | inherited | 1/60 s |
 | sampling-a-posterior | 3 | the-draws | measure | Transit Lab | inherited | 1/60 s |
 | sampling-a-posterior | 4 | did-it-converge | measure | Transit Lab | inherited | 1/60 s |
@@ -608,8 +608,8 @@ is not pinned. Closing the lesson lifts the pin.
 | sampling-a-posterior | 7 | refuse-a-short-run | question | Transit Lab | inherited | 1/60 s |
 | sampling-a-posterior | 8 | what-you-worked-out | read | Transit Lab | inherited | none (holds the clock) |
 | why-rings | 5 | a-pass-inside-the-limit | read | Roche Pass | yes | 1/60 s |
-| why-rings | 7 | a-ring-with-a-resonance | read | Ring Gap | yes | 1/60 s |
-| the-scale-of-the-solar-system | 1 | a-picture-you-have-seen | read | Solar System | yes | 1/60 s |
+| why-rings | 7 | a-ring-with-a-resonance | read | Ring Gap | yes | none (holds the clock) |
+| the-scale-of-the-solar-system | 1 | a-picture-you-have-seen | read | Solar System | yes | none (holds the clock) |
 | the-scale-of-the-solar-system | 2 | three-distances | measure | Solar System | inherited | 1/60 s |
 | the-scale-of-the-solar-system | 3 | light-time-predict | predict | Solar System | inherited | 1/60 s |
 | the-scale-of-the-solar-system | 4 | light-time | measure | Solar System | inherited | 1/60 s |
@@ -617,7 +617,7 @@ is not pinned. Closing the lesson lifts the pin.
 | the-scale-of-the-solar-system | 6 | scale-model | measure | Solar System | inherited | 1/60 s |
 | the-scale-of-the-solar-system | 7 | what-a-diagram-gets-wrong | question | Solar System | inherited | 1/60 s |
 | the-scale-of-the-solar-system | 8 | what-you-worked-out | read | Solar System | inherited | none (holds the clock) |
-| comets-and-the-sun | 1 | a-dirty-snowball | read | Solar System | yes | 1/60 s |
+| comets-and-the-sun | 1 | a-dirty-snowball | read | Solar System | yes | none (holds the clock) |
 | comets-and-the-sun | 2 | tail-predict | predict | Solar System | inherited | 1/60 s |
 | comets-and-the-sun | 3 | watch-the-tails | explore | Solar System | inherited | 1/60 s |
 | comets-and-the-sun | 4 | going-out | question | Solar System | inherited | 1/60 s |

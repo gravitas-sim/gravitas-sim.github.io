@@ -143,12 +143,12 @@ describe('the pin contract', () => {
     // A reading step holds the clock: nothing runs, nothing to pin.
     gate.pinLessonStep({ type: 'read' }, null, null, setup);
     expect(timestep.pinnedStep()).toBe(0);
-    gate.pinLessonStep(
-      { type: 'read', time: { paused: true } },
-      null,
-      null,
-      setup
-    );
+    // ...and still does when its declared time starts paused (the next step
+    // lets go); one whose time starts running needs the clock, and is pinned.
+    const read = time => ({ type: 'read', time });
+    gate.pinLessonStep(read({ speed: 5, paused: true }), null, null, setup);
+    expect(timestep.pinnedStep()).toBe(0);
+    gate.pinLessonStep(read({ speed: 5, paused: false }), null, null, setup);
     expect(timestep.pinnedStep()).toBe(timestep.STEP_SECONDS);
     gate.pinLessonStep(null);
     expect(timestep.pinnedStep()).toBe(0);
