@@ -131,10 +131,8 @@ import {
 import { encodePayload, parseDocument, shareUrl } from './shareState.js';
 import { normalizeSeed, formatSeed } from './rng.js';
 // From js/notify.js rather than through js/controls.js, which only re-exports
-// them. Going through controls put this module in a cycle - controls
-// dynamic-imports the loader, the loader dynamic-imports this - and although
-// every edge in it was lazy, a cycle that exists only because of a convenience
-// re-export is not one worth keeping.
+// them: going through controls put this module in a cycle (controls
+// dynamic-imports the loader, the loader this) that a convenience re-export alone made.
 import { toast, announce, loadFailed, refuseLink } from './notify.js';
 import { captureToNotebook, setEvidenceContext } from './widgetRuntime.js';
 // Lives in its own module so the instructor answer keys, which are generated
@@ -857,6 +855,8 @@ const loadSeams = async ({ steps, canvas }) => {
     )
   )
     fieldModule((figures = await import('./investigations/figures.js')));
+  if (steps.some(s => s.fields?.some(f => f.options)))
+    slots.menu = (await import('./investigations/menu.js')).select;
 };
 
 /** Draw the step's scatter plot from the lesson's current state. */

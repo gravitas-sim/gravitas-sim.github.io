@@ -6,16 +6,16 @@
     ["steps.contraction-luminosity.fields.0.unit","R☉"],
     ["steps.contraction-luminosity.fields.1.unit","R☉"],
     ["steps.contraction-luminosity.fields.2.unit","Myr"],
-    ["steps.arriving.fields.0.unit","K"],
-    ["steps.arriving.fields.1.unit","L☉"],
-    ["steps.arriving.fields.2.unit","Myr"],
-    ["steps.the-sun-today.fields.0.unit","K"],
-    ["steps.the-sun-today.fields.1.unit","L☉"],
-    ["steps.the-sun-today.fields.2.unit","R☉"],
-    ["steps.across-the-main-sequence.fields.0.unit","L☉"],
-    ["steps.across-the-main-sequence.fields.1.unit","L☉"],
-    ["steps.across-the-main-sequence.fields.2.unit","×"],
-    ["steps.across-the-main-sequence.fields.3.unit","Gyr"],
+    ["steps.compare-two-moments.fields.0.unit","Gyr"],
+    ["steps.compare-two-moments.fields.1.unit","L☉"],
+    ["steps.compare-two-moments.fields.2.unit","R☉"],
+    ["steps.compare-two-moments.fields.3.unit","K"],
+    ["steps.compare-two-moments.fields.4.unit","Gyr"],
+    ["steps.compare-two-moments.fields.5.unit","L☉"],
+    ["steps.compare-two-moments.fields.6.unit","R☉"],
+    ["steps.compare-two-moments.fields.7.unit","K"],
+    ["steps.compare-two-moments.fields.8.unit","×"],
+    ["steps.compare-two-moments.fields.9.unit","×"],
     ["steps.compare-young-and-old.fields.0.unit","R☉"],
     ["steps.compare-young-and-old.fields.1.unit","R☉"],
     ["steps.core-in-envelope-out.fields.0.unit","R☉"],
@@ -52,6 +52,7 @@
     ["steps.design-a-comparison.fields.3.unit","L☉"]
    ],
    "numbered": [
+    ["steps.compare-young-and-old.fields.0.label","Radius at 0.46 Gyr"],
     ["steps.the-same-age.fields.0.label","Sun-like star, luminosity at 4.6 Gyr"],
     ["steps.the-same-age.fields.1.label","0.2 M☉ star, luminosity at 4.6 Gyr"],
     ["steps.massive-versus-sun.fields.1.label","20 M☉, luminosity"],
@@ -61,6 +62,7 @@
   "es": {
    "units": [],
    "numbered": [
+    ["steps.compare-young-and-old.fields.0.label","Radio a los 0,46 Gyr"],
     ["steps.the-same-age.fields.0.label","Estrella tipo Sol, luminosidad a 4,6 Gyr"],
     ["steps.the-same-age.fields.1.label","Estrella de 0,2 M☉, luminosidad a 4,6 Gyr"],
     ["steps.massive-versus-sun.fields.1.label","20 M☉, luminosidad"],
@@ -72,7 +74,11 @@
   "answers": [],
   "decimals": [
    [
-    "across-the-main-sequence.ratio",
+    "compare-two-moments.lumRatio",
+    2
+   ],
+   [
+    "compare-two-moments.radRatio",
     2
    ],
    [
@@ -91,20 +97,14 @@
    "contraction-luminosity": {
     "validate": {"calls":242,"distinct":3,"digest":"981c2e546c2a7bd5","samples":[{"level":"warn","message":"Three numbers, from the readout."},{"level":"error","message":"It should be getting smaller, not larger. Check which reading you took first — the earlier age goes in the first box."},{"level":"ok","message":"Contracting the whole time, and shining the whole time. It is not yet on the main sequence: the readout will not call it that until hydrogen fusion in the core is steady enough to hold the star up on its own."}]}
    },
-   "arriving": {
-    "validate": {"calls":242,"distinct":2,"digest":"301f916e674a3a77","samples":[{"level":"warn","message":"All three, from the readout."},{"level":"warn","message":"That is not the arrival point. Press \"Next phase\" until the readout says Main sequence, and read the first values it shows."}]}
-   },
-   "the-sun-today": {
-    "validate": {"calls":242,"distinct":2,"digest":"08ac11b294775a8e","samples":[{"level":"warn","message":"All three, from the readout."},{"level":"warn","message":"Not at 4.6 Gyr yet. The readout&rsquo;s Age row is what to steer by."}]}
-   },
-   "across-the-main-sequence": {
-    "validate": {"calls":242,"distinct":4,"digest":"7efdb8e9903c9d6e","samples":[{"level":"warn","message":"Three numbers, from the readout."},{"level":"error","message":"It brightens. Check which reading went in which box."},{"level":"warn","message":"The end of the main sequence is at about 9.9 billion years for this star. The readout gives the age in Gyr."},{"level":"ok","message":"From 0.80 to 2.28 solar luminosities — nearly three times brighter — over 9.9 billion years, while the surface temperature barely moved. A star does not sit at one point on the diagram for its whole main-sequence life, and it does not slide down the main sequence either: it drifts slowly up and very slightly right."}]}
+   "compare-two-moments": {
+    "validate": {"calls":242,"distinct":3,"digest":"985feb8311dc81be","samples":[{"level":"warn","message":"Each moment needs four readings: its age, luminosity, radius and surface temperature. Freeze the first moment, move to the second, and read the frozen star and the live one."},{"level":"error","message":"The first and second moment's luminosity, radius and temperature do not belong together. In solar units the luminosity is the radius squared times the temperature over 5,772 K, raised to the fourth power, so one of the three came from a different moment. Read all three from the same one."},{"level":"warn","message":"No age that large is on this track, which ends near 11.5 billion years. The readout writes young ages in Myr, so type them in Gyr (457 Myr is 0.457 Gyr)."}]}
    },
    "compare-young-and-old": {
     "validate": {"calls":232,"distinct":3,"digest":"40119c2682a606c2","samples":[{"level":"warn","message":"Both radii, from the list."},{"level":"error","message":"The later one is larger. Check the order."},{"level":"ok","message":"About 0.90 to 1.56 solar radii. Hold on to that number: three steps from now the same star is a hundred and seventy times the size of the Sun, and the contrast between those two changes is the point of this part of the investigation."}]}
    },
    "core-in-envelope-out": {
-    "validate": {"calls":242,"distinct":4,"digest":"13cb337567950154","samples":[{"level":"warn","message":"Three numbers, from the readout."},{"level":"warn","message":"The tip is much larger than that. Drag the playhead to the end of the red-giant branch — the readout&rsquo;s Radius row climbs into the hundreds."},{"level":"ok","message":"From about 1.6 to about 173 solar radii, and the surface cools from 5,700 K to about 3,100 K on the way. A hundredfold in radius, and it got cooler — which is exactly how something can be far more luminous and far redder at the same time."},{"level":"warn","message":"The tip is cooler than that. Keep going along the branch: the surface temperature falls as the star swells."}]}
+    "validate": {"calls":242,"distinct":4,"digest":"a133c4645eac1a94","samples":[{"level":"warn","message":"Three numbers, from the readout."},{"level":"warn","message":"The tip is much larger than that. Drag the playhead to the end of the red-giant branch — the readout&rsquo;s Radius row climbs into the hundreds."},{"level":"ok","message":"From about 1.6 to about 173 solar radii: a hundredfold in radius. The next step asks what the radius and the tip temperature you recorded mean for the star&rsquo;s place on the diagram."},{"level":"warn","message":"That temperature is too warm for the tip. Keep going to the end of the branch and read the Surface temperature row there."}]}
    },
    "measure-the-giant": {
     "validate": {"calls":242,"distinct":3,"digest":"beed89028d51a1aa","samples":[{"level":"warn","message":"All four, from the readout."},{"level":"warn","message":"Not at the tip yet. Keep going along the branch until the radius stops climbing."},{"level":"warn","message":"The mass should still be close to one solar mass. Almost nothing has been lost yet — that comes later."}]}

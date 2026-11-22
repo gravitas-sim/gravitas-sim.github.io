@@ -2,9 +2,8 @@
 // What a step looks like: its markup
 // -----------------------------------------------------------------------------
 // The part of renderStep that only reads: the step and the reader's state (in
-// `c`) in, the panel's markup out as strings. Below it: the saved record's
-// persistence and the answer boxes' listeners. Pure to import (no canvas, no
-// simulation), and folded in here to keep the lesson routes' request count.
+// `c`) in, markup out as strings; then the saved record and the answer boxes'
+// listeners. Folded in here to keep the lesson routes' request count.
 // =============================================================================
 
 import { formatNumber } from '../format.js';
@@ -417,10 +416,14 @@ export function stepMarkup(step, c) {
           const derived = Boolean(f.compute);
           return `<label class="inv-field${derived ? ' is-derived' : ''}">
               <span class="inv-field-label">${prose(f.label)}${f.unit ? ` <span class="inv-field-unit">(${escape(f.unit)})</span>` : ''}${derived ? ` <span class="inv-field-auto">${escape(t('inv.field.auto'))}</span>` : ''}</span>
-              <input type="text" ${f.kind === 'text' ? '' : 'inputmode="decimal"'}
+              ${
+                f.options
+                  ? slots.menu(key, f, responses[key])
+                  : `<input type="text" ${f.kind === 'text' ? '' : 'inputmode="decimal"'}
                      data-field="${attr(key)}" value="${attr(responses[key] ?? '')}"
                      ${derived ? 'readonly tabindex="-1"' : ''}
-                     placeholder="${escape(cueText(f.hint))}" />
+                     placeholder="${escape(cueText(f.hint))}" />`
+              }
             </label>${slots.field?.takeRow(step, f, c) ?? ''}`;
         })
         .join('')}</div>`
@@ -905,8 +908,7 @@ export const formatFieldNumber = (value, decimals, locale) =>
  * What persistence needs of the engine: state() is {active, responses,
  * attempts, visited, stepIndex, startedAt, depthChoice, deepest, spent,
  * progressNotes}; authoring() and assigned() are booleans, assignmentKey() is
- * where an assignment's progress lives; els() the elements; clock() brings the
- * time spent up to date.
+ * where an assignment's progress lives; els() the elements; clock() the time spent.
  * @typedef {Object} PersistenceHost
  */
 /** @type {PersistenceHost} */
@@ -1296,15 +1298,11 @@ function read(id, lesson) {
 }
 
 /**
- * How far through an investigation a student is.
- *
- * `done` counts steps seen (the progress bar); `at` is the step a resume lands
- * on, which differs once a student has gone back to reread.
+ * How far through an investigation a student is: `done` counts steps seen (the
+ * progress bar); `at` is the step a resume lands on.
  *
  * @param {string} id - Investigation id
- * @param {number} total - Steps in it. The lesson browser reads this from the
- *   manifest, which the engine does not import: the browser asks for all of
- *   them before any is loaded.
+ * @param {number} total - Steps in it (the browser reads it from the manifest)
  * @returns {{done:number, total:number, started:boolean, at:number}} Progress
  */
 export function progressFor(id, total = 0) {
