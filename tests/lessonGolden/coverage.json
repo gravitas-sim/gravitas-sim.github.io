@@ -5,6 +5,7 @@
     "the-saturated-star",
     "binary-star-planets",
     "weighing-stars",
+    "tides",
     "black-holes",
     "butterfly-effect",
     "measuring-the-moon",
@@ -13,7 +14,6 @@
     "what-is-a-gravitational-wave",
     "a-night-at-the-telescope",
     "counts-to-magnitudes",
-    "detect-this-planet",
     "extending-an-experiment",
     "missing-mass",
     "power-law-gravity",
@@ -100,6 +100,7 @@
       "key:read.evidence",
       "key:read.quote",
       "key:read.setup",
+      "key:read.time",
       "key:read.tip",
       "key:read.type",
       "key:wedges.bind",
@@ -180,6 +181,12 @@
       "key:read.showBarycenter",
       "math:arithmetic"
     ],
+    "tides": [
+      "key:explore.canvas",
+      "key:predict.misconceptions",
+      "key:question.canvas",
+      "key:read.allowInspector"
+    ],
     "black-holes": [
       "key:question.checklist",
       "key:read.explainView",
@@ -213,9 +220,6 @@
     ],
     "counts-to-magnitudes": [
       "depth-step:quantitative/predict"
-    ],
-    "detect-this-planet": [
-      "key:read.allowInspector"
     ],
     "extending-an-experiment": [
       "key:measure.compute"
@@ -299,14 +303,14 @@
   ],
   "totals": {
     "investigations": 124,
-    "steps": 1992,
+    "steps": 1998,
     "activityCuts": 6,
-    "lessonTokens": 173,
+    "lessonTokens": 177,
     "activityTokens": 29,
     "stepTypes": {
-      "read": 377,
-      "predict": 200,
-      "measure": 521,
+      "read": 378,
+      "predict": 202,
+      "measure": 524,
       "ellipse": 1,
       "question": 751,
       "explore": 141,
