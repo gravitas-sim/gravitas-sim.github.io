@@ -85,20 +85,6 @@ export async function installProbe(page) {
         const L = await import('/js/lessonStage.js');
         const E = await import('/js/engine/state.js');
         const T = await import('/js/timestep.js');
-        const bodies = [];
-        for (const key of LISTS)
-          for (const o of P[key] || [])
-            bodies.push({
-              list: key,
-              kind: o.obj_type ?? null,
-              name: String(o.name ?? ''),
-              mass: num(o.mass),
-              radius: num(o.radius),
-              x: num(o.pos?.x),
-              y: num(o.pos?.y),
-              vx: num(o.vel?.x),
-              vy: num(o.vel?.y),
-            });
         // What the reader can touch (a hidden panel keeps the controls of the
         // step before), without the controls an instrument moves itself: a
         // cursor sweeping a curve reads differently every time it is looked at.
@@ -116,11 +102,26 @@ export async function installProbe(page) {
                 : el.value,
             ]);
         const first = controls();
-        if (first.length) await wait(150);
+        if (first.length) await wait(250);
         const again = controls();
         const instrument = first.filter(
           ([name, value], i) => again[i]?.[0] === name && again[i][1] === value
         );
+        // Read after the wait: an instrument restands its scene on a later frame.
+        const bodies = [];
+        for (const key of LISTS)
+          for (const o of P[key] || [])
+            bodies.push({
+              list: key,
+              kind: o.obj_type ?? null,
+              name: String(o.name ?? ''),
+              mass: num(o.mass),
+              radius: num(o.radius),
+              x: num(o.pos?.x),
+              y: num(o.pos?.y),
+              vx: num(o.vel?.x),
+              vy: num(o.vel?.y),
+            });
         return {
           // An instrument that moves itself (its controls changed while looked at)
           // moves the scene with it, so the scene is a function of dwell time.

@@ -35,8 +35,11 @@ the pinned integration step, the stage key and its roles, the canvas kind and
 the instrument's controls. `compare` then applies these rules:
 
 - Bodies are compared by list, kind and name. Positions, masses, radii and
-  velocities are compared only when both screens are at the same simulation time
-  (to 1e-9 s, to a relative 1e-9): a scene that ran between two steps has moved.
+  velocities are compared only when both screens are paused at the same
+  simulation time (to 1e-9 s, to a relative 1e-9): a scene that ran between two
+  steps has moved, and a running one is not a function of the clock alone (a
+  ring built by an instrument ran at the same simulation time with different
+  phases).
   A scene that ran may have lost comets and debris the engine culls, so the
   resumed screen may hold more of those and nothing else.
 - Paused, speed and the pin count only where the step states its clock: it
@@ -46,6 +49,10 @@ the instrument's controls. `compare` then applies these rules:
   no record of; it is reported as carried, not as a difference.
 - Instrument controls that an instrument moves itself (a cursor sweeping a
   curve, a position that advances) are left out; every other control is compared.
+  A step whose instrument moves itself is not compared on bodies either: the
+  star it stands is a function of how long the screen was looked at (Lives of
+  Stars' neutron-star-scale showed a neutron star walked, a star resumed).
+  Such a step is reported as carried.
 
 ## The sampling rule
 
@@ -69,6 +76,14 @@ Six lessons, five kinds of difference:
 | goldilocks-question | five steps | one comet fewer when walked | check rule: culled comets are not a difference |
 | lives-of-stars, what-is-a-gravitational-wave, a-universe-of-stars | 18 steps | an instrument's moving cursor or position, and one control drawn late | check rule: moving controls are left out; the late control waits for its panel |
 | keplers-laws | fast-and-slow-in-numbers, why-the-speed-changes, equal-areas-however-you-slice | running when walked (watch-it-happen runs the clock), paused when resumed | not a difference: the step states no clock; reported as carried |
+
+## One more defect found on the way
+
+An activity resumed from its address showed the investigation's title instead
+of the activity's after a language change (the locale handler rewrote the title
+and subtitle from the lesson). It now keeps the activity's title, and leaves
+the subtitle (the activity's own words) alone. Found by the assignment check:
+its depth, its five steps and its position survived; the title did not.
 
 ## The altered scene
 
