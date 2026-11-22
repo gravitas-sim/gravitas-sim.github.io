@@ -4,17 +4,17 @@
 
 The low quality tier caps the generic populations a scenario asks for (`populationCaps` in `js/quality.js`): num_asteroids 40, num_comets 8, num_planets 12, num_gas_giants 4, num_micro_stars 60, num_stars 40. The cap is skipped when a scenario's placement is `Empty` (every body placed by hand): the Solar System, every resonance system, TRAPPIST-1 and the galaxy discs are spared by that test, not by a list.
 
-Each scene below is built in Node at both tiers from the same seed. "Uncut kinds" says whether the bodies of every kind the cap did not cut are identical at both tiers (position, velocity, mass and name, slot by slot). If not, it names each kind that changed and the largest change in it: *mass* (with the largest fractional change); *orbit* (its distance or speed from the heaviest body changed, with the largest fractional change; the heaviest body itself is measured by how far it moved, as a fraction of the distance to the farthest body); *phase* (same distance and speed, another point on the orbit; for the heaviest body, a shift below a billionth of that distance); or *name* only. A cap draws fewer random numbers, so bodies generated or placed after a capped population are drawn from a different point in the seeded stream. A lesson scene is built as its setup states it (scenario, seed, settings), the way `payloadFromSetup` in `js/investigations.js` hands it to the builder.
+Each scene below is built in Node at both tiers from the same seed. The builder makes the whole population at both tiers and drops what is past a cap last (`js/world/build.js`), so the low tier keeps the full tier's own bodies. "Kept bodies" compares every body the low tier keeps with the full tier's body of the same id: *identical* (position, velocity, mass and name); *same places and masses* with every velocity shifted by one common amount, given with its size as a share of the median speed (the builder sets the world's total momentum to zero after the cut, and the cut bodies carried some of it); or *changed*, which the check refuses. A lesson scene is built as its setup states it (scenario, seed, settings), the way `payloadFromSetup` in `js/investigations.js` hands it to the builder.
 
 ## Summary
 
 - Lesson scenes: 39 setups over 28 scenarios in 124 lessons; 0 differ between tiers.
 - Built-in scenarios: 61; 24 differ between tiers.
-- Scenes where a kind the cap did not cut still changed: white-dwarf-binary, stellar-graveyard, galactic-center, supernova-remnant, intermediate-mass-bh, galactic-collision, micro-bh-swarm, exoplanet-lab, triple-bh-system, supermassive-bh, star-cluster, kuiper-belt, sagittarius-a, slingshot, quasar-cannon, the-pinwheel-galaxy-core, star-frisbee, kessler-cascade, alien-dyson-swarm-collapse, tidal-arm-tango, hungry-hungry-holes, slingshot-gauntlet, black-hole-billiards, stellar-nursery.
+- Scenes where a kept body changed: none.
 
 ## Lesson scenes
 
-| Scenario | Lessons | Seed | Settings | Full tier | Low tier | Differs | Uncut kinds |
+| Scenario | Lessons | Seed | Settings | Full tier | Low tier | Differs | Kept bodies |
 |---|---|---|---|---|---|---|---|
 | binary-pair | butterfly-effect | chaos-binary | sim_speed=20 | 2 star (2) | 2 star (2) | no | identical |
 | binary-planet-lab | binary-star-planets, extending-an-experiment | binary | - | 2 star, 1 planet (3) | 2 star, 1 planet (3) | no | identical |
@@ -60,42 +60,42 @@ Each scene below is built in Node at both tiers from the same seed. "Uncut kinds
 
 Seed `tier-table`, no settings beyond the scenario's own. "Gallery" marks the scenarios the sandbox gallery lists (`SCENARIO_INFO`).
 
-| Scenario | Gallery | Lessons | Full tier | Low tier | Differs | Uncut kinds |
+| Scenario | Gallery | Lessons | Full tier | Low tier | Differs | Kept bodies |
 |---|---|---|---|---|---|---|
 | binary-bh | yes | - | 2 BH, 10 planet, 2 giant, 30 asteroid (44) | 2 BH, 10 planet, 2 giant, 30 asteroid (44) | no | identical |
 | neutron-star-collision | yes | - | 5 planet, 1 giant, 20 asteroid, 2 NS (28) | 5 planet, 1 giant, 20 asteroid, 2 NS (28) | no | identical |
 | pulsar-system | yes | - | 3 planet, 15 asteroid, 1 NS (19) | 3 planet, 15 asteroid, 1 NS (19) | no | identical |
-| white-dwarf-binary | yes | - | 80 asteroid, 2 WD (82) | 40 asteroid, 2 WD (42) | yes: asteroid 80 to 40 | changed: WD (phase) |
-| stellar-graveyard | yes | - | 3 BH, 10 planet, 3 giant, 200 asteroid, 5 NS, 8 WD (229) | 3 BH, 10 planet, 3 giant, 40 asteroid, 5 NS, 8 WD (69) | yes: asteroid 200 to 40 | changed: BH (orbit 0.5), planet (orbit 0.9), giant (orbit 0.6), NS (orbit 1), WD (orbit 0.8) |
-| galactic-center | yes | - | 1 BH, 30 planet, 8 giant, 100 asteroid, 8 NS, 15 WD (162) | 1 BH, 12 planet, 4 giant, 40 asteroid, 8 NS, 15 WD (80) | yes: planet 30 to 12; giant 8 to 4; asteroid 100 to 40 | changed: BH (phase), NS (orbit 0.5), WD (orbit 0.4) |
-| supernova-remnant | yes | - | 5 planet, 2 giant, 200 asteroid, 1 NS (208) | 5 planet, 2 giant, 40 asteroid, 1 NS (48) | yes: asteroid 200 to 40 | changed: planet (orbit 0.9), giant (orbit 1), NS (phase) |
+| white-dwarf-binary | yes | - | 80 asteroid, 2 WD (82) | 40 asteroid, 2 WD (42) | yes: asteroid 80 to 40 | same places and masses; every velocity shifted by 2.5e-8 (under 0.001% of the median speed) |
+| stellar-graveyard | yes | - | 3 BH, 10 planet, 3 giant, 200 asteroid, 5 NS, 8 WD (229) | 3 BH, 10 planet, 3 giant, 40 asteroid, 5 NS, 8 WD (69) | yes: asteroid 200 to 40 | same places and masses; every velocity shifted by 7.4e-9 (under 0.001% of the median speed) |
+| galactic-center | yes | - | 1 BH, 30 planet, 8 giant, 100 asteroid, 8 NS, 15 WD (162) | 1 BH, 12 planet, 4 giant, 40 asteroid, 8 NS, 15 WD (80) | yes: planet 30 to 12; giant 8 to 4; asteroid 100 to 40 | same places and masses; every velocity shifted by 0.00037 (under 0.001% of the median speed) |
+| supernova-remnant | yes | - | 5 planet, 2 giant, 200 asteroid, 1 NS (208) | 5 planet, 2 giant, 40 asteroid, 1 NS (48) | yes: asteroid 200 to 40 | same places and masses; every velocity shifted by 5.2e-8 (under 0.001% of the median speed) |
 | compact-object-zoo | yes | - | 3 BH, 10 planet, 3 giant, 40 asteroid, 4 NS, 6 WD (66) | 3 BH, 10 planet, 3 giant, 40 asteroid, 4 NS, 6 WD (66) | no | identical |
 | millisecond-pulsar | yes | - | 2 planet, 25 asteroid, 1 NS, 1 WD (29) | 2 planet, 25 asteroid, 1 NS, 1 WD (29) | no | identical |
 | tidal-disruption-event | yes | tides | 1 BH, 1 star (2) | 1 BH, 1 star (2) | no | identical |
-| intermediate-mass-bh | yes | - | 1 BH, 30 planet, 5 giant, 60 asteroid, 2 NS, 8 WD (106) | 1 BH, 12 planet, 4 giant, 40 asteroid, 2 NS, 8 WD (67) | yes: planet 30 to 12; giant 5 to 4; asteroid 60 to 40 | changed: BH (phase), NS (orbit 0.3), WD (orbit 0.3) |
-| galactic-collision | yes | - | 2 BH, 300 planet, 30 giant, 600 asteroid, 15 NS, 25 WD (972) | 2 BH, 12 planet, 4 giant, 40 asteroid, 15 NS, 25 WD (98) | yes: planet 300 to 12; giant 30 to 4; asteroid 600 to 40 | changed: BH (phase), NS (orbit 0.9), WD (orbit 0.9) |
-| micro-bh-swarm | yes | - | 12 BH, 50 planet, 8 giant, 150 asteroid (220) | 12 BH, 12 planet, 4 giant, 40 asteroid (68) | yes: planet 50 to 12; giant 8 to 4; asteroid 150 to 40 | changed: BH (orbit 1) |
-| exoplanet-lab | yes | - | 120 planet, 25 giant, 300 asteroid, 1 NS, 2 WD (448) | 12 planet, 4 giant, 40 asteroid, 1 NS, 2 WD (59) | yes: planet 120 to 12; giant 25 to 4; asteroid 300 to 40 | changed: NS (phase), WD (orbit 0.9) |
-| triple-bh-system | yes | - | 3 BH, 20 planet, 2 giant, 40 asteroid (65) | 3 BH, 12 planet, 2 giant, 40 asteroid (57) | yes: planet 20 to 12 | changed: BH (phase), giant (mass 0.8), asteroid (orbit 0.5) |
-| supermassive-bh | yes | - | 1 BH, 50 planet, 5 giant, 100 asteroid (156) | 1 BH, 12 planet, 4 giant, 40 asteroid (57) | yes: planet 50 to 12; giant 5 to 4; asteroid 100 to 40 | changed: BH (phase) |
-| star-cluster | yes | - | 80 planet, 15 giant, 150 asteroid, 2 NS, 8 WD (255) | 12 planet, 4 giant, 40 asteroid, 2 NS, 8 WD (66) | yes: planet 80 to 12; giant 15 to 4; asteroid 150 to 40 | changed: NS (orbit 0.9), WD (orbit 1) |
-| kuiper-belt | yes | - | 1 star, 8 planet, 300 asteroid (309) | 1 star, 8 planet, 40 asteroid (49) | yes: asteroid 300 to 40 | changed: star (phase), planet (orbit 0.00003) |
-| sagittarius-a | yes | - | 1 BH, 100 planet, 5 giant, 200 asteroid, 10 NS, 20 WD (336) | 1 BH, 12 planet, 4 giant, 40 asteroid, 10 NS, 20 WD (87) | yes: planet 100 to 12; giant 5 to 4; asteroid 200 to 40 | changed: BH (phase), NS (orbit 0.7), WD (orbit 0.7) |
+| intermediate-mass-bh | yes | - | 1 BH, 30 planet, 5 giant, 60 asteroid, 2 NS, 8 WD (106) | 1 BH, 12 planet, 4 giant, 40 asteroid, 2 NS, 8 WD (67) | yes: planet 30 to 12; giant 5 to 4; asteroid 60 to 40 | same places and masses; every velocity shifted by 0.00064 (0.0012% of the median speed) |
+| galactic-collision | yes | - | 2 BH, 300 planet, 30 giant, 600 asteroid, 15 NS, 25 WD (972) | 2 BH, 12 planet, 4 giant, 40 asteroid, 15 NS, 25 WD (98) | yes: planet 300 to 12; giant 30 to 4; asteroid 600 to 40 | same places and masses; every velocity shifted by 0.0037 (0.0056% of the median speed) |
+| micro-bh-swarm | yes | - | 12 BH, 50 planet, 8 giant, 150 asteroid (220) | 12 BH, 12 planet, 4 giant, 40 asteroid (68) | yes: planet 50 to 12; giant 8 to 4; asteroid 150 to 40 | same places and masses; every velocity shifted by 0.0099 (0.20% of the median speed) |
+| exoplanet-lab | yes | - | 120 planet, 25 giant, 300 asteroid, 1 NS, 2 WD (448) | 12 planet, 4 giant, 40 asteroid, 1 NS, 2 WD (59) | yes: planet 120 to 12; giant 25 to 4; asteroid 300 to 40 | same places and masses; every velocity shifted by 0.028 (1.2% of the median speed) |
+| triple-bh-system | yes | - | 3 BH, 20 planet, 2 giant, 40 asteroid (65) | 3 BH, 12 planet, 2 giant, 40 asteroid (57) | yes: planet 20 to 12 | same places and masses; every velocity shifted by 0.0000014 (under 0.001% of the median speed) |
+| supermassive-bh | yes | - | 1 BH, 50 planet, 5 giant, 100 asteroid (156) | 1 BH, 12 planet, 4 giant, 40 asteroid (57) | yes: planet 50 to 12; giant 5 to 4; asteroid 100 to 40 | same places and masses; every velocity shifted by 0.0010 (0.0043% of the median speed) |
+| star-cluster | yes | - | 80 planet, 15 giant, 150 asteroid, 2 NS, 8 WD (255) | 12 planet, 4 giant, 40 asteroid, 2 NS, 8 WD (66) | yes: planet 80 to 12; giant 15 to 4; asteroid 150 to 40 | same places and masses; every velocity shifted by 0.0055 (0.21% of the median speed) |
+| kuiper-belt | yes | - | 1 star, 8 planet, 300 asteroid (309) | 1 star, 8 planet, 40 asteroid (49) | yes: asteroid 300 to 40 | same places and masses; every velocity shifted by 3.5e-9 (under 0.001% of the median speed) |
+| sagittarius-a | yes | - | 1 BH, 100 planet, 5 giant, 200 asteroid, 10 NS, 20 WD (336) | 1 BH, 12 planet, 4 giant, 40 asteroid, 10 NS, 20 WD (87) | yes: planet 100 to 12; giant 5 to 4; asteroid 200 to 40 | same places and masses; every velocity shifted by 0.000028 (under 0.001% of the median speed) |
 | binary-star-system | yes | - | 2 star, 5 planet, 2 giant, 20 asteroid (29) | 2 star, 5 planet, 2 giant, 20 asteroid (29) | no | identical |
 | solar-system | yes | comets-and-the-sun, goldilocks-question, keplers-laws, missing-mass, power-law-gravity, the-scale-of-the-solar-system | 1 star, 4 planet, 4 giant, 16 asteroid, 10 comet (35) | 1 star, 4 planet, 4 giant, 16 asteroid, 10 comet (35) | no | identical |
 | earth-moon-system | yes | tides | 2 planet (2) | 2 planet (2) | no | identical |
-| slingshot | yes | - | 2 BH, 25 planet, 5 giant, 40 asteroid (72) | 2 BH, 12 planet, 4 giant, 40 asteroid (58) | yes: planet 25 to 12; giant 5 to 4 | changed: BH (phase), asteroid (orbit 0.8) |
+| slingshot | yes | - | 2 BH, 25 planet, 5 giant, 40 asteroid (72) | 2 BH, 12 planet, 4 giant, 40 asteroid (58) | yes: planet 25 to 12; giant 5 to 4 | same places and masses; every velocity shifted by 0.0054 (0.025% of the median speed) |
 | rogue-encounter | yes | - | 1 BH, 1 star, 12 planet, 4 giant, 80 asteroid (98) | 1 BH, 1 star, 12 planet, 4 giant, 80 asteroid (98) | no | identical |
-| quasar-cannon | yes | - | 1 BH, 50 star, 15 planet, 2 giant, 10 asteroid (78) | 1 BH, 40 star, 12 planet, 2 giant, 10 asteroid (65) | yes: star 50 to 40; planet 15 to 12 | changed: BH (phase), giant (mass 0.9), asteroid (orbit 0.6) |
-| the-pinwheel-galaxy-core | yes | - | 2 BH, 200 star, 15 planet, 2 giant, 10 asteroid (229) | 2 BH, 40 star, 12 planet, 2 giant, 10 asteroid (66) | yes: star 200 to 40; planet 15 to 12 | changed: BH (phase), giant (mass 0.9), asteroid (orbit 0.2) |
-| star-frisbee | yes | - | 1 BH, 30 star, 15 planet, 2 giant, 10 asteroid (58) | 1 BH, 30 star, 12 planet, 2 giant, 10 asteroid (55) | yes: planet 15 to 12 | changed: BH (phase), star (orbit 0.02), giant (mass 0.9), asteroid (orbit 0.03) |
-| kessler-cascade | yes | - | 1 BH, 300 star (301) | 1 BH, 60 star (61) | yes: star 300 to 60 | changed: BH (phase) |
-| alien-dyson-swarm-collapse | yes | - | 1 BH, 100 star, 15 planet, 2 giant, 10 asteroid (128) | 1 BH, 40 star, 12 planet, 2 giant, 10 asteroid (65) | yes: star 100 to 40; planet 15 to 12 | changed: BH (orbit 0.1), giant (mass 0.9), asteroid (orbit 0.1) |
-| tidal-arm-tango | yes | - | 2 BH, 300 star, 15 planet, 2 giant, 10 asteroid (329) | 2 BH, 40 star, 12 planet, 2 giant, 10 asteroid (66) | yes: star 300 to 40; planet 15 to 12 | changed: BH (phase), giant (mass 1), asteroid (orbit 0.7) |
-| hungry-hungry-holes | yes | - | 4 BH, 50 star, 15 planet, 2 giant, 10 asteroid (81) | 4 BH, 40 star, 12 planet, 2 giant, 10 asteroid (68) | yes: star 50 to 40; planet 15 to 12 | changed: BH (orbit 0.9), giant (mass 0.5), asteroid (orbit 1) |
-| slingshot-gauntlet | yes | - | 5 BH, 1 star, 15 planet, 2 giant, 10 asteroid (33) | 5 BH, 1 star, 12 planet, 2 giant, 10 asteroid (30) | yes: planet 15 to 12 | changed: BH (phase), giant (mass 0.9), asteroid (orbit 0.8) |
-| black-hole-billiards | yes | - | 4 BH, 14 star, 15 planet, 2 giant, 10 asteroid (45) | 4 BH, 14 star, 12 planet, 2 giant, 10 asteroid (42) | yes: planet 15 to 12 | changed: BH (phase), star (orbit 0.6), giant (mass 0.6), asteroid (orbit 0.6) |
-| stellar-nursery | yes | - | 1 BH, 100 star, 15 planet, 2 giant, 10 asteroid (128) | 1 BH, 40 star, 12 planet, 2 giant, 10 asteroid (65) | yes: star 100 to 40; planet 15 to 12 | changed: BH (orbit 0.4), giant (mass 0.9), asteroid (orbit 1) |
+| quasar-cannon | yes | - | 1 BH, 50 star, 15 planet, 2 giant, 10 asteroid (78) | 1 BH, 40 star, 12 planet, 2 giant, 10 asteroid (65) | yes: star 50 to 40; planet 15 to 12 | same places and masses; every velocity shifted by 0.00011 (under 0.001% of the median speed) |
+| the-pinwheel-galaxy-core | yes | - | 2 BH, 200 star, 15 planet, 2 giant, 10 asteroid (229) | 2 BH, 40 star, 12 planet, 2 giant, 10 asteroid (66) | yes: star 200 to 40; planet 15 to 12 | same places and masses; every velocity shifted by 0.36 (0.060% of the median speed) |
+| star-frisbee | yes | - | 1 BH, 30 star, 15 planet, 2 giant, 10 asteroid (58) | 1 BH, 30 star, 12 planet, 2 giant, 10 asteroid (55) | yes: planet 15 to 12 | same places and masses; every velocity shifted by 2.8e-7 (under 0.001% of the median speed) |
+| kessler-cascade | yes | - | 1 BH, 300 star (301) | 1 BH, 60 star (61) | yes: star 300 to 60 | same places and masses; every velocity shifted by 0.11 (0.20% of the median speed) |
+| alien-dyson-swarm-collapse | yes | - | 1 BH, 100 star, 15 planet, 2 giant, 10 asteroid (128) | 1 BH, 40 star, 12 planet, 2 giant, 10 asteroid (65) | yes: star 100 to 40; planet 15 to 12 | same places and masses; every velocity shifted by 1.3 (14% of the median speed) |
+| tidal-arm-tango | yes | - | 2 BH, 300 star, 15 planet, 2 giant, 10 asteroid (329) | 2 BH, 40 star, 12 planet, 2 giant, 10 asteroid (66) | yes: star 300 to 40; planet 15 to 12 | same places and masses; every velocity shifted by 0.15 (0.013% of the median speed) |
+| hungry-hungry-holes | yes | - | 4 BH, 50 star, 15 planet, 2 giant, 10 asteroid (81) | 4 BH, 40 star, 12 planet, 2 giant, 10 asteroid (68) | yes: star 50 to 40; planet 15 to 12 | same places and masses; every velocity shifted by 0.45 (5.7% of the median speed) |
+| slingshot-gauntlet | yes | - | 5 BH, 1 star, 15 planet, 2 giant, 10 asteroid (33) | 5 BH, 1 star, 12 planet, 2 giant, 10 asteroid (30) | yes: planet 15 to 12 | same places and masses; every velocity shifted by 3.7e-7 (under 0.001% of the median speed) |
+| black-hole-billiards | yes | - | 4 BH, 14 star, 15 planet, 2 giant, 10 asteroid (45) | 4 BH, 14 star, 12 planet, 2 giant, 10 asteroid (42) | yes: planet 15 to 12 | same places and masses; every velocity shifted by 3.3e-7 (under 0.001% of the median speed) |
+| stellar-nursery | yes | - | 1 BH, 100 star, 15 planet, 2 giant, 10 asteroid (128) | 1 BH, 40 star, 12 planet, 2 giant, 10 asteroid (65) | yes: star 100 to 40; planet 15 to 12 | same places and masses; every velocity shifted by 0.68 (24% of the median speed) |
 | keplers-2nd-law | yes | keplers-laws, orbital-energy | 1 star, 2 planet (3) | 1 star, 2 planet (3) | no | identical |
 | retrograde-mars | yes | retrograde-motion | 1 star, 2 planet (3) | 1 star, 2 planet (3) | no | identical |
 | three-body-sensitivity-lab | yes | butterfly-effect | 3 star (3) | 3 star (3) | no | identical |
@@ -131,7 +131,7 @@ For every scene below, at the low tier a student reads a different:
 - the canvas line "Reduced population on this device: n of N bodies" (crowdNotes in js/bodyDrawSky.js), which states the cut;
 - the canvas summary read to a screen reader, "{total} bodies: ..." (js/canvasSummary.js), and the shared-link announcement "{n} objects" (js/share.js), which count the world as built;
 - the conservation lines (energy and angular-momentum drift, summed over every massive body) and the whole-system barycenter, which describe a different system;
-- any body's inspector values where the Uncut kinds column says *orbit* or *mass*: those bodies start from a different draw of the seeded stream;
+- a kept body's speed in its inspector, by the shift the Kept bodies column gives (its place, mass and name are the full tier's);
 
 and, scene by scene, what its own card or instruments say. No lesson, activity, course pack or Experiment Bench experiment loads any of these scenarios (see the lesson table above; the activities, teaching routes, course packs and js/experiments name only scenarios in it).
 
@@ -140,11 +140,11 @@ and, scene by scene, what its own card or instruments say. No lesson, activity, 
 - **exoplanet-lab**: Its card says "120+ exoplanets"; the low tier builds 12 planets and 4 gas giants.
 - **galactic-center**: Its card gives the black hole as 4000 solar masses, which the tier does not change (the hole is uncut and keeps its mass); it states no count.
 - **galactic-collision**: Its card says "hundreds of stars" (300 planets and 30 gas giants stand for them); the low tier builds 12 and 4. The two black holes keep their stated masses.
-- **hungry-hungry-holes**: Its card says "Four black holes": all four are built at both tiers with the same masses; their starting places differ between the tiers.
+- **hungry-hungry-holes**: Its card says "Four black holes": all four are built at both tiers, in the same places with the same masses.
 - **intermediate-mass-bh**: Its card gives 400 solar masses for the hole, which the tier does not change; it states no count.
 - **kessler-cascade**: Its card says "Hundreds of micro-stars"; the low tier builds 60 (num_micro_stars 300 capped to 60).
-- **kuiper-belt**: Its card names Pluto, Eris, Haumea, Makemake, Quaoar, Sedna, Orcus, Varuna, Ixion, Huya and 2002 AW197: all are kept (the eight dwarf planets are planets, uncut; the twelve named small bodies are the first twelve of the forty asteroids the low tier keeps), and their distance and speed from the Sun agree to 3e-5, only their starting phase differs. The 288 unnamed belt objects cut carry no number the card or an instrument quotes.
-- **micro-bh-swarm**: Its card gives the holes as 0.6 to 1.8 solar masses, which the tier does not change (the twelve holes are uncut; their orbits differ).
+- **kuiper-belt**: Its card names Pluto, Eris, Haumea, Makemake, Quaoar, Sedna, Orcus, Varuna, Ixion, Huya and 2002 AW197: all are kept (the eight dwarf planets are planets, uncut; the twelve named small bodies are the first twelve of the forty asteroids the low tier keeps), in the same places at both tiers. The 288 unnamed belt objects cut carry no number the card or an instrument quotes.
+- **micro-bh-swarm**: Its card gives the holes as 0.6 to 1.8 solar masses, which the tier does not change (the twelve holes are uncut).
 - **quasar-cannon**: Its card states no count.
 - **sagittarius-a**: Its card gives 4000 solar masses for the hole, which the tier does not change; it states no count.
 - **slingshot**: Its card gives the holes as 60 and 3 solar masses, which the tier does not change; it states no count.
@@ -157,8 +157,8 @@ and, scene by scene, what its own card or instruments say. No lesson, activity, 
 - **supernova-remnant**: Its card states no count.
 - **the-pinwheel-galaxy-core**: Its card states no count.
 - **tidal-arm-tango**: Its card states no count.
-- **triple-bh-system**: Its card gives the holes as 20, 15 and 10 solar masses, which the tier does not change (the holes keep their masses; only their phase differs).
-- **white-dwarf-binary**: Its card states no count; the two white dwarfs keep their masses and orbit (only their phase differs).
+- **triple-bh-system**: Its card gives the holes as 20, 15 and 10 solar masses, which the tier does not change.
+- **white-dwarf-binary**: Its card states no count; the two white dwarfs are uncut.
 
 ## Computation sizes by tier
 

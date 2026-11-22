@@ -82,7 +82,7 @@ const COMMON = [
   'the canvas line "Reduced population on this device: n of N bodies" (crowdNotes in js/bodyDrawSky.js), which states the cut',
   'the canvas summary read to a screen reader, "{total} bodies: ..." (js/canvasSummary.js), and the shared-link announcement "{n} objects" (js/share.js), which count the world as built',
   'the conservation lines (energy and angular-momentum drift, summed over every massive body) and the whole-system barycenter, which describe a different system',
-  "any body's inspector values where the Uncut kinds column says *orbit* or *mass*: those bodies start from a different draw of the seeded stream",
+  "a kept body's speed in its inspector, by the shift the Kept bodies column gives (its place, mass and name are the full tier's)",
 ];
 const NO_COUNT = 'Its card states no count.';
 const READABLE = {
@@ -95,15 +95,15 @@ const READABLE = {
   'galactic-collision':
     'Its card says "hundreds of stars" (300 planets and 30 gas giants stand for them); the low tier builds 12 and 4. The two black holes keep their stated masses.',
   'hungry-hungry-holes':
-    'Its card says "Four black holes": all four are built at both tiers with the same masses; their starting places differ between the tiers.',
+    'Its card says "Four black holes": all four are built at both tiers, in the same places with the same masses.',
   'intermediate-mass-bh':
     'Its card gives 400 solar masses for the hole, which the tier does not change; it states no count.',
   'kessler-cascade':
     'Its card says "Hundreds of micro-stars"; the low tier builds 60 (num_micro_stars 300 capped to 60).',
   'kuiper-belt':
-    'Its card names Pluto, Eris, Haumea, Makemake, Quaoar, Sedna, Orcus, Varuna, Ixion, Huya and 2002 AW197: all are kept (the eight dwarf planets are planets, uncut; the twelve named small bodies are the first twelve of the forty asteroids the low tier keeps), and their distance and speed from the Sun agree to 3e-5, only their starting phase differs. The 288 unnamed belt objects cut carry no number the card or an instrument quotes.',
+    'Its card names Pluto, Eris, Haumea, Makemake, Quaoar, Sedna, Orcus, Varuna, Ixion, Huya and 2002 AW197: all are kept (the eight dwarf planets are planets, uncut; the twelve named small bodies are the first twelve of the forty asteroids the low tier keeps), in the same places at both tiers. The 288 unnamed belt objects cut carry no number the card or an instrument quotes.',
   'micro-bh-swarm':
-    'Its card gives the holes as 0.6 to 1.8 solar masses, which the tier does not change (the twelve holes are uncut; their orbits differ).',
+    'Its card gives the holes as 0.6 to 1.8 solar masses, which the tier does not change (the twelve holes are uncut).',
   'quasar-cannon': NO_COUNT,
   'sagittarius-a':
     'Its card gives 4000 solar masses for the hole, which the tier does not change; it states no count.',
@@ -121,15 +121,15 @@ const READABLE = {
   'the-pinwheel-galaxy-core': NO_COUNT,
   'tidal-arm-tango': NO_COUNT,
   'triple-bh-system':
-    'Its card gives the holes as 20, 15 and 10 solar masses, which the tier does not change (the holes keep their masses; only their phase differs).',
+    'Its card gives the holes as 20, 15 and 10 solar masses, which the tier does not change.',
   'white-dwarf-binary':
-    'Its card states no count; the two white dwarfs keep their masses and orbit (only their phase differs).',
+    'Its card states no count; the two white dwarfs are uncut.',
 };
 
 const noop = () => {};
 
 /** Build one world; its counts and a digest of every body, by kind. */
-function build(id, tier, seed, overrides) {
+function build(id, tier, seed, overrides, frames = 0) {
   setTier(tier);
   resetPresetMemory();
   const settings = JSON.parse(JSON.stringify(DEFAULT_SETTINGS));
@@ -145,7 +145,7 @@ function build(id, tier, seed, overrides) {
   const warn = console.warn;
   console.warn = noop;
   try {
-    engine(normalizeSeed(seed), () =>
+    engine(normalizeSeed(seed), () => {
       buildWorld({
         settings,
         state,
@@ -158,93 +158,83 @@ function build(id, tier, seed, overrides) {
         computeAreaSweep: noop,
         isAreaSweepSuppressed: () => true,
         regenerateStarfield: noop,
-      })
-    );
+      });
+      // A fixed step, so a run is the same calculation whatever the machine.
+      for (let f = 0; f < frames; f++) physics.updatePhysics(0.01);
+    });
   } finally {
     Date.now = now;
     performance.now = perf;
     console.warn = warn;
   }
-  // Positions and velocities are taken from the heaviest body in the world, so
-  // an orbit that is the same about its primary reads the same even when the
-  // builder recentres the world on a barycentre the cut bodies shifted.
-  const all = KINDS.flatMap(([l]) => physics[l]);
-  const primary = all.reduce((m, b) => (!m || b.mass > m.mass ? b : m), null);
-  // The primary itself is measured from the origin, against the size of the
-  // world (the farthest body from it), so a recentring shows at its true size.
-  const size = Math.max(
-    1e-300,
-    ...all.map(b =>
-      Math.hypot(b.pos.x - primary.pos.x, b.pos.y - primary.pos.y)
-    )
-  );
   const counts = {};
-  const bodies = {};
-  for (const [list] of KINDS) {
+  const bodies = new Map();
+  for (const [list, short] of KINDS) {
     counts[list] = physics[list].length;
-    bodies[list] = physics[list].map(b => {
-      const ref =
-        b === primary ? { pos: { x: 0, y: 0 }, vel: { x: 0, y: 0 } } : primary;
-      return {
-        x: b.pos.x - ref.pos.x,
-        y: b.pos.y - ref.pos.y,
-        vx: b.vel.x - ref.vel.x,
-        vy: b.vel.y - ref.vel.y,
+    for (const b of physics[list])
+      bodies.set(b.id, {
+        kind: short,
+        x: b.pos.x,
+        y: b.pos.y,
+        vx: b.vel.x,
+        vy: b.vel.y,
         mass: b.mass,
         name: b.name ?? '',
-        size: b === primary ? size : 0,
-      };
-    });
+      });
   }
   return { counts, bodies, note: builtPopulation() };
 }
 
-/** Both tiers of one scene, compared. */
+const pct = f =>
+  100 * f < 0.001 ? 'under 0.001%' : `${(100 * f).toPrecision(2)}%`;
+
+/**
+ * Both tiers of one scene, compared body by body. The builder makes the whole
+ * population at both tiers and drops what is past a cap last, so every body the
+ * low tier keeps should be the full tier's body of the same id, in the same
+ * place with the same mass and name. Its velocity may differ by one shift
+ * common to every body: the builder sets the world's total momentum to zero
+ * after the cut, and the cut bodies carried some of it.
+ */
 function compare(id, seed, overrides) {
   const full = build(id, 'full', seed, overrides);
   const low = build(id, 'low', seed, overrides);
   setTier('full');
   const differs = KINDS.some(([l]) => full.counts[l] !== low.counts[l]);
-  // The kinds the cap did not cut: are their bodies the same bodies, in the
-  // same places? A cap draws fewer random numbers, which can change a body that
-  // is built or placed after it. Each such kind is labelled by the largest
-  // change found in it: its mass; its distance or speed from the primary
-  // ("orbit", with the largest fractional change); only where it is on that
-  // orbit ("phase"); or only its name.
-  const rel = (a, b) =>
-    Math.abs(a - b) / Math.max(Math.abs(a), Math.abs(b), 1e-300);
-  const r = (x, y) => Math.hypot(x, y);
-  const how = (a, b) => {
-    if (rel(a.mass, b.mass) > 1e-12) return [3, rel(a.mass, b.mass)];
-    const d = a.size
-      ? r(a.x - b.x, a.y - b.y) / a.size
-      : Math.max(
-          rel(r(a.x, a.y), r(b.x, b.y)),
-          rel(r(a.vx, a.vy), r(b.vx, b.vy))
-        );
-    if (d > 1e-9) return [2, d];
-    if (a.x !== b.x || a.y !== b.y || a.vx !== b.vx || a.vy !== b.vy)
-      return [1, 0];
-    return [a.name !== b.name ? 0 : -1, 0];
-  };
-  const LABEL = ['name', 'phase', 'orbit', 'mass'];
   const moved = [];
-  for (const [l, short] of KINDS) {
-    if (full.counts[l] !== low.counts[l]) continue;
-    let worst = [-1, 0];
-    full.bodies[l].forEach((a, i) => {
-      const h = how(a, low.bodies[l][i]);
-      if (h[0] > worst[0] || (h[0] === worst[0] && h[1] > worst[1])) worst = h;
-    });
-    if (worst[0] >= 0)
-      moved.push(
-        `${short} (${LABEL[worst[0]]}${
-          worst[0] >= 2 ? ` ${worst[1].toPrecision(1)}` : ''
-        })`
-      );
+  const dv = [];
+  for (const [bid, b] of low.bodies) {
+    const a = full.bodies.get(bid);
+    if (
+      !a ||
+      a.kind !== b.kind ||
+      a.x !== b.x ||
+      a.y !== b.y ||
+      a.mass !== b.mass ||
+      a.name !== b.name
+    )
+      moved.push(bid);
+    else dv.push([a.vx - b.vx, a.vy - b.vy, Math.hypot(a.vx, a.vy)]);
   }
-  const same = moved.length === 0;
-  return { full, low, differs, same, moved };
+  const mean = i => dv.reduce((n, d) => n + d[i], 0) / (dv.length || 1);
+  const shift = [mean(0), mean(1)];
+  const speeds = dv.map(d => d[2]).sort((x, y) => x - y);
+  const median = speeds[Math.floor(speeds.length / 2)] || 0;
+  // One shift for all: no body's difference strays from the mean by more than
+  // rounding (1e-9 of the median speed).
+  const common = dv.every(
+    d =>
+      Math.hypot(d[0] - shift[0], d[1] - shift[1]) <=
+      1e-9 * Math.max(median, 1e-300)
+  );
+  const size = Math.hypot(...shift);
+  const same = moved.length === 0 && common;
+  const kept = !same
+    ? `changed: ${moved.length} bodies moved${common ? '' : ', velocities differ unevenly'}`
+    : size === 0
+      ? 'identical'
+      : `same places and masses; every velocity shifted by ${size.toPrecision(2)} (${pct(size / median)} of the median speed)`;
+  return { full, low, differs, same, kept, shift: size, median };
 }
 
 const countText = counts =>
@@ -338,7 +328,7 @@ function render() {
   );
   p('');
   p(
-    'Each scene below is built in Node at both tiers from the same seed. "Uncut kinds" says whether the bodies of every kind the cap did not cut are identical at both tiers (position, velocity, mass and name, slot by slot). If not, it names each kind that changed and the largest change in it: *mass* (with the largest fractional change); *orbit* (its distance or speed from the heaviest body changed, with the largest fractional change; the heaviest body itself is measured by how far it moved, as a fraction of the distance to the farthest body); *phase* (same distance and speed, another point on the orbit; for the heaviest body, a shift below a billionth of that distance); or *name* only. A cap draws fewer random numbers, so bodies generated or placed after a capped population are drawn from a different point in the seeded stream. A lesson scene is built as its setup states it (scenario, seed, settings), the way `payloadFromSetup` in `js/investigations.js` hands it to the builder.'
+    "Each scene below is built in Node at both tiers from the same seed. The builder makes the whole population at both tiers and drops what is past a cap last (`js/world/build.js`), so the low tier keeps the full tier's own bodies. \"Kept bodies\" compares every body the low tier keeps with the full tier's body of the same id: *identical* (position, velocity, mass and name); *same places and masses* with every velocity shifted by one common amount, given with its size as a share of the median speed (the builder sets the world's total momentum to zero after the cut, and the cut bodies carried some of it); or *changed*, which the check refuses. A lesson scene is built as its setup states it (scenario, seed, settings), the way `payloadFromSetup` in `js/investigations.js` hands it to the builder."
   );
   p('');
   const lessonCount = new Set(lessonRows.map(x => x.id)).size;
@@ -356,7 +346,7 @@ function render() {
     `- Built-in scenarios: ${catRows.length}; ${catDiff.length} differ between tiers.`
   );
   p(
-    `- Scenes where a kind the cap did not cut still changed: ${
+    `- Scenes where a kept body changed: ${
       [
         ...new Set(
           [...lessonRows, ...catRows].filter(x => !x.r.same).map(x => x.id)
@@ -368,7 +358,7 @@ function render() {
   p('## Lesson scenes');
   p('');
   p(
-    '| Scenario | Lessons | Seed | Settings | Full tier | Low tier | Differs | Uncut kinds |'
+    '| Scenario | Lessons | Seed | Settings | Full tier | Low tier | Differs | Kept bodies |'
   );
   p('|---|---|---|---|---|---|---|---|');
   for (const { id, s, r } of lessonRows) {
@@ -382,7 +372,7 @@ function render() {
       } | ${countText(r.full.counts)} (${total(r.full.counts)}) | ${countText(
         r.low.counts
       )} (${total(r.low.counts)}) | ${r.differs ? `yes: ${cut(r)}` : 'no'} | ${
-        r.same ? 'identical' : `changed: ${r.moved.join(', ')}`
+        r.kept
       } |`
     );
   }
@@ -394,7 +384,7 @@ function render() {
   );
   p('');
   p(
-    '| Scenario | Gallery | Lessons | Full tier | Low tier | Differs | Uncut kinds |'
+    '| Scenario | Gallery | Lessons | Full tier | Low tier | Differs | Kept bodies |'
   );
   p('|---|---|---|---|---|---|---|');
   for (const { id, r, gallery } of catRows) {
@@ -407,7 +397,7 @@ function render() {
       } | ${countText(r.full.counts)} (${total(r.full.counts)}) | ${countText(
         r.low.counts
       )} (${total(r.low.counts)}) | ${r.differs ? `yes: ${cut(r)}` : 'no'} | ${
-        r.same ? 'identical' : `changed: ${r.moved.join(', ')}`
+        r.kept
       } |`
     );
   }
@@ -442,11 +432,29 @@ function render() {
   for (const k of Object.keys(COMPUTE_TIERS.full))
     p(`| ${k} | ${COMPUTE_TIERS.full[k]} | ${COMPUTE_TIERS.low[k]} |`);
   p('');
-  return { text: lines.join('\n'), missing: [...new Set(missing)] };
+  const changed = [
+    ...new Set(
+      [...lessonRows, ...catRows].filter(x => !x.r.same).map(x => x.id)
+    ),
+  ];
+  return {
+    text: lines.join('\n'),
+    missing: [...new Set(missing)],
+    changed,
+    lessonRows,
+    catRows,
+  };
 }
 
-const { text, missing } = render();
-if (process.argv.includes('--check')) {
+export { render, compare, build, OUT };
+
+const main =
+  process.argv[1] &&
+  resolve(process.argv[1]) === fileURLToPath(import.meta.url);
+const { text, missing, changed } = main ? render() : {};
+if (!main) {
+  // imported (tests/tierInvariance.test.js)
+} else if (process.argv.includes('--check')) {
   let committed = '';
   try {
     committed = readFileSync(OUT, 'utf8');
@@ -457,6 +465,10 @@ if (process.argv.includes('--check')) {
   if (committed !== text)
     problems.push(
       'docs/tier-invariance.md is not what tools/tier-table.mjs writes; run it and commit the result.'
+    );
+  if (changed.length)
+    problems.push(
+      `A body the low tier keeps is not the full tier's: ${changed.join(', ')}.`
     );
   if (missing.length)
     problems.push(
