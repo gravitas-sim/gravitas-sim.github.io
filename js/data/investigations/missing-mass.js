@@ -75,33 +75,41 @@ const tracerRows = ctx => {
   const b = ctx.selected;
   if (!b) {
     return [
-      { label: 'Tracer', value: 'select a disc star, on the canvas or below' },
+      {
+        id: 'tracer',
+        label: 'Tracer',
+        value: 'select a disc star, on the canvas or below',
+      },
+      { id: 'dist', label: 'Its distance from the center', value: '-' },
+      { id: 'speed', label: 'Its speed now', value: '-' },
+      {
+        id: 'pred',
+        label: 'Speed the visible mass alone would give',
+        value: '-',
+      },
+      { id: 'ratio', label: 'Measured ÷ predicted', value: '-' },
     ];
   }
   const rc = ctx.rotationCurve();
   const center = rc?.center;
-  if (!center) return [{ label: 'Tracer', value: b.name || 'body' }];
-  const r = Math.hypot(b.pos.x - center.x, b.pos.y - center.y);
-  const v = Math.hypot(b.vel.x, b.vel.y);
-  // What the visible mass inside this radius would give, which is the dashed
-  // line on the plot. Computed from the same enclosed-mass the panel uses.
-  const inside = (rc.bodies || []).reduce(
-    (m, o) =>
-      Math.hypot(o.pos.x - center.x, o.pos.y - center.y) <= r
-        ? m + (o.mass || 0)
-        : m,
-    center.mass || 0
-  );
-  const predicted = r > 0 ? Math.sqrt((ctx.G * inside) / r) : NaN;
+  if (!center)
+    return [{ id: 'tracer', label: 'Tracer', value: b.name || 'body' }];
+  const { r, v, predicted } = tracerOf(rc, ctx.G, b);
   return [
-    { label: 'Tracer', value: b.name || 'body' },
-    { label: 'Its distance from the center', value: ctx.distance(r) },
-    { label: 'Its speed now', value: ctx.speed(v) },
+    { id: 'tracer', label: 'Tracer', value: b.name || 'body' },
     {
+      id: 'dist',
+      label: 'Its distance from the center',
+      value: ctx.distance(r),
+    },
+    { id: 'speed', label: 'Its speed now', value: ctx.speed(v) },
+    {
+      id: 'pred',
       label: 'Speed the visible mass alone would give',
       value: Number.isFinite(predicted) ? ctx.speed(predicted) : '-',
     },
     {
+      id: 'ratio',
       label: 'Measured ÷ predicted',
       value:
         Number.isFinite(predicted) && predicted > 0
@@ -110,6 +118,37 @@ const tracerRows = ctx => {
       emphasis: true,
     },
   ];
+};
+
+/**
+ * One body's distance, speed and the speed the visible mass inside its orbit
+ * would give: the dashed line on the plot, from the same enclosed mass.
+ */
+const tracerOf = (rc, G, b) => {
+  const c = rc.center;
+  const r = Math.hypot(b.pos.x - c.x, b.pos.y - c.y);
+  const v = Math.hypot(b.vel.x, b.vel.y);
+  const inside = (rc.bodies || []).reduce(
+    (m, o) =>
+      Math.hypot(o.pos.x - c.x, o.pos.y - c.y) <= r ? m + (o.mass || 0) : m,
+    c.mass || 0
+  );
+  return { r, v, predicted: r > 0 ? Math.sqrt((G * inside) / r) : NaN };
+};
+
+/**
+ * The ratios of the outer three fifths of the disc (by distance), so that a reading
+ * taken from any outer star is accepted: [{r, ratio}] sorted by r.
+ */
+const outerRatios = ctx => {
+  const rc = ctx.rotationCurve();
+  if (!rc?.center) return [];
+  const all = (rc.bodies || [])
+    .map(b => ({ ...tracerOf(rc, ctx.G, b), name: b.name }))
+    .filter(x => x.r > 0 && x.predicted > 0)
+    .map(x => ({ r: x.r, ratio: x.v / x.predicted }))
+    .sort((a, b) => a.r - b.r);
+  return all.slice(Math.floor(all.length * 0.4));
 };
 
 const DM_SOLAR = {
@@ -141,6 +180,13 @@ const DM_CLUSTER = {
   paused: true,
 };
 
+// The fit opens with no mass in the disc and none in the halo: the starting
+// position is not a guess at the answer. Where a step holds the disc, it holds
+// the mass its light implies (the Stars only preset of the instrument), which
+// is a premise of the fit; the fit's answer is the halo.
+const NEUTRAL_FIT = { discMass: 0, haloVFlat: 0 };
+const HELD_DISC = { discMass: 3.3, discScale: 2.6 };
+
 const DARK_MATTER = {
   id: 'missing-mass',
   thumbnail: 'images/scenarios/milky-way-rotation.webp',
@@ -159,6 +205,18 @@ const DARK_MATTER = {
   // the whole set without a second list to keep in step.
   tags: ['galaxies', 'gravity'],
   lock: { placement: true, inspector: false, areaSweep: false },
+  // A deeper step revised under a new id: its saved answer stays readable as an
+  // answer from an earlier version and is never marked against the new step.
+  retired: {
+    'dark-fraction-with-an-error-bar': {
+      to: 'error-bar-from-your-fits',
+      release: '3.1',
+      was: {
+        en: 'Give the ratio of halo mass to visible mass inside 30 kpc as a value with an uncertainty, copying the uncertainty from the step before.',
+        es: 'Dar el cociente entre la masa del halo y la masa visible dentro de 30 kpc como un valor con su incertidumbre, copiando la incertidumbre del paso anterior.',
+      },
+    },
+  },
   objectives: [
     'Explain why orbital speed falls as the inverse square root of radius when the mass is concentrated in the middle',
     'Read a rotation curve and describe what its slope says about where the mass is',
@@ -221,9 +279,9 @@ const DARK_MATTER = {
       title: 'Which arrangement gives a flat curve?',
       kind: 'choice',
       tool: { id: 'dm-shapes' },
-      body: `You have just seen four ways of arranging the same mass, and only one
-             of them produced a curve that stays level as you go out. Use the
-             instrument to check your answer before committing to it.`,
+      body: `You have just tried four ways of arranging the same mass and watched
+             the curve each one gives. Go back to the instrument if you want
+             another look, then commit to an answer.`,
       prompt: 'A rotation curve stays flat when…',
       options: [
         'the mass is concentrated in the middle',
@@ -349,10 +407,10 @@ const DARK_MATTER = {
       kind: 'choice',
       tool: { id: 'dm-enclosed', values: { shape: 1, radius: 10 } },
       body: `Go back to M(&lt;r) = v²·r/G, and this time treat the speed as known
-             and the mass as the unknown. If v is the same at every radius, then
-             M(&lt;r) is proportional to r.
-             \n\nThe instrument will tell you the answer if you drag the marker.
-             Work it out first.`,
+             and the mass as the unknown. Suppose v has the same value at every
+             radius.
+             \n\nWork out how the mass inside, M(&lt;r), has to change as r grows,
+             before you drag the marker in the instrument.`,
       prompt: 'A flat rotation curve means that as you go further out…',
       options: [
         'the enclosed mass stops growing',
@@ -439,10 +497,9 @@ const DARK_MATTER = {
       setup: DM_EXPECTED,
       body: `A spiral galaxy is a disc of stars with a dense bulge in the
              middle, and most of its light comes from that bulge and the inner
-             disc. In that respect it is built like the Solar System: bright and
-             heavy in the center, thin and faint further out.
-             \n\nThis scenario is a galaxy built on exactly that assumption. Every
-             star was launched at the speed the visible mass says it should have.
+             disc.
+             \n\nThis scenario holds such a galaxy: a bulge and ninety
+             disc stars, each on a circular orbit around the center.
              \n\nBefore you look at the panel, commit to an answer.`,
       prompt: 'The rotation curve of this galaxy will…',
       options: [
@@ -452,11 +509,13 @@ const DARK_MATTER = {
         'have no particular shape',
       ],
       answer: 0,
-      because: `It falls off as 1/√r. The reasoning is the same as for the Solar
-                System and so is the answer: put most of the mass in the middle,
-                and the mass enclosed by an orbit stops growing once you are
-                outside the bulge. This scenario is the prediction, drawn out in
-                full. The next one is what telescopes actually find.`,
+      because: `It falls off as 1/√r. This galaxy was built on exactly one
+                assumption: every star was launched at the speed the visible
+                mass says it should have. The reasoning is then the same as for
+                the Solar System and so is the answer: with most of the mass in
+                the middle, the mass enclosed by an orbit stops growing once you
+                are outside the bulge. This scenario is the prediction, drawn out
+                in full. The next one is what telescopes actually find.`,
     },
     {
       sid: 'measure-the-expected-curve',
@@ -514,12 +573,13 @@ const DARK_MATTER = {
       body: `Record what the panel reports now. The visible mass is unchanged
              from the previous scenario, so any difference is in the motion and
              not in the bookkeeping.
-             \n\nBefore you write the numbers down, look at one star. Select an
-             outer disc star - from the canvas, or from the list below - and read
-             the last two lines of the readout: how fast it is actually moving,
-             and how fast the visible mass inside its orbit says it should be.
-             The ratio between those is the whole of this investigation, measured on one
-             object you chose rather than read off a curve somebody drew.`,
+             \n\nThen take one star as a case. Select an outer disc star, from
+             the canvas or from the list below. The readout gives how fast it is
+             actually moving, how fast the visible mass inside its orbit says it
+             should be moving, and the ratio between the two. Press
+             <strong>Take reading</strong> beside the last field to record that
+             ratio for the star you chose. Any outer star will do; take a second
+             one and compare.`,
       probe: tracerRows,
       fields: [
         { id: 'obs_slope', label: 'Outer slope (the exponent)', unit: '' },
@@ -532,19 +592,42 @@ const DARK_MATTER = {
         {
           id: 'obs_gap',
           label:
-            'At the outer edge, roughly how many times faster are the stars moving than the dashed prediction?',
+            'For the star you selected: its speed divided by the speed the visible mass predicts',
           unit: '×',
+          source: { probe: 'ratio' },
         },
       ],
+      validate: (v, ctx) => {
+        if (!Number.isFinite(v.obs_gap)) return null;
+        const outer = outerRatios(ctx);
+        if (!outer.length) return null;
+        const ratios = outer.map(o => o.ratio);
+        const lo = Math.min(...ratios);
+        const hi = Math.max(...ratios);
+        if (v.obs_gap < lo * 0.9 || v.obs_gap > hi * 1.1) {
+          return {
+            level: 'warn',
+            message:
+              'That is not the ratio of any outer disc star in this scene. Select one star, from the canvas or the list, and press Take reading beside this field.',
+          };
+        }
+        return {
+          level: 'ok',
+          message: `That is a reading for one star. The outer stars in this scene run from ${Math.round(lo * 10) / 10} to ${Math.round(hi * 10) / 10} times the prediction, so a second star gives a different number: what do they have in common?`,
+        };
+      },
     },
 
     // --- Part 4: do what the astronomers actually do -------------------------
+    //
+    // Every fit step opens neutral: the halo at zero and, until the step that
+    // holds the disc at what the light implies, the disc at zero too.
     {
       sid: 'now-do-what-the-astronomers',
       bind: GALAXY_TRACERS,
       type: 'read',
       title: 'Now do what the astronomers did',
-      tool: { id: 'dm-fit', values: { haloVFlat: 0 } },
+      tool: { id: 'dm-fit', values: NEUTRAL_FIT, presets: false },
       body: `Measuring a flat curve is the easy half. The hard half, and the one
              that took the 1970s and 1980s to settle, is working out what mass
              distribution could possibly produce it — and showing that no
@@ -559,7 +642,7 @@ const DARK_MATTER = {
              choose how much mass the disc has and how spread out it is, because
              neither is known precisely from the light alone. You may not move the
              data.`,
-      tip: 'The panel scores you: "average miss" is how far your curve sits from the points, in km/s, and the data itself is only good to about ±5. Get under that and the plot says FITTED.',
+      tip: 'The panel scores you: "average miss" is how far your curve sits from the points, in km/s, and it states how good the data itself is beside it. Get under that and the plot says FITTED.',
     },
     {
       sid: 'try-it-with-stars-alone',
@@ -568,22 +651,23 @@ const DARK_MATTER = {
       title: 'Try it with stars alone',
       tool: {
         id: 'dm-fit',
-        values: { haloVFlat: 0 },
+        values: NEUTRAL_FIT,
         hide: ['haloVFlat', 'haloCore'],
+        presets: false,
       },
-      body: `The halo is switched off and hidden. You have two sliders: how much
-             mass is in the disc, and how far it is spread. Both are genuinely
-             uncertain in a real galaxy, so this is a fair fight.
+      body: `The halo is switched off and hidden, and the disc starts with no
+             mass at all. You have two sliders: how much mass is in the disc,
+             and how far it is spread. Both are genuinely uncertain in a real
+             galaxy, so this is a fair fight.
              \n\nTry to fit the curve. Really try — the point of this step is not
              to fail quickly.`,
       checklist: [
-        'Start from the "Stars only" preset and look at where the model falls below the data',
-        'Push the disc mass up until the outer points are matched, and look at what happened to the inner ones',
-        'Bring the mass back down until the inner points are matched, and look at the outer ones',
+        'Raise the disc mass from zero and watch where the model sits against the points at the inner end and at the outer end',
+        'Move the mass up and down to match the inner points, then the outer points, and look at what happens to the other end each time',
         'Try spreading the disc out with the scale-length slider, and then squeezing it in',
         'Find the best "average miss" you can manage, and write down what it is',
       ],
-      tip: 'A heavier disc lifts the whole curve. A wider disc moves its peak outward and flattens it a little. Neither changes the fact that a disc curve comes back down.',
+      tip: 'A heavier disc lifts the whole curve. A wider disc moves its peak outward and flattens it a little.',
     },
     {
       sid: 'record-your-best-stars-only',
@@ -594,12 +678,14 @@ const DARK_MATTER = {
       title: 'Record your best stars-only fit',
       tool: {
         id: 'dm-fit',
-        values: { haloVFlat: 0 },
+        values: NEUTRAL_FIT,
         hide: ['haloVFlat', 'haloCore'],
+        presets: false,
       },
       body: `Whatever your best attempt was, record it. This is a real result and
              it is worth having in your own handwriting: it is the number that
-             rules out the obvious explanation.`,
+             rules out the obvious explanation. The instrument here starts empty
+             again, so bring it back to your best fit before you read it.`,
       fields: [
         { id: 'so_rms', label: 'Best average miss you achieved', unit: 'km/s' },
         { id: 'so_disc', label: 'Disc mass that gave it', unit: '× 10¹⁰ M☉' },
@@ -615,7 +701,7 @@ const DARK_MATTER = {
           kind: 'text',
         },
       ],
-      tip: 'The best possible stars-only fit leaves an average miss of about 15 km/s, three times the size of the error bars, and it is worst at the outer edge. If you got close to that, you found the real answer.',
+      tip: 'Compare your average miss with the error bars the readout quotes for the data. A fit has to get inside those before it can be called a fit.',
     },
     {
       sid: 'why-a-heavier-disc-cannot',
@@ -625,12 +711,13 @@ const DARK_MATTER = {
       kind: 'choice',
       tool: {
         id: 'dm-fit',
-        values: { haloVFlat: 0 },
+        values: NEUTRAL_FIT,
         hide: ['haloVFlat', 'haloCore'],
+        presets: false,
       },
-      body: `You have just discovered something that took the field a decade to
-             accept. Adding mass to the disc does lift the outer curve — but it
-             lifts the inner curve at the same time, and by more.`,
+      body: `Look back over your own attempts. Each change to the disc moved the
+             model at the inner end and at the outer end of the curve, and you
+             saw where it stopped matching the points.`,
       prompt: 'No disc, at any mass, fits the whole curve because…',
       options: [
         'a disc cannot hold enough mass to matter',
@@ -656,22 +743,29 @@ const DARK_MATTER = {
       bind: GALAXY_TRACERS,
       type: 'explore',
       title: 'Now add the halo',
+      // The disc is held at what its light implies, a premise of the fit and not
+      // its answer; the halo opens at zero with a core that is neither end of
+      // the range that fits.
       tool: {
         id: 'dm-fit',
-        values: { discMass: 3.3, discScale: 2.6, haloVFlat: 0 },
+        values: { ...HELD_DISC, haloVFlat: 0, haloCore: 10.5 },
+        hide: ['discMass', 'discScale'],
+        presets: false,
       },
       body: `Two more sliders, controlling a component that is not made of stars.
              The halo's flat speed sets how much of it there is; its core radius
              sets how quickly it takes over from the disc.
-             \n\nGet the plot to say FITTED.`,
+             \n\nThe disc is held at the mass its light implies, which the
+             readout gives as the visible mass; the light fixes it to about
+             20%, so it is not yours to move in this step. Get the plot to say
+             FITTED.`,
       checklist: [
-        'Set the disc back to about 3.3 and its scale length to about 2.6',
-        'Raise the halo strength from zero and watch the outer curve lift while the inner curve barely moves',
-        'Adjust the core radius until the two components hand over smoothly',
-        'Drive the average miss below 5 km/s and read the FITTED marker',
+        'Raise the halo strength from zero and watch how the outer curve responds, and how the inner curve responds',
+        'Adjust the core radius and watch how the two components hand over',
+        'Drive the average miss below the data’s own error bars and read the FITTED marker',
         'Read the last row: how much dark mass there is for every unit of visible mass',
       ],
-      tip: 'This is the shape the halo has to have, and the reason the pseudo-isothermal profile is used: negligible in the middle, growing without limit outward. Nothing made of stars does that.',
+      tip: 'The halo has to be negligible in the middle and keep growing outward, which is why the pseudo-isothermal profile is used. Nothing made of stars does that.',
     },
     {
       sid: 'record-the-fit-that-works',
@@ -680,10 +774,17 @@ const DARK_MATTER = {
       requires: ['now-add-the-halo'],
       type: 'measure',
       title: 'Record the fit that works',
-      tool: { id: 'dm-fit' },
-      body: `Write down the model that fitted. These four numbers are a
-             decomposition of a galaxy, and they are the same four numbers a
-             published rotation-curve paper reports.`,
+      tool: {
+        id: 'dm-fit',
+        values: { ...HELD_DISC, haloVFlat: 0, haloCore: 10.5 },
+        hide: ['discMass', 'discScale'],
+        presets: false,
+      },
+      body: `Write down the model that fitted. These numbers are a
+             decomposition of a galaxy, and they are the same ones a
+             published rotation-curve paper reports. The instrument here starts
+             without a halo again, so bring it back to your fit before you read
+             it.`,
       fields: [
         { id: 'fit_vflat', label: 'Halo flat speed', unit: 'km/s' },
         { id: 'fit_core', label: 'Halo core radius', unit: 'kpc' },
@@ -695,7 +796,63 @@ const DARK_MATTER = {
           unit: '× 10¹⁰ M☉',
         },
       ],
-      tip: 'A good fit lands near 150 km/s and a core of about 6 kpc, with an average miss around 2 km/s. There is a genuine degeneracy between the two halo sliders, which is why real papers quote them together with a covariance.',
+      tip: 'There is a genuine degeneracy between the two halo sliders: different pairs fit almost equally well, which is why real papers quote them together with a covariance.',
+    },
+    {
+      sid: 'compare-your-two-fits',
+      bind: GALAXY_TRACERS,
+      requires: ['record-your-best-stars-only', 'record-the-fit-that-works'],
+      type: 'measure',
+      title: 'Your two fits, side by side',
+      body: `You saved two fits: your best with stars alone, and your fit with
+             the halo. The table below is copied from what you recorded, nothing
+             else, so the two sit in one place.
+             \n\nThe data is good to a few km/s at each point, and the
+             instrument states how many. Say which of your two fits describes
+             the points within that, and what in the table tells you so.`,
+      fields: [
+        {
+          id: 'cmp_so_rms',
+          label: 'Stars only: average miss',
+          unit: 'km/s',
+          compute: (v, e) => e('record-your-best-stars-only', 'so_rms'),
+          decimals: 1,
+        },
+        {
+          id: 'cmp_so_disc',
+          label: 'Stars only: disc mass (× 10¹⁰ M☉)',
+          unit: '',
+          compute: (v, e) => e('record-your-best-stars-only', 'so_disc'),
+          decimals: 1,
+        },
+        {
+          id: 'cmp_halo_rms',
+          label: 'With the halo: average miss',
+          unit: 'km/s',
+          compute: (v, e) => e('record-the-fit-that-works', 'fit_rms'),
+          decimals: 1,
+        },
+        {
+          id: 'cmp_halo_disc',
+          label: 'With the halo: visible mass (× 10¹⁰ M☉)',
+          unit: '',
+          compute: (v, e) => e('record-the-fit-that-works', 'fit_visible'),
+          decimals: 2,
+        },
+        {
+          id: 'cmp_halo_mass',
+          label: 'With the halo: halo mass inside 30 kpc (× 10¹⁰ M☉)',
+          unit: '',
+          compute: (v, e) => e('record-the-fit-that-works', 'fit_halo'),
+          decimals: 1,
+        },
+        {
+          id: 'cmp_which',
+          label: 'Which fit describes the points, and what tells you so?',
+          unit: '',
+          kind: 'text',
+        },
+      ],
     },
     {
       hints: [
@@ -712,15 +869,27 @@ const DARK_MATTER = {
       type: 'question',
       title: 'How much of it is dark?',
       kind: 'numeric',
-      tool: { id: 'dm-fit' },
+      tool: {
+        id: 'dm-fit',
+        values: { ...HELD_DISC, haloVFlat: 0, haloCore: 10.5 },
+        hide: ['discMass', 'discScale'],
+        presets: false,
+      },
       body: `You fitted a galaxy. Divide the halo mass inside 30 kpc by the
-             visible mass and you have the headline number of forty years of
-             galaxy dynamics.`,
+             visible mass, both as you recorded them for your own fit, and you
+             have the headline number of forty years of galaxy dynamics.
+             \n\nUse the numbers of the fit you recorded: the answer counts when it
+             agrees with the ratio of a fit that works.`,
       prompt: 'Halo mass inside 30 kpc, divided by visible mass',
       unit: '×',
       answer: 3.4,
       tolerance: 0.9,
-      because: `About three and a half. Roughly three-quarters of the mass inside
+      because: `About three and a half. With the disc held at the mass its light
+                implies, every fit that reaches FITTED gives a ratio between
+                about 2.9 and 3.9, because the two halo sliders trade off against
+                each other; the published decomposition, a halo flat speed of
+                150 km/s, a core of 6 kpc and an average miss of 2 km/s, gives
+                3.4, in the middle. Roughly three-quarters of the mass inside
                 the visible extent of this galaxy is in something that gives off
                 no light — and the fraction keeps climbing if you measure further
                 out, because the halo's mass keeps growing while the disc's does
@@ -750,6 +919,34 @@ const DARK_MATTER = {
         'Try relaunching at 8 kpc with the halo off, where the disc still dominates, and see it stay',
       ],
       tip: 'This is exactly the situation the flat rotation curve presents. Real stars at 20 kpc really are moving at this speed, and the visible mass really cannot hold them.',
+    },
+    {
+      sid: 'predict-the-disc-without-its-halo',
+      bind: GALAXY_TRACERS,
+      type: 'predict',
+      reveal: 'take-the-halo-away-from',
+      title: 'What happens to the disc without its halo?',
+      setup: DM_OBSERVED,
+      body: `The galaxy on the canvas has ninety disc stars and a halo that is
+             switched on. The stars are moving at the speeds you measured.
+             \n\nYou are about to switch the halo off, and nothing else, and let
+             the simulation run. Before you do, commit to what the disc will do.`,
+      prompt: 'With the halo switched off, the disc will…',
+      options: [
+        'keep orbiting as before: the stars were already moving, and nothing touches them directly',
+        'fall inward toward the bulge, because there is less mass holding the galaxy together',
+        'drift outward onto wider paths, and most of the disc comes apart; only the stars deep in the bulge’s pull stay near it',
+        'speed up and spin faster, because nothing is pulling on the stars from outside',
+      ],
+      answer: 2,
+      because: `The stars keep the speed they had, but the pull that held them at
+                that speed is gone, so they move out onto wider paths. The halo
+                supplies most of the mass at large radius and very little near the
+                center, so only the stars close to the bulge keep a pull strong
+                enough to hold them; the rest drift away. Taking
+                away mass reduces the pull; it does not add one, which is why the
+                disc does not fall inward, and a star that is not pulled harder
+                does not speed up.`,
     },
     {
       sid: 'take-the-halo-away-from',
@@ -784,7 +981,7 @@ const DARK_MATTER = {
           },
         ];
       },
-      tip: 'The stars do not stop suddenly. They keep the speed they had and simply stop being held, so the disc unwinds from the outside in.',
+      tip: 'The stars do not stop suddenly. They keep the speed they had and simply stop being held, so the disc comes apart everywhere the bulge cannot hold it.',
     },
 
     // --- Part 6: Zwicky got there first -------------------------------------
@@ -837,9 +1034,18 @@ const DARK_MATTER = {
       sid: 'measure-the-simulated-cluster',
       type: 'measure',
       title: 'Measure the simulated cluster',
-      body: `Now the cluster in the simulation. Switch to <strong>simulation
-             units</strong> using the Physical units button in the Tools section
-             of the rail. That is not cosmetic. In the app's own units the
+      body: `Now a scale model of a cluster, built in the simulation: the same
+             kind of swarm, with its own small masses, not the real Coma
+             Cluster. It is paused, so everyone measures the same thing.
+             \n\nFirst open the <strong>Rotation Curve</strong> panel, with the
+             Rotation Curve button in the Instruments group of the Tools section
+             of the rail on the right. If the panel is closed or the Tools section
+             is folded, open it again from there. Its Cluster measurements block
+             holds the numbers.
+             \n\nThen switch to <strong>simulation units</strong> with the unit
+             button in the View group of the same section: it reads Physical
+             units now, and Sim units when you have switched, and the U key does
+             the same. That is not cosmetic. In the app's own units the
              gravitational constant G is exactly 1, so the arithmetic below has no
              unit conversions in it at all, and a mass comes out directly in
              simulation mass units.
@@ -876,7 +1082,8 @@ const DARK_MATTER = {
       type: 'question',
       title: 'Weigh the cluster by its motion',
       kind: 'numeric',
-      body: `For any system held together by its own gravity and settled down,
+      body: `This is the scale-model cluster, so the mass you get is the model's own.
+             \n\nFor any system held together by its own gravity and settled down,
              the kinetic and potential energies are locked in a fixed ratio:
              2K + U = 0. This is the virial theorem, and it is what turns a
              spread of speeds into a mass.
@@ -915,7 +1122,7 @@ const DARK_MATTER = {
       type: 'question',
       title: 'Now compare',
       kind: 'numeric',
-      body: `You have weighed the same cluster twice. Once by adding up its
+      body: `You have weighed the same scale-model cluster twice. Once by adding up its
              galaxies, which is the visible mass the panel reports, and once by
              watching how those galaxies move.`,
       prompt: 'Dynamical mass divided by visible mass',
@@ -931,129 +1138,6 @@ const DARK_MATTER = {
                 several times more mass than the galaxies do. The modern figure
                 for Coma is around a factor of ten once that gas is included —
                 which is the number the instrument two steps back reports.`,
-    },
-
-    // --- Part 6b: the other explanation -------------------------------------
-    //
-    // Four steps, deliberately. The alternative to dark matter deserves to be
-    // met honestly rather than named in a footnote, and it deserves not to
-    // become a second lesson: what a student needs from it is the comparison,
-    // not a course in modified gravity.
-    {
-      sid: 'a-different-way-to-read',
-      type: 'read',
-      title: 'A different way to read the same curve',
-      tool: {
-        id: 'dm-mond',
-        values: { model: 0, discMass: 3.3, haloVFlat: 150 },
-      },
-      body: `Everything so far has assumed Newton's law of gravity is right and
-             asked what mass would have to be there. There is another way to
-             read a flat rotation curve, and it has been on the table since 1983.
-             \n\nMordehai Milgrom noticed that the curves stop falling at a
-             particular <em>acceleration</em> rather than at a particular radius
-             or a particular brightness. Below about a₀ = 1.2 × 10⁻¹⁰ m/s² —
-             roughly a hundred billionth of Earth's surface gravity — galaxies
-             behave as though gravity were stronger than Newton says. Above it
-             nothing changes, which is why no laboratory and no planetary orbit
-             has ever seen this.
-             \n\nIf that is what is happening, then far from a galaxy the
-             gravitational pull falls off as 1/r rather than 1/r², and a circular
-             orbit out there has
-             \n\n<strong>v⁴ = G M a₀</strong>
-             \n\nwith M the mass you can see. Not fitted. Predicted, from one
-             constant that is meant to be the same for every galaxy.`,
-      tip: 'The instrument is showing the halo fit you just built. The switch at the top puts MOND on the same points.',
-    },
-    {
-      sid: 'fit-it-both-ways',
-      type: 'explore',
-      title: 'Fit it both ways',
-      tool: { id: 'dm-mond' },
-      body: `Both explanations, the same twelve points, scored the same way.
-             Try each of them, and use the two presets when you want to see
-             where each one ends up.
-             \n\nPay attention to what each explanation had to be told. The halo
-             needs three numbers chosen to match this galaxy: how heavy the disc
-             is, how fast the halo's curve flattens, and how big its core is.
-             MOND needs one — the disc — because a₀ is not adjustable and is the
-             same number for every galaxy in the universe.`,
-      checklist: [
-        'Load the best halo fit and read its residual',
-        'Switch to MOND, leaving the disc where it is',
-        'Bring the disc down until MOND matches too',
-        'Compare how many numbers each explanation needed',
-      ],
-      tip: 'MOND wants a lighter disc than the halo fit does — about two thirds. A rotation curve cannot measure the mass of the stars directly, so how heavy the disc is was never pinned down by the data in either picture.',
-    },
-    {
-      hints: [
-        'MOND gives v⁴ = G M a₀: the flat speed is the fourth root of G M a₀.',
-        'Add the disc and the bulge first, and use the units the instrument uses, before taking the fourth root.',
-      ],
-      feedback: {
-        close:
-          'Close. Take the fourth root, not the square root, and include the bulge.',
-        off: 'Total visible mass first (disc plus bulge), then v = (G M a₀)^(1/4).',
-      },
-      sid: 'the-prediction-mond-makes',
-      type: 'question',
-      title: 'The prediction MOND makes',
-      kind: 'numeric',
-      tool: {
-        id: 'dm-mond',
-        values: { model: 1, discMass: 2.1, haloVFlat: 0 },
-      },
-      body: `The relation v⁴ = G M a₀ turns a visible mass straight into a flat
-             speed, with nothing adjusted. Use the disc the instrument is showing
-             — 2.1 × 10¹⁰ solar masses, plus the small 0.05 × 10¹⁰ bulge — and
-             the value of a₀ above.
-             \n\nIn the units the instrument works in, G a₀ = 0.0159 (km/s)⁴ per
-             solar mass.`,
-      prompt: 'The flat speed MOND predicts for this galaxy',
-      unit: 'km/s',
-      answer: 136,
-      tolerance: 12,
-      because: `About 136 km/s. Multiply 2.15 × 10¹⁰ by 0.0159 to get 3.4 × 10⁸,
-                and take the fourth root. The instrument reports the same number
-                on its own row.
-                \n\nThis is the baryonic Tully–Fisher relation, and it is worth
-                being clear that it is an observed regularity rather than a MOND
-                result: real galaxies do lie on M ∝ v⁴, with remarkably little
-                scatter, whatever is causing it. MOND predicts it. A dark-matter
-                halo has to arrange for it, because there is no obvious reason a
-                halo's properties should track the visible mass so tightly, and
-                explaining that tightness is a live problem in galaxy formation.`,
-    },
-    {
-      sid: 'does-the-curve-decide',
-      type: 'question',
-      title: 'Does the curve decide?',
-      kind: 'short',
-      body: `You have now fitted the same rotation curve twice, with two
-             incompatible ideas about what is going on, and both of them work.
-             \n\nThat is not a failure of the exercise. It is the actual state of
-             this particular piece of evidence, and knowing what a measurement
-             cannot settle is as much a part of using it as knowing what it can.`,
-      prompt:
-        'In two or three sentences: does fitting this rotation curve establish which explanation is right? What kind of evidence would you need instead?',
-      rubric: `It does not. Both reproduce the curve to within its error bars, so
-               the curve cannot distinguish them; the fits differ in how many
-               free parameters they spend and in what disc mass they imply, and
-               neither of those is decided by the curve either. Credit any
-               reasonable route to evidence from somewhere else: galaxy clusters,
-               where MOND reduces the missing mass but leaves a residual factor
-               of about two and so still needs unseen matter; the Bullet Cluster,
-               where the lensing mass is displaced from the visible gas after a
-               collision; the cosmic microwave background, whose acoustic peak
-               heights are fitted by cold dark matter and not by MOND without
-               adding a dark component anyway; or the fact that MOND has no
-               settled relativistic form, which makes it hard to apply to
-               cosmology or lensing at all. Strong answers note that the two
-               ideas are not symmetric in what they still owe: dark matter owes
-               an explanation of why halo properties track the visible mass so
-               tightly, and MOND owes almost everything outside galaxy rotation
-               curves.`,
     },
 
     // --- Part 7: what this does and does not establish ----------------------

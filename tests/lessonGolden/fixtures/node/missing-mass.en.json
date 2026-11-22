@@ -2,19 +2,19 @@
  "id": "missing-mass",
  "locale": "en",
  "title": "The Missing Mass",
- "steps": 39,
+ "steps": 41,
  "depths": [
   [
    "core",
-   33
+   31
   ],
   [
    "quantitative",
-   35
+   33
   ],
   [
    "advanced",
-   39
+   41
   ]
  ],
  "grading": [
@@ -216,68 +216,6 @@
    ]
   },
   {
-   "sid": "dark-fraction-with-an-error-bar",
-   "type": "question",
-   "kind": "numeric",
-   "tolerance": 0.9,
-   "grades": [
-    [
-     "3.4",
-     false,
-     "unreadable",
-     null,
-     null,
-     false,
-     "needsUncertainty"
-    ],
-    [
-     "3.85",
-     false,
-     "unreadable",
-     null,
-     null,
-     false,
-     "needsUncertainty"
-    ],
-    [
-     "6.1",
-     false,
-     "unreadable",
-     null,
-     null,
-     false,
-     "needsUncertainty"
-    ],
-    [
-     "3.4 ×",
-     false,
-     "unreadable",
-     null,
-     null,
-     false,
-     "needsUncertainty"
-    ],
-    [
-     "not a number",
-     false,
-     "unreadable",
-     null,
-     null,
-     false,
-     "notANumber"
-    ],
-    [
-     "",
-     false,
-     "unreadable",
-     null,
-     null,
-     false,
-     "blank"
-    ]
-   ]
-  },
-  {
    "sid": "why-not-report-one-number",
    "type": "question",
    "kind": "choice",
@@ -312,6 +250,33 @@
     [
      "ungraded",
      null
+    ]
+   ]
+  },
+  {
+   "sid": "predict-the-disc-without-its-halo",
+   "type": "predict",
+   "kind": null,
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     true,
+     "correct"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
     ]
    ]
   },
@@ -537,10 +502,9 @@
     "missing-mass:why-a-heavier-disc-cannot": 1,
     "missing-mass:how-much-of-it-is": "3.4",
     "missing-mass:how-much-of-it-is:locale": "en",
-    "missing-mass:dark-fraction-with-an-error-bar": "3.4",
-    "missing-mass:dark-fraction-with-an-error-bar:locale": "en",
     "missing-mass:why-not-report-one-number": 1,
     "missing-mass:what-would-tell-them-apart": "A fixed sentence for the golden.",
+    "missing-mass:predict-the-disc-without-its-halo": 2,
     "missing-mass:weigh-the-cluster-by-its": "1756",
     "missing-mass:weigh-the-cluster-by-its:locale": "en",
     "missing-mass:now-compare": "18.3",
@@ -557,8 +521,8 @@
     "missing-mass:now-a-galaxy": 1,
     "missing-mass:why-a-heavier-disc-cannot": 1,
     "missing-mass:how-much-of-it-is": 1,
-    "missing-mass:dark-fraction-with-an-error-bar": 1,
     "missing-mass:why-not-report-one-number": 1,
+    "missing-mass:predict-the-disc-without-its-halo": 1,
     "missing-mass:weigh-the-cluster-by-its": 1,
     "missing-mass:now-compare": 1,
     "missing-mass:the-prediction-mond-makes": 1
@@ -582,14 +546,16 @@
     "why-a-heavier-disc-cannot",
     "now-add-the-halo",
     "record-the-fit-that-works",
+    "compare-your-two-fits",
     "how-much-of-it-is",
     "how-sure-is-the-dark-fraction",
-    "dark-fraction-with-an-error-bar",
+    "error-bar-from-your-fits",
     "why-not-report-one-number",
     "what-would-tell-them-apart",
     "the-milky-way-as-measured",
     "the-real-halo-fit",
     "what-the-halo-is-holding",
+    "predict-the-disc-without-its-halo",
     "take-the-halo-away-from",
     "forty-years-earlier",
     "zwicky-s-arithmetic-and-the",
@@ -618,10 +584,9 @@
     "missing-mass:why-a-heavier-disc-cannot": 1,
     "missing-mass:how-much-of-it-is": "3.4",
     "missing-mass:how-much-of-it-is:locale": "en",
-    "missing-mass:dark-fraction-with-an-error-bar": "3.4",
-    "missing-mass:dark-fraction-with-an-error-bar:locale": "en",
     "missing-mass:why-not-report-one-number": 1,
     "missing-mass:what-would-tell-them-apart": "A fixed sentence for the golden.",
+    "missing-mass:predict-the-disc-without-its-halo": 2,
     "missing-mass:weigh-the-cluster-by-its": "1756",
     "missing-mass:weigh-the-cluster-by-its:locale": "en",
     "missing-mass:now-compare": "18.3",
@@ -638,16 +603,17 @@
     "missing-mass:now-a-galaxy": 1,
     "missing-mass:why-a-heavier-disc-cannot": 1,
     "missing-mass:how-much-of-it-is": 1,
-    "missing-mass:dark-fraction-with-an-error-bar": 1,
     "missing-mass:why-not-report-one-number": 1,
+    "missing-mass:predict-the-disc-without-its-halo": 1,
     "missing-mass:weigh-the-cluster-by-its": 1,
     "missing-mass:now-compare": 1,
     "missing-mass:the-prediction-mond-makes": 1
    },
    "visited": [
     "a-different-way-to-read",
-    "dark-fraction-with-an-error-bar",
+    "compare-your-two-fits",
     "does-the-curve-decide",
+    "error-bar-from-your-fits",
     "fit-it-both-ways",
     "forty-years-earlier",
     "how-much-of-it-is",
@@ -661,6 +627,7 @@
     "now-add-the-halo",
     "now-compare",
     "now-do-what-the-astronomers",
+    "predict-the-disc-without-its-halo",
     "put-the-mass-somewhere",
     "record-the-fit-that-works",
     "record-your-best-stars-only",
@@ -703,7 +670,7 @@
    "lesson": {
     "id": "missing-mass",
     "title": "The Missing Mass",
-    "stepCount": 39
+    "stepCount": 41
    },
    "student": null,
    "progress": {
@@ -728,14 +695,16 @@
      "why-a-heavier-disc-cannot",
      "now-add-the-halo",
      "record-the-fit-that-works",
+     "compare-your-two-fits",
      "how-much-of-it-is",
      "how-sure-is-the-dark-fraction",
-     "dark-fraction-with-an-error-bar",
+     "error-bar-from-your-fits",
      "why-not-report-one-number",
      "what-would-tell-them-apart",
      "the-milky-way-as-measured",
      "the-real-halo-fit",
      "what-the-halo-is-holding",
+     "predict-the-disc-without-its-halo",
      "take-the-halo-away-from",
      "forty-years-earlier",
      "zwicky-s-arithmetic-and-the",
@@ -758,10 +727,9 @@
      "missing-mass:why-a-heavier-disc-cannot": 1,
      "missing-mass:how-much-of-it-is": "3.4",
      "missing-mass:how-much-of-it-is:locale": "en",
-     "missing-mass:dark-fraction-with-an-error-bar": "3.4",
-     "missing-mass:dark-fraction-with-an-error-bar:locale": "en",
      "missing-mass:why-not-report-one-number": 1,
      "missing-mass:what-would-tell-them-apart": "A fixed sentence for the golden.",
+     "missing-mass:predict-the-disc-without-its-halo": 2,
      "missing-mass:weigh-the-cluster-by-its": "1756",
      "missing-mass:weigh-the-cluster-by-its:locale": "en",
      "missing-mass:now-compare": "18.3",
@@ -778,8 +746,8 @@
      "missing-mass:now-a-galaxy": 1,
      "missing-mass:why-a-heavier-disc-cannot": 1,
      "missing-mass:how-much-of-it-is": 1,
-     "missing-mass:dark-fraction-with-an-error-bar": 1,
      "missing-mass:why-not-report-one-number": 1,
+     "missing-mass:predict-the-disc-without-its-halo": 1,
      "missing-mass:weigh-the-cluster-by-its": 1,
      "missing-mass:now-compare": 1,
      "missing-mass:the-prediction-mond-makes": 1
@@ -896,126 +864,138 @@
     },
     {
      "index": 18,
+     "sid": "compare-your-two-fits",
+     "fingerprint": "measure|-|-|-|cmp_so_rms+cmp_so_disc+cmp_halo_rms+cmp_halo_disc+cmp_halo_mass+cmp_which|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 19,
      "sid": "how-much-of-it-is",
      "fingerprint": "question|numeric|dm-fit|-|-|-|a=3.4;t=0.9;u=×",
      "optionCount": null
     },
     {
-     "index": 19,
+     "index": 20,
      "sid": "how-sure-is-the-dark-fraction",
      "fingerprint": "measure|-|-|-|vis_frac+ratio+halo_frac+s_ratio|-|-",
      "optionCount": null
     },
     {
-     "index": 20,
-     "sid": "dark-fraction-with-an-error-bar",
-     "fingerprint": "question|numeric|-|-|-|-|a=3.4;t=0.9;u=×",
+     "index": 21,
+     "sid": "error-bar-from-your-fits",
+     "fingerprint": "measure|-|dm-fit|-|accept+r_lo+r_hi+r_half|-|-",
      "optionCount": null
     },
     {
-     "index": 21,
+     "index": 22,
      "sid": "why-not-report-one-number",
      "fingerprint": "question|choice|-|-|-|4|a=1;c=1",
      "optionCount": 4
     },
     {
-     "index": 22,
+     "index": 23,
      "sid": "what-would-tell-them-apart",
      "fingerprint": "question|short|-|-|-|-|-",
      "optionCount": null
     },
     {
-     "index": 23,
+     "index": 24,
      "sid": "the-milky-way-as-measured",
      "fingerprint": "read|-|rotating-disk|-|-|-|-",
      "optionCount": null
     },
     {
-     "index": 24,
+     "index": 25,
      "sid": "the-real-halo-fit",
      "fingerprint": "measure|-|rotating-disk|-|stars+halo|-|-",
      "optionCount": null
     },
     {
-     "index": 25,
+     "index": 26,
      "sid": "what-the-halo-is-holding",
      "fingerprint": "explore|-|dm-flyby|-|-|-|-",
      "optionCount": null
     },
     {
-     "index": 26,
+     "index": 27,
+     "sid": "predict-the-disc-without-its-halo",
+     "fingerprint": "predict|-|-|Milky Way Rotation|-|4|a=2;c=2",
+     "optionCount": 4
+    },
+    {
+     "index": 28,
      "sid": "take-the-halo-away-from",
      "fingerprint": "explore|-|-|Milky Way Rotation|-|-|-",
      "optionCount": null
     },
     {
-     "index": 27,
+     "index": 29,
      "sid": "forty-years-earlier",
      "fingerprint": "read|-|-|Coma Cluster|-|-|-",
      "optionCount": null
     },
     {
-     "index": 28,
+     "index": 30,
      "sid": "zwicky-s-arithmetic-and-the",
      "fingerprint": "explore|-|dm-virial|-|-|-|-",
      "optionCount": null
     },
     {
-     "index": 29,
+     "index": 31,
      "sid": "measure-the-simulated-cluster",
      "fingerprint": "measure|-|-|-|cl_n+cl_sigma+cl_R+cl_visible|-|-",
      "optionCount": null
     },
     {
-     "index": 30,
+     "index": 32,
      "sid": "weigh-the-cluster-by-its",
      "fingerprint": "question|numeric|-|-|-|-|a=1756;t=180;u=M☉",
      "optionCount": null
     },
     {
-     "index": 31,
+     "index": 33,
      "sid": "now-compare",
      "fingerprint": "question|numeric|-|-|-|-|a=18.3;t=4;u=×",
      "optionCount": null
     },
     {
-     "index": 32,
+     "index": 34,
      "sid": "a-different-way-to-read",
      "fingerprint": "read|-|dm-mond|-|-|-|-",
      "optionCount": null
     },
     {
-     "index": 33,
+     "index": 35,
      "sid": "fit-it-both-ways",
      "fingerprint": "explore|-|dm-mond|-|-|-|-",
      "optionCount": null
     },
     {
-     "index": 34,
+     "index": 36,
      "sid": "the-prediction-mond-makes",
      "fingerprint": "question|numeric|dm-mond|-|-|-|a=136;t=12;u=km/s",
      "optionCount": null
     },
     {
-     "index": 35,
+     "index": 37,
      "sid": "does-the-curve-decide",
      "fingerprint": "question|short|-|-|-|-|-",
      "optionCount": null
     },
     {
-     "index": 36,
+     "index": 38,
      "sid": "what-have-you-actually-shown",
      "fingerprint": "question|short|-|-|-|-|-",
      "optionCount": null
     },
     {
-     "index": 37,
+     "index": 39,
      "sid": "how-much-of-the-universe",
      "fingerprint": "read|-|dm-budget|-|-|-|-",
      "optionCount": null
     },
     {
-     "index": 38,
+     "index": 40,
      "sid": "where-it-stands",
      "fingerprint": "read|-|-|-|-|-|-",
      "optionCount": null
@@ -1034,10 +1014,9 @@
     "missing-mass:why-a-heavier-disc-cannot": 1,
     "missing-mass:how-much-of-it-is": "3.4",
     "missing-mass:how-much-of-it-is:locale": "en",
-    "missing-mass:dark-fraction-with-an-error-bar": "3.4",
-    "missing-mass:dark-fraction-with-an-error-bar:locale": "en",
     "missing-mass:why-not-report-one-number": 1,
     "missing-mass:what-would-tell-them-apart": "A fixed sentence for the golden.",
+    "missing-mass:predict-the-disc-without-its-halo": 2,
     "missing-mass:weigh-the-cluster-by-its": "1756",
     "missing-mass:weigh-the-cluster-by-its:locale": "en",
     "missing-mass:now-compare": "18.3",
@@ -1054,16 +1033,17 @@
     "missing-mass:now-a-galaxy": 1,
     "missing-mass:why-a-heavier-disc-cannot": 1,
     "missing-mass:how-much-of-it-is": 1,
-    "missing-mass:dark-fraction-with-an-error-bar": 1,
     "missing-mass:why-not-report-one-number": 1,
+    "missing-mass:predict-the-disc-without-its-halo": 1,
     "missing-mass:weigh-the-cluster-by-its": 1,
     "missing-mass:now-compare": 1,
     "missing-mass:the-prediction-mond-makes": 1
    },
    "visited": [
     "a-different-way-to-read",
-    "dark-fraction-with-an-error-bar",
+    "compare-your-two-fits",
     "does-the-curve-decide",
+    "error-bar-from-your-fits",
     "fit-it-both-ways",
     "forty-years-earlier",
     "how-much-of-it-is",
@@ -1077,6 +1057,7 @@
     "now-add-the-halo",
     "now-compare",
     "now-do-what-the-astronomers",
+    "predict-the-disc-without-its-halo",
     "put-the-mass-somewhere",
     "record-the-fit-that-works",
     "record-your-best-stars-only",
@@ -1101,7 +1082,7 @@
     "why-not-report-one-number",
     "zwicky-s-arithmetic-and-the"
    ],
-   "stepIndex": 38,
+   "stepIndex": 40,
    "startedAt": "2026-01-02T03:04:05.000Z",
    "moved": [],
    "dropped": [],
@@ -1186,11 +1167,6 @@
      "locale": "en"
     },
     {
-     "sid": "dark-fraction-with-an-error-bar",
-     "value": "3.4",
-     "locale": "en"
-    },
-    {
      "sid": "why-not-report-one-number",
      "value": 1,
      "locale": "en"
@@ -1198,6 +1174,11 @@
     {
      "sid": "what-would-tell-them-apart",
      "value": "A fixed sentence for the golden.",
+     "locale": "en"
+    },
+    {
+     "sid": "predict-the-disc-without-its-halo",
+     "value": 2,
      "locale": "en"
     },
     {
@@ -1270,11 +1251,6 @@
      "locale": "en"
     },
     {
-     "sid": "dark-fraction-with-an-error-bar",
-     "value": "3.4",
-     "locale": "en"
-    },
-    {
      "sid": "why-not-report-one-number",
      "value": 1,
      "locale": "en"
@@ -1282,6 +1258,11 @@
     {
      "sid": "what-would-tell-them-apart",
      "value": "A fixed sentence for the golden.",
+     "locale": "en"
+    },
+    {
+     "sid": "predict-the-disc-without-its-halo",
+     "value": 2,
      "locale": "en"
     },
     {
@@ -1378,11 +1359,6 @@
      "locale": "en"
     },
     {
-     "sid": "dark-fraction-with-an-error-bar",
-     "value": "3.4",
-     "locale": "en"
-    },
-    {
      "sid": "why-not-report-one-number",
      "value": 1,
      "locale": "en"
@@ -1390,6 +1366,11 @@
     {
      "sid": "what-would-tell-them-apart",
      "value": "A fixed sentence for the golden.",
+     "locale": "en"
+    },
+    {
+     "sid": "predict-the-disc-without-its-halo",
+     "value": 2,
      "locale": "en"
     },
     {
@@ -1463,11 +1444,6 @@
      "locale": "en"
     },
     {
-     "sid": "dark-fraction-with-an-error-bar",
-     "value": "3.4",
-     "locale": "en"
-    },
-    {
      "sid": "why-not-report-one-number",
      "value": 1,
      "locale": "en"
@@ -1475,6 +1451,11 @@
     {
      "sid": "what-would-tell-them-apart",
      "value": "A fixed sentence for the golden.",
+     "locale": "en"
+    },
+    {
+     "sid": "predict-the-disc-without-its-halo",
+     "value": 2,
      "locale": "en"
     },
     {

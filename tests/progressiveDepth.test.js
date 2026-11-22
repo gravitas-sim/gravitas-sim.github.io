@@ -109,13 +109,20 @@ describe('the rules refuse what would change the science', () => {
   };
 
   test('a depth-specific expectation that disagrees with the core one', () => {
-    // A deeper step that restates a core one: Kepler's Laws no longer has one
-    // (its period question is now each student's own), so another lesson does.
+    // No shipped deeper step restates a core one now, so a deeper step of
+    // Missing Mass is made to: it restates how-much-of-it-is with an answer
+    // outside the core step's tolerance.
     const lesson = 'missing-mass';
     const c = core(lesson);
     const deeper = clone(DEEPER[lesson]);
-    const at = deeper.findIndex(x => x.restates);
-    deeper[at].answer = deeper[at].answer + 9;
+    const base = c.steps.find(x => x.sid === 'how-much-of-it-is');
+    const at = deeper.findIndex(x => x.sid === 'error-bar-from-your-fits');
+    Object.assign(deeper[at], {
+      restates: base.sid,
+      kind: 'numeric',
+      answer: base.answer + 9,
+      unit: base.unit,
+    });
     expect(
       checkDepth(c, layDepth(c, deeper), deeper, null).map(f => f.rule)
     ).toContain('depth/expectation');

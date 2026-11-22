@@ -8,6 +8,7 @@ import {
 } from '../js/darkMatterWidgets.js';
 import { getWidget, widgetDefaults, whenWidgetsReady } from '../js/widgets.js';
 import { getInvestigation } from '../js/data/investigations.js';
+import DEEPER from '../js/data/investigations/depth/missing-mass.js';
 import {
   galaxyCurveAt,
   curveResidual,
@@ -402,7 +403,10 @@ describe('dm-fit: the fitting exercise', () => {
     for (const step of lesson.steps) {
       if (step.tool?.id !== 'dm-fit') continue;
       const hide = step.tool.hide || [];
-      for (const p of presetsOf(w, step.tool)) {
+      // A step with presets:false offers none, in the app as here.
+      const offered =
+        step.tool.presets === false ? [] : presetsOf(w, step.tool);
+      for (const p of offered) {
         for (const k of Object.keys(p.values)) {
           if (!hide.includes(k)) continue;
           // A preset may set a hidden control only if it leaves it at the value
@@ -738,7 +742,10 @@ describe('the lesson wires the instruments up', () => {
   });
 
   test('all six instruments are actually used', () => {
-    const used = new Set(lesson.steps.filter(s => s.tool).map(s => s.tool.id));
+    // The MOND instrument is used by the deeper steps (the advanced reading).
+    const used = new Set(
+      [...lesson.steps, ...DEEPER.steps].filter(s => s.tool).map(s => s.tool.id)
+    );
     for (const w of DARK_MATTER_WIDGETS) {
       expect(used).toContain(w.id);
     }
