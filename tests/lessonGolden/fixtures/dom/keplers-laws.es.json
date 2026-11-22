@@ -12,7 +12,7 @@
   "body": "<p class=\"inv-step-count\">Paso 1 de 26 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">Tres preguntas sobre una órbita</h3><div class=\"inv-step-body\"><p>¿Qué trayectoria sigue un planeta alrededor de su estrella, y qué fija lo rápido que se mueve y lo que dura su año? Lo responderás en la vista de la órbita en directo, prediciendo y midiendo.</p><p>Johannes Kepler lo respondió hace cuatrocientos años a partir de posiciones de Marte medidas sin telescopio. Por qué confió en ellas llega después de tu primera predicción.</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> Mientras una investigación está en marcha, pulsar selecciona un objeto sin abrir la ficha del inspector, y la colocación de objetos nuevos queda desactivada para que un clic accidental no altere el sistema que estás midiendo.</p>",
   "previousDisabled": true,
   "nextDisabled": false,
-  "depthState": ""
+  "depthState": "Versión básica"
  },
  {
   "depth": "core",
@@ -27,7 +27,7 @@
   "body": "<p class=\"inv-step-count\">Paso 3 de 26 <span class=\"inv-step-kind\">predicción</span></p><h3 class=\"inv-step-title\">¿Dónde está la estrella?</h3><div class=\"inv-step-body\"><p>Una elipse tiene un centro, a mitad de su diámetro largo, y dos puntos especiales llamados focos, uno a cada lado del centro.</p><p>Mira la trayectoria del cuerpo naranja y dónde se sitúa la estrella dentro de ella. Comprométete con una respuesta antes de medir nada: el paso siguiente te da una manera de comprobarla.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">La estrella se sitúa en…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">A</span><span>el centro de la elipse</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">B</span><span>uno de los focos de la elipse, descentrado</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">C</span><span>el punto más cercano de la órbita</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">D</span><span>un punto que se mueve conforme se mueve el planeta</span></button></div>",
   "previousDisabled": false,
   "nextDisabled": false,
-  "depthState": ""
+  "depthState": "Versión básica"
  },
  {
   "depth": "core",
@@ -42,7 +42,7 @@
   "body": "<p class=\"inv-step-count\">Paso 3 de 26 <span class=\"inv-step-kind\">predicción</span></p><h3 class=\"inv-step-title\">¿Dónde está la estrella?</h3><div class=\"inv-step-body\"><p>Una elipse tiene un centro, a mitad de su diámetro largo, y dos puntos especiales llamados focos, uno a cada lado del centro.</p><p>Mira la trayectoria del cuerpo naranja y dónde se sitúa la estrella dentro de ella. Comprométete con una respuesta antes de medir nada: el paso siguiente te da una manera de comprobarla.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">La estrella se sitúa en…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">A</span><span>el centro de la elipse</span></button><button type=\"button\" class=\"inv-option is-chosen is-held\" data-option=\"1\" role=\"radio\" aria-checked=\"true\" disabled=\"\"><span class=\"inv-option-mark\">B</span><span>uno de los focos de la elipse, descentrado</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">C</span><span>el punto más cercano de la órbita</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">D</span><span>un punto que se mueve conforme se mueve el planeta</span></button></div><p class=\"inv-held\">Tu respuesta queda registrada. No se corrige hasta que llegues a «La primera ley, y la anatomía de una elipse», para que la decida el experimento y no la clave de respuestas.</p><button type=\"button\" class=\"ui-button subtle\" data-change=\"\">Cambiar respuesta</button>",
   "previousDisabled": false,
   "nextDisabled": false,
-  "depthState": ""
+  "depthState": "Versión básica"
  },
  {
   "depth": "core",
@@ -57,7 +57,7 @@
   "body": "<p class=\"inv-step-count\">Paso 26 de 26 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">Dónde te deja esto</h3><div class=\"inv-step-body\"><p>Las tres leyes no son tres hechos separados. Una sola atracción hacia la estrella, que se debilita con el cuadrado de la distancia, las produce todas, y por eso se cumplen en TRAPPIST-1&nbsp;igual que aquí. Describen un cuerpo ligero que gira alrededor de otro mucho más pesado: cuando las dos masas son parecidas, como en una pareja de estrellas, las dos se mueven, y el periodo depende de su suma.</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> Si vas a entregar esto para una calificación, pulsa Terminar para introducir tu nombre y descargar tu informe de laboratorio. Si no, simplemente puedes cerrar el panel.</p>",
   "previousDisabled": false,
   "nextDisabled": false,
-  "depthState": ""
+  "depthState": "Versión básica"
  },
  {
   "depth": "quantitative",
@@ -72,7 +72,7 @@
   "body": "<p class=\"inv-step-count\">Paso 1 de 29 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">Tres preguntas sobre una órbita</h3><div class=\"inv-step-body\"><p>¿Qué trayectoria sigue un planeta alrededor de su estrella, y qué fija lo rápido que se mueve y lo que dura su año? Lo responderás en la vista de la órbita en directo, prediciendo y midiendo.</p><p>Johannes Kepler lo respondió hace cuatrocientos años a partir de posiciones de Marte medidas sin telescopio. Por qué confió en ellas llega después de tu primera predicción.</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> Mientras una investigación está en marcha, pulsar selecciona un objeto sin abrir la ficha del inspector, y la colocación de objetos nuevos queda desactivada para que un clic accidental no altere el sistema que estás midiendo.</p>",
   "previousDisabled": true,
   "nextDisabled": false,
-  "depthState": "Profundidad: Cuantitativo"
+  "depthState": "Versión cuantitativa"
  },
  {
   "depth": "quantitative",
@@ -87,7 +87,7 @@
   "body": "<p class=\"inv-step-count\">Paso 3 de 29 <span class=\"inv-step-kind\">predicción</span></p><h3 class=\"inv-step-title\">¿Dónde está la estrella?</h3><div class=\"inv-step-body\"><p>Una elipse tiene un centro, a mitad de su diámetro largo, y dos puntos especiales llamados focos, uno a cada lado del centro.</p><p>Mira la trayectoria del cuerpo naranja y dónde se sitúa la estrella dentro de ella. Comprométete con una respuesta antes de medir nada: el paso siguiente te da una manera de comprobarla.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">La estrella se sitúa en…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">A</span><span>el centro de la elipse</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">B</span><span>uno de los focos de la elipse, descentrado</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">C</span><span>el punto más cercano de la órbita</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">D</span><span>un punto que se mueve conforme se mueve el planeta</span></button></div>",
   "previousDisabled": false,
   "nextDisabled": false,
-  "depthState": "Profundidad: Cuantitativo"
+  "depthState": "Versión cuantitativa"
  },
  {
   "depth": "quantitative",
@@ -102,7 +102,7 @@
   "body": "<p class=\"inv-step-count\">Paso 3 de 29 <span class=\"inv-step-kind\">predicción</span></p><h3 class=\"inv-step-title\">¿Dónde está la estrella?</h3><div class=\"inv-step-body\"><p>Una elipse tiene un centro, a mitad de su diámetro largo, y dos puntos especiales llamados focos, uno a cada lado del centro.</p><p>Mira la trayectoria del cuerpo naranja y dónde se sitúa la estrella dentro de ella. Comprométete con una respuesta antes de medir nada: el paso siguiente te da una manera de comprobarla.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">La estrella se sitúa en…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">A</span><span>el centro de la elipse</span></button><button type=\"button\" class=\"inv-option is-chosen is-held\" data-option=\"1\" role=\"radio\" aria-checked=\"true\" disabled=\"\"><span class=\"inv-option-mark\">B</span><span>uno de los focos de la elipse, descentrado</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">C</span><span>el punto más cercano de la órbita</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">D</span><span>un punto que se mueve conforme se mueve el planeta</span></button></div><p class=\"inv-held\">Tu respuesta queda registrada. No se corrige hasta que llegues a «La primera ley, y la anatomía de una elipse», para que la decida el experimento y no la clave de respuestas.</p><button type=\"button\" class=\"ui-button subtle\" data-change=\"\">Cambiar respuesta</button>",
   "previousDisabled": false,
   "nextDisabled": false,
-  "depthState": "Profundidad: Cuantitativo"
+  "depthState": "Versión cuantitativa"
  },
  {
   "depth": "quantitative",
@@ -117,7 +117,7 @@
   "body": "<p class=\"inv-step-count\">Paso 29 de 29 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">Dónde te deja esto</h3><div class=\"inv-step-body\"><p>Las tres leyes no son tres hechos separados. Una sola atracción hacia la estrella, que se debilita con el cuadrado de la distancia, las produce todas, y por eso se cumplen en TRAPPIST-1&nbsp;igual que aquí. Describen un cuerpo ligero que gira alrededor de otro mucho más pesado: cuando las dos masas son parecidas, como en una pareja de estrellas, las dos se mueven, y el periodo depende de su suma.</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> Si vas a entregar esto para una calificación, pulsa Terminar para introducir tu nombre y descargar tu informe de laboratorio. Si no, simplemente puedes cerrar el panel.</p>",
   "previousDisabled": false,
   "nextDisabled": false,
-  "depthState": "Profundidad: Cuantitativo"
+  "depthState": "Versión cuantitativa"
  },
  {
   "depth": "advanced",
@@ -132,7 +132,7 @@
   "body": "<p class=\"inv-step-count\">Paso 1 de 32 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">Tres preguntas sobre una órbita</h3><div class=\"inv-step-body\"><p>¿Qué trayectoria sigue un planeta alrededor de su estrella, y qué fija lo rápido que se mueve y lo que dura su año? Lo responderás en la vista de la órbita en directo, prediciendo y midiendo.</p><p>Johannes Kepler lo respondió hace cuatrocientos años a partir de posiciones de Marte medidas sin telescopio. Por qué confió en ellas llega después de tu primera predicción.</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> Mientras una investigación está en marcha, pulsar selecciona un objeto sin abrir la ficha del inspector, y la colocación de objetos nuevos queda desactivada para que un clic accidental no altere el sistema que estás midiendo.</p>",
   "previousDisabled": true,
   "nextDisabled": false,
-  "depthState": "Profundidad: Avanzado"
+  "depthState": "Versión avanzada"
  },
  {
   "depth": "advanced",
@@ -147,7 +147,7 @@
   "body": "<p class=\"inv-step-count\">Paso 3 de 32 <span class=\"inv-step-kind\">predicción</span></p><h3 class=\"inv-step-title\">¿Dónde está la estrella?</h3><div class=\"inv-step-body\"><p>Una elipse tiene un centro, a mitad de su diámetro largo, y dos puntos especiales llamados focos, uno a cada lado del centro.</p><p>Mira la trayectoria del cuerpo naranja y dónde se sitúa la estrella dentro de ella. Comprométete con una respuesta antes de medir nada: el paso siguiente te da una manera de comprobarla.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">La estrella se sitúa en…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">A</span><span>el centro de la elipse</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">B</span><span>uno de los focos de la elipse, descentrado</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">C</span><span>el punto más cercano de la órbita</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">D</span><span>un punto que se mueve conforme se mueve el planeta</span></button></div>",
   "previousDisabled": false,
   "nextDisabled": false,
-  "depthState": "Profundidad: Avanzado"
+  "depthState": "Versión avanzada"
  },
  {
   "depth": "advanced",
@@ -162,7 +162,7 @@
   "body": "<p class=\"inv-step-count\">Paso 3 de 32 <span class=\"inv-step-kind\">predicción</span></p><h3 class=\"inv-step-title\">¿Dónde está la estrella?</h3><div class=\"inv-step-body\"><p>Una elipse tiene un centro, a mitad de su diámetro largo, y dos puntos especiales llamados focos, uno a cada lado del centro.</p><p>Mira la trayectoria del cuerpo naranja y dónde se sitúa la estrella dentro de ella. Comprométete con una respuesta antes de medir nada: el paso siguiente te da una manera de comprobarla.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">La estrella se sitúa en…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">A</span><span>el centro de la elipse</span></button><button type=\"button\" class=\"inv-option is-chosen is-held\" data-option=\"1\" role=\"radio\" aria-checked=\"true\" disabled=\"\"><span class=\"inv-option-mark\">B</span><span>uno de los focos de la elipse, descentrado</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">C</span><span>el punto más cercano de la órbita</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">D</span><span>un punto que se mueve conforme se mueve el planeta</span></button></div><p class=\"inv-held\">Tu respuesta queda registrada. No se corrige hasta que llegues a «La primera ley, y la anatomía de una elipse», para que la decida el experimento y no la clave de respuestas.</p><button type=\"button\" class=\"ui-button subtle\" data-change=\"\">Cambiar respuesta</button>",
   "previousDisabled": false,
   "nextDisabled": false,
-  "depthState": "Profundidad: Avanzado"
+  "depthState": "Versión avanzada"
  },
  {
   "depth": "advanced",
@@ -177,6 +177,6 @@
   "body": "<p class=\"inv-step-count\">Paso 32 de 32 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">Dónde te deja esto</h3><div class=\"inv-step-body\"><p>Las tres leyes no son tres hechos separados. Una sola atracción hacia la estrella, que se debilita con el cuadrado de la distancia, las produce todas, y por eso se cumplen en TRAPPIST-1&nbsp;igual que aquí. Describen un cuerpo ligero que gira alrededor de otro mucho más pesado: cuando las dos masas son parecidas, como en una pareja de estrellas, las dos se mueven, y el periodo depende de su suma.</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> Si vas a entregar esto para una calificación, pulsa Terminar para introducir tu nombre y descargar tu informe de laboratorio. Si no, simplemente puedes cerrar el panel.</p>",
   "previousDisabled": false,
   "nextDisabled": false,
-  "depthState": "Profundidad: Avanzado"
+  "depthState": "Versión avanzada"
  }
 ]

@@ -11,7 +11,7 @@
   "body": "<p class=\"inv-step-count\">Step 1 of 13 <span class=\"inv-step-kind\">read</span></p><h3 class=\"inv-step-title\">Three questions about an orbit</h3><div class=\"inv-step-body\"><p>What path does a planet follow around its star, and what sets how fast it moves and how long its year is? You will answer it in the live orbit view: predict first, then measure distances, speeds and years in orbits you choose.</p><p>Johannes Kepler answered it four hundred years ago from positions of Mars measured without a telescope. Why he trusted them comes after your first prediction.</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> While an investigation is running, clicking selects an object without opening the inspector card, and placing new objects is switched off so a stray click cannot alter the system you are measuring.</p>",
   "previousDisabled": true,
   "nextDisabled": false,
-  "depthState": ""
+  "depthState": "Core version"
  },
  {
   "role": "graded",
@@ -25,7 +25,7 @@
   "body": "<p class=\"inv-step-count\">Step 2 of 13 <span class=\"inv-step-kind\">predict</span></p><h3 class=\"inv-step-title\">Where is the star?</h3><div class=\"inv-step-body\"><p>An ellipse has a center, halfway along its long diameter, and two special points called foci, one on each side of the center.</p><p>Look at the orange body's path and where the star sits inside it. Commit to an answer before measuring anything: the next step gives you a way to check it.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">The star sits at…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">A</span><span>the center of the ellipse</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">B</span><span>one focus of the ellipse, off-center</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">C</span><span>the closest point of the orbit</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">D</span><span>a point that moves as the planet moves</span></button></div>",
   "previousDisabled": false,
   "nextDisabled": false,
-  "depthState": ""
+  "depthState": "Core version"
  },
  {
   "role": "marked",
@@ -39,7 +39,7 @@
   "body": "<p class=\"inv-step-count\">Step 2 of 13 <span class=\"inv-step-kind\">predict</span></p><h3 class=\"inv-step-title\">Where is the star?</h3><div class=\"inv-step-body\"><p>An ellipse has a center, halfway along its long diameter, and two special points called foci, one on each side of the center.</p><p>Look at the orange body's path and where the star sits inside it. Commit to an answer before measuring anything: the next step gives you a way to check it.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">The star sits at…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">A</span><span>the center of the ellipse</span></button><button type=\"button\" class=\"inv-option is-chosen is-held\" data-option=\"1\" role=\"radio\" aria-checked=\"true\" disabled=\"\"><span class=\"inv-option-mark\">B</span><span>one focus of the ellipse, off-center</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">C</span><span>the closest point of the orbit</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">D</span><span>a point that moves as the planet moves</span></button></div><p class=\"inv-held\">Your answer is recorded. It stays unmarked until you reach “The First Law, and the anatomy of an ellipse”, so the experiment settles it rather than the answer key.</p><button type=\"button\" class=\"ui-button subtle\" data-change=\"\">Change answer</button>",
   "previousDisabled": false,
   "nextDisabled": false,
-  "depthState": ""
+  "depthState": "Core version"
  },
  {
   "role": "last",
@@ -53,6 +53,6 @@
   "body": "<p class=\"inv-step-count\">Step 13 of 13 <span class=\"inv-step-kind\">question</span></p><h3 class=\"inv-step-title\">Where Kepler's version breaks</h3><div class=\"inv-step-body\"><p>Newton's correction replaces Kepler's constant with one that depends on <em>M</em> + <em>m</em> rather than <em>M</em> alone.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">For which system does that correction matter most?</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">A</span><span>Earth orbiting the Sun</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">B</span><span>A Jupiter-mass planet orbiting a Sun-like star</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">C</span><span>Two white dwarfs of equal mass orbiting each other</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">D</span><span>A spacecraft orbiting the Earth</span></button></div>",
   "previousDisabled": false,
   "nextDisabled": false,
-  "depthState": ""
+  "depthState": "Core version"
  }
 ]

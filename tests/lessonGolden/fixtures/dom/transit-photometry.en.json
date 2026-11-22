@@ -12,7 +12,7 @@
   "body": "<p class=\"inv-step-count\">Step 1 of 30 <span class=\"inv-step-kind\">read</span></p><h3 class=\"inv-step-title\">A planet you cannot see</h3><div class=\"inv-step-body\"><p>How can you find a planet you cannot see, and measure how big it is? You will watch a star dim as its planet crosses in front of it, predict how deep the dip will be, then read the depth off the light curve and turn it into a size.</p><p>On screen is <strong>HD 209458</strong>, a slightly hotter and more massive relative of the Sun about 160&nbsp;light years away in Pegasus, with a planet on a three and a half day orbit. The star and the planet are drawn at their true relative sizes, which is why the view is zoomed so far in.</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> Everything in this investigation is measurable from what is on screen. Clicking selects an object without opening the inspector card, and placing new objects is switched off so a stray click cannot alter the system you are measuring.</p>",
   "previousDisabled": true,
   "nextDisabled": false,
-  "depthState": ""
+  "depthState": "Core version"
  },
  {
   "depth": "core",
@@ -27,7 +27,7 @@
   "body": "<p class=\"inv-step-count\">Step 7 of 30 <span class=\"inv-step-kind\">question</span></p><h3 class=\"inv-step-title\">From a depth to a size</h3><div class=\"inv-step-body\"><p>Suppose a survey reports a clean, repeating 1% dip: <em>δ</em>&nbsp;= 0.0100.</p></div><p class=\"inv-prompt\">What is R<sub>p</sub> / R<sub>★</sub> for a 1% dip?</p><div class=\"inv-numeric\"><input type=\"text\" inputmode=\"decimal\" class=\"inv-answer-num\" data-numeric=\"transit-photometry:from-a-depth-to-a\" value=\"\" placeholder=\"Your value\"><button type=\"button\" class=\"ui-button\" data-check-numeric=\"transit-photometry:from-a-depth-to-a\">Check</button></div><div class=\"inv-hints\"><div class=\"inv-hint-row\"><button type=\"button\" class=\"ui-button subtle inv-hint-btn\" data-hint=\"h1\"> I could use a hint </button></div></div>",
   "previousDisabled": false,
   "nextDisabled": false,
-  "depthState": ""
+  "depthState": "Core version"
  },
  {
   "depth": "core",
@@ -42,7 +42,7 @@
   "body": "<p class=\"inv-step-count\">Step 7 of 30 <span class=\"inv-step-kind\">question</span></p><h3 class=\"inv-step-title\">From a depth to a size</h3><div class=\"inv-step-body\"><p>Suppose a survey reports a clean, repeating 1% dip: <em>δ</em>&nbsp;= 0.0100.</p></div><p class=\"inv-prompt\">What is R<sub>p</sub> / R<sub>★</sub> for a 1% dip?</p><div class=\"inv-numeric\"><input type=\"text\" inputmode=\"decimal\" class=\"inv-answer-num\" data-numeric=\"transit-photometry:from-a-depth-to-a\" value=\"0.1\" placeholder=\"Your value\"><button type=\"button\" class=\"ui-button\" data-check-numeric=\"transit-photometry:from-a-depth-to-a\">Check</button></div><p class=\"inv-feedback is-right\">That matches. The square root of 0.01&nbsp;is 0.1: the planet is a tenth of the star’s radius. Around a Sun-like star that is roughly Jupiter-sized, which is exactly why every transiting planet found before about 2005&nbsp;was a hot Jupiter. They were the only ones anybody could see. To check a result like this, square it and see that the depth comes back.</p><div class=\"inv-hints\"><div class=\"inv-hint-row\"><button type=\"button\" class=\"ui-button subtle inv-hint-btn\" data-hint=\"h1\"> I could use a hint </button></div></div>",
   "previousDisabled": false,
   "nextDisabled": false,
-  "depthState": ""
+  "depthState": "Core version"
  },
  {
   "depth": "core",
@@ -57,7 +57,7 @@
   "body": "<p class=\"inv-step-count\">Step 30 of 30 <span class=\"inv-step-kind\">read</span></p><h3 class=\"inv-step-title\">What you did, and where it goes next</h3><div class=\"inv-step-body\"><p>Every radius you found is a ratio to the star, made better three times over, and each correction rested on something besides the dip: how the star's edge darkens, how the orbit is tilted to us, what else shines in the same aperture. A planet's radius is only as good as those.</p><p>TESS, JWST and PLATO are measuring transits now, and behind every one of their planets is the follow-up of the last three steps: somebody has to look at the host star with a big enough telescope to find out what else is there.</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> A note on numbers: the survey results quoted here come from the Robo-AO Kepler Survey and the SOAR TESS Survey, both of which set out to image every planet-candidate host they could reach. The Robo-AO census covers 3,857&nbsp;Kepler hosts; the SOAR program has observed close to 3,000&nbsp;TESS targets and finds a median primary-host radius correction of about 1.07, rising to 1.33&nbsp;for the worst tenth.</p>",
   "previousDisabled": false,
   "nextDisabled": false,
-  "depthState": ""
+  "depthState": "Core version"
  },
  {
   "depth": "quantitative",
@@ -72,7 +72,7 @@
   "body": "<p class=\"inv-step-count\">Step 1 of 33 <span class=\"inv-step-kind\">read</span></p><h3 class=\"inv-step-title\">A planet you cannot see</h3><div class=\"inv-step-body\"><p>How can you find a planet you cannot see, and measure how big it is? You will watch a star dim as its planet crosses in front of it, predict how deep the dip will be, then read the depth off the light curve and turn it into a size.</p><p>On screen is <strong>HD 209458</strong>, a slightly hotter and more massive relative of the Sun about 160&nbsp;light years away in Pegasus, with a planet on a three and a half day orbit. The star and the planet are drawn at their true relative sizes, which is why the view is zoomed so far in.</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> Everything in this investigation is measurable from what is on screen. Clicking selects an object without opening the inspector card, and placing new objects is switched off so a stray click cannot alter the system you are measuring.</p>",
   "previousDisabled": true,
   "nextDisabled": false,
-  "depthState": "Depth: Quantitative"
+  "depthState": "Quantitative version"
  },
  {
   "depth": "quantitative",
@@ -87,7 +87,7 @@
   "body": "<p class=\"inv-step-count\">Step 7 of 33 <span class=\"inv-step-kind\">question</span></p><h3 class=\"inv-step-title\">From a depth to a size</h3><div class=\"inv-step-body\"><p>Suppose a survey reports a clean, repeating 1% dip: <em>δ</em>&nbsp;= 0.0100.</p></div><p class=\"inv-prompt\">What is R<sub>p</sub> / R<sub>★</sub> for a 1% dip?</p><div class=\"inv-numeric\"><input type=\"text\" inputmode=\"decimal\" class=\"inv-answer-num\" data-numeric=\"transit-photometry:from-a-depth-to-a\" value=\"\" placeholder=\"Your value\"><button type=\"button\" class=\"ui-button\" data-check-numeric=\"transit-photometry:from-a-depth-to-a\">Check</button></div><div class=\"inv-hints\"><div class=\"inv-hint-row\"><button type=\"button\" class=\"ui-button subtle inv-hint-btn\" data-hint=\"h1\"> I could use a hint </button></div></div>",
   "previousDisabled": false,
   "nextDisabled": false,
-  "depthState": "Depth: Quantitative"
+  "depthState": "Quantitative version"
  },
  {
   "depth": "quantitative",
@@ -102,7 +102,7 @@
   "body": "<p class=\"inv-step-count\">Step 7 of 33 <span class=\"inv-step-kind\">question</span></p><h3 class=\"inv-step-title\">From a depth to a size</h3><div class=\"inv-step-body\"><p>Suppose a survey reports a clean, repeating 1% dip: <em>δ</em>&nbsp;= 0.0100.</p></div><p class=\"inv-prompt\">What is R<sub>p</sub> / R<sub>★</sub> for a 1% dip?</p><div class=\"inv-numeric\"><input type=\"text\" inputmode=\"decimal\" class=\"inv-answer-num\" data-numeric=\"transit-photometry:from-a-depth-to-a\" value=\"0.1\" placeholder=\"Your value\"><button type=\"button\" class=\"ui-button\" data-check-numeric=\"transit-photometry:from-a-depth-to-a\">Check</button></div><p class=\"inv-feedback is-right\">That matches. The square root of 0.01&nbsp;is 0.1: the planet is a tenth of the star’s radius. Around a Sun-like star that is roughly Jupiter-sized, which is exactly why every transiting planet found before about 2005&nbsp;was a hot Jupiter. They were the only ones anybody could see. To check a result like this, square it and see that the depth comes back.</p><div class=\"inv-hints\"><div class=\"inv-hint-row\"><button type=\"button\" class=\"ui-button subtle inv-hint-btn\" data-hint=\"h1\"> I could use a hint </button></div></div>",
   "previousDisabled": false,
   "nextDisabled": false,
-  "depthState": "Depth: Quantitative"
+  "depthState": "Quantitative version"
  },
  {
   "depth": "quantitative",
@@ -117,7 +117,7 @@
   "body": "<p class=\"inv-step-count\">Step 33 of 33 <span class=\"inv-step-kind\">read</span></p><h3 class=\"inv-step-title\">What you did, and where it goes next</h3><div class=\"inv-step-body\"><p>Every radius you found is a ratio to the star, made better three times over, and each correction rested on something besides the dip: how the star's edge darkens, how the orbit is tilted to us, what else shines in the same aperture. A planet's radius is only as good as those.</p><p>TESS, JWST and PLATO are measuring transits now, and behind every one of their planets is the follow-up of the last three steps: somebody has to look at the host star with a big enough telescope to find out what else is there.</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> A note on numbers: the survey results quoted here come from the Robo-AO Kepler Survey and the SOAR TESS Survey, both of which set out to image every planet-candidate host they could reach. The Robo-AO census covers 3,857&nbsp;Kepler hosts; the SOAR program has observed close to 3,000&nbsp;TESS targets and finds a median primary-host radius correction of about 1.07, rising to 1.33&nbsp;for the worst tenth.</p>",
   "previousDisabled": false,
   "nextDisabled": false,
-  "depthState": "Depth: Quantitative"
+  "depthState": "Quantitative version"
  },
  {
   "depth": "advanced",
@@ -132,7 +132,7 @@
   "body": "<p class=\"inv-step-count\">Step 1 of 36 <span class=\"inv-step-kind\">read</span></p><h3 class=\"inv-step-title\">A planet you cannot see</h3><div class=\"inv-step-body\"><p>How can you find a planet you cannot see, and measure how big it is? You will watch a star dim as its planet crosses in front of it, predict how deep the dip will be, then read the depth off the light curve and turn it into a size.</p><p>On screen is <strong>HD 209458</strong>, a slightly hotter and more massive relative of the Sun about 160&nbsp;light years away in Pegasus, with a planet on a three and a half day orbit. The star and the planet are drawn at their true relative sizes, which is why the view is zoomed so far in.</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> Everything in this investigation is measurable from what is on screen. Clicking selects an object without opening the inspector card, and placing new objects is switched off so a stray click cannot alter the system you are measuring.</p>",
   "previousDisabled": true,
   "nextDisabled": false,
-  "depthState": "Depth: Advanced"
+  "depthState": "Advanced version"
  },
  {
   "depth": "advanced",
@@ -147,7 +147,7 @@
   "body": "<p class=\"inv-step-count\">Step 7 of 36 <span class=\"inv-step-kind\">question</span></p><h3 class=\"inv-step-title\">From a depth to a size</h3><div class=\"inv-step-body\"><p>Suppose a survey reports a clean, repeating 1% dip: <em>δ</em>&nbsp;= 0.0100.</p></div><p class=\"inv-prompt\">What is R<sub>p</sub> / R<sub>★</sub> for a 1% dip?</p><div class=\"inv-numeric\"><input type=\"text\" inputmode=\"decimal\" class=\"inv-answer-num\" data-numeric=\"transit-photometry:from-a-depth-to-a\" value=\"\" placeholder=\"Your value\"><button type=\"button\" class=\"ui-button\" data-check-numeric=\"transit-photometry:from-a-depth-to-a\">Check</button></div><div class=\"inv-hints\"><div class=\"inv-hint-row\"><button type=\"button\" class=\"ui-button subtle inv-hint-btn\" data-hint=\"h1\"> I could use a hint </button></div></div>",
   "previousDisabled": false,
   "nextDisabled": false,
-  "depthState": "Depth: Advanced"
+  "depthState": "Advanced version"
  },
  {
   "depth": "advanced",
@@ -162,7 +162,7 @@
   "body": "<p class=\"inv-step-count\">Step 7 of 36 <span class=\"inv-step-kind\">question</span></p><h3 class=\"inv-step-title\">From a depth to a size</h3><div class=\"inv-step-body\"><p>Suppose a survey reports a clean, repeating 1% dip: <em>δ</em>&nbsp;= 0.0100.</p></div><p class=\"inv-prompt\">What is R<sub>p</sub> / R<sub>★</sub> for a 1% dip?</p><div class=\"inv-numeric\"><input type=\"text\" inputmode=\"decimal\" class=\"inv-answer-num\" data-numeric=\"transit-photometry:from-a-depth-to-a\" value=\"0.1\" placeholder=\"Your value\"><button type=\"button\" class=\"ui-button\" data-check-numeric=\"transit-photometry:from-a-depth-to-a\">Check</button></div><p class=\"inv-feedback is-right\">That matches. The square root of 0.01&nbsp;is 0.1: the planet is a tenth of the star’s radius. Around a Sun-like star that is roughly Jupiter-sized, which is exactly why every transiting planet found before about 2005&nbsp;was a hot Jupiter. They were the only ones anybody could see. To check a result like this, square it and see that the depth comes back.</p><div class=\"inv-hints\"><div class=\"inv-hint-row\"><button type=\"button\" class=\"ui-button subtle inv-hint-btn\" data-hint=\"h1\"> I could use a hint </button></div></div>",
   "previousDisabled": false,
   "nextDisabled": false,
-  "depthState": "Depth: Advanced"
+  "depthState": "Advanced version"
  },
  {
   "depth": "advanced",
@@ -177,6 +177,6 @@
   "body": "<p class=\"inv-step-count\">Step 36 of 36 <span class=\"inv-step-kind\">read</span></p><h3 class=\"inv-step-title\">What you did, and where it goes next</h3><div class=\"inv-step-body\"><p>Every radius you found is a ratio to the star, made better three times over, and each correction rested on something besides the dip: how the star's edge darkens, how the orbit is tilted to us, what else shines in the same aperture. A planet's radius is only as good as those.</p><p>TESS, JWST and PLATO are measuring transits now, and behind every one of their planets is the follow-up of the last three steps: somebody has to look at the host star with a big enough telescope to find out what else is there.</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> A note on numbers: the survey results quoted here come from the Robo-AO Kepler Survey and the SOAR TESS Survey, both of which set out to image every planet-candidate host they could reach. The Robo-AO census covers 3,857&nbsp;Kepler hosts; the SOAR program has observed close to 3,000&nbsp;TESS targets and finds a median primary-host radius correction of about 1.07, rising to 1.33&nbsp;for the worst tenth.</p>",
   "previousDisabled": false,
   "nextDisabled": false,
-  "depthState": "Depth: Advanced"
+  "depthState": "Advanced version"
  }
 ]
