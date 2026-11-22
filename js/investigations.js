@@ -89,7 +89,6 @@ import {
   observedStar,
 } from './radialVelocity.js';
 import { orbitalElements, dominantPrimary, pairEnergy } from './orbital.js';
-import { formatNumber } from './format.js';
 import {
   formatDistance,
   formatSpeed,
@@ -316,7 +315,6 @@ bindPersistence({
  * Build the object a step's probe reads from: a prepared context, so that
  * data/investigations.js stays a description of teaching, not the engine.
  */
-const shownRange = r => r && { ...r, shown: formatNumber(r.halfRange) };
 function probeContext() {
   const G = SETTINGS.gravitational_constant;
   const selected = state.selectedObject?.object || null;
@@ -358,17 +356,17 @@ function probeContext() {
     // Photometry, for the steps that ask students to read a light curve rather
     // than an orbit. The clock is the one the light curve plots against, so a
     // time stamped here lands under the dip the student is looking at.
-    flux: () => currentBrightness(),
-    days: () => currentTimeDays(),
-    observerAngle: () => getObserverAngle(),
+    flux: currentBrightness,
+    days: currentTimeDays,
+    observerAngle: getObserverAngle,
     // What the recorded light curve contains: the baseline, every complete
     // transit and a running count (one passes in half a second).
-    photometry: () => transitAnalysis(),
+    photometry: transitAnalysis,
     // The rotation curve and cluster measurements, from the same functions the
     // panel calls, so a lesson and its instrument cannot disagree.
-    rotationCurve: () => rotationCurveState(),
-    cluster: () => clusterState(),
-    haloOn: () => darkMatterHaloOn(),
+    rotationCurve: rotationCurveState,
+    cluster: clusterState,
+    haloOn: darkMatterHaloOn,
     // Which reference frame the view is in, and where a body lies as seen from
     // its origin (retrograde motion rests on both).
     frame: () => frameState(),
@@ -454,7 +452,7 @@ function probeContext() {
      * dark disc is a drawing at a scale chosen so orbits fit, and the Schwarzschild radius is a length in km;
      * the readout that uses this says which is which.
      */
-    holeFacts: massSun => blackHoleFacts(massSun),
+    holeFacts: blackHoleFacts,
     /** Where the observed star is in its orbit, what a spectrograph reads now, and the panel's half-range. */
     rvNow: () => {
       const star = observedStar();
@@ -477,7 +475,7 @@ function probeContext() {
         phaseDeg: ((angle * 180) / Math.PI + 360) % 360,
         period: el?.period ?? null,
         observerAngleDeg: getObserverAngle(),
-        range: shownRange(measuredHalfRange()),
+        range: measuredHalfRange(),
       };
     },
     /**
@@ -509,7 +507,7 @@ function probeContext() {
     /**
      * How far the whole world's conserved quantities have moved.
      */
-    conservation: () => conservationDrift(),
+    conservation: conservationDrift,
     /**
      * Where a transiting body is against its star's disc, right now.
      *

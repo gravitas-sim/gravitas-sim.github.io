@@ -531,7 +531,8 @@ export function currentRadialVelocity() {
  *   max: number, midlineCrossings: number}|null} The estimate, or null before there is one
  */
 export function measuredHalfRange() {
-  return halfRangeOfSeries(series, { minSamples: MIN_SAMPLES_FOR_RANGE });
+  const r = halfRangeOfSeries(series, { minSamples: MIN_SAMPLES_FOR_RANGE });
+  return r && { ...r, shown: formatNumber(r.halfRange) };
 }
 
 /** @returns {Array<{x: number, y: number}>} A copy of the recorded series */
