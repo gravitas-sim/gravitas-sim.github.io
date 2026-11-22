@@ -19,6 +19,8 @@
     ["steps.the-zone-at-three-ages.fields.0.unit","AU"],
     ["steps.the-zone-at-three-ages.fields.1.unit","AU"],
     ["steps.the-zone-at-three-ages.fields.2.unit","AU"],
+    ["steps.two-runs-one-orbit.fields.1.unit","%"],
+    ["steps.two-runs-one-orbit.fields.3.unit","%"],
     ["steps.the-m-dwarf-zone-and-the-tide.fields.0.unit","AU"],
     ["steps.the-m-dwarf-zone-and-the-tide.fields.1.unit","AU"],
     ["steps.a-middling-star.fields.0.unit","AU"],
@@ -41,6 +43,10 @@
     ["steps.the-zone-at-three-ages.fields.0.label","Inner edge at 1 billion years"],
     ["steps.the-zone-at-three-ages.fields.1.label","Inner edge at 4.57 billion years"],
     ["steps.the-zone-at-three-ages.fields.2.label","Inner edge at 8 billion years"],
+    ["steps.two-runs-one-orbit.fields.0.label","Run 1: eccentricity"],
+    ["steps.two-runs-one-orbit.fields.1.label","Run 1: fraction of the year inside the zone"],
+    ["steps.two-runs-one-orbit.fields.2.label","Run 2: eccentricity"],
+    ["steps.two-runs-one-orbit.fields.3.label","Run 2: fraction of the year inside the zone"],
     ["steps.take-the-readings-yourself.fields.0.label","TRAPPIST-1e receives"],
     ["steps.take-the-readings-yourself.fields.1.label","TRAPPIST-1f receives"],
     ["steps.take-the-readings-yourself.fields.2.label","TRAPPIST-1g receives"]
@@ -58,6 +64,10 @@
     ["steps.the-zone-at-three-ages.fields.0.label","Borde interior a 1000 millones de años"],
     ["steps.the-zone-at-three-ages.fields.1.label","Borde interior a 4570 millones de años"],
     ["steps.the-zone-at-three-ages.fields.2.label","Borde interior a 8000 millones de años"],
+    ["steps.two-runs-one-orbit.fields.0.label","Ejecución 1: excentricidad"],
+    ["steps.two-runs-one-orbit.fields.1.label","Ejecución 1: fracción del año dentro de la zona"],
+    ["steps.two-runs-one-orbit.fields.2.label","Ejecución 2: excentricidad"],
+    ["steps.two-runs-one-orbit.fields.3.label","Ejecución 2: fracción del año dentro de la zona"],
     ["steps.take-the-readings-yourself.fields.0.label","TRAPPIST-1e recibe"],
     ["steps.take-the-readings-yourself.fields.1.label","TRAPPIST-1f recibe"],
     ["steps.take-the-readings-yourself.fields.2.label","TRAPPIST-1g recibe"]
@@ -105,7 +115,11 @@
    "crossing-the-edges": {
     "probe": [[{"label":"Selected","value":"click a planet on the canvas to read it"}],[{"label":"Planet","value":"Eccentric Orbiter"},{"label":"Distance from its star","value":"1.234 AU"},{"label":"Starlight it receives","value":"0.65 Earths"},{"label":"Zone (conservative)","value":"0.95 to 1.67 AU"},{"label":"Which puts it","value":"inside the habitable zone"}],[{"label":"Planet","value":"Circular Orbiter"},{"label":"Distance from its star","value":"0.046 AU"},{"label":"Starlight it receives","value":"14.20 Earths"},{"label":"Zone (conservative)","value":"0.10 to 0.30 AU"},{"label":"Which puts it","value":"inside the inner edge"}],[{"label":"Planet","value":"Far Orbiter"},{"label":"Distance from its star","value":"9.500 AU"},{"label":"Starlight it receives","value":"0.01 Earths"},{"label":"Zone (conservative)","value":"0.80 to 1.40 AU"},{"label":"Which puts it","value":"outside the outer edge"}]]
    },
-   "reading-the-fraction": {
+   "two-runs-one-orbit": {
+    "probe": [[{"label":"Selected","value":"click a planet on the canvas to read it"}],[{"label":"Planet","value":"Eccentric Orbiter"},{"label":"Distance from its star","value":"1.234 AU"},{"label":"Starlight it receives","value":"0.65 Earths"},{"label":"Zone (conservative)","value":"0.95 to 1.67 AU"},{"label":"Which puts it","value":"inside the habitable zone"}],[{"label":"Planet","value":"Circular Orbiter"},{"label":"Distance from its star","value":"0.046 AU"},{"label":"Starlight it receives","value":"14.20 Earths"},{"label":"Zone (conservative)","value":"0.10 to 0.30 AU"},{"label":"Which puts it","value":"inside the inner edge"}],[{"label":"Planet","value":"Far Orbiter"},{"label":"Distance from its star","value":"9.500 AU"},{"label":"Starlight it receives","value":"0.01 Earths"},{"label":"Zone (conservative)","value":"0.80 to 1.40 AU"},{"label":"Which puts it","value":"outside the outer edge"}]],
+    "validate": {"calls":242,"distinct":4,"digest":"e43fef98675b9f4c","samples":[null,{"level":"error","message":"An eccentricity is a number from 0 to 0.6 here, and a fraction of the year is between 0 and 100 percent."},{"level":"warn","message":"Your second run should be eccentric. Raise the eccentricity and take the reading there."},{"level":"ok","message":"Two runs with the same average distance and two different fractions of the year inside the zone. The next screen sets them beside your prediction."}]}
+   },
+   "fraction-of-your-run": {
     "probe": [[{"label":"Selected","value":"click a planet on the canvas to read it"}],[{"label":"Planet","value":"Eccentric Orbiter"},{"label":"Distance from its star","value":"1.234 AU"},{"label":"Starlight it receives","value":"0.65 Earths"},{"label":"Zone (conservative)","value":"0.95 to 1.67 AU"},{"label":"Which puts it","value":"inside the habitable zone"}],[{"label":"Planet","value":"Circular Orbiter"},{"label":"Distance from its star","value":"0.046 AU"},{"label":"Starlight it receives","value":"14.20 Earths"},{"label":"Zone (conservative)","value":"0.10 to 0.30 AU"},{"label":"Which puts it","value":"inside the inner edge"}],[{"label":"Planet","value":"Far Orbiter"},{"label":"Distance from its star","value":"9.500 AU"},{"label":"Starlight it receives","value":"0.01 Earths"},{"label":"Zone (conservative)","value":"0.80 to 1.40 AU"},{"label":"Which puts it","value":"outside the outer edge"}]]
    },
    "the-m-dwarf-zone-and-the-tide": {
@@ -122,7 +136,7 @@
    },
    "take-the-readings-yourself": {
     "probe": [[{"label":"Selected","value":"click a planet on the canvas to read it"}],[{"label":"Planet","value":"Eccentric Orbiter"},{"label":"Distance from its star","value":"1.234 AU"},{"label":"Starlight it receives","value":"0.65 Earths"},{"label":"Zone (conservative)","value":"0.95 to 1.67 AU"},{"label":"Which puts it","value":"inside the habitable zone"}],[{"label":"Planet","value":"Circular Orbiter"},{"label":"Distance from its star","value":"0.046 AU"},{"label":"Starlight it receives","value":"14.20 Earths"},{"label":"Zone (conservative)","value":"0.10 to 0.30 AU"},{"label":"Which puts it","value":"inside the inner edge"}],[{"label":"Planet","value":"Far Orbiter"},{"label":"Distance from its star","value":"9.500 AU"},{"label":"Starlight it receives","value":"0.01 Earths"},{"label":"Zone (conservative)","value":"0.80 to 1.40 AU"},{"label":"Which puts it","value":"outside the outer edge"}]],
-    "validate": {"calls":242,"distinct":4,"digest":"70ddabe1c8de154e","samples":[null,{"level":"warn","message":"Check e, f, g, inner, outer against the list under the picture. Each planet's row gives its starlight in Earths, and the top row gives the two edges."},{"level":"warn","message":"Check e, f, g, inner against the list under the picture. Each planet's row gives its starlight in Earths, and the top row gives the two edges."},{"level":"warn","message":"Check e, g, inner, outer against the list under the picture. Each planet's row gives its starlight in Earths, and the top row gives the two edges."}]}
+    "validate": {"calls":242,"distinct":4,"digest":"42c524c55ea02cc6","samples":[null,{"level":"warn","message":"Check e, f, g, inner, outer against the list under the picture. Each planet's row gives its starlight in Earths, and the top row gives the two edges, which depend on the zone definition the panel is set to."},{"level":"warn","message":"Check e, f, g, inner against the list under the picture. Each planet's row gives its starlight in Earths, and the top row gives the two edges, which depend on the zone definition the panel is set to."},{"level":"warn","message":"Check e, g, inner, outer against the list under the picture. Each planet's row gives its starlight in Earths, and the top row gives the two edges, which depend on the zone definition the panel is set to."}]}
    }
   },
   "es": "same"

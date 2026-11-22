@@ -314,28 +314,28 @@
     "defaults": {"ecc":"0","semi":"1.2"}
    },
    "precision": [],
-   "specs": 4,
-   "frames": 48,
+   "specs": 5,
+   "frames": 54,
    "readout": {
-    "calls": 48,
-    "distinct": 26,
-    "digest": "4eb3644b50261472",
-    "samples": [[{"label":"Distance right now","value":"1.200 AU"},{"label":"Starlight right now","value":"0.69 Earths","emphasis":true},{"label":"Closest / furthest","value":"1.20 / 1.20 AU"},{"label":"Starlight at closest / furthest","value":"0.69 Earths / 0.69 Earths"}],[{"label":"Distance right now","value":"0.600 AU"},{"label":"Starlight right now","value":"2.78 Earths","emphasis":true},{"label":"Closest / furthest","value":"0.60 / 0.60 AU"},{"label":"Starlight at closest / furthest","value":"2.78 Earths / 2.78 Earths"}],[{"label":"Distance right now","value":"0.260 AU"},{"label":"Starlight right now","value":"14.8 Earths","emphasis":true},{"label":"Closest / furthest","value":"0.26 / 1.04 AU"},{"label":"Starlight at closest / furthest","value":"14.8 Earths / 0.92 Earths"}],[{"label":"Distance right now","value":"0.286 AU"},{"label":"Starlight right now","value":"12.2 Earths","emphasis":true},{"label":"Closest / furthest","value":"0.29 / 1.01 AU"},{"label":"Starlight at closest / furthest","value":"12.2 Earths / 0.97 Earths"}],[{"label":"Distance right now","value":"0.660 AU"},{"label":"Starlight right now","value":"2.30 Earths","emphasis":true},{"label":"Closest / furthest","value":"0.66 / 1.74 AU"},{"label":"Starlight at closest / furthest","value":"2.30 Earths / 0.33 Earths"},{"label":"Right now the planet is","value":"closer than the inner edge"},{"label":"Fraction of the year inside the zone","value":"56%","emphasis":true}],[{"label":"Distance right now","value":"0.720 AU"},{"label":"Starlight right now","value":"1.93 Earths","emphasis":true},{"label":"Closest / furthest","value":"0.72 / 2.88 AU"},{"label":"Starlight at closest / furthest","value":"1.93 Earths / 0.12 Earths"},{"label":"Right now the planet is","value":"closer than the inner edge"},{"label":"Fraction of the year inside the zone","value":"18%","emphasis":true}],[{"label":"Distance right now","value":"0.600 AU"},{"label":"Starlight right now","value":"2.78 Earths","emphasis":true},{"label":"Closest / furthest","value":"0.60 / 0.60 AU"},{"label":"Starlight at closest / furthest","value":"2.78 Earths / 2.78 Earths"},{"label":"Right now the planet is","value":"closer than the inner edge"},{"label":"Fraction of the year inside the zone","value":"0%","emphasis":true}],[{"label":"Distance right now","value":"1.609 AU"},{"label":"Starlight right now","value":"0.39 Earths","emphasis":true},{"label":"Closest / furthest","value":"0.66 / 1.74 AU"},{"label":"Starlight at closest / furthest","value":"2.30 Earths / 0.33 Earths"},{"label":"Right now the planet is","value":"within the modeled zone"},{"label":"Fraction of the year inside the zone","value":"56%","emphasis":true}]]
+    "calls": 54,
+    "distinct": 29,
+    "digest": "986713ea5fd8cc33",
+    "samples": [[{"label":"Distance right now","value":"1.200 AU"},{"label":"Starlight right now","value":"0.69 Earths","emphasis":true},{"label":"Closest / furthest","value":"1.20 / 1.20 AU"},{"label":"Starlight at closest / furthest","value":"0.69 Earths / 0.69 Earths"}],[{"label":"Distance right now","value":"0.600 AU"},{"label":"Starlight right now","value":"2.78 Earths","emphasis":true},{"label":"Closest / furthest","value":"0.60 / 0.60 AU"},{"label":"Starlight at closest / furthest","value":"2.78 Earths / 2.78 Earths"}],[{"label":"Distance right now","value":"0.260 AU"},{"label":"Starlight right now","value":"14.8 Earths","emphasis":true},{"label":"Closest / furthest","value":"0.26 / 1.04 AU"},{"label":"Starlight at closest / furthest","value":"14.8 Earths / 0.92 Earths"}],[{"label":"Distance right now","value":"0.286 AU"},{"label":"Starlight right now","value":"12.2 Earths","emphasis":true},{"label":"Closest / furthest","value":"0.29 / 1.01 AU"},{"label":"Starlight at closest / furthest","value":"12.2 Earths / 0.97 Earths"}],[{"label":"Distance right now","value":"0.660 AU"},{"label":"Starlight right now","value":"2.30 Earths","emphasis":true},{"label":"Closest / furthest","value":"0.66 / 1.74 AU"},{"label":"Starlight at closest / furthest","value":"2.30 Earths / 0.33 Earths"},{"label":"Right now the planet is","value":"closer than the inner edge"},{"label":"Fraction of the year inside the zone","value":"56%","emphasis":true}],[{"label":"Distance right now","value":"0.720 AU"},{"label":"Starlight right now","value":"1.93 Earths","emphasis":true},{"label":"Closest / furthest","value":"0.72 / 2.88 AU"},{"label":"Starlight at closest / furthest","value":"1.93 Earths / 0.12 Earths"},{"label":"Right now the planet is","value":"closer than the inner edge"},{"label":"Fraction of the year inside the zone","value":"18%","emphasis":true}],[{"label":"Distance right now","value":"0.600 AU"},{"label":"Starlight right now","value":"2.78 Earths","emphasis":true},{"label":"Closest / furthest","value":"0.60 / 0.60 AU"},{"label":"Starlight at closest / furthest","value":"2.78 Earths / 2.78 Earths"},{"label":"Right now the planet is","value":"closer than the inner edge"},{"label":"Fraction of the year inside the zone","value":"0%","emphasis":true}],[{"label":"Distance right now","value":"1.609 AU"},{"label":"Starlight right now","value":"0.39 Earths","emphasis":true},{"label":"Closest / furthest","value":"0.66 / 1.74 AU"},{"label":"Starlight at closest / furthest","value":"2.30 Earths / 0.33 Earths"},{"label":"Right now the planet is","value":"within the modeled zone"},{"label":"Fraction of the year inside the zone","value":"56%","emphasis":true}],[{"label":"Distance right now","value":"1.040 AU"},{"label":"Starlight right now","value":"0.92 Earths","emphasis":true},{"label":"Closest / furthest","value":"0.96 / 1.44 AU"},{"label":"Starlight at closest / furthest","value":"1.09 Earths / 0.48 Earths"},{"label":"Right now the planet is","value":"within the modeled zone"},{"label":"Fraction of the year inside the zone","value":"89%","emphasis":true}]]
    },
    "canvas": {
-    "calls": 48,
-    "distinct": 19,
-    "digest": "e92be931b7973f65",
+    "calls": 54,
+    "distinct": 20,
+    "digest": "f92129f692c0c9c2",
     "samples": [["one full year","starlight (Earths)","0.8","0"],["one full year","starlight (Earths)","3.2","0"],["one full year","starlight (Earths)","17.0","0"],["one full year","starlight (Earths)","14.1","0"],["habitable zone","habitable zone","one full year","starlight (Earths)","2.6","0"],["habitable zone","habitable zone","one full year","starlight (Earths)","3.2","0"]]
    },
    "controls": {
-    "calls": 48,
-    "distinct": 18,
-    "digest": "eee77cc393ceb092",
+    "calls": 54,
+    "distinct": 19,
+    "digest": "183ee5410173e009",
     "samples": [["0.00","1.20 AU"],["0.00","0.60 AU"]]
    },
    "phases": {
-    "calls": 18,
+    "calls": 20,
     "distinct": 12,
     "digest": "0797b274d8258bbc",
     "samples": [{"run":1},{"run":2},{"run":16},{"run":24},{"action":"run","after":"press","button":"Run / Pause"},{"action":"run","after":"step","button":"Run / Pause"},{"action":"run","after":"press again","button":"Run / Pause"},{"action":"reset","after":"press","button":"↺ Reset"},{"action":"reset","after":"step","button":"↺ Reset"},{"action":"reset","after":"press again","button":"↺ Reset"}]
@@ -351,28 +351,28 @@
     "defaults": {"ecc":"0","semi":"1.2"}
    },
    "precision": [],
-   "specs": 4,
-   "frames": 48,
+   "specs": 5,
+   "frames": 54,
    "readout": {
-    "calls": 48,
-    "distinct": 26,
-    "digest": "19b9ab8fac990fa2",
-    "samples": [[{"label":"Distancia ahora mismo","value":"1.200 AU"},{"label":"Luz estelar ahora mismo","value":"0.69 Earths","emphasis":true},{"label":"Mínima / máxima","value":"1.20 / 1.20 AU"},{"label":"Luz estelar en el punto más cercano / más lejano","value":"0.69 Earths / 0.69 Earths"}],[{"label":"Distancia ahora mismo","value":"0.600 AU"},{"label":"Luz estelar ahora mismo","value":"2.78 Earths","emphasis":true},{"label":"Mínima / máxima","value":"0.60 / 0.60 AU"},{"label":"Luz estelar en el punto más cercano / más lejano","value":"2.78 Earths / 2.78 Earths"}],[{"label":"Distancia ahora mismo","value":"0.260 AU"},{"label":"Luz estelar ahora mismo","value":"14.8 Earths","emphasis":true},{"label":"Mínima / máxima","value":"0.26 / 1.04 AU"},{"label":"Luz estelar en el punto más cercano / más lejano","value":"14.8 Earths / 0.92 Earths"}],[{"label":"Distancia ahora mismo","value":"0.286 AU"},{"label":"Luz estelar ahora mismo","value":"12.2 Earths","emphasis":true},{"label":"Mínima / máxima","value":"0.29 / 1.01 AU"},{"label":"Luz estelar en el punto más cercano / más lejano","value":"12.2 Earths / 0.97 Earths"}],[{"label":"Distancia ahora mismo","value":"0.660 AU"},{"label":"Luz estelar ahora mismo","value":"2.30 Earths","emphasis":true},{"label":"Mínima / máxima","value":"0.66 / 1.74 AU"},{"label":"Luz estelar en el punto más cercano / más lejano","value":"2.30 Earths / 0.33 Earths"},{"label":"Ahora mismo el planeta está","value":"closer than the inner edge"},{"label":"Fracción del año dentro de la zona","value":"56%","emphasis":true}],[{"label":"Distancia ahora mismo","value":"0.720 AU"},{"label":"Luz estelar ahora mismo","value":"1.93 Earths","emphasis":true},{"label":"Mínima / máxima","value":"0.72 / 2.88 AU"},{"label":"Luz estelar en el punto más cercano / más lejano","value":"1.93 Earths / 0.12 Earths"},{"label":"Ahora mismo el planeta está","value":"closer than the inner edge"},{"label":"Fracción del año dentro de la zona","value":"18%","emphasis":true}],[{"label":"Distancia ahora mismo","value":"0.600 AU"},{"label":"Luz estelar ahora mismo","value":"2.78 Earths","emphasis":true},{"label":"Mínima / máxima","value":"0.60 / 0.60 AU"},{"label":"Luz estelar en el punto más cercano / más lejano","value":"2.78 Earths / 2.78 Earths"},{"label":"Ahora mismo el planeta está","value":"closer than the inner edge"},{"label":"Fracción del año dentro de la zona","value":"0%","emphasis":true}],[{"label":"Distancia ahora mismo","value":"1.609 AU"},{"label":"Luz estelar ahora mismo","value":"0.39 Earths","emphasis":true},{"label":"Mínima / máxima","value":"0.66 / 1.74 AU"},{"label":"Luz estelar en el punto más cercano / más lejano","value":"2.30 Earths / 0.33 Earths"},{"label":"Ahora mismo el planeta está","value":"within the modeled zone"},{"label":"Fracción del año dentro de la zona","value":"56%","emphasis":true}]]
+    "calls": 54,
+    "distinct": 29,
+    "digest": "b91f8ab7329bd069",
+    "samples": [[{"label":"Distancia ahora mismo","value":"1.200 AU"},{"label":"Luz estelar ahora mismo","value":"0.69 Earths","emphasis":true},{"label":"Mínima / máxima","value":"1.20 / 1.20 AU"},{"label":"Luz estelar en el punto más cercano / más lejano","value":"0.69 Earths / 0.69 Earths"}],[{"label":"Distancia ahora mismo","value":"0.600 AU"},{"label":"Luz estelar ahora mismo","value":"2.78 Earths","emphasis":true},{"label":"Mínima / máxima","value":"0.60 / 0.60 AU"},{"label":"Luz estelar en el punto más cercano / más lejano","value":"2.78 Earths / 2.78 Earths"}],[{"label":"Distancia ahora mismo","value":"0.260 AU"},{"label":"Luz estelar ahora mismo","value":"14.8 Earths","emphasis":true},{"label":"Mínima / máxima","value":"0.26 / 1.04 AU"},{"label":"Luz estelar en el punto más cercano / más lejano","value":"14.8 Earths / 0.92 Earths"}],[{"label":"Distancia ahora mismo","value":"0.286 AU"},{"label":"Luz estelar ahora mismo","value":"12.2 Earths","emphasis":true},{"label":"Mínima / máxima","value":"0.29 / 1.01 AU"},{"label":"Luz estelar en el punto más cercano / más lejano","value":"12.2 Earths / 0.97 Earths"}],[{"label":"Distancia ahora mismo","value":"0.660 AU"},{"label":"Luz estelar ahora mismo","value":"2.30 Earths","emphasis":true},{"label":"Mínima / máxima","value":"0.66 / 1.74 AU"},{"label":"Luz estelar en el punto más cercano / más lejano","value":"2.30 Earths / 0.33 Earths"},{"label":"Ahora mismo el planeta está","value":"closer than the inner edge"},{"label":"Fracción del año dentro de la zona","value":"56%","emphasis":true}],[{"label":"Distancia ahora mismo","value":"0.720 AU"},{"label":"Luz estelar ahora mismo","value":"1.93 Earths","emphasis":true},{"label":"Mínima / máxima","value":"0.72 / 2.88 AU"},{"label":"Luz estelar en el punto más cercano / más lejano","value":"1.93 Earths / 0.12 Earths"},{"label":"Ahora mismo el planeta está","value":"closer than the inner edge"},{"label":"Fracción del año dentro de la zona","value":"18%","emphasis":true}],[{"label":"Distancia ahora mismo","value":"0.600 AU"},{"label":"Luz estelar ahora mismo","value":"2.78 Earths","emphasis":true},{"label":"Mínima / máxima","value":"0.60 / 0.60 AU"},{"label":"Luz estelar en el punto más cercano / más lejano","value":"2.78 Earths / 2.78 Earths"},{"label":"Ahora mismo el planeta está","value":"closer than the inner edge"},{"label":"Fracción del año dentro de la zona","value":"0%","emphasis":true}],[{"label":"Distancia ahora mismo","value":"1.609 AU"},{"label":"Luz estelar ahora mismo","value":"0.39 Earths","emphasis":true},{"label":"Mínima / máxima","value":"0.66 / 1.74 AU"},{"label":"Luz estelar en el punto más cercano / más lejano","value":"2.30 Earths / 0.33 Earths"},{"label":"Ahora mismo el planeta está","value":"within the modeled zone"},{"label":"Fracción del año dentro de la zona","value":"56%","emphasis":true}],[{"label":"Distancia ahora mismo","value":"1.040 AU"},{"label":"Luz estelar ahora mismo","value":"0.92 Earths","emphasis":true},{"label":"Mínima / máxima","value":"0.96 / 1.44 AU"},{"label":"Luz estelar en el punto más cercano / más lejano","value":"1.09 Earths / 0.48 Earths"},{"label":"Ahora mismo el planeta está","value":"within the modeled zone"},{"label":"Fracción del año dentro de la zona","value":"89%","emphasis":true}]]
    },
    "canvas": {
-    "calls": 48,
-    "distinct": 19,
-    "digest": "e92be931b7973f65",
+    "calls": 54,
+    "distinct": 20,
+    "digest": "f92129f692c0c9c2",
     "samples": [["one full year","starlight (Earths)","0.8","0"],["one full year","starlight (Earths)","3.2","0"],["one full year","starlight (Earths)","17.0","0"],["one full year","starlight (Earths)","14.1","0"],["habitable zone","habitable zone","one full year","starlight (Earths)","2.6","0"],["habitable zone","habitable zone","one full year","starlight (Earths)","3.2","0"]]
    },
    "controls": {
-    "calls": 48,
-    "distinct": 18,
-    "digest": "eee77cc393ceb092",
+    "calls": 54,
+    "distinct": 19,
+    "digest": "183ee5410173e009",
     "samples": [["0.00","1.20 AU"],["0.00","0.60 AU"]]
    },
    "phases": {
-    "calls": 18,
+    "calls": 20,
     "distinct": 12,
     "digest": "2c77d19f688376f1",
     "samples": [{"run":1},{"run":2},{"run":16},{"run":24},{"action":"run","after":"press","button":"Ejecutar / Pausar"},{"action":"run","after":"step","button":"Ejecutar / Pausar"},{"action":"run","after":"press again","button":"Ejecutar / Pausar"},{"action":"reset","after":"press","button":"↺ Reiniciar"},{"action":"reset","after":"step","button":"↺ Reiniciar"},{"action":"reset","after":"press again","button":"↺ Reiniciar"}]
