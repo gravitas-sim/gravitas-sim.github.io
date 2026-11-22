@@ -128,7 +128,6 @@ import {
   transitGeometry,
 } from './lightCurve.js';
 import { encodePayload, parseDocument, shareUrl } from './shareState.js';
-import { payloadFromSetup } from './lesson/setupPayload.js';
 // From js/notify.js rather than through js/controls.js, which only re-exports
 // them: going through controls put this module in a cycle (controls
 // dynamic-imports the loader, the loader this) that a convenience re-export alone made.
@@ -171,6 +170,7 @@ import {
   stageContext,
   stageLoaded,
   stageMemo,
+  payloadFromSetup,
   pinLessonStep,
   stageOf,
   stageScale,

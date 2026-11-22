@@ -109,8 +109,8 @@ its depth, its five steps and its position survived; the title did not.
 `sceneAltered` (`js/lessonFrame.js`) answers whether the student changed the
 bodies a step drew: a body placed (`EV_OBJECT_PLACED`), a burn applied (the
 engine's intervention counter, `getInterventionEpoch`), or, after the student
-pressed or typed outside the lesson panel, a body added or removed, or a
-body's mass changed, three seconds after the step drew. Running or pausing the
+pressed or typed outside the lesson panel, a body added or removed, three
+seconds after the step drew. Running or pausing the
 clock is not a change (a measurement may need it). It is memory only, set from
 the student's own actions and read when a reading is taken and by the existing
 once-a-second scene note, never per frame; nothing is stored. A stage the lesson
@@ -126,9 +126,8 @@ investigation's scene", the same action. The words are in
 `js/i18n/en.reset.js` and `es.reset.js` and arrive with the reset vocabulary,
 only when the line is first needed.
 
-Limits: a mass changed by accretion after the student pressed on the canvas
-counts as a change. A body moved or edited by hand without a burn, placement or
-mass change is not seen.
+Limits: a body edited by hand (a mass changed in the inspector) without a burn
+or placement is not seen.
 
 ## What is said on a return
 
