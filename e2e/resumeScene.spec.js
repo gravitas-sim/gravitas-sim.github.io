@@ -14,7 +14,7 @@
 // velocities when both screens are at the same simulation time; the stage and
 // its roles; the canvas kind; the clock a step states itself; the instrument's
 // controls. The sampling rule is sampleSteps there; RESUME_ALL=1 compares
-// every step, RESUME_LESSONS=a,b limits the lessons and RESUME_EVERY=n takes every n-th.
+// every step, RESUME_LESSONS=a,b limits the lessons and RESUME_EVERY=n takes every n-th from RESUME_OFFSET.
 // =============================================================================
 
 import { test, expect } from './fixtures.js';
@@ -39,11 +39,12 @@ const ONLY = (process.env.RESUME_LESSONS || '').split(',').filter(Boolean);
 const ALL = process.env.RESUME_ALL === '1';
 // A local run may take every n-th lesson; CI takes them all.
 const EVERY = Number(process.env.RESUME_EVERY || 1);
+const OFFSET = Number(process.env.RESUME_OFFSET || 0);
 
 test.describe('opening a step from its saved record gives the scene walking there gives', () => {
   for (const [at, entry] of MANIFEST.entries()) {
     if (ONLY.length && !ONLY.includes(entry.id)) continue;
-    if (at % EVERY) continue;
+    if ((at - OFFSET) % EVERY) continue;
     // The deepest path holds every step of the lessons it contains, so two
     // walks cover a lesson: the core path a student takes by default, and the
     // path through everything.

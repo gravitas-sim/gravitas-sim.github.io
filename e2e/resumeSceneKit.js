@@ -72,8 +72,15 @@ export async function installProbe(page) {
       /** Wait for a step's instrument to be drawn (it is a lazy chunk), up to a few seconds. */
       async tool(expected) {
         if (!expected) return;
-        for (let i = 0; i < 300; i++) {
-          if (!document.getElementById('investigationTool')?.hidden) break;
+        // The panel may still hold the step before's controls: wait for ones
+        // that are showing, but not for long where the instrument has none.
+        for (let i = 0; i < 150; i++) {
+          const panel = document.getElementById('investigationTool');
+          if (
+            !panel?.hidden &&
+            panel.querySelector('input, select')?.offsetParent
+          )
+            break;
           await wait(10);
         }
         await frame();
