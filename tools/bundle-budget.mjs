@@ -53,7 +53,7 @@ const BUDGETS = [
   {
     id: 'initial',
     label: 'Initial download (CSS + eager JS)',
-    limit: 743.6,
+    limit: 743.7,
     reason:
       'Was 743 KB when this budget was first asked for. The application had ' +
       'already grown to 771 KB on its own - the extracted state module, the ' +
@@ -122,12 +122,13 @@ const BUDGETS = [
       '\n\nThe lesson walk repairs taken together (D-R4-TRAIN-08): raised from 741.5 to 741.6 KB, the measurement by CI of the combined branch (bf32e882f): 759,371 bytes (741.57 KB), rounded up to 0.1 KB. Under the standing approval of 2026-10-10.' +
       '\n\nThe low-tier frame cost repair (D-R4-COI-02): fewer glow sprites per trail at the low tier and the canvas width kept by an observer; raised from 741.6 to 741.9 KB, the measurement by CI of the branch merged with v4 ef760870 (run 44844706105): 759,694 bytes (741.89 KB), rounded up to 0.1 KB. Under the standing approval of 2026-10-10.' +
       '\n\nThe combined lesson framing, links, reset and saving branch (D-R4-TRAINA-03): raised from 741.9 to 743.5 KB, the measurement by CI of the branch (head f51518237): 761,259 bytes (743.42 KB), rounded up to 0.1 KB. Under the standing approval of 2026-10-10.' +
-      '\n\nThe same branch after the lesson sheet and status block repairs (D-R4-TRAINA-03): raised from 743.5 to 743.6 KB, the measurement by CI (head 51ee3a090): 761,442 bytes (743.60 KB), rounded up to 0.1 KB. Under the standing approval of 2026-10-10.',
+      '\n\nThe same branch after the lesson sheet and status block repairs (D-R4-TRAINA-03): raised from 743.5 to 743.6 KB, the measurement by CI (head 51ee3a090): 761,442 bytes (743.60 KB), rounded up to 0.1 KB. Under the standing approval of 2026-10-10.' +
+      '\n\nThe combined stars and computing lessons (D-R4-TRAINB-05): raised from 743.6 to 743.7 KB, the measurement by CI of the branch (head 08b3981b): 761,484 bytes (743.64 KB), rounded up to 0.1 KB. Under the standing approval of 2026-10-10.',
   },
   {
     id: 'deferred',
     label: 'Deferred JavaScript (lazy chunks, gzipped)',
-    limit: 3233.3,
+    limit: 3249.2,
     reason:
       'Jumped from 1369 KB to 2105 KB when three.js and Chart.js stopped being ' +
       'CDN requests and became bundled chunks. That is the point of the change ' +
@@ -737,7 +738,8 @@ const BUDGETS = [
       '\n\nThe lesson walk repairs taken together (D-R4-TRAIN-08): raised from 3225.8 to 3226.1 KB, the measurement by CI of the combined branch (bf32e882f): 3,303,516 bytes gzipped (3226.09 KB), rounded up to 0.1 KB. Under the standing approval of 2026-10-10.' +
       '\n\nThe low-tier frame cost repair (D-R4-COI-02): raised from 3226.1 to 3226.2 KB, the measurement by CI of the branch merged with v4 ef760870 (run 44844706105): 3,303,620 bytes gzipped (3226.19 KB), rounded up to 0.1 KB. Under the standing approval of 2026-10-10.' +
       "\n\nThe lesson link's frame hold (D-R4-439-04): raised from 3226.2 to 3226.3 KB, the measurement by CI of the branch merged with v4 c34f4c9a (run 44864250726): 3,303,635 bytes gzipped (3226.206 KB), rounded up to 0.1 KB. Under the standing approval of 2026-10-10." +
-      '\n\nThe combined lesson framing, links, reset and saving branch (D-R4-TRAINA-03): raised from 3226.3 to 3233.3 KB, the measurement by CI of the branch (head f51518237): 3,310,838 bytes gzipped (3233.24 KB), rounded up to 0.1 KB. Under the standing approval of 2026-10-10.',
+      '\n\nThe combined lesson framing, links, reset and saving branch (D-R4-TRAINA-03): raised from 3226.3 to 3233.3 KB, the measurement by CI of the branch (head f51518237): 3,310,838 bytes gzipped (3233.24 KB), rounded up to 0.1 KB. Under the standing approval of 2026-10-10.' +
+      '\n\nThe combined stars and computing lessons (D-R4-TRAINB-05): raised from 3233.3 to 3249.2 KB, the measurement by CI of the branch (head 08b3981b): 3,327,086 bytes gzipped (3249.11 KB), rounded up to 0.1 KB. Under the standing approval of 2026-10-10.',
   },
 ];
 
