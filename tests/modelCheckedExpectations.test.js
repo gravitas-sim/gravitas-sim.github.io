@@ -231,6 +231,7 @@ describe('the instructor expectations record', () => {
     // 551 after the two Gaia investigations (Prompt 233 Part B): 4 more over 547.
     // 556 over v4's 552: the new steps of Weighing the Stars, Transit Photometry and Kepler's Laws, net of the ones they retire.
     // 555 after Why Mars Goes Backwards (Prompt 346): its two reversal expectations became one.
+    // 555 after the Goldilocks Question's two steps on distances became one (three-distances-yours).
     expect(total).toBe(555);
     // 542 after How Many Earths? (Prompt 229): 3 more over 539.
     // 547 after the four exoplanet closeout investigations (Prompt 231): 5 more over 542.

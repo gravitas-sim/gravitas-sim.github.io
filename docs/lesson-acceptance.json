@@ -125,17 +125,16 @@
       "centralExperimentId": "ce.goldilocks-question",
       "object": "earth",
       "control": "hz-insolation/distance",
-      "quantity": "insolation at three distances, plotted",
-      "evidence": "plot",
+      "quantity": "starlight at three distances the student chooses, one twice another and spread over a factor of two or more, each taken from the panel; the prediction for a doubling is set beside the readings",
+      "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": [
         "move-it-twice-as-far",
-        "three-distances",
-        "write-the-three-down",
+        "three-distances-yours",
         "what-the-graph-says"
       ],
       "evidenceFrom": "model",
-      "decision": "unreviewed",
+      "decision": "Which three distances to read, which one to double so as to test the prediction, and where the slider was for each starlight (a reading taken at another distance, or a missing doubling, is refused in words).",
       "leakFree": true
     },
     "missing-mass": {
