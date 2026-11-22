@@ -438,8 +438,8 @@ export const UPPER_LEVEL_MODULES = {
           lesson: 'lives-of-stars',
           objectives: ['stellar'],
           pin: {
-            fp: '584bfc2b',
-            n: 35,
+            fp: 'c2caed69',
+            n: 33,
           },
         },
         {
@@ -1112,8 +1112,8 @@ export const UPPER_LEVEL_MODULES = {
           objectives: ['compute'],
           needs: ['orbital-energy'],
           pin: {
-            fp: '61d4a5f8',
-            n: 8,
+            fp: 'ce2d5c20',
+            n: 10,
           },
         },
         {
@@ -1123,7 +1123,7 @@ export const UPPER_LEVEL_MODULES = {
           depth: 'core',
           objectives: ['compute'],
           pin: {
-            fp: 'db9e3b7b',
+            fp: 'ac95b855',
             n: 8,
           },
         },
@@ -1135,8 +1135,8 @@ export const UPPER_LEVEL_MODULES = {
           objectives: ['compute'],
           needs: ['transit-photometry'],
           pin: {
-            fp: '61ae825b',
-            n: 8,
+            fp: '1dbb7011',
+            n: 9,
           },
         },
         {
@@ -1147,7 +1147,7 @@ export const UPPER_LEVEL_MODULES = {
           objectives: ['compute'],
           needs: ['transit-photometry'],
           pin: {
-            fp: '6f20ef65',
+            fp: '9d368d42',
             n: 8,
           },
         },
@@ -1159,7 +1159,7 @@ export const UPPER_LEVEL_MODULES = {
           objectives: ['compute'],
           needs: ['refitting-a-transit'],
           pin: {
-            fp: '8e4c5e51',
+            fp: 'b884d524',
             n: 8,
           },
         },
