@@ -233,7 +233,8 @@ describe('the instructor expectations record', () => {
     // 556 over v4's 552: the new steps of Weighing the Stars, Transit Photometry and Kepler's Laws, net of the ones they retire.
     // 557 after Tides: two entries renamed with their steps and one new one for the Roche hunt.
     // 559 after the review fixes: expectations for the two new-distance steps.
-    expect(total).toBe(559);
+    // 560 with Finding Planets by Their Tug: one more for the half-range step of Radial Velocity.
+    expect(total).toBe(560);
     // 542 after How Many Earths? (Prompt 229): 3 more over 539.
     // 547 after the four exoplanet closeout investigations (Prompt 231): 5 more over 542.
   });
