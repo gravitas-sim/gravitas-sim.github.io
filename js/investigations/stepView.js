@@ -418,7 +418,7 @@ export function stepMarkup(step, c) {
               <span class="inv-field-label">${prose(f.label)}${f.unit ? ` <span class="inv-field-unit">(${escape(f.unit)})</span>` : ''}${derived ? ` <span class="inv-field-auto">${escape(t('inv.field.auto'))}</span>` : ''}</span>
               ${
                 f.options
-                  ? slots.menu(key, f.options, responses[key])
+                  ? slots.menu(key, f, responses[key])
                   : `<input type="text" ${f.kind === 'text' ? '' : 'inputmode="decimal"'}
                      data-field="${attr(key)}" value="${attr(responses[key] ?? '')}"
                      ${derived ? 'readonly tabindex="-1"' : ''}

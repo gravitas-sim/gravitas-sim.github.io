@@ -1,9 +1,9 @@
 // The drop-down a measure field with `options` shows instead of a text box, fetched
 // when a lesson opens with such a field (js/investigations.js, `loadSeams`): the
-// lesson route carries none of it, and `slots.menu` (js/investigations/stepView.js) is
-// set only there. It imports only what figures.js does (the
-// decimal mark is read here, not from js/answerParse.js): a module of the
-// start-up chunk it shared with a lazy file would be split into a chunk of its own.
+// lesson route carries none of it, and `slots.menu` (js/investigations/stepView.js) is set
+// from `select` only there. It imports only what figures.js does, and not
+// js/answerParse.js or stepView.js (the decimal mark is read here): a module it
+// shared with a lazy file would be split into a chunk of its own.
 
 import { getLocale, t } from '../i18n/index.js';
 import { escapeHtml as escape } from '../lessonMarkup.js';
@@ -15,7 +15,7 @@ const text = o =>
     : String(o);
 
 /** The menu for one field; a stored choice with a decimal comma is read as a point to match the option's own number. */
-export const select = (key, options, saved) => {
+export const select = (key, { options }, saved) => {
   const chosen = String(saved ?? '').replace(/^(\d+),(\d+)$/, '$1.$2');
   return `<select data-field="${escape(key).replace(/"/g, '&quot;')}"><option value="">${escape(t('inv.field.choose'))}</option>${options
     .map(
