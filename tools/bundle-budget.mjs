@@ -128,7 +128,7 @@ const BUDGETS = [
   {
     id: 'deferred',
     label: 'Deferred JavaScript (lazy chunks, gzipped)',
-    limit: 3234.5,
+    limit: 3250.2,
     reason:
       'Jumped from 1369 KB to 2105 KB when three.js and Chart.js stopped being ' +
       'CDN requests and became bundled chunks. That is the point of the change ' +
@@ -739,7 +739,8 @@ const BUDGETS = [
       '\n\nThe low-tier frame cost repair (D-R4-COI-02): raised from 3226.1 to 3226.2 KB, the measurement by CI of the branch merged with v4 ef760870 (run 44844706105): 3,303,620 bytes gzipped (3226.19 KB), rounded up to 0.1 KB. Under the standing approval of 2026-10-10.' +
       "\n\nThe lesson link's frame hold (D-R4-439-04): raised from 3226.2 to 3226.3 KB, the measurement by CI of the branch merged with v4 c34f4c9a (run 44864250726): 3,303,635 bytes gzipped (3226.206 KB), rounded up to 0.1 KB. Under the standing approval of 2026-10-10." +
       '\n\nThe combined lesson framing, links, reset and saving branch (D-R4-TRAINA-03): raised from 3226.3 to 3233.3 KB, the measurement by CI of the branch (head f51518237): 3,310,838 bytes gzipped (3233.24 KB), rounded up to 0.1 KB. Under the standing approval of 2026-10-10.' +
-      '\n\nWhat pulls on what (D-R4-459-07): the relation, the scene statement and the inspector row, carried into every bundle that builds the engine; raised from 3233.3 to 3234.5 KB, the measurement by CI of the branch merged with v4 b2424e160 (run 44966228334): 3,312,125 bytes gzipped (3234.50 KB), rounded up to 0.1 KB. Under the standing approval of 2026-10-10.',
+      '\n\nWhat pulls on what (D-R4-459-07): the relation, the scene statement and the inspector row, carried into every bundle that builds the engine; raised from 3233.3 to 3234.5 KB, the measurement by CI of the branch merged with v4 b2424e160 (run 44966228334): 3,312,125 bytes gzipped (3234.50 KB), rounded up to 0.1 KB. Under the standing approval of 2026-10-10.' +
+      '\n\nThe combined stars and computing lessons (D-R4-TRAINB-08): raised from 3234.5 to 3250.2 KB, the measurement by CI of the branch merged with v4 9d4aa6fda: 3,328,164 bytes gzipped (3250.16 KB), rounded up to 0.1 KB. Under the standing approval of 2026-10-10.',
   },
 ];
 
