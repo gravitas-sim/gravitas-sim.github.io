@@ -211,9 +211,10 @@ describe('conserved quantities, worked by hand', () => {
       orbit_decay_rate: 1,
       enable_star_merging: true,
     });
+    // Two holes pull each other whatever mutual gravity says, so nothing
+    // here is one-way until a star stands beside them.
     expect(physics.conservationCaveats()).toEqual([
       'caveat.staticBlackHole',
-      'caveat.oneWayGravity',
       'caveat.halo',
       'caveat.orbitDecay',
       'caveat.merging',
@@ -225,6 +226,8 @@ describe('conserved quantities, worked by hand', () => {
       galaxy_msun_per_unit: 1,
     });
     expect(physics.conservationCaveats()).toContain('caveat.mond');
+    physics.stars.push(body(11, 1, 30, 0, 0, 0));
+    expect(physics.conservationCaveats()).toContain('caveat.oneWayGravity');
   });
 
   test('the drift is null before a baseline and cached between reads', () => {

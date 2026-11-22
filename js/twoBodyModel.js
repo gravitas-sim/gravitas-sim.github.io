@@ -9,7 +9,7 @@
 // function, as it hands it the softening (js/twoBodySettings.js).
 // =============================================================================
 
-import { isSourceKind } from './engine/sources.js';
+import { isSourceKind, gravityRoles, canMoveNow } from './engine/sources.js';
 
 // Bound once: free globals are 8-25x slower in Jest's vm context.
 const { Math } = globalThis;
@@ -26,20 +26,20 @@ export function isGravitySource(b, s) {
 }
 
 /**
- * Whether `target` is moved by the pull of `source`, given that it is one.
- * A body a prescribed model owns is not stepped; a black hole feels only
- * other holes, and only when holes orbit (js/engine/blackHole.js).
+ * Whether `target` is moved by the pull of `source`: the engine's relation
+ * and its per-body test together (js/engine/state.js), so a model-owned body
+ * is not stepped, a hole feels holes only, and a Static hole only in its grace.
  * @param {Object} target - The body acted on
  * @param {Object} source - The body pulling
- * @param {Object} s - Settings (bh_behavior)
+ * @param {Object} s - Settings (mutual_gravity, star_only_gravity, bh_behavior)
  * @returns {boolean} True when the engine applies that pull
  */
 function feels(target, source, s) {
-  if (!target || target.model_owned) return false;
-  if (target.kind === 'BlackHole') {
-    return source?.kind === 'BlackHole' && s?.bh_behavior === 'Orbiting';
-  }
-  return true;
+  return (
+    Boolean(target) &&
+    gravityRoles(s).pulls(source?.kind, target.kind) &&
+    canMoveNow(target, s)
+  );
 }
 
 /**
