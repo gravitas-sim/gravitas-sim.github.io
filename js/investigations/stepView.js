@@ -70,13 +70,12 @@ export const misconceptionText = missed =>
 export const SHORT_ANSWER_MIN = 40;
 
 /**
- * Seven places a lazy module adds to a step (an empty slot is the step as it was),
+ * Six places a lazy module adds to a step (an empty slot is the step as it was),
  * filled when a lesson opens: field (importFromSelection, source, take, span),
- * menu (options), runs (variation), reveal, time, canvas, feedback.
+ * runs (variation), reveal, time, canvas, feedback.
  */
 export const slots = {
   field: null,
-  menu: null,
   runs: null,
   reveal: null,
   time: null,
