@@ -79,6 +79,13 @@ export async function loadAuthoringInputs() {
   // allWidgets() lists only the families fetched so far; the rules check
   // every tool id against the whole catalog, lazily loaded families included.
   await whenWidgetsReady();
+  // The moons' fit reads two packs the page fetches; from disk, so its rows exist to be checked.
+  const jovian = await import('../../js/jovianWidgets.js');
+  const { openGalilean } = await import('../../js/satellites/galilean.js');
+  const pack = async f => JSON.parse(await readFile(`sky/${f}.json`, 'utf8'));
+  jovian.provideModel(
+    openGalilean(await pack('galilean-moons'), await pack('ephemeris'))
+  );
   // A revised step may be succeeded by a deeper one, which the lesson file does not hold.
   const deeper = {};
   for (const inv of INVESTIGATIONS)

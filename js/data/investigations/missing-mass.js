@@ -929,6 +929,7 @@ const DARK_MATTER = {
       type: 'predict',
       reveal: 'take-the-halo-away-from',
       title: 'What happens to the disc without its halo?',
+      time: { speed: 2, paused: false },
       setup: DM_OBSERVED,
       body: `The galaxy on the canvas has ninety disc stars and a halo that is
              switched on. The stars are moving at the speeds you measured.
