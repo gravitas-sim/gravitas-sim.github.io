@@ -383,3 +383,26 @@ export function sampleSteps(lesson, depth = 'core', all = false) {
   });
   return chosen;
 }
+
+/**
+ * The lessons a default run always takes, whatever the stride, one or more for
+ * each kind the resume rules treat differently: a staged lesson with a deeper
+ * path whose last steps have no stage (weighing-stars), lessons whose steps
+ * are all stage-less (listening-to-spacetime, a-universe-of-stars), a staged
+ * lesson with deeper steps (keplers-laws) and the remnant instrument
+ * (lives-of-stars). The assignment is its own test and always runs.
+ */
+export const KIND_LESSONS = [
+  'keplers-laws',
+  'weighing-stars',
+  'listening-to-spacetime',
+  'a-universe-of-stars',
+  'lives-of-stars',
+];
+
+/** The default stride: every third lesson, plus the kinds above. 1 takes all. */
+export const DEFAULT_EVERY = 3;
+
+/** Whether the lesson at manifest position `at` is in a run with this stride. */
+export const inSample = (at, id, every = DEFAULT_EVERY, offset = 0) =>
+  every <= 1 || KIND_LESSONS.includes(id) || (at - offset) % every === 0;

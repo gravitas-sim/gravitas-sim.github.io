@@ -14,7 +14,8 @@
 // velocities when both screens are at the same simulation time; the stage and
 // its roles; the canvas kind; the clock a step states itself; the instrument's
 // controls. The sampling rule is sampleSteps there; RESUME_ALL=1 compares
-// every step, RESUME_LESSONS=a,b limits the lessons and RESUME_EVERY=n takes every n-th from RESUME_OFFSET.
+// every step, RESUME_LESSONS=a,b limits the lessons and RESUME_EVERY=n takes every n-th from RESUME_OFFSET
+// (the default is every third, plus the lessons of each kind; 1 takes all).
 // =============================================================================
 
 import { test, expect } from './fixtures.js';
@@ -22,7 +23,9 @@ import { MANIFEST } from '../js/data/investigations/manifest.js';
 import { loadInvestigation } from '../js/data/investigations/registry.js';
 import { writeProgress } from '../js/investigations/progressSchema.js';
 import {
+  DEFAULT_EVERY,
   compare,
+  inSample,
   installProbe,
   lessonFor,
   resume,
@@ -37,8 +40,10 @@ test.skip(
 
 const ONLY = (process.env.RESUME_LESSONS || '').split(',').filter(Boolean);
 const ALL = process.env.RESUME_ALL === '1';
-// A local run may take every n-th lesson; CI takes them all.
-const EVERY = Number(process.env.RESUME_EVERY || 1);
+// A default run takes every third lesson and always the lessons of each kind
+// (KIND_LESSONS in the kit); RESUME_EVERY=1 takes them all, which a local run
+// and a manual dispatch do.
+const EVERY = Number(process.env.RESUME_EVERY || DEFAULT_EVERY);
 const OFFSET = Number(process.env.RESUME_OFFSET || 0);
 
 /**
@@ -54,7 +59,7 @@ const KNOWN = {
 test.describe('opening a step from its saved record gives the scene walking there gives', () => {
   for (const [at, entry] of MANIFEST.entries()) {
     if (ONLY.length && !ONLY.includes(entry.id)) continue;
-    if ((at - OFFSET) % EVERY) continue;
+    if (!inSample(at, entry.id, EVERY, OFFSET)) continue;
     // The deepest path holds every step of the lessons it contains, so two
     // walks cover a lesson: the core path a student takes by default, and the
     // path through everything.

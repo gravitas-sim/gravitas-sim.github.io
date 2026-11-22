@@ -15,8 +15,12 @@ import {
   compare,
   sampleSteps,
   statesClock,
+  DEFAULT_EVERY,
+  KIND_LESSONS,
+  inSample,
 } from '../e2e/resumeSceneKit.js';
 import { carriedStage } from '../js/lesson/stage.js';
+import { MANIFEST } from '../js/data/investigations/manifest.js';
 import { inDepth } from '../js/investigations/progressSchema.js';
 
 const body = (name, over = {}) => ({
@@ -212,5 +216,30 @@ describe('carriedStage', () => {
     ];
     expect(carriedStage(deeper, 2, shown)).toBeNull();
     expect(carriedStage(deeper, 2, s => inDepth(s, 'advanced'))).toBe(stage);
+  });
+});
+
+describe('the default sample', () => {
+  const entries = [...MANIFEST.entries()];
+  const taken = every => entries.filter(([at, e]) => inSample(at, e.id, every));
+
+  test('every lesson of a kind is in the manifest and in the default run', () => {
+    const ids = new Set(entries.map(([, e]) => e.id));
+    for (const id of KIND_LESSONS) {
+      expect(ids.has(id)).toBe(true);
+      expect(taken(DEFAULT_EVERY).some(([, e]) => e.id === id)).toBe(true);
+    }
+  });
+
+  test('it holds a lesson with a deeper path and one without', () => {
+    expect(taken(DEFAULT_EVERY).some(([, e]) => e.depths)).toBe(true);
+    expect(taken(DEFAULT_EVERY).some(([, e]) => !e.depths)).toBe(true);
+  });
+
+  test('it is about a third of the lessons, and an every of 1 takes all', () => {
+    const n = taken(DEFAULT_EVERY).length;
+    expect(n).toBeGreaterThan(entries.length / 4);
+    expect(n).toBeLessThan(entries.length / 2);
+    expect(taken(1).length).toBe(entries.length);
   });
 });
