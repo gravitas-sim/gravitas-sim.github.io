@@ -166,6 +166,7 @@ const GRAVITY_ASSIST = {
       bind: ASSIST,
       type: 'read',
       title: 'Voyager left faster than it arrived',
+      time: { speed: 400, paused: true },
       setup: ISOLATED,
       body: `In July 1979 Voyager 2 passed Jupiter. It approached at about ten
              kilometers per second relative to the Sun and departed at about
@@ -233,6 +234,7 @@ const GRAVITY_ASSIST = {
       probe: runRows,
       type: 'explore',
       title: 'Fly it',
+      time: { speed: 400, paused: false },
       setup: ISOLATED,
       body: `The <strong>Gravity Assist</strong> panel is already open. It is set
              to an impact parameter of <strong>+40</strong>, which passes the
@@ -365,6 +367,7 @@ const GRAVITY_ASSIST = {
       probe: runRows,
       type: 'explore',
       title: 'Now the other side — both at once',
+      time: { speed: 400, paused: false },
       setup: ISOLATED,
       // Requires the prediction, not the first flyby: the point of collecting
       // it at the third screen is that it is collected before any evidence,
@@ -656,6 +659,7 @@ const GRAVITY_ASSIST = {
       probe: runRows,
       type: 'explore',
       title: 'Optional: how much does passing closer buy you?',
+      time: { speed: 400, paused: false },
       setup: ISOLATED,
       requires: ['which-side-gains'],
       body: `<strong>Optional, and it takes about three minutes.</strong> Skip
@@ -808,6 +812,7 @@ const GRAVITY_ASSIST = {
       bind: ASSIST_SUN,
       type: 'read',
       title: 'Now put a star back',
+      time: { speed: 3, paused: true },
       setup: HELIOCENTRIC,
       body: `Everything so far was exact, and slightly unreal: real planets are
              not drifting alone through empty space, they are orbiting stars.
@@ -827,6 +832,7 @@ const GRAVITY_ASSIST = {
       probe: runRows,
       type: 'explore',
       title: 'Fly it, and watch the residual',
+      time: { speed: 3, paused: false },
       setup: HELIOCENTRIC,
       body: `Press <strong>Fly it</strong>. This encounter is much quicker — the
              spacecraft is only tracked while it is close enough to the planet

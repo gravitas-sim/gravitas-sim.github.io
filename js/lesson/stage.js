@@ -271,3 +271,26 @@ export function stageOf(steps, step) {
     if (s.stage || s.setup || s.bind) return s.stage;
   }
 }
+
+/** Stage kinds whose bodies the integrator moves (js/lessonStageHole.js, applyStarPairStage). */
+export const ENGINE_STAGES = Object.freeze([
+  'starPair',
+  'hole',
+  'equalMass',
+  'system',
+]);
+
+/**
+ * Whether the integrator moves a lesson step's scene: a stage of an engine kind,
+ * or, with no stage, a scenario built from a setup. A quiet canvas, a portrait
+ * (held still), a display stage and the prescribed gravitational-wave binary
+ * are not.
+ * @param {?string} canvas - The canvas kind in force, if one is stated
+ * @param {?object} stage - The stage in force (stageOf)
+ * @param {?object} setup - The setup the scene was built from
+ * @returns {boolean} Whether a reading from it depends on the integration step
+ */
+export const sceneIntegrated = (canvas, stage, setup) =>
+  canvas !== 'quiet' &&
+  canvas !== 'portrait' &&
+  (stage ? ENGINE_STAGES.some(k => stage[k]) : Boolean(setup));

@@ -46,6 +46,7 @@ const REFITTING_A_TRANSIT = {
     {
       sid: 'same-model-another-route',
       type: 'read',
+      time: { speed: 0.03, paused: true },
       setup: { scenario: 'Transit Lab', seed: 'transit-lab', paused: true },
       title: 'The same model, another route',
       body: `The Observatory's fit panel fits a transit to the TESS light curve of

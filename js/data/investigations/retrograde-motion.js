@@ -79,6 +79,7 @@ const RETROGRADE = {
         by: 'Claudius Ptolemy, Almagest, c. 150 CE',
       },
       tip: 'This investigation leaves the inspector switched on: you will need it to read numbers off Earth and Mars. Placing new objects is off, so a stray click cannot alter the system you are measuring.',
+      time: { speed: 4, paused: true },
       setup: {
         scenario: 'Retrograde Mars',
         seed: 'retrograde-lab',

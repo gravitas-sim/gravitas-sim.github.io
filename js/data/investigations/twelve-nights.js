@@ -103,6 +103,7 @@ const TWELVE_NIGHTS = {
       bind: TARGET,
       type: 'read',
       title: 'Twelve nights',
+      time: { speed: 0.03, paused: true },
       setup: RV_LAB,
       body: `A time allocation committee has given you <strong>twelve
              nights</strong> on one star: HD&nbsp;209458, from
@@ -131,6 +132,7 @@ const TWELVE_NIGHTS = {
       bind: TARGET,
       type: 'explore',
       title: 'What you actually get',
+      time: { speed: 0.03, paused: false },
       setup: RV_LAB,
       tool: PLANNER,
       body: `Open the planner. Each row is one night of the allocation. The
@@ -383,6 +385,7 @@ const TWELVE_NIGHTS = {
       bind: TARGET,
       type: 'explore',
       title: 'Commit the schedule',
+      time: { speed: 0.03, paused: false },
       setup: RV_LAB,
       requires: ['predict-which-plan-wins'],
       // The planner stays open here rather than being put away: each of the
