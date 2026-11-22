@@ -328,8 +328,12 @@ export function compare(walked, resumed, step) {
   const wb = walked.bodies.map(sig);
   const rb = resumed.bodies.map(sig);
   // A scene that ran has lost the comets and debris the engine culls or
-  // disperses, so the resumed screen may hold more of those and nothing else.
-  const lost = wb.filter(v => !rb.includes(v));
+  // disperses, and gained the fragments a tidal disruption throws off while it
+  // ran, so when the two screens are at different times the two may differ in
+  // those and nothing else.
+  const lost = wb.filter(
+    v => !rb.includes(v) && (sameTime || !/^(comets|debris)\//.test(v))
+  );
   const extra = rb.filter(
     v => !wb.includes(v) && (sameTime || !/^(comets|debris)\//.test(v))
   );

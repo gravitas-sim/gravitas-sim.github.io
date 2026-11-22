@@ -40,8 +40,9 @@ the instrument's controls. `compare` then applies these rules:
   steps has moved, and a running one is not a function of the clock alone (a
   ring built by an instrument ran at the same simulation time with different
   phases).
-  A scene that ran may have lost comets and debris the engine culls, so the
-  resumed screen may hold more of those and nothing else.
+  When the two screens are at different times, comets and debris may differ:
+  a scene that ran has lost the ones the engine culls and gained the fragments
+  a tidal disruption threw off (tides, core), and nothing else may differ.
 - Paused, speed and the pin count only where the step states its clock: it
   declares a `setup` (every one declares `time`, #719), a `time`, or it is a
   reading step that holds the clock. A step that states nothing carries the

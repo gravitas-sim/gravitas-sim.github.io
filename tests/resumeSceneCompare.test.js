@@ -105,6 +105,9 @@ describe('compare', () => {
     const withComet = screen({ bodies: [...screen().bodies, comet] });
     expect(compare(screen({ time: 9 }), withComet, {}).differences).toEqual([]);
     expect(compare(screen(), withComet, {}).differences[0]).toMatch(/^bodies/);
+    // Fragments a disruption threw off while the walk ran are not in a reopened scene.
+    expect(compare(withComet, screen({ time: 9 }), {}).differences).toEqual([]);
+    expect(compare(withComet, screen(), {}).differences[0]).toMatch(/^bodies/);
     const lost = screen({ bodies: [screen().bodies[0]] });
     // A planet that is gone, or one that appeared, is a difference whatever the time.
     expect(compare(screen({ time: 9 }), lost, {}).differences[0]).toMatch(
