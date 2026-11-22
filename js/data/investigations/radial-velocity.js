@@ -114,6 +114,7 @@ const RADIAL_VELOCITY = {
       bind: SYSTEM,
       type: 'read',
       title: 'The planet you already measured',
+      time: { speed: 0.03, paused: true },
       setup: RV_LAB,
       body: `In <em>Finding Planets by Their Shadows</em> you watched HD 209458 b
              cross its star and used the depth of the dip to work out how big the
@@ -151,6 +152,7 @@ const RADIAL_VELOCITY = {
       type: 'predict',
       reveal: 'both-of-them-go-round',
       title: 'Which one moves?',
+      time: { speed: 0.03, paused: true },
       setup: RV_LAB_PAUSED,
       body: `Before you run anything: the star here is about 1.15 times the mass
              of the Sun. The planet is roughly two thirds the mass of Jupiter,
@@ -289,6 +291,7 @@ const RADIAL_VELOCITY = {
       bind: SYSTEM,
       type: 'explore',
       title: 'Open the real instrument',
+      time: { speed: 0.03, paused: false },
       setup: RV_LAB,
       body: `Now the live system. Open <strong>Radial Velocity</strong> from the
              Tools list on the right. It measures the star in this simulation, the
@@ -372,6 +375,7 @@ const RADIAL_VELOCITY = {
       bind: SYSTEM,
       type: 'measure',
       title: 'Read K off the panel',
+      time: { speed: 0.03, paused: false },
       setup: RV_LAB,
       body: `With the Radial Velocity panel open and at least one complete cycle
              recorded, read the semi-amplitude it reports.`,

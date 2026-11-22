@@ -165,6 +165,7 @@ const ENERGY = {
              which side of it something falls on, is the whole of this investigation.
              \n\nOver the next few steps you will fire Newton's cannon yourself.`,
       tip: 'Nothing needs measuring yet. The panel on the right will appear in a moment with a cannon on it.',
+      time: { speed: 5, paused: true },
       setup: ENERGY_LAB,
     },
     {
@@ -421,6 +422,7 @@ const ENERGY = {
              close and races, then drifts far out and crawls. Click it.
              \n\nThe panel shows its two energies as bars, and plots them over
              time underneath. Watch for a full lap.`,
+      time: { speed: 5, paused: false },
       setup: ENERGY_ORBIT,
       tool: { id: 'live-energy' },
       probe: energyProbe,
@@ -657,6 +659,7 @@ const ENERGY = {
              object anyone had ever caught.
              \n\nIt is on screen now, on its real orbit, with Earth shown for
              scale. Watch it come in.`,
+      time: { speed: 0.8, paused: false },
       setup: {
         scenario: 'Interstellar Visitor',
         seed: 'visitor',

@@ -79,6 +79,7 @@ const BUTTERFLY_EFFECT = {
       bind: TRIPLE,
       type: 'read',
       title: 'A word that has been worn smooth',
+      time: { speed: 1, paused: true },
       setup: {
         scenario: 'Three-Body Sensitivity Lab',
         seed: 'chaos-lab',
@@ -229,6 +230,7 @@ const BUTTERFLY_EFFECT = {
       bind: PAIR,
       type: 'read',
       title: 'A control, before the interesting case',
+      time: { speed: 20, paused: true },
       setup: {
         scenario: 'Binary Pair',
         seed: 'chaos-binary',
@@ -384,6 +386,7 @@ const BUTTERFLY_EFFECT = {
       bind: TRIPLE,
       type: 'read',
       title: 'Back to the triangle',
+      time: { speed: 1, paused: true },
       setup: {
         scenario: 'Three-Body Sensitivity Lab',
         seed: 'chaos-lab',

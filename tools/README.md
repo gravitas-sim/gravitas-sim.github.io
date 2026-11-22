@@ -180,6 +180,7 @@ current, and the orchestrator checks it.
 | `lesson-golden.mjs` | npm run lesson:golden -- --regenerate-lesson-golden | `npm run lesson:golden` |
 | `lesson-scene-audit.mjs` | What every lesson step does with the main scene | `npm run audit:scene` |
 | `lesson-standard.mjs` | The lesson standard's ratchet | `npm run author:standard` |
+| `lesson-step-pins.mjs` | Which lesson steps run with a pinned integration step, as a table |  |
 | `lesson-text.mjs` | Spanish lesson text, keyed by step: the source, and the files the app loads | `npm run lesson-text` |
 | `library-routes.mjs` | Does a Library route open what it names? |  |
 | `longtask-census.mjs` | Main-thread work above a stated budget (Prompt 112, part 2) |  |

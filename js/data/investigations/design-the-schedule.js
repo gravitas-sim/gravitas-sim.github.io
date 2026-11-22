@@ -132,6 +132,7 @@ const DESIGN_THE_SCHEDULE = {
       bind: TARGET,
       type: 'read',
       title: 'Eight nights',
+      time: { speed: 0.03, paused: true },
       setup: RV_LAB,
       body: `The star on screen has a planet. You are not going to be told its
              period, and you are not going to be given much time on the
@@ -153,6 +154,7 @@ const DESIGN_THE_SCHEDULE = {
       probe: runRows,
       type: 'explore',
       title: 'Set the run up',
+      time: { speed: 0.03, paused: false },
       setup: RV_LAB,
       body: `Open <strong>Radial Velocity</strong> from the Tools list, and tick
              <strong>Synthetic observing run</strong>. That switches the panel
@@ -204,6 +206,7 @@ const DESIGN_THE_SCHEDULE = {
       probe: runRows,
       type: 'explore',
       title: 'Run both schedules at once',
+      time: { speed: 0.03, paused: false },
       setup: RV_LAB,
       body: `Now the controlled version of that question. Tick
              <strong>Compare with a second schedule</strong> and set the second
@@ -353,6 +356,7 @@ const DESIGN_THE_SCHEDULE = {
       probe: runRows,
       type: 'explore',
       title: 'Break your own result',
+      time: { speed: 0.03, paused: false },
       setup: RV_LAB,
       body: `A claim you cannot test is not worth much, so test this one.
              \n\nChange the <strong>Noise seed</strong> to something else -
@@ -401,6 +405,7 @@ const DESIGN_THE_SCHEDULE = {
       probe: runRows,
       type: 'explore',
       title: 'Lose a fortnight',
+      time: { speed: 0.03, paused: false },
       setup: RV_LAB,
       requires: ['predict-the-weather'],
       body: `Type <strong>8-16</strong> into <strong>Gaps</strong> and let both arms
@@ -421,6 +426,7 @@ const DESIGN_THE_SCHEDULE = {
       probe: runRows,
       type: 'explore',
       title: 'Type the dates yourself',
+      time: { speed: 0.03, paused: false },
       setup: RV_LAB,
       body: `Last configuration. Set the first schedule to <strong>Listed
              times</strong> and type eight times of your own into the box - days
