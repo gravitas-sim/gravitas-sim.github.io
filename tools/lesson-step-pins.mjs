@@ -9,7 +9,7 @@
 // setup, or a stage of an engine kind (js/lesson/stage.js, sceneIntegrated).
 // The rule is the engine's own (js/lesson/stageGate.js, pinLessonStep): such a
 // step is pinned to the bench's 1/60 s unless it holds the clock
-// (js/appState.js, holdsClock), in which case its scene does not run and
+// (js/timestep.js, holdsClock), in which case its scene does not run and
 // there is nothing to pin. Steps on a quiet canvas, a portrait, a display
 // stage or a prescribed binary have no row.
 // =============================================================================
@@ -18,9 +18,9 @@ import { readFile, writeFile } from 'node:fs/promises';
 import { INVESTIGATIONS } from '../js/data/investigations.js';
 import { canvasAt } from '../js/lesson/canvasKind.js';
 import { stageOf, sceneIntegrated, ENGINE_STAGES } from '../js/lesson/stage.js';
-import { holdsClock, DEFAULT_SETTINGS } from '../js/appState.js';
+import { DEFAULT_SETTINGS } from '../js/appState.js';
 import { SCENARIO_PRESETS, scenarioId } from '../js/scenarios.js';
-import { STEP_SECONDS } from '../js/timestep.js';
+import { STEP_SECONDS, holdsClock } from '../js/timestep.js';
 
 const OUT = new URL('../docs/lesson-step-pins.md', import.meta.url);
 
@@ -83,7 +83,7 @@ export function render(rows = pinRows()) {
     `${ENGINE_STAGES.map(k => `\`${k}\``).join(', ')}) runs with every frame`,
     "standing for the bench's 1/60 s, so a reading taken from it is the same",
     'on a 60 Hz screen, a 144 Hz screen and a throttled tab. A reading step',
-    'that holds the clock (`holdsClock` in `js/appState.js`) does not run and',
+    'that holds the clock (`holdsClock` in `js/timestep.js`) does not run and',
     'is not pinned. Closing the lesson lifts the pin.',
     '',
     `${rows.length} steps in ${lessons} lessons run on an integrated scene; ` +

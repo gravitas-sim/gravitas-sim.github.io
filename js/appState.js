@@ -11,6 +11,7 @@
 // that goes through setSettings() and setScenarioName(); importers read them.
 // =============================================================================
 
+import { holdsClock } from './timestep.js';
 // Pins js/lesson/barycenter.js (pure arithmetic, no imports) to this chunk. The
 // canvas (render.js) and the lazily loaded stage (lessonStage.js) both use it;
 // left to the bundler it becomes a chunk of its own that every page requests.
@@ -418,11 +419,6 @@ export const state = {
 };
 
 let held = null;
-
-/** Whether a step holds the clock (holdClock below): reading, nothing to watch. */
-export const holdsClock = step =>
-  step?.type === 'read' &&
-  !(step.motion || step.tool || step.pauseAt || step.time);
 
 /**
  * A lesson's reading step holds the clock, so nothing runs behind the panels,

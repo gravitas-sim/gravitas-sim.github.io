@@ -22,8 +22,7 @@
 // =============================================================================
 
 import { BINARY_SCALE, SCALE, sceneIntegrated, stageOf } from './stage.js';
-import { STEP_SECONDS, setFixedStep } from '../timestep.js';
-import { holdsClock } from '../appState.js';
+import { STEP_SECONDS, holdsClock, setFixedStep } from '../timestep.js';
 
 export { BINARY_SCALE, SCALE, stageOf };
 

@@ -110,3 +110,14 @@ export const pinnedStep = () => pins.values().next().value || 0;
 export function frameAdvance(seconds, simSpeed, dt) {
   return Math.min(seconds, 0.05) * simSpeed * 50 * dt;
 }
+
+/**
+ * Whether a lesson step holds the clock: a reading step with nothing to watch
+ * (no `motion`, instrument, `pauseAt` or `time`). js/appState.js holdClock()
+ * pauses for it, and a held step is never pinned (js/lesson/stageGate.js).
+ * @param {?object} step - The step on screen
+ * @returns {boolean} Whether it holds
+ */
+export const holdsClock = step =>
+  step?.type === 'read' &&
+  !(step.motion || step.tool || step.pauseAt || step.time);

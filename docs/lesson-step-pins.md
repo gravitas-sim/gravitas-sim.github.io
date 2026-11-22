@@ -6,7 +6,7 @@ scene the integrator moves (a scenario setup, or a stage of kind
 `starPair`, `hole`, `equalMass`, `system`) runs with every frame
 standing for the bench's 1/60 s, so a reading taken from it is the same
 on a 60 Hz screen, a 144 Hz screen and a throttled tab. A reading step
-that holds the clock (`holdsClock` in `js/appState.js`) does not run and
+that holds the clock (`holdsClock` in `js/timestep.js`) does not run and
 is not pinned. Closing the lesson lifts the pin.
 
 613 steps in 28 lessons run on an integrated scene; 517 are pinned and 96 hold the clock.
