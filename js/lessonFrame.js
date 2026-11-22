@@ -584,7 +584,8 @@ function noteScene({ scene }) {
   open = id;
   at = i;
   has = scene;
-  if (!again || !said) rebase();
+  // A redraw of the same step keeps what the student has done to the scene.
+  if (!again || (!said && !start.acted && !start.placed)) rebase();
   if (!again) say(scene && back ? 'saved.scene.back' : '');
   timer ||= setInterval(tick, 1000);
 }

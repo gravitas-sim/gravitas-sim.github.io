@@ -114,7 +114,27 @@ export async function installProbe(page) {
         const instrument = first.filter(
           ([name, value], i) => again[i]?.[0] === name && again[i][1] === value
         );
-        // Read after the wait: an instrument restands its scene on a later frame.
+        // Read after the wait: an instrument restands its scene on a later frame
+        // (a star becomes the remnant its track ends in), so wait for the bodies
+        // to stop changing kind or number.
+        const kinds = () =>
+          JSON.stringify(
+            LISTS.map(key =>
+              (P[key] || []).map(o => [
+                o.obj_type ?? null,
+                String(o.name ?? ''),
+              ])
+            )
+          );
+        if (first.length) {
+          let seen = kinds();
+          for (let i = 0; i < 10; i++) {
+            await wait(200);
+            const now = kinds();
+            if (now === seen) break;
+            seen = now;
+          }
+        }
         const bodies = [];
         for (const key of LISTS)
           for (const o of P[key] || [])
