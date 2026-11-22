@@ -188,6 +188,10 @@ for (const locale of ['en', 'es']) {
     await app.boot({ url: '/' });
     await saveLanguage(page, locale);
     for (const [suffix, name] of NAMES[locale]) {
+      // Each version on its own: a saved choice from the last would make this link differ.
+      await page.evaluate(() =>
+        localStorage.removeItem('gravitas_investigation_keplers-laws')
+      );
       await open(page, app, `keplers-laws${suffix}`);
       await page.reload();
       await expect(page.locator('.inv-step-title')).toBeVisible({

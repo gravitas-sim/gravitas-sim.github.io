@@ -576,7 +576,9 @@ export async function openDepth(lesson, mem, assignment, locale, ui = {}) {
  * or the instructor's. Writes into `el` (the note's paragraph and button).
  * @returns {string} The sentence, for the announcement
  */
+let noted = null;
 function noteDepth(el, r, assignment, change) {
+  noted = el;
   const adj = d => t(`inv.depth.adj.${d}`);
   const text = r.kept
     ? t('inv.depth.link', { depth: adj(r.depth), saved: adj(r.kept) })
@@ -620,6 +622,7 @@ export async function change({
 }) {
   const to = DEPTHS[DEPTHS.indexOf(depth) + by];
   if (!to || !active.depths.includes(to)) return null;
+  if (noted) noted.hidden = true;
   const here = active.steps[stepIndex]?.sid;
   const [lesson] = await Promise.all([
     by > 0 ? withDepth(active, locale) : active,

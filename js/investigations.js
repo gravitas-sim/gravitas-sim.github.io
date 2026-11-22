@@ -1563,13 +1563,6 @@ function clock() {
 /** The steps the lesson's declared time is for: the whole lesson at core depth. */
 let fullSteps = 0;
 
-/** The version being read. Core needs no download, so its name is in the page. */
-const versionName = () =>
-  depthName ||
-  (active.depths &&
-    els.where?.dataset[getLocale() === 'es' ? 'coreEs' : 'coreEn']) ||
-  '';
-
 /** The where line: step, depth and time against what the lesson declares. */
 function renderWhere(seen) {
   const w = els.where;
@@ -1579,7 +1572,7 @@ function renderWhere(seen) {
   w.textContent = tpl
     .replace('{n}', seen.indexOf(currentStep()) + 1)
     .replace('{total}', seen.length)
-    .replace('{depth}', versionName() ? ` · ${versionName()}` : '')
+    .replace('{depth}', depthName ? ` · ${depthName}` : '')
     .replace('{m}', Math.floor(spent / 60))
     .replace('{planned}', plannedTime(active, seen.length, fullSteps));
 }
@@ -1941,7 +1934,7 @@ function renderDepth() {
   if (!els.depth) return;
   els.depth.hidden = !o;
   const i = o ? o.indexOf(depth) : 0;
-  els.depthState.textContent = versionName();
+  els.depthState.textContent = depthName;
   els.deeper.hidden = !o || Boolean(assignment) || i >= o.length - 1;
   els.shallower.hidden = !o || Boolean(assignment) || i < 1;
 }
@@ -1957,7 +1950,6 @@ async function changeDepth(by) {
   ({ depth, deepest, depthName } = r);
   depthChoice = depth;
   active = r.lesson;
-  els.depthNote.hidden = true;
   toast(r.said);
   goToStep(r.at);
 }
@@ -2074,6 +2066,9 @@ export async function openInvestigation(id, opts = {}) {
     ({ inv, depth, depthChoice, deepest, depthName } = m);
     depthSaid = m.said;
   }
+  // Core needs no download: its name is in the page.
+  if (!depthName && inv.depths)
+    depthName = els.where.dataset[getLocale() === 'es' ? 'coreEs' : 'coreEn'];
   await loadSeams(inv);
   if (generation !== openGeneration) return;
   // Every step key is written into the panel's attributes and selectors. The
@@ -2200,11 +2195,7 @@ export async function openInvestigation(id, opts = {}) {
   }
   if (generation !== openGeneration) return;
   startProbeLoop();
-  announce(
-    [t('inv.announce.started', { title: inv.title }), depthSaid]
-      .join(' ')
-      .trim()
-  );
+  announce(`${t('inv.announce.started', { title: inv.title })} ${depthSaid}`);
 }
 
 /**
