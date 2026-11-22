@@ -944,10 +944,11 @@ function renderStep() {
 }
 
 /**
- * The step's time and event window (js/investigations/eventWindow.js): speed,
- * pause, pause-at-event tool (armed only where `pauseAt.auto` says), Replay and
- * Rewind. Entered once per step, released on the way out so a watch armed on
- * one step cannot fire into the next. Lazy, fetched by the first step with one.
+ * The step's time and event window (js/investigations/eventWindow.js): its
+ * speed and pause, its pause-at-event tool (armed for the student only where
+ * `pauseAt.auto` says), Replay and Rewind to here. Entered once per step, drawn
+ * on each render, released on the way out: a watch armed on one step must not
+ * fire into the next. Lazy, fetched by the first step that declares one.
  *
  * @param {?Object} step - Step definition, or null when the lesson closes
  */
@@ -969,9 +970,7 @@ const windowHost = {
   bodies: () => probeContext()?.bodies || [],
   setTime({ paused, speed }) {
     if (speed > 0) SETTINGS.sim_speed = speed;
-    // An instrument held until Run (the reader's Motion choice) keeps the world held.
-    const held = !paused && windowStep?.tool && !autoruns(windowStep.tool);
-    if (typeof paused === 'boolean' && !held)
+    if (typeof paused === 'boolean')
       timeline.setParkedPause((state.paused = paused));
   },
   timeline,
@@ -1213,7 +1212,8 @@ function syncToolPanel(step) {
     });
   });
 
-  // A step can ask the instrument to sit still until Run; so does reduced motion.
+  // A step can ask the instrument to sit still until Run (a prediction step
+  // must not show the answer it asks for); so does reduced motion (autoruns).
   widget.reset?.(toolValues, { autorun: autoruns(spec), spec });
   paintTool();
   if (widget.animated) startToolLoop(widget, spec);

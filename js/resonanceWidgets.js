@@ -414,7 +414,11 @@ const RUN = {
     },
   ],
   reset(_v, { autorun = true } = {}) {
-    if (!autorun) setParkedPause((state.paused = true));
+    if (autorun) return;
+    const hold = () => setParkedPause((state.paused = true));
+    hold();
+    // A step that declares its time starts the world just after this: hold it again.
+    setTimeout(hold, 0);
   },
   act() {
     setParkedPause((state.paused = !state.paused));
