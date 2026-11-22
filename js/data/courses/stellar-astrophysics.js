@@ -429,8 +429,8 @@ export const STELLAR_ASTROPHYSICS = {
           lesson: 'lives-of-stars',
           objectives: ['evolution'],
           pin: {
-            fp: '584bfc2b',
-            n: 35,
+            fp: 'c2caed69',
+            n: 33,
           },
         },
         {

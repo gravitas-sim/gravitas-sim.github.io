@@ -109,36 +109,38 @@ export default {
         'Slope 1, 200,000 planets, cutoff 3: half-way distance 0.255 (within 0.003), its uncertainty 0.0243 (within 0.004), 0.6 of the trials bound (within 0.01) and 0.596 of the synthetic population (within 0.02).',
       'a-uniform-population':
         'Slope 0: 0.451 bound in the synthetic population (within 0.02), 0.149 below the trials’ 0.6 (within 0.03).',
-      'move-the-definition':
-        'Slope 1, cutoff 6: half-way distance 0.289 (within 0.004) and 0.701 of the synthetic population bound (within 0.02).',
+      'move-the-definition-yours':
+        'Slope 1, cutoff 6 (4, 10 alike): 0.289 (within 0.004), 0.701 bound (within 0.02); cutoff 2: 0.233, 0.529.',
+      'which-trial-moved':
+        'By pair: 2 and 3, one trial, bin 0.255; 3 with 4, 6 or 10, one, 0.225; 2 with 4, 6 or 10, two, nearest 0.225; among 4, 6, 10, none (0, none).',
     },
     'refitting-a-transit': {
       'the-fit':
         'Setting 1: period 3.52454 (within 0.00005), Rp/R* 0.11926 (within 0.0004), a/R* 9.21 (within 0.08), impact parameter 0.430 (within 0.012), reduced chi-square 7.98 (within 0.06).',
       'sigma-and-profile':
         'Rp/R* sigma 0.00164 (within 0.0002), profile 0.11797 to 0.12043 (each within 0.0003); impact parameter profile 0.368 to 0.476 (each within 0.012).',
-      'hold-the-limb-darkening':
-        'Setting 0: Rp/R* 0.11767 (within 0.0004), sigma 0.00050 (within 0.00012), a shift of 3.2 new sigmas (within 0.6).',
+      'shift-from-your-fit':
+        'Setting 0: Rp/R* 0.11767 (within 0.0004), sigma 0.00050 (0.00012), shift worked out from their own two values and their own sigma (3.2 for these numbers).',
     },
     'two-periodograms': {
       'the-two-periods':
         'Lomb-Scargle 1.7689 d (within 0.01), box 3.524 d (within 0.002), ratio 0.502 (within 0.004).',
-      'the-box':
-        'Duration 2.5 h (within 0.3), depth 14,582 ppm (within 400), S/N 191 (within 30).',
-      'against-the-fit':
-        'Box minus fitted period -0.00058 d (within 0.0003), -19.4 fit sigmas (within 7).',
+      'the-box-with-your-limit':
+        'Per limit in the key (2 h sits at the edge); within 0.06 h, 100 ppm, S/N 4.',
+      'separation-from-your-period':
+        'Their box period, 3.5238 to 3.5241 d: 15 to 24 fit sigmas, 9 to 14 at 1.7x.',
     },
     'sampling-a-posterior': {
-      'the-draws':
-        'Defaults: Rp/R* median 0.11926 (within 0.0003), interval width 0.00026 (within 0.00006); impact parameter 0.430 (within 0.008), width 0.0051 (within 0.0012).',
+      'the-draws-at-your-ratio':
+        'Per a/R* in the key; medians within 0.0003 (Rp/R*) and 0.008 (b), widths 0.00006 and 0.0012.',
       'did-it-converge':
         'Largest R-hat between 0.99 and 1.05, smallest effective sample size between 400 and 40,000, acceptance 0.72 (within 0.1).',
     },
     'integrators-in-practice': {
       'four-drifts':
         'Kepler-16, 3 periods, 500 steps: explicit Euler +49.75 percent (within 0.5), symplectic Euler -0.002317, velocity Verlet +0.001768, Runge-Kutta 4 -6.47e-8 (each within 3 percent, with the sign) and 10,722 steps. Explicit Euler is about 50 because its orbit has changed, not because its error is small.',
-      'halve-the-step':
-        '1000 steps: velocity Verlet +0.000442 (within 5 percent) and Runge-Kutta 4 -2.44e-9; the improvement is 4.0 for Verlet (within 10 percent) and 26.5 for Runge-Kutta 4 (within 15).',
+      'choose-the-second-step':
+        'Per step count in the key; drifts within 5 percent.',
       'the-engine':
         '438 steps: velocity Verlet +0.002304 (within 5 percent), Runge-Kutta 4 -1.22e-7 (within 5) and symplectic Euler -0.0001646 (within 10); the application’s engine gave +0.002299 and -1.217e-7.',
     },
@@ -637,12 +639,8 @@ export default {
     'lives-of-stars': {
       'contraction-luminosity':
         'The radius falls from about 14.9 to about 0.88 solar radii across the pre-main-sequence stage, over 42 million years. Students sometimes read the two boxes in the wrong order; the validator catches it and says so.',
-      arriving:
-        'About 5,740 K and 0.80 solar luminosities at 457 million years - the zero-age main sequence.',
-      'the-sun-today':
-        'About 5,850 K, 1.11 solar luminosities, 1.03 solar radii at 4.6 Gyr. Worth pointing out that the real Sun is 5,772 K and 1.00 by definition, so the model is within a couple of per cent without having been fitted.',
-      'across-the-main-sequence':
-        'From 0.80 to 2.28 solar luminosities over 9.9 billion years - nearly three times - with the surface temperature almost unchanged.',
+      'compare-two-moments':
+        'Any two moments that differ; there is no single answer. On the Sun-like track: 0.457 Gyr, 0.797 solar luminosities, 0.904 solar radii, 5,736 K; 4.60 Gyr, 1.11, 1.03, 5,850 K; 9.92 Gyr, 2.28, 1.56, 5,683 K. Each moment must satisfy luminosity = radius squared times (temperature over 5,772 K) to the fourth, within 6 per cent.',
       'compare-young-and-old':
         'Radii of about 0.90 and 1.56 solar - a factor of 1.7 across ten billion years, and the smallest change in the investigation. Both versions are on the canvas at once, so a student can click either. Hold on to these: three screens later the same star is 173.',
       'the-interior':

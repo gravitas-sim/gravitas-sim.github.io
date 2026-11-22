@@ -1122,7 +1122,7 @@ test.describe('the central experiment of each investigation', () => {
     await expectVerdictRevealed(page, plan, predict);
   });
 
-  test('lives-of-stars: leaving the main sequence makes it bigger, cooler and brighter @accepts:ce.lives-of-stars', async ({
+  test('lives-of-stars: two moments the student chooses show the Sun changing, and one moment twice does not @accepts:ce.lives-of-stars', async ({
     page,
     app,
   }) => {
@@ -1130,28 +1130,23 @@ test.describe('the central experiment of each investigation', () => {
     const id = 'lives-of-stars';
     const entry = declared(id);
     const { control } = controlOf(entry);
-    const [predictSid, measureSid] = entry.loop;
+    const [momentsSid, predictSid, measureSid] = entry.loop;
 
     await openInvestigation(page, app, id);
     const plan = await lessonPlan(page, id);
 
-    const predict = await walkToSid(page, plan, predictSid);
-    await commitPredictionHeld(page, predict);
-
-    await walkToSid(page, plan, measureSid);
+    // 1. The step where the student chooses two moments. It opens paused at the
+    //    start of the track with no phase chosen: the cloud, which has no
+    //    numbers, so nothing on the screen is the answer.
+    await walkToSid(page, plan, momentsSid);
     await page.waitForTimeout(400);
-
-    // The step opens the playback running - it asks for that, and the star
-    // lives its whole life in a few seconds without anybody touching it.
-    // Seeking while it runs is a race this test cannot win: whatever the
-    // playhead was set to has moved on by the time the readout is read, and
-    // under load it has moved several phases on. The reader's own Pause button
-    // is the way out, and afterwards the instrument has to sit still.
-    await pausePlayback(page);
+    await expect(page.locator('#investigationToolReadout')).toContainText(
+      /collapsing cloud/i
+    );
     await expectStill(page);
 
-    // Now walk the playhead - the declared control - and read the phase at
-    // each stop. Where the main sequence sits on this slider is the track's
+    // Walk the playhead - the declared control - and read the phase at each
+    // stop. Where the main sequence sits on this slider is the track's
     // business: it depends on the pacing and on where the reduction placed its
     // samples, which is at the moments the star changes fastest and therefore
     // hardly anywhere on the main sequence. So the phase is read rather than
@@ -1185,7 +1180,19 @@ test.describe('the central experiment of each investigation', () => {
       }
     }
 
+    // What the readout says at one stop: the numbers the student would copy,
+    // with the age put into Gyr as the step asks.
+    const ageGyr = rows => {
+      const text = row(rows, /^age$/i).text;
+      const n = reading(rows, /^age$/i);
+      return /Myr/i.test(text)
+        ? n / 1000
+        : /trillion/i.test(text)
+          ? n * 1000
+          : n;
+    };
     const numbers = s => ({
+      age: ageGyr(s.rows),
       teff: reading(s.rows, /surface temperature/i),
       lum: reading(s.rows, /^luminosity$/i),
       radius: reading(s.rows, /^radius$/i),
@@ -1198,8 +1205,8 @@ test.describe('the central experiment of each investigation', () => {
       0
     );
     // The tip of the branch is the largest the star gets on it, which is what
-    // the step asks the reader to park at - not whichever giant sample came
-    // last.
+    // the later step asks the reader to park at - not whichever giant sample
+    // came last.
     const giant = giants.reduce((a, b) =>
       numbers(b).radius > numbers(a).radius ? b : a
     );
@@ -1217,6 +1224,98 @@ test.describe('the central experiment of each investigation', () => {
     expect(giant.lum / ms.lum).toBeGreaterThan(100);
     expect(giant.mass).toBeLessThanOrEqual(ms.mass);
 
+    // 2. The first moment is frozen and kept as a copy on the canvas.
+    await setControl(page, control, ms.at);
+    await toolAction(page, 'freeze');
+    const copies = await page.evaluate(async () => {
+      const ph = await import('/js/physics.js');
+      return ph.stars.map(s => s.name).filter(n => /Then:/.test(n));
+    });
+    expect(copies, 'a frozen copy is standing on the canvas').toHaveLength(1);
+
+    const field = (moment, suffix) => ({
+      [`age${suffix}`]: round(moment.age),
+      [`lum${suffix}`]: moment.lum,
+      [`rad${suffix}`]: moment.radius,
+      [`teff${suffix}`]: moment.teff,
+    });
+    const pair = (a, b) => ({ ...field(a, 'A'), ...field(b, 'B') });
+    const accepted = () =>
+      expect(page.locator('#investigationBody .inv-check.is-ok')).toBeVisible();
+
+    // The same moment twice: the readings do not differ, and the step says
+    // which decision was badly made. Nothing is accepted.
+    await recordFields(page, id, momentsSid, pair(ms, ms));
+    await expect(
+      page.locator('#investigationBody .inv-check.is-error')
+    ).toContainText(/almost the same star/i);
+    await expect(
+      page.locator('#investigationBody .inv-check.is-ok')
+    ).toHaveCount(0);
+
+    // Two different phases, which differ: accepted, and the message gives the
+    // student's own factors.
+    await recordFields(page, id, momentsSid, pair(ms, giant));
+    await accepted();
+    await expect(
+      page.locator('#investigationBody .inv-check.is-ok')
+    ).toContainText(/up and to the right/i);
+    await expectDerived(
+      page,
+      id,
+      momentsSid,
+      { lumRatio: giant.lum / ms.lum, radRatio: giant.radius / ms.radius },
+      0.05
+    );
+    await expectEvidenceRetained(page, id, momentsSid, pair(ms, giant));
+
+    // Readings that do not belong to one moment are refused, and say why.
+    await recordFields(page, id, momentsSid, {
+      lumB: ms.lum,
+    });
+    await expect(
+      page.locator('#investigationBody .inv-check.is-error')
+    ).toContainText(/do not belong together/i);
+    await recordFields(page, id, momentsSid, pair(ms, giant));
+    await accepted();
+
+    // The reading is kept as evidence: the live moment is captured.
+    await setControl(page, control, giant.at);
+    const before = await captures(page);
+    await toolAction(page, 'capture');
+    await keepCapture(page, {
+      claim: 'The Sun-like star is far larger and brighter as a giant.',
+      evidence: `${ms.radius} R_sun at ${ms.teff} K became ${giant.radius} R_sun at ${giant.teff} K.`,
+    });
+    await expect
+      .poll(async () => (await captures(page)).entries.length, {
+        timeout: 10_000,
+      })
+      .toBeGreaterThan(before.entries.length);
+    // The notebook opens over the instrument's buttons; the student closes it
+    // to carry on.
+    await page.locator('#nbClose').click();
+    await expect(page.locator('#evidenceNotebook')).toBeHidden();
+
+    // 3. The prediction, which opens at the start of the track and says
+    //    nothing, is committed and held.
+    const predict = await walkToSid(page, plan, predictSid);
+    await expect(page.locator('#investigationToolReadout')).toContainText(
+      /collapsing cloud/i
+    );
+    await expectStill(page);
+    await commitPredictionHeld(page, predict);
+
+    // 4. The measure step opens the playback running - it asks for that, and
+    //    the star lives its whole life in a few seconds without anybody
+    //    touching it. Seeking while it runs is a race this test cannot win, so
+    //    the reader's own Pause button is the way out.
+    await walkToSid(page, plan, measureSid);
+    await pausePlayback(page);
+    await expectStill(page);
+    const { after } = await setControl(page, control, giant.at);
+    expect(phaseIn(after)).toMatch(/giant/i);
+
     const evidence = {
       teff: giant.teff,
       lum: giant.lum,
@@ -1225,19 +1324,6 @@ test.describe('the central experiment of each investigation', () => {
     };
     await recordFields(page, id, measureSid, evidence);
     await expectEvidenceRetained(page, id, measureSid, evidence);
-
-    const before = await captures(page);
-    await toolAction(page, 'capture');
-    await keepCapture(page, {
-      claim:
-        'Leaving the main sequence, the star gets larger, cooler and brighter.',
-      evidence: `${ms.radius} R_sun at ${ms.teff} K became ${giant.radius} R_sun at ${giant.teff} K.`,
-    });
-    await expect
-      .poll(async () => (await captures(page)).entries.length, {
-        timeout: 10_000,
-      })
-      .toBeGreaterThan(before.entries.length);
 
     await expectVerdictRevealed(page, plan, predict);
   });
@@ -3714,10 +3800,12 @@ test.describe('the central experiment of each investigation', () => {
     await accepted(page);
     await expectEvidenceRetained(page, id, measureSid, drifts);
 
-    // 3. the relationship the lesson is about: halving the step improves a
-    //    second-order method four times, and a fourth-order one far more.
+    // 3. the relationship the lesson is about: the student chooses the second
+    //    step count from a menu (here the halving), and a second-order method
+    //    improves by the square of the ratio, a fourth-order one far more.
     await walkToSid(page, plan, halveSid);
     const halved = {
+      second: '1000',
       verlet: four(half['drift.verlet'].value),
       rk4: four(half['drift.rk4'].value),
       ratioVerlet: four(main['drift.verlet'] / half['drift.verlet'].value),
@@ -3729,6 +3817,13 @@ test.describe('the central experiment of each investigation', () => {
     await recordFields(page, id, halveSid, halved);
     await accepted(page);
     await expectEvidenceRetained(page, id, halveSid, halved);
+
+    // The same numbers after choosing another count are not accepted, and the
+    // feedback names the count they belong to.
+    await recordFields(page, id, halveSid, { second: '750' });
+    await expect(
+      page.locator('#investigationBody .inv-check.is-error')
+    ).toContainText('1000-step run');
 
     // 4. and only now is the prediction settled
     await expectVerdictRevealed(page, plan, predict);
@@ -3766,6 +3861,7 @@ test.describe('the central experiment of each investigation', () => {
     // outcome is a definition.
     await walkToSid(page, plan, moveSid);
     const moved = {
+      cutoff: '6',
       edge: four(six['a.crit'].value),
       extended: four(six['bound.extended'].value),
     };
@@ -3773,6 +3869,12 @@ test.describe('the central experiment of each investigation', () => {
     await recordFields(page, id, moveSid, moved);
     await accepted(page);
     await expectEvidenceRetained(page, id, moveSid, moved);
+    // The same numbers after choosing cutoff 2 belong to cutoffs 4, 6 and 10, and the
+    // check says so.
+    await recordFields(page, id, moveSid, { cutoff: '2' });
+    await expect(
+      page.locator('#investigationBody .inv-check.is-error')
+    ).toContainText('cutoffs 4, 6 and 10');
 
     await expectVerdictRevealed(page, plan, predict);
   });
@@ -3809,6 +3911,7 @@ test.describe('the central experiment of each investigation', () => {
     const shift = Math.abs((held.value - main.k) / held.sigma);
     expect(shift).toBeGreaterThan(3);
     const moved = {
+      yours: four(main.k),
       k: four(held.value),
       kSigma: four(held.sigma),
       shift: four(shift),
@@ -3845,14 +3948,43 @@ test.describe('the central experiment of each investigation', () => {
 
     // The relationship: the box period is many fit sigmas from the fitted one.
     await walkToSid(page, plan, relationSid);
+    const sigmas = Math.abs(main['bls.period'] - 3.52454) / 0.00003;
+    expect(sigmas).toBeGreaterThan(10);
     const gap = {
-      difference: four(main['bls.period'] - 3.52454),
-      sigmas: four((main['bls.period'] - 3.52454) / 0.00003),
+      period: main['bls.period'].toFixed(5),
+      sigmas: four(sigmas),
+      corrected: four(sigmas / 1.7),
+      survives: '1',
     };
-    expect(Math.abs(Number(gap.sigmas))).toBeGreaterThan(10);
     await recordFields(page, id, relationSid, gap);
     await accepted(page);
     await expectEvidenceRetained(page, id, relationSid, gap);
+
+    // The box with a limit the student chose: the numbers of another limit are
+    // refused by name, and the limit below the best box sits at the edge.
+    const boxSid = 'the-box-with-your-limit';
+    await walkToSid(page, plan, boxSid);
+    const reference = (await runs())['periodograms/limit2'];
+    await recordFields(page, id, boxSid, {
+      limit: '2',
+      duration: '2.5',
+      depth: four(main['bls.depth']),
+      snr: four(main['bls.snr']),
+      edge: '0',
+    });
+    await expect(
+      page.locator('#investigationBody .inv-check.is-error')
+    ).toContainText('limits 4 and 6');
+    const atEdge = {
+      limit: '2',
+      duration: String(reference['bls.duration'].value),
+      depth: String(Math.round(reference['bls.depth'].value)),
+      snr: reference['bls.snr'].value.toFixed(1),
+      edge: '1',
+    };
+    await recordFields(page, id, boxSid, atEdge);
+    await accepted(page);
+    await expectEvidenceRetained(page, id, boxSid, atEdge);
     await expectVerdictRevealed(page, plan, predict);
   });
 
@@ -3872,6 +4004,7 @@ test.describe('the central experiment of each investigation', () => {
     await commitPredictionHeld(page, predict);
     await walkToSid(page, plan, measureSid);
     const draws = {
+      ratio: '9.21',
       k: four(main.k),
       kWidth: four(main['k.hi'] - main['k.lo']),
       b: four(main.b),
@@ -3880,6 +4013,12 @@ test.describe('the central experiment of each investigation', () => {
     await recordFields(page, id, measureSid, draws);
     await accepted(page);
     await expectEvidenceRetained(page, id, measureSid, draws);
+    // The same numbers after choosing another orbit size belong to the run
+    // with 9.21, and the check says so.
+    await recordFields(page, id, measureSid, { ratio: '8' });
+    await expect(
+      page.locator('#investigationBody .inv-check.is-error')
+    ).toContainText('a/R* 9.21');
 
     await walkToSid(page, plan, relationSid);
     const diag = {
