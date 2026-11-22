@@ -43,6 +43,7 @@ import {
   EARTH_MASSES_PER_JUPITER_MASS,
 } from './constants.js';
 import { formatNumber } from './format.js';
+import { bodyRolesText } from './sceneStatement.js';
 import { ENVIRONMENT, ENVIRONMENTS } from './blackHole/appearance.js';
 import {
   bh_list,
@@ -128,6 +129,14 @@ export const isObjectStillInSimulation = object => {
  * @returns {object|null} Info for the inspector
  */
 export const objectInfoFor = (object, type) => {
+  const info = infoByType(object, type);
+  // What pulls it and what it pulls, from the engine's relation: the same
+  // builder as the scene statement (js/sceneStatement.js).
+  info?.stats?.push({ label: t('roles.label'), value: bodyRolesText(object) });
+  return info;
+};
+
+const infoByType = (object, type) => {
   switch (type) {
     case 'BlackHole':
       return getBlackHoleInfo(object);

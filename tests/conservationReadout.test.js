@@ -209,6 +209,8 @@ describe('the reasons a scene is not closed', () => {
 
   test('one-way gravity is named', () => {
     updatePhysicsSettings({ ...DEFAULT_SETTINGS, mutual_gravity: false });
+    // The star pulls the planet and the planet does not pull back.
+    stars.push(new PhysicsObject({ x: 0, y: 0 }, { x: 0, y: 0 }, 1000, 8));
     planets.push(new PhysicsObject({ x: 5, y: 0 }, { x: 0, y: 1 }, 100, 1));
     resetConservationBaseline();
     expect(conservationDrift(true).caveats).toContain('caveat.oneWayGravity');

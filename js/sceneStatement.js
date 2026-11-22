@@ -24,7 +24,9 @@ import {
   debris,
 } from './physics.js';
 import { physicsSettings } from './engine/state.js';
-import { sceneSources } from './engine/sources.js';
+import { sceneRoles, bodyRoles } from './engine/sources.js';
+import { timeUnitSeconds } from './units.js';
+import { decimal } from './format.js';
 import { dominantPrimary } from './orbital.js';
 import { barycenterOf, drawBarycenterCross } from './lesson/barycenter.js';
 import { frameState, WORLD, BARYCENTER, OBJECT } from './referenceFrame.js';
@@ -110,12 +112,8 @@ const LIST_WORD = {
 let lastKey = '';
 let lastLine = '';
 
-/**
- * Which bodies pull on others and which only feel gravity, in one line.
- * @param {object} [settings] - mutual_gravity and star_only_gravity in force
- * @returns {string} The statement, or '' for an empty scene
- */
-export function sourcesStatement(settings = physicsSettings) {
+/** Bodies per engine list, as they are now. */
+function liveCounts() {
   const lists = {
     bh_list,
     stars,
@@ -130,12 +128,21 @@ export function sourcesStatement(settings = physicsSettings) {
   };
   const counts = {};
   for (const [k, v] of Object.entries(lists)) counts[k] = v.length;
-  const locale = getLocale();
-  // The readout is rewritten many times a second; the line changes only
-  // with a count, a setting or the language.
-  const key = `${Object.values(counts)}|${settings?.mutual_gravity}|${settings?.star_only_gravity}|${locale}`;
-  if (key === lastKey) return lastLine;
-  const { pulling, feeling } = sceneSources(counts, settings);
+  return counts;
+}
+
+/**
+ * What pulls on what, in sentences, from the engine's relation
+ * (js/engine/sources.js sceneRoles): who pulls, who only feels, that holes
+ * feel only holes, that static holes are fixed, and, where G is schematic,
+ * G and the time unit.
+ * @param {Object<string, number>} counts - Bodies per list name
+ * @param {object} settings - Settings in force
+ * @param {string} [locale] - Language, for lower-casing the kind words
+ * @returns {string[]} Sentences, empty for an empty scene
+ */
+export function rolesSentences(counts, settings, locale = getLocale()) {
+  const r = sceneRoles(counts, settings);
   const words = group =>
     group
       .map(({ list, n }) =>
@@ -145,14 +152,77 @@ export function sourcesStatement(settings = physicsSettings) {
         })
       )
       .join(t('summary.listSeparator'));
-  const parts = [];
-  if (pulling.length)
-    parts.push(t('sources.pulling', { list: words(pulling) }));
-  if (feeling.length)
-    parts.push(t('sources.feeling', { list: words(feeling) }));
+  const out = [];
+  if (r.pulling.length)
+    out.push(t('sources.pulling', { list: words(r.pulling) }));
+  if (r.feeling.length)
+    out.push(t('sources.feeling', { list: words(r.feeling) }));
+  if (r.holesFeelOnlyHoles) out.push(t('sources.holesOnly'));
+  if (r.staticHoles) out.push(t('sources.staticHoles'));
+  const G = settings?.gravitational_constant;
+  if (out.length && G > 100) {
+    const days = decimal(timeUnitSeconds() / 86400, 4, locale);
+    out.push(t('sources.schematic', { g: G, days }));
+  }
+  return out;
+}
+
+/**
+ * Which bodies pull on others and which only feel gravity, in one line.
+ * @param {object} [settings] - The gravity settings in force
+ * @returns {string} The statement, or '' for an empty scene
+ */
+export function sourcesStatement(settings = physicsSettings) {
+  const counts = liveCounts();
+  const locale = getLocale();
+  // The readout is rewritten many times a second; the line changes only
+  // with a count, a setting or the language.
+  const key = `${Object.values(counts)}|${settings?.mutual_gravity}|${settings?.star_only_gravity}|${settings?.bh_behavior}|${settings?.gravitational_constant}|${locale}`;
+  if (key === lastKey) return lastLine;
   lastKey = key;
-  lastLine = parts.join(' ');
+  lastLine = rolesSentences(counts, settings, locale).join(' ');
   return lastLine;
+}
+
+const rowMemo = { key: '', text: '' };
+
+/**
+ * The inspector's gravity row for one body: what pulls it and what it pulls,
+ * from the same relation, or why it does not move.
+ * @param {object} body - The selected body
+ * @param {object} [settings] - The gravity settings in force
+ * @returns {string} One or two sentences
+ */
+export function bodyRolesText(body, settings = physicsSettings) {
+  const locale = getLocale();
+  const counts = liveCounts();
+  // The inspector refreshes every tick; the row changes only with this.
+  const key = `${body?.kind}|${body?.model_owned}|${body?.kind === 'BlackHole' && body.can_move?.()}|${Object.values(counts)}|${settings?.mutual_gravity}|${settings?.star_only_gravity}|${settings?.bh_behavior}|${locale}`;
+  if (key === rowMemo.key) return rowMemo.text;
+  const r = bodyRoles(body, counts, settings);
+  const words = lists =>
+    lists
+      .map(l => t(LIST_WORD[l]).toLocaleLowerCase(locale))
+      .join(t('summary.listSeparator'));
+  const parts = [];
+  if (!r.moves)
+    parts.push(
+      t(body?.kind === 'BlackHole' ? 'roles.fixedHole' : 'roles.modelOwned')
+    );
+  else
+    parts.push(
+      r.pulledBy.length
+        ? t('roles.pulledBy', { list: words(r.pulledBy) })
+        : t('roles.pulledByNone')
+    );
+  parts.push(
+    r.pulls.length
+      ? t('roles.pulls', { list: words(r.pulls) })
+      : t('roles.pullsNone')
+  );
+  rowMemo.key = key;
+  rowMemo.text = parts.join(' ');
+  return rowMemo.text;
 }
 
 // --- The barycenter marker ----------------------------------------------------

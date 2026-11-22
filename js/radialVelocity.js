@@ -32,6 +32,7 @@ import {
   getWorldGeneration,
 } from './physics.js';
 import { velocityUnitToMs, timeUnitSeconds } from './units.js';
+import { gravityRoles, physicsSettings } from './engine/state.js';
 import {
   projectVelocityLOS,
   observerGeometry,
@@ -809,12 +810,8 @@ function renderReadout() {
  *
  * @returns {boolean} Whether the observed star is pinned
  */
-export function starIsHeldFixed() {
-  return Boolean(
-    getPhysicsSetting('star_only_gravity') ||
-    !getPhysicsSetting('mutual_gravity')
-  );
-}
+export const starIsHeldFixed = () =>
+  !gravityRoles(physicsSettings).pulls('Planet', 'StarObject');
 
 /**
  * Sample the star, once per cadence. Called from the render loop.

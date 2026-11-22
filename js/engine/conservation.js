@@ -18,6 +18,8 @@ import {
   worldGeneration,
   state,
   minInteractionDistance,
+  oneWayPairs,
+  presentKinds,
   activeIntegrator,
   isBarnesHutActive,
   MASS_UNIT_KG,
@@ -249,10 +251,11 @@ export const conservationCaveats = () => {
   if (bh_list.length > 0 && physicsSettings.bh_behavior !== 'Orbiting') {
     out.push('caveat.staticBlackHole');
   }
-  if (
-    physicsSettings.star_only_gravity === true ||
-    physicsSettings.mutual_gravity !== true
-  ) {
+  // From the relation the step sums by, over the kinds present: a hole beside
+  // a star is one-way with mutual gravity on, and stars alone pull both ways
+  // with it off.
+
+  if (oneWayPairs(presentKinds(), physicsSettings).length) {
     out.push('caveat.oneWayGravity');
   }
   if (physicsSettings.galaxy_gravity === 'halo') {
