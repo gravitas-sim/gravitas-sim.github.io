@@ -78,6 +78,21 @@ const rvRows = ctx => {
   ];
 };
 
+/** The rows above, and the half-range the Radial Velocity panel shows, which a field takes as it is printed. */
+const kRows = ctx => {
+  const range = ctx.rvNow()?.range;
+  return [
+    ...rvRows(ctx),
+    {
+      id: 'k',
+      label: range?.bracketedBothExtremes
+        ? 'Half-range ½(max − min)'
+        : 'Half-range observed so far',
+      value: range ? `${range.shown} m/s` : 'Keep observing…',
+    },
+  ];
+};
+
 const RADIAL_VELOCITY = {
   id: 'radial-velocity',
   thumbnail: 'images/scenarios/exoplanet-characterization-lab.webp',
@@ -93,6 +108,16 @@ const RADIAL_VELOCITY = {
   prerequisites: ['transit-photometry'],
   // Upper depth (Prompt 227): the joint fit and the star's share of the uncertainty; the core steps are unchanged.
   depths: ['core', 'advanced'],
+  retired: {
+    'how-dense-is-it': {
+      to: 'density-from-your-mass',
+      release: '3.1',
+      was: {
+        en: 'Read the planet’s bulk density off the characterization panel and type it in.',
+        es: 'Leer en el panel de caracterización la densidad media del planeta y escribirla.',
+      },
+    },
+  },
   // Subject tags, for the browser's filters. A fixed vocabulary
   // shared across the catalog rather than free text, so a filter can offer
   // the whole set without a second list to keep in step.
@@ -153,8 +178,8 @@ const RADIAL_VELOCITY = {
       title: 'Which one moves?',
       setup: RV_LAB_PAUSED,
       body: `Before you run anything: the star here is about 1.15 times the mass
-             of the Sun. The planet is roughly two thirds the mass of Jupiter,
-             which makes it about a seventeen-hundredth of the star.`,
+             of the Sun. The planet is a gas giant, more than a thousand times
+             lighter than its star.`,
       prompt: 'When the simulation runs, which objects will actually move?',
       options: [
         'Only the planet. The star stays where it is.',
@@ -164,9 +189,9 @@ const RADIAL_VELOCITY = {
       ],
       answer: 1,
       because: `Both move, around their common center of mass. Because the star is
-                about seventeen hundred times heavier, its own orbit is about
-                seventeen hundred times smaller. That is why it looks stationary
-                here and is not.`,
+                more than a thousand times heavier, its own orbit is more than
+                a thousand times smaller. That is why it looks stationary here
+                and is not.`,
     },
     {
       sid: 'both-of-them-go-round',
@@ -176,12 +201,15 @@ const RADIAL_VELOCITY = {
       body: `This instrument draws the same idea with the star’s orbit magnified
              so you can see it. The planet’s orbit is at true scale; the star’s is
              blown up by the amount written at the bottom of the picture.
+             \n\nIt waits for you: press <strong>Run</strong> to set both going,
+             and Pause to stop them.
              \n\nThe cross is the center of mass: the point they both circle.
              Notice that the star and the planet are always on opposite sides of
              it.`,
       tool: {
         id: 'reflex-motion',
-        values: { mp: 0.69, a: 0.04747, mag: 400 },
+        values: { mp: 0.3, a: 0.05, mag: 600 },
+        noSystem: true,
         title: 'Who is actually moving?',
         note: 'Try the presets. The magnification changes; the physics does not.',
       },
@@ -204,13 +232,73 @@ const RADIAL_VELOCITY = {
                 bigger stellar wobble.`,
     },
     {
+      sid: 'read-the-two-wobbles',
+      bind: SYSTEM,
+      type: 'measure',
+      title: 'Read two wobbles',
+      body: `Choose a light planet and a much heavier one, and read the star’s own
+             orbit for each. Leave the orbit size alone: only the planet changes.
+             \n\nSet the planet-mass slider, press <strong>Run</strong> to watch
+             the star go round, then take the reading beside the box. Do it again
+             with the other planet.
+             \n\nThe magnification changes the picture, not the number you take.`,
+      tool: {
+        id: 'reflex-motion',
+        values: { mp: 0.3, a: 0.05, mag: 600 },
+        noSystem: true,
+        title: 'Weigh the wobble',
+        note: 'Change only the planet’s mass. Take each reading after the star has gone round once.',
+      },
+      fields: [
+        {
+          id: 'light',
+          label: 'Star’s own orbit, lighter planet',
+          unit: 'AU',
+          source: { tool: 'aStar' },
+        },
+        {
+          id: 'heavy',
+          label: 'Star’s own orbit, heavier planet',
+          unit: 'AU',
+          source: { tool: 'aStar' },
+        },
+      ],
+      validate: v => {
+        if (![v.light, v.heavy].every(Number.isFinite)) return null;
+        if (v.light <= 0 || v.heavy <= 0) {
+          return {
+            level: 'error',
+            message: 'Each reading is a distance, so it has to be above zero.',
+          };
+        }
+        if (v.light === v.heavy) {
+          return {
+            level: 'warn',
+            message:
+              'The two readings are the same. Change the planet’s mass and take the second reading again.',
+          };
+        }
+        return {
+          level: 'ok',
+          message:
+            'Two readings kept. The next step sets them beside what you said.',
+        };
+      },
+    },
+    {
       sid: 'watch-it-grow',
       bind: SYSTEM,
       type: 'explore',
+      evidence: [
+        { step: 'read-the-two-wobbles', field: 'light' },
+        { step: 'read-the-two-wobbles', field: 'heavy' },
+      ],
+      compare:
+        'A heavier planet pulls the balance point further from the star’s center, so the star’s own orbit is bigger: check your two readings against what you said.',
       title: 'Watch it grow',
-      body: `Drag the planet-mass slider from an Earth up to a heavy Jupiter and
-             watch the star’s circle open out. Read the number labeled
-             <strong>Star’s own orbit</strong> as you go.
+      body: `Now go further. Drag the planet-mass slider from an Earth up to a
+             heavy Jupiter and watch the star’s circle open out. Keep reading the
+             number labeled <strong>Star’s own orbit</strong>.
              \n\nThen try the Earth preset. The physical wobble becomes tiny, and
              the magnification has to go up by a factor of thousands before you
              can see it at all. It is still there.
@@ -219,7 +307,8 @@ const RADIAL_VELOCITY = {
              enough to move its star by an amount we can measure.`,
       tool: {
         id: 'reflex-motion',
-        values: { mp: 0.69, a: 0.04747, mag: 400 },
+        values: { mp: 0.3, a: 0.05, mag: 600 },
+        noSystem: true,
         title: 'More mass, bigger wobble',
       },
     },
@@ -264,9 +353,10 @@ const RADIAL_VELOCITY = {
       bind: SYSTEM,
       type: 'explore',
       title: 'Toward, away, toward again',
-      body: `On the left, the star goes round its small orbit and an arrow shows
-             how much of its motion is pointing at us. On the right, that quantity
-             is plotted as the star goes round.
+      body: `Press <strong>Run</strong> to set the diagram going. On the left, the
+             star goes round its small orbit and an arrow shows how much of its
+             motion is pointing at us. On the right, that quantity is plotted as
+             the star goes round.
              \n\nWatch what happens at the two points where the star is moving
              straight across your view.
              \n\nThe panel is a diagram of the idea. Underneath it is the same
@@ -277,7 +367,7 @@ const RADIAL_VELOCITY = {
       allowInspector: true,
       tool: {
         id: 'rv-observer',
-        values: { mp: 0.69, inc: 90 },
+        values: { mp: 0.25, inc: 90 },
         title: 'The part we can measure',
       },
       probe: rvRows,
@@ -337,7 +427,8 @@ const RADIAL_VELOCITY = {
              set to stop the simulation the moment the radial velocity reaches
              its most positive value - press <strong>Arm</strong> and it will
              pause there. Do it twice and the gap between the two stops is the
-             period, read off the clock rather than eyeballed off a graph.
+             period, read off the clock rather than eyeballed off a graph. You
+             can time more cycles and divide: how many is your decision.
              \n\nWhile it is stopped, look at the canvas. Which way is the star
              actually moving, and does the sign of the reading agree?`,
       allowInspector: true,
@@ -374,8 +465,19 @@ const RADIAL_VELOCITY = {
       title: 'Read K off the panel',
       setup: RV_LAB,
       body: `With the Radial Velocity panel open and at least one complete cycle
-             recorded, read the semi-amplitude it reports.`,
-      fields: [{ id: 'k', label: 'Semi-amplitude K', unit: 'm/s', want: '84' }],
+             recorded, take the half-range it reports: press the button beside
+             the box. You can type a value instead, and the box says which you
+             did.`,
+      probe: kRows,
+      fields: [
+        {
+          id: 'k',
+          label: 'Semi-amplitude K',
+          unit: 'm/s',
+          want: '84',
+          source: { probe: 'k' },
+        },
+      ],
     },
 
     // --- Part 5: what controls K --------------------------------------------
@@ -405,7 +507,8 @@ const RADIAL_VELOCITY = {
              you double K.`,
       tool: {
         id: 'rv-mass',
-        values: { mp: 0.69 },
+        values: { mp: 0.25 },
+        noSystem: true,
         title: 'Mass against K',
       },
     },
@@ -419,13 +522,14 @@ const RADIAL_VELOCITY = {
       type: 'question',
       kind: 'numeric',
       title: 'Weigh HD 209458 b',
-      body: `Use the instrument below. Set the true planet mass until the K it
-             reports matches the K you measured from the panel, about 84 meters
-             per second, with the inclination left at 90 degrees.
+      body: `Use the instrument below. Search for the true planet mass whose K
+             matches the K you took from the panel, with the inclination left at
+             90 degrees. The instrument opens at a mass of its own: yours is to
+             find.
              \n\nWhat planet mass gives that?`,
       tool: {
         id: 'rv-inclination',
-        values: { inc: 90, mp: 0.69 },
+        values: { inc: 90, mp: 0.25 },
         title: 'Match the measured K',
       },
       prompt: 'Planet mass, in Jupiter masses',
@@ -448,8 +552,8 @@ const RADIAL_VELOCITY = {
         concept: `K is set by how hard the planet pulls its star. Heavier planet,
                   bigger wobble — and everything else about this system is
                   already fixed, so the mass is the only thing left to change.`,
-        method: `Drag the planet-mass slider until the K in the readout reads
-                 about 84 m/s. Leave the inclination at 90 degrees: tilting the
+        method: `Drag the planet-mass slider until the K in the readout matches
+                 the K you took. Leave the inclination at 90 degrees: tilting the
                  orbit changes K without changing the mass, which is the next
                  screen's problem rather than this one's.`,
       },
@@ -712,8 +816,8 @@ const RADIAL_VELOCITY = {
       body: `You now have two independent measurements of the same planet.
              \n\nFrom the transit, in the previous investigation: its
              <strong>radius</strong>, about 1.38 Jupiter radii.
-             \n\nFrom the wobble, in this one: its <strong>mass</strong>, about
-             0.69 Jupiter masses.
+             \n\nFrom the wobble, in this one: its <strong>mass</strong>, the one
+             you weighed.
              \n\nNeither number alone says what kind of object this is. Together
              they do.`,
     },
@@ -725,13 +829,14 @@ const RADIAL_VELOCITY = {
       body: `The panel below takes each measurement in turn and shows what it buys.
              The top two rows are the transit and the radial velocity. The third
              combines them.
-             \n\nRead the bulk density for HD 209458 b, and compare it with water at
-             1 gram per cubic centimeter and with Earth at 5.5.`,
+             \n\nIt opens on a planet of its own. Set the radius to the one the
+             transit gave and the mass to the one you weighed, then change one
+             at a time and watch which rows move.`,
       tool: {
         id: 'planet-characterization',
         values: {
-          rp: 1.38,
-          mp: 0.69,
+          rp: 1,
+          mp: 1,
           a: 0.04747,
           lum: 1.77,
           teff: 6065,
@@ -740,12 +845,17 @@ const RADIAL_VELOCITY = {
       },
     },
     {
-      sid: 'how-dense-is-it',
+      sid: 'density-from-your-mass',
       bind: SYSTEM,
+      requires: ['weigh-hd-209458-b'],
       type: 'question',
       kind: 'numeric',
-      title: 'How dense is it?',
-      body: `Read the bulk density from the panel for HD 209458 b.`,
+      title: 'Density from your mass',
+      body: `Work out the planet’s bulk density yourself, from the mass you weighed
+             and the transit radius, 1.38 Jupiter radii. Density is mass over
+             volume, and the planet is close to a sphere.
+             \n\nThen check it against the panel on the step before: set its
+             radius and mass to these two numbers and read the planet’s own row.`,
       prompt: 'Bulk density, in g/cm³',
       answer: 0.33,
       unit: 'g/cm³',
@@ -770,9 +880,10 @@ const RADIAL_VELOCITY = {
       hints: {
         concept: `Density is mass divided by volume, and you have both: a mass
                   from the wobble and a radius from the transit.`,
-        method: `The characterization panel has already combined them. Find the
-                 row giving the planet's own bulk density — not the row comparing
-                 it with Earth.`,
+        method: `Jupiter itself is 1.24 g/cm³ at its equatorial radius. Scale that
+                 by your mass in Jupiter masses over the radius in Jupiter radii,
+                 cubed. Then compare with the panel's own row, not the row that
+                 compares the planet with Earth.`,
       },
       worked: `0.69 Jupiter masses inside a sphere of 1.38 Jupiter radii comes
                out at about 0.33 g/cm³: a third the density of water and a

@@ -284,7 +284,7 @@ export const MODELS = {
         5
       ),
   },
-  'radial-velocity/how-dense-is-it': {
+  'radial-velocity/density-from-your-mass': {
     via: 'js/tidalPhysics.js bulkDensity of the published mass and radius, g/cm^3',
     value: () =>
       bulkDensity(

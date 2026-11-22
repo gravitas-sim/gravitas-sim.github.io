@@ -114,7 +114,7 @@
         "what-would-you-still-want"
       ],
       "evidenceFrom": "model",
-      "decision": "unreviewed",
+      "decision": "Which two planet masses to compare and when to take each reading, how many cycles to time for the period, whether to take K from the panel or type it and when the curve has turned at both ends, and which planet mass reproduces the K they took, searched for from an instrument that opens at a mass of its own.",
       "leakFree": true
     },
     "goldilocks-question": {

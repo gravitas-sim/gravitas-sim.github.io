@@ -276,13 +276,15 @@ export default {
       'measure-the-period':
         'The curve repeats every 3.52 days. Students reading between successive peaks typically land between 3.3 and 3.8; anything in that range is a good measurement off a live plot. The published period is 3.5247 days. The event watch stops the run at the most positive radial velocity. Two stops bracket one period: about 3.5 days. While it is stopped, ask which way the star is actually moving on the canvas and whether the sign agrees - that is the point of stopping rather than reading it off a graph.',
       'read-k-off-the-panel':
-        'The panel reports K near 84 m/s once a full cycle is recorded, which matches the published semi-amplitude for HD 209458 b. A student answer near 168 has taken the full peak-to-peak range rather than the semi-amplitude and should be sent back to step 13.',
+        'The panel reports K near 84 m/s once a full cycle is recorded, which matches the published semi-amplitude for HD 209458 b. A student answer near 168 has taken the full peak-to-peak range rather than the semi-amplitude and should be sent back to step 14.',
+      'read-the-two-wobbles':
+        'Any two masses: the star’s orbit is in proportion (0.3 and 3 Jupiter masses give about 1.4e-5 and 1.4e-4 AU).',
       'one-thing-at-a-time':
-        'The rv-mass instrument holds star, period and viewing angle fixed, so K is strictly proportional to planet mass: an Earth gives 0.38 m/s, a Neptune 6.6, HD 209458 b 84, and a five-Jupiter planet 609. At step 17 students match this instrument to their measured K and should land near 0.69 Jupiter masses, the published value; the accepted range is 0.61 to 0.77, wide enough to absorb a slightly misread K.',
+        'The rv-mass instrument holds star, period and viewing angle fixed, so K is strictly proportional to planet mass: an Earth gives 0.38 m/s, a Neptune 6.6, HD 209458 b 84, and a five-Jupiter planet 609. At step 18 students match the weighing instrument to their measured K and should land near 0.69 Jupiter masses, the published value; the accepted range is 0.61 to 0.77, wide enough to absorb a slightly misread K.',
       'the-same-planet-four-viewing':
         "The observer has been swung to 90 degrees on the live system: one controlled change, nothing about the star or planet touched. The panel's inclination presets are the analytic version of the same idea, and the two should be read together rather than confused - the panel tilts a model, the observer angle moves where we are standing.",
       'characterize-the-planet':
-        'The characterization panel reports HD 209458 b at 1.38 Jupiter radii, 0.69 Jupiter masses and a bulk density of 0.33 g/cm³: about a third the density of water and a sixteenth of Earth’s. It receives roughly 785 times Earth’s starlight and sits far inside the inner edge of the modeled zone. At step 32 the accepted density range is 0.25 to 0.41; a student answering near 5.5 has read Earth’s density from the comparison text rather than the planet’s.',
+        'Set to 1.38 Jupiter radii and 0.69 Jupiter masses (it opens on a Jupiter of its own), the panel reports a bulk density of 0.33 g/cm³: about a third the density of water and a sixteenth of Earth’s. It receives roughly 785 times Earth’s starlight and sits far inside the inner edge of the modeled zone. At step 33 the accepted density range is 0.25 to 0.41; a student answering near 5.5 has read Earth’s density from the comparison text rather than the planet’s.',
     },
     'goldilocks-question': {
       'three-distances':

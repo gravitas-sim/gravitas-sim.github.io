@@ -1384,7 +1384,9 @@
     "mag"
    ],
    "presets": 3,
-   "buttons": [],
+   "buttons": [
+    "run"
+   ],
    "engineReads": [],
    "mutates": [],
    "datasets": []
@@ -1550,7 +1552,9 @@
     "inc"
    ],
    "presets": 0,
-   "buttons": [],
+   "buttons": [
+    "run"
+   ],
    "engineReads": [],
    "mutates": [],
    "datasets": [
@@ -15544,7 +15548,8 @@
      ],
      "actions": [
       "move-an-instrument-control",
-      "press-an-instrument-preset"
+      "press-an-instrument-preset",
+      "press-an-instrument-button"
      ],
      "requires": [],
      "reveal": null,
@@ -15655,8 +15660,85 @@
      ]
     },
     {
-     "sid": "watch-it-grow",
+     "sid": "read-the-two-wobbles",
      "index": 6,
+     "type": "measure",
+     "title": "Read two wobbles",
+     "declares": {
+      "stage": null,
+      "bound": [
+       "star",
+       "planet"
+      ],
+      "roles": [
+       "star",
+       "planet"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram",
+      "captured-evidence"
+     ],
+     "actions": [
+      "record-values",
+      "move-an-instrument-control",
+      "press-an-instrument-preset",
+      "press-an-instrument-button"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": true
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "whole lesson"
+     },
+     "loop": {
+      "declared": "measure",
+      "actual": [
+       "experiment",
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "reflex-motion",
+      "capture": false
+     },
+     "evidence": [
+      "notebook-fields"
+     ],
+     "reset": [
+      "stamps instrument values",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the step binds the object by name, so there is none",
+      "ambiguous result: the check says in words how close is close enough"
+     ]
+    },
+    {
+     "sid": "watch-it-grow",
+     "index": 7,
      "type": "explore",
      "title": "Watch it grow",
      "declares": {
@@ -15677,7 +15759,8 @@
      ],
      "actions": [
       "move-an-instrument-control",
-      "press-an-instrument-preset"
+      "press-an-instrument-preset",
+      "press-an-instrument-button"
      ],
      "requires": [],
      "reveal": null,
@@ -15726,7 +15809,7 @@
     },
     {
      "sid": "light-carries-the-answer",
-     "index": 7,
+     "index": 8,
      "type": "read",
      "title": "Light carries the answer",
      "declares": {
@@ -15788,7 +15871,7 @@
     },
     {
      "sid": "which-way-is-it-going",
-     "index": 8,
+     "index": 9,
      "type": "question",
      "title": "Which way is it going?",
      "declares": {
@@ -15850,7 +15933,7 @@
     },
     {
      "sid": "toward-away-toward-again",
-     "index": 9,
+     "index": 10,
      "type": "explore",
      "title": "Toward, away, toward again",
      "declares": {
@@ -15874,7 +15957,8 @@
      ],
      "actions": [
       "open-a-body-inspector",
-      "move-an-instrument-control"
+      "move-an-instrument-control",
+      "press-an-instrument-button"
      ],
      "requires": [],
      "reveal": null,
@@ -15926,7 +16010,7 @@
     },
     {
      "sid": "open-the-real-instrument",
-     "index": 10,
+     "index": 11,
      "type": "explore",
      "title": "Open the real instrument",
      "declares": {
@@ -15997,7 +16081,7 @@
     },
     {
      "sid": "reading-the-curve",
-     "index": 11,
+     "index": 12,
      "type": "question",
      "title": "Reading the curve",
      "declares": {
@@ -16059,7 +16143,7 @@
     },
     {
      "sid": "measure-the-period",
-     "index": 12,
+     "index": 13,
      "type": "measure",
      "title": "Measure the period",
      "declares": {
@@ -16138,7 +16222,7 @@
     },
     {
      "sid": "the-semi-amplitude-k",
-     "index": 13,
+     "index": 14,
      "type": "read",
      "title": "The semi-amplitude, K",
      "declares": {
@@ -16200,7 +16284,7 @@
     },
     {
      "sid": "read-k-off-the-panel",
-     "index": 14,
+     "index": 15,
      "type": "measure",
      "title": "Read K off the panel",
      "declares": {
@@ -16216,6 +16300,7 @@
      },
      "kinds": [
       "scene-declared",
+      "engine-measurement",
       "captured-evidence"
      ],
      "actions": [
@@ -16243,14 +16328,16 @@
        "experiment",
        "measure"
       ],
-      "handTranscribed": true,
+      "handTranscribed": false,
       "mismatch": null
      },
      "scene": {
       "nameMatches": [],
       "readsSelection": false,
       "importsFromSelection": false,
-      "engineReads": [],
+      "engineReads": [
+       "rvNow"
+      ],
       "mutates": [],
       "eventWatch": null
      },
@@ -16266,12 +16353,13 @@
       "wrong body: the step binds the object by name, so there is none",
       "missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand",
       "reset: rebuilds the scenario on arrival",
+      "null result: guarded, but the fallback is not spelled out",
       "ambiguous result: nothing marks these, they are a record"
      ]
     },
     {
      "sid": "what-would-make-k-bigger",
-     "index": 15,
+     "index": 16,
      "type": "predict",
      "title": "What would make K bigger?",
      "declares": {
@@ -16334,7 +16422,7 @@
     },
     {
      "sid": "one-thing-at-a-time",
-     "index": 16,
+     "index": 17,
      "type": "explore",
      "title": "One thing at a time",
      "declares": {
@@ -16406,7 +16494,7 @@
     },
     {
      "sid": "weigh-hd-209458-b",
-     "index": 17,
+     "index": 18,
      "type": "question",
      "title": "Weigh HD 209458 b",
      "declares": {
@@ -16481,7 +16569,7 @@
     },
     {
      "sid": "now-tilt-the-whole-system",
-     "index": 18,
+     "index": 19,
      "type": "predict",
      "title": "Now tilt the whole system",
      "declares": {
@@ -16544,7 +16632,7 @@
     },
     {
      "sid": "the-same-planet-four-viewing",
-     "index": 19,
+     "index": 20,
      "type": "explore",
      "title": "The same planet, four viewing angles",
      "declares": {
@@ -16621,7 +16709,7 @@
     },
     {
      "sid": "m-sin-i",
-     "index": 20,
+     "index": 21,
      "type": "read",
      "title": "M sin i",
      "declares": {
@@ -16683,7 +16771,7 @@
     },
     {
      "sid": "what-a-transit-adds",
-     "index": 21,
+     "index": 22,
      "type": "question",
      "title": "What a transit adds",
      "declares": {
@@ -16745,7 +16833,7 @@
     },
     {
      "sid": "a-face-on-system",
-     "index": 22,
+     "index": 23,
      "type": "predict",
      "title": "A face-on system",
      "declares": {
@@ -16808,7 +16896,7 @@
     },
     {
      "sid": "astrometry",
-     "index": 23,
+     "index": 24,
      "type": "read",
      "title": "Astrometry",
      "declares": {
@@ -16870,7 +16958,7 @@
     },
     {
      "sid": "tilt-it-again-and-watch",
-     "index": 24,
+     "index": 25,
      "type": "explore",
      "title": "Tilt it again, and watch the other method",
      "declares": {
@@ -16941,7 +17029,7 @@
     },
     {
      "sid": "two-methods-opposite-weaknesses",
-     "index": 25,
+     "index": 26,
      "type": "question",
      "title": "Two methods, opposite weaknesses",
      "declares": {
@@ -17003,7 +17091,7 @@
     },
     {
      "sid": "all-three-at-once",
-     "index": 26,
+     "index": 27,
      "type": "explore",
      "title": "All three at once",
      "declares": {
@@ -17074,7 +17162,7 @@
     },
     {
      "sid": "move-the-system-further-away",
-     "index": 27,
+     "index": 28,
      "type": "predict",
      "title": "Move the system further away",
      "declares": {
@@ -17137,7 +17225,7 @@
     },
     {
      "sid": "distance-and-orbit-size",
-     "index": 28,
+     "index": 29,
      "type": "explore",
      "title": "Distance, and orbit size",
      "declares": {
@@ -17208,7 +17296,7 @@
     },
     {
      "sid": "different-methods-different-planets",
-     "index": 29,
+     "index": 30,
      "type": "question",
      "title": "Different methods, different planets",
      "declares": {
@@ -17270,7 +17358,7 @@
     },
     {
      "sid": "bring-the-transit-back",
-     "index": 30,
+     "index": 31,
      "type": "read",
      "title": "Bring the transit back",
      "declares": {
@@ -17332,7 +17420,7 @@
     },
     {
      "sid": "characterize-the-planet",
-     "index": 31,
+     "index": 32,
      "type": "explore",
      "title": "Characterize the planet",
      "declares": {
@@ -17402,10 +17490,10 @@
      ]
     },
     {
-     "sid": "how-dense-is-it",
-     "index": 32,
+     "sid": "density-from-your-mass",
+     "index": 33,
      "type": "question",
-     "title": "How dense is it?",
+     "title": "Density from your mass",
      "declares": {
       "stage": null,
       "bound": [
@@ -17423,7 +17511,9 @@
      "actions": [
       "read"
      ],
-     "requires": [],
+     "requires": [
+      "weigh-hd-209458-b"
+     ],
      "reveal": null,
      "asks": {
       "choice": false,
@@ -17465,7 +17555,7 @@
     },
     {
      "sid": "where-does-hd-209458-b",
-     "index": 33,
+     "index": 34,
      "type": "question",
      "title": "Where does HD 209458 b sit?",
      "declares": {
@@ -17527,7 +17617,7 @@
     },
     {
      "sid": "three-candidates",
-     "index": 34,
+     "index": 35,
      "type": "read",
      "title": "Three candidates",
      "declares": {
@@ -17598,7 +17688,7 @@
     },
     {
      "sid": "which-is-the-strongest-candidate",
-     "index": 35,
+     "index": 36,
      "type": "question",
      "title": "Which is the strongest candidate?",
      "declares": {
@@ -17660,7 +17750,7 @@
     },
     {
      "sid": "what-would-you-still-want",
-     "index": 36,
+     "index": 37,
      "type": "question",
      "title": "What would you still want to know?",
      "declares": {
@@ -17722,7 +17812,7 @@
     },
     {
      "sid": "the-point-of-all-this",
-     "index": 37,
+     "index": 38,
      "type": "question",
      "title": "The point of all this",
      "declares": {
@@ -17784,7 +17874,7 @@
     },
     {
      "sid": "what-you-can-now-say",
-     "index": 38,
+     "index": 39,
      "type": "read",
      "title": "What you can now say about a star you cannot resolve",
      "declares": {
@@ -17869,6 +17959,7 @@
      "predictCollects": true,
      "heldUntil": "watch-it-grow",
      "experiment": [
+      "read-the-two-wobbles",
       "watch-it-grow",
       "toward-away-toward-again",
       "open-the-real-instrument",
@@ -17876,6 +17967,7 @@
       "read-k-off-the-panel"
      ],
      "measure": [
+      "read-the-two-wobbles",
       "watch-it-grow",
       "toward-away-toward-again",
       "open-the-real-instrument",
@@ -17883,6 +17975,7 @@
       "read-k-off-the-panel"
      ],
      "evidence": [
+      "read-the-two-wobbles",
       "measure-the-period",
       "read-k-off-the-panel"
      ],
@@ -17975,16 +18068,16 @@
     }
    ],
    "totals": {
-    "steps": 38,
-    "declared": 38,
+    "steps": 39,
+    "declared": 39,
     "student": 3,
-    "engine": 4,
-    "model": 11,
+    "engine": 5,
+    "model": 12,
     "data": 5,
-    "diagram": 11,
-    "evidence": 2,
+    "diagram": 12,
+    "evidence": 3,
     "computation": 0,
-    "declaredButInert": 35,
+    "declaredButInert": 36,
     "prose": 0,
     "mismatched": 0,
     "rebuilds": 4
@@ -120443,16 +120536,16 @@
   }
  ],
  "totals": {
-  "steps": 1528,
-  "declared": 1420,
+  "steps": 1529,
+  "declared": 1421,
   "student": 166,
-  "engine": 180,
-  "model": 1009,
+  "engine": 181,
+  "model": 1010,
   "data": 161,
-  "diagram": 878,
-  "evidence": 395,
+  "diagram": 879,
+  "evidence": 396,
   "computation": 14,
-  "declaredButInert": 1254,
+  "declaredButInert": 1255,
   "prose": 59,
   "mismatched": 8,
   "rebuilds": 81,
@@ -120460,7 +120553,7 @@
    "scene": 0,
    "portrait": 7,
    "quiet": 16,
-   "unstated": 1505
+   "unstated": 1506
   },
   "lessons": 124,
   "loops": 197,

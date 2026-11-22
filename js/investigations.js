@@ -83,8 +83,13 @@ import {
 } from './habitability.js';
 import { habitableZoneModelFromSettings, setFixedStep } from './render.js';
 import { STEP_SECONDS, frameAdvance } from './timestep.js';
-import { currentRadialVelocity, observedStar } from './radialVelocity.js';
+import {
+  currentRadialVelocity,
+  measuredHalfRange,
+  observedStar,
+} from './radialVelocity.js';
 import { orbitalElements, dominantPrimary, pairEnergy } from './orbital.js';
+import { formatNumber } from './format.js';
 import {
   formatDistance,
   formatSpeed,
@@ -309,12 +314,10 @@ bindPersistence({
 // --- Live simulation context --------------------------------------------------
 
 /**
- * Build the object a step's probe reads from.
- *
- * Handing the lesson a prepared context, rather than letting it import the
- * simulation, is what keeps data/investigations.js a description of teaching
- * instead of a piece of the engine.
+ * Build the object a step's probe reads from: a prepared context, so that
+ * data/investigations.js stays a description of teaching, not the engine.
  */
+const shownRange = r => r && { ...r, shown: formatNumber(r.halfRange) };
 function probeContext() {
   const G = SETTINGS.gravitational_constant;
   const selected = state.selectedObject?.object || null;
@@ -453,10 +456,7 @@ function probeContext() {
      * the readout that uses this says which is which.
      */
     holeFacts: massSun => blackHoleFacts(massSun),
-    /**
-     * Where the observed star is in its orbit, and what the spectrograph is
-     * reading at that instant.
-     */
+    /** Where the observed star is in its orbit, what a spectrograph reads now, and the panel's half-range. */
     rvNow: () => {
       const star = observedStar();
       if (!star) return null;
@@ -478,6 +478,7 @@ function probeContext() {
         phaseDeg: ((angle * 180) / Math.PI + 360) % 360,
         period: el?.period ?? null,
         observerAngleDeg: getObserverAngle(),
+        range: shownRange(measuredHalfRange()),
       };
     },
     /**
@@ -1162,11 +1163,9 @@ function syncToolPanel(step) {
     els.toolPanel.querySelectorAll('[data-tool]').forEach(input => {
       input.value = String(toolValues[input.dataset.tool]);
     });
-    // A widget that animates restarts its run from the new settings: change
-    // the speed, watch it happen. `fromControl` says a reader moved something,
-    // not that the step opened: a widget that parks itself where the step asked
-    // (the evolutionary playback's phase and track) does that once, on entry,
-    // or the playhead and the track could not be changed (dead controls).
+    // An animating widget restarts from the new settings. `fromControl` says a
+    // reader moved something, not that the step opened: a widget that parks
+    // itself where the step asked does that once, on entry (else dead controls).
     widget.reset?.(toolValues, { autorun: true, spec, fromControl: true });
     paintTool();
   };
