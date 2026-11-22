@@ -994,7 +994,7 @@
       "value": 0.04667,
       "bound": 0.02,
       "pass": false,
-      "limit": ""
+      "limit": "A fixed-step first-order scheme loses this share of a hard three-body pass's energy at this frame rate; no pair-timescale substep up to 1/80 of the pair's timescale meets 0.02 at all four rates (docs/encounter-rules.md, D-R4-460-02). Stated on the model page; read a close pass's outcome as qualitative."
     },
     {
       "id": "R4x.energy@30",
@@ -1005,7 +1005,7 @@
       "value": 0.1675,
       "bound": 0.02,
       "pass": false,
-      "limit": ""
+      "limit": "A fixed-step first-order scheme loses this share of a hard three-body pass's energy at this frame rate; no pair-timescale substep up to 1/80 of the pair's timescale meets 0.02 at all four rates (docs/encounter-rules.md, D-R4-460-02). Stated on the model page; read a close pass's outcome as qualitative."
     },
     {
       "id": "R4x.energy@60",
@@ -1016,7 +1016,7 @@
       "value": 0.07727,
       "bound": 0.02,
       "pass": false,
-      "limit": ""
+      "limit": "A fixed-step first-order scheme loses this share of a hard three-body pass's energy at this frame rate; no pair-timescale substep up to 1/80 of the pair's timescale meets 0.02 at all four rates (docs/encounter-rules.md, D-R4-460-02). Stated on the model page; read a close pass's outcome as qualitative."
     },
     {
       "id": "R4x.energy@clamp",
@@ -1027,22 +1027,22 @@
       "value": 0.2572,
       "bound": 0.02,
       "pass": false,
-      "limit": ""
+      "limit": "A fixed-step first-order scheme loses this share of a hard three-body pass's energy at this frame rate; no pair-timescale substep up to 1/80 of the pair's timescale meets 0.02 at all four rates (docs/encounter-rules.md, D-R4-460-02). Stated on the model page; read a close pass's outcome as qualitative."
     },
     {
       "id": "R5.fragmentSpread",
       "case": "R5",
       "quantity": "fragmentSpread",
       "rate": "all",
-      "value": 1.673,
+      "value": 0,
       "bound": 0.2,
-      "pass": false,
+      "pass": true,
       "limit": "",
       "perRate": {
-        "30": 75,
-        "60": 53,
-        "120": 0,
-        "clamp": 92
+        "30": 112,
+        "60": 112,
+        "120": 112,
+        "clamp": 112
       }
     },
     {
@@ -1807,7 +1807,6 @@
     "R4x.energy@30",
     "R4x.energy@60",
     "R4x.energy@clamp",
-    "R5.fragmentSpread",
     "R5.position@120",
     "R5.position@30",
     "R5.position@60",
@@ -1863,18 +1862,18 @@
       "orbitsRun": 50,
       "omegaDt": 0.0008784
     },
-    "R3@30": {
-      "endSeparationOverA": 0.0002473,
-      "stepsPerOrbit": 5961,
-      "orbitsRun": 50,
-      "omegaDt": 0.001054
-    },
     "R1@120": {
       "endPositionOverA": 0.0007727,
       "stepsPerOrbit": 4769,
       "orbitsRun": 100,
       "periodsMeasured": 100,
       "omegaDt": 0.001318
+    },
+    "R3@30": {
+      "endSeparationOverA": 0.0002473,
+      "stepsPerOrbit": 5961,
+      "orbitsRun": 50,
+      "omegaDt": 0.001054
     },
     "R2@120": {
       "endPositionOverA": 0.01079,
@@ -1895,14 +1894,14 @@
     "R6.control@30": {
       "deletedAtHundredThousandAU": 35
     },
+    "R6.control@60": {
+      "deletedAtHundredThousandAU": 35
+    },
     "R3@clamp": {
       "endSeparationOverA": 0.0002838,
       "stepsPerOrbit": 5563,
       "orbitsRun": 50,
       "omegaDt": 0.001129
-    },
-    "R6.control@60": {
-      "deletedAtHundredThousandAU": 35
     },
     "R6.control@120": {
       "deletedAtHundredThousandAU": 35
@@ -1947,12 +1946,6 @@
       "dvSim": 1.739,
       "dvRef": 1.739
     },
-    "R4x@120": {
-      "timeOfCloseApproach": 33.63,
-      "minimumSeparation": 25.46,
-      "energyErrorThroughTheRun": 0.04667,
-      "side": 86.6
-    },
     "R4@clamp": {
       "closestApproach": 13.06,
       "craftPositionError": 0.01356,
@@ -1960,11 +1953,17 @@
       "dvSim": 1.739,
       "dvRef": 1.739
     },
+    "R4x@120": {
+      "timeOfCloseApproach": 33.63,
+      "minimumSeparation": 25.46,
+      "energyErrorThroughTheRun": 0.04667,
+      "side": 86.6
+    },
     "R5@120": {
       "periapsisTime": 3.217,
       "sampleTime": 3.208,
       "periapsisDistance": 117.4,
-      "fragmentsCreated": 0,
+      "fragmentsCreated": 112,
       "massFraction": 0.7977
     },
     "R4x@60": {
@@ -1977,7 +1976,7 @@
       "periapsisTime": 3.217,
       "sampleTime": 3.208,
       "periapsisDistance": 117.4,
-      "fragmentsCreated": 53,
+      "fragmentsCreated": 112,
       "massFraction": 0.7979
     },
     "R4x@30": {
@@ -1990,7 +1989,7 @@
       "periapsisTime": 3.217,
       "sampleTime": 3.25,
       "periapsisDistance": 117.4,
-      "fragmentsCreated": 75,
+      "fragmentsCreated": 112,
       "massFraction": 0.7983
     },
     "R4x@clamp": {
@@ -2003,7 +2002,7 @@
       "periapsisTime": 3.217,
       "sampleTime": 3.25,
       "periapsisDistance": 117.4,
-      "fragmentsCreated": 92,
+      "fragmentsCreated": 112,
       "massFraction": 0.7987
     }
   },

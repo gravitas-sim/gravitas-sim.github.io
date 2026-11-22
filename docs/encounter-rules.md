@@ -20,7 +20,7 @@ Three classes:
 
 | Rule | Where | Class | Quantity and bound | Reason |
 |---|---|---|---|---|
-| Tidal debris count: a body inside the tidal radius of a hole (3, 4, 5 and 2 hole radii for planet, gas giant, star and comet) sheds `fraction * c * dt` fragments per step, c = 20, 35, 50 and 25 | `js/engine/bodies.js` `tidal_mass_loss` (four sites), called from `js/engine/step.js` | numerical defect | R5 fragments created by the time the star leaves 5 hole radii: (max - min) / mean over the four rates <= 0.2 | The count was `floor` of each step's share, so a short step rounds every share to zero: 0, 53, 75 and 92 fragments at 120, 60, 30 frames a second and the clamp (spread 1.67). The fix carries the remainder per body (`carry += fraction*c*dt; n = floor(carry); carry -= n`), the same at all four sites, starting at 0 and not stored in saves. |
+| Tidal debris count: a body inside the tidal radius of a hole (3, 4, 5 and 2 hole radii for planet, gas giant, star and comet) sheds `fraction * c * dt` fragments per step, c = 20, 35, 50 and 25 | `js/engine/bodies.js` `tidal_mass_loss` (four sites), called from `js/engine/step.js` | numerical defect | R5 fragments created by the time the star leaves 5 hole radii: (max - min) / mean over the four rates <= 0.2 | The count was `floor` of each step's share, so a short step rounds every share to zero: 0, 53, 75 and 92 fragments at 120, 60, 30 frames a second and the clamp (spread 1.67). The fix carries the remainder per body (`carry += fraction*c*dt; n = floor(carry); carry -= n`), through one method (`tidalFragments`) at all four sites, starting at 0 and not stored in saves. After the fix: 112 fragments at every rate, spread 0. |
 | Tidal mass loss `m * fraction * k * dt`, k = 0.05, 0.08, 0.1 and 0.1 | the same four sites | kept | R5 star mass fraction on leaving: (max - min) / mean over the four rates <= 0.05 | Already a rate: 0.7977 to 0.7987, spread 0.00125. Tidal disruption is a mass sink, reported by the conservation caveats. |
 | Rocky contact (planet, asteroid, comet pairs) above a relative speed of 15 sheds `floor(speed / 8) + 2` fragments and multiplies each body's mass by 0.9 | `js/engine/collisions.js` `handle_rocky_collisions` | teaching simplification (D-R10-23) | each body loses exactly 10 percent; the fragments carry a fixed fragment mass unrelated to it | Kept as decided in D-R10-23. 15 speed units is 141 km/s at G = 1 and 100 km/s at G = 2 (one unit is 9.42 and 6.66 km/s). |
 | Restitution: rocky pairs bounce with e = 0.3; gas giants that may not merge (a pair with a `model_owned` body) bounce with e = 0.8 | `handle_rocky_collisions`, `handle_collisions` | teaching simplification | momentum along the contact normal conserved; kinetic energy lost by `1 - e^2` of the normal part | A bounce stands in for deformation, heating and break-up. |
@@ -59,5 +59,5 @@ first-order scheme loses 2 to 26 percent of a hard three-body pass's energy
 before the bodies are within 0.3 of their starting separation, depending on
 the frame rate; even a step of one eightieth of the pair's own timescale
 leaves 2.05 to 2.33 percent at 60, 30 frames a second and the clamp. This
-is written on the model page and in 445's `limit` field for the four R4x
-rows.
+is written on the model page and in the `limit` field of the four R4x
+rows of `tests/fixtures/reference-cases/record.json`.
