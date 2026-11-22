@@ -47,19 +47,19 @@ const JP = (values = {}, hide = []) => ({ id: 'moon-fit', values, hide });
 // 1. Moons of the Giants
 // -----------------------------------------------------------------------------
 /** A reading taken with another moon selected, or on the once-a-night sampling, is told so. */
-const WRONG_MOON = {
-  id: 'wrongMoon',
-  when: { setting: { moon: { max: 0 } } },
+const wrongMoon = (id, moon) => ({
+  id,
+  when: { setting: { moon } },
   say: 'That reading was taken with another moon selected. Set Moon to 1 for Io, 2 for Europa and 3 for Ganymede, then take the period again.',
-};
+});
 const NIGHTLY = {
   id: 'nightly',
   when: { setting: { cadence: { max: 0 } } },
   say: 'That reading used the once-a-night sampling (0). This step asks for the designed sampling, 1.',
 };
 const moonSlips = n => [
-  { ...WRONG_MOON, when: { setting: { moon: { max: n - 1 } } } },
-  { ...WRONG_MOON, when: { setting: { moon: { min: n + 1 } } } },
+  wrongMoon('wrongMoonLow', { max: n - 1 }),
+  wrongMoon('wrongMoonHigh', { min: n + 1 }),
   NIGHTLY,
 ];
 /** The motion in degrees a day of a period in days. */
