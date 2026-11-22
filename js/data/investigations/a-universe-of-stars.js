@@ -39,31 +39,20 @@
 // never graded: step 3 asks what changed, not what shade it is.
 // =============================================================================
 
-// This lesson names no scenario anywhere, and that is the change.
-//
-// It used to open a Stellar Nursery, pause it, and say in a note that nothing
-// was measured off it - a backdrop. Every screen now stands the stars it is
-// about on the main canvas itself, through `stage`, so there is no scenario to
-// build and immediately discard, and no paused sandbox behind the panel
-// implying that something is being integrated. The stars are handed to the
-// stellar model, which owns them; the transport is not lying about a scene
-// that does not move, and the clock is left alone.
+// This lesson names no scenario. Every screen stands the stars it is about on
+// the main canvas through `stage`; the stellar model owns them, so no paused
+// sandbox implies that something is being integrated and the clock is left
+// alone.
 
 /**
  * A shelf of stars on the main canvas.
  *
- * They stand still and they are not orbiting one another: this is a display,
- * and js/lessonStage.js hands each of them to the stellar model so that the
- * integrator does not pretend otherwise. Spacing is in world units and does
- * not depend on how big anything is drawn, so switching between true and
- * compressed scale changes sizes and moves nothing.
- *
- * Fitted by default, and that is not cosmetic. A shelf exists to be looked at
- * whole, and several of these steps now ask a reader to click a particular
- * star on the canvas - so a star parked underneath the right-hand rail is a
- * step that cannot be completed as written. fitStage() frames the shelf in
- * the clear region between the lesson panel and the rail rather than in the
- * whole window, which is why this works at 390px as well as at 1440.
+ * They stand still and are not orbiting one another: js/lessonStage.js hands
+ * each to the stellar model. Spacing is in world units, so switching between
+ * true and compressed scale changes sizes and moves nothing. Fitted by
+ * default: several steps ask a reader to click a particular star, and one
+ * parked under the right-hand rail cannot be clicked. fitStage() frames the
+ * shelf between the lesson panel and the rail, at 390px as well as at 1440.
  */
 const shelf = (stars, extra = {}) => ({
   spacing: 95,
@@ -74,18 +63,11 @@ const shelf = (stars, extra = {}) => ({
 
 // Where every example on this page sits.
 // -----------------------------------------------------------------------------
-// Each of these is one star, declared once. The canvas resolves the
-// declaration and so does the comparison card - through the same function, and
-// from the same list, because a step that wants its stars compared says
-// `pinStaged` rather than repeating them.
-//
-// Every one of them says out loud where on its track it is. A bare `{track}`
-// is legal and means the middle of the main sequence, but leaving it bare
-// invited the drift this pass was written to fix: for most of a year the
-// canvas read a bare declaration as forty per cent of the way through the
-// star's *age* while the card read it as mid-main-sequence, so "Star 2" was a
-// 16,687 K star of 3.18 solar radii in the scene and a 16,596 K star of 3.26
-// on the diagram beside it.
+// Each is one star, declared once; the canvas and the comparison card resolve
+// it through the same function (a step that wants its stars compared says
+// `pinStaged`). Each says where on its track it is: a bare `{track}` once
+// read as forty per cent of the star's age on the canvas and mid-main-sequence
+// on the card, so "Star 2" differed between scene and diagram.
 
 // The three the lesson opens and closes with. Anonymous at first: a positional
 // name says which one is which without saying what it is.
@@ -394,11 +376,8 @@ const A_UNIVERSE_OF_STARS = {
              nothing else.
              \n\nOne of them puts out about three hundred times as much light
              as the other.
-             \n\nThink about what a fixed temperature means. Every square meter
-             of a 4,300&nbsp;K surface radiates the same amount per second,
-             whichever star it belongs to — that is what a temperature
-             <em>is</em>. So the only way one of these can put out three
-             hundred times the light is to have far more square meters.`,
+             \n\nThe two stars share a temperature, so something else about
+             them differs. The next step asks you to commit to what.`,
       tool: stage({
         pace: 'phase',
         pinStaged: true,
@@ -415,8 +394,7 @@ const A_UNIVERSE_OF_STARS = {
       body: `Same two stars. Same surface temperature. One about three hundred
              times more luminous.
              \n\nCommit before you measure. The reasoning matters more than the
-             number: a star&rsquo;s surface area grows as the <em>square</em>
-             of its radius.`,
+             number.`,
       prompt:
         'Two stars at the same surface temperature, one 300 times more luminous. Its radius is about…',
       options: [
@@ -427,7 +405,7 @@ const A_UNIVERSE_OF_STARS = {
       ],
       answer: 1,
       because:
-        'About seventeen, because area goes as the square of the radius and the square root of 300 is a little over 17. That is the whole of the relationship between the three quantities: the light a star puts out is its surface area times how hard each patch of that surface radiates, and at a fixed temperature the second factor is the same for both. Double the radius and you quadruple the light.',
+        'About seventeen. Every square meter of a 4,300 K surface radiates the same amount per second, whichever star it belongs to - that is what a temperature is - so the only way one star can put out three hundred times the light is to have far more square meters. A star&rsquo;s surface area grows as the square of its radius, and the square root of 300 is a little over 17. That is the whole of the relationship between the three quantities: the light a star puts out is its surface area times how hard each patch of that surface radiates, and at a fixed temperature the second factor is the same for both. Double the radius and you quadruple the light.',
       tool: stage({
         pace: 'phase',
         pinStaged: true,
@@ -577,11 +555,11 @@ const A_UNIVERSE_OF_STARS = {
       body: `The Sun&rsquo;s surface is at 5,772&nbsp;K and its luminosity is,
              by definition, one solar luminosity. Put the cursor there and read
              off the radius.
-             \n\nYou should get about one solar radius. That is not circular:
-             the lab is not looking the Sun up. It is computing a radius from
-             the temperature and the luminosity you placed, with the same
-             relation it uses everywhere else. Getting 1.0 back is a check that
-             the relation is doing its job.`,
+             \n\nThen ask whether it is the radius you would expect for the
+             Sun. That check is not circular: the lab is not looking the Sun
+             up. It is computing a radius from the temperature and the
+             luminosity you placed, with the same relation it uses everywhere
+             else, so the answer tests the relation.`,
       fields: [{ id: 'radius', label: 'Radius the lab reports', unit: 'R☉' }],
       validate: v => {
         if (!Number.isFinite(v.radius)) {
@@ -607,7 +585,7 @@ const A_UNIVERSE_OF_STARS = {
         capture: true,
         compare: false,
       }),
-      tip: 'The Sun is the reference for all three units here — R☉, L☉ and M☉. That is a convenience, not a claim that it is a typical star. Step 24 shows what typical looks like.',
+      tip: 'The Sun is the reference for all three units here — R☉, L☉ and M☉. That is a convenience, not a claim that it is a typical star. The four-hundred-star step shows what typical looks like.',
     },
     {
       sid: 'straight-up-the-diagram',
@@ -659,10 +637,7 @@ const A_UNIVERSE_OF_STARS = {
       kind: 'choice',
       body: `Now move the other way. Put the cursor at 1 solar luminosity and
              travel along that line, from the cool right-hand side to the hot
-             left-hand side, watching the radius.
-             \n\nAt a fixed luminosity, a hotter surface radiates far harder
-             per square meter — as the fourth power of the temperature — so
-             the star needs fewer square meters to put out the same light.`,
+             left-hand side, watching the radius.`,
       prompt:
         'Moving left along a line of constant luminosity, from 3,000 K to 30,000 K, the radius…',
       options: [
@@ -672,8 +647,20 @@ const A_UNIVERSE_OF_STARS = {
         'shrinks by a factor of about 10',
       ],
       answer: 2,
+      misconceptions: [
+        {
+          id: 'hotterIsBigger',
+          option: 0,
+          say: 'Hotter does not mean bigger here. The luminosity is held fixed, and a hotter surface radiates far more from each square meter, so ask how many square meters the star needs to give out the same total.',
+        },
+        {
+          id: 'tenInRadius',
+          option: 3,
+          say: 'Ten is the change in temperature, not in radius. The output from each square meter rises as the fourth power of the temperature, so it is the area that has to fall by that much, and the radius goes as the square root of the area.',
+        },
+      ],
       because:
-        'It shrinks by about a hundred. Ten times the temperature is ten to the fourth - ten thousand times - the output per square meter, and to hold the total light fixed the area must fall by the same ten thousand, which is a hundred in radius. Check it on the diagram: at 1 L(sun) the cool end is about 3.7 solar radii and the hot end about 0.037. That second number is white-dwarf territory, and step 20 comes back to it.',
+        'It shrinks by about a hundred. At a fixed luminosity a hotter surface radiates far harder per square meter, as the fourth power of the temperature, so the star needs fewer square meters to put out the same light. Ten times the temperature is ten to the fourth - ten thousand times - the output per square meter, and to hold the total light fixed the area must fall by the same ten thousand, which is a hundred in radius. Check it on the diagram: at 1 L(sun) the cool end is about 3.7 solar radii and the hot end about 0.037. That second number is white-dwarf territory, and step 20 comes back to it.',
       tool: lab({
         bind: 'cursor',
         mode: 'free',
@@ -829,20 +816,20 @@ const A_UNIVERSE_OF_STARS = {
       body: `You have two points on the main sequence: 0.2 solar masses giving
              about 0.0066 solar luminosities, and 20 solar masses giving about
              59,000.
-             \n\nA hundred times the mass, nine million times the light.
-             Commit to the shape of that relationship before checking the
-             stars in between.`,
+             \n\nThose are the two stars you measured in the last step. Commit
+             to the shape of the relationship between their masses and their
+             light before checking the stars in between.`,
       prompt:
         'Along the main sequence, luminosity rises roughly as mass to the power…',
       options: ['1 — proportional', '2', '3.5', '10'],
       answer: 2,
       because:
-        'Roughly the 3.5th power, and this measurement gives 3.5 almost exactly: nine million is a hundred to the power 3.5. It is not a law of nature - it is a summary of what stellar-structure calculations produce for stars supported the way main-sequence stars are - and the exponent is not really constant, running steeper near a solar mass and shallower at the top end. What matters for the rest of this investigation is that it is very steep. A star with ten times the mass does not put out ten times the light; it puts out thousands of times more.',
+        'Roughly the 3.5th power, and this measurement gives 3.5 almost exactly: nine million is a hundred to the power 3.5, and a hundred to the power 3.5 is ten to the power seven, ten million, near enough to nine million for a relationship this rough. It is not a law of nature - it is a summary of what stellar-structure calculations produce for stars supported the way main-sequence stars are - and the exponent is not really constant, running steeper near a solar mass and shallower at the top end. What matters for the rest of this investigation is that it is very steep. A star with ten times the mass does not put out ten times the light; it puts out thousands of times more.',
       tool: stage({
         pace: 'phase',
         pinStaged: ['m020', 'm100', 'm2000'],
       }),
-      tip: 'A hundred to the power 3.5 is ten to the power seven, which is ten million — near enough to nine million for a relationship this rough.',
+      tip: 'The three luminosities are on the card in the instrument panel, and in your notebook if you chose Save to notebook and Keep it in the last step.',
     },
     {
       sid: 'the-whole-sequence',
@@ -1073,9 +1060,7 @@ const A_UNIVERSE_OF_STARS = {
              kelvin — more than four times the Sun&rsquo;s surface temperature
              — putting out a hundredth of the Sun&rsquo;s light.
              \n\nYou now have everything you need to say how big it is
-             without being told. Each square meter of a surface at 25,000 K
-             radiates far more than a square meter at 5,772 K; this star still
-             manages to be a hundred times fainter overall.
+             without being told.
              \n\nCommit before you measure.`,
       prompt: 'So how much surface can it have?',
       options: [
@@ -1164,6 +1149,13 @@ const A_UNIVERSE_OF_STARS = {
         'impossible — nothing can be that hot and that faint',
       ],
       answer: 1,
+      misconceptions: [
+        {
+          id: 'hotMeansMainSequence',
+          option: 0,
+          say: 'A main-sequence star at that temperature would be tens of thousands of solar luminosities, far brighter than 0.01. Put the cursor there in the free mode and read the radius before you choose.',
+        },
+      ],
       because:
         'A white dwarf. At 30,000 K each square meter is radiating ferociously, so putting out only a hundredth of a solar luminosity takes a very small surface: the radius works out at about 0.0037 solar radii, well under the size of the Earth. A main-sequence star at 30,000 K would be tens of thousands of solar luminosities, six million times brighter than this. Position on the diagram is enough to classify it, because the two axes fix the radius between them - and that is what the diagram is for.',
       tool: lab({ mode: 'free', regions: true, compare: false }),
@@ -1181,8 +1173,8 @@ const A_UNIVERSE_OF_STARS = {
       title: 'More fuel, longer life?',
       body: `A twenty solar-mass star has a hundred times as much material as a
              0.2 solar-mass one. A hundred times the fuel.
-             \n\nYou also measured, in step 15, that it puts out something like
-             nine million times as much light — and light is the fuel leaving.
+             \n\nYou also measured, in step 13, that it puts out something like
+             nine million times as much light.
              \n\nCommit before you look it up.`,
       prompt:
         'The 20 M☉ star&rsquo;s main-sequence life, compared with the 0.2 M☉ star&rsquo;s, is…',
@@ -1194,7 +1186,7 @@ const A_UNIVERSE_OF_STARS = {
       ],
       answer: 2,
       because:
-        'Shorter by more than a hundred thousand. This is the single most useful consequence of the steep mass-luminosity relation, and it is worth stating as a ratio: how long the fuel lasts is how much there is divided by how fast it goes. The fuel goes as the mass, and the rate goes as the luminosity, which goes as roughly the mass to the 3.5. So the lifetime goes as mass divided by mass-to-the-3.5, which is one over mass-to-the-2.5. A hundred times the mass is a hundred to the power two and a half - a hundred thousand - times shorter. The next step measures it.',
+        'Shorter by more than a hundred thousand. This is the single most useful consequence of the steep mass-luminosity relation, and it is worth stating as a ratio: how long the fuel lasts is how much there is divided by how fast it goes. The fuel goes as the mass, and the rate goes as the luminosity, because light is the fuel leaving; the luminosity goes as roughly the mass to the 3.5. So the lifetime goes as mass divided by mass-to-the-3.5, which is one over mass-to-the-2.5. A hundred times the mass is a hundred to the power two and a half - a hundred thousand - times shorter. The next step measures it.',
       tool: lab({ mode: 'model', regions: true, compare: false }),
       tip: 'A car with a bigger tank does not necessarily go further. It depends what the engine does with it.',
     },
@@ -1206,13 +1198,11 @@ const A_UNIVERSE_OF_STARS = {
       body: `The readout gives the total main-sequence lifetime for whichever
              model is selected. Step the mass slider across and record three of
              them.
-             \n\nOne of these numbers deserves care. The 0.2 solar-mass model
-             gives a main-sequence lifetime of about 1.1&nbsp;<em>trillion</em>
-             years. The Universe is about 13.8 billion years old — roughly a
-             thousandth of that. So no such star has ever finished its main
-             sequence, anywhere. That figure is a prediction made by
-             integrating a model forward, not an observed lifetime, and it
-             cannot be checked against anything.`,
+             \n\nThese lifetimes come from integrating a model forward, not
+             from watching any star finish. The Universe is about 13.8 billion
+             years old: as you record each lifetime, ask whether a star of that
+             mass could have finished its main sequence yet, and whether
+             anything could check the figure.`,
       fields: [
         { id: 'small', label: '0.2 M☉ main-sequence lifetime', unit: 'Gyr' },
         { id: 'sun', label: '1 M☉', unit: 'Gyr' },
@@ -1461,50 +1451,22 @@ const A_UNIVERSE_OF_STARS = {
       tip: 'Both statements are true of main-sequence stars, which is why they sound right. Neither is true of stars in general, and roughly one star in a thousand near the Sun is a counterexample to the second.',
     },
     // -----------------------------------------------------------------------
-    // 29-34: what a color cannot tell you
+    // 30-35: what a color cannot tell you
     // -----------------------------------------------------------------------
-    // A coda, and the only part of this lesson built on observations rather
-    // than on models. Everything before it came from eight MIST tracks: a
-    // published grid of stellar structure calculations, which is imported data
-    // and is not a measurement of any star. These six screens are four real
-    // spectra - photons that left four stars, were dispersed by a grating at
-    // Apache Point in 2008 and counted by a CCD. Every readout on them says
-    // which of the two it is looking at, because the lesson now has both.
+    // A coda, and the only part of this lesson built on observations: four
+    // real spectra (Apache Point, 2008), beside eight modeled tracks that are
+    // imported data, not a measurement of any star. Each readout says which
+    // of the two it is looking at. The block argues in order that a color
+    // works; that two measured features still separate stars whose color
+    // cannot (calcium rises and then falls, which no temperature recovers);
+    // and so that a star can be classified with no color at all.
     //
-    // The argument the six screens make, and the order they make it in:
-    //
-    //   30  a color works. Ranked by the slope of the continuum alone the four
-    //       come out in temperature order, and that slope is the whole of what
-    //       starColor() knows. This screen is meant to be easy.
-    //   31  two features, measured. Inside a 170 Angstrom window the continuum
-    //       slope of the three hottest differs by two per cent - there is no
-    //       color to read - and hydrogen still separates them eightfold.
-    //       Calcium then does something hydrogen does not: it rises and falls.
-    //   32  and so a star can be classified with no color available at all.
-    //   33  the general statement, in the student's own words. A quantity that
-    //       rises and falls cannot be recovered from a temperature, so the two
-    //       measurements are not two readings of one thing.
-    //
-    // What is on the canvas behind these six, and why it is the three stars
-    // -----------------------------------------------------------------------
-    // The obvious move is no stage at all: these four stars are not in the
-    // simulation and could not be, and standing four bodies on the canvas
-    // beside their spectra would say Gravitas has a model of them, which it
-    // has nothing of the kind of.
-    //
-    // But a step with no stage does not clear the canvas - it inherits
-    // whatever the previous step left, which here is the shelf of three
-    // modeled stars. So "no stage" does not avoid the juxtaposition; it makes
-    // it accidental and unlabeled, with four real spectra apparently belonging
-    // to three modeled stars that they have nothing to do with.
-    //
-    // The three stars are therefore staged deliberately and named as what they
-    // are on the opening screen of the block: the modeled half of the lesson,
-    // still on the canvas, beside the observed half in the panel. The
-    // distinction the whole coda is about becomes something a reader can see
-    // rather than something the prose asserts. It also keeps the `star-sizes`
-    // activity's `scenario: null` honest, which is only legal while every step
-    // in this lesson stands up its own scene.
+    // The canvas behind it is the three modeled stars, staged on purpose and
+    // named as modeled on the first step. A step with no stage inherits the
+    // previous scene, which would juxtapose four real spectra with three
+    // modeled stars by accident and unlabeled. Staging them also keeps the
+    // `star-sizes` activity's `scenario: null` legal, which needs every step
+    // in this lesson to stand up its own scene.
     {
       sid: 'spectra-the-light-itself',
       stage: shelf(THREE, { fit: true }),

@@ -13,9 +13,10 @@
     ["steps.sigma-and-profile.fields.2.unit",""],
     ["steps.sigma-and-profile.fields.3.unit",""],
     ["steps.sigma-and-profile.fields.4.unit",""],
-    ["steps.hold-the-limb-darkening.fields.0.unit",""],
-    ["steps.hold-the-limb-darkening.fields.1.unit",""],
-    ["steps.hold-the-limb-darkening.fields.2.unit",""]
+    ["steps.shift-from-your-fit.fields.0.unit",""],
+    ["steps.shift-from-your-fit.fields.1.unit",""],
+    ["steps.shift-from-your-fit.fields.2.unit",""],
+    ["steps.shift-from-your-fit.fields.3.unit",""]
    ],
    "numbered": []
   },
@@ -37,8 +38,8 @@
    "sigma-and-profile": {
     "validate": {"calls":242,"distinct":2,"digest":"36e9cc06f448cf1f","samples":[null,{"level":"error","message":"Read Rp/R*’s sigma from the Uncertainty column, and the ends of the two profile intervals from the rows labeled with their profile interval."}]}
    },
-   "hold-the-limb-darkening": {
-    "validate": {"calls":242,"distinct":2,"digest":"a19a9e7ba76c8ded","samples":[null,{"level":"error","message":"Set the setting to 0, run, read Rp/R* and its sigma, and divide the difference from 0.11926 by the new sigma."}]}
+   "shift-from-your-fit": {
+    "validate": {"calls":250,"distinct":4,"digest":"778ca09e4ed328a3","samples":[null,{"level":"error","message":"Your own value is the one from the run with the setting at 1, the limb darkening fitted. Enter that one first, then run with the setting at 0."},{"level":"ok","message":"Holding the limb darkening cut Rp/R*’s sigma from 0.0016 to 0.0005, and moved Rp/R* from 0.1193 to 0.1177: a move of 0.0016, about one old sigma (0.97), which is 3.2 of its new sigmas. The smaller error bar does not include the cost of assuming the limb darkening, and the assumption moved the answer by more than the bar."},{"level":"error","message":"The run is right. The shift is the difference between the two values, yours with the limb darkening fitted and the new one, divided by the new sigma. From your own entries your shift should be about 3.2."}]}
    }
   },
   "es": "same"
