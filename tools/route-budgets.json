@@ -4,11 +4,11 @@
   "routes": {
     "sources": {
       "front-door": {
-        "kb": 1929.4,
+        "kb": 1929.6,
         "requests": 109
       },
       "sandbox": {
-        "kb": 1929.4,
+        "kb": 1929.6,
         "requests": 109
       },
       "kepler": {
@@ -44,7 +44,7 @@
         "requests": 44
       },
       "figure": {
-        "kb": 2207,
+        "kb": 2207.3,
         "requests": 129
       },
       "experiments": {
@@ -130,11 +130,11 @@
     },
     "build": {
       "front-door": {
-        "kb": 547.5,
+        "kb": 547.6,
         "requests": 59
       },
       "sandbox": {
-        "kb": 547.5,
+        "kb": 547.6,
         "requests": 59
       },
       "kepler": {
@@ -170,7 +170,7 @@
         "requests": 2
       },
       "figure": {
-        "kb": 684,
+        "kb": 684.1,
         "requests": 61
       },
       "experiments": {
