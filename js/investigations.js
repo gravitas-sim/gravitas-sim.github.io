@@ -18,6 +18,7 @@ import {
   persisted,
   resetExplainer,
   wireExplainer,
+  plannedTime,
   progressFor,
   fieldModule,
   estimateHolds,
@@ -1562,25 +1563,12 @@ function clock() {
 /** The steps the lesson's declared time is for: the whole lesson at core depth. */
 let fullSteps = 0;
 
-/**
- * The lesson's declared time ("35-45 min") scaled to what is on offer: an
- * assignment is part of the lesson, and a deeper level is more of it. Whole
- * minutes, and the declared text untouched when nothing is scaled.
- *
- * @param {string} duration - The lesson's range, e.g. '35-45 min'
- * @param {number} count - Steps on offer now
- * @returns {string} The range to show
- */
-function plannedTime(duration, count) {
-  const base =
-    fullSteps || active.steps.filter(s => inDepth(s, 'core')).length || 0;
-  const m = /^(\d+)\s*-\s*(\d+)(.*)$/.exec(duration || '');
-  const f = base ? count / base : 1;
-  if (!m || !(f > 0) || Math.abs(f - 1) < 0.03) return duration || '';
-  const lo = Math.max(1, Math.round(m[1] * f));
-  const hi = Math.max(lo, Math.round(m[2] * f));
-  return `${lo === hi ? lo : `${lo}-${hi}`}${m[3]}`;
-}
+/** The version being read. Core needs no download, so its name is in the page. */
+const versionName = () =>
+  depthName ||
+  (active.depths &&
+    els.where.dataset[getLocale() === 'es' ? 'coreEs' : 'coreEn']) ||
+  '';
 
 /** The where line: step, depth and time against what the lesson declares. */
 function renderWhere(seen) {
@@ -1591,9 +1579,9 @@ function renderWhere(seen) {
   w.textContent = tpl
     .replace('{n}', seen.indexOf(currentStep()) + 1)
     .replace('{total}', seen.length)
-    .replace('{depth}', depthName ? ` · ${depthName}` : '')
+    .replace('{depth}', versionName() ? ` · ${versionName()}` : '')
     .replace('{m}', Math.floor(spent / 60))
-    .replace('{planned}', plannedTime(active.duration, seen.length));
+    .replace('{planned}', plannedTime(active, seen.length, fullSteps));
 }
 
 function renderFooter() {
@@ -1953,7 +1941,7 @@ function renderDepth() {
   if (!els.depth) return;
   els.depth.hidden = !o;
   const i = o ? o.indexOf(depth) : 0;
-  els.depthState.textContent = depthName;
+  els.depthState.textContent = versionName();
   els.deeper.hidden = !o || Boolean(assignment) || i >= o.length - 1;
   els.shallower.hidden = !o || Boolean(assignment) || i < 1;
 }
@@ -1969,7 +1957,8 @@ async function changeDepth(by) {
   ({ depth, deepest, depthName } = r);
   depthChoice = depth;
   active = r.lesson;
-  announce(r.said);
+  els.depthNote.hidden = true;
+  toast(r.said);
   goToStep(r.at);
 }
 
@@ -2067,19 +2056,23 @@ export async function openInvestigation(id, opts = {}) {
   depthChoice = null;
   deepest = 'core';
   depthName = '';
+  els.depthNote.hidden = true;
   const mem = inv.depths && !authoring && peekDepth(id);
-  if (mem && opts.depth) mem.depth = opts.depth;
+  let depthSaid = '';
   if (
     opts.assignment?.d ||
-    mem?.depth ||
-    mem?.deepest ||
-    /^[ma]/.test(mem?.level)
+    (mem && (opts.depth || mem.depth || mem.deepest || /^[ma]/.test(mem.level)))
   ) {
     const m = await (
       await import('./investigations/depth.js')
-    ).openDepth(inv, mem, opts.assignment, getLocale());
+    ).openDepth(inv, mem, opts.assignment, getLocale(), {
+      link: opts.depth,
+      note: els.depthNote,
+      change: changeDepth,
+    });
     if (generation !== openGeneration) return;
     ({ inv, depth, depthChoice, deepest, depthName } = m);
+    depthSaid = m.said;
   }
   await loadSeams(inv);
   if (generation !== openGeneration) return;
@@ -2207,7 +2200,11 @@ export async function openInvestigation(id, opts = {}) {
   }
   if (generation !== openGeneration) return;
   startProbeLoop();
-  announce(t('inv.announce.started', { title: inv.title }));
+  announce(
+    [t('inv.announce.started', { title: inv.title }), depthSaid]
+      .join(' ')
+      .trim()
+  );
 }
 
 /**
@@ -2626,6 +2623,7 @@ export function initInvestigations({ signal } = {}) {
     scaleBtn: document.getElementById('investigationScale'),
     depth: document.getElementById('investigationDepth'),
     depthState: document.getElementById('investigationDepthState'),
+    depthNote: document.getElementById('investigationDepthNote'),
     deeper: document.getElementById('investigationDeeper'),
     shallower: document.getElementById('investigationShallower'),
     prev: document.getElementById('investigationPrev'),

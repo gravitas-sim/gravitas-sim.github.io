@@ -15,10 +15,26 @@ the step's id, and the saved progress records the choice (`depth`) and the
 deepest depth the reader has been at (`deepest`), so a reader who returns to
 core still has the deeper answers read back.
 
-The depth is chosen, in this order, by an assignment or a course item (the
-instructor's), by a link (`#investigation=<id>/<depth>`), by the student's own
-choice, and by the course level (Prompt 52: introductory is core, majors
-quantitative, advanced advanced).
+The depth is chosen, in this order, by an assignment (the instructor's), by a
+link (`#investigation=<id>/<depth>`, which is also what a course item is), by
+the student's own choice, and by the course level (Prompt 52: introductory is
+core, majors quantitative, advanced advanced). `resolveDepth` in
+`js/investigations/depth.js` is that order as one function, and
+`tests/depthVersions.test.js` is its table. Four things the table fixes:
+
+- A source that names a version the lesson does not offer is passed over for
+  the next one; an assignment that names none reads core.
+- A link that opens a version other than the student's saved choice is read for
+  this open, and the saved choice stays what the progress record holds: the
+  link does not overwrite it. Only the student's own switch (Go deeper, Fewer
+  steps, Keep mine) writes it. (`deepest` still follows what was read, so the
+  deeper answers are read back.) A link with nothing saved to overwrite is
+  taken as the student's choice, as it always was.
+- An assignment's version is never a choice and never written (`depth` in the
+  record stays empty); the panel says the instructor set it.
+- The version is named, in the student's own words, whenever the lesson offers
+  more than one: the where line says "Core version", "Quantitative version" or
+  "Advanced version" at every depth, core included.
 
 The core steps stay in the lesson's own file and are unchanged. The deeper
 steps are in `js/data/investigations/depth/<id>.js`, with their Spanish in
@@ -97,12 +113,27 @@ given overlaps the interval the tolerance allows and is no wider than
 |---|---|
 | Assignment link | `d` (payload version 2); the builder has a depth picker and a set depth holds no deeper step |
 | Course pack item | `depth` on lesson and assignment items; a lesson item links to `#investigation=<id>/<depth>` |
-| Report | A Depth row, and only the steps read at that depth, numbered as the student saw them |
+| Report | A "Read as" row naming the version, and only the steps read at that depth, numbered as the student saw them |
 | Submission token | `dp`; the review page lays the deeper steps in, grades only that depth, and names it |
 | Answer key | `answerKeyFor(lesson, depth)`; the instructor key prints core steps numbered as students see them and marks each deeper step by its depth |
-| Library | The card says how many depths the investigation can be read at |
+| Library | The card names the versions ("Versions: core, quantitative, advanced"); `library.json` lists them (`versions`) only where it is not the usual three |
+| Where line | The version's name at every depth, from the page itself at core (a core reader downloads nothing extra) |
+| A link that differs | One sentence under the where line and one button: "This link opens the quantitative version. You had chosen the core version." and "Keep mine" |
+| An activity | "Your instructor set this activity to the quantitative version.", with no way to keep another |
+| A switch | A toast and an announcement: "Now reading the core version. Switching changes which steps are shown; your answers, the scene and your place in the lesson are kept." |
 | Composer | A depth per step, a pack's `depths`, and the translation status of each depth |
 | Pins | `stepFingerprint` has never read `depth`, so no pin or assignment fingerprint moves |
+
+### What an older build shows for a link made here
+
+Nothing a link or a record carries changed: the link is `#investigation=<id>/<depth>`
+or an assignment with `d`, and the progress record keeps `depth` and `deepest`.
+A 2.0.0 or 3.0 build opens a link made here exactly as before: it takes the
+link's version over the student's saved choice and writes it on the first save,
+names no version at core, and says "Depth: Quantitative" elsewhere. It shows
+neither the notice nor the new names, and does not know the saved choice was
+meant to stay. Nothing in the corpus (`tests/compat`, the investigation link
+and the progress store) changes.
 
 ## Coverage
 
