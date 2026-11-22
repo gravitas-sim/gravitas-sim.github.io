@@ -11,12 +11,8 @@
 // chance. So the ratio is not the evidence. A resonant angle is: it librates
 // about a fixed value, or it circulates through 360 degrees.
 //
-// The third answer. The angle instrument reports "inconclusive" whenever the
-// record cannot separate a slow circulation from a wide libration, and over a
-// lesson-length run that is the honest answer for Callisto. It is the third of
-// the three states the lesson teaches. The scenarios and the published values
-// behind every number here are in js/resonance/systems.js and the "Orbital
-// resonance" group of js/validation/physicsChecks.js.
+// "Inconclusive" is the third answer, the honest one for Callisto over a lesson
+// run. The values behind every number are in js/resonance/systems.js.
 // =============================================================================
 
 /**
@@ -35,8 +31,7 @@ const laplaceRows = ctx => {
   if (!io || !europa || !ganymede || !primary) {
     return [{ label: 'The three moons', value: 'not all on the canvas' }];
   }
-  // True longitude off the positions: within a degree of the mean longitude
-  // for these eccentricities, enough to point at and not to compute with.
+  // True longitude, within a degree of the mean one here: to point at only.
   const lon = b =>
     ((Math.atan2(b.pos.y - primary.pos.y, b.pos.x - primary.pos.x) * 180) /
       Math.PI +
@@ -61,13 +56,11 @@ const laplaceRows = ctx => {
 };
 
 // A captured amplitude below these is a bound taken before the angle turned
-// back. Each is about 3 degrees under the lowest converged value measured at 20
-// to 120 frames a second (Laplace 26.4 to 26.5, Pluto 80.0 to 80.3).
+// back: about 3 degrees under the converged values at 20 to 120 frames a second.
 const AMPLITUDE_FLOOR = 21;
 const PLUTO_FLOOR = 77;
 const TADPOLE_FLOOR = 15;
-// At 60 frames a second the Galilean scenarios use all 64 substeps, so 30 doubled
-// the step. At this speed it is 21 and even 20 frames a second fits in 64.
+// At this speed 20 frames a second still fits in the 64 substeps.
 const SLOWED = { sim_speed: 250 };
 // Every instrument step re-holds the world under Reduced motion and Step by step.
 const HELD =
@@ -141,7 +134,7 @@ const WHEN_ORBITS_LOCK = {
       bind: GALILEANS,
       type: 'read',
       title: 'Four moons and a suspicious coincidence',
-      time: { speed: 750, paused: true },
+      time: { speed: 250, paused: true },
       setup: {
         scenario: 'Galilean Resonance',
         seed: 'resonance-lab',
@@ -201,9 +194,8 @@ const WHEN_ORBITS_LOCK = {
       bind: GALILEANS,
       type: 'explore',
       title: 'Measure the four periods',
-      // Step 1 paused it so the student could read without four moons moving
-      // behind the text. This step says "let it run", so it has to.
-      time: { speed: 750, paused: false },
+      // Step 1 paused it; this step says "let it run", so it has to.
+      time: { speed: 250, paused: false },
       setup: {
         scenario: 'Galilean Resonance',
         seed: 'resonance-lab',
@@ -362,7 +354,7 @@ const WHEN_ORBITS_LOCK = {
       type: 'predict',
       reveal: 'watch-the-line-ups',
       title: 'Where do the line-ups happen?',
-      time: { speed: 750, paused: false },
+      time: { speed: 250, paused: false },
       setup: {
         scenario: 'Galilean Resonance',
         seed: 'resonance-lab',
@@ -749,7 +741,7 @@ const WHEN_ORBITS_LOCK = {
       probe: laplaceRows,
       type: 'explore',
       title: 'Break it',
-      time: { speed: 750, paused: false },
+      time: { speed: 250, paused: false },
       setup: {
         scenario: 'Broken Laplace Resonance',
         seed: 'resonance-lab',
@@ -814,7 +806,7 @@ const WHEN_ORBITS_LOCK = {
       bind: GALILEANS,
       type: 'explore',
       title: 'The awkward case',
-      time: { speed: 750, paused: false },
+      time: { speed: 250, paused: false },
       setup: {
         scenario: 'Galilean Resonance',
         seed: 'resonance-lab',
@@ -1446,10 +1438,8 @@ const WHEN_ORBITS_LOCK = {
     {
       sid: 'say-what-a-libration-shows',
       bind: GALILEANS,
-      // Four recorded librations in this lesson and no step that asks what
-      // they mean. The distinction between a ratio that is close and an angle
-      // that is held is the entire argument, and it is the one thing a
-      // checklist of readings cannot demonstrate.
+      // Four librations are recorded and no step asks what they mean: a ratio
+      // that is close against an angle that is held is the whole argument.
       requires: ['capture-the-laplace-libration'],
       type: 'question',
       kind: 'short',
