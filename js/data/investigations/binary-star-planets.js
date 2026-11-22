@@ -139,6 +139,7 @@ const BINARY_STAR_PLANETS = {
       type: 'read',
       motion: true,
       title: 'Two suns',
+      time: { speed: 750, paused: false },
       setup: S_LAB,
       body: `Rather more than half of the Sun-like stars in the galaxy have at
              least one companion. Planets in those systems are not a curiosity;
@@ -227,6 +228,7 @@ const BINARY_STAR_PLANETS = {
       probe: runRows,
       type: 'explore',
       title: 'Run it as it stands',
+      time: { speed: 750, paused: false },
       setup: S_LAB,
       body: `Open <strong>Binary Planet Run</strong> from the Tools list on the
              right. It is set to the configuration on screen: the planet
@@ -368,6 +370,7 @@ const BINARY_STAR_PLANETS = {
       probe: runRows,
       type: 'explore',
       title: 'Run it at 0.30',
+      time: { speed: 750, paused: false },
       setup: S_LAB,
       body: `Set <strong>Planet start</strong> to <strong>0.30</strong> and
              press Run. The world is rebuilt from scratch — same two stars, same
@@ -556,6 +559,7 @@ The published boundary is at 0.177. Commit before you run it.`,
       probe: runRows,
       type: 'explore',
       title: 'Run the sweep',
+      time: { speed: 750, paused: false },
       setup: S_LAB,
       requires: ['predict-the-sweep'],
       body: `Press <strong>Run the sweep</strong> and leave it. Five trials of
@@ -656,6 +660,7 @@ Watch what it reports as it goes. Each trial ends with an
       probe: runRows,
       type: 'explore',
       title: 'Is the edge real, or is it the arithmetic?',
+      time: { speed: 750, paused: false },
       setup: S_LAB,
       requires: ['read-the-sweep'],
       body: `Pick the trial where the outcome changes — the selector marks it —
@@ -720,6 +725,7 @@ This is the same test you did by hand at 0.25 separations, applied to the
       probe: runRows,
       type: 'explore',
       title: 'The first check, and its limits',
+      time: { speed: 750, paused: false },
       setup: S_LAB,
       body: `The obvious guard is energy. The three bodies form a closed system,
              so their total energy cannot change; if the number the simulation
@@ -747,6 +753,7 @@ This is the same test you did by hand at 0.25 separations, applied to the
       probe: runRows,
       type: 'explore',
       title: 'Now the case that matters',
+      time: { speed: 750, paused: false },
       setup: S_LAB,
       body: `Set the planet to <strong>0.25</strong> separations, leave the step
              at <strong>1.0</strong>, and run the full twenty periods.
@@ -924,6 +931,7 @@ This is the same test you did by hand at 0.25 separations, applied to the
       bind: BINARY_CAST,
       type: 'read',
       title: 'Around both at once',
+      time: { speed: 1500, paused: true },
       setup: P_LAB,
       body: `The other place a planet can live in a binary is outside both stars,
              going round the pair as though it were a single object. These are
@@ -966,6 +974,7 @@ This is the same test you did by hand at 0.25 separations, applied to the
       probe: runRows,
       type: 'explore',
       title: 'Four separations out, then two',
+      time: { speed: 1500, paused: false },
       setup: P_LAB,
       body: `Forty binary periods this time, because a circumbinary planet is
              slow: at 40 AU it takes about eight binary periods to go
@@ -1105,6 +1114,7 @@ This is the same test you did by hand at 0.25 separations, applied to the
       probe: runRows,
       type: 'explore',
       title: 'Optional: the same sweep, out here',
+      time: { speed: 1500, paused: false },
       setup: P_LAB,
       body: `<strong>Optional, and it takes about eight to twelve minutes.</strong>
              Skip it if the session is short; nothing after this depends on it.
@@ -1127,6 +1137,7 @@ The published boundary for this configuration is 3.61. Predict
       probe: runRows,
       type: 'explore',
       title: 'Two radii inside the published boundary',
+      time: { speed: 1500, paused: false },
       setup: P_LAB,
       body: `The fit puts the boundary at 3.61 separations, so
              <strong>3.0</strong> and <strong>2.5</strong> both lie inside it.

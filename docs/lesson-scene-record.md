@@ -1206,7 +1206,7 @@ The canvas behind a step is stated as scene on 4, portrait on 7, quiet on 42; 14
 
 - **Steps:** 9. Scene declared on 9; a reader can change something on 0; 9 declare a scene nobody on that step can touch.
 - **Where the numbers come from:** 3 live engine, 0 prescribed model, 0 stored dataset, 0 self-contained panel.
-- **What students do:** read, commit-a-prediction, run-the-simulation, tick-a-checklist, choose-an-option, record-values.
+- **What students do:** read, commit-a-prediction, tick-a-checklist, choose-an-option, record-values.
 - **Objects the steps declare:** sun.
 - **Instruments:** none.
 - **Stored data:** none.

@@ -3848,7 +3848,7 @@
       "rubric": false,
       "validated": false
      },
-     "worldRunning": true,
+     "worldRunning": false,
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
@@ -3909,7 +3909,6 @@
      "actions": [
       "open-a-body-inspector",
       "select-a-body",
-      "run-the-simulation",
       "watch-the-area-sweep",
       "tick-a-checklist"
      ],
@@ -3922,7 +3921,7 @@
       "rubric": false,
       "validated": false
      },
-     "worldRunning": true,
+     "worldRunning": false,
      "affordances": {
       "inspector": "this step",
       "placement": "locked",
@@ -3986,8 +3985,7 @@
      ],
      "actions": [
       "record-values",
-      "select-a-body",
-      "run-the-simulation"
+      "select-a-body"
      ],
      "requires": [],
      "reveal": null,
@@ -3998,7 +3996,7 @@
       "rubric": false,
       "validated": true
      },
-     "worldRunning": true,
+     "worldRunning": false,
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
@@ -4074,7 +4072,7 @@
       "rubric": false,
       "validated": false
      },
-     "worldRunning": true,
+     "worldRunning": false,
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
@@ -4140,7 +4138,7 @@
       "rubric": false,
       "validated": false
      },
-     "worldRunning": true,
+     "worldRunning": false,
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
@@ -4206,7 +4204,7 @@
       "rubric": false,
       "validated": false
      },
-     "worldRunning": true,
+     "worldRunning": false,
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
@@ -97687,7 +97685,7 @@
       "rubric": false,
       "validated": false
      },
-     "worldRunning": true,
+     "worldRunning": "inherited",
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
@@ -97749,7 +97747,7 @@
       "rubric": false,
       "validated": false
      },
-     "worldRunning": true,
+     "worldRunning": "inherited",
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
@@ -97800,7 +97798,6 @@
       "engine-measurement"
      ],
      "actions": [
-      "run-the-simulation",
       "tick-a-checklist"
      ],
      "requires": [],
@@ -97812,7 +97809,7 @@
       "rubric": false,
       "validated": false
      },
-     "worldRunning": true,
+     "worldRunning": "inherited",
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
@@ -97876,7 +97873,7 @@
       "rubric": false,
       "validated": false
      },
-     "worldRunning": true,
+     "worldRunning": "inherited",
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
@@ -97927,8 +97924,7 @@
       "captured-evidence"
      ],
      "actions": [
-      "record-values",
-      "run-the-simulation"
+      "record-values"
      ],
      "requires": [],
      "reveal": null,
@@ -97939,7 +97935,7 @@
       "rubric": false,
       "validated": true
      },
-     "worldRunning": true,
+     "worldRunning": "inherited",
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
@@ -97999,8 +97995,7 @@
       "captured-evidence"
      ],
      "actions": [
-      "record-values",
-      "run-the-simulation"
+      "record-values"
      ],
      "requires": [],
      "reveal": null,
@@ -98011,7 +98006,7 @@
       "rubric": false,
       "validated": true
      },
-     "worldRunning": true,
+     "worldRunning": "inherited",
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
@@ -98070,8 +98065,7 @@
       "captured-evidence"
      ],
      "actions": [
-      "record-values",
-      "run-the-simulation"
+      "record-values"
      ],
      "requires": [],
      "reveal": null,
@@ -98082,7 +98076,7 @@
       "rubric": false,
       "validated": true
      },
-     "worldRunning": true,
+     "worldRunning": "inherited",
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
@@ -98091,7 +98085,6 @@
      "loop": {
       "declared": "measure",
       "actual": [
-       "experiment",
        "measure",
        "interpret"
       ],
@@ -98148,7 +98141,7 @@
       "rubric": false,
       "validated": false
      },
-     "worldRunning": true,
+     "worldRunning": "inherited",
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
@@ -98208,7 +98201,7 @@
       "rubric": false,
       "validated": false
      },
-     "worldRunning": true,
+     "worldRunning": "inherited",
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
@@ -98248,8 +98241,7 @@
      "experiment": [
       "watch-the-tails",
       "orbit-ends",
-      "heat-at-the-ends",
-      "the-real-halley"
+      "heat-at-the-ends"
      ],
      "measure": [
       "watch-the-tails",

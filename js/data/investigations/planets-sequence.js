@@ -12,8 +12,7 @@
 // Content, no imports: every number a step states is recomputed in
 // tests/planetsCloseout.test.js from the instruments and kernels the lesson
 // points at. Every step carries a `sid`, an opaque stable id that student
-// progress is keyed by: reword a step, move it, translate it, never change its
-// sid.
+// progress is keyed by: reword, move or translate a step, never its sid.
 //
 // Not here, and why (D-R10-206-01): "Worlds compared" needs the workbench of
 // Prompt 203 part B, which is not built; "Reading a surface" needs a marking
@@ -473,6 +472,7 @@ export const THE_SCALE_OF_THE_SOLAR_SYSTEM = {
              view reaches at least Saturn, because nothing wider would
              leave the inner planets visible. Scroll to zoom out and find Neptune.`,
       tip: 'The distances in the readout come from the sandbox, not from a table; the next steps check them against the numbers you know.',
+      time: { speed: 1, paused: true },
       setup: SCALE_SETUP,
     },
     {
@@ -709,7 +709,6 @@ const COMET_SETUP = {
   seed: 'comets-and-the-sun',
   settings: { enable_asteroids: false, num_asteroids: 0, num_comets: 12 },
   camera: { zoom: 1.5, pan: { x: 0, y: 0 } },
-  paused: false,
 };
 const COMET_BIND = { sun: { name: 'Sol' } };
 /** The first comet on a bound orbit, with its closest and furthest distance in AU, or null. */
@@ -787,6 +786,7 @@ export const COMETS_AND_THE_SUN = {
              with 70 percent of the speed of a circular orbit, so they are
              <strong>model comets on orbits of their own</strong>, not the real orbits.`,
       tip: 'The comets move quickly. Pause to read a number; run it again to watch the tails.',
+      time: { speed: 1, paused: true },
       setup: COMET_SETUP,
     },
     {

@@ -195,6 +195,7 @@ const TIDES = {
              that is not already in that picture. What it requires is
              subtraction.`,
       tip: 'While an investigation is running, clicking selects an object without opening the inspector card, and placing new objects is switched off so a stray click cannot alter the system you are measuring.',
+      time: { speed: 1, paused: true },
       setup: TIDES_EARTH_MOON,
       probe: ctx => {
         const moon = ctx.find('Luna');
@@ -1386,6 +1387,7 @@ const TIDES = {
         'Follow a debris stream and notice it spreads out along the orbit rather than staying in a clump',
         'Look for material that ends up bound to the hole and material that leaves',
       ],
+      time: { speed: 0.5, paused: false },
       setup: TIDES_DISRUPTION,
       tip: 'Debris spreading along the orbit rather than falling in together is a real feature of tidal disruption: the near end of the object was on a slightly tighter orbit than the far end, so the pieces have slightly different periods.',
       // The differential pull first, then what the model does and does not

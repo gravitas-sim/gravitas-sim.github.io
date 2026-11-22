@@ -176,6 +176,7 @@ const DARK_MATTER = {
       bind: SOLAR_TRACERS,
       type: 'read',
       title: 'Two ways to weigh a thing you cannot touch',
+      time: { speed: 1, paused: true },
       setup: DM_SOLAR,
       body: `You cannot put a galaxy on a scale. There are two ways to find out
              how much a system in space weighs, and they are completely
@@ -436,6 +437,7 @@ const DARK_MATTER = {
       type: 'predict',
       reveal: 'measure-the-expected-curve',
       title: 'Now a galaxy',
+      time: { speed: 2, paused: false },
       setup: DM_EXPECTED,
       body: `A spiral galaxy is a disc of stars with a dense bulge in the
              middle, and most of its light comes from that bulge and the inner
@@ -490,6 +492,7 @@ const DARK_MATTER = {
       bind: GALAXY_TRACERS,
       type: 'read',
       title: 'What Rubin and Ford found',
+      time: { speed: 2, paused: true },
       setup: DM_OBSERVED,
       body: `Through the 1960s and 1970s Vera Rubin and Kent Ford measured
              rotation curves of spiral galaxies, starting with Andromeda. Their
@@ -756,6 +759,7 @@ const DARK_MATTER = {
       bind: GALAXY_TRACERS,
       type: 'explore',
       title: 'Take the halo away from the whole galaxy',
+      time: { speed: 2, paused: false },
       setup: DM_OBSERVED,
       body: `Now the same experiment on ninety stars at once, in the live
              simulation rather than a model panel.
@@ -792,6 +796,7 @@ const DARK_MATTER = {
       sid: 'forty-years-earlier',
       type: 'read',
       title: 'Forty years earlier',
+      time: { speed: 1.5, paused: true },
       setup: DM_CLUSTER,
       body: `Rubin and Ford were not the first. In 1933 Fritz Zwicky pointed a
              spectrograph at the Coma Cluster, a swarm of about a thousand
