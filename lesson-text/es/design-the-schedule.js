@@ -67,8 +67,6 @@ export default {
     },
     'what-the-window-says': {
       title: 'Un pico de ventana del 100%',
-      compare:
-        'Pon lo que dijiste junto a lo que devolvió cada brazo: la cadencia regular en las dos primeras lecturas, la irregular en las dos últimas.',
       body: 'La comparación indica un "pico de ventana peor" para cada calendario: alrededor del <strong>100%</strong> para la cadencia regular y alrededor del <strong>57%</strong> para la irregular.\n\nEse número sale solo de los tiempos de observación. No entra ninguna velocidad: podrías calcularlo antes de observar nada, que es justamente la razón por la que merece la pena calcularlo.',
       prompt: 'Un pico de ventana del 100% significa que el calendario…',
       options: [

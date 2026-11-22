@@ -302,13 +302,11 @@ const DESIGN_THE_SCHEDULE = {
       title: 'A window peak of 100%',
       requires: ['read-the-comparison'],
       evidence: [
-        { step: 'read-the-comparison', field: 'periodRegular' },
-        { step: 'read-the-comparison', field: 'kRegular' },
-        { step: 'read-the-comparison', field: 'periodIrregular' },
-        { step: 'read-the-comparison', field: 'kIrregular' },
-      ],
-      compare:
-        'Set what you said beside what each arm returned: the regular cadence in the first two readings, the irregular one in the last two.',
+        'periodRegular',
+        'kRegular',
+        'periodIrregular',
+        'kIrregular',
+      ].map(field => ({ step: 'read-the-comparison', field })),
       body: `The comparison quotes a "worst window peak" for each schedule:
              about <strong>100%</strong> for the regular cadence and about
              <strong>57%</strong> for the irregular one.

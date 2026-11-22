@@ -106,8 +106,7 @@ const TWELVE_NIGHTS = {
       time: { speed: 0.03, paused: true },
       setup: RV_LAB,
       body: `This investigation assumes the alias idea from <em>Can You Detect
-             This Planet?</em> and <em>Design the Schedule</em>: nights spaced
-             like the planet's period can hide it.
+             This Planet?</em> and <em>Design the Schedule</em>.
              \n\nA time allocation committee has given you <strong>twelve
              nights</strong> on one star: HD&nbsp;209458, from
              <strong>La&nbsp;Silla</strong> in Chile, spread anywhere you like
@@ -374,9 +373,8 @@ const TWELVE_NIGHTS = {
         'Neither returns anything: twelve points cannot constrain a period at all',
       ],
       answer: 1,
-      because: `The two nearest aliases of the 3.5247-day planet are
-                <strong>1.391 d</strong> and <strong>0.777 d</strong>. A window
-                power of almost exactly 1 means the alias fits the
+      because: `The nearest aliases are <strong>1.391 d</strong> and
+                <strong>0.777 d</strong>. A window power of almost exactly 1 means the alias fits the
                 data as well as the truth does, so which one comes out lowest is
                 decided by the noise rather than by the planet. At 0.7 the truth
                 usually wins. Note the word "usually": the peak is smaller, not
