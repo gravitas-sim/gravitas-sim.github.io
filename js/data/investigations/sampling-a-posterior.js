@@ -48,6 +48,7 @@ const SAMPLING_A_POSTERIOR = {
     {
       sid: 'what-a-sampler-does',
       type: 'read',
+      time: { speed: 0.03, paused: true },
       setup: { scenario: 'Transit Lab', seed: 'transit-lab', paused: true },
       title: 'What a sampler does',
       body: `A fit asks which values make the data most likely, and how wide that valley

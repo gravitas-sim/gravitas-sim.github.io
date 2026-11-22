@@ -11,6 +11,7 @@
 // that goes through setSettings() and setScenarioName(); importers read them.
 // =============================================================================
 
+import { holdsClock } from './timestep.js';
 // Pins js/lesson/barycenter.js (pure arithmetic, no imports) to this chunk. The
 // canvas (render.js) and the lazily loaded stage (lessonStage.js) both use it;
 // left to the bundler it becomes a chunk of its own that every page requests.
@@ -422,7 +423,7 @@ let held = null;
 /**
  * A lesson's reading step holds the clock, so nothing runs behind the panels,
  * unless it says `motion: true` or carries an instrument, a `pauseAt` watch or
- * its own `time`, which need the clock (or set it). The next step releases what this held. `world` is what
+ * its own `time` that does not start paused, which need the clock (or set it). The next step releases what this held. `world` is what
  * the scene was built from: a rebuild owns the clock again.
  *
  * @param {object|undefined} step - The step now on screen
@@ -430,9 +431,7 @@ let held = null;
  */
 export function holdClock(step, world) {
   world ||= state;
-  const hold =
-    step?.type === 'read' &&
-    !(step.motion || step.tool || step.pauseAt || step.time);
+  const hold = holdsClock(step);
   if (!state.paused || held !== world) held = null;
   if (hold ? !state.paused : held) {
     state.paused = hold;

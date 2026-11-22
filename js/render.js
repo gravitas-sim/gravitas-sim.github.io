@@ -294,7 +294,12 @@ import { updateRadialVelocity } from './radialVelocity.js';
 import { updateAstrometry } from './astrometry.js';
 import { updateRotationCurve } from './instrumentGate.js';
 import * as timeline from './timeline.js';
-import { STEP_SECONDS, substepPlan, frameAdvance } from './timestep.js';
+import {
+  STEP_SECONDS,
+  substepPlan,
+  frameAdvance,
+  pinnedStep,
+} from './timestep.js';
 import { drawOverlays } from './overlays.js';
 import { readToken, onThemeChange } from './theme.js';
 import { auToSim, formatTime } from './units.js';
@@ -2549,20 +2554,9 @@ if (typeof window !== 'undefined') {
   }
 }
 
-// Fixed-step recording, for a controlled experiment: the loop normally steps by
-// the last frame's real duration, so two runs of one world would diverge. While
-// the Experiment Bench records, every frame advances the clock equally.
-let fixedStepSeconds = 0;
-
-/**
- * Drive the simulation at a fixed step per frame, or stop doing so.
- * @param {number} seconds - Wall-clock seconds to pretend each frame took, or 0
- */
-export function setFixedStep(seconds) {
-  fixedStepSeconds = Number.isFinite(seconds) && seconds > 0 ? seconds : 0;
-}
-
-export { MAX_SUBSTEPS, substepPlan } from './timestep.js';
+// A pinned frame time (the bench, a controlled run, a measuring lesson step)
+// replaces the measured one: js/timestep.js holds the pins.
+export { MAX_SUBSTEPS, substepPlan, setFixedStep } from './timestep.js';
 
 /** One frame's simulated time: substeps, then the stopwatch and the label. */
 export function integrateFrame(dtSim) {
@@ -2594,7 +2588,7 @@ const gameLoop = timestamp => {
   if (!state.last_time) state.last_time = timestamp;
   const measured = (timestamp - state.last_time) / 1000.0;
   state.last_time = timestamp;
-  const dt_seconds = fixedStepSeconds || measured;
+  const dt_seconds = pinnedStep() || measured;
   const dt_sim = frameAdvance(dt_seconds, SETTINGS.sim_speed, DT);
   // While scrubbing, tickTimeline holds the restored frame and physics is
   // skipped so the recorded state is what gets drawn.

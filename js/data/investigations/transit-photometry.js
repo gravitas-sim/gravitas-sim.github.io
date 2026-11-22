@@ -258,6 +258,7 @@ const TRANSITS = {
              the planet are drawn at their true relative sizes, which is why the
              view is zoomed so far in.`,
       tip: 'Everything in this investigation is measurable from what is on screen. Clicking selects an object without opening the inspector card, and placing new objects is switched off so a stray click cannot alter the system you are measuring.',
+      time: { speed: 0.03, paused: true },
       setup: TRANSIT_LAB,
     },
     {
@@ -1262,6 +1263,7 @@ const TRANSITS = {
              Then compare the new curve with the one you measured before: the
              time between transits, the length of the dip and its shape, and
              its depth.`,
+      time: { speed: 0.03, paused: false },
       setup: {
         scenario: 'Blended Binary',
         seed: 'transit-lab',

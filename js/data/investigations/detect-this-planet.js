@@ -130,6 +130,7 @@ const DETECT_THIS_PLANET = {
       probe: targetRows,
       type: 'read',
       title: 'Twelve nights',
+      time: { speed: 0.03, paused: true },
       setup: RV_LAB,
       body: `You have been given twelve nights on a spectrograph. Not twelve
              consecutive nights necessarily - twelve nights, to use when you
@@ -493,6 +494,7 @@ const DETECT_THIS_PLANET = {
       bind: TARGET,
       type: 'explore',
       title: 'Do it to the real star',
+      time: { speed: 0.03, paused: false },
       setup: RV_LAB,
       body: `The instrument above is a model of the signal. Now run a schedule
              against the simulation itself.

@@ -44,6 +44,7 @@ const EXTENDING_AN_EXPERIMENT = {
     {
       sid: 'twenty-planets',
       type: 'read',
+      time: { speed: 750, paused: true },
       setup: { scenario: 'Binary Planet Lab', seed: 'binary', paused: true },
       title: 'Twenty planets that the engine ran',
       body: `The Binary Planet Lab puts a planet near one star of a pair that is ten
