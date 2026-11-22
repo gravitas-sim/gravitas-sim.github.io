@@ -1578,19 +1578,48 @@
       "scene_class": "setup scenario",
       "limits": null,
       "open_items": [],
-      "questions": { "Q1": "", "Q2": "", "Q3": "", "Q4": "", "Q5": "" },
-      "leak": {
-        "L1": "HOLDS: no field cue or step placeholder holds a numeral at any depth, in either language, and the panel renders none that does (tests/fieldCue.test.js); the expected value is the field's `want`, which no page reads.",
-        "L2": "",
-        "L3": "",
-        "L4": "",
-        "L5": ""
+      "questions": {
+        "Q1": "Yes: the student commits a prediction, runs two schedules on one star in the live Radial Velocity panel with the same frames, seed and noise, and then tests the result on other seeds; the comparison a paragraph could not show.",
+        "Q2": "The panel is named, every control to set is listed (baseline, uncertainty, seed, schedule, observations), and the probe rows say which bodies are on the canvas and whether the last run still describes the scene.",
+        "Q3": "The panel, the comparison block and the prose use one baseline (24.673 d), one count (eight) and one uncertainty (8 m/s); the prediction no longer quotes a period the comparison block also prints.",
+        "Q4": "The student chooses the times of the run, the seed and the gap, and decides how far one pair of runs goes; claiming irregular schedules are better in general is an option that can be picked and is refused in words.",
+        "Q5": "Met by the advanced steps (the site, an irregular night and what the verdict assumes), which are unchanged; the core steps are not given deeper variants."
       },
-      "task_rule_items": [],
-      "editorial": "OPEN",
-      "redesign": "OPEN",
-      "reason": "",
-      "step_revisions": [],
+      "leak": {
+        "L1": "HOLDS: no field cue or step placeholder holds a numeral at any depth, in either language (tests/fieldCue.test.js); the expected value is the field's `want`, which no page reads.",
+        "L2": "UNCHANGED (355): the panel is opened by the student; no panel or stage state was edited.",
+        "L3": "HOLDS (355): predict-the-comb no longer gives the planet's period or the spacing: the body says the period is close to the spacing and the student divides; the prediction is held until what-the-window-says and returns beside the four readings.",
+        "L4": "HOLDS (355): the prediction's because, the readings and the window peaks are not stated before the steps that produce them.",
+        "L5": "UNCHANGED (355): readout and instructor text were not edited."
+      },
+      "task_rule_items": [
+        "T2: the prediction now returns beside the student's four readings at what-the-window-says (evidence and compare on that step; the prediction's reveal points there).",
+        "REFUTED (355): the audit's question whether the 0.28 d in read-the-comparison is the search range's lower edge. The panel searches 0.247 to 24.67 d for this run (comparisonBounds: a hundredth of the span up to the span); 0.28 d is 0.033 d above the edge, about ten resolution elements (period squared over baseline, 0.003 d), and atSearchBound does not flag it. read-the-comparison names no range, and the-range-you-searched stays the first mention.",
+        "NOT FOUND (355): the `has live probe` condition the prompt names does not exist in the tree; the existing `requires` is used instead (run-both-schedules requires set-the-run-up; read-the-comparison requires run-both-schedules as well as the prediction), which an assignment reads and which does not block a student.",
+        "T4: transfers unchanged (type-the-dates); the advanced steps' numbers are not the student's own eight nights, recorded here and not built.",
+        "PATTERN WORTH COPYING (commit, break your own result): the student commits before the run, reads two schedules on one draw, is asked what one pair of runs establishes in general, tests it on other seeds (break-your-own-result), and names what has to travel with a period."
+      ],
+      "editorial": "REVISED",
+      "redesign": "REVIEWED CLEAR",
+      "reason": "STRONG: leak fixes and polish only. The prediction no longer states the period and returns beside the readings (register D-R4-355-01); no validate, answer, tolerance, id or stage changed.",
+      "step_revisions": [
+        {
+          "sid": "predict-the-comb",
+          "change": "REWORDED: the body and prompt say the period is close to the spacing and the student divides; the one option that quoted 3.52 d says the planet's period; the reveal is the step that returns it beside the readings."
+        },
+        {
+          "sid": "run-both-schedules",
+          "change": "REWORDED: requires set-the-run-up."
+        },
+        {
+          "sid": "read-the-comparison",
+          "change": "REWORDED: requires run-both-schedules as well as the prediction."
+        },
+        {
+          "sid": "what-the-window-says",
+          "change": "REWORDED: shows the prediction beside the four readings of read-the-comparison."
+        }
+      ],
       "walk": "NOT RUN",
       "pr": null,
       "hash": null
@@ -1616,19 +1645,47 @@
       "scene_class": "setup scenario",
       "limits": null,
       "open_items": [],
-      "questions": { "Q1": "", "Q2": "", "Q3": "", "Q4": "", "Q5": "" },
-      "leak": {
-        "L1": "HOLDS: no field cue or step placeholder holds a numeral at any depth, in either language, and the panel renders none that does (tests/fieldCue.test.js); the expected value is the field's `want`, which no page reads.",
-        "L2": "",
-        "L3": "",
-        "L4": "",
-        "L5": ""
+      "questions": {
+        "Q1": "Yes: the student compares two schedules of one planet, one instrument and one noise draw where only the spacing differs, then isolates the precision, and in the transit half sets a depth against a noise budget; a paragraph could not show a flat line that hides a planet.",
+        "Q2": "Each reading step names the preset to set and the three numbers to read, the instrument notes say what is held, and the target chips and probe name the star; the first prediction asks which knob decides before any data.",
+        "Q3": "Instrument, canvas, prose and units use one planet (3.5247 d, 8 m/s, twelve nights) and one noise draw; the Spanish transit checklist no longer carries figures that disagreed with the English.",
+        "Q4": "The student chooses which of spacing, number of nights and precision decides, and what each schedule allows them to claim; the overclaim (a planet from a changing velocity) and the underclaim (no evidence) are both options that can be picked.",
+        "Q5": "Core only (26 steps); the inference is in what-have-you-established, the-limits-of-finding-nothing, why-more-nights-do-not-help and what-would-it-take, which ask what a result rules out and what would have to change."
       },
-      "task_rule_items": [],
-      "editorial": "OPEN",
-      "redesign": "OPEN",
-      "reason": "",
-      "step_revisions": [],
+      "leak": {
+        "L1": "HOLDS: no field cue or step placeholder holds a numeral at any depth, in either language (tests/fieldCue.test.js); the expected value is the field's `want`, which no page reads.",
+        "L2": "UNCHANGED (355): the lesson standard still finds leak/instrument-at-answer on write-down-what-schedule-a and write-down-what-schedule-b (recorded in tools/lesson-standard-ratchet.json); the two presets are the state the lesson's A/B comparison reads, and no panel or stage state was edited.",
+        "L3": "HOLDS (355): the first prediction (what-decides-whether-you-find) comes before any data; the-same-planet-invisible no longer says how many bins the folded points fall in or why one orbit between nights hides the planet, so why-it-failed is the one place the alias is explained.",
+        "L4": "HOLDS (355): the checklists of the-floor and the-edge-of-what-tess-can-do name what to read and not what it reads (the figures 4, 31 and 49 sit in the because of why-more-nights-do-not-help, which the student answers after reading them).",
+        "L5": "UNCHANGED (355): readout and instructor text were not edited; the because texts show only after the question is answered."
+      },
+      "task_rule_items": [
+        "T1 (open): write-down-what-schedule-a and write-down-what-schedule-b ask the student to type three numbers the panel prints in the same view; not re-tasked in this pass (a STRONG lesson, no step re-tasked), and a captured reading is the later option.",
+        "T4: transfers unchanged (the transit half, the-edge-of-what-tess-can-do and what-would-it-take); the core-only depth is recorded.",
+        "T6: from the first schedule step to ambiguous-evidence the canvas is the lab's star and planet (setup scenario Exoplanet Characterization Lab) beside the survey-schedule instrument; recorded, not changed.",
+        "PATTERN WORTH COPYING (same-draw A/B with one knob): the student predicts which knob decides, reads one schedule, reads a second that differs only in spacing on the same draw, and is told that anything concluded is about cadence; precision is then isolated on its own (the-third-knob), so the lesson ends with three knobs that fail independently."
+      ],
+      "editorial": "REVISED",
+      "redesign": "REVIEWED CLEAR",
+      "reason": "STRONG: leak fixes and polish only. Readings moved out of checklists and a body into the because of the step that follows (register D-R4-355-01); no validate, answer, tolerance, id or stage changed.",
+      "step_revisions": [
+        {
+          "sid": "the-same-planet-invisible",
+          "change": "REWORDED: the body no longer says the folded points fall in two bins or that a cadence of one orbit catches the star at the same place; why-it-failed is the one explanation of the alias."
+        },
+        {
+          "sid": "the-floor",
+          "change": "REWORDED: the checklist and tip say what to read and compare; the readings 4, 31 and 49 are not stated."
+        },
+        {
+          "sid": "why-more-nights-do-not-help",
+          "change": "REWORDED: the body points back to the student's own readings; 4, 31 and 49 moved to the because."
+        },
+        {
+          "sid": "the-edge-of-what-tess-can-do",
+          "change": "REWORDED: the checklist names what to read, not the readings (the Spanish checklist had figures that disagreed with the English)."
+        }
+      ],
       "walk": "NOT RUN",
       "pr": null,
       "hash": null
@@ -6127,19 +6184,38 @@
       "scene_class": "setup scenario",
       "limits": null,
       "open_items": [],
-      "questions": { "Q1": "", "Q2": "", "Q3": "", "Q4": "", "Q5": "" },
-      "leak": {
-        "L1": "HOLDS: no field cue or step placeholder holds a numeral at any depth, in either language, and the panel renders none that does (tests/fieldCue.test.js); the expected value is the field's `want`, which no page reads.",
-        "L2": "",
-        "L3": "",
-        "L4": "",
-        "L5": ""
+      "questions": {
+        "Q1": "Yes: the student places twelve epochs inside real observing windows and runs two placements on the live spectrograph, and a measured four-row table then shows that placement beats count; a paragraph could not show an alias come back from the student's own schedule.",
+        "Q2": "The planner opens with nothing preset, each step says what the figure shows (the bright bar is the budget, the lower panel the window) and what to read, and the first sentence says the lesson assumes the alias idea.",
+        "Q3": "The planner, the live panel and the prose use one star, one site, one period and one comb spacing (1.00274 cycles a day); the sky is real and the velocities are simulated, said in the first step.",
+        "Q4": "The student chooses where inside each window to place the epochs and which plan to expect to win; the best-moment placement can be chosen and returns an alias, which the lesson then explains.",
+        "Q5": "Core only; the inference is what-would-actually-fix-it, which asks for the mechanism (a second longitude) and refuses more nights."
       },
-      "task_rule_items": [],
-      "editorial": "OPEN",
-      "redesign": "OPEN",
-      "reason": "",
-      "step_revisions": [],
+      "leak": {
+        "L1": "HOLDS: no field cue or step placeholder holds a numeral at any depth, in either language (tests/fieldCue.test.js); the expected value is the field's `want`, which no page reads.",
+        "L2": "UNCHANGED (355): the planner opens with nothing preset and the live panel is set up by the student.",
+        "L3": "HOLDS (355): predict-which-plan-wins no longer works out the two aliases in its body (they sit in its because and in the options); the first sentence of the first step names the alias idea, not the two periods.",
+        "L4": "HOLDS (355): no step before read-what-you-got states the periods the runs return.",
+        "L5": "UNCHANGED (355): readout and instructor text were not edited."
+      },
+      "task_rule_items": [
+        "T4: the transfer is what-would-actually-fix-it (a second longitude); no second case is added.",
+        "PATTERN WORTH COPYING (placement beats count): the student predicts the comb, measures the window power of two placements, runs both on the live spectrograph with one seed, and is shown a measured four-row table of twelve and sixty epochs at the window centre and both ends.",
+        "OPEN (355): the hand copy of the epoch list in commit-the-schedule at 375 px wide is recorded in the handoff, not changed."
+      ],
+      "editorial": "REVISED",
+      "redesign": "REVIEWED CLEAR",
+      "reason": "STRONG: leak fixes and polish only. The aliases moved out of the prediction body into its because; the lesson lists the two lessons it builds on (register D-R4-355-01); no validate, answer, tolerance, id or stage changed.",
+      "step_revisions": [
+        {
+          "sid": "the-allocation",
+          "change": "REWORDED: the first sentence says the lesson assumes the alias idea; prerequisites now detect-this-planet and design-the-schedule."
+        },
+        {
+          "sid": "predict-which-plan-wins",
+          "change": "REWORDED: the body no longer gives the two aliases (1.391 and 0.777 d); they are in the because, and the options still carry 0.78 and 1.39."
+        }
+      ],
       "walk": "NOT RUN",
       "pr": null,
       "hash": null
