@@ -44,6 +44,7 @@ import {
   world_to_screen,
   screen_to_world,
   getSimulationTime,
+  physicsSettings,
   bh_list,
   stars,
   neutron_stars,
@@ -62,7 +63,12 @@ import {
 } from './instruments.js';
 import { formatNumber } from './format.js';
 import { primaryCandidates, primaryOf } from './orbital.js';
-import { t } from './i18n/index.js';
+import { t, registerMessages } from './i18n/index.js';
+import { EN_STEPSTATEMENT } from './i18n/en.stepStatement.js';
+import { ES_STEPSTATEMENT } from './i18n/es.stepStatement.js';
+
+registerMessages('en', EN_STEPSTATEMENT, true);
+registerMessages('es', ES_STEPSTATEMENT, true);
 import { sceneWords } from './canvasSummary.js';
 
 /** Meters in one simulation length unit. */
@@ -827,6 +833,13 @@ export function stopwatchRows() {
       value: formatTime(mean),
     });
   }
+  // The step-policy gate's verdict C (STEP_POLICY_GATE.md): where a scene does
+  // not cap its step, a timed reading depends on the frame rate, and says so.
+  if (elapsed !== null && !(physicsSettings.max_timestep > 0))
+    rows.push({
+      label: t('instrument.stopwatch.step'),
+      value: t('instrument.stopwatch.stepFollowsFrame'),
+    });
   return rows;
 }
 

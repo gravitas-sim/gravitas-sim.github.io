@@ -13,8 +13,13 @@ import {
   asteroids,
   comets,
   galaxies,
+  debris,
   physicsSettings,
   simulationTime,
+  gravityRoles,
+  canMoveNow,
+  engineEvents,
+  getStepIndex,
   worldGeneration,
   state,
   minInteractionDistance,
@@ -109,7 +114,16 @@ const conservedBodies = () =>
 export const conservedQuantities = () => {
   const bodies = conservedBodies();
   const n = bodies.length;
+  // Debris pulls nothing but feels the sources: in the model's sum, not in
+  // the all-pairs one (which keeps its old value).
+  const all = bodies.concat(
+    debris.filter(b => b && b.alive !== false && Number.isFinite(b.mass))
+  );
+  const N = all.length;
   const G = physicsSettings.gravitational_constant;
+  const settings = physicsSettings;
+  const { pulls } = gravityRoles(settings);
+  const rmin = minInteractionDistance();
 
   // Flat arrays, and Math.sqrt rather than Math.hypot in the inner loop. This
   // is the one O(N^2) sum in the application: a nine-hundred-body scene is
@@ -117,21 +131,40 @@ export const conservedQuantities = () => {
   // overflow the simulation's coordinates cannot reach - costs several times
   // what the square root does. Measured on Galactic Collision, the two changes
   // together take this from 29ms to 2.8.
-  const px = new Float64Array(n);
-  const py = new Float64Array(n);
-  const mass = new Float64Array(n);
+  const px = new Float64Array(N);
+  const py = new Float64Array(N);
+  const mass = new Float64Array(N);
+  // The model's terms: which kind each body is, whether it moves now, and
+  // which kind pulls which (js/engine/state.js), read once per pass.
+  const kinds = [];
+  const kindOf = new Int32Array(N);
+  const moves = new Uint8Array(N);
+  const pulledBy = new Uint8Array(N);
+  const oneWaySource = new Uint8Array(N);
   let m = 0;
   let cx = 0;
   let cy = 0;
-  for (let i = 0; i < n; i++) {
-    const b = bodies[i];
+  let prescribed = false;
+  for (let i = 0; i < N; i++) {
+    const b = all[i];
     px[i] = b.pos.x;
     py[i] = b.pos.y;
     mass[i] = b.mass;
-    m += b.mass;
-    cx += b.mass * b.pos.x;
-    cy += b.mass * b.pos.y;
+    let k = kinds.indexOf(b.kind);
+    if (k < 0) k = kinds.push(b.kind) - 1;
+    kindOf[i] = k;
+    moves[i] = canMoveNow(b, settings) ? 1 : 0;
+    if (b.model_owned) prescribed = true;
+    if (i < n) {
+      m += b.mass;
+      cx += b.mass * b.pos.x;
+      cy += b.mass * b.pos.y;
+    }
   }
+  const K = kinds.length;
+  const table = new Uint8Array(K * K);
+  for (let a = 0; a < K; a++)
+    for (let c = 0; c < K; c++) table[a * K + c] = pulls(kinds[a], kinds[c]);
   const ox = m > 0 ? cx / m : 0;
   const oy = m > 0 ? cy / m : 0;
 
@@ -150,26 +183,108 @@ export const conservedQuantities = () => {
   // multiplications, and they change no total.
   let energyScale = 0;
   let angularScale = 0;
-  for (let i = 0; i < n; i++) {
-    const b = bodies[i];
+  // The energy the model conserves (D-R4-461): the kinetic energy of each
+  // body that moves, once; the softened pair potential (js/engine/forces.js)
+  // of each pair where either pulls the other and the pulled one moves, once
+  // per pair, whether one-way or both ways.
+  let model = 0;
+  let modelScale = 0;
+  let oneWay = false;
+  for (let i = 0; i < N; i++) {
+    const b = all[i];
     const kinetic = 0.5 * mass[i] * (b.vel.x * b.vel.x + b.vel.y * b.vel.y);
+    if (moves[i]) {
+      model += kinetic;
+      modelScale += kinetic;
+    }
+    const ki = kindOf[i] * K;
+    const gmi = G * mass[i];
+    let pot = 0;
+    let modelPot = 0;
+    for (let j = i + 1; j < N; j++) {
+      const dx = px[i] - px[j];
+      const dy = py[i] - py[j];
+      const r2 = dx * dx + dy * dy;
+      // One square root for both sums.
+      const r = Math.sqrt(r2);
+      if (j < n && r2 > 0) pot -= mass[j] / r;
+      const kj = kindOf[j];
+      const ij = table[ki + kj] && moves[j];
+      const ji = table[kj * K + kindOf[i]] && moves[i];
+      if (!ij && !ji) continue;
+      // Inside the softening length the force is held at its value there, so
+      // the potential is linear in r: continuous at rmin.
+      modelPot -= r >= rmin ? mass[j] / r : (mass[j] * (2 - r / rmin)) / rmin;
+      if (ij) pulledBy[j] = 1;
+      if (ji) pulledBy[i] = 1;
+      if (!ij || !ji) {
+        oneWay = true;
+        oneWaySource[ij ? i : j] = 1;
+      }
+    }
+    model += gmi * modelPot;
+    modelScale += Math.abs(gmi * modelPot);
+    if (i >= n) continue;
     const spin = mass[i] * ((px[i] - ox) * b.vel.y - (py[i] - oy) * b.vel.x);
     energy += kinetic;
     angular += spin;
     energyScale += kinetic;
     angularScale += Math.abs(spin);
-    const gmi = G * mass[i];
-    let pot = 0;
-    for (let j = i + 1; j < n; j++) {
-      const dx = px[i] - px[j];
-      const dy = py[i] - py[j];
-      const r2 = dx * dx + dy * dy;
-      if (r2 > 0) pot -= mass[j] / Math.sqrt(r2);
-    }
     energy += gmi * pot;
     energyScale += Math.abs(gmi * pot);
   }
-  return { energy, angular, energyScale, angularScale, count: n };
+  // A one-way source is a fixed field only at rest and pulled by nothing.
+  let movingSource = false;
+  for (let i = 0; i < N; i++)
+    if (
+      oneWaySource[i] &&
+      moves[i] &&
+      (pulledBy[i] || all[i].vel.x !== 0 || all[i].vel.y !== 0)
+    )
+      movingSource = true;
+  return {
+    energy,
+    angular,
+    energyScale,
+    angularScale,
+    count: n,
+    model: {
+      energy: model,
+      scale: modelScale,
+      oneWay,
+      movingSource,
+      prescribed,
+    },
+  };
+};
+
+/**
+ * Why the model's energy is not conserved in this world now, or null.
+ *
+ * Checked from the settings and the engine's own event count, never from a
+ * jump in the energy: modified gravity, a halo whose potential the sum does
+ * not hold, orbital decay on a hole that can move, a one-way source that
+ * moves, a body moved by a prescribed model, and events in consecutive steps
+ * (bodies resting in contact, or a body being stripped).
+ *
+ * @param {object} q - conservedQuantities()
+ * @returns {?string} mond, halo, decay, movingSource, prescribed, tidal or
+ *   contact; null when the energy is conserved
+ */
+export const modelEnergyFailure = q => {
+  const s = physicsSettings;
+  if (s.galaxy_gravity === 'mond') return 'mond';
+  if (s.galaxy_gravity === 'halo') return 'halo';
+  if (
+    (s.orbit_decay_rate || 0) > 0 &&
+    bh_list.some(b => b && b.alive !== false && canMoveNow(b, s))
+  )
+    return 'decay';
+  if (q.model.movingSource) return 'movingSource';
+  if (q.model.prescribed) return 'prescribed';
+  if (engineEvents.streak >= 2 && engineEvents.step >= getStepIndex() - 1)
+    return engineEvents.last === 'tidal' ? 'tidal' : 'contact';
+  return null;
 };
 
 /**
@@ -206,6 +321,21 @@ const wellConditioned = (total, scale) =>
   Math.abs(total) >= CONDITION_FLOOR * scale;
 
 let conservationBaseline = null;
+// The model energy's own reference: retaken after each engine event, so a
+// change at a collision is that event's and never drift.
+let modelBaseline = null;
+let modelEvent = null;
+let lastModelEnergy = null;
+
+const takeModelBaseline = q => {
+  modelBaseline = {
+    energy: q.model.energy,
+    scale: q.model.scale,
+    events: engineEvents.count,
+    atTime: simulationTime,
+  };
+  lastModelEnergy = q.model.energy;
+};
 
 /**
  * Take the reference state the drift is measured against.
@@ -228,6 +358,8 @@ export const resetConservationBaseline = () => {
     count: now.count,
     atTime: simulationTime,
   };
+  takeModelBaseline(now);
+  modelEvent = null;
   return conservationBaseline;
 };
 
@@ -357,7 +489,23 @@ const cachedConservedQuantities = fresh => {
  */
 export const conservationDrift = (fresh = false) => {
   if (!conservationBaseline) return null;
-  const now = cachedConservedQuantities(fresh);
+  // An event since the model's reference: measure now, not from the cache, so
+  // the new reference is the state after it.
+  const eventSince =
+    modelBaseline && engineEvents.count !== modelBaseline.events;
+  const now = cachedConservedQuantities(fresh || eventSince);
+  if (eventSince) {
+    modelEvent = {
+      kind: engineEvents.last,
+      change: now.model.energy - lastModelEnergy,
+      atTime: simulationTime,
+    };
+    takeModelBaseline(now);
+  }
+  lastModelEnergy = now.model.energy;
+  const failure = modelEnergyFailure(now);
+  const m0 = modelBaseline ? modelBaseline.energy : now.model.energy;
+  const modelOk = wellConditioned(m0, modelBaseline?.scale);
   const e0 = conservationBaseline.energy;
   const l0 = conservationBaseline.angular;
   // Conditioned against the baseline's own scale, not the current one: the
@@ -387,6 +535,19 @@ export const conservationDrift = (fresh = false) => {
     elapsed: simulationTime - conservationBaseline.atTime,
     integrator: activeIntegrator(),
     caveats: conservationCaveats(),
+    // The energy this world's model conserves, or why it conserves none. The
+    // all-pairs figure above is kept as its own named line.
+    model: {
+      energy: now.model.energy,
+      conserved: failure === null,
+      failure,
+      fixedField: now.model.oneWay,
+      change: now.model.energy - m0,
+      drift: modelOk ? (100 * (now.model.energy - m0)) / Math.abs(m0) : NaN,
+      conditioned: modelOk,
+      since: modelBaseline ? modelBaseline.atTime : simulationTime,
+      event: modelEvent,
+    },
   };
 };
 

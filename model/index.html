@@ -1830,6 +1830,23 @@ try {
         gravitational-wave luminosity; nothing in this simulation calculates
         radiated energy.</span><span class="gs-es" lang="es">Cuando se muestran, los valores aparecen agrupados bajo &ldquo;Conservation check&rdquo; con las razones por las que <em>esta</em> escena no es cerrada junto a ellos &mdash; un agujero estático, gravedad unidireccional, un halo o campo MOND, decaimiento orbital impuesto, fusiones, desgarramiento por marea &mdash; y con el momento en que se tomó la referencia. Un cambio por cualquiera de ellos es el modelo, no el método. Obsérvese en particular que una disminución de energía en un escenario de espiral es una tasa de decaimiento <em>impuesta</em>, no una luminosidad de ondas gravitacionales calculada; nada en esta simulación calcula la energía radiada.</span>
       </p>
+      <p>
+        <span class="gs-en">There are two energy lines, because no one sum is conserved in every
+        world. The first is the energy this world&rsquo;s model conserves: the
+        kinetic energy of each body that moves, counted once, plus the softened
+        potential of each pair where either body pulls the other, counted once.
+        Where a body pulls one way only, it is labeled &ldquo;in the fixed
+        field&rdquo;, and it is conserved only while that body is at rest and
+        pulled by nothing. Where the model conserves no energy (modified
+        gravity, a halo, orbital decay, a one-way source that moves, a body on a
+        prescribed path, bodies touching in every step) the line says so and
+        why. A collision, merger, absorption, collapse or tidal stripping is an
+        event: the line says how much the energy changed at it and measures
+        drift from after it, so the loss at a bounce is never read as drift.
+        The second line is the old sum over every pair, kept under its own name
+        as &ldquo;all pairs&rdquo;; in a one-way world it changes far more than
+        anything the model conserves.</span><span class="gs-es" lang="es">Hay dos líneas de energía, porque ninguna suma se conserva en todos los mundos. La primera es la energía que conserva el modelo de este mundo: la energía cinética de cada cuerpo que se mueve, contada una vez, más el potencial suavizado de cada par en el que uno de los cuerpos atrae al otro, contado una vez. Donde un cuerpo atrae en un solo sentido, se rotula &ldquo;en el campo fijo&rdquo;, y se conserva solo mientras ese cuerpo esté en reposo y nada lo atraiga. Donde el modelo no conserva ninguna energía (gravedad modificada, un halo, decaimiento orbital, una fuente unidireccional que se mueve, un cuerpo en una trayectoria impuesta, cuerpos en contacto en cada paso) la línea lo dice y por qué. Una colisión, fusión, absorción, colapso o desgarro por mareas es un evento: la línea indica cuánto cambió la energía en él y mide la deriva desde después, de modo que la pérdida en un rebote nunca se lee como deriva. La segunda línea es la suma antigua sobre todos los pares, conservada con su propio nombre como &ldquo;todos los pares&rdquo;; en un mundo unidireccional cambia mucho más que cualquier cosa que el modelo conserve.</span>
+      </p>
       <h4><span class="gs-en">What a student can do with it</span><span class="gs-es" lang="es">Lo que un estudiante puede hacer con ello</span></h4>
       <p>
         <span class="gs-en">In a closed system, a change is numerical error, and the way to
@@ -3285,62 +3302,62 @@ try {
             <tr>
               <td>Replaced</td>
               <td>a star past the collapse mass is replaced by a black hole; the star it was is gone, along with its type, temperature and radius</td>
-              <td><code>js/engine/step.js:822</code></td>
+              <td><code>js/engine/step.js:826</code></td>
             </tr>
             <tr>
               <td>Deleted when far away</td>
               <td>planets more than 20 view-widths out are deleted</td>
-              <td><code>js/engine/step.js:951</code></td>
+              <td><code>js/engine/step.js:955</code></td>
             </tr>
             <tr>
               <td>Deleted when far away</td>
               <td>stars more than 20 view-widths out are deleted</td>
-              <td><code>js/engine/step.js:958</code></td>
+              <td><code>js/engine/step.js:962</code></td>
             </tr>
             <tr>
               <td>Deleted when far away</td>
               <td>gas giants more than 20 view-widths out are deleted</td>
-              <td><code>js/engine/step.js:965</code></td>
+              <td><code>js/engine/step.js:969</code></td>
             </tr>
             <tr>
               <td>Deleted when far away</td>
               <td>neutron stars more than 20 view-widths out are deleted</td>
-              <td><code>js/engine/step.js:972</code></td>
+              <td><code>js/engine/step.js:976</code></td>
             </tr>
             <tr>
               <td>Deleted when far away</td>
               <td>white dwarfs more than 20 view-widths out are deleted</td>
-              <td><code>js/engine/step.js:979</code></td>
+              <td><code>js/engine/step.js:983</code></td>
             </tr>
             <tr>
               <td>Deleted when far away</td>
               <td>galaxies more than 20 view-widths out are deleted</td>
-              <td><code>js/engine/step.js:986</code></td>
+              <td><code>js/engine/step.js:990</code></td>
             </tr>
             <tr>
               <td>Deleted when far away</td>
               <td>black holes more than 50 view-widths out are deleted</td>
-              <td><code>js/engine/step.js:993</code></td>
+              <td><code>js/engine/step.js:997</code></td>
             </tr>
             <tr>
               <td>Deleted when far away</td>
               <td>asteroids more than 5 view-widths out are deleted</td>
-              <td><code>js/engine/step.js:1002</code></td>
-            </tr>
-            <tr>
-              <td>Deleted when far away</td>
-              <td>comets more than 20 view-widths out are deleted</td>
               <td><code>js/engine/step.js:1006</code></td>
             </tr>
             <tr>
               <td>Deleted when far away</td>
-              <td>debris more than 3 view-widths out are deleted</td>
+              <td>comets more than 20 view-widths out are deleted</td>
               <td><code>js/engine/step.js:1010</code></td>
             </tr>
             <tr>
               <td>Deleted when far away</td>
-              <td>accretion-disk particles more than 2 view-widths out are deleted</td>
+              <td>debris more than 3 view-widths out are deleted</td>
               <td><code>js/engine/step.js:1014</code></td>
+            </tr>
+            <tr>
+              <td>Deleted when far away</td>
+              <td>accretion-disk particles more than 2 view-widths out are deleted</td>
+              <td><code>js/engine/step.js:1018</code></td>
             </tr>
             <tr>
               <td>Merged</td>
@@ -3355,7 +3372,7 @@ try {
             <tr>
               <td>Fragmented</td>
               <td>a rocky collision destroys both bodies and scatters debris whose directions, speeds and offsets come from 4 fresh Math.random draws - unseeded, so the shower cannot be reproduced, let alone reversed</td>
-              <td><code>js/engine/collisions.js:1070</code></td>
+              <td><code>js/engine/collisions.js:1073</code></td>
             </tr>
           <!--/fact-block-->
           </tbody>
