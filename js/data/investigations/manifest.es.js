@@ -1056,8 +1056,8 @@ export const MANIFEST = [
     duration: '15-25 min',
     level: 'Introductory astronomy',
     thumbnail: 'images/investigations/moons-of-the-giants.webp',
-    stepCount: 10,
-    gradedCount: 8,
+    stepCount: 11,
+    gradedCount: 9,
     objectiveCount: 4,
   },
   {
@@ -1080,8 +1080,8 @@ export const MANIFEST = [
     duration: '15-25 min',
     level: 'Introductory astronomy',
     thumbnail: 'images/scenarios/solar-system.webp',
-    stepCount: 9,
-    gradedCount: 6,
+    stepCount: 10,
+    gradedCount: 7,
     objectiveCount: 4,
   },
   {
