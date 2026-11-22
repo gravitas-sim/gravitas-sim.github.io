@@ -11,16 +11,16 @@ The hand-written, human-reviewed acceptance map is
 [`lesson-acceptance.json`](lesson-acceptance.json); `npm run
 audit:scene:check` fails if it disagrees with what is generated here.
 
-Across 124 investigations and 1528 steps: 1418 steps
-declare a scene, 164 let a reader change one, 177 read the
-running integration, 1006 show a prescribed model result, 159 draw
-on a stored dataset, 877 put a self-contained panel beside the text,
-393 keep something, and 61 are prose.
-Of 201 prediction loops, 201 are returned to,
-200 produce a measurement before they are answered, and
+Across 124 investigations and 1530 steps: 1420 steps
+declare a scene, 165 let a reader change one, 178 read the
+running integration, 1007 show a prescribed model result, 159 draw
+on a stored dataset, 878 put a self-contained panel beside the text,
+394 keep something, and 61 are prose.
+Of 202 prediction loops, 202 are returned to,
+201 produce a measurement before they are answered, and
 1 end in an explanation in the reader's own words.
-200 hold their marking until the experiment settles them.
-The canvas behind a step is stated as scene on 8, portrait on 7, quiet on 51; 1462 state none.
+201 hold their marking until the experiment settles them.
+The canvas behind a step is stated as scene on 8, portrait on 7, quiet on 51; 1464 state none.
 
 ## Kepler's Laws (`keplers-laws`)
 
@@ -122,14 +122,14 @@ The canvas behind a step is stated as scene on 8, portrait on 7, quiet on 51; 14
 
 ## The Goldilocks Question (`goldilocks-question`)
 
-- **Steps:** 36. Scene declared on 23; a reader can change something on 6; 17 declare a scene nobody on that step can touch.
-- **Where the numbers come from:** 6 live engine, 17 prescribed model, 2 stored dataset, 13 self-contained panel.
+- **Steps:** 38. Scene declared on 25; a reader can change something on 7; 18 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 7 live engine, 18 prescribed model, 2 stored dataset, 14 self-contained panel.
 - **What students do:** read, move-an-instrument-control, press-an-instrument-preset, run-the-simulation, commit-a-prediction, record-values, build-a-plot, choose-an-option, tick-a-checklist, open-a-body-inspector, select-a-body, answer-in-words, press-an-instrument-button, run-to-an-armed-event.
 - **Objects the steps declare:** venus, earth, mars, ceres, e, f, g.
 - **Instruments:** hz-insolation, hz-spreading, hz-star, hz-boundaries, hz-orbit, hz-trappist, hz-candidates.
 - **Stored data:** TRAPPIST-1 system parameters (observation).
 - **Evidence kept:** notebook-fields, plot.
-- **Prediction loops:** move-it-twice-as-far → three-distances-yours, the-star-is-not-running → what-the-graph-says; leave-the-planet-change-the → four-stars-one-planet, so-where-would-a-planet, now-put-it-round-the, the-two-edges, two-definitions-of-the-same, the-wider-definition-on-the, a-year-on-a-circular → four-stars-one-planet; now-stretch-the-orbit → run-an-eccentric-year, crossing-the-edges, reading-the-fraction → run-an-eccentric-year; a-real-system-forty-light → all-seven-planets, watch-it-run, take-the-readings-yourself, three-planets-that-all-look → all-seven-planets.
+- **Prediction loops:** move-it-twice-as-far → three-distances-yours, the-star-is-not-running → what-the-graph-says; leave-the-planet-change-the → four-stars-one-planet, so-where-would-a-planet, now-put-it-round-the, the-two-edges, two-definitions-of-the-same, the-wider-definition-on-the, a-year-on-a-circular → four-stars-one-planet; now-stretch-the-orbit → run-an-eccentric-year → run-an-eccentric-year; predict-the-fraction → crossing-the-edges, two-runs-one-orbit, fraction-of-your-run → fraction-of-your-run; a-real-system-forty-light → all-seven-planets, watch-it-run, take-the-readings-yourself, three-planets-that-all-look → all-seven-planets.
 - **Recovery:** reset: rebuilds the scenario on arrival; ambiguous result: the check says in words how close is close enough; wrong body: the step binds the object by name, so there is none; null result: the probe names what is missing; wrong body: the object list names what the step staged; missed moment: an event watch stops the run at periapsis.
 - **Scene rebuilds:** 6 step(s) on arrival (what-does-earth-get-from, now-put-it-round-the, the-wider-definition-on-the, a-real-system-forty-light, all-seven-planets, watch-it-run).
 - **Accepted central experiment** (reviewed 2026-09-11): object `earth`, control hz-insolation/distance, measures starlight at three distances the student chooses, one twice another and spread over a factor of two or more, each taken from the panel; the prediction for a doubling is set beside the readings, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.

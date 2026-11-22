@@ -19536,8 +19536,75 @@
      ]
     },
     {
-     "sid": "crossing-the-edges",
+     "sid": "predict-the-fraction",
      "index": 26,
+     "type": "predict",
+     "title": "How long inside the zone?",
+     "declares": {
+      "stage": null,
+      "bound": [
+       "venus",
+       "earth",
+       "mars",
+       "ceres"
+      ],
+      "roles": [
+       "venus",
+       "earth",
+       "mars",
+       "ceres"
+      ]
+     },
+     "kinds": [
+      "scene-declared"
+     ],
+     "actions": [
+      "commit-a-prediction"
+     ],
+     "requires": [],
+     "reveal": "fraction-of-your-run",
+     "asks": {
+      "choice": true,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": true,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "whole lesson"
+     },
+     "loop": {
+      "declared": "predict",
+      "actual": [
+       "predict",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the step binds the object by name, so there is none"
+     ]
+    },
+    {
+     "sid": "crossing-the-edges",
+     "index": 27,
      "type": "explore",
      "title": "Crossing the edges",
      "declares": {
@@ -19622,10 +19689,95 @@
      ]
     },
     {
-     "sid": "reading-the-fraction",
-     "index": 27,
+     "sid": "two-runs-one-orbit",
+     "index": 28,
+     "type": "measure",
+     "title": "Two runs at one average distance",
+     "declares": {
+      "stage": {
+       "objects": 0,
+       "kind": "named",
+       "scale": "display",
+       "fits": false,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [
+      "scene-declared",
+      "student-changes-scene",
+      "engine-measurement",
+      "model-result",
+      "panel-diagram",
+      "captured-evidence"
+     ],
+     "actions": [
+      "record-values",
+      "select-a-body",
+      "move-an-instrument-control",
+      "press-an-instrument-button",
+      "run-the-simulation"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": true
+     },
+     "worldRunning": true,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "whole lesson"
+     },
+     "loop": {
+      "declared": "measure",
+      "actual": [
+       "experiment",
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": true,
+      "importsFromSelection": false,
+      "engineReads": [
+       "role",
+       "roles",
+       "selected"
+      ],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "hz-orbit",
+      "capture": false
+     },
+     "evidence": [
+      "notebook-fields"
+     ],
+     "reset": [
+      "stamps instrument values",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged",
+      "null result: the probe names what is missing",
+      "ambiguous result: the check says in words how close is close enough"
+     ]
+    },
+    {
+     "sid": "fraction-of-your-run",
+     "index": 29,
      "type": "question",
-     "title": "Reading the fraction",
+     "title": "What your fraction says",
      "declares": {
       "stage": {
        "objects": 0,
@@ -19697,7 +19849,7 @@
     },
     {
      "sid": "a-real-system-forty-light",
-     "index": 28,
+     "index": 30,
      "type": "predict",
      "title": "A real system, forty light years away",
      "declares": {
@@ -19764,7 +19916,7 @@
     },
     {
      "sid": "all-seven-planets",
-     "index": 29,
+     "index": 31,
      "type": "explore",
      "title": "All seven planets",
      "declares": {
@@ -19840,7 +19992,7 @@
     },
     {
      "sid": "watch-it-run",
-     "index": 30,
+     "index": 32,
      "type": "explore",
      "title": "Watch it run",
      "declares": {
@@ -19918,7 +20070,7 @@
     },
     {
      "sid": "take-the-readings-yourself",
-     "index": 31,
+     "index": 33,
      "type": "measure",
      "title": "Take the readings yourself",
      "declares": {
@@ -20006,7 +20158,7 @@
     },
     {
      "sid": "the-question-the-name-invites",
-     "index": 32,
+     "index": 34,
      "type": "question",
      "title": "The question the name invites",
      "declares": {
@@ -20070,7 +20222,7 @@
     },
     {
      "sid": "three-planets-that-all-look",
-     "index": 33,
+     "index": 35,
      "type": "explore",
      "title": "Three planets that all look promising",
      "declares": {
@@ -20143,7 +20295,7 @@
     },
     {
      "sid": "which-one-would-you-observe",
-     "index": 34,
+     "index": 36,
      "type": "question",
      "title": "Which one would you observe next?",
      "declares": {
@@ -20207,7 +20359,7 @@
     },
     {
      "sid": "one-more-and-then-you",
-     "index": 35,
+     "index": 37,
      "type": "question",
      "title": "One more, and then you are done",
      "declares": {
@@ -20271,7 +20423,7 @@
     },
     {
      "sid": "what-you-worked-out",
-     "index": 36,
+     "index": 38,
      "type": "read",
      "title": "What you worked out",
      "declares": {
@@ -20392,17 +20544,37 @@
      "predictCollects": true,
      "heldUntil": "run-an-eccentric-year",
      "experiment": [
-      "run-an-eccentric-year",
-      "crossing-the-edges",
-      "reading-the-fraction"
+      "run-an-eccentric-year"
      ],
      "measure": [
-      "run-an-eccentric-year",
-      "crossing-the-edges",
-      "reading-the-fraction"
+      "run-an-eccentric-year"
      ],
      "evidence": [],
      "interpret": "run-an-eccentric-year",
+     "measuredBeforeAnswering": true,
+     "explained": false,
+     "answeredByTheExperiment": true,
+     "closed": true,
+     "complete": true
+    },
+    {
+     "predict": "predict-the-fraction",
+     "predictCollects": true,
+     "heldUntil": "fraction-of-your-run",
+     "experiment": [
+      "crossing-the-edges",
+      "two-runs-one-orbit",
+      "fraction-of-your-run"
+     ],
+     "measure": [
+      "crossing-the-edges",
+      "two-runs-one-orbit",
+      "fraction-of-your-run"
+     ],
+     "evidence": [
+      "two-runs-one-orbit"
+     ],
+     "interpret": "fraction-of-your-run",
      "measuredBeforeAnswering": true,
      "explained": false,
      "answeredByTheExperiment": true,
@@ -20437,16 +20609,16 @@
     }
    ],
    "totals": {
-    "steps": 36,
-    "declared": 23,
-    "student": 6,
-    "engine": 6,
-    "model": 17,
+    "steps": 38,
+    "declared": 25,
+    "student": 7,
+    "engine": 7,
+    "model": 18,
     "data": 2,
-    "diagram": 13,
-    "evidence": 2,
+    "diagram": 14,
+    "evidence": 3,
     "computation": 0,
-    "declaredButInert": 17,
+    "declaredButInert": 18,
     "prose": 8,
     "mismatched": 0,
     "rebuilds": 6
@@ -120485,16 +120657,16 @@
   }
  ],
  "totals": {
-  "steps": 1528,
-  "declared": 1418,
-  "student": 164,
-  "engine": 177,
-  "model": 1006,
+  "steps": 1530,
+  "declared": 1420,
+  "student": 165,
+  "engine": 178,
+  "model": 1007,
   "data": 159,
-  "diagram": 877,
-  "evidence": 393,
+  "diagram": 878,
+  "evidence": 394,
   "computation": 14,
-  "declaredButInert": 1254,
+  "declaredButInert": 1255,
   "prose": 61,
   "mismatched": 8,
   "rebuilds": 78,
@@ -120502,13 +120674,13 @@
    "scene": 8,
    "portrait": 7,
    "quiet": 51,
-   "unstated": 1462
+   "unstated": 1464
   },
   "lessons": 124,
-  "loops": 201,
-  "closedLoops": 201,
+  "loops": 202,
+  "closedLoops": 202,
   "explainedLoops": 1,
-  "heldLoops": 200,
-  "completeLoops": 200
+  "heldLoops": 201,
+  "completeLoops": 201
  }
 }

@@ -15,7 +15,7 @@ export default {
   title: 'La cuestión de Ricitos de Oro',
   subtitle:
     'Mueve un planeta, cambia su estrella y decide qué significa de verdad «habitable»',
-  duration: '40-50 min',
+  duration: '60-70 min',
   level: 'Astronomía introductoria',
   objectives: [
     'Explicar por qué la luz estelar que llega a un planeta decae rápidamente con la distancia, y usar la regla del doble de lejos, la cuarta parte',

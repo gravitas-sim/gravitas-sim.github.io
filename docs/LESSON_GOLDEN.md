@@ -81,9 +81,9 @@ The browser half takes about seven minutes on the private port.
 | # | Investigation | Tokens it adds |
 |---|---|---|
 | 1 | `keplers-laws` | 103: `audience:intro`, `check:choice/number`, `check:numeric/number+tolerance+unit`, `check:short/undefined`, `depth-step:advanced/question`, `depth-step:quantitative/measure`, … |
-| 2 | `goldilocks-question` | 22: `depth-step:advanced/measure`, `depth-step:advanced/read`, `depth-step:quantitative/predict`, `depth-step:quantitative/read`, `key:explore.pauseAt`, `key:explore.setup`, … |
+| 2 | `goldilocks-question` | 23: `depth-step:advanced/measure`, `depth-step:advanced/read`, `depth-step:quantitative/predict`, `depth-step:quantitative/read`, `key:explore.pauseAt`, `key:explore.setup`, … |
 | 3 | `transit-photometry` | 15: `check:numeric/number+tolerance`, `key:explore.lightCurve`, `key:explore.observerAngle`, `key:measure.checklist`, `key:measure.compare`, `key:measure.evidence`, … |
-| 4 | `what-is-a-gravitational-wave` | 9: `audience:beginner`, `key:measure.stage`, `key:predict.stage`, `key:predict.tip`, `key:predict.tool`, `key:read.checklist`, … |
+| 4 | `what-is-a-gravitational-wave` | 8: `audience:beginner`, `key:predict.stage`, `key:predict.tip`, `key:predict.tool`, `key:read.checklist`, `key:read.stage`, … |
 | 5 | `measuring-the-moon` | 4: `key:predict.hints`, `key:question.maxUncertainty`, `key:question.minUncertainty`, `key:question.valueWithin` |
 | 6 | `weighing-stars` | 4: `key:explore.showBarycenter`, `key:measure.showBarycenter`, `key:read.motion`, `key:read.showBarycenter` |
 | 7 | `butterfly-effect` | 3: `key:explore.rubric`, `key:predict.requires`, `lock:null` |

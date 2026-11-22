@@ -103,13 +103,13 @@ export const MANIFEST = [
     title: 'The Goldilocks Question',
     subtitle:
       "Move a planet, change its star, and decide what 'habitable' really means",
-    duration: '40-50 min',
+    duration: '60-70 min',
     level: 'Introductory astronomy',
     thumbnail: 'images/scenarios/habitable-zone-lab.webp',
     series: 'Detecting exoplanets',
     depths: 3,
-    stepCount: 36,
-    gradedCount: 19,
+    stepCount: 38,
+    gradedCount: 21,
     objectiveCount: 7,
   },
   {

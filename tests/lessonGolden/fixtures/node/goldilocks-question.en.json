@@ -2,19 +2,19 @@
  "id": "goldilocks-question",
  "locale": "en",
  "title": "The Goldilocks Question",
- "steps": 47,
+ "steps": 49,
  "depths": [
   [
    "core",
-   36
+   38
   ],
   [
    "quantitative",
-   43
+   45
   ],
   [
    "advanced",
-   47
+   49
   ]
  ],
  "grading": [
@@ -457,7 +457,34 @@
    ]
   },
   {
-   "sid": "reading-the-fraction",
+   "sid": "predict-the-fraction",
+   "type": "predict",
+   "kind": null,
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     true,
+     "correct"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "fraction-of-your-run",
    "type": "question",
    "kind": "choice",
    "grades": [
@@ -614,7 +641,8 @@
     "goldilocks-question:venus-by-the-rule-you:locale": "en",
     "goldilocks-question:earth-in-the-model-zone": 1,
     "goldilocks-question:now-stretch-the-orbit": 1,
-    "goldilocks-question:reading-the-fraction": 2,
+    "goldilocks-question:predict-the-fraction": 2,
+    "goldilocks-question:fraction-of-your-run": 2,
     "goldilocks-question:a-real-system-forty-light": 2,
     "goldilocks-question:the-question-the-name-invites": 2,
     "goldilocks-question:which-one-would-you-observe": 1,
@@ -634,7 +662,8 @@
     "goldilocks-question:venus-by-the-rule-you": 1,
     "goldilocks-question:earth-in-the-model-zone": 1,
     "goldilocks-question:now-stretch-the-orbit": 1,
-    "goldilocks-question:reading-the-fraction": 1,
+    "goldilocks-question:predict-the-fraction": 1,
+    "goldilocks-question:fraction-of-your-run": 1,
     "goldilocks-question:a-real-system-forty-light": 1,
     "goldilocks-question:the-question-the-name-invites": 1,
     "goldilocks-question:which-one-would-you-observe": 1,
@@ -674,8 +703,10 @@
     "a-year-on-a-circular",
     "now-stretch-the-orbit",
     "run-an-eccentric-year",
+    "predict-the-fraction",
     "crossing-the-edges",
-    "reading-the-fraction",
+    "two-runs-one-orbit",
+    "fraction-of-your-run",
     "a-real-system-forty-light",
     "all-seven-planets",
     "the-m-dwarf-zone-and-the-tide",
@@ -712,7 +743,8 @@
     "goldilocks-question:venus-by-the-rule-you:locale": "en",
     "goldilocks-question:earth-in-the-model-zone": 1,
     "goldilocks-question:now-stretch-the-orbit": 1,
-    "goldilocks-question:reading-the-fraction": 2,
+    "goldilocks-question:predict-the-fraction": 2,
+    "goldilocks-question:fraction-of-your-run": 2,
     "goldilocks-question:a-real-system-forty-light": 2,
     "goldilocks-question:the-question-the-name-invites": 2,
     "goldilocks-question:which-one-would-you-observe": 1,
@@ -732,7 +764,8 @@
     "goldilocks-question:venus-by-the-rule-you": 1,
     "goldilocks-question:earth-in-the-model-zone": 1,
     "goldilocks-question:now-stretch-the-orbit": 1,
-    "goldilocks-question:reading-the-fraction": 1,
+    "goldilocks-question:predict-the-fraction": 1,
+    "goldilocks-question:fraction-of-your-run": 1,
     "goldilocks-question:a-real-system-forty-light": 1,
     "goldilocks-question:the-question-the-name-invites": 1,
     "goldilocks-question:which-one-would-you-observe": 1,
@@ -749,6 +782,7 @@
     "earth-in-the-model-zone",
     "estimate-the-dim-limit",
     "four-stars-one-planet",
+    "fraction-of-your-run",
     "how-sure-is-the-radius",
     "leave-the-planet-change-the",
     "move-it-twice-as-far",
@@ -756,7 +790,7 @@
     "now-stretch-the-orbit",
     "one-earth-of-starlight",
     "one-more-and-then-you",
-    "reading-the-fraction",
+    "predict-the-fraction",
     "reading-the-real-solar-system",
     "run-an-eccentric-year",
     "saying-it-carefully",
@@ -775,6 +809,7 @@
     "three-distances-yours",
     "three-planets-that-all-look",
     "two-definitions-of-the-same",
+    "two-runs-one-orbit",
     "venus-by-the-rule-you",
     "watch-it-run",
     "what-actually-changed",
@@ -805,7 +840,7 @@
    "lesson": {
     "id": "goldilocks-question",
     "title": "The Goldilocks Question",
-    "stepCount": 47
+    "stepCount": 49
    },
    "student": null,
    "progress": {
@@ -845,8 +880,10 @@
      "a-year-on-a-circular",
      "now-stretch-the-orbit",
      "run-an-eccentric-year",
+     "predict-the-fraction",
      "crossing-the-edges",
-     "reading-the-fraction",
+     "two-runs-one-orbit",
+     "fraction-of-your-run",
      "a-real-system-forty-light",
      "all-seven-planets",
      "the-m-dwarf-zone-and-the-tide",
@@ -877,7 +914,8 @@
      "goldilocks-question:venus-by-the-rule-you:locale": "en",
      "goldilocks-question:earth-in-the-model-zone": 1,
      "goldilocks-question:now-stretch-the-orbit": 1,
-     "goldilocks-question:reading-the-fraction": 2,
+     "goldilocks-question:predict-the-fraction": 2,
+     "goldilocks-question:fraction-of-your-run": 2,
      "goldilocks-question:a-real-system-forty-light": 2,
      "goldilocks-question:the-question-the-name-invites": 2,
      "goldilocks-question:which-one-would-you-observe": 1,
@@ -897,7 +935,8 @@
      "goldilocks-question:venus-by-the-rule-you": 1,
      "goldilocks-question:earth-in-the-model-zone": 1,
      "goldilocks-question:now-stretch-the-orbit": 1,
-     "goldilocks-question:reading-the-fraction": 1,
+     "goldilocks-question:predict-the-fraction": 1,
+     "goldilocks-question:fraction-of-your-run": 1,
      "goldilocks-question:a-real-system-forty-light": 1,
      "goldilocks-question:the-question-the-name-invites": 1,
      "goldilocks-question:which-one-would-you-observe": 1,
@@ -1105,84 +1144,96 @@
     },
     {
      "index": 33,
+     "sid": "predict-the-fraction",
+     "fingerprint": "predict|-|-|-|-|4|a=2;c=2",
+     "optionCount": 4
+    },
+    {
+     "index": 34,
      "sid": "crossing-the-edges",
      "fingerprint": "explore|-|hz-orbit|-|-|-|-",
      "optionCount": null
     },
     {
-     "index": 34,
-     "sid": "reading-the-fraction",
+     "index": 35,
+     "sid": "two-runs-one-orbit",
+     "fingerprint": "measure|-|hz-orbit|-|e1+f1+e2+f2|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 36,
+     "sid": "fraction-of-your-run",
      "fingerprint": "question|choice|-|-|-|4|a=2;c=2",
      "optionCount": 4
     },
     {
-     "index": 35,
+     "index": 37,
      "sid": "a-real-system-forty-light",
      "fingerprint": "predict|-|-|TRAPPIST-1 System|-|4|a=2;c=2",
      "optionCount": 4
     },
     {
-     "index": 36,
+     "index": 38,
      "sid": "all-seven-planets",
      "fingerprint": "explore|-|hz-trappist|TRAPPIST-1 System|-|-|-",
      "optionCount": null
     },
     {
-     "index": 37,
+     "index": 39,
      "sid": "the-m-dwarf-zone-and-the-tide",
      "fingerprint": "measure|-|hz-locking|-|radius+inner|-|-",
      "optionCount": null
     },
     {
-     "index": 38,
+     "index": 40,
      "sid": "a-middling-star",
      "fingerprint": "measure|-|hz-locking|-|radius+outer|-|-",
      "optionCount": null
     },
     {
-     "index": 39,
+     "index": 41,
      "sid": "how-sure-is-the-radius",
      "fingerprint": "measure|-|hz-locking|-|low+high|-|-",
      "optionCount": null
     },
     {
-     "index": 40,
+     "index": 42,
      "sid": "watch-it-run",
      "fingerprint": "explore|-|-|TRAPPIST-1 System|-|-|-",
      "optionCount": null
     },
     {
-     "index": 41,
+     "index": 43,
      "sid": "take-the-readings-yourself",
      "fingerprint": "measure|-|hz-trappist|-|e+f+g+inner+outer|-|-",
      "optionCount": null
     },
     {
-     "index": 42,
+     "index": 44,
      "sid": "the-question-the-name-invites",
      "fingerprint": "question|choice|-|-|-|4|a=2;c=2",
      "optionCount": 4
     },
     {
-     "index": 43,
+     "index": 45,
      "sid": "three-planets-that-all-look",
      "fingerprint": "explore|-|hz-candidates|-|-|-|-",
      "optionCount": null
     },
     {
-     "index": 44,
+     "index": 46,
      "sid": "which-one-would-you-observe",
      "fingerprint": "question|choice|-|-|-|4|a=1;c=1",
      "optionCount": 4
     },
     {
-     "index": 45,
+     "index": 47,
      "sid": "one-more-and-then-you",
      "fingerprint": "question|choice|-|-|-|4|a=2;c=2",
      "optionCount": 4
     },
     {
-     "index": 46,
+     "index": 48,
      "sid": "what-you-worked-out",
      "fingerprint": "read|-|-|-|-|-|-",
      "optionCount": null
@@ -1210,7 +1261,8 @@
     "goldilocks-question:venus-by-the-rule-you:locale": "en",
     "goldilocks-question:earth-in-the-model-zone": 1,
     "goldilocks-question:now-stretch-the-orbit": 1,
-    "goldilocks-question:reading-the-fraction": 2,
+    "goldilocks-question:predict-the-fraction": 2,
+    "goldilocks-question:fraction-of-your-run": 2,
     "goldilocks-question:a-real-system-forty-light": 2,
     "goldilocks-question:the-question-the-name-invites": 2,
     "goldilocks-question:which-one-would-you-observe": 1,
@@ -1230,7 +1282,8 @@
     "goldilocks-question:venus-by-the-rule-you": 1,
     "goldilocks-question:earth-in-the-model-zone": 1,
     "goldilocks-question:now-stretch-the-orbit": 1,
-    "goldilocks-question:reading-the-fraction": 1,
+    "goldilocks-question:predict-the-fraction": 1,
+    "goldilocks-question:fraction-of-your-run": 1,
     "goldilocks-question:a-real-system-forty-light": 1,
     "goldilocks-question:the-question-the-name-invites": 1,
     "goldilocks-question:which-one-would-you-observe": 1,
@@ -1247,6 +1300,7 @@
     "earth-in-the-model-zone",
     "estimate-the-dim-limit",
     "four-stars-one-planet",
+    "fraction-of-your-run",
     "how-sure-is-the-radius",
     "leave-the-planet-change-the",
     "move-it-twice-as-far",
@@ -1254,7 +1308,7 @@
     "now-stretch-the-orbit",
     "one-earth-of-starlight",
     "one-more-and-then-you",
-    "reading-the-fraction",
+    "predict-the-fraction",
     "reading-the-real-solar-system",
     "run-an-eccentric-year",
     "saying-it-carefully",
@@ -1273,6 +1327,7 @@
     "three-distances-yours",
     "three-planets-that-all-look",
     "two-definitions-of-the-same",
+    "two-runs-one-orbit",
     "venus-by-the-rule-you",
     "watch-it-run",
     "what-actually-changed",
@@ -1285,7 +1340,7 @@
     "why-no-climate-history",
     "writing-it-down-then-using"
    ],
-   "stepIndex": 46,
+   "stepIndex": 48,
    "startedAt": "2026-01-02T03:04:05.000Z",
    "moved": [],
    "dropped": [],
@@ -1410,7 +1465,12 @@
      "locale": "en"
     },
     {
-     "sid": "reading-the-fraction",
+     "sid": "predict-the-fraction",
+     "value": 2,
+     "locale": "en"
+    },
+    {
+     "sid": "fraction-of-your-run",
      "value": 2,
      "locale": "en"
     },
@@ -1519,7 +1579,12 @@
      "locale": "en"
     },
     {
-     "sid": "reading-the-fraction",
+     "sid": "predict-the-fraction",
+     "value": 2,
+     "locale": "en"
+    },
+    {
+     "sid": "fraction-of-your-run",
      "value": 2,
      "locale": "en"
     },
@@ -1652,7 +1717,12 @@
      "locale": "en"
     },
     {
-     "sid": "reading-the-fraction",
+     "sid": "predict-the-fraction",
+     "value": 2,
+     "locale": "en"
+    },
+    {
+     "sid": "fraction-of-your-run",
      "value": 2,
      "locale": "en"
     },
@@ -1762,7 +1832,12 @@
      "locale": "en"
     },
     {
-     "sid": "reading-the-fraction",
+     "sid": "predict-the-fraction",
+     "value": 2,
+     "locale": "en"
+    },
+    {
+     "sid": "fraction-of-your-run",
      "value": 2,
      "locale": "en"
     },
