@@ -159,6 +159,9 @@ function build(id, tier, seed, overrides, frames = 0) {
         isAreaSweepSuppressed: () => true,
         regenerateStarfield: noop,
       });
+      // The page does this after every build (js/world.js): without it the
+      // step keeps its cached body lists from the last world of the same shape.
+      physics.bumpWorldGeneration();
       // A fixed step, so a run is the same calculation whatever the machine.
       for (let f = 0; f < frames; f++) physics.updatePhysics(0.01);
     });

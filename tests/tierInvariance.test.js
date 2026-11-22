@@ -84,9 +84,6 @@ describe('render-only reductions', () => {
       show_gravitational_waves: true,
       show_accretion_disk: true,
     };
-    // The first run in a process differs from every later one (some engine
-    // state is set up on the first step), so one is run and set aside.
-    build('binary-bh', 'full', 'render', on, 120);
     const plain = build('binary-bh', 'full', 'render', on, 120);
     const reduced = build(
       'binary-bh',
