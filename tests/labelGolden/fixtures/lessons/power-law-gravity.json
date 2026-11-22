@@ -13,7 +13,8 @@
     ["steps.measure-the-slope.fields.1.unit",""],
     ["steps.measure-the-slope.fields.2.unit",""],
     ["steps.measure-the-slope.fields.3.unit",""],
-    ["steps.predict-the-slope.unit",""],
+    ["steps.find-the-slope-rate.unit",""],
+    ["steps.predict-the-slope-at-2-9.unit",""],
     ["steps.measure-conservation.fields.0.unit",""],
     ["steps.measure-conservation.fields.1.unit",""],
     ["steps.measure-conservation.fields.2.unit",""]
@@ -55,7 +56,13 @@
  "numeric": {
   "answers": [
    {
-    "sid": "predict-the-slope",
+    "sid": "find-the-slope-rate",
+    "answer": "0.5",
+    "tolerance": "0.02",
+    "unit": ""
+   },
+   {
+    "sid": "predict-the-slope-at-2-9",
     "answer": "1.95",
     "tolerance": "0.03",
     "unit": ""
