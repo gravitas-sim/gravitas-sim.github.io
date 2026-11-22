@@ -263,7 +263,7 @@ test('a switch says what it changes and keeps, and changes no answer in the save
   await openMore(page);
   await page.locator('#investigationShallower').click();
   await expect(page.locator('#srStatus')).toContainText(
-    'Now reading the core version. Switching changes which steps are shown; your answers, the scene and your place in the lesson are kept.'
+    'Now reading the core version. Switching changes which steps are shown; your answers, the scene and your place in the investigation are kept.'
   );
   await expect(where(page)).toContainText('Core version');
   const after = await savedProgress(page, 'keplers-laws');

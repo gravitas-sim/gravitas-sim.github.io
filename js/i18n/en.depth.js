@@ -12,7 +12,7 @@ export const EN_DEPTH = {
   'inv.depth.adj.quantitative': 'quantitative',
   'inv.depth.adj.advanced': 'advanced',
   'inv.depth.changed':
-    'Now reading the {depth} version. Switching changes which steps are shown; your answers, the scene and your place in the lesson are kept.',
+    'Now reading the {depth} version. Switching changes which steps are shown; your answers, the scene and your place in the investigation are kept.',
   'inv.depth.link':
     'This link opens the {depth} version. You had chosen the {saved} version.',
   'inv.depth.keep': 'Keep mine',

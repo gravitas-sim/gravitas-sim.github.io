@@ -1567,7 +1567,7 @@ let fullSteps = 0;
 const versionName = () =>
   depthName ||
   (active.depths &&
-    els.where.dataset[getLocale() === 'es' ? 'coreEs' : 'coreEn']) ||
+    els.where?.dataset[getLocale() === 'es' ? 'coreEs' : 'coreEn']) ||
   '';
 
 /** The where line: step, depth and time against what the lesson declares. */

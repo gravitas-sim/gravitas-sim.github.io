@@ -363,10 +363,10 @@ describe('what a switch keeps, held against the saved record', () => {
     expect(back.deepest).toBe('quantitative');
     // The sentence promises exactly this much, and the words say it.
     expect(EN_DEPTH['inv.depth.changed']).toMatch(
-      /answers.*scene.*place in the lesson/
+      /answers.*scene.*place in the investigation/
     );
     expect(ES_DEPTH['inv.depth.changed']).toMatch(
-      /respuestas.*escena.*lugar en la lección/
+      /respuestas.*escena.*lugar en la investigación/
     );
   });
 

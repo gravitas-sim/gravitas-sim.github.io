@@ -120,7 +120,7 @@ given overlaps the interval the tolerance allows and is no wider than
 | Where line | The version's name at every depth, from the page itself at core (a core reader downloads nothing extra) |
 | A link that differs | One sentence under the where line and one button: "This link opens the quantitative version. You had chosen the core version." and "Keep mine" |
 | An activity | "Your instructor set this activity to the quantitative version.", with no way to keep another |
-| A switch | A toast and an announcement: "Now reading the core version. Switching changes which steps are shown; your answers, the scene and your place in the lesson are kept." |
+| A switch | A toast and an announcement: "Now reading the core version. Switching changes which steps are shown; your answers, the scene and your place in the investigation are kept." |
 | Composer | A depth per step, a pack's `depths`, and the translation status of each depth |
 | Pins | `stepFingerprint` has never read `depth`, so no pin or assignment fingerprint moves |
 
