@@ -363,10 +363,11 @@
     {
       "file": "js/resonanceWidgets.js",
       "kind": "animated-widget",
-      "treatment": "gap",
-      "what": "Four instruments (the periods, the resonant angle, the conjunctions, the frame) that advance a phase every frame",
-      "reason": "They start by themselves, advance a phase on every frame and have neither a Run control nor a check of the motion setting. The motion is the picture of the resonance, and the step's sliders set the quantities it shows.",
-      "proposed": "Give each a Run and Pause control and read autoruns (a change to the instrument's controls and its tests, which this sweep's rule 'do not change a page's content' leaves to a content prompt)"
+      "treatment": "follows",
+      "what": "Four instruments (the periods, the resonant angle, the conjunctions, the frame) that redraw the running world every frame",
+      "pause": "A Run and Pause button in each instrument, which sets the world's clock the transport bar sets",
+      "reduced": "Open with the world held under reduced motion and Step by step, through the step's autorun (js/widgets.js, autoruns); Run starts it",
+      "test": "tests/motionInventory.test.js"
     },
     {
       "file": "js/skyPage.js",

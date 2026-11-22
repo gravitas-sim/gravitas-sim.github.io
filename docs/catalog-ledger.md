@@ -164,7 +164,7 @@ Scene class of the lessons: portrait or backdrop 94, setup scenario 26, engine-i
 | `investigation:what-is-it-made-of`                   | lesson      |   396 | FOCUSED  | portrait or backdrop    | OPEN      | OPEN     | NOT RUN      | synthetic data (+1)                   |          0 |
 | `investigation:what-kinds-of-planets-exist`          | lesson      |   396 | REDESIGN | portrait or backdrop    | OPEN      | OPEN     | NOT RUN      | synthetic survey                      |          0 |
 | `investigation:when-a-star-explodes`                 | lesson      |   380 | FOCUSED  | portrait or backdrop    | OPEN      | OPEN     | NOT RUN      | -                                     |          0 |
-| `investigation:when-orbits-lock`                     | lesson      |   349 | FOCUSED  | setup scenario          | OPEN      | OPEN     | NOT RUN      | -                                     |          2 |
+| `investigation:when-orbits-lock`                     | lesson      |   349 | FOCUSED  | setup scenario          | REVISED   | REVISED  | NOT RUN      | -                                     |          1 |
 | `investigation:when-the-method-must-refuse`          | lesson      |   403 | STRONG   | portrait or backdrop    | OPEN      | OPEN     | NOT RUN      | synthetic data with known truth       |          1 |
 | `investigation:where-galaxies-live`                  | lesson      |   402 | REDESIGN | portrait or backdrop    | OPEN      | OPEN     | NOT RUN      | -                                     |          1 |
 | `investigation:which-instrument-for-which-question`  | lesson      |   407 | FOCUSED  | portrait or backdrop    | OPEN      | OPEN     | NOT RUN      | -                                     |          0 |
