@@ -5,16 +5,17 @@
     "the-saturated-star",
     "binary-star-planets",
     "weighing-stars",
+    "tides",
     "black-holes",
     "butterfly-effect",
     "extending-an-experiment",
     "measuring-the-moon",
-    "missing-mass",
+    "radial-velocity",
     "propose-an-observation",
     "what-is-a-gravitational-wave",
     "a-night-at-the-telescope",
     "counts-to-magnitudes",
-    "detect-this-planet",
+    "missing-mass",
     "power-law-gravity",
     "retrograde-motion"
   ],
@@ -180,6 +181,12 @@
       "key:read.showBarycenter",
       "math:arithmetic"
     ],
+    "tides": [
+      "key:explore.canvas",
+      "key:predict.misconceptions",
+      "key:question.canvas",
+      "key:read.allowInspector"
+    ],
     "black-holes": [
       "key:question.checklist",
       "key:read.explainView",
@@ -200,9 +207,10 @@
       "key:question.minUncertainty",
       "key:question.valueWithin"
     ],
-    "missing-mass": [
-      "key:predict.setup",
-      "key:question.restates"
+    "radial-velocity": [
+      "key:explore.compare",
+      "key:explore.evidence",
+      "key:predict.setup"
     ],
     "propose-an-observation": [
       "key:measure.plan",
@@ -218,8 +226,8 @@
     "counts-to-magnitudes": [
       "depth-step:quantitative/predict"
     ],
-    "detect-this-planet": [
-      "key:read.allowInspector"
+    "missing-mass": [
+      "key:question.restates"
     ],
     "power-law-gravity": [
       "key:question.explain"
@@ -297,14 +305,14 @@
   ],
   "totals": {
     "investigations": 124,
-    "steps": 1992,
+    "steps": 1999,
     "activityCuts": 6,
-    "lessonTokens": 174,
+    "lessonTokens": 179,
     "activityTokens": 29,
     "stepTypes": {
-      "read": 377,
-      "predict": 202,
-      "measure": 519,
+      "read": 378,
+      "predict": 204,
+      "measure": 523,
       "ellipse": 1,
       "question": 751,
       "explore": 141,
