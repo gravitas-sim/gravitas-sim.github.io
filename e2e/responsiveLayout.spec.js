@@ -49,8 +49,14 @@ const DESKTOP_SIZES = [
 ];
 const sizesFor = info => SIZES[info.project.name] ?? DESKTOP_SIZES;
 
-/** The step with an instrument and a graph, and a step of prose. */
-const MEASURE_STEP = '/?author=tides&step=10';
+/**
+ * The step with an instrument and a graph, and a step of prose. The tides
+ * lesson's measuring steps hold a quiet canvas, which folds the transport bar
+ * away, so the pressable transport checks need a step that keeps it.
+ */
+const MEASURE_STEP = '/?author=power-law-gravity&step=11';
+/** A measuring step on a quiet canvas: the tabs share its top row with the Menu button. */
+const QUIET_MEASURE_STEP = '/?author=tides&step=10';
 const READ_STEP = '/?author=tides&step=1';
 
 const APP_REGIONS = {
@@ -396,6 +402,20 @@ test.describe('the four layouts', () => {
           await page.keyboard.press('ArrowLeft');
           await expect(page.locator('#investigationDockTool')).toBeChecked();
         }
+      });
+    }
+
+    // The same step on a quiet canvas, which folds the transport bar away: the
+    // tabs share the top row with the Menu button and must stay clear of it.
+    for (const [width, height] of sizesFor(info)) {
+      await test.step(`quiet canvas ${width}x${height}`, async () => {
+        await page.setViewportSize({ width, height });
+        await openStep(page, app, QUIET_MEASURE_STEP);
+        await expect(page.locator('#investigationToolCanvas')).toBeVisible();
+        const boxes = await regions(page, LESSON_REGIONS);
+        expect(Boolean(boxes.tool), 'the instrument is shown').toBe(true);
+        expect(overlaps(boxes), 'regions that overlap').toEqual([]);
+        await expectNoSidewaysScroll(page);
       });
     }
   });
