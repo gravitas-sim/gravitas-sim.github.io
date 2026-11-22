@@ -30,7 +30,6 @@ const launch = ENERGY_WIDGETS.find(w => w.id === 'launch');
 const compare = ENERGY_WIDGETS.find(w => w.id === 'escape-compare');
 
 // The cannon: 320 km up is 1.05 Earth radii (js/energyWidgets.js LAUNCH_HEIGHT).
-const G = 6.674e-11;
 const EARTH = { mass: 5.972e24, radius: 6.371e6 };
 const R0 = EARTH.radius * 1.05;
 
@@ -66,7 +65,10 @@ describe('Bound, Unbound and Escape: the dividing speed is found, not handed ove
   ];
 
   test('no speed from the dividing line is in a tip, a body or a checklist before the bracket', () => {
-    const before = ENERGY.steps.slice(0, indexOf(ENERGY, 'bracket-the-dividing-speed') + 1);
+    const before = ENERGY.steps.slice(
+      0,
+      indexOf(ENERGY, 'bracket-the-dividing-speed') + 1
+    );
     const text = before
       .map(s =>
         plain(`${s.tip ?? ''} ${s.body ?? ''} ${(s.checklist || []).join(' ')}`)
@@ -76,7 +78,11 @@ describe('Bound, Unbound and Escape: the dividing speed is found, not handed ove
   });
 
   test('the tips locate the line and the readouts', () => {
-    for (const sid of ['fire-it', 'find-the-dividing-line', 'watch-the-total']) {
+    for (const sid of [
+      'fire-it',
+      'find-the-dividing-line',
+      'watch-the-total',
+    ]) {
       expect(plain(stepOf(ENERGY, sid).tip)).toMatch(/Does it come back\?/);
     }
   });
@@ -98,7 +104,8 @@ describe('Bound, Unbound and Escape: the dividing speed is found, not handed ove
   test('the escape-speed row is withheld where a step asks for it and shown elsewhere', () => {
     const v = { v: 9 };
     launch.reset(v, { autorun: false });
-    const rows = spec => launch.readout(v, undefined, spec).map(r => r.id ?? r.label);
+    const rows = spec =>
+      launch.readout(v, undefined, spec).map(r => r.id ?? r.label);
     expect(rows({ withhold: ['escape'] })).not.toContain('escape');
     expect(rows({})).toContain('escape');
     expect(rows(undefined)).toContain('escape');
@@ -224,15 +231,11 @@ describe('Bound, Unbound and Escape: the prediction comes back beside the readin
   test('the readings are for the surface: a start further out is told so', () => {
     const { validate } = stepOf(ENERGY, 'read-the-escape-speeds');
     const surface = Object.fromEntries(
-      compare
-        .readout({ dist: 1 })
-        .map(r => [`v_${r.id}`, parseFloat(r.value)])
+      compare.readout({ dist: 1 }).map(r => [`v_${r.id}`, parseFloat(r.value)])
     );
     expect(validate(surface, {})).toBeNull();
     const out = Object.fromEntries(
-      compare
-        .readout({ dist: 4 })
-        .map(r => [`v_${r.id}`, parseFloat(r.value)])
+      compare.readout({ dist: 4 }).map(r => [`v_${r.id}`, parseFloat(r.value)])
     );
     expect(validate(out, {}).message).toMatch(/further out than the surface/);
   });
@@ -240,14 +243,19 @@ describe('Bound, Unbound and Escape: the prediction comes back beside the readin
   test('the prediction stays committed, not revealed, while the readings are taken', () => {
     const responses = { 'orbital-energy:somewhere-else-entirely': '3' };
     const upTo = sid =>
-      new Set(
-        ENERGY.steps.slice(0, indexOf(ENERGY, sid) + 1).map(s => s.sid)
-      );
+      new Set(ENERGY.steps.slice(0, indexOf(ENERGY, sid) + 1).map(s => s.sid));
     const state = sid =>
       predictionState(ENERGY.steps, stepOf(ENERGY, sid), upTo(sid), responses);
     expect(state('read-the-escape-speeds')).toBe('committed');
     expect(state('more-mass-harder-to-leave')).toBe('revealed');
-    expect(predictionState(ENERGY.steps, stepOf(ENERGY, 'read-the-escape-speeds'), upTo('read-the-escape-speeds'), {})).toBe('uncommitted');
+    expect(
+      predictionState(
+        ENERGY.steps,
+        stepOf(ENERGY, 'read-the-escape-speeds'),
+        upTo('read-the-escape-speeds'),
+        {}
+      )
+    ).toBe('uncommitted');
   });
 
   test('wrong turns on the reading signs and on what stays put have authored feedback', () => {

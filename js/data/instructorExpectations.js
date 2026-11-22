@@ -222,7 +222,7 @@ export default {
       'find-the-dividing-line':
         'The dividing line is where the total energy bar reaches zero. Students should be able to bracket it within a small range of the slider.',
       'bracket-the-dividing-speed':
-        'Two numbers with a gap between them, either side of 10.9 km/s. The instrument opens at 9 km/s and the escape speed is withheld on this step, so the bracket is the student\'s own. A student who moved the slider in whole units will report a gap of 1 km/s; one who worked through the last stretch in tenths will report 0.1. Both are correct measurements and the difference is the point - the gap is the uncertainty, and the check says so rather than marking the coarse one wrong. A pair on one side of the line is refused with the side named; a pair whose middle is outside 10.3 to 11.5 is told which of the two is a long way off.',
+        "Two numbers with a gap between them, either side of 10.9 km/s. The instrument opens at 9 km/s and the escape speed is withheld on this step, so the bracket is the student's own. A student who moved the slider in whole units will report a gap of 1 km/s; one who worked through the last stretch in tenths will report 0.1. Both are correct measurements and the difference is the point - the gap is the uncertainty, and the check says so rather than marking the coarse one wrong. A pair on one side of the line is refused with the side named; a pair whose middle is outside 10.3 to 11.5 is told which of the two is a long way off.",
       'watch-the-total':
         'The kinetic and potential bars change continuously; the total does not. This is the observation the next question depends on.',
       'check-it-yourself':
