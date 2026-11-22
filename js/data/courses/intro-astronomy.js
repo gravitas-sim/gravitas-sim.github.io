@@ -350,8 +350,8 @@ export const INTRO_ASTRONOMY = {
           objectives: ['exoplanets'],
           needs: ['a-first-transit'],
           pin: {
-            fp: '93cf260b',
-            n: 37,
+            fp: '669c9664',
+            n: 36,
           },
         },
       ],

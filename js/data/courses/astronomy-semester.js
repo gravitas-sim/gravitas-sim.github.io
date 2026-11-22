@@ -556,8 +556,8 @@ export const ASTRONOMY_SEMESTER = {
           objectives: ['worlds'],
           needs: ['transit-photometry'],
           pin: {
-            fp: '93cf260b',
-            n: 37,
+            fp: '669c9664',
+            n: 36,
           },
         },
         {
