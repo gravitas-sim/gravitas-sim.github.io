@@ -1,5 +1,6 @@
 import { describe, test, expect, beforeEach } from '@jest/globals';
 import {
+  PhysicsObject,
   StarObject,
   Planet,
   stars,
@@ -423,12 +424,28 @@ describe('conservation diagnostics', () => {
     // Message ids rather than sentences: the prose moved to the catalog when
     // the interface was internationalized, and physics.js is the wrong place
     // for a sentence anyway.
+    // One-way gravity is asked of the relation over the kinds present
+    // (js/engine/state.js gravityRoles), not of the two settings alone.
     clearWorld();
+    stars.push(new PhysicsObject({ x: 0, y: 0 }, { x: 0, y: 0 }, 1000, 8));
+    planets.push(new PhysicsObject({ x: 50, y: 0 }, { x: 0, y: 1 }, 1, 2));
     updatePhysicsSettings({ star_only_gravity: true, mutual_gravity: false });
     expect(conservationCaveats()).toContain('caveat.oneWayGravity');
 
     updatePhysicsSettings({ star_only_gravity: false, mutual_gravity: true });
     expect(conservationCaveats()).not.toContain('caveat.oneWayGravity');
+
+    // Stars alone pull each other with mutual gravity off: nothing one-way.
+    planets.length = 0;
+    updatePhysicsSettings({ mutual_gravity: false });
+    expect(conservationCaveats()).not.toContain('caveat.oneWayGravity');
+
+    // A hole beside a star is one-way with mutual gravity on: the star feels
+    // the hole and the hole does not feel the star.
+    updatePhysicsSettings({ mutual_gravity: true, bh_behavior: 'Orbiting' });
+    bh_list.push(new PhysicsObject({ x: -50, y: 0 }, { x: 0, y: 0 }, 1000, 8));
+    expect(conservationCaveats()).toContain('caveat.oneWayGravity');
+    clearWorld();
 
     updatePhysicsSettings({ dark_matter_halo: true });
     expect(conservationCaveats()).toContain('caveat.halo');
