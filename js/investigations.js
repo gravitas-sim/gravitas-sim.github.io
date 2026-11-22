@@ -306,7 +306,7 @@ bindPersistence({
   assignment: () => assignment,
   assignmentKey: () => assignmentKey,
   els: () => els,
-  clock: () => clock(),
+  clock,
 });
 
 // --- Live simulation context --------------------------------------------------
@@ -394,7 +394,7 @@ function probeContext() {
     /** Which role, if any, names a body. Null for anything unbound. */
     roleOf,
     /** Every role this step bound, in binding order. */
-    roles: () => boundRoles(),
+    roles: boundRoles,
     /** Select a role's body, as though the reader had clicked it. */
     selectRole,
     /**
@@ -458,7 +458,7 @@ function probeContext() {
       const star = observedStar();
       if (!star) return null;
       const velocity = currentRadialVelocity();
-      const primary = star ? primaryOf(star) : null;
+      const primary = primaryOf(star);
       const el = primary ? orbitalElements(star, primary, G) : null;
       const angle = Math.atan2(star.pos.y, star.pos.x);
       return {

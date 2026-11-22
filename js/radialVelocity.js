@@ -707,7 +707,6 @@ function renderReadout() {
   const e = cacheElements();
   const star = observedStar();
   const rv = currentRadialVelocity();
-
   if (e.target) e.target.textContent = star ? star.name || 'Star' : 'No star';
 
   if (e.current) {
