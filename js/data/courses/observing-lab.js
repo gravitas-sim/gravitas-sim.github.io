@@ -523,8 +523,8 @@ export const OBSERVING_LAB = {
           lesson: 'lives-of-stars',
           objectives: ['archive'],
           pin: {
-            fp: '584bfc2b',
-            n: 35,
+            fp: 'c2caed69',
+            n: 33,
           },
         },
         {

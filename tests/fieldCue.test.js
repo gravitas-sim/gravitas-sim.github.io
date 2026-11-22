@@ -4,7 +4,8 @@ import { INVESTIGATIONS } from '../js/data/investigations.js';
 import { loadInvestigation } from '../js/data/investigations/registry.js';
 import { DEPTH_LESSONS, loadDepthSteps } from '../js/investigations/depth.js';
 import { layDepth } from '../js/investigations/depthPure.js';
-import { cueText, stepMarkup } from '../js/investigations/stepView.js';
+import { cueText, slots, stepMarkup } from '../js/investigations/stepView.js';
+import { select } from '../js/investigations/menu.js';
 import { cueFindings } from '../tools/authoring/cueRules.mjs';
 import { checkCatalog } from '../js/authoring/rules.js';
 import { loadAuthoringInputs } from '../tools/authoring/inputs.mjs';
@@ -20,6 +21,8 @@ import { loadAuthoringInputs } from '../tools/authoring/inputs.mjs';
 // =============================================================================
 
 const ctx = { probe: {} };
+// The drop-down for a field with options is a lazy module the engine installs when a lesson opens.
+slots.menu = select;
 
 describe('the engine guard', () => {
   test('a cue with a numeral in any notation is not shown', () => {

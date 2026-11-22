@@ -888,6 +888,7 @@ export const EN_DEFERRED = {
   'inv.token.save': 'Download as a text file',
   'inv.token.failed':
     'The submission token could not be made. The PDF report still carries every answer.',
+  'inv.field.choose': 'Choose…',
   'inv.field.auto': 'worked out for you',
   'inv.model.compare': 'Compare with a model answer',
   'inv.model.writeFirst': 'Write your own answer first.',
@@ -3987,7 +3988,6 @@ export const EN_DEFERRED = {
   'failure.error': 'Something went wrong: {message}',
   'failure.worker.physics':
     'The gravity worker stopped, so gravity is now worked out on the main thread. The simulation is still correct, but may run more slowly.',
-
   // --- Words a lesson computes ----------------------------------------------
   'assign.roster.help':
     'The code rides on the link into every report, so one code can cover a whole class; it does not say which student made a report. To tell students apart, ask them to type their login or student number where the report asks for a name, or make one link per student.',

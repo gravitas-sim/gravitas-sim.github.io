@@ -77,6 +77,14 @@
       "why": "the bottom timeline bar covers the stars of a binary or Lagrange scene: the free region does not count it (lesson layout)",
       "expect": "is under timeline"
     },
+    "1280|integrators-in-practice|choose-the-second-step": {
+      "why": "the bottom timeline bar covers the stars of a binary or Lagrange scene: the free region does not count it (lesson layout)",
+      "expect": "is under timeline"
+    },
+    "1280|extending-an-experiment|move-the-definition-yours": {
+      "why": "the bottom timeline bar covers the stars of a binary or Lagrange scene: the free region does not count it (lesson layout)",
+      "expect": "is under timeline"
+    },
     "1280|extending-an-experiment|twenty-planets": {
       "why": "the bottom timeline bar covers the stars of a binary or Lagrange scene: the free region does not count it (lesson layout)",
       "expect": "is under timeline"

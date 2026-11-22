@@ -167,8 +167,20 @@ export function entryFor(step, index) {
       label: plainText(f.label),
       unit: f.unit ?? null,
       derived: Boolean(f.compute),
-      // The author's expected value when there is one (`want`), else the text cue.
-      hint: plainText(f.want ?? f.hint) || null,
+      // The author's expected value when there is one (`want`), else the text cue; a menu-driven
+      // field adds each choice's value (`by`).
+      hint:
+        plainText(
+          [
+            f.want ?? f.hint,
+            f.by &&
+              `by choice ${Object.entries(f.by)
+                .map(([k, v]) => `${k}: ${v}`)
+                .join('; ')}`,
+          ]
+            .filter(Boolean)
+            .join(', ')
+        ) || null,
     }));
     entry.hasValidator =
       typeof step.validate === 'function' || Boolean(step.plan);

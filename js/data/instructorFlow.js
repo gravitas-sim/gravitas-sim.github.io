@@ -191,9 +191,9 @@ export default {
         text: 'Run the notebook, read the edge and two fractions; a uniform population and why the sample differs from it.',
       },
       {
-        from: 'move-the-definition',
-        to: 'what-moved-it',
-        text: 'Change the cutoff and see one reclassified planet move the edge.',
+        from: 'move-the-definition-yours',
+        to: 'which-trial-moved',
+        text: 'Choose a cutoff, then find the trial that changed class.',
       },
       {
         from: 'what-you-worked-out',
@@ -218,9 +218,9 @@ export default {
         text: 'Why a profile interval can be lopsided where a covariance sigma is symmetric.',
       },
       {
-        from: 'hold-the-limb-darkening',
+        from: 'predict-the-shift',
         to: 'what-is-not-counted',
-        text: 'Hold the limb darkening fixed and see the sigma fall and the value move; what the scaled sigmas do not count.',
+        text: 'Predict, then hold the limb darkening: sigma falls, value moves; what sigmas omit.',
       },
       {
         from: 'what-you-worked-out',
@@ -240,9 +240,9 @@ export default {
         text: 'Run the notebook and read the two best periods; why Lomb-Scargle peaks at a harmonic.',
       },
       {
-        from: 'the-box',
-        to: 'against-the-fit',
-        text: "The best box, and the box period against the fitted one in the fit's uncertainties.",
+        from: 'the-box-with-your-limit',
+        to: 'separation-from-your-period',
+        text: "Choose a longest box; your box period against the fit's, with the red-noise factor.",
       },
       {
         from: 'what-a-grid-step-is',
@@ -258,13 +258,13 @@ export default {
     'sampling-a-posterior': [
       {
         from: 'what-a-sampler-does',
-        to: 'how-wide',
-        text: "What a posterior and a sampler are, and a prediction about the interval's width.",
+        to: 'pick-the-ratio-predict-the-width',
+        text: "A posterior, a sampler, and a prediction of the interval's width at a chosen a/R*.",
       },
       {
-        from: 'the-draws',
+        from: 'the-draws-at-your-ratio',
         to: 'did-it-converge',
-        text: 'Run the notebook, read the medians and widths, then the convergence diagnostics.',
+        text: 'Run at the chosen a/R*: the median moves, the width does not; convergence.',
       },
       {
         from: 'profile-and-posterior',
@@ -294,14 +294,14 @@ export default {
         text: 'Run the notebook on Kepler-16 and read four drifts; why the symplectic one stays bounded.',
       },
       {
-        from: 'halve-the-step',
-        to: 'halve-the-step',
-        text: 'Halve the step: fourfold for second order, far more for fourth order.',
+        from: 'predict-the-halving',
+        to: 'choose-the-second-step',
+        text: 'Predict how the step changes each drift, then choose a second step.',
       },
       {
         from: 'the-engine',
-        to: 'phase-luck',
-        text: 'The same step as the application’s engine, and why one symplectic number is a point on a curve.',
+        to: 'trust-at-six-orbits',
+        text: 'The same step as the application’s engine; at six orbits, a size or a phase.',
       },
       {
         from: 'what-you-worked-out',
@@ -1212,33 +1212,33 @@ export default {
     'lives-of-stars': [
       {
         from: 'three-futures',
-        to: 'arriving',
-        text: 'Before there is a star — The opening prediction is worth protecting: do not resolve it, and note that the two wrong answers about the small and the Sun-like star are corrected at screens 22 and 18 respectively. Screen 2 is the cloud, which carries no numbers at all, and the readout says why - that refusal is the investigation, not a gap. All three stars now stand on the main canvas rather than only on the comparison card, and they are half way through their own main sequences - the same FRACTION of a life, not the same age. That is the deliberate contrast with screen 23, which lines two stars up at the same number of years and gets a completely different picture. Name the difference here; a class that misses it reads screen 23 as contradicting this one.',
+        to: 'the-pms-track',
+        text: 'Before there is a star — The opening prediction is worth protecting: do not resolve it, and note that the two wrong answers about the small and the Sun-like star are corrected at screens 20 and 16 respectively. Screen 2 is the cloud, which carries no numbers at all, and the readout says why - that refusal is the investigation, not a gap. All three stars now stand on the main canvas rather than only on the comparison card, and they are half way through their own main sequences - the same FRACTION of a life, not the same age. That is the deliberate contrast with screen 21, which lines two stars up at the same number of years and gets a completely different picture. Name the difference here; a class that misses it reads screen 21 as contradicting this one.',
       },
       {
-        from: 'the-sun-today',
+        from: 'compare-two-moments',
         to: 'core-in-envelope-out',
-        text: 'The long part, and what ends it — Screen 8 is where a student sees that the Sun has already brightened by a third since it arrived, which kills the picture of a star sitting at one point for ten billion years. Screen 10 is the core-hydrogen prediction and the most important single screen in the investigation; give it time before revealing.',
+        text: 'The long part, and what ends it — Screen 6 is the one place students choose their moments on the Sun-like track; a main-sequence pair shows about three times the luminosity at nearly the same temperature, which kills the picture of a star sitting at one point for ten billion years. Screen 8 is the core-hydrogen prediction and the most important single screen in the investigation; give it time before revealing.',
       },
       {
         from: 'predict-direction',
         to: 'how-long-was-each-part',
-        text: 'Giant, ejection, cinder — Screen 16 exists to stop the tidy story: after helium ignites the star does not carry on getting bigger and redder, it drops and loops back. Screen 18 is the "the Sun will explode" correction. Screen 21 is the duration comparison and is the one to keep if you are short of time.',
+        text: 'Giant, ejection, cinder — Screen 14 exists to stop the tidy story: after helium ignites the star does not carry on getting bigger and redder, it drops and loops back. Screen 16 is the "the Sun will explode" correction. Screen 19 is the duration comparison and is the one to keep if you are short of time.',
       },
       {
         from: 'predict-the-red-dwarf',
         to: 'massive-versus-sun',
-        text: 'The two ends of the mass range — Screen 22 is the red dwarf, and the point is that almost nothing happens to it. Screen 23 is explicitly a same-age comparison and says so - the distinction between comparing at the same age and at the same fraction of a life is set up here and used again at screen 33.',
+        text: 'The two ends of the mass range — Screen 20 is the red dwarf, and the point is that almost nothing happens to it. Screen 21 is explicitly a same-age comparison and says so - the distinction between comparing at the same age and at the same fraction of a life is set up here and used again at screen 31.',
       },
       {
         from: 'supergiant-and-burning',
         to: 'the-black-hole',
-        text: 'What the heavy ones do — Screen 27 is a written answer about iron and is the hardest question in the investigation. Screens 29 and 31 are the two endpoint cases, and the contrast between them is deliberate: one is confident, one is a range spanning a factor of three with no bright supernova expected.',
+        text: 'What the heavy ones do — Screen 25 is a written answer about iron and is the hardest question in the investigation. Screens 27 and 29 are the two endpoint cases, and the contrast between them is deliberate: one is confident, one is a range spanning a factor of three with no bright supernova expected.',
       },
       {
         from: 'read-the-descriptions',
         to: 'what-you-followed',
-        text: 'Reading it back — Screen 32 has "not enough information" as its correct answer, which students find harder than any of the physics. Screen 33 is the open challenge and screen 34 the summative piece, which requires naming a limitation of the models. The last screen is a closing summary: mass to luminosity to lifetime, what is left behind, and what these models do not model.',
+        text: 'Reading it back — Screen 30 has "not enough information" as its correct answer, which students find harder than any of the physics. Screen 31 is the open challenge and screen 32 the summative piece, which requires citing two of the student’s own readings by name and naming a limitation of the models. The last screen is a closing summary: mass to luminosity to lifetime, what is left behind, and what these models do not model.',
       },
     ],
     'twelve-nights': [

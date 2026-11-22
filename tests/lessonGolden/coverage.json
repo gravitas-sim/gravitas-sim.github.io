@@ -4,17 +4,17 @@
     "transit-photometry",
     "the-saturated-star",
     "binary-star-planets",
-    "missing-mass",
     "weighing-stars",
-    "butterfly-effect",
-    "measuring-the-moon",
     "black-holes",
+    "butterfly-effect",
+    "extending-an-experiment",
+    "measuring-the-moon",
+    "missing-mass",
     "propose-an-observation",
     "what-is-a-gravitational-wave",
     "a-night-at-the-telescope",
     "counts-to-magnitudes",
     "detect-this-planet",
-    "extending-an-experiment",
     "power-law-gravity",
     "retrograde-motion"
   ],
@@ -173,14 +173,6 @@
       "lock:{\"placement\":true}",
       "prereq:yes"
     ],
-    "missing-mass": [
-      "depth-step:advanced/explore",
-      "key:explore.after",
-      "key:explore.decides",
-      "key:explore.depth",
-      "key:predict.setup",
-      "lock:{\"placement\":true,\"inspector\":false,\"areaSweep\":false}"
-    ],
     "weighing-stars": [
       "key:explore.showBarycenter",
       "key:explore.stage",
@@ -188,19 +180,29 @@
       "key:read.showBarycenter",
       "math:arithmetic"
     ],
+    "black-holes": [
+      "key:question.checklist",
+      "key:read.explainView",
+      "lock:{\"placement\":true,\"inspector\":false,\"areaSweep\":false}"
+    ],
     "butterfly-effect": [
       "key:explore.rubric",
       "key:predict.requires",
       "lock:null"
+    ],
+    "extending-an-experiment": [
+      "key:measure.canvas",
+      "key:measure.compute",
+      "key:read.canvas"
     ],
     "measuring-the-moon": [
       "key:question.maxUncertainty",
       "key:question.minUncertainty",
       "key:question.valueWithin"
     ],
-    "black-holes": [
-      "key:question.checklist",
-      "key:read.explainView"
+    "missing-mass": [
+      "key:predict.setup",
+      "key:question.restates"
     ],
     "propose-an-observation": [
       "key:measure.plan",
@@ -218,9 +220,6 @@
     ],
     "detect-this-planet": [
       "key:read.allowInspector"
-    ],
-    "extending-an-experiment": [
-      "key:measure.compute"
     ],
     "power-law-gravity": [
       "key:question.explain"
@@ -298,16 +297,16 @@
   ],
   "totals": {
     "investigations": 124,
-    "steps": 1995,
+    "steps": 1992,
     "activityCuts": 6,
-    "lessonTokens": 175,
+    "lessonTokens": 174,
     "activityTokens": 29,
     "stepTypes": {
       "read": 377,
-      "predict": 203,
-      "measure": 522,
+      "predict": 202,
+      "measure": 519,
       "ellipse": 1,
-      "question": 750,
+      "question": 751,
       "explore": 141,
       "wedges": 1
     }

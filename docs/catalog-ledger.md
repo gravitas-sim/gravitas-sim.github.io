@@ -18,7 +18,7 @@ Rows by kind: activity 6, course 6, experiment 4, investigation 146, sequence 11
 
 Baseline (measured at f9277ff8): 146 investigations (124 lessons, 10 Observatory, 9 3-D, 3 mission), 6 activity entries, 4 bench labs, 7 courses (6 rows and 1 out of scope), 11 sequences, 69 scenarios (61 sandbox, 8 3-D lab), 16 datasets.
 
-Editorial: OPEN 167, REVISED 6. Redesign: OPEN 167, REVISED 6. Scenario dispositions: OPEN 69.
+Editorial: OPEN 166, REVISED 7. Redesign: OPEN 167, REVISED 6. Scenario dispositions: OPEN 69.
 
 Scene class of the lessons: portrait or backdrop 94, setup scenario 26, engine-integrated stage 2, model-owned stage 2.
 
@@ -35,7 +35,7 @@ Scene class of the lessons: portrait or backdrop 94, setup scenario 26, engine-i
 | `investigation:a-lens-passing-by`                    | lesson      |   400 | FOCUSED  | portrait or backdrop    | OPEN      | OPEN     | NOT RUN      | -                                     |          0 |
 | `investigation:a-night-at-the-telescope`             | lesson      |   408 | FOCUSED  | portrait or backdrop    | OPEN      | OPEN     | NOT RUN      | -                                     |          0 |
 | `investigation:a-stars-life-in-numbers`              | lesson      |   382 | FOCUSED  | portrait or backdrop    | OPEN      | OPEN     | NOT RUN      | -                                     |          0 |
-| `investigation:a-universe-of-stars`                  | lesson      |   359 | STRONG   | portrait or backdrop    | OPEN      | OPEN     | NOT RUN      | -                                     |          0 |
+| `investigation:a-universe-of-stars`                  | lesson      |   359 | STRONG   | portrait or backdrop    | REVISED   | OPEN     | NOT RUN      | -                                     |          0 |
 | `investigation:a-variable-star-from-frames`          | lesson      |   406 | STRONG   | portrait or backdrop    | OPEN      | OPEN     | NOT RUN      | synthetic frames                      |          0 |
 | `investigation:architectures`                        | lesson      |   395 | FOCUSED  | portrait or backdrop    | OPEN      | OPEN     | NOT RUN      | -                                     |          0 |
 | `investigation:bending-light`                        | lesson      |   400 | FOCUSED  | portrait or backdrop    | OPEN      | OPEN     | NOT RUN      | -                                     |          0 |
@@ -88,9 +88,9 @@ Scene class of the lessons: portrait or backdrop 94, setup scenario 26, engine-i
 | `investigation:leavitts-law`                         | lesson      |   385 | FOCUSED  | portrait or backdrop    | OPEN      | OPEN     | NOT RUN      | -                                     |          0 |
 | `investigation:lines-and-motion`                     | lesson      |   378 | STRONG   | portrait or backdrop    | OPEN      | OPEN     | NOT RUN      | -                                     |          0 |
 | `investigation:listening-to-spacetime`               | lesson      |   353 | STRONG   | model-owned stage       | OPEN      | OPEN     | NOT RUN      | -                                     |          0 |
-| `investigation:lives-of-stars`                       | lesson      |   360 | FOCUSED  | portrait or backdrop    | OPEN      | OPEN     | NOT RUN      | -                                     |          0 |
+| `investigation:lives-of-stars`                       | lesson      |   360 | FOCUSED  | portrait or backdrop    | REVISED   | REVISED  | NOT RUN      | -                                     |          1 |
 | `investigation:measuring-the-moon`                   | lesson      |   330 | STRONG   | portrait or backdrop    | REVISED   | REVISED  | NOT VERIFIED | -                                     |          4 |
-| `investigation:missing-mass`                         | lesson      |   358 | STRONG   | setup scenario          | REVISED   | REVISED  | NOT RUN      | -                                     |          4 |
+| `investigation:missing-mass`                         | lesson      |   358 | FOCUSED  | setup scenario          | OPEN      | OPEN     | NOT RUN      | -                                     |          0 |
 | `investigation:ml-cruise`                            | mission     |   420 | STRONG   | -                       | OPEN      | OPEN     | NOT RUN      | -                                     |          1 |
 | `investigation:ml-orbit`                             | mission     |   420 | FOCUSED  | -                       | OPEN      | OPEN     | NOT RUN      | -                                     |          1 |
 | `investigation:ml-window`                            | mission     |   420 | FOCUSED  | -                       | OPEN      | OPEN     | NOT RUN      | -                                     |          1 |
