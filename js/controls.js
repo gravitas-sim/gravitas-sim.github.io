@@ -501,6 +501,8 @@ function setupShortcuts() {
       state.pan = { x: 0, y: 0 };
       // Deliberate, so Follow mode re-centers instead of reading it as a drag.
       resetFollowCamera(state);
+      // The reader chose this view: a lesson's fit leaves it alone.
+      state.cameraTouchedAt = Date.now();
       toast(t('toast.view.reset'));
     },
   });

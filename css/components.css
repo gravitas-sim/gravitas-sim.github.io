@@ -4293,12 +4293,14 @@
   #investigationFinish.hidden {
     display: none;
   }
-  #investigationRestart::backdrop {
+  #investigationRestart::backdrop,
+  #linkNotice::backdrop {
     background: color-mix(in srgb, var(--bg-color) 88%, transparent);
     backdrop-filter: blur(8px);
   }
   #investigationFinishContent,
-  #investigationRestart {
+  #investigationRestart,
+  #linkNotice {
     width: min(520px, 100%);
     max-height: 90vh;
     overflow-y: auto;
@@ -4476,14 +4478,13 @@
 @layer components {
   .inv-reset-scenario {
     flex: none;
-    width: 26px;
-    height: 26px;
-    min-height: 0;
-    padding: 0;
-    display: grid;
-    place-items: center;
-    font-size: var(--text-md);
-    line-height: 1;
+    min-height: 26px;
+    padding: 0 var(--space-2);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    font-size: var(--text-xs);
+    white-space: nowrap;
     color: var(--text-secondary);
     background: transparent;
     border: 1px solid var(--border);
@@ -7222,17 +7223,17 @@
  * ------------------------------------------------------------------------- */
 @layer components {
   .inv-progress-safety {
-    padding: var(--space-2, 8px) var(--space-3, 12px);
+    padding: var(--space-1, 4px) var(--space-3, 12px);
     border-top: 1px solid var(--border-subtle);
     display: flex;
     flex-direction: column;
-    gap: var(--space-2, 8px);
+    gap: var(--space-1, 4px);
   }
 
   .inv-save-status {
     margin: 0;
     font-size: var(--text-2xs, 11px);
-    line-height: 1.45;
+    line-height: 1.35;
     color: var(--text-muted);
   }
 
@@ -7249,6 +7250,19 @@
     border-left: 3px solid var(--warning);
     padding: var(--space-2, 8px);
     border-radius: var(--radius-sm, 4px);
+  }
+
+  /* The backup button a refusal offers, on its own line; the note that the
+     scene is rebuilt (js/investigations/vocabulary.js) is marked by a rule too. */
+  .inv-save-status .ui-button {
+    display: block;
+    margin-top: var(--space-2, 8px);
+  }
+
+  .inv-save-status[data-state='scene'] {
+    color: var(--text-primary);
+    border-left: 3px solid var(--border-subtle);
+    padding-left: var(--space-2, 8px);
   }
 
   /* The two backup buttons, behind one disclosure. An authoring preview

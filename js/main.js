@@ -392,6 +392,8 @@ document.addEventListener('DOMContentLoaded', () => {
       // A deliberate camera command, so Follow mode starts a fresh camera
       // rather than reading the reset as a drag to be preserved.
       resetFollowCamera(state);
+      // The reader chose this view: a lesson's fit leaves it alone.
+      state.cameraTouchedAt = Date.now();
     },
   });
   canvas.addEventListener('touchstart', e => doubleTap.start(e), {

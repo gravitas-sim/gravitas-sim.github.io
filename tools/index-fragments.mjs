@@ -122,6 +122,14 @@ export const FRAGMENTS = [
     ids: ['investigationFinish', 'investigationRestart'],
   },
   {
+    // Fetched only when a link is refused, so no visit pays for it.
+    host: 'link-notice',
+    family: 'classroom entry',
+    kind: 'file',
+    owner: 'js/assignments/linkNotice.js',
+    ids: ['linkNotice'],
+  },
+  {
     host: 'bh-masses',
     family: 'start-up: black-hole masses',
     kind: 'template',

@@ -213,7 +213,8 @@ export const placedOf = entries =>
   entries.map(e => ({
     x: e.star.pos.x,
     y: e.star.pos.y,
-    radius: e.star.radius,
+    // The radius drawn, which a lesson may set apart from the model's.
+    radius: e.star.stageRadius > 0 ? e.star.stageRadius : e.star.radius,
   }));
 
 export const SHEET_MAX_WIDTH = 900;

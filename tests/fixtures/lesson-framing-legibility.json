@@ -1,0 +1,648 @@
+{
+ "rows": [
+  {
+   "what": "scenario Kepler's 2nd Law",
+   "step": "keplers-laws/eight-minutes-of-arc",
+   "size": "1280x800",
+   "labels": 3,
+   "smallest": 11,
+   "small": [],
+   "overlaps": [],
+   "pass": true
+  },
+  {
+   "what": "scenario Solar System",
+   "step": "keplers-laws/kepler-s-third-law",
+   "size": "1280x800",
+   "labels": 7,
+   "smallest": 11,
+   "small": [],
+   "overlaps": [],
+   "pass": true
+  },
+  {
+   "what": "scenario TRAPPIST-1 System",
+   "step": "keplers-laws/what-newton-added",
+   "size": "1280x800",
+   "labels": 7,
+   "smallest": 11,
+   "small": [],
+   "overlaps": [],
+   "pass": true
+  },
+  {
+   "what": "scenario Retrograde Mars",
+   "step": "retrograde-motion/the-wandering-stars",
+   "size": "1280x800",
+   "labels": 3,
+   "smallest": 11,
+   "small": [],
+   "overlaps": [],
+   "pass": true
+  },
+  {
+   "what": "scenario Transit Lab",
+   "step": "transit-photometry/a-firefly-beside-a-lighthouse",
+   "size": "1280x800",
+   "labels": 2,
+   "smallest": 11,
+   "small": [],
+   "overlaps": [],
+   "pass": true
+  },
+  {
+   "what": "scenario Blended Binary",
+   "step": "transit-photometry/compare-the-two-curves",
+   "size": "1280x800",
+   "labels": 2,
+   "smallest": 11,
+   "small": [],
+   "overlaps": [],
+   "pass": true
+  },
+  {
+   "what": "scenario Interstellar Visitor",
+   "step": "orbital-energy/something-that-came-from-outside",
+   "size": "1280x800",
+   "labels": 3,
+   "smallest": 11,
+   "small": [],
+   "overlaps": [],
+   "pass": true
+  },
+  {
+   "what": "scenario Exoplanet Characterization Lab",
+   "step": "radial-velocity/the-planet-you-already-measured",
+   "size": "1280x800",
+   "labels": 2,
+   "smallest": 11,
+   "small": [],
+   "overlaps": [],
+   "pass": true
+  },
+  {
+   "what": "scenario Habitable Zone Lab",
+   "step": "goldilocks-question/now-put-it-round-the",
+   "size": "1280x800",
+   "labels": 5,
+   "smallest": 11,
+   "small": [],
+   "overlaps": [],
+   "pass": true
+  },
+  {
+   "what": "scenario Spiral Galaxy",
+   "step": "missing-mass/now-a-galaxy",
+   "size": "1280x800",
+   "labels": 4,
+   "smallest": 12,
+   "small": [],
+   "overlaps": [],
+   "pass": true
+  },
+  {
+   "what": "scenario Milky Way Rotation",
+   "step": "missing-mass/what-rubin-and-ford-found",
+   "size": "1280x800",
+   "labels": 4,
+   "smallest": 12,
+   "small": [],
+   "overlaps": [],
+   "pass": true
+  },
+  {
+   "what": "scenario Coma Cluster",
+   "step": "missing-mass/forty-years-earlier",
+   "size": "1280x800",
+   "labels": 0,
+   "smallest": null,
+   "small": [],
+   "overlaps": [],
+   "pass": false
+  },
+  {
+   "what": "scenario Earth-Moon System",
+   "step": "tides/twice-a-day-everywhere",
+   "size": "1280x800",
+   "labels": 0,
+   "smallest": null,
+   "small": [],
+   "overlaps": [],
+   "pass": false
+  },
+  {
+   "what": "scenario Tidal Disruption Event",
+   "step": "tides/the-extreme-case-running-live",
+   "size": "1280x800",
+   "labels": 1,
+   "smallest": 12,
+   "small": [],
+   "overlaps": [],
+   "pass": true
+  },
+  {
+   "what": "scenario Three-Body Sensitivity Lab",
+   "step": "butterfly-effect/a-word-that-has-been",
+   "size": "1280x800",
+   "labels": 3,
+   "smallest": 12,
+   "small": [],
+   "overlaps": [],
+   "pass": true
+  },
+  {
+   "what": "scenario Binary Pair",
+   "step": "butterfly-effect/a-control-before-the-interesting",
+   "size": "1280x800",
+   "labels": 2,
+   "smallest": 12,
+   "small": [],
+   "overlaps": [],
+   "pass": true
+  },
+  {
+   "what": "scenario Galilean Resonance",
+   "step": "when-orbits-lock/four-moons-and-a-suspicious",
+   "size": "1280x800",
+   "labels": 5,
+   "smallest": 11,
+   "small": [],
+   "overlaps": [],
+   "pass": true
+  },
+  {
+   "what": "scenario Broken Laplace Resonance",
+   "step": "when-orbits-lock/break-it",
+   "size": "1280x800",
+   "labels": 4,
+   "smallest": 11,
+   "small": [],
+   "overlaps": [],
+   "pass": true
+  },
+  {
+   "what": "scenario Pluto and Neptune",
+   "step": "when-orbits-lock/the-orbit-that-crosses-and",
+   "size": "1280x800",
+   "labels": 3,
+   "smallest": 11,
+   "small": [],
+   "overlaps": [],
+   "pass": true
+  },
+  {
+   "what": "scenario Jupiter Trojans",
+   "step": "when-orbits-lock/sixty-degrees-ahead",
+   "size": "1280x800",
+   "labels": 2,
+   "smallest": 11,
+   "small": [],
+   "overlaps": [],
+   "pass": true
+  },
+  {
+   "what": "scenario Binary Planet Lab",
+   "step": "binary-star-planets/two-suns",
+   "size": "1280x800",
+   "labels": 3,
+   "smallest": 11,
+   "small": [],
+   "overlaps": [],
+   "pass": true
+  },
+  {
+   "what": "scenario Circumbinary Planet Lab",
+   "step": "binary-star-planets/around-both",
+   "size": "1280x800",
+   "labels": 3,
+   "smallest": 11,
+   "small": [],
+   "overlaps": [],
+   "pass": true
+  },
+  {
+   "what": "scenario Gravity Assist Lab",
+   "step": "gravity-assist/voyager-left-faster",
+   "size": "1280x800",
+   "labels": 2,
+   "smallest": 11,
+   "small": [],
+   "overlaps": [],
+   "pass": true
+  },
+  {
+   "what": "scenario Gravity Assist: Heliocentric",
+   "step": "gravity-assist/now-with-a-sun",
+   "size": "1280x800",
+   "labels": 3,
+   "smallest": 11,
+   "small": [],
+   "overlaps": [],
+   "pass": true
+  },
+  {
+   "what": "scenario Orbital Transfer Lab",
+   "step": "hohmann-transfer/the-problem",
+   "size": "1280x800",
+   "labels": 3,
+   "smallest": 11,
+   "small": [],
+   "overlaps": [],
+   "pass": true
+  },
+  {
+   "what": "scenario Lagrange Point Lab",
+   "step": "lagrange-points/two-stars-and-a-speck",
+   "size": "1280x800",
+   "labels": 3,
+   "smallest": 11,
+   "small": [],
+   "overlaps": [],
+   "pass": true
+  },
+  {
+   "what": "scenario Roche Pass",
+   "step": "why-rings/a-pass-inside-the-limit",
+   "size": "1280x800",
+   "labels": 1,
+   "smallest": 11,
+   "small": [],
+   "overlaps": [],
+   "pass": true
+  },
+  {
+   "what": "scenario Ring Gap",
+   "step": "why-rings/a-ring-with-a-resonance",
+   "size": "1280x800",
+   "labels": 3,
+   "smallest": 11,
+   "small": [],
+   "overlaps": [],
+   "pass": true
+  },
+  {
+   "what": "stage weighing-stars",
+   "step": "weighing-stars/you-cannot-put-a-star",
+   "size": "1280x800",
+   "labels": 2,
+   "smallest": 12,
+   "small": [],
+   "overlaps": [],
+   "pass": true
+  },
+  {
+   "what": "stage black-holes",
+   "step": "black-holes/not-a-hole-and-not",
+   "size": "1280x800",
+   "labels": 0,
+   "smallest": null,
+   "small": [],
+   "overlaps": [],
+   "pass": false
+  },
+  {
+   "what": "stage what-is-a-gravitational-wave",
+   "step": "what-is-a-gravitational-wave/travel-without-shining",
+   "size": "1280x800",
+   "labels": 0,
+   "smallest": null,
+   "small": [],
+   "overlaps": [],
+   "pass": false
+  },
+  {
+   "what": "stage listening-to-spacetime",
+   "step": "listening-to-spacetime/an-unlabeled-signal",
+   "size": "1280x800",
+   "labels": 0,
+   "smallest": null,
+   "small": [],
+   "overlaps": [],
+   "pass": false
+  },
+  {
+   "what": "scenario Kepler's 2nd Law",
+   "step": "keplers-laws/eight-minutes-of-arc",
+   "size": "375x812",
+   "labels": 3,
+   "smallest": 11,
+   "small": [],
+   "overlaps": [],
+   "pass": true
+  },
+  {
+   "what": "scenario Solar System",
+   "step": "keplers-laws/kepler-s-third-law",
+   "size": "375x812",
+   "labels": 6,
+   "smallest": 11,
+   "small": [],
+   "overlaps": [],
+   "pass": true
+  },
+  {
+   "what": "scenario TRAPPIST-1 System",
+   "step": "keplers-laws/what-newton-added",
+   "size": "375x812",
+   "labels": 4,
+   "smallest": 11,
+   "small": [],
+   "overlaps": [],
+   "pass": true
+  },
+  {
+   "what": "scenario Retrograde Mars",
+   "step": "retrograde-motion/the-wandering-stars",
+   "size": "375x812",
+   "labels": 3,
+   "smallest": 11,
+   "small": [],
+   "overlaps": [],
+   "pass": true
+  },
+  {
+   "what": "scenario Transit Lab",
+   "step": "transit-photometry/a-firefly-beside-a-lighthouse",
+   "size": "375x812",
+   "labels": 2,
+   "smallest": 11,
+   "small": [],
+   "overlaps": [],
+   "pass": true
+  },
+  {
+   "what": "scenario Blended Binary",
+   "step": "transit-photometry/compare-the-two-curves",
+   "size": "375x812",
+   "labels": 2,
+   "smallest": 11,
+   "small": [],
+   "overlaps": [],
+   "pass": true
+  },
+  {
+   "what": "scenario Interstellar Visitor",
+   "step": "orbital-energy/something-that-came-from-outside",
+   "size": "375x812",
+   "labels": 3,
+   "smallest": 11,
+   "small": [],
+   "overlaps": [],
+   "pass": true
+  },
+  {
+   "what": "scenario Exoplanet Characterization Lab",
+   "step": "radial-velocity/the-planet-you-already-measured",
+   "size": "375x812",
+   "labels": 2,
+   "smallest": 11,
+   "small": [],
+   "overlaps": [],
+   "pass": true
+  },
+  {
+   "what": "scenario Habitable Zone Lab",
+   "step": "goldilocks-question/now-put-it-round-the",
+   "size": "375x812",
+   "labels": 4,
+   "smallest": 11,
+   "small": [],
+   "overlaps": [],
+   "pass": true
+  },
+  {
+   "what": "scenario Spiral Galaxy",
+   "step": "missing-mass/now-a-galaxy",
+   "size": "375x812",
+   "labels": 4,
+   "smallest": 12,
+   "small": [],
+   "overlaps": [],
+   "pass": true
+  },
+  {
+   "what": "scenario Milky Way Rotation",
+   "step": "missing-mass/what-rubin-and-ford-found",
+   "size": "375x812",
+   "labels": 4,
+   "smallest": 12,
+   "small": [],
+   "overlaps": [],
+   "pass": true
+  },
+  {
+   "what": "scenario Coma Cluster",
+   "step": "missing-mass/forty-years-earlier",
+   "size": "375x812",
+   "labels": 0,
+   "smallest": null,
+   "small": [],
+   "overlaps": [],
+   "pass": false
+  },
+  {
+   "what": "scenario Earth-Moon System",
+   "step": "tides/twice-a-day-everywhere",
+   "size": "375x812",
+   "labels": 0,
+   "smallest": null,
+   "small": [],
+   "overlaps": [],
+   "pass": false
+  },
+  {
+   "what": "scenario Tidal Disruption Event",
+   "step": "tides/the-extreme-case-running-live",
+   "size": "375x812",
+   "labels": 1,
+   "smallest": 12,
+   "small": [],
+   "overlaps": [],
+   "pass": true
+  },
+  {
+   "what": "scenario Three-Body Sensitivity Lab",
+   "step": "butterfly-effect/a-word-that-has-been",
+   "size": "375x812",
+   "labels": 3,
+   "smallest": 12,
+   "small": [],
+   "overlaps": [],
+   "pass": true
+  },
+  {
+   "what": "scenario Binary Pair",
+   "step": "butterfly-effect/a-control-before-the-interesting",
+   "size": "375x812",
+   "labels": 2,
+   "smallest": 12,
+   "small": [],
+   "overlaps": [],
+   "pass": true
+  },
+  {
+   "what": "scenario Galilean Resonance",
+   "step": "when-orbits-lock/four-moons-and-a-suspicious",
+   "size": "375x812",
+   "labels": 4,
+   "smallest": 11,
+   "small": [],
+   "overlaps": [],
+   "pass": true
+  },
+  {
+   "what": "scenario Broken Laplace Resonance",
+   "step": "when-orbits-lock/break-it",
+   "size": "375x812",
+   "labels": 4,
+   "smallest": 11,
+   "small": [],
+   "overlaps": [],
+   "pass": true
+  },
+  {
+   "what": "scenario Pluto and Neptune",
+   "step": "when-orbits-lock/the-orbit-that-crosses-and",
+   "size": "375x812",
+   "labels": 2,
+   "smallest": 11,
+   "small": [],
+   "overlaps": [],
+   "pass": true
+  },
+  {
+   "what": "scenario Jupiter Trojans",
+   "step": "when-orbits-lock/sixty-degrees-ahead",
+   "size": "375x812",
+   "labels": 0,
+   "smallest": null,
+   "small": [],
+   "overlaps": [],
+   "pass": false
+  },
+  {
+   "what": "scenario Binary Planet Lab",
+   "step": "binary-star-planets/two-suns",
+   "size": "375x812",
+   "labels": 2,
+   "smallest": 12,
+   "small": [],
+   "overlaps": [],
+   "pass": true
+  },
+  {
+   "what": "scenario Circumbinary Planet Lab",
+   "step": "binary-star-planets/around-both",
+   "size": "375x812",
+   "labels": 3,
+   "smallest": 11,
+   "small": [],
+   "overlaps": [],
+   "pass": true
+  },
+  {
+   "what": "scenario Gravity Assist Lab",
+   "step": "gravity-assist/voyager-left-faster",
+   "size": "375x812",
+   "labels": 2,
+   "smallest": 11,
+   "small": [],
+   "overlaps": [],
+   "pass": true
+  },
+  {
+   "what": "scenario Gravity Assist: Heliocentric",
+   "step": "gravity-assist/now-with-a-sun",
+   "size": "375x812",
+   "labels": 3,
+   "smallest": 11,
+   "small": [],
+   "overlaps": [],
+   "pass": true
+  },
+  {
+   "what": "scenario Orbital Transfer Lab",
+   "step": "hohmann-transfer/the-problem",
+   "size": "375x812",
+   "labels": 3,
+   "smallest": 11,
+   "small": [],
+   "overlaps": [],
+   "pass": true
+  },
+  {
+   "what": "scenario Lagrange Point Lab",
+   "step": "lagrange-points/two-stars-and-a-speck",
+   "size": "375x812",
+   "labels": 9,
+   "smallest": 11,
+   "small": [],
+   "overlaps": [
+    "\"0.0300 M\" over \"L5\"",
+    "\"0.0300 M\" over \"L5\"",
+    "\"0.0300 M\" over \"L5\""
+   ],
+   "pass": false
+  },
+  {
+   "what": "scenario Roche Pass",
+   "step": "why-rings/a-pass-inside-the-limit",
+   "size": "375x812",
+   "labels": 1,
+   "smallest": 11,
+   "small": [],
+   "overlaps": [],
+   "pass": true
+  },
+  {
+   "what": "scenario Ring Gap",
+   "step": "why-rings/a-ring-with-a-resonance",
+   "size": "375x812",
+   "labels": 2,
+   "smallest": 11,
+   "small": [],
+   "overlaps": [],
+   "pass": true
+  },
+  {
+   "what": "stage weighing-stars",
+   "step": "weighing-stars/you-cannot-put-a-star",
+   "size": "375x812",
+   "labels": 2,
+   "smallest": 12,
+   "small": [],
+   "overlaps": [],
+   "pass": true
+  },
+  {
+   "what": "stage black-holes",
+   "step": "black-holes/not-a-hole-and-not",
+   "size": "375x812",
+   "labels": 0,
+   "smallest": null,
+   "small": [],
+   "overlaps": [],
+   "pass": false
+  },
+  {
+   "what": "stage what-is-a-gravitational-wave",
+   "step": "what-is-a-gravitational-wave/travel-without-shining",
+   "size": "375x812",
+   "labels": 0,
+   "smallest": null,
+   "small": [],
+   "overlaps": [],
+   "pass": false
+  },
+  {
+   "what": "stage listening-to-spacetime",
+   "step": "listening-to-spacetime/an-unlabeled-signal",
+   "size": "375x812",
+   "labels": 0,
+   "smallest": null,
+   "small": [],
+   "overlaps": [],
+   "pass": false
+  }
+ ]
+}

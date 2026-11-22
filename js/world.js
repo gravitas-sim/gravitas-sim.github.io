@@ -479,6 +479,7 @@ const load_simulation_state = () => {
     const view = loadedState.view || { zoom: 1.5, pan: { x: 0, y: 0 } };
     state.zoom = view.zoom;
     state.pan = view.pan;
+    state.cameraTouchedAt = Date.now(); // a loaded view is the reader's
     commitSettings('saved-world');
     rebuildWorldFromStates(loadedState.objects);
     builtSystem = null;

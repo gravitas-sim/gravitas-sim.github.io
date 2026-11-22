@@ -21,6 +21,7 @@
 // =============================================================================
 
 import { t, registerMessages } from '../i18n/index.js';
+import { isTooLongLink } from '../names.js';
 
 /** The pack, judged and compiled: {ok, compiled} or {ok: false, errors}. */
 export async function compilePack(pack, facts) {
@@ -108,27 +109,31 @@ export async function installedPack(id, store) {
 export async function openPackFromUrl() {
   // Dynamic, like every bridge's: a static import splits a chunk a lesson loads.
   const facts = await (await import('../investigations.js')).packFacts();
-  const [{ toast }, { readPackFragment }, { EN_REMIX }, { ES_REMIX }] =
-    await Promise.all([
-      import('../notify.js'),
-      import('../composer/packLink.js'),
-      import('../i18n/en.remix.js'),
-      import('../i18n/es.remix.js'),
-    ]);
+  const [
+    { toast, refuseLink },
+    { readPackFragment },
+    { EN_REMIX },
+    { ES_REMIX },
+  ] = await Promise.all([
+    import('../notify.js'),
+    import('../composer/packLink.js'),
+    import('../i18n/en.remix.js'),
+    import('../i18n/es.remix.js'),
+  ]);
   registerMessages('en', EN_REMIX);
   registerMessages('es', ES_REMIX);
+  // A refusal is the dialog of ../assignments/linkNotice.js.
+  const refuse = why => refuseLink({ why }) && false;
   const fail = (field, message) =>
-    toast(t('remix.error.invalid', { field, message })) && false;
+    refuse(t('remix.error.invalid', { field, message }));
 
   const read = await readPackFragment(location.hash);
-  if (!read.ok) return toast(t(`remix.error.${read.reason}`)) && false;
+  if (!read.ok) return refuse(t(`remix.error.${read.reason}`));
   let pack = read.pack;
   if (read.installed) {
     const got = await installedPack(read.installed);
     if (!got.ok)
-      return (
-        toast(t(`remix.error.${got.reason}`, { id: read.installed })) && false
-      );
+      return refuse(t(`remix.error.${got.reason}`, { id: read.installed }));
     pack = got.pack;
   }
   if (read.delta) {
@@ -138,8 +143,7 @@ export async function openPackFromUrl() {
     ]);
     const from = String(read.delta.from?.id);
     const original = await load(from, facts, core);
-    if (!original)
-      return toast(t('remix.error.noOriginal', { id: from })) && false;
+    if (!original) return refuse(t('remix.error.noOriginal', { id: from }));
     const base = await core.remixOf(original, from, { id: 'base' });
     const laid = applyDelta(read.delta, base.pack);
     if (!laid.ok) return fail(laid.path, laid.message);
@@ -154,8 +158,12 @@ export async function openPackFromUrl() {
       ? { es: () => Promise.resolve({ default: shadow }) }
       : {},
   });
-  const opened = await facts.openInvestigation(lesson.id);
-  if (opened?.ok === false) return fail('', opened.reason);
+  const opened = await facts.openInvestigation(lesson.id, {
+    link: location.hash,
+  });
+  if (opened?.ok === false) return refuse(t(`assign.error.${opened.reason}`));
+  // A pack link can carry a whole lesson: too long to come back to from Home.
+  if (isTooLongLink(location.hash)) toast(t('remix.notice.tooLong'));
   if (pack.derivedFrom)
     toast(
       t('remix.notice.opened', {

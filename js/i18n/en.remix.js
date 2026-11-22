@@ -20,6 +20,8 @@ export const EN_REMIX = {
     'That investigation was made from “{id}”, which this Gravitas does not have.',
   'remix.error.invalid':
     'That investigation cannot be opened: {field} {message}',
+  'remix.notice.tooLong':
+    'This link is too long for Home to bring you back to it. Keep the link, or the file, to open this work again.',
   'remix.notice.opened':
     '“{title}” is an instructor’s version of “{original}”. The science is the original’s; the words and the order are the instructor’s.',
 };

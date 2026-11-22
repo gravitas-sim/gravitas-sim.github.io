@@ -447,7 +447,10 @@ const titleOf = item => {
   const e = byId.get(item.id);
   return e
     ? pick(e.title)
-    : item.title?.[document.documentElement.lang] || item.title?.en || '';
+    : item.title?.[document.documentElement.lang] ||
+        item.title?.en ||
+        item.title?.es ||
+        '';
 };
 
 /**
@@ -465,7 +468,10 @@ function fillContinue() {
       p?.total && p.started && p.done < p.total
         ? ` <span class="ui-note">${escape(t('lib.continue.of', { n: p.done, total: p.total }))}</span>`
         : '';
-    return `<li><a class="lib-resume" data-entry="${escape(item.id)}" href="${escape(item.route)}">${escape(label ?? title)}</a>${seen}</li>`;
+    const shown = item.id.startsWith('assignment:')
+      ? t('lib.continue.assignment', { title })
+      : (label ?? title);
+    return `<li><a class="lib-resume" data-entry="${escape(item.id)}" href="${escape(item.route)}">${escape(shown)}</a>${seen}</li>`;
   };
   let html = '';
   if (items.length) {

@@ -128,7 +128,12 @@ const PARSES = {
     'none',
     OWN + ' (the sandbox restore reads progress)',
   ],
-  'js/investigations/stepView.js': [1, 'none', OWN + ' (load reads progress)'],
+  'js/investigations/stepView.js': [
+    2,
+    'none',
+    OWN +
+      ' (load reads progress; the second keeps the link, checked for shape)',
+  ],
   'js/investigations/figures.js': [
     1,
     'none',

@@ -157,8 +157,8 @@ test.describe('the canvas behind a lesson', () => {
     );
     await expect(page.locator('.inv-object-role')).toHaveText('picture');
     await expect(page.locator('#investigationResetScenario')).toHaveAttribute(
-      'aria-label',
-      'Reset the picture and instrument for this step'
+      'title',
+      "Rebuilds this step's picture. Your answers are not changed."
     );
     expect(await paused(page)).toBe(true);
     // The rail is as it was: a portrait folds nothing.

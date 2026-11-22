@@ -20,6 +20,8 @@ export const ES_REMIX = {
     'Esa investigación se hizo a partir de «{id}», que esta versión de Gravitas no tiene.',
   'remix.error.invalid':
     'Esa investigación no se puede abrir: {field} {message}',
+  'remix.notice.tooLong':
+    'Este enlace es demasiado largo para que el inicio te lleve de vuelta. Guarda el enlace, o el archivo, para abrir este trabajo otra vez.',
   'remix.notice.opened':
     '«{title}» es la versión de un instructor de «{original}». La ciencia es la del original; las palabras y el orden son del instructor.',
 };

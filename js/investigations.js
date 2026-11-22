@@ -8,11 +8,16 @@ import {
   bindStepInputs,
   formatFieldNumber,
   keyForAssignment,
+  drafts,
   earlierFor,
   forgetKept,
   keepEarlier,
+  canSave,
   load,
   parseFieldNumber,
+  persisted,
+  resetExplainer,
+  wireExplainer,
   progressFor,
   fieldModule,
   estimateHolds,
@@ -23,6 +28,7 @@ import {
   roleLabel,
   save,
   sessionProgress,
+  setEntryLink,
   slots,
   stepMarkup,
   storageKey,
@@ -60,10 +66,6 @@ import * as timeline from './timeline.js';
 import {
   bh_list,
   stars,
-  planets,
-  gas_giants,
-  asteroids,
-  comets,
   neutron_stars,
   white_dwarfs,
   DT,
@@ -132,7 +134,7 @@ import { normalizeSeed, formatSeed } from './rng.js';
 // dynamic-imports the loader, the loader dynamic-imports this - and although
 // every edge in it was lazy, a cycle that exists only because of a convenience
 // re-export is not one worth keeping.
-import { toast, announce, loadFailed } from './notify.js';
+import { toast, announce, loadFailed, refuseLink } from './notify.js';
 import { captureToNotebook, setEvidenceContext } from './widgetRuntime.js';
 // Lives in its own module so the instructor answer keys, which are generated
 // in Node, can grade with the identical function this page grades with.
@@ -175,10 +177,21 @@ import {
   stagePresence,
   stagedStars,
 } from './lesson/stageGate.js';
-import { closeSheet, frameScene, initSheet, takeFit } from './lessonFrame.js';
 import {
+  closeSheet,
+  frameScene,
+  initSheet,
+  railLeavesScene,
+  resetSaid,
+  syncReset,
+  takeFit,
+} from './lessonFrame.js';
+import {
+  allBodies,
   bindRoles,
   boundRoles,
+  restoreSandbox,
+  restoreSelection,
   roleBody,
   selectBody,
   enterLessonScope,
@@ -287,23 +300,13 @@ bindPersistence({
   }),
   authoring: () => authoring,
   assigned: () => Boolean(assignment),
+  assignment: () => assignment,
   assignmentKey: () => assignmentKey,
   els: () => els,
   clock: () => clock(),
 });
 
 // --- Live simulation context --------------------------------------------------
-
-const allBodies = () => [
-  ...bh_list,
-  ...stars,
-  ...planets,
-  ...gas_giants,
-  ...asteroids,
-  ...comets,
-  ...neutron_stars,
-  ...white_dwarfs,
-];
 
 /**
  * Build the object a step's probe reads from.
@@ -622,14 +625,12 @@ function bindStepRoles(force, fresh) {
     return;
   }
   clearStage();
-  if (!step?.bind) {
-    releaseModelOwnership();
-    return;
-  }
-  const { problems } = bindRoles(step.bind, {
-    modelOwned: step.prescribes || [],
-  });
-  warn(problems, 'unbound role');
+  if (step?.bind) {
+    const { problems } = bindRoles(step.bind, {
+      modelOwned: step.prescribes || [],
+    });
+    warn(problems, 'unbound role');
+  } else releaseModelOwnership();
   if (fresh) frameScene();
 }
 
@@ -915,6 +916,7 @@ function renderStep() {
   renderProbe();
   figures?.point(step, { roleBody, announce, objects: els.objects });
   renderFooter();
+  syncReset(resetKit(step));
   bindStepInputs({
     els: () => els,
     responses: () => responses,
@@ -999,44 +1001,6 @@ function syncPlotPanel(step) {
       els.plotToggle.classList.toggle('is-on', plotTransformed);
     }
   }
-}
-
-/**
- * The "What am I looking at?" button of a docked panel.
- *
- * Its label and its closed state are set each time the panel is drawn for a
- * step, so a region opened on one step is not left under the next. The words
- * are a lazy module fetched on the first press (js/explainers.js).
- *
- * @param {?HTMLElement} button - The panel header's button
- * @returns {void}
- */
-function resetExplainer(button) {
-  if (!button) return;
-  const host = button.closest('header');
-  if (host?.nextElementSibling?.classList.contains('explainer'))
-    host.nextElementSibling.remove();
-  button.setAttribute('aria-expanded', 'false');
-  button.removeAttribute('aria-controls');
-  button.textContent = t('inv.explain.open');
-}
-
-/**
- * Wire a panel's explainer button once.
- * @param {?HTMLElement} button - The button
- * @param {(m: object) => ?string} keyOf - The explainer for what is showing now
- * @param {object} [opts] - Listener options (the unmount signal)
- */
-function wireExplainer(button, keyOf, opts) {
-  button?.addEventListener(
-    'click',
-    async () => {
-      const m = await import('./explainers.js');
-      const key = keyOf(m);
-      if (key) m.toggleExplainer(button, key, button.closest('header'));
-    },
-    opts
-  );
 }
 
 /**
@@ -2073,11 +2037,10 @@ function peekDepth(id) {
  */
 export async function openInvestigation(id, opts = {}) {
   const generation = ++openGeneration;
-  // The one await in the panel's life. Everything below it runs against a
-  // lesson that is fully in hand, so no other code path had to learn that a
-  // lesson might not be there yet.
+  // The one await in the panel's life: below it, the lesson is fully in hand.
   let inv = await loadInvestigation(id);
-  if (!inv || generation !== openGeneration) return;
+  if (generation !== openGeneration) return;
+  if (!inv) return { ok: false, reason: 'noLesson' };
   // A question whose expected value is a formula over the student's own
   // measurements (js/formula/grade.js) is bound to read them, so every grader
   // below sees the number that student is owed; the module loads only for a
@@ -2130,12 +2093,11 @@ export async function openInvestigation(id, opts = {}) {
     throw new Error(`Unsafe step id: ${JSON.stringify(unsafe.sid)}`);
   }
 
-  // An assignment is the same lesson with most of its steps taken out. It is
-  // built here rather than being a second kind of thing the panel has to know
-  // about: everything below works on `active`, and `active.id` stays the
-  // lesson's, so a response key means the same question whether it was
-  // answered in the assignment or in the whole lesson.
+  // An assignment is the same lesson with steps taken out (`active.id` stays its).
   assignment = opts.assignment ?? null;
+  // An undo belongs to the record it was taken from.
+  restartMod?.then(m => m.forget()).catch(() => {});
+  setEntryLink(opts.link);
   assignmentBinding = null;
   if (assignment) {
     assignmentBinding = stepBindings(assignment, inv, stepFingerprint);
@@ -2199,6 +2161,7 @@ export async function openInvestigation(id, opts = {}) {
       })
     : inv.subtitle;
   document.body.classList.add('investigation-open');
+  railLeavesScene(true);
   closeBrowser({ restoreFocus: false });
   // Focus follows the choice (closing the browser destroys the focused card),
   // but never out of an open modal: D-R10-228-08.
@@ -2248,47 +2211,6 @@ export async function openInvestigation(id, opts = {}) {
 }
 
 /**
- * Put the reader's own world back, if it is still theirs: the world on screen is the one the lesson built
- * (a stage was up, or the generation has not moved past the lesson's rebuilds). A loaded scenario or followed link was deliberate.
- * @param {object} saved - The pairs handed back by leaveLessonScope()
- * @returns {boolean} Whether the sandbox was put back
- */
-function restoreSandbox(saved) {
-  const payload = saved?.sandbox;
-  if (!payload) return false;
-  // A world with nothing in it is not worth restoring over, and restoring an
-  // empty capture would blank a scene the reader may want. Both directions of
-  // that are covered by refusing to act on an empty payload. The bodies ride
-  // under `b` - see packBody() and the payload shape in js/shareState.js.
-  if (!Array.isArray(payload.b) || payload.b.length === 0) return false;
-  try {
-    applyShareState(JSON.parse(JSON.stringify(payload)));
-    return true;
-  } catch (err) {
-    console.warn(err);
-    return false;
-  }
-}
-
-/**
- * Put the reader's selection back on the body it was on, by id, only after a
- * successful restore (the restored world carries the ids it was saved with).
- * Silent when the body is not there: selecting something arbitrary instead
- * would be worse than nothing.
- *
- * @param {?object} selection - {id} as saved on entry
- * @returns {boolean} Whether a body was reselected
- */
-function restoreSelection(selection) {
-  const id = selection?.id;
-  if (!Number.isFinite(id)) return false;
-  const body = allBodies().find(b => b?.id === id);
-  if (!body) return false;
-  selectBody(body);
-  return true;
-}
-
-/**
  * Whether the scene on the canvas is still the lesson's to hand back: a stage
  * is up, or the last build was one of its step setups. False once the reader
  * has loaded something themselves, which a restore must not overwrite.
@@ -2308,6 +2230,8 @@ export function closeInvestigation() {
   els.panel.hidden = true;
   els.panel.classList.remove('is-open');
   document.body.classList.remove('investigation-open');
+  railLeavesScene(false);
+  restartMod?.then(m => m.forget()).catch(() => {});
   closeSheet();
   slots.runs?.release();
   stopProbeLoop();
@@ -2541,15 +2465,42 @@ function plotAnywhere() {
   return plot;
 }
 
+/** What the step in force has to rebuild: its scene (a setup or a stage), its instrument. */
+const resetKit = (step = currentStep()) => ({
+  scene: Boolean(stageOf(active.steps, step) || setupInForceAt(stepIndex)),
+  tool: Boolean(step?.tool),
+  kind: canvasNow()?.kind,
+});
+
+/** Starting over, fetched by its first press and kept only once it arrived; what it reads and writes of the open record. */
+let restartMod = null;
+const loadRestart = () =>
+  (restartMod ??= import('./investigations/restart.js').catch(err => {
+    restartMod = null;
+    throw err;
+  }));
+const restartHost = {
+  state: () => ({
+    ...persisted(),
+    assigned: Boolean(assignment),
+    key: assignment ? assignmentKey : storageKey(active.id),
+    saved: canSave(),
+  }),
+  put: p => {
+    ({ responses, attempts, visited, startedAt } = p);
+    save();
+  },
+  go: (index, rebuild) => goToStep(index, { rebuild }),
+  kept: { drafts, earlierFor, forgetKept, keepEarlier },
+};
+
 /** Put what this step shows (scene, instrument) back to its start; answers stay. */
 function resetStepScene() {
-  const step = currentStep();
+  const kit = resetKit();
   for (const k in responses)
     if (k.startsWith(`${stepId(stepIndex)}:tool:`)) delete responses[k];
   goToStep(stepIndex, { rebuild: true });
-  const scene = stageOf(active.steps, step) || setupInForceAt(stepIndex);
-  const which = +!!step.tool + 2 * !!scene + 4 * (getLocale() === 'es');
-  toast(els.resetScenario.dataset.said.split('|')[which]);
+  resetSaid(kit).then(toast, () => {});
 }
 
 // --- Wiring -------------------------------------------------------------------
@@ -2595,13 +2546,15 @@ function openInvestigationFromHash() {
   const [id, depth] = investigationFromHash();
   if (!id) return;
   if (!hasInvestigation(id)) {
-    toast(t('inv.link.unknown'));
+    refuseLink({ why: t('inv.link.unknown') });
     return;
   }
   if (active?.id === id) return;
-  openInvestigation(id, { depth }).catch(err =>
-    loadFailed(() => openInvestigation(id, { depth }).catch(() => {}), err)
-  );
+  openInvestigation(id, { depth })
+    .then(r => r?.ok === false && toast(t('inv.load.failed')))
+    .catch(err =>
+      loadFailed(() => openInvestigation(id, { depth }).catch(() => {}), err)
+    );
 }
 
 // A language change swaps the manifest the cards are drawn from, and rewrites
@@ -2855,21 +2808,13 @@ export function initInvestigations({ signal } = {}) {
   els.finishBack?.addEventListener('click', closeFinish);
   const on = (id, fn) =>
     document.getElementById(id)?.addEventListener('click', fn);
-  // Restart asks first (lesson-finish.html).
-  const ask = document.getElementById('investigationRestart');
-  on('investigationReset', () => {
-    ask.querySelector('b').textContent =
-      active.steps.filter(answeredStep).length;
-    ask.showModal();
-  });
-  on('investigationRestartGo', () => {
-    ask.close();
-    [responses, attempts, visited] = [{}, {}, new Set()];
-    startedAt = new Date().toISOString();
-    forgetKept(active.id);
-    toast(t('inv.progress.cleared'));
-    goToStep(0);
-  });
+  // Starting over asks first (js/investigations/restart.js, lesson-finish.html).
+  const askRestart = () =>
+    loadRestart().then(
+      m => m.ask(restartHost),
+      err => loadFailed(askRestart, err)
+    );
+  on('investigationReset', askRestart);
   on('investigationDownload', finishAction('generateReport'));
   on('investigationDownloadHtml', finishAction('generateHtmlReport'));
   const backup = finishAction('downloadBackup', 'inv.backup.failed');
