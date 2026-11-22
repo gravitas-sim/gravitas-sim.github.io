@@ -37,7 +37,7 @@ a real defect with a real fix.
 
 The surfaces, named as the spec names them: front door, sandbox, settings rail,
 scenario gallery, object inspector, investigations browser, active
-investigation, lesson measurement screen, share dialog, A/B bench, observing
+investigation, lesson opened at another version, lesson measurement screen, share dialog, A/B bench, observing
 panels, lecture mode, model page, instructor portal, teaching page, figure
 builder, evaluation kit, glossary, validation report, observatory, catalog, library,
 library by sequence, library browse, all filters, library topic, library item, my work, experiment runner, scenario studio, investigation composer, course builder,
