@@ -1593,7 +1593,7 @@
         "L5": "UNCHANGED (355): readout and instructor text were not edited."
       },
       "task_rule_items": [
-        "T2: the prediction now returns beside the student's four readings at what-the-window-says (evidence and compare on that step; the prediction's reveal points there).",
+        "T2: the prediction now returns beside the student's four readings at what-the-window-says (evidence on that step; the prediction's reveal points there).",
         "REFUTED (355): the audit's question whether the 0.28 d in read-the-comparison is the search range's lower edge. The panel searches 0.247 to 24.67 d for this run (comparisonBounds: a hundredth of the span up to the span); 0.28 d is 0.033 d above the edge, about ten resolution elements (period squared over baseline, 0.003 d), and atSearchBound does not flag it. read-the-comparison names no range, and the-range-you-searched stays the first mention.",
         "NOT FOUND (355): the `has live probe` condition the prompt names does not exist in the tree; the existing `requires` is used instead (run-both-schedules requires set-the-run-up; read-the-comparison requires run-both-schedules as well as the prediction), which an assignment reads and which does not block a student.",
         "T4: transfers unchanged (type-the-dates); the advanced steps' numbers are not the student's own eight nights, recorded here and not built.",
