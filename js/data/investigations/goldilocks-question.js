@@ -833,6 +833,8 @@ const GOLDILOCKS = {
     {
       sid: 'crossing-the-edges',
       type: 'explore',
+      // The speed the scene before it ran at, stated: its periapsis wait is 6 s.
+      time: { speed: 3 },
       title: 'Crossing the edges',
       body: `Now the habitable zone is drawn on both halves of the panel: as a
              ring around the star, and as a horizontal band on the graph. They
