@@ -300,8 +300,8 @@ export const MANIFEST = [
     duration: '45-60 min',
     level: 'Introductory astronomy',
     thumbnail: 'images/scenarios/solar-system.webp',
-    stepCount: 21,
-    gradedCount: 14,
+    stepCount: 22,
+    gradedCount: 15,
     objectiveCount: 5,
   },
   {

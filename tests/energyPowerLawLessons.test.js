@@ -213,7 +213,10 @@ describe('Bound, Unbound and Escape: the prediction comes back beside the readin
     const rows = compare.readout({ dist: 1 });
     for (const f of measure.fields) {
       const row = rows.find(r => r.id === f.source.tool);
-      expect(row, f.id).toBeTruthy();
+      expect({ field: f.id, found: Boolean(row) }).toEqual({
+        field: f.id,
+        found: true,
+      });
       expect(row.value).toMatch(/km\/s$/);
     }
   });
