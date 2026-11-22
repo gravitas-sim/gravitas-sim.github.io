@@ -9,7 +9,15 @@
 // why not. Loaded with the inspector card, never at start-up.
 // =============================================================================
 
-import * as physics from './physics.js';
+import {
+  bh_list,
+  stars,
+  neutron_stars,
+  white_dwarfs,
+  galaxies,
+  gas_giants,
+  planets,
+} from './physics.js';
 import { primaryCandidates, primaryOf, orbitalElements } from './orbital.js';
 import { pairElements } from './twoBodyModel.js';
 import { gravityRoles } from './engine/sources.js';
@@ -41,7 +49,7 @@ registerMessages('es', ES_INSPECTORORBIT, true);
 export function orbitReadout(
   body,
   settings = twoBodySettings(),
-  lists = physics
+  lists = engineLists()
 ) {
   if (!body?.pos || !body?.vel) return { state: 'no-primary' };
   const { pulls } = gravityRoles(settings);
@@ -73,7 +81,7 @@ export function orbitReadout(
  * @param {Object} [lists] - The engine's lists by name
  * @returns {Object|null} The primary
  */
-export const primaryFor = (body, lists = physics) =>
+export const primaryFor = (body, lists = engineLists()) =>
   primaryOf(body, primaryCandidates(lists, body));
 
 /**
@@ -85,6 +93,19 @@ export const primaryFor = (body, lists = physics) =>
  */
 export const elementsFor = (body, primary, settings = twoBodySettings()) =>
   primary ? pairElements(body, primary, settings) : null;
+
+// Named, not a namespace import: a namespace would put physics.js's whole
+// export object into the start-up bundle. Read at call time: the engine
+// reassigns its lists.
+const engineLists = () => ({
+  bh_list,
+  stars,
+  neutron_stars,
+  white_dwarfs,
+  galaxies,
+  gas_giants,
+  planets,
+});
 
 const STATE_KEY = {
   'no-primary': 'noPrimary',

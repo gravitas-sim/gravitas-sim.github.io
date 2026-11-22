@@ -12,7 +12,6 @@
 import { t, registerMessages } from './i18n/index.js';
 import { EN_ENERGYREADOUT } from './i18n/en.energyReadout.js';
 import { ES_ENERGYREADOUT } from './i18n/es.energyReadout.js';
-import { formatTime } from './units.js';
 
 registerMessages('en', EN_ENERGYREADOUT, true);
 registerMessages('es', ES_ENERGYREADOUT, true);
@@ -28,9 +27,11 @@ const escapeHtml = v =>
 /**
  * The conservation check's markup.
  * @param {object} drift - conservationDrift()
+ * @param {Function} formatTime - js/units.js's, passed in: an import here
+ *   would split units.js out of the start-up engine chunk, one more request
  * @returns {string} HTML
  */
-export function conservationReadoutHtml(drift) {
+export function conservationReadoutHtml(drift, formatTime) {
   const pct = v =>
     !Number.isFinite(v) ? '\u2014' : `${v >= 0 ? '+' : ''}${v.toPrecision(3)}%`;
   // An absolute change, for the case where a relative one cannot be

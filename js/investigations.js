@@ -80,8 +80,12 @@ import {
 import { habitableZoneModelFromSettings, setFixedStep } from './render.js';
 import { STEP_SECONDS, frameAdvance } from './timestep.js';
 import { currentRadialVelocity, observedStar } from './radialVelocity.js';
-import { pairEnergy } from './orbital.js';
-import { primaryFor, elementsFor } from './inspectorOrbit.js';
+import {
+  orbitalElements,
+  pairEnergy,
+  primaryOf,
+  PRIMARY_KINDS,
+} from './orbital.js';
 import {
   formatDistance,
   formatSpeed,
@@ -314,8 +318,12 @@ bindPersistence({
 function probeContext() {
   const G = SETTINGS.gravitational_constant;
   const selected = state.selectedObject?.object || null;
-  // The shared rule and the pair's own mu (js/inspectorOrbit.js).
-  const primaryOf = body => primaryFor(body);
+  // The inspector's primary rule (js/orbital.js); mu stays G(M + m), as the
+  // probes have always read it, so no two-body module loads with a lesson.
+  const candidate = c => c.mass > 0 && PRIMARY_KINDS.has(c.kind);
+  const primaryFor = body => primaryOf(body, allBodies().filter(candidate));
+  const elementsFor = (body, primary) =>
+    primary ? orbitalElements(body, primary, G) : null;
 
   return {
     selected,
@@ -324,12 +332,12 @@ function probeContext() {
     elements: body => {
       const b = body || selected;
       if (!b) return null;
-      return elementsFor(b, primaryOf(b));
+      return elementsFor(b, primaryFor(b));
     },
     energy: body => {
       const b = body || selected;
       if (!b) return null;
-      const primary = primaryOf(b);
+      const primary = primaryFor(b);
       return primary ? pairEnergy(b, primary, G) : null;
     },
     distance: formatDistance,
@@ -451,7 +459,7 @@ function probeContext() {
       const star = observedStar();
       if (!star) return null;
       const velocity = currentRadialVelocity();
-      const primary = star ? primaryOf(star) : null;
+      const primary = star ? primaryFor(star) : null;
       const el = elementsFor(star, primary);
       const angle = Math.atan2(star.pos.y, star.pos.x);
       return {
@@ -476,7 +484,7 @@ function probeContext() {
     habitability: body => {
       const planet = body || selected;
       if (!planet) return null;
-      const star = primaryOf(planet);
+      const star = primaryFor(planet);
       if (!star) return null;
       const props = stellarPropertiesFor(star);
       if (!props) return null;

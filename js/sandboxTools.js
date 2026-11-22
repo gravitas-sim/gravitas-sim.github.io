@@ -64,11 +64,21 @@ import {
 import { formatNumber } from './format.js';
 import { primaryCandidates, primaryOf } from './orbital.js';
 import { t, registerMessages } from './i18n/index.js';
-import { EN_STEPSTATEMENT } from './i18n/en.stepStatement.js';
-import { ES_STEPSTATEMENT } from './i18n/es.stepStatement.js';
 
-registerMessages('en', EN_STEPSTATEMENT, true);
-registerMessages('es', ES_STEPSTATEMENT, true);
+// The step statement's words load with the first stopwatch reading, not at
+// start-up (js/i18n/en.stepStatement.js).
+let stepWords = null;
+const stepWordsReady = () => {
+  stepWords ??= Promise.all([
+    import('./i18n/en.stepStatement.js'),
+    import('./i18n/es.stepStatement.js'),
+  ]).then(([en, es]) => {
+    registerMessages('en', en.EN_STEPSTATEMENT, true);
+    registerMessages('es', es.ES_STEPSTATEMENT, true);
+    stepWords = true;
+  });
+  return stepWords === true;
+};
 import { sceneWords } from './canvasSummary.js';
 
 /** Meters in one simulation length unit. */
@@ -835,7 +845,11 @@ export function stopwatchRows() {
   }
   // The step-policy gate's verdict C (STEP_POLICY_GATE.md): where a scene does
   // not cap its step, a timed reading depends on the frame rate, and says so.
-  if (elapsed !== null && !(physicsSettings.max_timestep > 0))
+  if (
+    elapsed !== null &&
+    !(physicsSettings.max_timestep > 0) &&
+    stepWordsReady()
+  )
     rows.push({
       label: t('instrument.stopwatch.step'),
       value: t('instrument.stopwatch.stepFollowsFrame'),

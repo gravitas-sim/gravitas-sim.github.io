@@ -323,7 +323,6 @@ import {
 } from './vectorOverlay.js';
 import { isEmbed } from './presentation.js';
 import { t, onLocaleChange } from './i18n/index.js';
-import { conservationReadoutHtml } from './conservationReadoutView.js';
 
 // -----------------------------------------------------------------------------
 // Palette: perceptual ramps for encoding physical quantities as color
@@ -1966,11 +1965,22 @@ function readoutHtml(drawn) {
   // --- Conservation check ---------------------------------------------------
   if (SETTINGS.show_conservation_diagnostics && !isEmbed()) {
     const drift = conservationDrift();
-    if (drift) sections.push(conservationReadoutHtml(drift));
+    // The check's markup and words load the first time it is switched on, so
+    // a launch that never asks for it does not download them.
+    if (drift && readoutView)
+      sections.push(readoutView.conservationReadoutHtml(drift, formatTime));
+    else if (drift)
+      readoutViewLoading ??= import('./conservationReadoutView.js').then(
+        m => (readoutView = m)
+      );
   }
 
   return sections.join('');
 }
+
+/** The conservation check's module, once loaded (js/conservationReadoutView.js). */
+let readoutView = null;
+let readoutViewLoading = null;
 
 /**
  * Whether the reader has opened the conservation explanation.
