@@ -52,7 +52,7 @@ Each scene below is built in Node at both tiers from the same seed. The builder 
 | spiral-galaxy | missing-mass | missing-mass | - | 91 star (91) | 91 star (91) | no | identical |
 | three-body-sensitivity-lab | butterfly-effect | chaos-lab | - | 3 star (3) | 3 star (3) | no | identical |
 | tidal-disruption-event | tides | tides-lab | - | 1 BH, 1 star (2) | 1 BH, 1 star (2) | no | identical |
-| transit-lab | refitting-a-transit, sampling-a-posterior, transit-photometry, two-periodograms | transit-lab | - | 1 star, 1 planet (2) | 1 star, 1 planet (2) | no | identical |
+| transit-lab | transit-photometry | transit-lab | - | 1 star, 1 planet (2) | 1 star, 1 planet (2) | no | identical |
 | trappist-1-system | keplers-laws | newton-lab | enable_asteroids=false, num_asteroids=0, num_comets=0 | 1 star, 7 planet (8) | 1 star, 7 planet (8) | no | identical |
 | trappist-1-system | goldilocks-question | goldilocks | habitable_zone_optimism=1, sim_speed=0.03 | 1 star, 7 planet (8) | 1 star, 7 planet (8) | no | identical |
 
@@ -117,7 +117,7 @@ Seed `tier-table`, no settings beyond the scenario's own. "Gallery" marks the sc
 | gravity-assist-heliocentric | yes | gravity-assist | 1 star, 1 planet, 1 giant (3) | 1 star, 1 planet, 1 giant (3) | no | identical |
 | lagrange-point-lab | yes | lagrange-points | 2 star, 1 planet (3) | 2 star, 1 planet (3) | no | identical |
 | orbital-transfer-lab | yes | hohmann-transfer | 1 star, 2 planet (3) | 1 star, 2 planet (3) | no | identical |
-| transit-lab | yes | refitting-a-transit, sampling-a-posterior, transit-photometry, two-periodograms | 1 star, 1 planet (2) | 1 star, 1 planet (2) | no | identical |
+| transit-lab | yes | transit-photometry | 1 star, 1 planet (2) | 1 star, 1 planet (2) | no | identical |
 | blended-binary | yes | transit-photometry | 2 star, 1 planet (3) | 2 star, 1 planet (3) | no | identical |
 | trappist-1-system | yes | goldilocks-question, keplers-laws | 1 star, 7 planet (8) | 1 star, 7 planet (8) | no | identical |
 | gw150914 | yes | - | 2 BH (2) | 2 BH (2) | no | identical |
