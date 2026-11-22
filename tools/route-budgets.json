@@ -76,7 +76,7 @@
         "requests": 31
       },
       "course-builder": {
-        "kb": 1167.6,
+        "kb": 1171.5,
         "requests": 48
       },
       "course-home": {
@@ -148,13 +148,13 @@
         "toolRequests": 93
       },
       "power-law": {
-        "kb": 912.0,
+        "kb": 913.0,
         "requests": 77,
-        "toolKb": 928.6,
+        "toolKb": 929.6,
         "toolRequests": 80
       },
       "largest-lesson": {
-        "kb": 1043.3,
+        "kb": 1043.4,
         "requests": 82
       },
       "teaching": {
@@ -202,7 +202,7 @@
         "requests": 16
       },
       "course-builder": {
-        "kb": 715.3,
+        "kb": 717.7,
         "requests": 13
       },
       "course-home": {

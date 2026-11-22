@@ -205,7 +205,7 @@ export const INTRO_ASTRONOMY = {
           objectives: ['energy'],
           needs: ['keplers-laws'],
           pin: {
-            fp: 'c220ddee',
+            fp: 'ad5e0025',
             n: 24,
           },
         },

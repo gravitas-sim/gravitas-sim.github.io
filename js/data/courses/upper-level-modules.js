@@ -163,7 +163,7 @@ export const UPPER_LEVEL_MODULES = {
           objectives: ['mechanics'],
           needs: ['keplers-laws'],
           pin: {
-            fp: 'c220ddee',
+            fp: 'ad5e0025',
             n: 24,
           },
         },

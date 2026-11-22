@@ -279,7 +279,7 @@ export const ASTRONOMY_SEMESTER = {
           objectives: ['gravity'],
           needs: ['keplers-laws'],
           pin: {
-            fp: 'c220ddee',
+            fp: 'ad5e0025',
             n: 24,
           },
         },
