@@ -419,6 +419,11 @@ export const state = {
 
 let held = null;
 
+/** Whether a step holds the clock (holdClock below): reading, nothing to watch. */
+export const holdsClock = step =>
+  step?.type === 'read' &&
+  !(step.motion || step.tool || step.pauseAt || step.time);
+
 /**
  * A lesson's reading step holds the clock, so nothing runs behind the panels,
  * unless it says `motion: true` or carries an instrument, a `pauseAt` watch or
@@ -430,9 +435,7 @@ let held = null;
  */
 export function holdClock(step, world) {
   world ||= state;
-  const hold =
-    step?.type === 'read' &&
-    !(step.motion || step.tool || step.pauseAt || step.time);
+  const hold = holdsClock(step);
   if (!state.paused || held !== world) held = null;
   if (hold ? !state.paused : held) {
     state.paused = hold;

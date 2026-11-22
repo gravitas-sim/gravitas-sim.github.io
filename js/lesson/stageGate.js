@@ -21,9 +21,27 @@
 // fails the same way and offers a reload.
 // =============================================================================
 
-import { BINARY_SCALE, SCALE, stageOf } from './stage.js';
+import { BINARY_SCALE, SCALE, sceneIntegrated, stageOf } from './stage.js';
+import { STEP_SECONDS, setFixedStep } from '../timestep.js';
+import { holdsClock } from '../appState.js';
 
 export { BINARY_SCALE, SCALE, stageOf };
+
+/**
+ * Pin the integration step for a lesson step that runs a scene the integrator
+ * moves, or lift the lesson's pin (`step` null: the lesson closed). The pin is
+ * the bench's 1/60 s (js/timestep.js), so a reading taken from the scene is the
+ * same on any display; a step that holds the clock is not pinned.
+ * @param {?object} step - The step on screen
+ * @param {?string} canvas - The canvas kind in force
+ * @param {?object} stage - The stage in force
+ * @param {?object} setup - The setup the scene was built from
+ */
+export function pinLessonStep(step, canvas, stage, setup) {
+  const pin =
+    step && !holdsClock(step) && sceneIntegrated(canvas, stage, setup);
+  setFixedStep(pin ? STEP_SECONDS : 0, 'lesson');
+}
 
 let stage = null;
 let pending = null;

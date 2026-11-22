@@ -172,6 +172,7 @@ import {
   stageContext,
   stageLoaded,
   stageMemo,
+  pinLessonStep,
   stageOf,
   stageScale,
   stagePresence,
@@ -613,10 +614,11 @@ function bindStepRoles(force, fresh) {
     releaseModelOwnership();
     appliedSetup = null;
   }
-  canvasMod?.enterCanvas(canvas, force);
-  if (quiet) return;
   // A stage declares the whole scene and binds its own roles, so it takes precedence over a bind.
   const stage = stageOf(active.steps, step);
+  pinLessonStep(step, canvas?.kind, stage, appliedSetup);
+  canvasMod?.enterCanvas(canvas, force);
+  if (quiet) return;
   if (stage) {
     const { problems } = applyStage(stage, { force });
     // Its fit is asked for here and taken on the panel's tick, after layout and
@@ -730,9 +732,8 @@ const currentStep = () => active?.steps[stepIndex] ?? null;
 function predictionAnsweredHere(step) {
   if (!active || !step?.sid) return null;
   const from = active.steps.find(x => x.reveal === step.sid);
-  if (!from || !Array.isArray(from.options) || from.answer === undefined) {
+  if (!from || !Array.isArray(from.options) || from.answer === undefined)
     return null;
-  }
   const chosen = responses[stepKey(active.id, from.sid)];
   if (chosen === undefined) return null;
   const index = Number(chosen);
@@ -1485,9 +1486,8 @@ function syncLightCurve(step) {
       setLightCurveEnabled(true);
       lightCurveOpenedByLesson = true;
     }
-    if (Number.isFinite(step.observerAngle)) {
+    if (Number.isFinite(step.observerAngle))
       setObserverAngle(step.observerAngle);
-    }
     if (step.clearLightCurve) clearLightCurve();
   } else if (lightCurveOpenedByLesson && step?.lightCurve === false) {
     setLightCurveEnabled(false);
@@ -2089,9 +2089,7 @@ export async function openInvestigation(id, opts = {}) {
   // either - a Composer preview staged before they did, for one - rather than
   // rendering it.
   const unsafe = inv.steps.find(s => !isValidSid(s.sid));
-  if (unsafe) {
-    throw new Error(`Unsafe step id: ${JSON.stringify(unsafe.sid)}`);
-  }
+  if (unsafe) throw new Error(`Unsafe step id: ${JSON.stringify(unsafe.sid)}`);
 
   // An assignment is the same lesson with steps taken out (`active.id` stays its).
   assignment = opts.assignment ?? null;
@@ -2256,6 +2254,7 @@ export function closeInvestigation() {
   clearStage();
   if (ours && restoreSandbox(saved)) restoreSelection(saved.selection);
   appliedSetup = null;
+  pinLessonStep(null);
   if (els.objectsWrap) els.objectsWrap.hidden = true;
   if (els.stageTools) els.stageTools.hidden = true;
   lastObjectsKey = '';
