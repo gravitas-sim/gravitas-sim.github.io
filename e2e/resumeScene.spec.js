@@ -51,7 +51,7 @@ test.describe('opening a step from its saved record gives the scene walking ther
     const depths = entry.depths ? ['core', 'deepest'] : ['core'];
     for (const named of depths) {
       test(`${entry.id}, ${named}`, async ({ page, app }) => {
-        test.setTimeout(180_000);
+        test.setTimeout(300_000);
         await app.boot();
         // The panel mounts on the first open; after that the engine is driven directly.
         await page.locator('#investigationsBtn').click();

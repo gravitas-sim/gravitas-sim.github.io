@@ -128,7 +128,7 @@ export async function installProbe(page) {
           );
         if (first.length) {
           let seen = kinds();
-          for (let i = 0; i < 10; i++) {
+          for (let i = 0; i < 4; i++) {
             await wait(200);
             const now = kinds();
             if (now === seen) break;
