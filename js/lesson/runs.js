@@ -107,7 +107,7 @@ const chosen = new Map();
 let env = { raf: cb => requestAnimationFrame(cb), pin: null };
 export const setEnv = e => (env = { ...env, ...e });
 /** Pin the integration step (the bench's call), or lift it with 0. */
-const pin = s => (env.pin || W.setFixedStep)(s);
+const pin = s => (env.pin || W.setFixedStep)(s, 'runs');
 
 /** Whether a run is under way. */
 export const running = () => Boolean(run);
