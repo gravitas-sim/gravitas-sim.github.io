@@ -133,11 +133,11 @@ export const MANIFEST = [
     title: 'Mareas',
     subtitle:
       'Estira un mundo, mueve una luna y descubre por qué la gravedad puede desgarrar objetos',
-    duration: '35-45 min',
+    duration: '40-50 min',
     level: 'Astronomía introductoria',
     thumbnail: 'images/scenarios/earth-moon-system.webp',
-    stepCount: 30,
-    gradedCount: 16,
+    stepCount: 36,
+    gradedCount: 21,
     objectiveCount: 5,
   },
   {

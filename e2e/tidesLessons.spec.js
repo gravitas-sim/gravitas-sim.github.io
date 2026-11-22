@@ -19,6 +19,7 @@ import {
   lessonPlan,
   openInvestigation,
   readout,
+  reading,
   recordFields,
   row,
   setControl,
@@ -331,3 +332,121 @@ test('tides-that-move-the-moon match-the-recession: the Q is found on the slider
   await recordFields(page, L, S, { q: 12, day: 2.05 });
   await expect(verdictOf(page)).toHaveClass(/is-ok/);
 });
+
+// =============================================================================
+// Tides: the readings are the student's own, and the Roche crossing is a hunt
+// -----------------------------------------------------------------------------
+// The four distances are taken from the panel with Take reading and typed, a
+// reading taken elsewhere than typed is refused in words, the crossing is
+// withheld on the hunt and found by moving the bars, and the prediction made
+// before it is settled by what the student found.
+// =============================================================================
+
+for (const locale of ['en', 'es']) {
+  const num = n => String(n).replace('.', locale === 'es' ? ',' : '.');
+
+  test(`tides: four distances of the student’s own, each stretch taken from the panel (${locale})`, async ({
+    page,
+    app,
+  }) => {
+    test.slow();
+    await open(page, app, 'tides', locale === 'es' ? 'es' : null);
+    const plan = await lessonPlan(page, 'tides');
+    const predict = await walkToSid(page, plan, 'bring-the-companion-closer');
+    await commitPredictionHeld(page, predict);
+    await walkToSid(page, plan, 'choose-four-distances');
+    const body = page.locator('#investigationBody');
+    const check = body.locator('[data-check-slot]');
+    const field = id =>
+      body.locator(`[data-field="tides:choose-four-distances:${id}"]`);
+
+    const mine = [1.8, 0.9, 0.45, 0.3];
+    for (const [i, d] of mine.entries()) {
+      await setControl(page, 'dist', d);
+      await body.locator(`[data-take="t${i + 1}"]`).click();
+      await expect(field(`t${i + 1}`)).toHaveValue(/\d/);
+      await field(`d${i + 1}`).fill(num(d));
+      await field(`d${i + 1}`).dispatchEvent('input');
+    }
+    await expect(check).toHaveClass(/is-ok/);
+
+    // A distance typed where the slider was not: refused in words.
+    await field('d1').fill(num(0.3));
+    await field('d1').dispatchEvent('input');
+    await expect(check).toHaveClass(/is-warn/);
+    await expect(check).toContainText(/slider was/);
+    await field('d1').fill(num(1.8));
+    await field('d1').dispatchEvent('input');
+    await expect(check).toHaveClass(/is-ok/);
+
+    // Narrow distances are told to spread out; nothing is prescribed in a box.
+    await field('d4').fill(num(1.6));
+    await field('d4').dispatchEvent('input');
+    await expect(check).toHaveClass(/is-warn/);
+    for (const id of ['d1', 'd2', 'd3', 'd4'])
+      await expect(field(id)).not.toHaveAttribute('placeholder', /\d/);
+  });
+
+  test(`tides: the Roche crossing is withheld and found by moving the bars, and the prediction is settled by it (${locale})`, async ({
+    page,
+    app,
+  }) => {
+    test.slow();
+    await open(page, app, 'tides', locale === 'es' ? 'es' : null);
+    const plan = await lessonPlan(page, 'tides');
+    const predict = await walkToSid(page, plan, 'a-denser-body-closer-in');
+    await commitPredictionHeld(page, predict);
+    await walkToSid(page, plan, 'hunt-the-crossing');
+    const readoutBox = page.locator('#investigationToolReadout');
+    await expect(readoutBox).not.toContainText(
+      locale === 'es' ? /se igualan a/i : /equal at/i
+    );
+    const body = page.locator('#investigationBody');
+    const field = id =>
+      body.locator(`[data-field="tides:hunt-the-crossing:${id}"]`);
+    const ratio = async () =>
+      reading(
+        await readout(page),
+        /stretch.{1,4}grip|estiramiento.{1,4}agarre/i
+      );
+
+    // Press a density, move the slider until stretch ÷ grip is one, record it.
+    const hunt = async (preset, from, to, id) => {
+      await page
+        .locator('#investigationToolPresets [data-tool-preset]', {
+          hasText: preset,
+        })
+        .click();
+      let best = [Infinity, from];
+      for (let d = from; d <= to + 1e-9; d = Number((d + 0.05).toFixed(2))) {
+        await setControl(page, 'dist', d);
+        const r = await ratio();
+        if (Math.abs(r - 1) < best[0]) best = [Math.abs(r - 1), d];
+      }
+      await setControl(page, 'dist', best[1]);
+      await field(id).fill(num(best[1]));
+      await field(id).dispatchEvent('input');
+      return best[1];
+    };
+    const ice = await hunt(
+      locale === 'es' ? /Hielo/ : /Comet ice/,
+      2.5,
+      2.8,
+      'ice'
+    );
+    const iron = await hunt(
+      locale === 'es' ? /Hierro/ : /Iron/,
+      1.2,
+      1.35,
+      'iron'
+    );
+    expect(ice).toBeGreaterThan(2.5);
+    expect(ice).toBeLessThan(2.8);
+    expect(iron).toBeLessThan(1.35);
+    await expect(body.locator('[data-check-slot]')).toHaveClass(/is-ok/);
+
+    await walkToSid(page, plan, predict.reveal);
+    await expect(body.locator('.inv-verdict')).toBeVisible();
+    await expect(body.locator('.inv-verdict')).toContainText(num(ice));
+  });
+}

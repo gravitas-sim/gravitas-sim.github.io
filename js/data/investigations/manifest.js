@@ -129,11 +129,11 @@ export const MANIFEST = [
     title: 'Tides',
     subtitle:
       'Stretch a world, move a moon, and discover why gravity can tear objects apart',
-    duration: '35-45 min',
+    duration: '40-50 min',
     level: 'Introductory astronomy',
     thumbnail: 'images/scenarios/earth-moon-system.webp',
-    stepCount: 30,
-    gradedCount: 16,
+    stepCount: 36,
+    gradedCount: 21,
     objectiveCount: 5,
   },
   {
