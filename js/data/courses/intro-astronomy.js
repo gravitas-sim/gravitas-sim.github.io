@@ -267,8 +267,8 @@ export const INTRO_ASTRONOMY = {
           objectives: ['starlight'],
           needs: ['a-universe-of-stars'],
           pin: {
-            fp: '584bfc2b',
-            n: 35,
+            fp: 'c2caed69',
+            n: 33,
           },
         },
       ],

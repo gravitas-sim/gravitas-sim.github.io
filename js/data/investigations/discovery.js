@@ -583,7 +583,7 @@ export const DISCOVERY = {
   'extending-an-experiment': {
     audience: 'intro',
     mathematics: 'logarithms',
-    prerequisites: [],
+    prerequisites: ['binary-star-planets'],
     textbook: {
       chapter: 21,
       section: null,

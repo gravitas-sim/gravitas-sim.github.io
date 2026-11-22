@@ -384,6 +384,12 @@ export const NEVER_PRECACHED = [
   // has about 2.5 KB of room, so the cards show no picture until one online
   // visit has kept them. D-R10-72.
   /^images\/investigations\/(measuring-the-moon|how-far-is-that-star|a-binary-stars-orbit|what-is-in-this-field)\.webp$/,
+  // The cards of Refitting a Transit, Two Periodograms and Sampling a Posterior:
+  // these lessons stage no scene, so each has a card file of its own (the picture
+  // the Transit Lab card already shows). Installed, three more copies would take
+  // the idle tier over its ceiling, so the cards show no picture until one online
+  // visit has kept them. D-R4-TRAINB-02.
+  /^images\/investigations\/(refitting-a-transit|two-periodograms|sampling-a-posterior)\.webp$/,
   // Weighing Jupiter (Prompt 193, SATELLITE_EPHEMERIS.md, D-R10-74): the lesson
   // and its instruments, the satellite kernel, the moons' pack and the
   // thumbnail. The first-visit and idle tiers have a few hundred bytes of room

@@ -11,16 +11,16 @@ The hand-written, human-reviewed acceptance map is
 [`lesson-acceptance.json`](lesson-acceptance.json); `npm run
 audit:scene:check` fails if it disagrees with what is generated here.
 
-Across 124 investigations and 1535 steps: 1401 steps
-declare a scene, 166 let a reader change one, 181 read the
-running integration, 1011 show a prescribed model result, 161 draw
-on a stored dataset, 880 put a self-contained panel beside the text,
-399 keep something, and 74 are prose.
+Across 124 investigations and 1529 steps: 1418 steps
+declare a scene, 164 let a reader change one, 178 read the
+running integration, 1007 show a prescribed model result, 159 draw
+on a stored dataset, 878 put a self-contained panel beside the text,
+394 keep something, and 61 are prose.
 Of 199 prediction loops, 199 are returned to,
 199 produce a measurement before they are answered, and
-2 end in an explanation in the reader's own words.
-197 hold their marking until the experiment settles them.
-The canvas behind a step is stated as scene on 4, portrait on 7, quiet on 42; 1482 state none.
+1 end in an explanation in the reader's own words.
+198 hold their marking until the experiment settles them.
+The canvas behind a step is stated as scene on 8, portrait on 7, quiet on 51; 1463 state none.
 
 ## Kepler's Laws (`keplers-laws`)
 
@@ -108,15 +108,15 @@ The canvas behind a step is stated as scene on 4, portrait on 7, quiet on 42; 14
 
 ## Finding Planets by Their Tug (`radial-velocity`)
 
-- **Steps:** 39. Scene declared on 39; a reader can change something on 3; 36 declare a scene nobody on that step can touch.
-- **Where the numbers come from:** 5 live engine, 12 prescribed model, 5 stored dataset, 12 self-contained panel.
-- **What students do:** read, choose-an-option, commit-a-prediction, move-an-instrument-control, press-an-instrument-preset, press-an-instrument-button, record-values, open-a-body-inspector, run-the-simulation, run-to-an-armed-event, view-from-a-set-angle, answer-in-words.
+- **Steps:** 38. Scene declared on 38; a reader can change something on 3; 35 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 4 live engine, 11 prescribed model, 5 stored dataset, 11 self-contained panel.
+- **What students do:** read, choose-an-option, commit-a-prediction, move-an-instrument-control, press-an-instrument-preset, open-a-body-inspector, run-the-simulation, record-values, run-to-an-armed-event, view-from-a-set-angle, answer-in-words.
 - **Objects the steps declare:** star, planet.
 - **Instruments:** reflex-motion, rv-observer, rv-mass, rv-inclination, astrometry-signature, method-comparison, planet-characterization.
 - **Stored data:** Published exoplanet system parameters (observation).
 - **Evidence kept:** notebook-fields.
-- **Prediction loops:** which-one-moves → both-of-them-go-round → both-of-them-go-round; make-the-planet-heavier → read-the-two-wobbles, watch-it-grow, toward-away-toward-again, open-the-real-instrument, measure-the-period, read-k-off-the-panel → watch-it-grow; what-would-make-k-bigger → one-thing-at-a-time, weigh-hd-209458-b → one-thing-at-a-time; now-tilt-the-whole-system → the-same-planet-four-viewing → the-same-planet-four-viewing; a-face-on-system → tilt-it-again-and-watch, all-three-at-once → tilt-it-again-and-watch; move-the-system-further-away → distance-and-orbit-size, characterize-the-planet, three-candidates → distance-and-orbit-size.
-- **Recovery:** wrong body: the step binds the object by name, so there is none; reset: rebuilds the scenario on arrival; ambiguous result: the check says in words how close is close enough; null result: guarded, but the fallback is not spelled out; missed moment: an event watch stops the run at rvMaximum; ambiguous result: nothing marks these, they are a record; missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand.
+- **Prediction loops:** which-one-moves → both-of-them-go-round → both-of-them-go-round; make-the-planet-heavier → watch-it-grow, toward-away-toward-again, open-the-real-instrument, measure-the-period, read-k-off-the-panel → watch-it-grow; what-would-make-k-bigger → one-thing-at-a-time, weigh-hd-209458-b → one-thing-at-a-time; now-tilt-the-whole-system → the-same-planet-four-viewing → the-same-planet-four-viewing; a-face-on-system → tilt-it-again-and-watch, all-three-at-once → tilt-it-again-and-watch; move-the-system-further-away → distance-and-orbit-size, characterize-the-planet, three-candidates → distance-and-orbit-size.
+- **Recovery:** wrong body: the step binds the object by name, so there is none; reset: rebuilds the scenario on arrival; null result: guarded, but the fallback is not spelled out; missed moment: an event watch stops the run at rvMaximum; ambiguous result: nothing marks these, they are a record; missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand.
 - **Scene rebuilds:** 4 step(s) on arrival (the-planet-you-already-measured, which-one-moves, open-the-real-instrument, read-k-off-the-panel).
 - **Accepted central experiment** (reviewed 2026-09-11): object `star`, control rv-inclination/inc, measures the semi-amplitude K, and the minimum mass it gives, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 
@@ -150,18 +150,17 @@ The canvas behind a step is stated as scene on 4, portrait on 7, quiet on 42; 14
 
 ## Tides (`tides`)
 
-- **Steps:** 36. Scene declared on 10; a reader can change something on 3; 7 declare a scene nobody on that step can touch.
-- **Where the numbers come from:** 4 live engine, 14 prescribed model, 0 stored dataset, 14 self-contained panel.
-- **What students do:** run-the-simulation, commit-a-prediction, open-a-body-inspector, move-an-instrument-control, choose-an-option, read, record-values, build-a-plot, read-a-prediction-prompt-that-collects-nothing, answer-in-words, press-an-instrument-preset, tick-a-checklist.
+- **Steps:** 30. Scene declared on 30; a reader can change something on 3; 27 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 4 live engine, 13 prescribed model, 0 stored dataset, 13 self-contained panel.
+- **What students do:** run-the-simulation, commit-a-prediction, open-a-body-inspector, move-an-instrument-control, choose-an-option, read, record-values, build-a-plot, answer-in-words, press-an-instrument-preset, tick-a-checklist.
 - **Objects the steps declare:** earth, moon, star, hole.
 - **Instruments:** tide-vectors, tide-strength, tide-compare, tide-balance, roche-model, tide-disrupt.
-- **Canvas:** quiet, scene.
 - **Stored data:** none.
 - **Evidence kept:** notebook-fields, plot.
-- **Prediction loops:** is-the-pull-the-same → three-points-three-pulls, how-different-are-they → three-points-three-pulls; so-why-two-bulges → take-the-center-away, what-the-far-side-arrow → take-the-center-away; bring-the-companion-closer → choose-four-distances, the-factor-per-halving, pick-a-new-distance → the-factor-per-halving; estimate-the-new-stretch → read-the-new-distance → the-estimate-and-the-reading; now-change-the-companion → choose-three-masses → what-the-mass-graph-says; the-sun-against-the-moon → seven-real-tides-on-one → seven-real-tides-on-one; what-holds-a-moon-together → stretch-against-grip → stretch-against-grip; a-denser-body-closer-in → hunt-the-crossing, the-roche-limit-and-why, change-what-the-moon-is, the-extreme-case-running-live, a-star-and-a-black → how-density-moved-it.
-- **Recovery:** wrong body: the step binds the object by name, so there is none; reset: rebuilds the scenario on arrival; null result: the probe names what is missing; ambiguous result: the check says in words how close is close enough; missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand.
+- **Prediction loops:** is-the-pull-the-same → three-points-three-pulls, how-different-are-they → three-points-three-pulls; so-why-two-bulges → take-the-center-away, what-the-far-side-arrow → take-the-center-away; bring-the-companion-closer → four-distances, how-steeply-does-it-fall → four-distances; now-change-the-companion → three-masses → three-masses; the-sun-against-the-moon → seven-real-tides-on-one → seven-real-tides-on-one; what-holds-a-moon-together → stretch-against-grip, where-the-balance-tips, the-roche-limit-and-why, change-what-the-moon-is, the-extreme-case-running-live, a-star-and-a-black → stretch-against-grip.
+- **Recovery:** wrong body: the step binds the object by name, so there is none; reset: rebuilds the scenario on arrival; null result: the probe names what is missing; ambiguous result: the check says in words how close is close enough.
 - **Scene rebuilds:** 2 step(s) on arrival (twice-a-day-everywhere, the-extreme-case-running-live).
-- **Accepted central experiment** (reviewed 2026-09-11): object `moon`, control tide-strength/dist, measures tidal stretch at four distances the student chooses, at least a factor of four apart, with the companion's mass held, and at three masses with the distance held; the stretch is taken from the panel, which gives one over the distance cubed and the mass once, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+- **Accepted central experiment** (reviewed 2026-09-11): object `moon`, control tide-strength/dist, measures tidal acceleration at four distances and three masses, evidence `plot`, covered by `e2e/centralExperiments.spec.js`.
 
 ## The Butterfly Effect in Space (`butterfly-effect`)
 
@@ -319,17 +318,17 @@ The canvas behind a step is stated as scene on 4, portrait on 7, quiet on 42; 14
 
 ## Lives of Stars (`lives-of-stars`)
 
-- **Steps:** 35. Scene declared on 35; a reader can change something on 35; 0 declare a scene nobody on that step can touch.
-- **Where the numbers come from:** 35 live engine, 35 prescribed model, 35 stored dataset, 0 self-contained panel.
+- **Steps:** 33. Scene declared on 33; a reader can change something on 33; 0 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 33 live engine, 33 prescribed model, 33 stored dataset, 0 self-contained panel.
 - **What students do:** commit-a-prediction, change-a-scene-object, move-an-instrument-control, press-an-instrument-button, press-an-instrument-preset, tick-a-checklist, record-values, choose-an-option, answer-in-words.
 - **Objects the steps declare:** light, sun, heavy, star, young, old, dwarf.
 - **Instruments:** stellar-compare, stellar-evolution, stellar-lab.
 - **Stored data:** MIST v1.2 evolutionary tracks (computed-grid).
 - **Evidence kept:** notebook-fields, instrument-capture.
-- **Prediction loops:** three-futures → the-cloud → the-black-hole; predict-protostar-power → contraction-luminosity, the-pms-track, arriving, the-sun-today, across-the-main-sequence, compare-young-and-old → contraction-luminosity; predict-what-runs-out → the-interior, core-in-envelope-out → the-interior; predict-direction → measure-the-giant, true-size-then-and-now, helium-and-the-loop, the-agb-and-the-wind → measure-the-giant; not-a-supernova → planetary-nebula, white-dwarf-cooling, how-long-was-each-part → planetary-nebula; predict-the-red-dwarf → the-same-age → the-same-age; predict-massive-lifetime → massive-versus-sun, supergiant-and-burning, why-iron-stops-it → massive-versus-sun; predict-core-and-envelope → the-neutron-star, neutron-star-scale, the-black-hole, read-the-descriptions, design-a-comparison, the-lifecycle-argument, what-you-followed → the-neutron-star.
+- **Prediction loops:** three-futures → the-cloud → the-black-hole; predict-protostar-power → contraction-luminosity, the-pms-track, compare-two-moments, compare-young-and-old → contraction-luminosity; predict-what-runs-out → the-interior, core-in-envelope-out → the-interior; predict-direction → measure-the-giant, true-size-then-and-now, helium-and-the-loop, the-agb-and-the-wind → measure-the-giant; not-a-supernova → planetary-nebula, white-dwarf-cooling, how-long-was-each-part → planetary-nebula; predict-the-red-dwarf → the-same-age → the-same-age; predict-massive-lifetime → massive-versus-sun, supergiant-and-burning, why-iron-stops-it → massive-versus-sun; predict-core-and-envelope → the-neutron-star, neutron-star-scale, the-black-hole, read-the-descriptions, design-a-comparison, the-lifecycle-argument, what-you-followed → the-neutron-star.
 - **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
 - **Scene rebuilds:** none.
-- **Accepted central experiment** (reviewed 2026-09-11): object `sun`, control stellar-evolution/position, measures radius and luminosity at a stated model age, evidence `instrument-capture`, covered by `e2e/centralExperiments.spec.js`.
+- **Accepted central experiment** (reviewed 2026-09-11): object `sun`, control stellar-evolution/position, measures luminosity, radius and surface temperature at two ages of the Sun-like track that the student chooses, one frozen and one live, and at the tip of the giant branch, evidence `instrument-capture`, covered by `e2e/centralExperiments.spec.js`.
 
 ## Twelve Nights (`twelve-nights`)
 
@@ -795,17 +794,18 @@ The canvas behind a step is stated as scene on 4, portrait on 7, quiet on 42; 14
 
 ## Integrators in Practice (`integrators-in-practice`)
 
-- **Steps:** 8. Scene declared on 0; a reader can change something on 0; 0 declare a scene nobody on that step can touch.
+- **Steps:** 10. Scene declared on 0; a reader can change something on 0; 0 declare a scene nobody on that step can touch.
 - **Where the numbers come from:** 0 live engine, 0 prescribed model, 0 stored dataset, 0 self-contained panel.
 - **What students do:** read, commit-a-prediction, record-values, choose-an-option.
 - **Objects the steps declare:** none.
 - **Instruments:** none.
+- **Canvas:** quiet, scene.
 - **Stored data:** none.
 - **Evidence kept:** notebook-fields.
-- **Prediction loops:** which-loses-most → four-drifts, halve-the-step, the-engine → four-drifts.
-- **Recovery:** reset: rebuilds the scenario on arrival; missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand; ambiguous result: the check says in words how close is close enough.
-- **Scene rebuilds:** 1 step(s) on arrival (one-system-four-steps).
-- **Accepted central experiment** (reviewed 2026-09-11): object `compute:integrators-compared`, control the compute page's steps-per-period setting (not a lesson widget), measures the energy drift of explicit Euler, symplectic Euler, velocity Verlet and Runge-Kutta 4 over three periods of the widest orbit, and how each changes when the step is halved, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+- **Prediction loops:** which-loses-most → four-drifts → four-drifts; predict-the-halving → choose-the-second-step, the-engine → the-engine.
+- **Recovery:** missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand; ambiguous result: the check says in words how close is close enough; reset: rebuilds the scenario on arrival.
+- **Scene rebuilds:** 1 step(s) on arrival (choose-the-second-step).
+- **Accepted central experiment** (reviewed 2026-09-11): object `compute:integrators-compared`, control the compute page's steps-per-period setting (not a lesson widget), and the second step count the student chooses from a menu in the lesson, measures the energy drift of explicit Euler, symplectic Euler, velocity Verlet and Runge-Kutta 4 over three periods of the widest orbit, and how velocity Verlet's and Runge-Kutta 4's drift change at the second step count the student chose, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 
 ## Extending an Experiment (`extending-an-experiment`)
 
@@ -814,26 +814,28 @@ The canvas behind a step is stated as scene on 4, portrait on 7, quiet on 42; 14
 - **What students do:** read, commit-a-prediction, record-values, choose-an-option.
 - **Objects the steps declare:** none.
 - **Instruments:** none.
+- **Canvas:** quiet, scene.
 - **Stored data:** none.
 - **Evidence kept:** notebook-fields.
-- **Prediction loops:** how-well-can-twenty-place-an-edge → the-fit, a-uniform-population, move-the-definition → the-fit.
-- **Recovery:** reset: rebuilds the scenario on arrival; missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand; ambiguous result: the check says in words how close is close enough.
-- **Scene rebuilds:** 1 step(s) on arrival (twenty-planets).
-- **Accepted central experiment** (reviewed 2026-09-11): object `compute:population-at-scale`, control the compute page's cutoff and slope settings (not a lesson widget), measures the half-way starting distance and the bound fraction of the twenty trials and of the synthetic population, for the settings run, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+- **Prediction loops:** how-well-can-twenty-place-an-edge → the-fit, a-uniform-population, move-the-definition-yours, which-trial-moved → the-fit.
+- **Recovery:** missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand; ambiguous result: the check says in words how close is close enough; reset: rebuilds the scenario on arrival.
+- **Scene rebuilds:** 1 step(s) on arrival (move-the-definition-yours).
+- **Accepted central experiment** (reviewed 2026-09-11): object `compute:population-at-scale`, control the compute page's cutoff and slope settings (not a lesson widget), and the cutoff the student chooses from a menu in the lesson, measures the half-way starting distance and the bound fraction of the twenty trials and of the synthetic population, for the settings run, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 
 ## Refitting a Transit (`refitting-a-transit`)
 
-- **Steps:** 8. Scene declared on 0; a reader can change something on 0; 0 declare a scene nobody on that step can touch.
+- **Steps:** 9. Scene declared on 0; a reader can change something on 0; 0 declare a scene nobody on that step can touch.
 - **Where the numbers come from:** 0 live engine, 0 prescribed model, 0 stored dataset, 0 self-contained panel.
 - **What students do:** read, commit-a-prediction, record-values, choose-an-option.
 - **Objects the steps declare:** none.
 - **Instruments:** none.
+- **Canvas:** quiet.
 - **Stored data:** none.
 - **Evidence kept:** notebook-fields.
-- **Prediction loops:** how-close → the-fit, sigma-and-profile, hold-the-limb-darkening → the-fit.
-- **Recovery:** reset: rebuilds the scenario on arrival; missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand; ambiguous result: the check says in words how close is close enough.
-- **Scene rebuilds:** 1 step(s) on arrival (same-model-another-route).
-- **Accepted central experiment** (reviewed 2026-09-11): object `compute:refit-transit`, control the compute page's limb-darkening setting (not a lesson widget), measures the fitted period, planet-to-star radius ratio, orbit size, impact parameter and reduced chi-square, the covariance sigma and profile intervals, and how the radius ratio and its sigma change when the limb darkening is held fixed, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+- **Prediction loops:** how-close → the-fit, sigma-and-profile → the-fit; predict-the-shift → shift-from-your-fit → shift-from-your-fit.
+- **Recovery:** missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** none.
+- **Accepted central experiment** (reviewed 2026-11-21): object `compute:refit-transit`, control the compute page's limb-darkening setting (not a lesson widget), measures the fitted period, planet-to-star radius ratio, orbit size, impact parameter and reduced chi-square, the covariance sigma and profile intervals, and how far the radius ratio moves, in its new sigmas, from the student's own fitted value when the limb darkening is held fixed, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 
 ## Two Periodograms (`two-periodograms`)
 
@@ -842,12 +844,13 @@ The canvas behind a step is stated as scene on 4, portrait on 7, quiet on 42; 14
 - **What students do:** read, commit-a-prediction, record-values, choose-an-option.
 - **Objects the steps declare:** none.
 - **Instruments:** none.
+- **Canvas:** quiet.
 - **Stored data:** none.
 - **Evidence kept:** notebook-fields.
-- **Prediction loops:** the-tallest-peak → the-two-periods, the-box, against-the-fit → the-two-periods.
-- **Recovery:** reset: rebuilds the scenario on arrival; missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand; ambiguous result: the check says in words how close is close enough.
-- **Scene rebuilds:** 1 step(s) on arrival (two-ways-to-look-for-a-period).
-- **Accepted central experiment** (reviewed 2026-09-11): object `compute:periodograms`, control the compute page's maximum period and maximum duration settings (not a lesson widget), measures the best period of a Lomb-Scargle and of a box least squares periodogram of one light curve, their ratio, and the box period against the fitted period in the fit's uncertainties, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+- **Prediction loops:** the-tallest-peak → the-two-periods, the-box-with-your-limit, separation-from-your-period → the-two-periods.
+- **Recovery:** missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** none.
+- **Accepted central experiment** (reviewed 2026-11-21): object `compute:periodograms`, control the compute page's maximum period and maximum duration settings (not a lesson widget), and the longest box duration the student chooses from a menu in the lesson, measures the best period of a Lomb-Scargle and of a box least squares periodogram of one light curve, their ratio, the best box for the longest duration the student allowed, and the box period against the fitted period in the fit's uncertainties, with and without the red-noise factor, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 
 ## Sampling a Posterior (`sampling-a-posterior`)
 
@@ -856,12 +859,13 @@ The canvas behind a step is stated as scene on 4, portrait on 7, quiet on 42; 14
 - **What students do:** read, commit-a-prediction, record-values, choose-an-option.
 - **Objects the steps declare:** none.
 - **Instruments:** none.
+- **Canvas:** quiet.
 - **Stored data:** none.
 - **Evidence kept:** notebook-fields.
-- **Prediction loops:** how-wide → the-draws, did-it-converge → the-draws.
-- **Recovery:** reset: rebuilds the scenario on arrival; missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand; ambiguous result: the check says in words how close is close enough.
-- **Scene rebuilds:** 1 step(s) on arrival (what-a-sampler-does).
-- **Accepted central experiment** (reviewed 2026-09-11): object `compute:posterior-sampling`, control the compute page's steps setting (not a lesson widget), measures the median and 68 percent interval width of the planet-to-star radius ratio and the impact parameter from an ensemble sampler, and the convergence diagnostics that let the interval be quoted, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+- **Prediction loops:** pick-the-ratio-predict-the-width → the-draws-at-your-ratio, did-it-converge → the-draws-at-your-ratio.
+- **Recovery:** missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** none.
+- **Accepted central experiment** (reviewed 2026-11-21): object `compute:posterior-sampling`, control the compute page's steps and a/R* settings (not a lesson widget), and the a/R* the student chooses from a menu in the lesson, measures the median and 68 percent interval width of the planet-to-star radius ratio and the impact parameter from an ensemble sampler with a/R* held at the student's choice, and the convergence diagnostics that let the interval be quoted, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 
 ## What Is a Measurement? (`what-is-a-measurement`)
 

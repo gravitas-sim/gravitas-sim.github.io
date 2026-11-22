@@ -5,17 +5,16 @@
     "the-saturated-star",
     "binary-star-planets",
     "weighing-stars",
-    "tides",
     "black-holes",
     "butterfly-effect",
+    "extending-an-experiment",
     "measuring-the-moon",
-    "radial-velocity",
+    "missing-mass",
     "propose-an-observation",
     "what-is-a-gravitational-wave",
     "a-night-at-the-telescope",
     "counts-to-magnitudes",
-    "extending-an-experiment",
-    "missing-mass",
+    "detect-this-planet",
     "power-law-gravity",
     "retrograde-motion"
   ],
@@ -181,12 +180,6 @@
       "key:read.showBarycenter",
       "math:arithmetic"
     ],
-    "tides": [
-      "key:explore.canvas",
-      "key:predict.misconceptions",
-      "key:question.canvas",
-      "key:read.allowInspector"
-    ],
     "black-holes": [
       "key:question.checklist",
       "key:read.explainView",
@@ -197,15 +190,19 @@
       "key:predict.requires",
       "lock:null"
     ],
+    "extending-an-experiment": [
+      "key:measure.canvas",
+      "key:measure.compute",
+      "key:read.canvas"
+    ],
     "measuring-the-moon": [
       "key:question.maxUncertainty",
       "key:question.minUncertainty",
       "key:question.valueWithin"
     ],
-    "radial-velocity": [
-      "key:explore.compare",
-      "key:explore.evidence",
-      "key:predict.setup"
+    "missing-mass": [
+      "key:predict.setup",
+      "key:question.restates"
     ],
     "propose-an-observation": [
       "key:measure.plan",
@@ -221,11 +218,8 @@
     "counts-to-magnitudes": [
       "depth-step:quantitative/predict"
     ],
-    "extending-an-experiment": [
-      "key:measure.compute"
-    ],
-    "missing-mass": [
-      "key:question.restates"
+    "detect-this-planet": [
+      "key:read.allowInspector"
     ],
     "power-law-gravity": [
       "key:question.explain"
@@ -303,14 +297,14 @@
   ],
   "totals": {
     "investigations": 124,
-    "steps": 1998,
+    "steps": 1992,
     "activityCuts": 6,
-    "lessonTokens": 177,
+    "lessonTokens": 174,
     "activityTokens": 29,
     "stepTypes": {
-      "read": 378,
+      "read": 377,
       "predict": 202,
-      "measure": 524,
+      "measure": 519,
       "ellipse": 1,
       "question": 751,
       "explore": 141,
