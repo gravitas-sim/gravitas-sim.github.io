@@ -433,6 +433,7 @@ export const bindSceneContext = fn => (sceneNow = fn);
 let start = {
   paused: false,
   count: 0,
+  mass: new Map(),
   key: '',
   epoch: 0,
   at: 0,
@@ -446,9 +447,10 @@ const acted = e => {
 };
 let armed = false;
 const bodies = () => allBodies().length;
+const massOf = () => new Map(allBodies().map(b => [b.id, b.mass]));
 /**
  * Whether the student changed the bodies this step drew (placed, launched,
- * removed or burned one), as opposed to running or pausing the
+ * removed, burned or reweighed one), as opposed to running or pausing the
  * clock, which a measurement may need. Read when a reading is taken and once a
  * second by the note below, never per frame. The lesson standing a new stage
  * itself (an instrument) is not the student's change.
@@ -461,7 +463,8 @@ export function sceneAltered() {
     getInterventionEpoch() !== start.epoch ||
     (start.acted &&
       Date.now() - start.at > SETTLE_MS &&
-      bodies() !== start.count)
+      (bodies() !== start.count ||
+        [...massOf()].some(([id, m]) => start.mass.get(id) !== m)))
   );
 }
 const changed = () =>
@@ -470,6 +473,7 @@ const rebase = () =>
   (start = {
     paused: state.paused,
     count: bodies(),
+    mass: massOf(),
     key: stageKey(),
     epoch: getInterventionEpoch(),
     at: Date.now(),
@@ -554,7 +558,8 @@ function tick() {
   } else if (has && !said && changed()) say('saved.scene.leave');
   // The scene is back as it was drawn (a reset): nothing left to warn of.
   else if (said === 'saved.scene.leave' && !changed()) say('');
-  if (Date.now() - start.at <= SETTLE_MS) start.count = bodies();
+  if (Date.now() - start.at <= SETTLE_MS)
+    [start.count, start.mass] = [bodies(), massOf()];
 }
 
 /**
