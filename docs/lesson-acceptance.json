@@ -61,8 +61,7 @@
       "loop": [
         "load-it-heavily",
         "find-the-dividing-line",
-        "write-down-the-dividing-speed",
-        "where-is-the-line"
+        "bracket-the-dividing-speed"
       ],
       "evidenceFrom": "model",
       "decision": "unreviewed",

@@ -388,7 +388,11 @@ export const MODELS = {
       return Math.hypot(l4.x + mu, l4.y);
     },
   },
-  'power-law-gravity/predict-the-slope': {
+  'power-law-gravity/find-the-slope-rate': {
+    via: 'js/powerLawGravity.js expectedKeplerSlope, the rise between n = 2 and n = 2.5 per unit n',
+    value: () => (expectedKeplerSlope(2.5) - expectedKeplerSlope(2)) / 0.5,
+  },
+  'power-law-gravity/predict-the-slope-at-2-9': {
     via: 'js/powerLawGravity.js expectedKeplerSlope at n = 2.9',
     value: () => expectedKeplerSlope(2.9),
   },

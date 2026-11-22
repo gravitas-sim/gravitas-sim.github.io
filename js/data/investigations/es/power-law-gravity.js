@@ -60,9 +60,10 @@ export default {
              cambiarían por ese motivo tanto como por cualquier otro. Peor aún:
              <em>cuánto</em> cambia dependería de si has decidido medir las
              distancias en kilómetros, en unidades astronómicas o en las
-             unidades de la simulación (100 por UA): a 1 UA, un 17 por
-             ciento más débil en kilómetros, un 4,5 en unidades de la
-             simulación, igual en UA.
+             unidades propias de la simulación (100 por UA). A una distancia
+             de 1 UA la atracción saldría un 17 por ciento más débil con la
+             distancia en kilómetros, un 4,5 por ciento más débil en las
+             unidades propias de la simulación, e igual en UA.
              Al universo le da igual qué unidades escribas.
 
              \n\nAsí que la ley que se usa aquí está anclada. Está escrita de
@@ -91,11 +92,10 @@ export default {
       ],
       because: `De forma apreciable, y rápido. La órbita sigue ligada y se
                 comporta perfectamente bien —no se expulsa nada a ninguna
-                parte—, pero el eje mayor de la elipse gira unos nueve grados
-                cada vez que el planeta completa un ciclo de ida y vuelta, lo
-                cual se nota en unas pocas vueltas. El tamaño del efecto no es
-                proporcional al tamaño del cambio en n, y eso conviene
-                retenerlo.`,
+                parte—, pero el eje mayor de la elipse gira cada vez que el
+                planeta completa un ciclo de ida y vuelta, lo cual se nota en
+                unas pocas vueltas. El tamaño del efecto no es proporcional al
+                tamaño del cambio en n, y eso conviene retenerlo.`,
       tip: 'Decide antes de ejecutarlo. Lo valioso de predecir es el compromiso, no el acierto.',
     },
     {
@@ -118,12 +118,12 @@ export default {
         note: 'Todos estos números se han medido ejecutando la órbita, no se han consultado en ninguna tabla.',
       },
       checklist: [
-        'Con n = 2 la precesión marca cero: la elipse se cierra',
-        'Con n = 2,05 son unos nueve grados por vuelta',
-        'Con n = 2,2 son unos cuarenta y tres grados',
-        'Con n = 1,8 es negativa: el eje gira al revés',
+        'Lee la precesión medida con n = 2 y después con n = 2,05',
+        'Léela con n = 2,2 y di cómo se compara con n = 2,05',
+        'Léela con n = 1,8, la ley menos empinada',
+        'Di hacia dónde gira el eje mayor con n = 1,8 en comparación con n = 2,2',
       ],
-      tip: 'Una precesión negativa significa que la elipse gira hacia atrás, en contra del sentido de la órbita.',
+      tip: 'El signo de la lectura dice hacia dónde gira el eje mayor.',
     },
     {
       title: 'Anota lo que hace el eje',
@@ -284,31 +284,47 @@ export default {
     },
     {
       hints: [
-        'Tus lecturas muestran que la pendiente cambia en una cantidad fija por cada paso de n.',
-        'Extiende el patrón desde una de tus lecturas hasta el nuevo n, al ritmo que muestran tus lecturas.',
+        'Toma el cambio de la pendiente entre las dos lecturas y el cambio de n.',
+        'Divide uno entre otro: ¿cuánto se mueve la pendiente cuando n se mueve 1?',
       ],
       feedback: {
         close:
-          'Cerca. La pendiente cambia a la mitad del ritmo de n: parte de una lectura de confianza.',
-        off: 'Elige una de tus lecturas y avanza hasta el nuevo n, a la mitad del ritmo al que cambia n.',
+          'Cerca. Usa el cambio de la pendiente entre las dos lecturas, dividido por el cambio de n.',
+        off: 'Trabaja con las dos lecturas: cuánto se movió la pendiente, dividido por cuánto se movió n.',
       },
-      title: 'Usa el patrón',
-      body: `Mira tus cuatro lecturas. Con n = 2 la pendiente es 1,5; con
-             n = 2,2 es 1,6; con n = 2,5 es 1,75; con n = 1,8 es 1,4.
+      title: 'La regla en tus lecturas',
+      body: `Mira solo dos de tus lecturas: con n = 2 la pendiente fue 1,5, y
+             con n = 2,5 la pendiente fue 1,75.
 
-             \n\nCada escalón de 0,2 en n mueve la pendiente 0,1: la pendiente
-             cambia exactamente a la mitad del ritmo del exponente. Escrita, esa
-             relación es <strong>pendiente = (n + 1) / 2</strong>, y puedes
-             comprobarla con las cuatro lecturas.
+             \n\nLa pendiente depende del exponente según una regla sencilla,
+             y dos lecturas bastan para encontrarla.`,
+      prompt: 'Cambio de la pendiente por cada subida de 1 en n',
+      explain: `La pendiente subió 0,25 mientras n subía 0,5, así que sube 0,5
+                por cada 1 de n: la mitad de rápido que el exponente.`,
+    },
+    {
+      hints: [
+        'Parte de la lectura con n = 2, donde la pendiente es 1,5, y usa el ritmo que encontraste para la subida de n.',
+        'El exponente pasa de 2 a 2,9: ¿cuánto es eso, y cuánto se mueve la pendiente por ello?',
+      ],
+      feedback: {
+        close:
+          'Cerca. Avanza desde una lectura de confianza, al ritmo que encontraste por cada subida de n.',
+        off: 'Elige una de tus lecturas y avanza hasta el nuevo n, al ritmo que encontraste.',
+      },
+      title: 'Usa la regla',
+      body: `Ahora aplica tu ritmo a un exponente que no hayas medido. El
+             instrumento llega hasta n = 2,9.
 
-             \n\nAhora aplícala a un exponente que no hayas medido. El
-             instrumento llega hasta n = 2,9.`,
+             \n\nDeduce primero la respuesta y luego pon el instrumento en
+             n = 2,9 para ver si acertaste.`,
       tool: {
         title: 'Comprueba aquí tu predicción, después de haberla hecho',
-        note: 'Deduce primero la respuesta a partir del patrón. El instrumento sirve para saber si acertaste, no para encontrar la respuesta.',
+        note: 'El instrumento sirve para saber si acertaste, no para encontrar la respuesta.',
       },
       prompt: 'Pendiente predicha de log P frente a log r con n = 2,9',
-      explain: `(2,9 + 1) / 2 = 1,95. Pon el instrumento en n = 2,9 y
+      explain: `La pendiente es (n + 1) / 2, así que con n = 2,9 vale
+                (2,9 + 1) / 2 = 1,95. Pon el instrumento en n = 2,9 y
                 compruébalo: marca 1,95. Esto es lo que significa que una
                 relación sea una ley y no una tabla: responde por casos que no
                 has medido. Y funciona también al revés, que es como se usa de

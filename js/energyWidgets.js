@@ -460,7 +460,7 @@ const LAUNCH = {
       shot.running = false;
     }
   },
-  readout(v) {
+  readout(v, ctx, spec) {
     const c = this.compute(v);
     const p = shot.path;
     const verdict = !p
@@ -470,7 +470,7 @@ const LAUNCH = {
         : p.bound
           ? 'yes: it comes back round'
           : 'no: it leaves for good';
-    return [
+    const rows = [
       {
         get label() {
           return t('energyW.doesItComeBack');
@@ -484,7 +484,9 @@ const LAUNCH = {
         },
         value: `${MJ(c.total) >= 0 ? '+' : ''}${withUnit(MJ(c.total).toFixed(1), 'MJ per kg')}, ${c.total < 0 ? 'below zero' : 'above zero'}`,
       },
+      // Withheld (`withhold: ['escape']`) on the steps that ask for this number.
       {
+        id: 'escape',
         get label() {
           return t('energyW.escapeSpeedFromHere');
         },
@@ -506,6 +508,9 @@ const LAUNCH = {
               : 'no limit: it never turns round',
       },
     ];
+    return spec?.withhold?.includes('escape')
+      ? rows.filter(r => r.id !== 'escape')
+      : rows;
   },
   draw(canvas, v) {
     const H = responsiveHeight(334, 262);
@@ -910,6 +915,7 @@ const ESCAPE_COMPARE = {
     const c = this.compute(v);
     return [
       ...c.rows.map(r => ({
+        id: r.key,
         label: `Escape speed from ${r.label}`,
         value: withUnit(kms(r.v).toFixed(2), 'km/s'),
         emphasis: r.key === 'earth',

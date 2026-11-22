@@ -221,8 +221,8 @@ export default {
         'A high launch speed gives a path that leaves and does not return. Total energy is at or above zero.',
       'find-the-dividing-line':
         'The dividing line is where the total energy bar reaches zero. Students should be able to bracket it within a small range of the slider.',
-      'write-down-the-dividing-speed':
-        'Two numbers with a gap between them, bracketing 10.9 km/s. A student who moved the slider in whole units will report a gap of 1 km/s; one who worked through the last stretch in hundredths will report 0.02. Both are correct measurements and the difference is the point - the gap is the uncertainty, and the field check says so rather than marking the coarse one wrong. Anything centered outside 10.3 to 11.5 is a misread of which shot came back.',
+      'bracket-the-dividing-speed':
+        'Two numbers with a gap between them, either side of 10.9 km/s. The instrument opens at 9 km/s and the escape speed is withheld on this step, so the bracket is the student\'s own. A student who moved the slider in whole units will report a gap of 1 km/s; one who worked through the last stretch in tenths will report 0.1. Both are correct measurements and the difference is the point - the gap is the uncertainty, and the check says so rather than marking the coarse one wrong. A pair on one side of the line is refused with the side named; a pair whose middle is outside 10.3 to 11.5 is told which of the two is a long way off.',
       'watch-the-total':
         'The kinetic and potential bars change continuously; the total does not. This is the observation the next question depends on.',
       'check-it-yourself':
@@ -693,8 +693,10 @@ export default {
         'At n = 2.2 the four timesteps all give 42.667 degrees and the spread is around 1e-5 degrees or smaller. At n = 2 every reading is zero. The comparison students should make is between the spread and the effect itself, which differ by six orders of magnitude.',
       'measure-the-slope':
         'Slopes of 1.400, 1.500, 1.600 and 1.750 at n = 1.8, 2, 2.2 and 2.5. These are exact to the displayed precision, which surprises students who expect measured numbers to be untidy; the orbits are circular and the fit is over a wide radius range, so the residual is around 1e-14.',
-      'predict-the-slope':
-        'Answer 1.95, from (n+1)/2 at n = 2.9. Tolerance is 0.03, so a student who reads the pattern as "half of one more than n" gets it and one who guesses does not.',
+      'find-the-slope-rate':
+        'Answer 0.5: the slope rises by 0.25 while n rises by 0.5, from the two readings the step names. Tolerance is 0.02. A student who gives the change in slope without dividing by the change in n answers 0.25 and is told to divide.',
+      'predict-the-slope-at-2-9':
+        'Answer 1.95, from (n+1)/2 at n = 2.9. Tolerance is 0.03, so a student who carries the rate found in the previous step from a reading they trust gets it and one who guesses does not. The instrument opens at n = 2 and the student sets 2.9 to check.',
       'measure-conservation':
         'Momentum and angular-momentum drift around 1e-15 at both exponents, with no systematic difference between them. Energy drift is around 1e-5, larger than the other two because that bench uses a first-order scheme; it is bounded rather than growing, which is the point.',
     },

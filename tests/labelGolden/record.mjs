@@ -194,9 +194,13 @@ const EXTRA_CASES = {
     { w_a: 0.02925, w_Pd: 61 },
     { w_a: 2.925, w_Pd: 6.1 },
   ],
-  'write-down-the-dividing-speed': () => [
+  'bracket-the-dividing-speed': () => [
     { back: 10.85, gone: 10.95 },
     { back: 10.5, gone: 11.3 },
+    { back: 9, gone: 10 },
+    { back: 11, gone: 12 },
+    { back: 6, gone: 12 },
+    { back: 10, gone: 14 },
   ],
   'weigh-the-pair': () => [
     { a: 4, p: 4 },
