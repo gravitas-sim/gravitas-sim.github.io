@@ -64,10 +64,6 @@ import {
 import * as timeline from './timeline.js';
 
 import {
-  bh_list,
-  stars,
-  neutron_stars,
-  white_dwarfs,
   DT,
   getSimulationTime,
   setSimulationTime,
@@ -84,7 +80,8 @@ import {
 import { habitableZoneModelFromSettings, setFixedStep } from './render.js';
 import { STEP_SECONDS, frameAdvance } from './timestep.js';
 import { currentRadialVelocity, observedStar } from './radialVelocity.js';
-import { orbitalElements, dominantPrimary, pairEnergy } from './orbital.js';
+import { pairEnergy } from './orbital.js';
+import { primaryFor, elementsFor } from './inspectorOrbit.js';
 import {
   formatDistance,
   formatSpeed,
@@ -317,13 +314,8 @@ bindPersistence({
 function probeContext() {
   const G = SETTINGS.gravitational_constant;
   const selected = state.selectedObject?.object || null;
-  const primaries = [...bh_list, ...stars, ...neutron_stars, ...white_dwarfs];
-
-  const primaryOf = body =>
-    dominantPrimary(
-      body,
-      primaries.filter(p => p !== body)
-    );
+  // The shared rule and the pair's own mu (js/inspectorOrbit.js).
+  const primaryOf = body => primaryFor(body);
 
   return {
     selected,
@@ -332,8 +324,7 @@ function probeContext() {
     elements: body => {
       const b = body || selected;
       if (!b) return null;
-      const primary = primaryOf(b);
-      return primary ? orbitalElements(b, primary, G) : null;
+      return elementsFor(b, primaryOf(b));
     },
     energy: body => {
       const b = body || selected;
@@ -461,7 +452,7 @@ function probeContext() {
       if (!star) return null;
       const velocity = currentRadialVelocity();
       const primary = star ? primaryOf(star) : null;
-      const el = primary ? orbitalElements(star, primary, G) : null;
+      const el = elementsFor(star, primary);
       const angle = Math.atan2(star.pos.y, star.pos.x);
       return {
         star,

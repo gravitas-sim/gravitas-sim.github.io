@@ -13,10 +13,6 @@
 import { EARTH_MASSES_PER_JUPITER_MASS } from './constants.js';
 import { formatNumber, withUnit } from './format.js';
 import {
-  bh_list,
-  stars,
-  neutron_stars,
-  white_dwarfs,
   SOLAR_MASS_UNIT,
   EARTH_MASS_UNIT,
   HALLEY_MASS_UNIT,
@@ -24,8 +20,8 @@ import {
 } from './physics.js';
 import { solarHTML, earthHTML, jupiterHTML } from './utils.js';
 import { t } from './i18n/index.js';
-import { orbitalElements, dominantPrimary } from './orbital.js';
-import { timeUnitSeconds, formatSpeed, formatDistance } from './units.js';
+import { orbitRows } from './inspectorOrbit.js';
+import { formatSpeed, formatDistance } from './units.js';
 import { blackHoleFacts, yearsLabel } from './blackHolePhysics.js';
 import { stellarStateFor, spectralType } from './stellar/state.js';
 import { SETTINGS } from './appState.js';
@@ -106,43 +102,48 @@ export const getBlackHoleInfo = bh => {
 };
 
 /**
- * Orbital period of a body about whatever it is actually orbiting, in days.
- *
- * Replaces four copies of a calculation that assumed a 1000-unit primary
- * sitting at the origin and measured distance from the origin rather than from
- * the primary, on a length scale that matched neither the simulation nor
- * units.js. In the Kepler scenario it reported 3.1 days for an orbit whose real
- * period is about 1.7 years, which is the sort of number a student is asked to
- * write down in an investigation.
- *
- * @param {Object} body - The orbiting object
- * @returns {number|null} Period in days, or null if unbound or with no primary
+ * The radius row for a body that carries no measured radius: the model radius,
+ * which is about the contact size, in the scene's own length unit. Never
+ * called physical (the size statement on the model page, #sizes).
+ * @param {Object} body - A body with `radius`
+ * @returns {{label: string, tooltipKey: string, value: string}} The row
  */
-const realOrbitalPeriodDays = body => {
-  if (!body?.pos) return null;
-  const primary = dominantPrimary(
-    body,
-    [...bh_list, ...stars, ...neutron_stars, ...white_dwarfs].filter(
-      p => p !== body
-    )
-  );
-  if (!primary) return null;
-  const el = orbitalElements(body, primary, SETTINGS.gravitational_constant);
-  if (!el || !el.bound || !isFinite(el.period)) return null;
-  return (el.period * timeUnitSeconds()) / 86400;
-};
+const modelRadiusRow = body => ({
+  label: t('inspector.stat.modelRadius'),
+  tooltipKey: 'radius',
+  value: formatDistance(body.radius),
+});
+
+/** A quantity derived from the model radius, said to be. */
+const forModelRadius = text => `${text} ${t('inspector.forModelRadius')}`;
 
 /**
- * Format an orbital period for the inspector.
- * @param {number|null} days - Period in days
- * @returns {string} Display text
+ * Density, surface gravity and escape speed from a measured radius.
+ * @param {number} massInKg - Mass
+ * @param {number} radiusInKm - Measured radius
+ * @returns {Array} Three rows
  */
-const formatOrbitalPeriod = days => {
-  if (days === null) return 'unbound';
-  if (days > 365) return withUnit(days / 365, 'years');
-  if (days < 1) return withUnit(days * 24, 'hours');
-  return withUnit(days, 'days');
+const surfaceRows = (massInKg, radiusInKm) => {
+  const G = 6.6743e-11;
+  const rM = radiusInKm * 1000;
+  return [
+    {
+      label: t('inspector.stat.density'),
+      value: withUnit(massInKg / ((4 / 3) * Math.PI * rM ** 3), 'kg/m³'),
+    },
+    {
+      label: t('inspector.stat.surfaceGravity'),
+      value: withUnit((G * massInKg) / (rM * rM), 'm/s²'),
+    },
+    {
+      label: t('inspector.stat.escapeVelocity'),
+      value: withUnit(Math.sqrt((2 * G * massInKg) / rM) / 1000, 'km/s'),
+    },
+  ];
 };
+
+/** A mass ladder's answer, labelled as one. */
+const byMass = type => `${type} ${t('inspector.byMass')}`;
 
 export const getStarInfo = star => {
   // One description, shared with the renderer, the habitable-zone ring and the
@@ -166,7 +167,6 @@ export const getStarInfo = star => {
   const G = 6.6743e-11;
   const surfaceGravity = (G * massInKg) / (radiusInM * radiusInM);
   const escapeVelocity = Math.sqrt((2 * G * massInKg) / radiusInM);
-  const orbitalPeriodDays = realOrbitalPeriodDays(star);
   const type = spectralType(state.teffK);
 
   /** Mark a number the model guessed rather than was told. */
@@ -182,7 +182,7 @@ export const getStarInfo = star => {
     },
     {
       label: t('inspector.stat.radius'),
-      tooltipKey: 'radius',
+      tooltipKey: 'radiusPhysical',
       value: maybe(
         'radiusSun',
         `${solarHTML(formatNumber(radiusInSuns), 'R')} (${withUnit(radiusInKm, 'km')})`
@@ -251,10 +251,7 @@ export const getStarInfo = star => {
   }
 
   stats.push(
-    {
-      label: t('inspector.stat.orbitalPeriod'),
-      value: formatOrbitalPeriod(orbitalPeriodDays),
-    },
+    ...orbitRows(star, undefined, { elements: false }),
     {
       label: t('inspector.stat.position'),
       value: `(${star.pos.x.toFixed(1)}, ${star.pos.y.toFixed(1)})`,
@@ -283,23 +280,25 @@ export const getPlanetInfo = planet => {
   // raw simulation mass as though it were a number of Earth masses, which is
   // wrong by a factor of 333 and is the same failure MASS_UNITS.md documents.
   const massInEarths = planet.massInEarths ?? planet.mass / EARTH_MASS_UNIT;
-  const radiusInEarths = planet.radius / PLANET_RADIUS;
-  const radiusInKm = radiusInEarths * 6371; // Earth radius in km
   const massInKg = massInEarths * 5.972e24; // Earth mass in kg
 
-  // Real density calculation (kg/m³)
-  const volume = (4 / 3) * Math.PI * Math.pow(radiusInKm * 1000, 3); // Convert km to m
-  const density = massInKg / volume;
-
-  // Real escape velocity (m/s)
-  const G = 6.6743e-11; // Gravitational constant
-  const escapeVelocity = Math.sqrt((2 * G * massInKg) / (radiusInKm * 1000));
-
-  // Real orbital period (if orbiting a central mass)
-  const orbitalPeriodDays = realOrbitalPeriodDays(planet);
-
-  // Real surface gravity (m/s²)
-  const surfaceGravity = (G * massInKg) / Math.pow(radiusInKm * 1000, 2);
+  // A measured radius where the body carries one (as the light curve reads
+  // it, js/lightCurve.js); otherwise the model radius, which is about the
+  // contact size and says nothing about density, gravity or escape speed.
+  const radiusInEarths = Number.isFinite(planet.radiusInEarths)
+    ? planet.radiusInEarths
+    : null;
+  const radiusRows =
+    radiusInEarths > 0
+      ? [
+          {
+            label: t('inspector.stat.radius'),
+            tooltipKey: 'radiusPhysical',
+            value: `${withUnit(radiusInEarths, 'R⊕')} (${withUnit(radiusInEarths * 6371, 'km')})`,
+          },
+          ...surfaceRows(massInKg, radiusInEarths * 6371),
+        ]
+      : [modelRadiusRow(planet)];
 
   let planetType = 'Terrestrial';
   if (massInEarths > 10) planetType = 'Ice Giant';
@@ -332,25 +331,9 @@ export const getPlanetInfo = planet => {
         label: t('inspector.stat.mass'),
         value: `${earthHTML(formatNumber(massInEarths))} (${withUnit(massInKg, 'kg')})`,
       },
-      {
-        label: t('inspector.stat.radius'),
-        tooltipKey: 'radius',
-        value: `${withUnit(radiusInEarths, 'R⊕')} (${withUnit(radiusInKm, 'km')})`,
-      },
-      { label: t('inspector.stat.density'), value: withUnit(density, 'kg/m³') },
-      {
-        label: t('inspector.stat.surfaceGravity'),
-        value: withUnit(surfaceGravity, 'm/s²'),
-      },
-      {
-        label: t('inspector.stat.escapeVelocity'),
-        value: withUnit(escapeVelocity / 1000, 'km/s'),
-      },
-      {
-        label: t('inspector.stat.orbitalPeriod'),
-        value: formatOrbitalPeriod(orbitalPeriodDays),
-      },
-      { label: t('inspector.stat.type'), value: planetType },
+      ...radiusRows,
+      ...orbitRows(planet),
+      { label: t('inspector.stat.type'), value: byMass(planetType) },
       {
         label: t('inspector.stat.position'),
         value: `(${planet.pos.x.toFixed(1)}, ${planet.pos.y.toFixed(1)})`,
@@ -368,24 +351,26 @@ export const getGasGiantInfo = gasGiant => {
   const massInJupiters =
     gasGiant.massInJupiters || gasGiant.mass / JUPITER_MASS_UNIT;
   const massInEarths = massInJupiters * EARTH_MASSES_PER_JUPITER_MASS;
-  const radiusInJupiters = gasGiant.radius / GAS_GIANT_RADIUS;
-  const radiusInEarths = radiusInJupiters * 11.2; // Convert Jupiter radius to Earth radius (1 Jupiter = 11.2 Earth radii)
-  const radiusInKm = radiusInEarths * 6371; // Earth radius in km
   const massInKg = massInEarths * 5.972e24; // Earth mass in kg
 
-  // Real density calculation (kg/m³)
-  const volume = (4 / 3) * Math.PI * Math.pow(radiusInKm * 1000, 3);
-  const density = massInKg / volume;
-
-  // Real escape velocity (m/s)
-  const G = 6.6743e-11;
-  const escapeVelocity = Math.sqrt((2 * G * massInKg) / (radiusInKm * 1000));
-
-  // Real surface gravity (m/s²)
-  const surfaceGravity = (G * massInKg) / Math.pow(radiusInKm * 1000, 2);
-
-  // Real orbital period
-  const orbitalPeriodDays = realOrbitalPeriodDays(gasGiant);
+  // A measured radius where the body carries one, in Jupiter or Earth radii
+  // (1 Jupiter radius = 11.2 Earth radii); otherwise the model radius.
+  const radiusInEarths =
+    gasGiant.radiusInJupiters > 0
+      ? gasGiant.radiusInJupiters * 11.2
+      : gasGiant.radiusInEarths > 0
+        ? gasGiant.radiusInEarths
+        : null;
+  const radiusRows = radiusInEarths
+    ? [
+        {
+          label: t('inspector.stat.radius'),
+          tooltipKey: 'radiusPhysical',
+          value: `${withUnit(radiusInEarths, 'R⊕')} (${withUnit(radiusInEarths * 6371, 'km')})`,
+        },
+        ...surfaceRows(massInKg, radiusInEarths * 6371),
+      ]
+    : [modelRadiusRow(gasGiant)];
 
   // Use the actual giant type from the object, or determine from mass
   let giantType = gasGiant.giantType || 'Gas Giant';
@@ -410,25 +395,12 @@ export const getGasGiantInfo = gasGiant => {
         label: t('inspector.stat.mass'),
         value: `${jupiterHTML(formatNumber(massInJupiters))} · ${earthHTML(formatNumber(massInEarths))}`,
       },
+      ...radiusRows,
+      ...orbitRows(gasGiant),
       {
-        label: t('inspector.stat.radius'),
-        tooltipKey: 'radius',
-        value: `${withUnit(radiusInEarths, 'R⊕')} (${withUnit(radiusInKm, 'km')})`,
+        label: t('inspector.stat.type'),
+        value: gasGiant.giantType ? displayType : byMass(displayType),
       },
-      { label: t('inspector.stat.density'), value: withUnit(density, 'kg/m³') },
-      {
-        label: t('inspector.stat.surfaceGravity'),
-        value: withUnit(surfaceGravity, 'm/s²'),
-      },
-      {
-        label: t('inspector.stat.escapeVelocity'),
-        value: withUnit(escapeVelocity / 1000, 'km/s'),
-      },
-      {
-        label: t('inspector.stat.orbitalPeriod'),
-        value: formatOrbitalPeriod(orbitalPeriodDays),
-      },
-      { label: t('inspector.stat.type'), value: displayType },
       ...(gasGiant.hasRings
         ? [
             {
@@ -456,22 +428,8 @@ export const getAsteroidInfo = asteroid => {
   // two have to be the same number.
   const massInEarths = asteroid.mass / EARTH_MASS_UNIT;
   const massInKg = massInEarths * 5.972e24;
-  const radiusInKm = asteroid.radius * 1000; // Rough conversion
-  const radiusInM = radiusInKm * 1000;
-
-  // Real density calculation (kg/m³)
-  const volume = (4 / 3) * Math.PI * Math.pow(radiusInM, 3);
-  const density = massInKg / volume;
-
-  // Real escape velocity (m/s)
-  const G = 6.6743e-11;
-  const escapeVelocity = Math.sqrt((2 * G * massInKg) / radiusInM);
-
-  // Real surface gravity (m/s²)
-  const surfaceGravity = (G * massInKg) / Math.pow(radiusInM, 2);
-
-  // Real orbital period
-  const orbitalPeriodDays = realOrbitalPeriodDays(asteroid);
+  // No asteroid carries a measured radius: the row is the model radius, and
+  // density, gravity and escape speed are not derived from it.
 
   let asteroidType = 'Asteroid';
   if (asteroid.radius > 5) asteroidType = 'Dwarf Planet';
@@ -486,25 +444,12 @@ export const getAsteroidInfo = asteroid => {
         label: t('inspector.stat.mass'),
         value: `${earthHTML(formatNumber(massInEarths, { sig: 4 }))} (${withUnit(massInKg, 'kg')})`,
       },
+      modelRadiusRow(asteroid),
+      ...orbitRows(asteroid),
       {
-        label: t('inspector.stat.radius'),
-        tooltipKey: 'radius',
-        value: withUnit(radiusInKm, 'km'),
+        label: t('inspector.stat.type'),
+        value: `${asteroidType} ${t('inspector.byModelRadius')}`,
       },
-      { label: t('inspector.stat.density'), value: withUnit(density, 'kg/m³') },
-      {
-        label: t('inspector.stat.surfaceGravity'),
-        value: withUnit(surfaceGravity, 'm/s²'),
-      },
-      {
-        label: t('inspector.stat.escapeVelocity'),
-        value: withUnit(escapeVelocity / 1000, 'km/s'),
-      },
-      {
-        label: t('inspector.stat.orbitalPeriod'),
-        value: formatOrbitalPeriod(orbitalPeriodDays),
-      },
-      { label: t('inspector.stat.type'), value: asteroidType },
       {
         label: t('inspector.stat.position'),
         value: `(${asteroid.pos.x.toFixed(1)}, ${asteroid.pos.y.toFixed(1)})`,
@@ -521,7 +466,6 @@ export const getAsteroidInfo = asteroid => {
 export const getNeutronStarInfo = neutronStar => {
   const massInSuns =
     neutronStar.massInSuns || neutronStar.mass / SOLAR_MASS_UNIT;
-  const radiusInKm = neutronStar.radius * 1000; // Rough conversion to km
   const density =
     neutronStar.mass / (Math.PI * neutronStar.radius * neutronStar.radius);
   const escapeVelocity = Math.sqrt(
@@ -542,18 +486,14 @@ export const getNeutronStarInfo = neutronStar => {
         label: t('inspector.stat.mass'),
         value: solarHTML(formatNumber(massInSuns)),
       },
-      {
-        label: t('inspector.stat.radius'),
-        tooltipKey: 'radius',
-        value: withUnit(radiusInKm, 'km'),
-      },
+      modelRadiusRow(neutronStar),
       {
         label: t('inspector.stat.density'),
-        value: withUnit(density, 'mass/unit²'),
+        value: forModelRadius(withUnit(density, 'mass/unit²')),
       },
       {
         label: t('inspector.stat.escapeVelocity'),
-        value: formatSpeed(escapeVelocity),
+        value: forModelRadius(formatSpeed(escapeVelocity)),
       },
       {
         label: t('inspector.stat.schwarzschildRadius'),
@@ -576,7 +516,6 @@ export const getNeutronStarInfo = neutronStar => {
 
 export const getWhiteDwarfInfo = whiteDwarf => {
   const massInSuns = whiteDwarf.massInSuns || whiteDwarf.mass / SOLAR_MASS_UNIT;
-  const radiusInEarths = whiteDwarf.radius / PLANET_RADIUS; // Compare to Earth radius
   const density =
     whiteDwarf.mass / (Math.PI * whiteDwarf.radius * whiteDwarf.radius);
   const escapeVelocity = Math.sqrt(
@@ -594,18 +533,14 @@ export const getWhiteDwarfInfo = whiteDwarf => {
         label: t('inspector.stat.mass'),
         value: solarHTML(formatNumber(massInSuns)),
       },
-      {
-        label: t('inspector.stat.radius'),
-        tooltipKey: 'radius',
-        value: withUnit(radiusInEarths, 'R⊕'),
-      },
+      modelRadiusRow(whiteDwarf),
       {
         label: t('inspector.stat.density'),
-        value: withUnit(density, 'mass/unit²'),
+        value: forModelRadius(withUnit(density, 'mass/unit²')),
       },
       {
         label: t('inspector.stat.escapeVelocity'),
-        value: formatSpeed(escapeVelocity),
+        value: forModelRadius(formatSpeed(escapeVelocity)),
       },
       {
         label: t('inspector.stat.chandrasekharLimit'),
@@ -673,11 +608,8 @@ export const getCometInfo = comet => {
   // Halley masses. The 0.1 that was here was a third copy of the constant the
   // Comet constructor had wrong.
   const massInComets = comet.massInComets ?? comet.mass / HALLEY_MASS_UNIT;
-  const radiusInKm = comet.radius * 1000; // Rough conversion to km
-  const density = comet.mass / (Math.PI * comet.radius * comet.radius);
-  const escapeVelocity = Math.sqrt(
-    (2 * SETTINGS.gravitational_constant * comet.mass) / comet.radius
-  );
+  // No comet carries a measured radius: the row is the model radius, and
+  // density and escape speed are not derived from it.
   const tailLength = comet.tailLength || 35;
 
   const cometType = comet.cometType || 'short_period';
@@ -690,19 +622,8 @@ export const getCometInfo = comet => {
     title: comet.name || 'Comet',
     stats: [
       { label: t('inspector.stat.mass'), value: withUnit(massInComets, 'C') },
-      {
-        label: t('inspector.stat.radius'),
-        tooltipKey: 'radius',
-        value: withUnit(radiusInKm, 'km'),
-      },
-      {
-        label: t('inspector.stat.density'),
-        value: withUnit(density, 'mass/unit²'),
-      },
-      {
-        label: t('inspector.stat.escapeVelocity'),
-        value: formatSpeed(escapeVelocity),
-      },
+      modelRadiusRow(comet),
+      ...orbitRows(comet),
       {
         label: t('inspector.stat.tailLength'),
         value: formatDistance(tailLength),
