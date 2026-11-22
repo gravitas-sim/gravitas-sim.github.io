@@ -436,7 +436,7 @@ export function stepMarkup(step, c) {
     parts.push(slots.field?.spanGroups(step, c) ?? '');
     parts.push(
       '<div class="inv-check" data-check-slot></div>',
-      '<p class="inv-feedback is-wrong" role="status" data-altered hidden></p>',
+      '<p class="inv-save-status" data-state="scene" role="status" data-altered hidden></p>',
       slipRow(step, id)
     );
   }
