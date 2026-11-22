@@ -16,11 +16,11 @@
     "deferredCoreKb": 1985.8,
     "routes": {
       "front-door": {
-        "kb": 1926.6,
+        "kb": 1928,
         "requests": 109
       },
       "sandbox": {
-        "kb": 1926.6,
+        "kb": 1928,
         "requests": 109
       },
       "kepler": {
