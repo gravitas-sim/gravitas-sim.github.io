@@ -1,6 +1,6 @@
 // The stopwatch's statement that the physics step follows the frame rate
 // (js/sandboxTools.js), in English, with the step-policy gate's figures
-// (STEP_POLICY_GATE.md, verdict C). Registered by the sandbox tools.
+// (verdict C; D-R4-461-02). Registered by the sandbox tools.
 export const EN_STEPSTATEMENT = {
   'instrument.stopwatch.step': 'Step',
   'instrument.stopwatch.stepFollowsFrame':
