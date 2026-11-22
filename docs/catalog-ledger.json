@@ -1072,7 +1072,7 @@
       ],
       "walk": "NOT RUN",
       "pr": null,
-      "hash": "817d0849697a663f2524dd685479e485b0eeeef49b3cd1fe408e625576add3f0"
+      "hash": "01d84baf69ed5442239ee1d570faa1c4e6d7b1816c7d64e0ba48c682e51f195e"
     },
     {
       "id": "investigation:black-holes",
@@ -4561,7 +4561,7 @@
       ],
       "walk": "NOT RUN",
       "pr": 702,
-      "hash": "fb12e23a95d5e5eb49398f8be3066b12d17be199272ace905e7ff903ef3c221f"
+      "hash": "f4601ff9a686149a5006da947f86c50571a14d5fd3b9da23090c457b9a5b4d3c"
     },
     {
       "id": "investigation:reading-the-hr-diagram",

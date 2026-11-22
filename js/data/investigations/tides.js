@@ -298,7 +298,6 @@ const TIDES = {
         note: 'Near side, center, far side. The last row does the comparison for you.',
       },
     },
-
     {
       sid: 'so-why-two-bulges',
       bind: EARTH_MOON,
