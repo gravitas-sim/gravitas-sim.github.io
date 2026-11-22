@@ -53,7 +53,7 @@ const BUDGETS = [
   {
     id: 'initial',
     label: 'Initial download (CSS + eager JS)',
-    limit: 743.8,
+    limit: 744.4,
     reason:
       'Was 743 KB when this budget was first asked for. The application had ' +
       'already grown to 771 KB on its own - the extracted state module, the ' +
@@ -123,12 +123,13 @@ const BUDGETS = [
       '\n\nThe low-tier frame cost repair (D-R4-COI-02): fewer glow sprites per trail at the low tier and the canvas width kept by an observer; raised from 741.6 to 741.9 KB, the measurement by CI of the branch merged with v4 ef760870 (run 44844706105): 759,694 bytes (741.89 KB), rounded up to 0.1 KB. Under the standing approval of 2026-10-10.' +
       '\n\nThe combined lesson framing, links, reset and saving branch (D-R4-TRAINA-03): raised from 741.9 to 743.5 KB, the measurement by CI of the branch (head f51518237): 761,259 bytes (743.42 KB), rounded up to 0.1 KB. Under the standing approval of 2026-10-10.' +
       '\n\nThe same branch after the lesson sheet and status block repairs (D-R4-TRAINA-03): raised from 743.5 to 743.6 KB, the measurement by CI (head 51ee3a090): 761,442 bytes (743.60 KB), rounded up to 0.1 KB. Under the standing approval of 2026-10-10.' +
+      '\n\nWhat pulls on what (D-R4-459-07): the one relation for which bodies pull which, its per-body test and the caveat that reads it are start-up engine code; raised from 743.6 to 744.4 KB, the measurement by CI of the branch merged with v4 b2424e160 (run 44966228334): 762,209 bytes (744.34 KB), rounded up to 0.1 KB. Under the standing approval of 2026-10-10.' +
       '\n\nThe pinned lesson step (D-R4-342-06): one pin per owner and the clock-hold rule beside it in js/timestep.js, start-up code; raised from 743.6 to 743.8 KB, the measurement by CI of the branch (run 44974679581, 1cca9c35b): 761,615 bytes (743.76 KB), rounded up to 0.1 KB. Under the standing approval of 2026-10-10.',
   },
   {
     id: 'deferred',
     label: 'Deferred JavaScript (lazy chunks, gzipped)',
-    limit: 3234.0,
+    limit: 3234.5,
     reason:
       'Jumped from 1369 KB to 2105 KB when three.js and Chart.js stopped being ' +
       'CDN requests and became bundled chunks. That is the point of the change ' +
@@ -739,6 +740,7 @@ const BUDGETS = [
       '\n\nThe low-tier frame cost repair (D-R4-COI-02): raised from 3226.1 to 3226.2 KB, the measurement by CI of the branch merged with v4 ef760870 (run 44844706105): 3,303,620 bytes gzipped (3226.19 KB), rounded up to 0.1 KB. Under the standing approval of 2026-10-10.' +
       "\n\nThe lesson link's frame hold (D-R4-439-04): raised from 3226.2 to 3226.3 KB, the measurement by CI of the branch merged with v4 c34f4c9a (run 44864250726): 3,303,635 bytes gzipped (3226.206 KB), rounded up to 0.1 KB. Under the standing approval of 2026-10-10." +
       '\n\nThe combined lesson framing, links, reset and saving branch (D-R4-TRAINA-03): raised from 3226.3 to 3233.3 KB, the measurement by CI of the branch (head f51518237): 3,310,838 bytes gzipped (3233.24 KB), rounded up to 0.1 KB. Under the standing approval of 2026-10-10.' +
+      '\n\nWhat pulls on what (D-R4-459-07): the relation, the scene statement and the inspector row, carried into every bundle that builds the engine; raised from 3233.3 to 3234.5 KB, the measurement by CI of the branch merged with v4 b2424e160 (run 44966228334): 3,312,125 bytes gzipped (3234.50 KB), rounded up to 0.1 KB. Under the standing approval of 2026-10-10.' +
       "\n\nThe pinned lesson step (D-R4-342-06): the pin rule in the stage gate and every setup step's declared speed and start state; raised from 3233.3 to 3234.0 KB, the measurement by CI of the branch (run 44974679581, 1cca9c35b): 3,311,538 bytes gzipped (3233.92 KB), rounded up to 0.1 KB. Under the standing approval of 2026-10-10.",
   },
 ];
