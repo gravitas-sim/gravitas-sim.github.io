@@ -1513,15 +1513,15 @@ test.describe('the central experiment of each investigation', () => {
         if (now.up >= seen.min + 1) seen.climbed = true;
         if (done(now, seen)) break;
         await page.evaluate(
-          () => new Promise(r => requestAnimationFrame(() => r()))
+          () => new Promise(r => window.requestAnimationFrame(() => r()))
         );
       }
       await pause();
       await page.evaluate(
-        () => new Promise(r => requestAnimationFrame(() => r()))
+        () => new Promise(r => window.requestAnimationFrame(() => r()))
       );
       await page.evaluate(
-        () => new Promise(r => requestAnimationFrame(() => r()))
+        () => new Promise(r => window.requestAnimationFrame(() => r()))
       );
       return sky();
     };
