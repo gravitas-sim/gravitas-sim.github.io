@@ -9,7 +9,7 @@ on a 60 Hz screen, a 144 Hz screen and a throttled tab. A reading step
 that holds the clock (`holdsClock` in `js/timestep.js`) does not run and
 is not pinned. Closing the lesson lifts the pin.
 
-595 steps in 28 lessons run on an integrated scene; 468 are pinned and 127 hold the clock.
+581 steps in 25 lessons run on an integrated scene; 458 are pinned and 123 hold the clock.
 
 | Lesson | Step | Id | Type | Scene | Own scene | Pinned step |
 |---|---|---|---|---|---|---|
@@ -108,16 +108,16 @@ is not pinned. Closing the lesson lifts the pin.
 | orbital-energy | 4 | load-it-heavily | predict | Kepler's 2nd Law | inherited | 1/60 s |
 | orbital-energy | 5 | fire-it-again | explore | Kepler's 2nd Law | inherited | 1/60 s |
 | orbital-energy | 6 | find-the-dividing-line | explore | Kepler's 2nd Law | inherited | 1/60 s |
-| orbital-energy | 7 | bracket-the-dividing-speed | measure | Kepler's 2nd Law | inherited | 1/60 s |
-| orbital-energy | 8 | what-is-actually-deciding-this | read | Kepler's 2nd Law | inherited | none (holds the clock) |
-| orbital-energy | 9 | watch-the-total | explore | Kepler's 2nd Law | inherited | 1/60 s |
-| orbital-energy | 10 | reading-the-sign | question | Kepler's 2nd Law | inherited | 1/60 s |
-| orbital-energy | 11 | around-a-real-orbit | explore | Kepler's 2nd Law | yes | 1/60 s |
-| orbital-energy | 12 | what-stays-put | question | Kepler's 2nd Law | inherited | 1/60 s |
-| orbital-energy | 13 | escape-speed | read | Kepler's 2nd Law | inherited | none (holds the clock) |
-| orbital-energy | 14 | a-common-misunderstanding | question | Kepler's 2nd Law | inherited | 1/60 s |
-| orbital-energy | 15 | somewhere-else-entirely | predict | Kepler's 2nd Law | inherited | 1/60 s |
-| orbital-energy | 16 | read-the-escape-speeds | measure | Kepler's 2nd Law | inherited | 1/60 s |
+| orbital-energy | 7 | write-down-the-dividing-speed | measure | Kepler's 2nd Law | inherited | 1/60 s |
+| orbital-energy | 8 | where-is-the-line | question | Kepler's 2nd Law | inherited | 1/60 s |
+| orbital-energy | 9 | what-is-actually-deciding-this | read | Kepler's 2nd Law | inherited | none (holds the clock) |
+| orbital-energy | 10 | watch-the-total | explore | Kepler's 2nd Law | inherited | 1/60 s |
+| orbital-energy | 11 | reading-the-sign | question | Kepler's 2nd Law | inherited | 1/60 s |
+| orbital-energy | 12 | around-a-real-orbit | explore | Kepler's 2nd Law | yes | 1/60 s |
+| orbital-energy | 13 | what-stays-put | question | Kepler's 2nd Law | inherited | 1/60 s |
+| orbital-energy | 14 | escape-speed | read | Kepler's 2nd Law | inherited | none (holds the clock) |
+| orbital-energy | 15 | a-common-misunderstanding | question | Kepler's 2nd Law | inherited | 1/60 s |
+| orbital-energy | 16 | somewhere-else-entirely | predict | Kepler's 2nd Law | inherited | 1/60 s |
 | orbital-energy | 17 | more-mass-harder-to-leave | explore | Kepler's 2nd Law | inherited | 1/60 s |
 | orbital-energy | 18 | further-out-easier-to-leave | explore | Kepler's 2nd Law | inherited | 1/60 s |
 | orbital-energy | 19 | starting-further-out | question | Kepler's 2nd Law | inherited | 1/60 s |
@@ -549,46 +549,32 @@ is not pinned. Closing the lesson lifts the pin.
 | power-law-gravity | 1 | the-exactly | read | Solar System | yes | none (holds the clock) |
 | power-law-gravity | 2 | why-there-is-a-reference-distance | read | Solar System | inherited | none (holds the clock) |
 | power-law-gravity | 3 | predict-does-small-matter | predict | Solar System | inherited | 1/60 s |
-| integrators-in-practice | 1 | one-system-four-steps | read | Circumbinary Planet Lab | yes | none (holds the clock) |
-| integrators-in-practice | 2 | which-loses-most | predict | Circumbinary Planet Lab | inherited | 1/60 s |
-| integrators-in-practice | 3 | four-drifts | measure | Circumbinary Planet Lab | inherited | 1/60 s |
-| integrators-in-practice | 4 | why-bounded | question | Circumbinary Planet Lab | inherited | 1/60 s |
-| integrators-in-practice | 5 | halve-the-step | measure | Circumbinary Planet Lab | inherited | 1/60 s |
-| integrators-in-practice | 6 | the-engine | measure | Circumbinary Planet Lab | inherited | 1/60 s |
-| integrators-in-practice | 7 | phase-luck | question | Circumbinary Planet Lab | inherited | 1/60 s |
-| integrators-in-practice | 8 | what-you-worked-out | read | Circumbinary Planet Lab | inherited | none (holds the clock) |
-| extending-an-experiment | 1 | twenty-planets | read | Binary Planet Lab | yes | none (holds the clock) |
-| extending-an-experiment | 2 | how-well-can-twenty-place-an-edge | predict | Binary Planet Lab | inherited | 1/60 s |
-| extending-an-experiment | 3 | the-fit | measure | Binary Planet Lab | inherited | 1/60 s |
-| extending-an-experiment | 4 | a-uniform-population | measure | Binary Planet Lab | inherited | 1/60 s |
-| extending-an-experiment | 5 | why-the-sample-differs | question | Binary Planet Lab | inherited | 1/60 s |
-| extending-an-experiment | 6 | move-the-definition | measure | Binary Planet Lab | inherited | 1/60 s |
-| extending-an-experiment | 7 | what-moved-it | question | Binary Planet Lab | inherited | 1/60 s |
+| power-law-gravity | 4 | first-look-at-the-orbit | explore | Solar System | inherited | 1/60 s |
+| power-law-gravity | 5 | record-the-precession | measure | Solar System | inherited | 1/60 s |
+| power-law-gravity | 6 | what-closes-an-orbit | question | Solar System | inherited | 1/60 s |
+| power-law-gravity | 7 | predict-is-it-the-computer | predict | Solar System | inherited | 1/60 s |
+| power-law-gravity | 8 | refine-the-timestep | measure | Solar System | inherited | 1/60 s |
+| power-law-gravity | 9 | the-refinement-verdict | question | Solar System | inherited | 1/60 s |
+| power-law-gravity | 10 | predict-period-and-distance | predict | Solar System | inherited | 1/60 s |
+| power-law-gravity | 11 | measure-the-slope | measure | Solar System | inherited | 1/60 s |
+| power-law-gravity | 12 | predict-the-slope | question | Solar System | inherited | 1/60 s |
+| power-law-gravity | 13 | why-the-slope-and-not-something-else | question | Solar System | inherited | 1/60 s |
+| power-law-gravity | 14 | predict-what-breaks | predict | Solar System | inherited | 1/60 s |
+| power-law-gravity | 15 | measure-conservation | measure | Solar System | inherited | 1/60 s |
+| power-law-gravity | 16 | why-they-survive | question | Solar System | inherited | 1/60 s |
+| power-law-gravity | 17 | and-energy | read | Solar System | inherited | none (holds the clock) |
+| power-law-gravity | 18 | two-lists | read | Solar System | inherited | none (holds the clock) |
+| power-law-gravity | 19 | near-three | read | Solar System | inherited | none (holds the clock) |
+| power-law-gravity | 20 | closing-question | question | Solar System | inherited | 1/60 s |
+| power-law-gravity | 21 | the-honest-caveat | read | Solar System | inherited | none (holds the clock) |
+| integrators-in-practice | 6 | choose-the-second-step | measure | Circumbinary Planet Lab | yes | 1/60 s |
+| integrators-in-practice | 7 | the-engine | measure | Circumbinary Planet Lab | inherited | 1/60 s |
+| integrators-in-practice | 8 | phase-luck | question | Circumbinary Planet Lab | inherited | 1/60 s |
+| integrators-in-practice | 9 | trust-at-six-orbits | question | Circumbinary Planet Lab | inherited | 1/60 s |
+| integrators-in-practice | 10 | what-you-worked-out | read | Circumbinary Planet Lab | inherited | none (holds the clock) |
+| extending-an-experiment | 6 | move-the-definition-yours | measure | Binary Planet Lab | yes | 1/60 s |
+| extending-an-experiment | 7 | which-trial-moved | measure | Binary Planet Lab | inherited | 1/60 s |
 | extending-an-experiment | 8 | what-you-worked-out | read | Binary Planet Lab | inherited | none (holds the clock) |
-| refitting-a-transit | 1 | same-model-another-route | read | Transit Lab | yes | none (holds the clock) |
-| refitting-a-transit | 2 | how-close | predict | Transit Lab | inherited | 1/60 s |
-| refitting-a-transit | 3 | the-fit | measure | Transit Lab | inherited | 1/60 s |
-| refitting-a-transit | 4 | sigma-and-profile | measure | Transit Lab | inherited | 1/60 s |
-| refitting-a-transit | 5 | why-they-differ | question | Transit Lab | inherited | 1/60 s |
-| refitting-a-transit | 6 | hold-the-limb-darkening | measure | Transit Lab | inherited | 1/60 s |
-| refitting-a-transit | 7 | what-is-not-counted | question | Transit Lab | inherited | 1/60 s |
-| refitting-a-transit | 8 | what-you-worked-out | read | Transit Lab | inherited | none (holds the clock) |
-| two-periodograms | 1 | two-ways-to-look-for-a-period | read | Transit Lab | yes | none (holds the clock) |
-| two-periodograms | 2 | the-tallest-peak | predict | Transit Lab | inherited | 1/60 s |
-| two-periodograms | 3 | the-two-periods | measure | Transit Lab | inherited | 1/60 s |
-| two-periodograms | 4 | why-half | question | Transit Lab | inherited | 1/60 s |
-| two-periodograms | 5 | the-box | measure | Transit Lab | inherited | 1/60 s |
-| two-periodograms | 6 | against-the-fit | measure | Transit Lab | inherited | 1/60 s |
-| two-periodograms | 7 | what-a-grid-step-is | question | Transit Lab | inherited | 1/60 s |
-| two-periodograms | 8 | what-you-worked-out | read | Transit Lab | inherited | none (holds the clock) |
-| sampling-a-posterior | 1 | what-a-sampler-does | read | Transit Lab | yes | none (holds the clock) |
-| sampling-a-posterior | 2 | how-wide | predict | Transit Lab | inherited | 1/60 s |
-| sampling-a-posterior | 3 | the-draws | measure | Transit Lab | inherited | 1/60 s |
-| sampling-a-posterior | 4 | did-it-converge | measure | Transit Lab | inherited | 1/60 s |
-| sampling-a-posterior | 5 | profile-and-posterior | question | Transit Lab | inherited | 1/60 s |
-| sampling-a-posterior | 6 | why-narrower | question | Transit Lab | inherited | 1/60 s |
-| sampling-a-posterior | 7 | refuse-a-short-run | question | Transit Lab | inherited | 1/60 s |
-| sampling-a-posterior | 8 | what-you-worked-out | read | Transit Lab | inherited | none (holds the clock) |
 | why-rings | 5 | a-pass-inside-the-limit | read | Roche Pass | yes | 1/60 s |
 | why-rings | 7 | a-ring-with-a-resonance | read | Ring Gap | yes | none (holds the clock) |
 | the-scale-of-the-solar-system | 1 | a-picture-you-have-seen | read | Solar System | yes | none (holds the clock) |

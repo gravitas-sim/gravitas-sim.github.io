@@ -7,16 +7,15 @@
     "weighing-stars",
     "black-holes",
     "butterfly-effect",
+    "extending-an-experiment",
     "measuring-the-moon",
-    "orbital-energy",
     "missing-mass",
-    "power-law-gravity",
+    "propose-an-observation",
     "what-is-a-gravitational-wave",
     "a-night-at-the-telescope",
     "counts-to-magnitudes",
     "detect-this-planet",
-    "extending-an-experiment",
-    "propose-an-observation",
+    "power-law-gravity",
     "retrograde-motion"
   ],
   "lessonGain": {
@@ -191,23 +190,23 @@
       "key:predict.requires",
       "lock:null"
     ],
+    "extending-an-experiment": [
+      "key:measure.canvas",
+      "key:measure.compute",
+      "key:read.canvas"
+    ],
     "measuring-the-moon": [
       "key:question.maxUncertainty",
       "key:question.minUncertainty",
       "key:question.valueWithin"
     ],
-    "orbital-energy": [
-      "key:explore.compare",
-      "key:explore.evidence",
-      "key:question.rubricCriteria"
-    ],
     "missing-mass": [
       "key:predict.setup",
       "key:question.restates"
     ],
-    "power-law-gravity": [
-      "key:explore.canvas",
-      "key:question.explain"
+    "propose-an-observation": [
+      "key:measure.plan",
+      "key:question.rubricCriteria"
     ],
     "what-is-a-gravitational-wave": [
       "audience:beginner",
@@ -222,11 +221,8 @@
     "detect-this-planet": [
       "key:read.allowInspector"
     ],
-    "extending-an-experiment": [
-      "key:measure.compute"
-    ],
-    "propose-an-observation": [
-      "key:measure.plan"
+    "power-law-gravity": [
+      "key:question.explain"
     ],
     "retrograde-motion": [
       "lock:{\"placement\":true,\"inspector\":false}"
@@ -303,12 +299,12 @@
     "investigations": 124,
     "steps": 1992,
     "activityCuts": 6,
-    "lessonTokens": 175,
+    "lessonTokens": 174,
     "activityTokens": 29,
     "stepTypes": {
       "read": 377,
-      "predict": 200,
-      "measure": 521,
+      "predict": 202,
+      "measure": 519,
       "ellipse": 1,
       "question": 751,
       "explore": 141,

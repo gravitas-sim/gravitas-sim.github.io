@@ -9188,10 +9188,10 @@
      ]
     },
     {
-     "sid": "bracket-the-dividing-speed",
+     "sid": "write-down-the-dividing-speed",
      "index": 7,
      "type": "measure",
-     "title": "Bracket the dividing speed",
+     "title": "Write down the speed you found",
      "declares": {
       "stage": null,
       "bound": [
@@ -9260,6 +9260,7 @@
       "notebook-fields"
      ],
      "reset": [
+      "stamps instrument values",
       "lesson locks: placement, inspector"
      ],
      "recovery": [
@@ -9268,8 +9269,72 @@
      ]
     },
     {
-     "sid": "what-is-actually-deciding-this",
+     "sid": "where-is-the-line",
      "index": 8,
+     "type": "question",
+     "title": "Where is the line?",
+     "declares": {
+      "stage": null,
+      "bound": [
+       "star",
+       "circular",
+       "eccentric"
+      ],
+      "roles": [
+       "star",
+       "circular",
+       "eccentric"
+      ]
+     },
+     "kinds": [
+      "scene-declared"
+     ],
+     "actions": [
+      "choose-an-option"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": true,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "whole lesson"
+     },
+     "loop": {
+      "declared": "interpret",
+      "actual": [
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the step binds the object by name, so there is none"
+     ]
+    },
+    {
+     "sid": "what-is-actually-deciding-this",
+     "index": 9,
      "type": "read",
      "title": "What is actually deciding this?",
      "declares": {
@@ -9333,7 +9398,7 @@
     },
     {
      "sid": "watch-the-total",
-     "index": 9,
+     "index": 10,
      "type": "explore",
      "title": "Watch the total",
      "declares": {
@@ -9407,7 +9472,7 @@
     },
     {
      "sid": "reading-the-sign",
-     "index": 10,
+     "index": 11,
      "type": "question",
      "title": "Reading the sign",
      "declares": {
@@ -9471,7 +9536,7 @@
     },
     {
      "sid": "around-a-real-orbit",
-     "index": 11,
+     "index": 12,
      "type": "explore",
      "title": "Around a real orbit",
      "declares": {
@@ -9557,7 +9622,7 @@
     },
     {
      "sid": "what-stays-put",
-     "index": 12,
+     "index": 13,
      "type": "question",
      "title": "What stays put",
      "declares": {
@@ -9621,7 +9686,7 @@
     },
     {
      "sid": "escape-speed",
-     "index": 13,
+     "index": 14,
      "type": "read",
      "title": "Escape speed",
      "declares": {
@@ -9685,7 +9750,7 @@
     },
     {
      "sid": "a-common-misunderstanding",
-     "index": 14,
+     "index": 15,
      "type": "question",
      "title": "A common misunderstanding",
      "declares": {
@@ -9749,7 +9814,7 @@
     },
     {
      "sid": "somewhere-else-entirely",
-     "index": 15,
+     "index": 16,
      "type": "predict",
      "title": "Somewhere else entirely",
      "declares": {
@@ -9810,85 +9875,6 @@
      ],
      "recovery": [
       "wrong body: the step binds the object by name, so there is none"
-     ]
-    },
-    {
-     "sid": "read-the-escape-speeds",
-     "index": 16,
-     "type": "measure",
-     "title": "Read the four escape speeds",
-     "declares": {
-      "stage": null,
-      "bound": [
-       "star",
-       "circular",
-       "eccentric"
-      ],
-      "roles": [
-       "star",
-       "circular",
-       "eccentric"
-      ]
-     },
-     "kinds": [
-      "scene-declared",
-      "model-result",
-      "panel-diagram",
-      "captured-evidence"
-     ],
-     "actions": [
-      "record-values",
-      "move-an-instrument-control",
-      "press-an-instrument-preset",
-      "run-the-simulation"
-     ],
-     "requires": [],
-     "reveal": null,
-     "asks": {
-      "choice": false,
-      "numeric": false,
-      "short": false,
-      "rubric": false,
-      "validated": true
-     },
-     "worldRunning": true,
-     "affordances": {
-      "inspector": "locked",
-      "placement": "locked",
-      "areaSweep": "whole lesson"
-     },
-     "loop": {
-      "declared": "measure",
-      "actual": [
-       "experiment",
-       "measure",
-       "interpret"
-      ],
-      "handTranscribed": false,
-      "mismatch": null
-     },
-     "scene": {
-      "nameMatches": [],
-      "readsSelection": false,
-      "importsFromSelection": false,
-      "engineReads": [],
-      "mutates": [],
-      "eventWatch": null
-     },
-     "instrument": {
-      "id": "escape-compare",
-      "capture": false
-     },
-     "evidence": [
-      "notebook-fields"
-     ],
-     "reset": [
-      "stamps instrument values",
-      "lesson locks: placement, inspector"
-     ],
-     "recovery": [
-      "wrong body: the step binds the object by name, so there is none",
-      "ambiguous result: the check says in words how close is close enough"
      ]
     },
     {
@@ -10473,19 +10459,19 @@
      "experiment": [
       "fire-it-again",
       "find-the-dividing-line",
-      "bracket-the-dividing-speed",
+      "write-down-the-dividing-speed",
       "watch-the-total",
       "around-a-real-orbit"
      ],
      "measure": [
       "fire-it-again",
       "find-the-dividing-line",
-      "bracket-the-dividing-speed",
+      "write-down-the-dividing-speed",
       "watch-the-total",
       "around-a-real-orbit"
      ],
      "evidence": [
-      "bracket-the-dividing-speed"
+      "write-down-the-dividing-speed"
      ],
      "interpret": "fire-it-again",
      "measuredBeforeAnswering": true,
@@ -10499,22 +10485,18 @@
      "predictCollects": true,
      "heldUntil": "more-mass-harder-to-leave",
      "experiment": [
-      "read-the-escape-speeds",
       "more-mass-harder-to-leave",
       "further-out-easier-to-leave",
       "three-shapes-one-law",
       "check-it-yourself"
      ],
      "measure": [
-      "read-the-escape-speeds",
       "more-mass-harder-to-leave",
       "further-out-easier-to-leave",
       "three-shapes-one-law",
       "check-it-yourself"
      ],
-     "evidence": [
-      "read-the-escape-speeds"
-     ],
+     "evidence": [],
      "interpret": "more-mass-harder-to-leave",
      "measuredBeforeAnswering": true,
      "explained": false,
@@ -10528,10 +10510,10 @@
     "declared": 24,
     "student": 2,
     "engine": 2,
-    "model": 9,
+    "model": 8,
     "data": 0,
-    "diagram": 9,
-    "evidence": 2,
+    "diagram": 8,
+    "evidence": 1,
     "computation": 0,
     "declaredButInert": 22,
     "prose": 0,
@@ -48078,174 +48060,10 @@
      ]
     },
     {
-     "sid": "arriving",
+     "sid": "compare-two-moments",
      "index": 6,
      "type": "measure",
-     "title": "Arriving",
-     "declares": {
-      "stage": {
-       "objects": 1,
-       "kind": "named",
-       "scale": "display",
-       "fits": true,
-       "anonymous": false
-      },
-      "bound": [],
-      "roles": [
-       "star"
-      ]
-     },
-     "kinds": [
-      "scene-declared",
-      "student-changes-scene",
-      "engine-measurement",
-      "model-result",
-      "imported-data",
-      "captured-evidence"
-     ],
-     "actions": [
-      "record-values",
-      "change-a-scene-object",
-      "move-an-instrument-control",
-      "press-an-instrument-preset",
-      "press-an-instrument-button"
-     ],
-     "requires": [],
-     "reveal": null,
-     "asks": {
-      "choice": false,
-      "numeric": false,
-      "short": false,
-      "rubric": false,
-      "validated": true
-     },
-     "worldRunning": "inherited",
-     "affordances": {
-      "inspector": "whole lesson",
-      "placement": "locked",
-      "areaSweep": "whole lesson"
-     },
-     "loop": {
-      "declared": "measure",
-      "actual": [
-       "experiment",
-       "measure",
-       "interpret"
-      ],
-      "handTranscribed": false,
-      "mismatch": null
-     },
-     "scene": {
-      "nameMatches": [],
-      "readsSelection": false,
-      "importsFromSelection": false,
-      "engineReads": [],
-      "mutates": [],
-      "eventWatch": null
-     },
-     "instrument": {
-      "id": "stellar-evolution",
-      "capture": true
-     },
-     "evidence": [
-      "notebook-fields",
-      "instrument-capture"
-     ],
-     "reset": [
-      "lesson locks: placement"
-     ],
-     "recovery": [
-      "wrong body: the object list names what the step staged",
-      "ambiguous result: the check says in words how close is close enough"
-     ]
-    },
-    {
-     "sid": "the-sun-today",
-     "index": 7,
-     "type": "measure",
-     "title": "The Sun, today",
-     "declares": {
-      "stage": {
-       "objects": 1,
-       "kind": "named",
-       "scale": "display",
-       "fits": true,
-       "anonymous": false
-      },
-      "bound": [],
-      "roles": [
-       "star"
-      ]
-     },
-     "kinds": [
-      "scene-declared",
-      "student-changes-scene",
-      "engine-measurement",
-      "model-result",
-      "imported-data",
-      "captured-evidence"
-     ],
-     "actions": [
-      "record-values",
-      "change-a-scene-object",
-      "move-an-instrument-control",
-      "press-an-instrument-preset",
-      "press-an-instrument-button"
-     ],
-     "requires": [],
-     "reveal": null,
-     "asks": {
-      "choice": false,
-      "numeric": false,
-      "short": false,
-      "rubric": false,
-      "validated": true
-     },
-     "worldRunning": "inherited",
-     "affordances": {
-      "inspector": "whole lesson",
-      "placement": "locked",
-      "areaSweep": "whole lesson"
-     },
-     "loop": {
-      "declared": "measure",
-      "actual": [
-       "experiment",
-       "measure",
-       "interpret"
-      ],
-      "handTranscribed": false,
-      "mismatch": null
-     },
-     "scene": {
-      "nameMatches": [],
-      "readsSelection": false,
-      "importsFromSelection": false,
-      "engineReads": [],
-      "mutates": [],
-      "eventWatch": null
-     },
-     "instrument": {
-      "id": "stellar-evolution",
-      "capture": true
-     },
-     "evidence": [
-      "notebook-fields",
-      "instrument-capture"
-     ],
-     "reset": [
-      "lesson locks: placement"
-     ],
-     "recovery": [
-      "wrong body: the object list names what the step staged",
-      "ambiguous result: the check says in words how close is close enough"
-     ]
-    },
-    {
-     "sid": "across-the-main-sequence",
-     "index": 8,
-     "type": "measure",
-     "title": "Ten billion years, measured",
+     "title": "Two moments in one life",
      "declares": {
       "stage": {
        "objects": 1,
@@ -48325,7 +48143,7 @@
     },
     {
      "sid": "compare-young-and-old",
-     "index": 9,
+     "index": 7,
      "type": "measure",
      "title": "Then and now, side by side",
      "declares": {
@@ -48407,7 +48225,7 @@
     },
     {
      "sid": "predict-what-runs-out",
-     "index": 10,
+     "index": 8,
      "type": "predict",
      "title": "What exactly runs out?",
      "declares": {
@@ -48485,7 +48303,7 @@
     },
     {
      "sid": "the-interior",
-     "index": 11,
+     "index": 9,
      "type": "explore",
      "title": "What is burning now",
      "declares": {
@@ -48561,7 +48379,7 @@
     },
     {
      "sid": "core-in-envelope-out",
-     "index": 12,
+     "index": 10,
      "type": "measure",
      "title": "The core shrinks, the star swells",
      "declares": {
@@ -48643,7 +48461,7 @@
     },
     {
      "sid": "predict-direction",
-     "index": 13,
+     "index": 11,
      "type": "predict",
      "title": "Which way does it go?",
      "declares": {
@@ -48721,7 +48539,7 @@
     },
     {
      "sid": "measure-the-giant",
-     "index": 14,
+     "index": 12,
      "type": "measure",
      "title": "The giant, measured",
      "declares": {
@@ -48803,7 +48621,7 @@
     },
     {
      "sid": "true-size-then-and-now",
-     "index": 15,
+     "index": 13,
      "type": "explore",
      "title": "To scale, and beside itself",
      "declares": {
@@ -48879,9 +48697,9 @@
     },
     {
      "sid": "helium-and-the-loop",
-     "index": 16,
+     "index": 14,
      "type": "question",
-     "title": "It does not simply keep swelling",
+     "title": "After helium ignites",
      "declares": {
       "stage": {
        "objects": 1,
@@ -48956,7 +48774,7 @@
     },
     {
      "sid": "the-agb-and-the-wind",
-     "index": 17,
+     "index": 15,
      "type": "measure",
      "title": "Losing itself",
      "declares": {
@@ -49038,7 +48856,7 @@
     },
     {
      "sid": "not-a-supernova",
-     "index": 18,
+     "index": 16,
      "type": "predict",
      "title": "Is that an explosion?",
      "declares": {
@@ -49116,7 +48934,7 @@
     },
     {
      "sid": "planetary-nebula",
-     "index": 19,
+     "index": 17,
      "type": "read",
      "title": "A planetary nebula, which is not made of planets",
      "declares": {
@@ -49191,7 +49009,7 @@
     },
     {
      "sid": "white-dwarf-cooling",
-     "index": 20,
+     "index": 18,
      "type": "measure",
      "title": "The cinder",
      "declares": {
@@ -49273,7 +49091,7 @@
     },
     {
      "sid": "how-long-was-each-part",
-     "index": 21,
+     "index": 19,
      "type": "measure",
      "title": "How long each part really took",
      "declares": {
@@ -49355,7 +49173,7 @@
     },
     {
      "sid": "predict-the-red-dwarf",
-     "index": 22,
+     "index": 20,
      "type": "predict",
      "title": "The star that does none of this",
      "declares": {
@@ -49433,7 +49251,7 @@
     },
     {
      "sid": "the-same-age",
-     "index": 23,
+     "index": 21,
      "type": "measure",
      "title": "The same age, two stars",
      "declares": {
@@ -49515,7 +49333,7 @@
     },
     {
      "sid": "predict-massive-lifetime",
-     "index": 24,
+     "index": 22,
      "type": "predict",
      "title": "Twenty solar masses",
      "declares": {
@@ -49593,7 +49411,7 @@
     },
     {
      "sid": "massive-versus-sun",
-     "index": 25,
+     "index": 23,
      "type": "measure",
      "title": "What that costs",
      "declares": {
@@ -49675,7 +49493,7 @@
     },
     {
      "sid": "supergiant-and-burning",
-     "index": 26,
+     "index": 24,
      "type": "explore",
      "title": "A supergiant, and what is burning in it",
      "declares": {
@@ -49751,7 +49569,7 @@
     },
     {
      "sid": "why-iron-stops-it",
-     "index": 27,
+     "index": 25,
      "type": "question",
      "title": "Why it cannot keep going",
      "declares": {
@@ -49828,7 +49646,7 @@
     },
     {
      "sid": "predict-core-and-envelope",
-     "index": 28,
+     "index": 26,
      "type": "predict",
      "title": "Two different fates in one star",
      "declares": {
@@ -49906,7 +49724,7 @@
     },
     {
      "sid": "the-neutron-star",
-     "index": 29,
+     "index": 27,
      "type": "measure",
      "title": "A neutron star, and how we know",
      "declares": {
@@ -49988,7 +49806,7 @@
     },
     {
      "sid": "neutron-star-scale",
-     "index": 30,
+     "index": 28,
      "type": "question",
      "title": "How small, and why you might never see it",
      "declares": {
@@ -50065,7 +49883,7 @@
     },
     {
      "sid": "the-black-hole",
-     "index": 31,
+     "index": 29,
      "type": "measure",
      "title": "And one that probably does not explode",
      "declares": {
@@ -50147,7 +49965,7 @@
     },
     {
      "sid": "read-the-descriptions",
-     "index": 32,
+     "index": 30,
      "type": "question",
      "title": "What is this one?",
      "declares": {
@@ -50224,7 +50042,7 @@
     },
     {
      "sid": "design-a-comparison",
-     "index": 33,
+     "index": 31,
      "type": "measure",
      "title": "Your own comparison",
      "declares": {
@@ -50306,7 +50124,7 @@
     },
     {
      "sid": "the-lifecycle-argument",
-     "index": 34,
+     "index": 32,
      "type": "question",
      "title": "Back to the three stars",
      "declares": {
@@ -50387,7 +50205,7 @@
     },
     {
      "sid": "what-you-followed",
-     "index": 35,
+     "index": 33,
      "type": "read",
      "title": "What you followed",
      "declares": {
@@ -50491,24 +50309,18 @@
      "experiment": [
       "contraction-luminosity",
       "the-pms-track",
-      "arriving",
-      "the-sun-today",
-      "across-the-main-sequence",
+      "compare-two-moments",
       "compare-young-and-old"
      ],
      "measure": [
       "contraction-luminosity",
       "the-pms-track",
-      "arriving",
-      "the-sun-today",
-      "across-the-main-sequence",
+      "compare-two-moments",
       "compare-young-and-old"
      ],
      "evidence": [
       "contraction-luminosity",
-      "arriving",
-      "the-sun-today",
-      "across-the-main-sequence",
+      "compare-two-moments",
       "compare-young-and-old"
      ],
      "interpret": "contraction-luminosity",
@@ -50674,14 +50486,14 @@
     }
    ],
    "totals": {
-    "steps": 35,
-    "declared": 35,
-    "student": 35,
-    "engine": 35,
-    "model": 35,
-    "data": 35,
+    "steps": 33,
+    "declared": 33,
+    "student": 33,
+    "engine": 33,
+    "model": 33,
+    "data": 33,
     "diagram": 0,
-    "evidence": 17,
+    "evidence": 15,
     "computation": 0,
     "declaredButInert": 0,
     "prose": 0,
@@ -51665,9 +51477,6 @@
    "id": "power-law-gravity",
    "title": "What If Gravity Were Not Inverse Square?",
    "lock": null,
-   "canvas": [
-    "quiet"
-   ],
    "steps": [
     {
      "sid": "the-exactly",
@@ -51838,7 +51647,6 @@
       "model-result",
       "panel-diagram"
      ],
-     "canvas": "quiet",
      "actions": [
       "move-an-instrument-control",
       "press-an-instrument-preset",
@@ -51901,7 +51709,6 @@
       "panel-diagram",
       "captured-evidence"
      ],
-     "canvas": "quiet",
      "actions": [
       "record-values",
       "move-an-instrument-control",
@@ -51965,7 +51772,6 @@
       "roles": []
      },
      "kinds": [],
-     "canvas": "quiet",
      "actions": [
       "choose-an-option"
      ],
@@ -52016,7 +51822,6 @@
       "roles": []
      },
      "kinds": [],
-     "canvas": "quiet",
      "actions": [
       "commit-a-prediction"
      ],
@@ -52072,7 +51877,6 @@
       "panel-diagram",
       "captured-evidence"
      ],
-     "canvas": "quiet",
      "actions": [
       "record-values",
       "move-an-instrument-control",
@@ -52135,7 +51939,6 @@
       "roles": []
      },
      "kinds": [],
-     "canvas": "quiet",
      "actions": [
       "choose-an-option"
      ],
@@ -52186,7 +51989,6 @@
       "roles": []
      },
      "kinds": [],
-     "canvas": "quiet",
      "actions": [
       "commit-a-prediction"
      ],
@@ -52242,7 +52044,6 @@
       "panel-diagram",
       "captured-evidence"
      ],
-     "canvas": "quiet",
      "actions": [
       "record-values",
       "move-an-instrument-control",
@@ -52298,61 +52099,10 @@
      ]
     },
     {
-     "sid": "find-the-slope-rate",
+     "sid": "predict-the-slope",
      "index": 12,
      "type": "question",
-     "title": "The rule in your readings",
-     "declares": {
-      "stage": null,
-      "bound": [],
-      "roles": []
-     },
-     "kinds": [],
-     "canvas": "quiet",
-     "actions": [
-      "read"
-     ],
-     "requires": [],
-     "reveal": null,
-     "asks": {
-      "choice": false,
-      "numeric": true,
-      "short": false,
-      "rubric": false,
-      "validated": false
-     },
-     "worldRunning": false,
-     "affordances": {
-      "inspector": "locked",
-      "placement": "open",
-      "areaSweep": "locked"
-     },
-     "loop": {
-      "declared": "interpret",
-      "actual": [
-       "interpret"
-      ],
-      "handTranscribed": false,
-      "mismatch": null
-     },
-     "scene": {
-      "nameMatches": [],
-      "readsSelection": false,
-      "importsFromSelection": false,
-      "engineReads": [],
-      "mutates": [],
-      "eventWatch": null
-     },
-     "instrument": null,
-     "evidence": [],
-     "reset": [],
-     "recovery": []
-    },
-    {
-     "sid": "predict-the-slope-at-2-9",
-     "index": 13,
-     "type": "question",
-     "title": "Use the rule",
+     "title": "Use the pattern",
      "declares": {
       "stage": null,
       "bound": [],
@@ -52362,7 +52112,6 @@
       "model-result",
       "panel-diagram"
      ],
-     "canvas": "quiet",
      "actions": [
       "move-an-instrument-control",
       "press-an-instrument-preset"
@@ -52412,7 +52161,7 @@
     },
     {
      "sid": "why-the-slope-and-not-something-else",
-     "index": 14,
+     "index": 13,
      "type": "question",
      "title": "Why this measurement in particular",
      "declares": {
@@ -52421,7 +52170,6 @@
       "roles": []
      },
      "kinds": [],
-     "canvas": "quiet",
      "actions": [
       "choose-an-option"
      ],
@@ -52463,7 +52211,7 @@
     },
     {
      "sid": "predict-what-breaks",
-     "index": 15,
+     "index": 14,
      "type": "predict",
      "title": "What else breaks?",
      "declares": {
@@ -52472,7 +52220,6 @@
       "roles": []
      },
      "kinds": [],
-     "canvas": "quiet",
      "actions": [
       "commit-a-prediction"
      ],
@@ -52515,7 +52262,7 @@
     },
     {
      "sid": "measure-conservation",
-     "index": 16,
+     "index": 15,
      "type": "measure",
      "title": "Check the conservation laws",
      "declares": {
@@ -52528,7 +52275,6 @@
       "panel-diagram",
       "captured-evidence"
      ],
-     "canvas": "quiet",
      "actions": [
       "record-values",
       "move-an-instrument-control",
@@ -52582,7 +52328,7 @@
     },
     {
      "sid": "why-they-survive",
-     "index": 17,
+     "index": 16,
      "type": "question",
      "title": "Why those two survived",
      "declares": {
@@ -52591,7 +52337,6 @@
       "roles": []
      },
      "kinds": [],
-     "canvas": "quiet",
      "actions": [
       "choose-an-option"
      ],
@@ -52633,7 +52378,7 @@
     },
     {
      "sid": "and-energy",
-     "index": 18,
+     "index": 17,
      "type": "read",
      "title": "And energy, with one catch",
      "declares": {
@@ -52642,7 +52387,6 @@
       "roles": []
      },
      "kinds": [],
-     "canvas": "quiet",
      "actions": [
       "read"
      ],
@@ -52684,7 +52428,7 @@
     },
     {
      "sid": "two-lists",
-     "index": 19,
+     "index": 18,
      "type": "read",
      "title": "Two lists",
      "declares": {
@@ -52693,7 +52437,6 @@
       "roles": []
      },
      "kinds": [],
-     "canvas": "quiet",
      "actions": [
       "read"
      ],
@@ -52735,7 +52478,7 @@
     },
     {
      "sid": "near-three",
-     "index": 20,
+     "index": 19,
      "type": "read",
      "title": "Where the instrument stops",
      "declares": {
@@ -52744,7 +52487,6 @@
       "roles": []
      },
      "kinds": [],
-     "canvas": "quiet",
      "actions": [
       "read"
      ],
@@ -52786,7 +52528,7 @@
     },
     {
      "sid": "closing-question",
-     "index": 21,
+     "index": 20,
      "type": "question",
      "title": "One last sort",
      "declares": {
@@ -52795,7 +52537,6 @@
       "roles": []
      },
      "kinds": [],
-     "canvas": "quiet",
      "actions": [
       "choose-an-option"
      ],
@@ -52837,7 +52578,7 @@
     },
     {
      "sid": "the-honest-caveat",
-     "index": 22,
+     "index": 21,
      "type": "read",
      "title": "What this was and was not",
      "declares": {
@@ -52846,7 +52587,6 @@
       "roles": []
      },
      "kinds": [],
-     "canvas": "quiet",
      "actions": [
       "read"
      ],
@@ -52936,11 +52676,11 @@
      "heldUntil": "measure-the-slope",
      "experiment": [
       "measure-the-slope",
-      "predict-the-slope-at-2-9"
+      "predict-the-slope"
      ],
      "measure": [
       "measure-the-slope",
-      "predict-the-slope-at-2-9"
+      "predict-the-slope"
      ],
      "evidence": [
       "measure-the-slope"
@@ -52974,7 +52714,7 @@
     }
    ],
    "totals": {
-    "steps": 22,
+    "steps": 21,
     "declared": 0,
     "student": 0,
     "engine": 0,
@@ -52984,7 +52724,7 @@
     "evidence": 4,
     "computation": 0,
     "declaredButInert": 0,
-    "prose": 16,
+    "prose": 15,
     "mismatched": 0,
     "rebuilds": 1
    }
@@ -77852,6 +77592,10 @@
     "placement": true,
     "inspector": true
    },
+   "canvas": [
+    "quiet",
+    "scene"
+   ],
    "steps": [
     {
      "sid": "one-system-four-steps",
@@ -77864,6 +77608,7 @@
       "roles": []
      },
      "kinds": [],
+     "canvas": "quiet",
      "actions": [
       "read"
      ],
@@ -77876,7 +77621,7 @@
       "rubric": false,
       "validated": false
      },
-     "worldRunning": false,
+     "worldRunning": "inherited",
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
@@ -77901,12 +77646,10 @@
      "instrument": null,
      "evidence": [],
      "reset": [
-      "rebuilds: scenario \"Circumbinary Planet Lab\" seed binary",
+      "inherits the world already on screen",
       "lesson locks: placement, inspector"
      ],
-     "recovery": [
-      "reset: rebuilds the scenario on arrival"
-     ]
+     "recovery": []
     },
     {
      "sid": "which-loses-most",
@@ -77919,6 +77662,7 @@
       "roles": []
      },
      "kinds": [],
+     "canvas": "quiet",
      "actions": [
       "commit-a-prediction"
      ],
@@ -77931,7 +77675,7 @@
       "rubric": false,
       "validated": false
      },
-     "worldRunning": false,
+     "worldRunning": "inherited",
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
@@ -77975,6 +77719,7 @@
       "external-computation",
       "captured-evidence"
      ],
+     "canvas": "quiet",
      "actions": [
       "record-values"
      ],
@@ -77987,7 +77732,7 @@
       "rubric": false,
       "validated": true
      },
-     "worldRunning": false,
+     "worldRunning": "inherited",
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
@@ -78034,6 +77779,7 @@
       "roles": []
      },
      "kinds": [],
+     "canvas": "quiet",
      "actions": [
       "choose-an-option"
      ],
@@ -78046,7 +77792,7 @@
       "rubric": false,
       "validated": false
      },
-     "worldRunning": false,
+     "worldRunning": "inherited",
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
@@ -78076,10 +77822,64 @@
      "recovery": []
     },
     {
-     "sid": "halve-the-step",
+     "sid": "predict-the-halving",
      "index": 5,
+     "type": "predict",
+     "title": "Predict the effect of the step",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [],
+     "canvas": "quiet",
+     "actions": [
+      "commit-a-prediction"
+     ],
+     "requires": [],
+     "reveal": "the-engine",
+     "asks": {
+      "choice": true,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "predict",
+      "actual": [
+       "predict",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": []
+    },
+    {
+     "sid": "choose-the-second-step",
+     "index": 6,
      "type": "measure",
-     "title": "Halve the step",
+     "title": "Choose the second step",
      "declares": {
       "stage": null,
       "bound": [],
@@ -78089,6 +77889,7 @@
       "external-computation",
       "captured-evidence"
      ],
+     "canvas": "scene",
      "actions": [
       "record-values"
      ],
@@ -78130,16 +77931,18 @@
       "notebook-fields"
      ],
      "reset": [
+      "rebuilds: scenario \"Circumbinary Planet Lab\" seed binary",
       "lesson locks: placement, inspector"
      ],
      "recovery": [
       "missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand",
+      "reset: rebuilds the scenario on arrival",
       "ambiguous result: the check says in words how close is close enough"
      ]
     },
     {
      "sid": "the-engine",
-     "index": 6,
+     "index": 7,
      "type": "measure",
      "title": "Against the application",
      "declares": {
@@ -78151,6 +77954,7 @@
       "external-computation",
       "captured-evidence"
      ],
+     "canvas": "scene",
      "actions": [
       "record-values"
      ],
@@ -78201,7 +78005,7 @@
     },
     {
      "sid": "phase-luck",
-     "index": 7,
+     "index": 8,
      "type": "question",
      "title": "A number that is not a property",
      "declares": {
@@ -78210,6 +78014,60 @@
       "roles": []
      },
      "kinds": [],
+     "canvas": "scene",
+     "actions": [
+      "choose-an-option"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": true,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "interpret",
+      "actual": [
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": []
+    },
+    {
+     "sid": "trust-at-six-orbits",
+     "index": 9,
+     "type": "question",
+     "title": "Which number to trust at six orbits",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [],
+     "canvas": "scene",
      "actions": [
       "choose-an-option"
      ],
@@ -78253,7 +78111,7 @@
     },
     {
      "sid": "what-you-worked-out",
-     "index": 8,
+     "index": 10,
      "type": "read",
      "title": "What you worked out",
      "declares": {
@@ -78262,6 +78120,7 @@
       "roles": []
      },
      "kinds": [],
+     "canvas": "scene",
      "actions": [
       "read"
      ],
@@ -78311,16 +78170,32 @@
      "heldUntil": "four-drifts",
      "experiment": [],
      "measure": [
-      "four-drifts",
-      "halve-the-step",
+      "four-drifts"
+     ],
+     "evidence": [
+      "four-drifts"
+     ],
+     "interpret": "four-drifts",
+     "measuredBeforeAnswering": true,
+     "explained": false,
+     "answeredByTheExperiment": true,
+     "closed": true,
+     "complete": true
+    },
+    {
+     "predict": "predict-the-halving",
+     "predictCollects": true,
+     "heldUntil": "the-engine",
+     "experiment": [],
+     "measure": [
+      "choose-the-second-step",
       "the-engine"
      ],
      "evidence": [
-      "four-drifts",
-      "halve-the-step",
+      "choose-the-second-step",
       "the-engine"
      ],
-     "interpret": "four-drifts",
+     "interpret": "the-engine",
      "measuredBeforeAnswering": true,
      "explained": false,
      "answeredByTheExperiment": true,
@@ -78329,7 +78204,7 @@
     }
    ],
    "totals": {
-    "steps": 8,
+    "steps": 10,
     "declared": 0,
     "student": 0,
     "engine": 0,
@@ -78339,7 +78214,7 @@
     "evidence": 3,
     "computation": 3,
     "declaredButInert": 0,
-    "prose": 5,
+    "prose": 7,
     "mismatched": 0,
     "rebuilds": 1
    }
@@ -78351,6 +78226,10 @@
     "placement": true,
     "inspector": true
    },
+   "canvas": [
+    "quiet",
+    "scene"
+   ],
    "steps": [
     {
      "sid": "twenty-planets",
@@ -78363,6 +78242,7 @@
       "roles": []
      },
      "kinds": [],
+     "canvas": "quiet",
      "actions": [
       "read"
      ],
@@ -78375,7 +78255,7 @@
       "rubric": false,
       "validated": false
      },
-     "worldRunning": false,
+     "worldRunning": "inherited",
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
@@ -78400,12 +78280,10 @@
      "instrument": null,
      "evidence": [],
      "reset": [
-      "rebuilds: scenario \"Binary Planet Lab\" seed binary",
+      "inherits the world already on screen",
       "lesson locks: placement, inspector"
      ],
-     "recovery": [
-      "reset: rebuilds the scenario on arrival"
-     ]
+     "recovery": []
     },
     {
      "sid": "how-well-can-twenty-place-an-edge",
@@ -78418,6 +78296,7 @@
       "roles": []
      },
      "kinds": [],
+     "canvas": "quiet",
      "actions": [
       "commit-a-prediction"
      ],
@@ -78430,7 +78309,7 @@
       "rubric": false,
       "validated": false
      },
-     "worldRunning": false,
+     "worldRunning": "inherited",
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
@@ -78474,6 +78353,7 @@
       "external-computation",
       "captured-evidence"
      ],
+     "canvas": "quiet",
      "actions": [
       "record-values"
      ],
@@ -78486,7 +78366,7 @@
       "rubric": false,
       "validated": true
      },
-     "worldRunning": false,
+     "worldRunning": "inherited",
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
@@ -78536,6 +78416,7 @@
       "external-computation",
       "captured-evidence"
      ],
+     "canvas": "quiet",
      "actions": [
       "record-values"
      ],
@@ -78548,7 +78429,7 @@
       "rubric": false,
       "validated": true
      },
-     "worldRunning": false,
+     "worldRunning": "inherited",
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
@@ -78595,6 +78476,7 @@
       "roles": []
      },
      "kinds": [],
+     "canvas": "quiet",
      "actions": [
       "choose-an-option"
      ],
@@ -78607,7 +78489,7 @@
       "rubric": false,
       "validated": false
      },
-     "worldRunning": false,
+     "worldRunning": "inherited",
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
@@ -78637,7 +78519,7 @@
      "recovery": []
     },
     {
-     "sid": "move-the-definition",
+     "sid": "move-the-definition-yours",
      "index": 6,
      "type": "measure",
      "title": "Move the definition",
@@ -78650,6 +78532,7 @@
       "external-computation",
       "captured-evidence"
      ],
+     "canvas": "scene",
      "actions": [
       "record-values"
      ],
@@ -78691,35 +78574,40 @@
       "notebook-fields"
      ],
      "reset": [
+      "rebuilds: scenario \"Binary Planet Lab\" seed binary",
       "lesson locks: placement, inspector"
      ],
      "recovery": [
       "missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand",
+      "reset: rebuilds the scenario on arrival",
       "ambiguous result: the check says in words how close is close enough"
      ]
     },
     {
-     "sid": "what-moved-it",
+     "sid": "which-trial-moved",
      "index": 7,
-     "type": "question",
-     "title": "What moved the edge",
+     "type": "measure",
+     "title": "Which trial moved",
      "declares": {
       "stage": null,
       "bound": [],
       "roles": []
      },
-     "kinds": [],
+     "kinds": [
+      "captured-evidence"
+     ],
+     "canvas": "scene",
      "actions": [
-      "choose-an-option"
+      "record-values"
      ],
      "requires": [],
      "reveal": null,
      "asks": {
-      "choice": true,
+      "choice": false,
       "numeric": false,
       "short": false,
       "rubric": false,
-      "validated": false
+      "validated": true
      },
      "worldRunning": false,
      "affordances": {
@@ -78728,11 +78616,12 @@
       "areaSweep": "locked"
      },
      "loop": {
-      "declared": "interpret",
+      "declared": "measure",
       "actual": [
+       "measure",
        "interpret"
       ],
-      "handTranscribed": false,
+      "handTranscribed": true,
       "mismatch": null
      },
      "scene": {
@@ -78744,11 +78633,16 @@
       "eventWatch": null
      },
      "instrument": null,
-     "evidence": [],
+     "evidence": [
+      "notebook-fields"
+     ],
      "reset": [
       "lesson locks: placement, inspector"
      ],
-     "recovery": []
+     "recovery": [
+      "missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand",
+      "ambiguous result: the check says in words how close is close enough"
+     ]
     },
     {
      "sid": "what-you-worked-out",
@@ -78761,6 +78655,7 @@
       "roles": []
      },
      "kinds": [],
+     "canvas": "scene",
      "actions": [
       "read"
      ],
@@ -78812,12 +78707,14 @@
      "measure": [
       "the-fit",
       "a-uniform-population",
-      "move-the-definition"
+      "move-the-definition-yours",
+      "which-trial-moved"
      ],
      "evidence": [
       "the-fit",
       "a-uniform-population",
-      "move-the-definition"
+      "move-the-definition-yours",
+      "which-trial-moved"
      ],
      "interpret": "the-fit",
      "measuredBeforeAnswering": true,
@@ -78835,10 +78732,10 @@
     "model": 0,
     "data": 0,
     "diagram": 0,
-    "evidence": 3,
+    "evidence": 4,
     "computation": 3,
     "declaredButInert": 0,
-    "prose": 5,
+    "prose": 4,
     "mismatched": 0,
     "rebuilds": 1
    }
@@ -78850,6 +78747,9 @@
     "placement": true,
     "inspector": true
    },
+   "canvas": [
+    "quiet"
+   ],
    "steps": [
     {
      "sid": "same-model-another-route",
@@ -78862,6 +78762,7 @@
       "roles": []
      },
      "kinds": [],
+     "canvas": "quiet",
      "actions": [
       "read"
      ],
@@ -78874,7 +78775,7 @@
       "rubric": false,
       "validated": false
      },
-     "worldRunning": false,
+     "worldRunning": "inherited",
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
@@ -78899,12 +78800,10 @@
      "instrument": null,
      "evidence": [],
      "reset": [
-      "rebuilds: scenario \"Transit Lab\" seed transit-lab",
+      "inherits the world already on screen",
       "lesson locks: placement, inspector"
      ],
-     "recovery": [
-      "reset: rebuilds the scenario on arrival"
-     ]
+     "recovery": []
     },
     {
      "sid": "how-close",
@@ -78917,6 +78816,7 @@
       "roles": []
      },
      "kinds": [],
+     "canvas": "quiet",
      "actions": [
       "commit-a-prediction"
      ],
@@ -78929,7 +78829,7 @@
       "rubric": false,
       "validated": false
      },
-     "worldRunning": false,
+     "worldRunning": "inherited",
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
@@ -78973,6 +78873,7 @@
       "external-computation",
       "captured-evidence"
      ],
+     "canvas": "quiet",
      "actions": [
       "record-values"
      ],
@@ -78985,7 +78886,7 @@
       "rubric": false,
       "validated": true
      },
-     "worldRunning": false,
+     "worldRunning": "inherited",
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
@@ -79035,6 +78936,7 @@
       "external-computation",
       "captured-evidence"
      ],
+     "canvas": "quiet",
      "actions": [
       "record-values"
      ],
@@ -79047,7 +78949,7 @@
       "rubric": false,
       "validated": true
      },
-     "worldRunning": false,
+     "worldRunning": "inherited",
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
@@ -79094,6 +78996,7 @@
       "roles": []
      },
      "kinds": [],
+     "canvas": "quiet",
      "actions": [
       "choose-an-option"
      ],
@@ -79106,7 +79009,7 @@
       "rubric": false,
       "validated": false
      },
-     "worldRunning": false,
+     "worldRunning": "inherited",
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
@@ -79136,8 +79039,62 @@
      "recovery": []
     },
     {
-     "sid": "hold-the-limb-darkening",
+     "sid": "predict-the-shift",
      "index": 6,
+     "type": "predict",
+     "title": "How far will it move",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [],
+     "canvas": "quiet",
+     "actions": [
+      "commit-a-prediction"
+     ],
+     "requires": [],
+     "reveal": "shift-from-your-fit",
+     "asks": {
+      "choice": true,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "predict",
+      "actual": [
+       "predict",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": []
+    },
+    {
+     "sid": "shift-from-your-fit",
+     "index": 7,
      "type": "measure",
      "title": "Hold the limb darkening",
      "declares": {
@@ -79149,6 +79106,7 @@
       "external-computation",
       "captured-evidence"
      ],
+     "canvas": "quiet",
      "actions": [
       "record-values"
      ],
@@ -79161,7 +79119,7 @@
       "rubric": false,
       "validated": true
      },
-     "worldRunning": false,
+     "worldRunning": "inherited",
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
@@ -79199,7 +79157,7 @@
     },
     {
      "sid": "what-is-not-counted",
-     "index": 7,
+     "index": 8,
      "type": "question",
      "title": "What the sigmas do not count",
      "declares": {
@@ -79208,6 +79166,7 @@
       "roles": []
      },
      "kinds": [],
+     "canvas": "quiet",
      "actions": [
       "choose-an-option"
      ],
@@ -79220,7 +79179,7 @@
       "rubric": false,
       "validated": false
      },
-     "worldRunning": false,
+     "worldRunning": "inherited",
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
@@ -79251,7 +79210,7 @@
     },
     {
      "sid": "what-you-worked-out",
-     "index": 8,
+     "index": 9,
      "type": "read",
      "title": "What you worked out",
      "declares": {
@@ -79260,6 +79219,7 @@
       "roles": []
      },
      "kinds": [],
+     "canvas": "quiet",
      "actions": [
       "read"
      ],
@@ -79272,7 +79232,7 @@
       "rubric": false,
       "validated": false
      },
-     "worldRunning": false,
+     "worldRunning": "inherited",
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
@@ -79310,15 +79270,31 @@
      "experiment": [],
      "measure": [
       "the-fit",
-      "sigma-and-profile",
-      "hold-the-limb-darkening"
+      "sigma-and-profile"
      ],
      "evidence": [
       "the-fit",
-      "sigma-and-profile",
-      "hold-the-limb-darkening"
+      "sigma-and-profile"
      ],
      "interpret": "the-fit",
+     "measuredBeforeAnswering": true,
+     "explained": false,
+     "answeredByTheExperiment": true,
+     "closed": true,
+     "complete": true
+    },
+    {
+     "predict": "predict-the-shift",
+     "predictCollects": true,
+     "heldUntil": "shift-from-your-fit",
+     "experiment": [],
+     "measure": [
+      "shift-from-your-fit"
+     ],
+     "evidence": [
+      "shift-from-your-fit"
+     ],
+     "interpret": "shift-from-your-fit",
      "measuredBeforeAnswering": true,
      "explained": false,
      "answeredByTheExperiment": true,
@@ -79327,7 +79303,7 @@
     }
    ],
    "totals": {
-    "steps": 8,
+    "steps": 9,
     "declared": 0,
     "student": 0,
     "engine": 0,
@@ -79337,9 +79313,9 @@
     "evidence": 3,
     "computation": 3,
     "declaredButInert": 0,
-    "prose": 5,
+    "prose": 6,
     "mismatched": 0,
-    "rebuilds": 1
+    "rebuilds": 0
    }
   },
   {
@@ -79349,6 +79325,9 @@
     "placement": true,
     "inspector": true
    },
+   "canvas": [
+    "quiet"
+   ],
    "steps": [
     {
      "sid": "two-ways-to-look-for-a-period",
@@ -79361,6 +79340,7 @@
       "roles": []
      },
      "kinds": [],
+     "canvas": "quiet",
      "actions": [
       "read"
      ],
@@ -79373,7 +79353,7 @@
       "rubric": false,
       "validated": false
      },
-     "worldRunning": false,
+     "worldRunning": "inherited",
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
@@ -79398,12 +79378,10 @@
      "instrument": null,
      "evidence": [],
      "reset": [
-      "rebuilds: scenario \"Transit Lab\" seed transit-lab",
+      "inherits the world already on screen",
       "lesson locks: placement, inspector"
      ],
-     "recovery": [
-      "reset: rebuilds the scenario on arrival"
-     ]
+     "recovery": []
     },
     {
      "sid": "the-tallest-peak",
@@ -79416,6 +79394,7 @@
       "roles": []
      },
      "kinds": [],
+     "canvas": "quiet",
      "actions": [
       "commit-a-prediction"
      ],
@@ -79428,7 +79407,7 @@
       "rubric": false,
       "validated": false
      },
-     "worldRunning": false,
+     "worldRunning": "inherited",
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
@@ -79472,6 +79451,7 @@
       "external-computation",
       "captured-evidence"
      ],
+     "canvas": "quiet",
      "actions": [
       "record-values"
      ],
@@ -79484,7 +79464,7 @@
       "rubric": false,
       "validated": true
      },
-     "worldRunning": false,
+     "worldRunning": "inherited",
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
@@ -79531,6 +79511,7 @@
       "roles": []
      },
      "kinds": [],
+     "canvas": "quiet",
      "actions": [
       "choose-an-option"
      ],
@@ -79543,7 +79524,7 @@
       "rubric": false,
       "validated": false
      },
-     "worldRunning": false,
+     "worldRunning": "inherited",
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
@@ -79573,10 +79554,10 @@
      "recovery": []
     },
     {
-     "sid": "the-box",
+     "sid": "the-box-with-your-limit",
      "index": 5,
      "type": "measure",
-     "title": "The best box",
+     "title": "The best box, within your limit",
      "declares": {
       "stage": null,
       "bound": [],
@@ -79586,6 +79567,7 @@
       "external-computation",
       "captured-evidence"
      ],
+     "canvas": "quiet",
      "actions": [
       "record-values"
      ],
@@ -79598,7 +79580,7 @@
       "rubric": false,
       "validated": true
      },
-     "worldRunning": false,
+     "worldRunning": "inherited",
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
@@ -79635,7 +79617,7 @@
      ]
     },
     {
-     "sid": "against-the-fit",
+     "sid": "separation-from-your-period",
      "index": 6,
      "type": "measure",
      "title": "Against the fit",
@@ -79648,6 +79630,7 @@
       "external-computation",
       "captured-evidence"
      ],
+     "canvas": "quiet",
      "actions": [
       "record-values"
      ],
@@ -79660,7 +79643,7 @@
       "rubric": false,
       "validated": true
      },
-     "worldRunning": false,
+     "worldRunning": "inherited",
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
@@ -79707,6 +79690,7 @@
       "roles": []
      },
      "kinds": [],
+     "canvas": "quiet",
      "actions": [
       "choose-an-option"
      ],
@@ -79719,7 +79703,7 @@
       "rubric": false,
       "validated": false
      },
-     "worldRunning": false,
+     "worldRunning": "inherited",
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
@@ -79759,6 +79743,7 @@
       "roles": []
      },
      "kinds": [],
+     "canvas": "quiet",
      "actions": [
       "read"
      ],
@@ -79771,7 +79756,7 @@
       "rubric": false,
       "validated": false
      },
-     "worldRunning": false,
+     "worldRunning": "inherited",
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
@@ -79809,13 +79794,13 @@
      "experiment": [],
      "measure": [
       "the-two-periods",
-      "the-box",
-      "against-the-fit"
+      "the-box-with-your-limit",
+      "separation-from-your-period"
      ],
      "evidence": [
       "the-two-periods",
-      "the-box",
-      "against-the-fit"
+      "the-box-with-your-limit",
+      "separation-from-your-period"
      ],
      "interpret": "the-two-periods",
      "measuredBeforeAnswering": true,
@@ -79838,7 +79823,7 @@
     "declaredButInert": 0,
     "prose": 5,
     "mismatched": 0,
-    "rebuilds": 1
+    "rebuilds": 0
    }
   },
   {
@@ -79848,6 +79833,9 @@
     "placement": true,
     "inspector": true
    },
+   "canvas": [
+    "quiet"
+   ],
    "steps": [
     {
      "sid": "what-a-sampler-does",
@@ -79860,6 +79848,7 @@
       "roles": []
      },
      "kinds": [],
+     "canvas": "quiet",
      "actions": [
       "read"
      ],
@@ -79872,7 +79861,7 @@
       "rubric": false,
       "validated": false
      },
-     "worldRunning": false,
+     "worldRunning": "inherited",
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
@@ -79897,29 +79886,28 @@
      "instrument": null,
      "evidence": [],
      "reset": [
-      "rebuilds: scenario \"Transit Lab\" seed transit-lab",
+      "inherits the world already on screen",
       "lesson locks: placement, inspector"
      ],
-     "recovery": [
-      "reset: rebuilds the scenario on arrival"
-     ]
+     "recovery": []
     },
     {
-     "sid": "how-wide",
+     "sid": "pick-the-ratio-predict-the-width",
      "index": 2,
      "type": "predict",
-     "title": "How wide will it be",
+     "title": "Pick the orbit size, predict the width",
      "declares": {
       "stage": null,
       "bound": [],
       "roles": []
      },
      "kinds": [],
+     "canvas": "quiet",
      "actions": [
       "commit-a-prediction"
      ],
      "requires": [],
-     "reveal": "the-draws",
+     "reveal": "the-draws-at-your-ratio",
      "asks": {
       "choice": true,
       "numeric": false,
@@ -79927,7 +79915,7 @@
       "rubric": false,
       "validated": false
      },
-     "worldRunning": false,
+     "worldRunning": "inherited",
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
@@ -79958,10 +79946,10 @@
      "recovery": []
     },
     {
-     "sid": "the-draws",
+     "sid": "the-draws-at-your-ratio",
      "index": 3,
      "type": "measure",
-     "title": "Run it: the draws",
+     "title": "Run it: the draws at your orbit size",
      "declares": {
       "stage": null,
       "bound": [],
@@ -79971,6 +79959,7 @@
       "external-computation",
       "captured-evidence"
      ],
+     "canvas": "quiet",
      "actions": [
       "record-values"
      ],
@@ -79983,7 +79972,7 @@
       "rubric": false,
       "validated": true
      },
-     "worldRunning": false,
+     "worldRunning": "inherited",
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
@@ -80033,6 +80022,7 @@
       "external-computation",
       "captured-evidence"
      ],
+     "canvas": "quiet",
      "actions": [
       "record-values"
      ],
@@ -80045,7 +80035,7 @@
       "rubric": false,
       "validated": true
      },
-     "worldRunning": false,
+     "worldRunning": "inherited",
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
@@ -80092,6 +80082,7 @@
       "roles": []
      },
      "kinds": [],
+     "canvas": "quiet",
      "actions": [
       "choose-an-option"
      ],
@@ -80104,7 +80095,7 @@
       "rubric": false,
       "validated": false
      },
-     "worldRunning": false,
+     "worldRunning": "inherited",
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
@@ -80144,6 +80135,7 @@
       "roles": []
      },
      "kinds": [],
+     "canvas": "quiet",
      "actions": [
       "choose-an-option"
      ],
@@ -80156,7 +80148,7 @@
       "rubric": false,
       "validated": false
      },
-     "worldRunning": false,
+     "worldRunning": "inherited",
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
@@ -80196,6 +80188,7 @@
       "roles": []
      },
      "kinds": [],
+     "canvas": "quiet",
      "actions": [
       "choose-an-option"
      ],
@@ -80208,7 +80201,7 @@
       "rubric": false,
       "validated": false
      },
-     "worldRunning": false,
+     "worldRunning": "inherited",
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
@@ -80248,6 +80241,7 @@
       "roles": []
      },
      "kinds": [],
+     "canvas": "quiet",
      "actions": [
       "read"
      ],
@@ -80260,7 +80254,7 @@
       "rubric": false,
       "validated": false
      },
-     "worldRunning": false,
+     "worldRunning": "inherited",
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
@@ -80292,19 +80286,19 @@
    ],
    "loops": [
     {
-     "predict": "how-wide",
+     "predict": "pick-the-ratio-predict-the-width",
      "predictCollects": true,
-     "heldUntil": "the-draws",
+     "heldUntil": "the-draws-at-your-ratio",
      "experiment": [],
      "measure": [
-      "the-draws",
+      "the-draws-at-your-ratio",
       "did-it-converge"
      ],
      "evidence": [
-      "the-draws",
+      "the-draws-at-your-ratio",
       "did-it-converge"
      ],
-     "interpret": "the-draws",
+     "interpret": "the-draws-at-your-ratio",
      "measuredBeforeAnswering": true,
      "explained": false,
      "answeredByTheExperiment": true,
@@ -80325,7 +80319,7 @@
     "declaredButInert": 0,
     "prose": 6,
     "mismatched": 0,
-    "rebuilds": 1
+    "rebuilds": 0
    }
   },
   {
@@ -120526,29 +120520,29 @@
  ],
  "totals": {
   "steps": 1529,
-  "declared": 1420,
-  "student": 166,
-  "engine": 180,
-  "model": 1010,
-  "data": 161,
-  "diagram": 879,
-  "evidence": 396,
+  "declared": 1418,
+  "student": 164,
+  "engine": 178,
+  "model": 1007,
+  "data": 159,
+  "diagram": 878,
+  "evidence": 394,
   "computation": 14,
   "declaredButInert": 1254,
-  "prose": 60,
+  "prose": 61,
   "mismatched": 8,
-  "rebuilds": 81,
+  "rebuilds": 78,
   "canvas": {
-   "scene": 0,
+   "scene": 8,
    "portrait": 7,
-   "quiet": 35,
-   "unstated": 1487
+   "quiet": 51,
+   "unstated": 1463
   },
   "lessons": 124,
-  "loops": 197,
-  "closedLoops": 197,
+  "loops": 199,
+  "closedLoops": 199,
   "explainedLoops": 1,
-  "heldLoops": 196,
-  "completeLoops": 197
+  "heldLoops": 198,
+  "completeLoops": 199
  }
 }

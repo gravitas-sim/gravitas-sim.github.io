@@ -1,7 +1,7 @@
 // =============================================================================
 // Lives of stars, walked end to end
 // -----------------------------------------------------------------------------
-// Thirty-four steps, three instruments, four evolutionary tracks and an
+// Thirty-three steps, three instruments, four evolutionary tracks and an
 // evidence export, in two languages, from the keyboard, at phone width, and
 // across a save and a resume.
 //
@@ -132,26 +132,33 @@ const instrumentDrawn = page =>
  * What the models actually give, by step and field id.
  *
  * Per-step because several ids mean different things on different screens -
- * `radius` is the Sun's on screen 7 and a white dwarf's on screen 20 - and
+ * `radius` is the Sun's on screen 7 and a white dwarf's on screen 18 - and
  * because half of these validators compare two boxes against each other, so
  * plausible-but-wrong numbers would still be caught.
  */
 const BY_STEP = {
   4: { rEarly: 14.9, rLate: 0.884, ageLate: 41.9 },
-  6: { teff: 5736, lum: 0.797, age: 457 },
-  7: { teff: 5850, lum: 1.11, radius: 1.03 },
-  8: { lumStart: 0.797, lumEnd: 2.28, age: 9.9 },
-  9: { rStart: 0.904, rEnd: 1.56 },
-  12: { rStart: 1.65, rTip: 172.6, tTip: 3070 },
-  14: { teff: 3070, lum: 2386, radius: 172.6, mass: 0.954 },
-  17: { born: 1, now: 0.54 },
-  20: { teff: 47621, lum: 1.58, radius: 0.0185 },
-  21: { ms: 9.88, rgb: 1.42, agb: 1.35 },
-  23: { sun: 1.11, dwarf: 0.0048 },
-  25: { lumSun: 1.11, lumBig: 43400, msSun: 9.88, msBig: 8.65 },
-  29: { remnant: 1.4, atStop: 9.41 },
-  31: { atStop: 35.1, lo: 10, hi: 35 },
-  33: { massA: 1, massB: 20, lumA: 1.11, lumB: 43400 },
+  6: {
+    ageA: 0.457,
+    lumA: 0.797,
+    radA: 0.904,
+    teffA: 5736,
+    ageB: 9.9,
+    lumB: 2.28,
+    radB: 1.56,
+    teffB: 5683,
+  },
+  7: { rStart: 0.904, rEnd: 1.56 },
+  10: { rStart: 1.65, rTip: 172.6, tTip: 3070 },
+  12: { teff: 3070, lum: 2386, radius: 172.6, mass: 0.954 },
+  15: { born: 1, now: 0.54 },
+  18: { teff: 47621, lum: 1.58, radius: 0.0185 },
+  19: { ms: 9.88, rgb: 1.42, agb: 1.35 },
+  21: { sun: 1.11, dwarf: 0.0048 },
+  23: { lumSun: 1.11, lumBig: 43400, msSun: 9.88, msBig: 8.65 },
+  27: { remnant: 1.4, atStop: 9.41 },
+  29: { atStop: 35.1, lo: 10, hi: 35 },
+  31: { massA: 1, massB: 20, lumA: 1.11, lumB: 43400 },
 };
 
 const PROSE =
@@ -284,9 +291,14 @@ test.describe('the playback behaves under a student', () => {
     app,
   }) => {
     test.slow();
-    // Screen 22 switches to the 0.2 solar-mass model, which has no remnant at
+    // Screen 20 switches to the 0.2 solar-mass model, which has no remnant at
     // all. A playhead carried over from the white dwarf would put it in one.
-    await toStep(page, app, 22);
+    // It opens at the start of its track (a neutral start), so the readout
+    // says the cloud has no numbers; one phase on is its main sequence.
+    await toStep(page, app, 20);
+    await readoutSaying(page, /collapsing cloud/i);
+    await page.locator('[data-tool-action="next"]').click();
+    await page.locator('[data-tool-action="next"]').click();
     const text = await readoutSaying(page, /0\.2 M/, /Main sequence/i);
     expect(text).not.toMatch(/white dwarf|neutron star|black hole/i);
   });
@@ -296,7 +308,7 @@ test.describe('the playback behaves under a student', () => {
     app,
   }) => {
     test.slow();
-    await toStep(page, app, 20);
+    await toStep(page, app, 18);
     const readout = page.locator('#investigationToolReadout');
     await expect(readout).toContainText(/white dwarf/i);
     const atEnd = await readout.innerText();
@@ -320,7 +332,7 @@ test.describe('the playback behaves under a student', () => {
     app,
   }) => {
     test.slow();
-    await toStep(page, app, 31);
+    await toStep(page, app, 29);
     await readoutSaying(page, /black hole/i, /no photosphere/i, /Sukhbold/);
   });
 });
@@ -403,8 +415,8 @@ test.describe('the lesson survives the things a student does to it', () => {
   }) => {
     test.slow();
     await openLesson(page, app);
-    for (let i = 1; i < 29; i++) await answerAndAdvance(page, i);
-    // Screen 29 is the neutron star: an endpoint that is quoted, not computed.
+    for (let i = 1; i < 27; i++) await answerAndAdvance(page, i);
+    // Screen 27 is the neutron star: an endpoint that is quoted, not computed.
     const capture = page.locator(
       '#investigationTool [data-tool-action="capture"]'
     );

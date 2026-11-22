@@ -202,6 +202,21 @@ const EXTRA_CASES = {
     { back: 6, gone: 12 },
     { back: 10, gone: 14 },
   ],
+  // The three later computing investigations: a run typed as the notebook gives it
+  // (HD 209458 b, sampler at a/R* 8, box search at 4 hours), and one with a wrong value.
+  'shift-from-your-fit': () => [
+    { yours: 0.11926, k: 0.11767, kSigma: 0.0005, shift: 3.2 },
+    { yours: 0.11926, k: 0.11767, kSigma: 0.0005, shift: 1 },
+  ],
+  'the-draws-at-your-ratio': () => [
+    { ratio: 8, k: 0.1226, kWidth: 0.0002859, b: 0.6224, bWidth: 0.002874 },
+    { ratio: 9.21, k: 0.1193, kWidth: 0.0002642, b: 0.4301, bWidth: 0.005138 },
+    { ratio: 10, k: 0.1226, kWidth: 0.0002859, b: 0.6224, bWidth: 0.002874 },
+  ],
+  'separation-from-your-period': () => [
+    { period: 3.52396, sigmas: 19, corrected: 11, survives: 1 },
+    { period: 3.52396, sigmas: 19, corrected: 11, survives: 0 },
+  ],
   'weigh-the-pair': () => [
     { a: 4, p: 4 },
     { a: 4, p: 9 },

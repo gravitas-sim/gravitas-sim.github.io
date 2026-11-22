@@ -347,13 +347,13 @@
       "centralExperimentId": "ce.lives-of-stars",
       "object": "sun",
       "control": "stellar-evolution/position",
-      "quantity": "radius and luminosity at a stated model age",
+      "quantity": "luminosity, radius and surface temperature at two ages of the Sun-like track that the student chooses, one frozen and one live, and at the tip of the giant branch",
       "evidence": "instrument-capture",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": ["predict-direction", "measure-the-giant", "why-iron-stops-it"],
+      "loop": ["compare-two-moments", "predict-direction", "measure-the-giant"],
       "evidenceFrom": "data",
-      "decision": "unreviewed",
-      "leakFree": false
+      "decision": "Which two moments of the Sun-like track to freeze and compare, so which stages of its life to claim a change across: two moments on the same stage that differ by less than ten per cent are told so, and readings that are not from one moment are told they do not belong together.",
+      "leakFree": true
     },
     "twelve-nights": {
       "centralExperimentId": "ce.twelve-nights",
@@ -762,67 +762,83 @@
       "leakFree": true
     },
     "integrators-in-practice": {
+      "canvas": ["quiet", "scene"],
       "centralExperimentId": "ce.integrators-in-practice",
       "object": "compute:integrators-compared",
-      "control": "the compute page's steps-per-period setting (not a lesson widget)",
-      "quantity": "the energy drift of explicit Euler, symplectic Euler, velocity Verlet and Runge-Kutta 4 over three periods of the widest orbit, and how each changes when the step is halved",
+      "control": "the compute page's steps-per-period setting (not a lesson widget), and the second step count the student chooses from a menu in the lesson",
+      "quantity": "the energy drift of explicit Euler, symplectic Euler, velocity Verlet and Runge-Kutta 4 over three periods of the widest orbit, and how velocity Verlet's and Runge-Kutta 4's drift change at the second step count the student chose",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": ["which-loses-most", "four-drifts", "halve-the-step"],
+      "loop": ["which-loses-most", "four-drifts", "choose-the-second-step"],
       "evidenceFrom": "computation",
-      "decision": "unreviewed",
+      "decision": "Which second step count to run (250, 438, 750 or 1000 steps per period) and compare with the baseline. The six-orbit comparison that follows is a choice question the student answers from their own run; its readings are not recorded in a notebook field.",
       "leakFree": true
     },
     "extending-an-experiment": {
+      "canvas": ["quiet", "scene"],
       "centralExperimentId": "ce.extending-an-experiment",
       "object": "compute:population-at-scale",
-      "control": "the compute page's cutoff and slope settings (not a lesson widget)",
+      "control": "the compute page's cutoff and slope settings (not a lesson widget), and the cutoff the student chooses from a menu in the lesson",
       "quantity": "the half-way starting distance and the bound fraction of the twenty trials and of the synthetic population, for the settings run",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": [
         "how-well-can-twenty-place-an-edge",
         "the-fit",
-        "move-the-definition"
+        "move-the-definition-yours"
       ],
       "evidenceFrom": "computation",
-      "decision": "unreviewed",
+      "decision": "Which cutoff to define bound by (2, 4, 6 or 10) and run against the baseline of 3, and which two cutoffs to compare to find the trial that changes class between them.",
       "leakFree": true
     },
     "refitting-a-transit": {
+      "reviewed": "2026-11-21",
+      "canvas": ["quiet"],
       "centralExperimentId": "ce.refitting-a-transit",
       "object": "compute:refit-transit",
       "control": "the compute page's limb-darkening setting (not a lesson widget)",
-      "quantity": "the fitted period, planet-to-star radius ratio, orbit size, impact parameter and reduced chi-square, the covariance sigma and profile intervals, and how the radius ratio and its sigma change when the limb darkening is held fixed",
+      "quantity": "the fitted period, planet-to-star radius ratio, orbit size, impact parameter and reduced chi-square, the covariance sigma and profile intervals, and how far the radius ratio moves, in its new sigmas, from the student's own fitted value when the limb darkening is held fixed",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": ["how-close", "the-fit", "hold-the-limb-darkening"],
+      "loop": ["how-close", "the-fit", "shift-from-your-fit"],
       "evidenceFrom": "computation",
-      "decision": "unreviewed",
+      "decision": "How far Rp/R* will move when the limb darkening is held, against the sigma of the fit with it free, and how many of the new, smaller sigmas that move is. Whether to trust the smaller sigma is a choice step outside this loop.",
       "leakFree": true
     },
     "two-periodograms": {
+      "reviewed": "2026-11-21",
+      "canvas": ["quiet"],
       "centralExperimentId": "ce.two-periodograms",
       "object": "compute:periodograms",
-      "control": "the compute page's maximum period and maximum duration settings (not a lesson widget)",
-      "quantity": "the best period of a Lomb-Scargle and of a box least squares periodogram of one light curve, their ratio, and the box period against the fitted period in the fit's uncertainties",
+      "control": "the compute page's maximum period and maximum duration settings (not a lesson widget), and the longest box duration the student chooses from a menu in the lesson",
+      "quantity": "the best period of a Lomb-Scargle and of a box least squares periodogram of one light curve, their ratio, the best box for the longest duration the student allowed, and the box period against the fitted period in the fit's uncertainties, with and without the red-noise factor",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": ["the-tallest-peak", "the-two-periods", "against-the-fit"],
+      "loop": [
+        "the-tallest-peak",
+        "the-two-periods",
+        "separation-from-your-period"
+      ],
       "evidenceFrom": "computation",
-      "decision": "unreviewed",
+      "decision": "Which longest box duration to allow (2, 3, 4, 6 or 8 hours) and whether the best box then sits at the edge of the range. The last entry, whether the box period still differs from the fit's after the correlated-noise factor (the panel's 1.66, Winn et al. 2008), is 1 for every limit on the menu: a check of the arithmetic against a three-sigma convention, not a choice that can come out the other way.",
       "leakFree": true
     },
     "sampling-a-posterior": {
+      "reviewed": "2026-11-21",
+      "canvas": ["quiet"],
       "centralExperimentId": "ce.sampling-a-posterior",
       "object": "compute:posterior-sampling",
-      "control": "the compute page's steps setting (not a lesson widget)",
-      "quantity": "the median and 68 percent interval width of the planet-to-star radius ratio and the impact parameter from an ensemble sampler, and the convergence diagnostics that let the interval be quoted",
+      "control": "the compute page's steps and a/R* settings (not a lesson widget), and the a/R* the student chooses from a menu in the lesson",
+      "quantity": "the median and 68 percent interval width of the planet-to-star radius ratio and the impact parameter from an ensemble sampler with a/R* held at the student's choice, and the convergence diagnostics that let the interval be quoted",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": ["how-wide", "the-draws", "did-it-converge"],
+      "loop": [
+        "pick-the-ratio-predict-the-width",
+        "the-draws-at-your-ratio",
+        "did-it-converge"
+      ],
       "evidenceFrom": "computation",
-      "decision": "unreviewed",
+      "decision": "Which a/R* to hold (8, 8.5, 9.21 or 10) and how wide the interval will be, then whether the run converged well enough to quote. Which step counts the notebook refuses is asked in a choice step outside this loop (its answer depends on a/R* and on the Python build, so it is not graded against a count).",
       "leakFree": true
     },
     "what-is-a-measurement": {
@@ -1351,10 +1367,7 @@
       "quantity": "the super-period, in days, of the wave in the O-C diagram of the inner planet of the near two-to-one pair, fitted to the engine-made transit times: 345 days over the whole record (the relation gives 346) and 347 over the first 60 percent",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": [
-        "a-wave",
-        "read-the-wave"
-      ],
+      "loop": ["a-wave", "read-the-wave"],
       "evidenceFrom": "model",
       "decision": "unreviewed",
       "leakFree": true
