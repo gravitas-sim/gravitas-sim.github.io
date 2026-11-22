@@ -111,12 +111,12 @@ const KEPLER = {
              positions of Mars measured without a telescope. Why he trusted
              them comes after your first prediction.`,
       tip: 'While an investigation is running, clicking selects an object without opening the inspector card, and placing new objects is switched off so a stray click cannot alter the system you are measuring.',
+      time: { speed: 5, paused: true },
       setup: {
         scenario: "Kepler's 2nd Law",
         seed: 'kepler-lab',
         camera: { zoom: 1.5, pan: { x: 0, y: 0 } },
-        // Paused: no orbit goes by while the first screens are read.
-        paused: true,
+        paused: true, // no orbit goes by while the first screens are read
       },
     },
     {
@@ -706,12 +706,12 @@ const KEPLER = {
              is why almost every diagram of the Solar System you have ever seen
              is drawn to the wrong scale.`,
       tip: 'Scroll to zoom. The planets stay visible as small dots however far out you go, and stay clickable, but they only separate properly when you zoom in. Nothing is moving, so take your time.',
+      time: { speed: 1, paused: true },
       setup: {
         scenario: 'Solar System',
         seed: 'kepler-lab',
-        // Asteroids and comets are turned off: they are not what is being
-        // measured, and a belt of unlabeled rocks between Mars and Jupiter is
-        // just something else to click by mistake.
+        // No asteroids or comets: not what is measured, and a belt of unlabeled
+        // rocks between Mars and Jupiter is just something to click by mistake.
         settings: { enable_asteroids: false, num_asteroids: 0, num_comets: 0 },
         // Framed on Mercury out to Saturn, which is the range a student can
         // actually work in: at 0.4 the inner planets are still separated by
@@ -1254,13 +1254,13 @@ const KEPLER = {
              \n\nThis is what turned a description of one solar system into a
              tool that works anywhere.`,
       tip: 'Rearranged for M, this equation is how essentially every stellar mass in the literature is measured.',
+      time: { speed: 0.01, paused: true },
       setup: {
         scenario: 'TRAPPIST-1 System',
         seed: 'newton-lab',
         settings: { enable_asteroids: false, num_asteroids: 0, num_comets: 0 },
         // 6.2 units across at 100 per AU: the view has to come a long way in.
         camera: { zoom: 55, pan: { x: 0, y: 0 } },
-        paused: false,
       },
     },
     {

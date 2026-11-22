@@ -128,6 +128,7 @@ const LAGRANGE_POINTS = {
       bind: RESTRICTED,
       type: 'read',
       title: 'Two stars and a speck',
+      time: { speed: 30, paused: true },
       setup: LAB,
       body: `Two stars orbit each other on a circle: one like the Sun, one about
              a thirtieth of its mass, eight astronomical units apart. The small
@@ -350,6 +351,7 @@ const LAGRANGE_POINTS = {
       type: 'predict',
       reveal: 'watch-it-not-cross',
       title: 'Same permission, same route?',
+      time: { speed: 30, paused: false },
       setup: LAB,
       body: `Two tracers, from the same point, at the same speed in the rotating
              frame, sent out in two different directions. Their Jacobi constants
@@ -380,6 +382,7 @@ const LAGRANGE_POINTS = {
       probe: neckRows,
       type: 'explore',
       title: 'Watch one cross and one not',
+      time: { speed: 30, paused: false },
       setup: LAB,
       // Reads the prediction's own claim back against evidence.
       requires: ['predict-same-region-same-path'],
