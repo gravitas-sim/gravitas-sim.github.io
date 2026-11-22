@@ -125,13 +125,13 @@ export async function openActivityFromUrl() {
     logic,
     investigations,
     registry,
-    { toast },
+    { refuseLink },
   ] = await Promise.all([
     import('../data/activities.js'),
     import('./activities.js'),
     import('../investigations.js'),
     import('../data/investigations/registry.js'),
-    import('../controls.js'),
+    import('../notify.js'),
     import('../i18n/deferredMessages.js').then(m =>
       m.ensureDeferredMessages().catch(() => {})
     ),
@@ -139,24 +139,25 @@ export async function openActivityFromUrl() {
 
   await ensureActivityMessages();
 
-  const activity = activityById(request.activity);
-  if (!activity) {
-    toast(t('activity.error.noActivity', { id: request.activity }));
+  // A refusal is the dialog of ./linkNotice.js: what went wrong, that only the
+  // sender can mend it, and the activity's investigation on its own.
+  const refuse = (why, lesson) => {
+    refuseLink({ why, lesson });
     return false;
-  }
+  };
+
+  const activity = activityById(request.activity);
+  if (!activity)
+    return refuse(t('activity.error.noActivity', { id: request.activity }));
 
   // No format named: the page that lists them is the right answer, not a guess
   // at which one they meant.
-  if (!request.format) {
-    toast(t('activity.error.noFormat', { id: '' }));
-    return false;
-  }
-
-  const format = formatById(activity, request.format);
-  if (!format) {
-    toast(t('activity.error.noFormat', { id: request.format }));
-    return false;
-  }
+  const format = request.format && formatById(activity, request.format);
+  if (!format)
+    return refuse(
+      t('activity.error.noFormat', { id: request.format ?? '' }),
+      activity.lesson
+    );
 
   // The merged lesson in the reader's language, from the same loader the panel
   // uses - so the assignment is built against exactly what will be shown.
@@ -170,17 +171,16 @@ export async function openActivityFromUrl() {
     t(format.introId),
     lessonProvider(activity.lesson)
   );
-  if (!built.ok) {
-    toast(t('activity.error.notUsable'));
-    return false;
-  }
+  if (!built.ok) return refuse(t('activity.error.notUsable'), activity.lesson);
 
   const opened = await investigations.openInvestigation(activity.lesson, {
     assignment: built.assignment,
+    link: location.hash,
   });
-  if (opened && opened.ok === false) {
-    toast(t(`assign.error.${opened.reason}`));
-    return false;
-  }
+  if (opened && opened.ok === false)
+    return refuse(
+      t(`assign.error.${opened.reason}`),
+      opened.reason === 'noLesson' ? null : activity.lesson
+    );
   return true;
 }

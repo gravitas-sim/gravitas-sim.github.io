@@ -32,10 +32,8 @@
 
 export const EN = {
   // --- Locale and the language picker ---------------------------------------
-  // Describes how much of a locale is translated, for a picker that wants to
-  // say so. It has to be specific about *what* is and is not translated:
-  // "partially translated" would leave a student wondering whether the lesson
-  // they are reading lost something.
+  // How much of a locale is translated, for the picker: specific about *what*
+  // is, so "partially translated" does not leave a student wondering.
   'locale.coverage.es': 'Spanish interface and investigations.',
   'locale.coverage.complete': 'Fully translated.',
 
@@ -1420,26 +1418,28 @@ export const EN = {
   'energyChart.potentialEnergy': 'Potential Energy',
   'energyChart.totalEnergy': 'Total Energy',
 
-  // --- Tidal comparison table ------------------------------------------------
-
   // --- Lesson panel chrome ---------------------------------------------------
-  // Kepler's Laws steps 5 and 10 are their own step types - an ellipse the
-  // student reshapes and a set of swept-area wedges - and neither had a badge,
-  // so the first lesson in the catalog printed the literal text
-  // "inv.step.kind.ellipse" where a word should be. They are hands-on screens,
-  // so they take the word the other hands-on screens already use rather than
-  // introducing two more for a reader to learn.
-  'inv.action.restart': 'Restart',
-  'inv.action.restart.hint':
-    'Clear every answer and start this investigation again',
+  // The ellipse and wedge steps are hands-on screens and take the word the
+  // other hands-on screens use ("inv.step.kind.ellipse" had no badge).
   'inv.action.back': 'Back',
   'inv.action.back.hint': 'Previous step (Shift + Left arrow)',
+  'reset.scene': 'Reset the scene',
+  'reset.scene.hint':
+    "Rebuilds this step's scene. Your answers are not changed.",
+  'reset.scene.none':
+    'Reset the scene is off on this step: it has no scene or instrument to rebuild.',
+  'reset.leave': "Leave this investigation's scene: {what}",
+  'reset.leave.hint': "Leaves this investigation's scene. {what}",
+  'saved.scene.leave':
+    'The scene you set up is not saved. When you come back, it is rebuilt from the start of this step.',
+  'saved.scene.back':
+    'The scene is rebuilt from the start of this step. The scene you set up last time is not kept.',
   'inv.body.label': 'Investigation step',
   'inv.backup.summary': 'Progress backup',
-  'inv.backup.download': 'Download progress backup',
+  'inv.backup.download': 'Download a backup of your answers',
   'inv.backup.download.hint':
     'Save a copy of your answers to a file you keep. The PDF report is still what you hand in.',
-  'inv.backup.restore': 'Restore progress backup',
+  'inv.backup.restore': 'Restore a backup of your answers',
   'inv.backup.restore.hint': 'Load answers back from a file you saved earlier.',
   'inv.probe.title': 'Live readout',
   'inv.stage.fit': 'Fit comparison',

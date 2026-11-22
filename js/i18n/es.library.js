@@ -138,6 +138,7 @@ export const ES_LIBRARY = {
     'Cada materia tiene su propia página: sus secuencias, cursos y el resto.',
   'lib.recent.title': 'Abiertos hace poco',
   'lib.continue.last': 'Continuar: {title}',
+  'lib.continue.assignment': 'Continuar la actividad: {title}',
   'lib.why': 'Coincide en {fields}',
   'lib.why.title': 'el título',
   'lib.why.id': 'el nombre',

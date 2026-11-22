@@ -18,6 +18,8 @@ export const ES_GUIDES = {
   'gd.path': 'Itinerario',
   'gd.path.intro': 'Introductorio',
   'gd.path.advanced': 'Avanzado (añade pasos)',
+  'gd.unknown':
+    'No hay ninguna investigación llamada “{id}” en esta página. Elige una de la lista de abajo.',
   'gd.start': 'Empezar',
   'gd.meta': '{steps} pasos, unos {minutes} minutos.',
   'gd.stepOf': 'Paso {n} de {of}: {title}',

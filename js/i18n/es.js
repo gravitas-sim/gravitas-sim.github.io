@@ -1410,17 +1410,25 @@ export const ES = {
   // --- Tidal comparison table ------------------------------------------------
 
   // --- Lesson panel chrome ---------------------------------------------------
-  'inv.action.restart': 'Reiniciar',
-  'inv.action.restart.hint':
-    'Borrar todas las respuestas y volver a empezar esta investigación',
   'inv.action.back': 'Atrás',
   'inv.action.back.hint': 'Paso anterior (Mayús + flecha izquierda)',
+  'reset.scene': 'Restablecer la escena',
+  'reset.scene.hint':
+    'Reconstruye la escena de este paso. Tus respuestas no cambian.',
+  'reset.scene.none':
+    'Restablecer la escena no está disponible en este paso: no tiene escena ni instrumento que reconstruir.',
+  'reset.leave': 'Salir de la escena de esta investigación: {what}',
+  'reset.leave.hint': 'Sale de la escena de esta investigación. {what}',
+  'saved.scene.leave':
+    'La escena que preparaste no se guarda. Cuando vuelvas, se reconstruye desde el inicio de este paso.',
+  'saved.scene.back':
+    'La escena se reconstruye desde el inicio de este paso. La escena que preparaste la última vez no se conserva.',
   'inv.body.label': 'Paso de la investigación',
   'inv.backup.summary': 'Copia del progreso',
-  'inv.backup.download': 'Descargar copia del progreso',
+  'inv.backup.download': 'Descargar una copia de tus respuestas',
   'inv.backup.download.hint':
     'Guarda una copia de tus respuestas en un archivo tuyo. El informe PDF sigue siendo lo que se entrega.',
-  'inv.backup.restore': 'Restaurar copia del progreso',
+  'inv.backup.restore': 'Restaurar una copia de tus respuestas',
   'inv.backup.restore.hint':
     'Carga respuestas desde un archivo que guardaste antes.',
   'inv.probe.title': 'Lectura en vivo',
