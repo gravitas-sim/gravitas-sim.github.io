@@ -156,12 +156,18 @@ describe('recordSizes (--record-sizes)', () => {
 });
 
 describe('the recorded ceilings', () => {
+  // buildGraph walks every module under js/, which can pass Jest's 5 s default on a loaded runner.
+  const GRAPH_TEST_TIMEOUT_MS = 30_000;
   const read = () => JSON.parse(readFileSync(SIZE_CEILINGS_FILE, 'utf8'));
 
-  test('hold today: no module over 1,500 unlisted, each listed one exactly at its ceiling', async () => {
-    const sizes = await moduleSizes(await buildGraph());
-    expect(findSizeProblems(sizes, read().ceilings)).toEqual([]);
-  });
+  test(
+    'hold today: no module over 1,500 unlisted, each listed one exactly at its ceiling',
+    async () => {
+      const sizes = await moduleSizes(await buildGraph());
+      expect(findSizeProblems(sizes, read().ceilings)).toEqual([]);
+    },
+    GRAPH_TEST_TIMEOUT_MS
+  );
 
   test('the file lists only modules over the limit', () => {
     for (const [file, ceiling] of Object.entries(read().ceilings)) {
@@ -169,10 +175,14 @@ describe('the recorded ceilings', () => {
     }
   });
 
-  test('js/ui.js is under the limit and so has no entry', async () => {
-    const { ceilings } = read();
-    const sizes = await moduleSizes(await buildGraph());
-    expect(ceilings['js/ui.js']).toBeUndefined();
-    expect(sizes.get('js/ui.js')).toBeLessThanOrEqual(LIMIT);
-  });
+  test(
+    'js/ui.js is under the limit and so has no entry',
+    async () => {
+      const { ceilings } = read();
+      const sizes = await moduleSizes(await buildGraph());
+      expect(ceilings['js/ui.js']).toBeUndefined();
+      expect(sizes.get('js/ui.js')).toBeLessThanOrEqual(LIMIT);
+    },
+    GRAPH_TEST_TIMEOUT_MS
+  );
 });
