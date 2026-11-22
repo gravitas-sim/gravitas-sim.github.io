@@ -20,7 +20,7 @@ Of 199 prediction loops, 199 are returned to,
 199 produce a measurement before they are answered, and
 1 end in an explanation in the reader's own words.
 198 hold their marking until the experiment settles them.
-The canvas behind a step is stated as scene on 8, portrait on 7, quiet on 70; 1445 state none.
+The canvas behind a step is stated as scene on 8, portrait on 7, quiet on 69; 1446 state none.
 
 ## Kepler's Laws (`keplers-laws`)
 

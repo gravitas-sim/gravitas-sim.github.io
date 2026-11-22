@@ -51668,7 +51668,6 @@
       "model-result",
       "panel-diagram"
      ],
-     "canvas": "quiet",
      "actions": [
       "move-an-instrument-control",
       "press-an-instrument-preset",
@@ -120625,8 +120624,8 @@
   "canvas": {
    "scene": 8,
    "portrait": 7,
-   "quiet": 70,
-   "unstated": 1445
+   "quiet": 69,
+   "unstated": 1446
   },
   "lessons": 124,
   "loops": 199,

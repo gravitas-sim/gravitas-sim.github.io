@@ -9,7 +9,7 @@ on a 60 Hz screen, a 144 Hz screen and a throttled tab. A reading step
 that holds the clock (`holdsClock` in `js/timestep.js`) does not run and
 is not pinned. Closing the lesson lifts the pin.
 
-563 steps in 25 lessons run on an integrated scene; 444 are pinned and 119 hold the clock.
+564 steps in 25 lessons run on an integrated scene; 445 are pinned and 119 hold the clock.
 
 | Lesson | Step | Id | Type | Scene | Own scene | Pinned step |
 |---|---|---|---|---|---|---|
@@ -549,6 +549,7 @@ is not pinned. Closing the lesson lifts the pin.
 | power-law-gravity | 1 | the-exactly | read | Solar System | yes | none (holds the clock) |
 | power-law-gravity | 2 | why-there-is-a-reference-distance | read | Solar System | inherited | none (holds the clock) |
 | power-law-gravity | 3 | predict-does-small-matter | predict | Solar System | inherited | 1/60 s |
+| power-law-gravity | 4 | first-look-at-the-orbit | explore | Solar System | inherited | 1/60 s |
 | integrators-in-practice | 6 | choose-the-second-step | measure | Circumbinary Planet Lab | yes | 1/60 s |
 | integrators-in-practice | 7 | the-engine | measure | Circumbinary Planet Lab | inherited | 1/60 s |
 | integrators-in-practice | 8 | phase-luck | question | Circumbinary Planet Lab | inherited | 1/60 s |

@@ -371,13 +371,16 @@ describe('What If Gravity Were Not Inverse Square?: a leak fixed, one task chang
     expect(indexOf(POWER, 'predict-the-slope')).toBe(-1);
   });
 
-  test('the canvas is quiet from the first tool-led run, and the scene stays for the opening', () => {
+  test('the canvas is quiet from the second instrument step, and the scene stays before it', () => {
     expect(canvasProblems(POWER)).toEqual([]);
-    expect(stepOf(POWER, 'first-look-at-the-orbit').canvas).toBe('quiet');
+    expect(stepOf(POWER, 'record-the-precession').canvas).toBe('quiet');
+    expect(
+      canvasAt(POWER, indexOf(POWER, 'first-look-at-the-orbit'))
+    ).toBeNull();
     expect(stepOf(POWER, 'the-exactly').setup.scenario).toBe('Solar System');
     expect(canvasAt(POWER, indexOf(POWER, 'the-exactly'))).toBeNull();
     for (const s of POWER.steps.slice(
-      indexOf(POWER, 'first-look-at-the-orbit')
+      indexOf(POWER, 'record-the-precession')
     )) {
       expect(canvasAt(POWER, indexOf(POWER, s.sid)).kind).toBe('quiet');
       expect(s.setup).toBeUndefined();

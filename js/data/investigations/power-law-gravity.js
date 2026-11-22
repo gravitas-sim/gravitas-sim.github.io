@@ -167,9 +167,6 @@ const POWER_LAW_GRAVITY = {
     // --- Act 2: precession, the primary visual result ----------------------
     {
       sid: 'first-look-at-the-orbit',
-      // The instruments from here on run their own contained orbits, so the
-      // Solar System on the canvas would only be something else to look at.
-      canvas: 'quiet',
       type: 'explore',
       title: 'Does the ellipse close?',
       body: `Here is the orbit. Start with the preset <strong>n = 2</strong> and
@@ -201,6 +198,11 @@ const POWER_LAW_GRAVITY = {
     },
     {
       sid: 'record-the-precession',
+      // The instruments from here on run their own contained orbits, so the
+      // Solar System on the canvas would only be something else to look at.
+      // Declared here, not on the first look, so the canvas code is fetched
+      // after the first instrument is open and not on the way to it.
+      canvas: 'quiet',
       type: 'measure',
       title: 'Record what the axis does',
       body: `Read the <strong>measured precession</strong> off the instrument at

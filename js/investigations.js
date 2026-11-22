@@ -661,13 +661,9 @@ function applyLocks() {
 }
 
 /**
- * Take down the life-stage illustration.
- *
- * Called on a step change as well as on close, because the overlay names a
- * body and a moment and both belong to one screen. A cloud left drawn around
- * a star the next step has restaged is the kind of leak that looks like a
- * rendering bug rather than a lesson bug.
- *
+ * Take down the life-stage illustration, on a step change as well as on close:
+ * the overlay names a body and a moment, and both belong to one screen, so a
+ * cloud left around a restaged star would look like a rendering bug.
  * @returns {void}
  */
 function clearEvolutionScene() {
@@ -711,12 +707,10 @@ function releaseLocks() {
 // --- Step helpers -------------------------------------------------------------
 
 /**
- * The response-key prefix for a step, by position.
- *
- * Keyed by the step's stable `sid` rather than its index, so an answer stays
- * attached to its question when a lesson is reordered. See
- * ./investigations/progressSchema.js for why neither position nor a structural
- * fingerprint was enough.
+ * The response-key prefix for a step: its stable `sid`, not its index, so an
+ * answer stays attached to its question when a lesson is reordered.
+ * See ./investigations/progressSchema.js for why position and fingerprint
+ * failed.
  */
 const stepId = index => stepKey(active.id, active.steps[index]?.sid);
 const shown = () => active.steps.filter(s => inDepth(s, depth));
@@ -838,10 +832,8 @@ let figures = null;
 let canvasMod = null;
 const canvasNow = (i = stepIndex) => canvasMod?.canvasAt(active, i) ?? null;
 
-/** Fetch the plot, ellipse, import and canvas code a lesson needs. */
-const loadSeams = async ({ steps, canvas }) => {
-  if (!canvasMod && (canvas || steps.some(s => s.canvas)))
-    canvasMod = await import('./lessonCanvas.js');
+/** Fetch the plot, ellipse and import code a lesson needs; the canvas code comes with the first step that declares one. */
+const loadSeams = async ({ steps }) => {
   if (
     !figures &&
     steps.some(
@@ -1896,22 +1888,30 @@ function goToStep(index, { rebuild = false, open = false } = {}) {
   if (!active) return;
   slots.runs?.release();
   const at = Math.max(0, Math.min(active.steps.length - 1, index));
-  // A step that stages waits for the stage code; opening rejects on failure.
+  // A step that stages waits for the stage code, and the first step that declares a canvas for the canvas code; opening rejects on failure.
   const declared = stageOf(active.steps, active.steps[at]);
-  if (declared && !stageLoaded(declared)) {
+  const canvasDue =
+    !canvasMod &&
+    [active, ...active.steps].some((x, i) => x.canvas && i <= at + 1);
+  if (canvasDue || (declared && !stageLoaded(declared))) {
     const turn = openGeneration;
     els.panel.setAttribute('aria-busy', 'true');
     announce(t('inv.tool.loading'));
     if (open) els.body.textContent = t('inv.tool.loading');
-    return loadStage(declared)
+    const again = () => goToStep(at, { rebuild });
+    return (
+      canvasDue
+        ? import('./lessonCanvas.js').then(m => (canvasMod = m))
+        : loadStage(declared)
+    )
       .then(() => {
         if (turn !== openGeneration || !active) return false;
-        goToStep(at, { rebuild });
+        again();
         return true;
       })
       .catch(err => {
         if (open) throw err;
-        loadFailed(() => goToStep(at, { rebuild }), err);
+        loadFailed(again, err);
         return false;
       })
       .finally(() => els.panel?.removeAttribute('aria-busy'));

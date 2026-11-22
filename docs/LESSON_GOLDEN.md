@@ -91,11 +91,11 @@ The browser half takes about seven minutes on the private port.
 | 9 | `measuring-the-moon` | 3: `key:question.maxUncertainty`, `key:question.minUncertainty`, `key:question.valueWithin` |
 | 10 | `orbital-energy` | 3: `key:explore.compare`, `key:explore.evidence`, `key:question.rubricCriteria` |
 | 11 | `missing-mass` | 2: `key:predict.setup`, `key:question.restates` |
-| 12 | `power-law-gravity` | 2: `key:explore.canvas`, `key:question.explain` |
-| 13 | `what-is-a-gravitational-wave` | 2: `audience:beginner`, `key:read.checklist` |
-| 14 | `a-night-at-the-telescope` | 1: `key:question.reflect` |
-| 15 | `counts-to-magnitudes` | 1: `depth-step:quantitative/predict` |
-| 16 | `detect-this-planet` | 1: `key:read.allowInspector` |
+| 12 | `what-is-a-gravitational-wave` | 2: `audience:beginner`, `key:read.checklist` |
+| 13 | `a-night-at-the-telescope` | 1: `key:question.reflect` |
+| 14 | `counts-to-magnitudes` | 1: `depth-step:quantitative/predict` |
+| 15 | `detect-this-planet` | 1: `key:read.allowInspector` |
+| 16 | `power-law-gravity` | 1: `key:question.explain` |
 | 17 | `propose-an-observation` | 1: `key:measure.plan` |
 | 18 | `retrograde-motion` | 1: `lock:{"placement":true,"inspector":false}` |
 
