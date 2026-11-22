@@ -4,11 +4,11 @@
     "transit-photometry",
     "the-saturated-star",
     "binary-star-planets",
+    "missing-mass",
     "weighing-stars",
-    "black-holes",
     "butterfly-effect",
     "measuring-the-moon",
-    "missing-mass",
+    "black-holes",
     "propose-an-observation",
     "what-is-a-gravitational-wave",
     "a-night-at-the-telescope",
@@ -173,17 +173,20 @@
       "lock:{\"placement\":true}",
       "prereq:yes"
     ],
+    "missing-mass": [
+      "depth-step:advanced/explore",
+      "key:explore.after",
+      "key:explore.decides",
+      "key:explore.depth",
+      "key:predict.setup",
+      "lock:{\"placement\":true,\"inspector\":false,\"areaSweep\":false}"
+    ],
     "weighing-stars": [
       "key:explore.showBarycenter",
       "key:explore.stage",
       "key:measure.showBarycenter",
       "key:read.showBarycenter",
       "math:arithmetic"
-    ],
-    "black-holes": [
-      "key:question.checklist",
-      "key:read.explainView",
-      "lock:{\"placement\":true,\"inspector\":false,\"areaSweep\":false}"
     ],
     "butterfly-effect": [
       "key:explore.rubric",
@@ -195,9 +198,9 @@
       "key:question.minUncertainty",
       "key:question.valueWithin"
     ],
-    "missing-mass": [
-      "key:predict.setup",
-      "key:question.restates"
+    "black-holes": [
+      "key:question.checklist",
+      "key:read.explainView"
     ],
     "propose-an-observation": [
       "key:measure.plan",
@@ -295,16 +298,16 @@
   ],
   "totals": {
     "investigations": 124,
-    "steps": 1991,
+    "steps": 1995,
     "activityCuts": 6,
-    "lessonTokens": 172,
+    "lessonTokens": 175,
     "activityTokens": 29,
     "stepTypes": {
       "read": 377,
-      "predict": 200,
-      "measure": 520,
+      "predict": 203,
+      "measure": 522,
       "ellipse": 1,
-      "question": 751,
+      "question": 750,
       "explore": 141,
       "wedges": 1
     }

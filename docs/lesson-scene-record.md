@@ -11,16 +11,16 @@ The hand-written, human-reviewed acceptance map is
 [`lesson-acceptance.json`](lesson-acceptance.json); `npm run
 audit:scene:check` fails if it disagrees with what is generated here.
 
-Across 124 investigations and 1528 steps: 1420 steps
-declare a scene, 166 let a reader change one, 180 read the
-running integration, 1009 show a prescribed model result, 161 draw
-on a stored dataset, 878 put a self-contained panel beside the text,
-395 keep something, and 59 are prose.
-Of 197 prediction loops, 197 are returned to,
-197 produce a measurement before they are answered, and
+Across 124 investigations and 1528 steps: 1413 steps
+declare a scene, 167 let a reader change one, 179 read the
+running integration, 1003 show a prescribed model result, 161 draw
+on a stored dataset, 872 put a self-contained panel beside the text,
+396 keep something, and 62 are prose.
+Of 200 prediction loops, 200 are returned to,
+200 produce a measurement before they are answered, and
 1 end in an explanation in the reader's own words.
-196 hold their marking until the experiment settles them.
-The canvas behind a step is stated as scene on 0, portrait on 7, quiet on 16; 1505 state none.
+199 hold their marking until the experiment settles them.
+The canvas behind a step is stated as scene on 0, portrait on 7, quiet on 27; 1494 state none.
 
 ## Kepler's Laws (`keplers-laws`)
 
@@ -136,16 +136,16 @@ The canvas behind a step is stated as scene on 0, portrait on 7, quiet on 16; 15
 
 ## The Missing Mass (`missing-mass`)
 
-- **Steps:** 33. Scene declared on 21; a reader can change something on 2; 19 declare a scene nobody on that step can touch.
-- **Where the numbers come from:** 4 live engine, 18 prescribed model, 0 stored dataset, 18 self-contained panel.
+- **Steps:** 31. Scene declared on 23; a reader can change something on 2; 21 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 4 live engine, 15 prescribed model, 0 stored dataset, 15 self-contained panel.
 - **What students do:** read, move-an-instrument-control, press-an-instrument-preset, run-the-simulation, tick-a-checklist, choose-an-option, open-a-body-inspector, record-values, build-a-plot, commit-a-prediction, select-a-body, press-an-instrument-button, answer-in-words.
 - **Objects the steps declare:** sun, mercury, earth, jupiter, neptune, bulge, inner, middle, outer.
-- **Instruments:** dm-shapes, dm-enclosed, dm-fit, dm-flyby, dm-virial, dm-mond, dm-budget.
+- **Instruments:** dm-shapes, dm-enclosed, dm-fit, dm-flyby, dm-virial, dm-budget.
 - **Stored data:** none.
 - **Evidence kept:** notebook-fields, plot.
-- **Prediction loops:** now-a-galaxy → measure-the-expected-curve, measure-the-real-curve, now-do-what-the-astronomers, try-it-with-stars-alone, record-your-best-stars-only, why-a-heavier-disc-cannot, now-add-the-halo, record-the-fit-that-works, how-much-of-it-is, what-the-halo-is-holding, take-the-halo-away-from, zwicky-s-arithmetic-and-the, measure-the-simulated-cluster, a-different-way-to-read, fit-it-both-ways, the-prediction-mond-makes, how-much-of-the-universe → measure-the-expected-curve.
-- **Recovery:** wrong body: the step binds the object by name, so there is none; reset: rebuilds the scenario on arrival; null result: guarded, but the fallback is not spelled out; ambiguous result: nothing marks these, they are a record; reset: rebuilds the scenario, discarding the previous step's scene; missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand; null result: the probe names what is missing.
-- **Scene rebuilds:** 5 step(s) on arrival (two-ways-to-weigh-a, now-a-galaxy, what-rubin-and-ford-found, take-the-halo-away-from, forty-years-earlier).
+- **Prediction loops:** now-a-galaxy → measure-the-expected-curve, measure-the-real-curve, now-do-what-the-astronomers, try-it-with-stars-alone, record-your-best-stars-only, why-a-heavier-disc-cannot, now-add-the-halo, record-the-fit-that-works, compare-your-two-fits, how-much-of-it-is, what-the-halo-is-holding → measure-the-expected-curve; predict-the-disc-without-its-halo → take-the-halo-away-from, zwicky-s-arithmetic-and-the, measure-the-simulated-cluster, how-much-of-the-universe → take-the-halo-away-from.
+- **Recovery:** wrong body: the step binds the object by name, so there is none; reset: rebuilds the scenario on arrival; null result: guarded, but the fallback is not spelled out; ambiguous result: nothing marks these, they are a record; reset: rebuilds the scenario, discarding the previous step's scene; missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand; null result: the probe names what is missing; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** 6 step(s) on arrival (two-ways-to-weigh-a, now-a-galaxy, what-rubin-and-ford-found, predict-the-disc-without-its-halo, take-the-halo-away-from, forty-years-earlier).
 - **Accepted central experiment** (reviewed 2026-09-11): object `outer`, control dm-fit/haloVFlat, measures orbital speed against radius, measured and then fitted, evidence `plot`, covered by `e2e/centralExperiments.spec.js`.
 
 ## Tides (`tides`)
@@ -1175,45 +1175,46 @@ The canvas behind a step is stated as scene on 0, portrait on 7, quiet on 16; 15
 
 ## Moons of the Giants (`moons-of-the-giants`)
 
-- **Steps:** 10. Scene declared on 10; a reader can change something on 0; 10 declare a scene nobody on that step can touch.
-- **Where the numbers come from:** 0 live engine, 10 prescribed model, 0 stored dataset, 10 self-contained panel.
-- **What students do:** move-an-instrument-control, commit-a-prediction, record-values, choose-an-option.
-- **Objects the steps declare:** star.
+- **Steps:** 11. Scene declared on 0; a reader can change something on 0; 0 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 7 prescribed model, 0 stored dataset, 7 self-contained panel.
+- **What students do:** move-an-instrument-control, commit-a-prediction, record-values, choose-an-option, read.
+- **Objects the steps declare:** none.
 - **Instruments:** moon-frames, moon-fit.
+- **Canvas:** quiet.
 - **Stored data:** none.
 - **Evidence kept:** notebook-fields.
-- **Prediction loops:** three-periods-predict → three-periods, the-ratios, a-hint-is-not-proof → three-periods; the-laplace-combination → the-motions-together, consistent-with-zero, callisto-is-not-in-the-chain, what-you-worked-out → the-motions-together.
-- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
+- **Prediction loops:** three-periods-predict → three-periods, the-ratios, a-hint-is-not-proof → three-periods; the-laplace-combination → how-sure-is-the-sum, consistent-with-zero → consistent-with-zero; callisto-predict → callisto-is-not-in-the-chain → callisto-is-not-in-the-chain.
+- **Recovery:** ambiguous result: the check says in words how close is close enough.
 - **Scene rebuilds:** none.
-- **Accepted central experiment** (reviewed 2026-09-11): object `panel:moon-fit`, control moon-fit/moon, measures the period a sinusoid fitted to one moon's measured distances from Jupiter gives, from which the Laplace combination of three motions follows: Io 1.7682, Europa 3.5480 and Ganymede 7.1413 days, a combination of 0.015 against an uncertainty of 0.025 degrees a day, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:moon-fit`, control moon-fit/moon, measures the period a sinusoid fitted to one moon's measured distances from Jupiter gives, with its uncertainty, from which the Laplace combination of three motions follows: Io 1.7682, Europa 3.5480 and Ganymede 7.1413 days, a combination of 0.022 against an uncertainty of 0.025 degrees a day on the designed sampling, and about -47 on one frame a night, where Io's period is an alias, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 
 ## The Scale of the Solar System (`the-scale-of-the-solar-system`)
 
-- **Steps:** 8. Scene declared on 8; a reader can change something on 0; 8 declare a scene nobody on that step can touch.
+- **Steps:** 8. Scene declared on 8; a reader can change something on 1; 7 declare a scene nobody on that step can touch.
 - **Where the numbers come from:** 1 live engine, 0 prescribed model, 0 stored dataset, 0 self-contained panel.
-- **What students do:** read, record-values, commit-a-prediction, choose-an-option.
+- **What students do:** read, record-values, select-a-body, commit-a-prediction, choose-an-option.
 - **Objects the steps declare:** sun, earth, jupiter, neptune.
 - **Instruments:** none.
 - **Stored data:** none.
 - **Evidence kept:** notebook-fields.
-- **Prediction loops:** light-time-predict → light-time → light-time; earth-as-a-marble → scale-model → scale-model.
+- **Prediction loops:** light-time-predict → light-time → light-time; earth-as-a-marble → choose-your-marble → choose-your-marble.
 - **Recovery:** wrong body: the step binds the object by name, so there is none; reset: rebuilds the scenario on arrival; missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand; null result: the probe names what is missing; ambiguous result: the check says in words how close is close enough.
 - **Scene rebuilds:** 1 step(s) on arrival (a-picture-you-have-seen).
-- **Accepted central experiment** (reviewed 2026-09-11): object `neptune`, control the canvas: scroll to zoom out to Neptune, and read the distances in the readout, measures the distance of Neptune from the Sun in astronomical units, 30.07, and the light time it gives, 4.17 hours, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+- **Accepted central experiment** (reviewed 2026-09-11): object `neptune`, control the canvas: zoom out until Neptune is on the screen, select each planet, and take its distance from the readout, measures the distance of Neptune from the Sun in astronomical units, 30.07, taken from the selected planet, and the light time it gives, 4.17 hours, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 
 ## Comets and the Sun (`comets-and-the-sun`)
 
-- **Steps:** 9. Scene declared on 9; a reader can change something on 0; 9 declare a scene nobody on that step can touch.
-- **Where the numbers come from:** 3 live engine, 0 prescribed model, 0 stored dataset, 0 self-contained panel.
+- **Steps:** 10. Scene declared on 10; a reader can change something on 0; 10 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 2 live engine, 0 prescribed model, 0 stored dataset, 0 self-contained panel.
 - **What students do:** read, commit-a-prediction, tick-a-checklist, choose-an-option, record-values.
 - **Objects the steps declare:** sun.
 - **Instruments:** none.
 - **Stored data:** none.
 - **Evidence kept:** notebook-fields.
-- **Prediction loops:** tail-predict → watch-the-tails, orbit-ends, heat-at-the-ends, the-real-halley → watch-the-tails.
+- **Prediction loops:** tail-predict → watch-the-tails, orbit-ends, heat-at-the-ends → watch-the-tails; halley-heat-predict → the-real-halley → the-real-halley.
 - **Recovery:** wrong body: the step binds the object by name, so there is none; reset: rebuilds the scenario on arrival; null result: the probe names what is missing; missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand; ambiguous result: the check says in words how close is close enough.
 - **Scene rebuilds:** 1 step(s) on arrival (a-dirty-snowball).
-- **Accepted central experiment** (reviewed 2026-09-11): object `sun`, control the canvas: watch the model comets, and read the first one's closest and furthest distance in the readout, measures the closest and furthest distance of the first model comet from the Sun, 5.79 and 17.84 astronomical units, and its bare-body temperature at each end, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+- **Accepted central experiment** (reviewed 2026-09-11): object `sun`, control the canvas: pause the model comets, select one that comes inside 3 AU, read its tail against the line to the Sun, then take its closest and furthest distance from the readout, measures the closest and furthest distance from the Sun of the comet the student selects, whether its tail is drawn (closer than 3 AU), its bare-body temperature at each end (275.5 K at 1 AU) and the real Halley at 360 K, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 
 ## What a Telescope Resolves (`what-a-telescope-resolves`)
 

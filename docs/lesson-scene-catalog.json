@@ -97554,7 +97554,6 @@
      "loop": {
       "declared": "measure",
       "actual": [
-       "experiment",
        "measure",
        "interpret"
       ],
@@ -97611,7 +97610,7 @@
       "rubric": false,
       "validated": false
      },
-     "worldRunning": true,
+     "worldRunning": "inherited",
      "affordances": {
       "inspector": "locked",
       "placement": "locked",
@@ -97837,8 +97836,7 @@
      "heldUntil": "watch-the-tails",
      "experiment": [
       "watch-the-tails",
-      "orbit-ends",
-      "heat-at-the-ends"
+      "orbit-ends"
      ],
      "measure": [
       "watch-the-tails",
@@ -97860,9 +97858,7 @@
      "predict": "halley-heat-predict",
      "predictCollects": true,
      "heldUntil": "the-real-halley",
-     "experiment": [
-      "the-real-halley"
-     ],
+     "experiment": [],
      "measure": [
       "the-real-halley"
      ],
