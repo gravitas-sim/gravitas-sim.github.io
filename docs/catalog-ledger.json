@@ -4780,7 +4780,7 @@
       ],
       "walk": "NOT RUN",
       "pr": null,
-      "hash": "c9a775c4e3b88786ea66eccf30d50657cf0757e7c728f74c55f4abc446e5b97c"
+      "hash": "bacf9e7373181188a2c7601d8d01cdf5924d879861b2bbdccf9ce75baedde8e5"
     },
     {
       "id": "investigation:sampling-a-posterior",
@@ -7257,7 +7257,7 @@
       ],
       "walk": "NOT RUN",
       "pr": null,
-      "hash": "77a3d5de5c5d8c85feeaf8cd281afa7102f0342f7cb416173dac70ed41083f67"
+      "hash": "6770ba7c51825b137e8ac33ba6e76d9719d258444d449be3a3a5e3ecdac045c4"
     },
     {
       "id": "investigation:when-the-method-must-refuse",
