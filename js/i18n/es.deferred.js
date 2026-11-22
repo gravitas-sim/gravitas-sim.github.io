@@ -1189,7 +1189,6 @@ export const ES_DEFERRED = {
     'Así que lee juntos el intervalo y los residuos. Un intervalo estrecho con residuos estructurados significa un parámetro determinado con precisión de un modelo que no ajusta. Lo que hay que creer es la estructura de los residuos.',
   'rvfit.mc.guidance.c':
     'Y cuando los reajustes se separan en familias, esa es la respuesta honesta: los datos admiten varios períodos. Lo que elimina familias son más observaciones, u observaciones espaciadas de otra forma, no más pruebas aquí. Ejecutar diez mil pruebas hace cada intervalo más suave y las familias igual de reales.',
-
   // --- Widget prose, moved off the start-up path ---------------------------
   'resW.periods.title': 'Periodos medidos y las razones entre ellos',
   'resW.periods.note':
@@ -1759,7 +1758,6 @@ export const ES_DEFERRED = {
     one: 'Ignorar {filter}: {n} investigación',
     other: 'Ignorar {filter}: {n} investigaciones',
   },
-
   // --- Los recorridos ---------------------------------------------------------
   'inv.seq.heading': 'Recorridos',
   'inv.seq.intro':
