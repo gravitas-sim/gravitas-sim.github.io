@@ -1144,6 +1144,7 @@ const ORBIT = {
         value: c.status.label,
       });
       rows.push({
+        id: 'fraction',
         get label() {
           return t('hzW.fractionOfTheYearInside');
         },

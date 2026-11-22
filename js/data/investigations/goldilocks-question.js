@@ -143,6 +143,12 @@ const zoneRows = ctx => {
 /** A step this lesson replaced, with its successor and what it asked. */
 const WAS = (to, en, es) => ({ to, release: '3.1', was: { en, es } });
 
+/** The two runs of the orbit step, as the evidence a reveal sets beside a prediction. */
+const TWO_RUNS = ['e1', 'f1', 'e2', 'f2'].map(field => ({
+  step: 'two-runs-one-orbit',
+  field,
+}));
+
 /** The three readings of the measuring step, as the evidence a reveal sets beside a prediction. */
 const THREE_READINGS = ['d1', 's1', 'd2', 's2', 'd3', 's3'].map(field => ({
   step: 'three-distances-yours',
@@ -179,6 +185,11 @@ const GOLDILOCKS = {
       'three-distances-yours',
       'Type the starlight read at 0.5, 1 and 2 AU beside each distance.',
       'Escribir la luz estelar leída a 0,5, 1 y 2 UA junto a cada distancia.'
+    ),
+    'reading-the-fraction': WAS(
+      'fraction-of-your-run',
+      'Say what a stated fraction of the year inside the zone tells you about the planet’s surface.',
+      'Decir qué dice sobre la superficie del planeta una fracción del año dentro de la zona que ya viene dada.'
     ),
   },
   objectives: [
@@ -892,6 +903,29 @@ const GOLDILOCKS = {
       tip: 'The peak on the graph is narrow and the trough is wide. That is not a drawing choice: the planet really does spend most of its year in the cold outer part of the orbit, and hurries through the hot part.',
     },
     {
+      sid: 'predict-the-fraction',
+      bind: SOLAR_WORLDS,
+      type: 'predict',
+      reveal: 'fraction-of-your-run',
+      title: 'How long inside the zone?',
+      body: `The planet you have just watched keeps 1.2 AU from its star on
+             average, which is the middle of the habitable zone, and it swings
+             in and out on an orbit with an eccentricity of 0.45. The next
+             screen draws the zone on that orbit.
+             \n\nCommit to an answer before you look: over one whole year, how
+             much of the time is the planet inside the zone?`,
+      prompt: 'Over one year, this planet is inside the zone for…',
+      options: [
+        'all of the year, because its average distance is inside the zone',
+        'more than three quarters of the year',
+        'about half of the year',
+        'less than a quarter of the year',
+      ],
+      answer: 2,
+      because:
+        'About half. The average distance sits in the middle of the zone, and that is what misleads: the planet does not stay near its average. It swings out past the outer edge and in past the inner edge, and the time it spends beyond each edge adds up. You are about to set this beside two runs of your own.',
+    },
+    {
       sid: 'crossing-the-edges',
       type: 'explore',
       // The speed the scene before it ran at, stated: its periapsis wait is 6 s.
@@ -933,29 +967,139 @@ const GOLDILOCKS = {
       tip: 'The fraction is measured in time, not in distance around the loop. Those are different numbers, because the planet does not cover equal stretches of orbit in equal times.',
     },
     {
-      sid: 'reading-the-fraction',
-      // Still the ellipse from the previous screen: this question is about
-      // that planet's year, so the planet stays on the canvas.
+      sid: 'two-runs-one-orbit',
+      // Still the ellipse from the previous screen: the runs are of that
+      // planet's year, so the planet stays on the canvas.
+      stage: ECCENTRIC_WORLD,
+      probe: zoneRows,
+      type: 'measure',
+      title: 'Two runs at one average distance',
+      body: `Make two runs of the same year at the same average distance: one
+             on a circular orbit, and one on an eccentric orbit that you
+             choose. Leave the semi-major axis where it is.
+             \n\nFor each run, set the eccentricity, press <strong>Take
+             reading</strong> beside the fraction of the year inside the zone,
+             and type the eccentricity you set. Nothing else changes between
+             the two runs.`,
+      fields: [
+        { id: 'e1', label: 'Run 1: eccentricity' },
+        {
+          id: 'f1',
+          label: 'Run 1: fraction of the year inside the zone',
+          unit: '%',
+          source: { tool: 'fraction' },
+        },
+        { id: 'e2', label: 'Run 2: eccentricity' },
+        {
+          id: 'f2',
+          label: 'Run 2: fraction of the year inside the zone',
+          unit: '%',
+          source: { tool: 'fraction' },
+        },
+      ],
+      validate: (v, _ctx, got = {}) => {
+        const runs = [
+          [v.e1, v.f1, 1],
+          [v.e2, v.f2, 2],
+        ].filter(([e, f]) => Number.isFinite(e) && Number.isFinite(f));
+        if (runs.length < 2) return null;
+        if (runs.some(([e, f]) => e < 0 || e > 0.6 || f < 0 || f > 100)) {
+          return {
+            level: 'error',
+            message:
+              'An eccentricity is a number from 0 to 0.6 here, and a fraction of the year is between 0 and 100 percent.',
+          };
+        }
+        const moved = runs.find(([e, , i]) => {
+          const at = got[`f${i}`]?.s?.ecc;
+          return Number.isFinite(at) && Math.abs(at - e) > 0.005;
+        });
+        if (moved) {
+          return {
+            level: 'warn',
+            message: `Run ${moved[2]} has an eccentricity that is not where the control was when you took its reading. Type the eccentricity you set, or take the reading again.`,
+          };
+        }
+        const axes = [1, 2].map(i => got[`f${i}`]?.s?.semi);
+        if (
+          axes.every(Number.isFinite) &&
+          Math.abs(axes[0] - axes[1]) > 0.001
+        ) {
+          return {
+            level: 'warn',
+            message:
+              'The two readings were taken at different semi-major axes. Set the same axis for both runs and take them again, so that only the stretch of the orbit differs.',
+          };
+        }
+        const round = runs.find(([e]) => e <= 0.005);
+        const stretched = runs.find(([e]) => e >= 0.05);
+        if (!round) {
+          return {
+            level: 'warn',
+            message:
+              'One of your two runs should be circular, with the eccentricity at 0, so that the stretch of the orbit is the only difference.',
+          };
+        }
+        if (!stretched) {
+          return {
+            level: 'warn',
+            message:
+              'Your second run should be eccentric. Raise the eccentricity and take the reading there.',
+          };
+        }
+        if (stretched[1] >= round[1]) {
+          return {
+            level: 'warn',
+            message:
+              'Your eccentric run was inside the zone for as long as the circular one. Raise the eccentricity until the planet leaves the zone at some point in its year, then take that reading.',
+          };
+        }
+        return {
+          level: 'ok',
+          message:
+            'Two runs with the same average distance and two different fractions of the year inside the zone. The next screen sets them beside your prediction.',
+        };
+      },
+      tool: {
+        id: 'hz-orbit',
+        values: { ecc: 0.2, semi: 1.2 },
+        showZone: true,
+        title: 'Run it twice',
+        note: 'Set the eccentricity with the slider, or with the arrow keys one step at a time. The fraction of the year inside the zone is in the readout under the picture.',
+      },
+      tip: 'Any eccentric orbit that leaves the zone at some point in its year will do. Take each reading with the eccentricity where you say it is.',
+    },
+    {
+      sid: 'fraction-of-your-run',
+      // The same ellipse as the screen before it.
       stage: ECCENTRIC_WORLD,
       probe: zoneRows,
       type: 'question',
-      title: 'Reading the fraction',
+      title: 'What your fraction says',
       kind: 'choice',
-      body: `At an eccentricity of 0.45 this planet spends a little over half of
-             its year inside the zone. At 0.3 it spends about three quarters
-             there. On a circular orbit at the same average distance it never
-             leaves.`,
+      evidence: TWO_RUNS,
+      compare:
+        'Set your two fractions beside what you predicted. The average distance was the same in both runs, so say what differs and what does not.',
+      body: `Your prediction and your two runs are below. Both planets keep the
+             same average distance from the star, in the middle of the zone.`,
       prompt:
-        'What does "56% of the year inside the zone" tell you about the planet’s surface?',
+        'What does the fraction of the year your eccentric run spent inside the zone tell you about the planet’s surface?',
       options: [
-        'It has liquid water for 56% of the year and ice for the rest',
+        'It has liquid water for that fraction of the year and ice for the rest',
         'It freezes and thaws twice a year',
         'Less than the number suggests: it describes the starlight arriving, not the surface temperature',
         'Nothing at all, since the habitable zone is not real',
       ],
       answer: 2,
+      misconceptions: [
+        {
+          id: 'inside-means-habitable',
+          option: 0,
+          say: 'That reads the fraction as time with liquid water. It counts the time the starlight is inside a range a climate model gave, and the surface is not asked.',
+        },
+      ],
       because:
-        'Less than it sounds like. The fraction describes incoming starlight against a climate model’s limits. An atmosphere and an ocean carry an enormous amount of heat and take a long time to change temperature, so a planet does not track the light arriving at it minute by minute any more than a beach cools the instant a cloud passes. A planet that dips outside the zone briefly each year may well be fine. The number is a useful flag, not a forecast.',
+        'Less than it sounds like. The tempting turn is that inside the zone means habitable, and that a fraction of the year inside means that fraction of the year habitable. The fraction describes incoming starlight against a climate model’s limits. An atmosphere and an ocean carry an enormous amount of heat and take a long time to change temperature, so a planet does not track the light arriving at it minute by minute, any more than a beach cools the instant a cloud passes. A planet that dips outside the zone briefly each year may well be fine. The number is a useful flag, not a forecast.',
     },
     {
       sid: 'a-real-system-forty-light',
@@ -973,8 +1117,10 @@ const GOLDILOCKS = {
              \n\nTRAPPIST-1 is a very small, very cool star: about nine percent
              of the Sun's mass, barely bigger than Jupiter, with a surface
              temperature of 2,566 K against the Sun's 5,772. Its measured
-             luminosity is 0.000553 Suns, which is about one eighteen-hundredth
-             of the Sun's output. It has seven known rocky planets.`,
+             luminosity is 0.000553 Suns. It has seven known rocky planets.
+             \n\nYou already have the rule that ties a star's luminosity to
+             where its zone lies. Use it before the next screen shows you the
+             zone.`,
       prompt: 'Compared with the Sun’s, TRAPPIST-1’s habitable zone should be…',
       options: [
         'much further out, because cool stars need more room',
@@ -992,8 +1138,14 @@ const GOLDILOCKS = {
       type: 'explore',
       title: 'All seven planets',
       body: `Here is the real system, with the habitable zone from the same
-             model, from TRAPPIST-1's luminosity, with the fit held at its
-             2600 K lower limit because the star is cooler.
+             model, from TRAPPIST-1's luminosity.
+             \n\nRead the two edges as an estimate. The zone calculator takes
+             stars from 2600 to 7200 K only, and TRAPPIST-1 is at 2566 K, below
+             that range. A panel that gives a star's limits (the quantitative
+             version has one) refuses it. This panel does not: it holds the fit
+             at 2600 K, the lowest temperature it covers, and draws what that
+             gives. For any star outside the range, give the zone as an
+             estimate and say so, or say that the calculator does not cover it.
              \n\nThe distance axis is compressed. Read the numbers, not the
              pixels.
              \n\nThe second panel puts the Solar System on the same axis. The
@@ -1011,7 +1163,7 @@ const GOLDILOCKS = {
       checklist: [
         'Find planets b and c, closest to the star, and read their starlight',
         'Find e, f and g and read theirs',
-        'Read where the zone begins and ends in AU',
+        'Read where the zone begins and ends in AU, as an estimate',
         'Switch the zone definition to optimistic and see whether anything changes category',
         'Compare the scale with Mercury’s orbit in the lower panel',
       ],
@@ -1057,31 +1209,19 @@ const GOLDILOCKS = {
       type: 'measure',
       title: 'Take the readings yourself',
       body: `Rather than being told which planets fall where, read it off the
-             instrument. The panel is back, on the conservative definition.
+             instrument. The panel opens on the optimistic zone definition.
+             Set it to the conservative one, the definition this lesson uses
+             for its edges, before you read anything.
              \n\nWork down the list under the picture and record the starlight
              each of the three middle planets receives, in Earths. Then record
-             where the zone begins and ends (at the fit’s lower limit).`,
+             where the zone begins and ends. Those two are an estimate, because
+             the fit is held at 2600 K, the coolest star it covers.`,
       fields: [
-        {
-          id: 'e',
-          label: 'TRAPPIST-1e receives',
-          unit: 'Earths',
-          want: '0.65',
-        },
-        {
-          id: 'f',
-          label: 'TRAPPIST-1f receives',
-          unit: 'Earths',
-          want: '0.37',
-        },
-        {
-          id: 'g',
-          label: 'TRAPPIST-1g receives',
-          unit: 'Earths',
-          want: '0.25',
-        },
-        { id: 'inner', label: 'Zone inner edge', unit: 'AU', want: '0.0254' },
-        { id: 'outer', label: 'Zone outer edge', unit: 'AU', want: '0.0499' },
+        { id: 'e', label: 'TRAPPIST-1e receives', unit: 'Earths' },
+        { id: 'f', label: 'TRAPPIST-1f receives', unit: 'Earths' },
+        { id: 'g', label: 'TRAPPIST-1g receives', unit: 'Earths' },
+        { id: 'inner', label: 'Zone inner edge', unit: 'AU' },
+        { id: 'outer', label: 'Zone outer edge', unit: 'AU' },
       ],
       validate: v => {
         const want = {
@@ -1101,18 +1241,18 @@ const GOLDILOCKS = {
         if (off.length) {
           return {
             level: 'warn',
-            message: `Check ${off.join(', ')} against the list under the picture. Each planet's row gives its starlight in Earths, and the top row gives the two edges.`,
+            message: `Check ${off.join(', ')} against the list under the picture. Each planet's row gives its starlight in Earths, and the top row gives the two edges, which depend on the zone definition the panel is set to.`,
           };
         }
         return {
           level: 'ok',
           message:
-            'Those match. Now say it in words, and say it carefully: e, f and g lie within the modeled habitable zone. That is a statement about their orbits and their star, and it is the correct thing to say. It is not a statement that any of them has water, an atmosphere, or a surface anyone would recognize.',
+            'Those match. The two edges are an estimate for this star, held at the coolest temperature the fit covers. Now say it in words, and say it carefully: e, f and g lie within the modeled habitable zone. That is a statement about their orbits and their star, and it is the correct thing to say. It is not a statement that any of them has water, an atmosphere, or a surface anyone would recognize.',
         };
       },
       tool: {
         id: 'hz-trappist',
-        values: { model: 0 },
+        values: { model: 1 },
         presets: false,
         title: 'Read the values here',
         note: 'Every planet is listed under the picture with its distance, the starlight it receives, and where it falls relative to the modeled zone.',
@@ -1147,8 +1287,8 @@ const GOLDILOCKS = {
       body: `To see how much room that leaves, consider three planets that all
              receive close to one Earth of starlight and all sit inside their
              star's habitable zone.
-             \n\nOn the one number this investigation has spent forty minutes on, they
-             are identical. Look at what else is known about each.
+             \n\nOn the one number this investigation has spent so long on, they are
+             identical. Look at what else is known about each.
              \n\nFor context from our own system: Venus and Earth are nearly the
              same size and receive starlight within a factor of two of each
              other, and their surfaces differ by more than four hundred degrees.

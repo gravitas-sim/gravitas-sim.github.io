@@ -354,6 +354,19 @@ export default {
       ],
       tip: 'El pico de la gráfica es estrecho y el valle es ancho. Eso no es una decisión de dibujo: el planeta pasa de verdad la mayor parte de su año en la fría parte exterior de la órbita, y se apresura por la parte caliente.',
     },
+    'predict-the-fraction': {
+      title: '¿Cuánto tiempo dentro de la zona?',
+      body: 'El planeta que acabas de observar se mantiene a 1,2 UA de su estrella de media, que es el centro de la zona habitable, y oscila hacia dentro y hacia fuera en una órbita de excentricidad 0,45. La pantalla siguiente dibuja la zona sobre esa órbita.\n\nComprométete con una respuesta antes de mirar: a lo largo de un año completo, ¿cuánto del tiempo está el planeta dentro de la zona?',
+      prompt: 'A lo largo de un año, este planeta está dentro de la zona…',
+      options: [
+        'todo el año, porque su distancia media está dentro de la zona',
+        'más de tres cuartas partes del año',
+        'alrededor de la mitad del año',
+        'menos de una cuarta parte del año',
+      ],
+      because:
+        'Alrededor de la mitad. La distancia media está en el centro de la zona, y eso es lo que engaña: el planeta no se queda cerca de su media. Se aleja más allá del borde exterior y entra más allá del borde interior, y el tiempo que pasa más allá de cada borde se suma. Estás a punto de poner esto junto a dos ejecuciones tuyas.',
+    },
     'crossing-the-edges': {
       title: 'Cruzar los bordes',
       body: 'Ahora la zona habitable está dibujada en ambas mitades del panel: como un anillo alrededor de la estrella, y como una banda horizontal en la gráfica. Son la misma información dos veces.\n\nEsta órbita concreta no se queda dentro de ella. Observa cómo el planeta abandona el anillo en un extremo de su año y vuelve en el otro, y observa cómo la línea de la gráfica sale de la banda en el mismo momento.\n\nLa lectura da ahora la fracción del <em>año</em> pasada dentro de la zona.\n\nY en el lienzo hay ahora uno de verdad. <strong>Wanderer</strong> va por una elipse auténtica —1,2 UA de media, excentricidad 0,45— movida por el mismo solucionador de gravedad que todo lo demás en Gravitas, no dibujada a lo largo de un camino. Usa el vigilante de sucesos para detenerla en su máximo acercamiento y otra vez en su punto más lejano, y lee la luz estelar que recibe en cada uno. Esos dos números son todo el sentido de esta pantalla.',
@@ -369,23 +382,51 @@ export default {
       ],
       tip: 'La fracción se mide en tiempo, no en distancia recorrida por el bucle. Son números distintos, porque el planeta no cubre tramos iguales de órbita en tiempos iguales.',
     },
-    'reading-the-fraction': {
-      title: 'Leer la fracción',
-      body: 'Con una excentricidad de 0,45 este planeta pasa algo más de la mitad de su año dentro de la zona. Con 0,3 pasa allí unas tres cuartas partes. En una órbita circular a la misma distancia media no la abandona nunca.',
+    'two-runs-one-orbit': {
+      title: 'Dos ejecuciones a una misma distancia media',
+      body: 'Haz dos ejecuciones del mismo año a la misma distancia media: una en una órbita circular y otra en una órbita excéntrica que elijas tú. Deja el semieje mayor donde está.\n\nPara cada ejecución, pon la excentricidad, pulsa <strong>Tomar la lectura</strong> junto a la fracción del año dentro de la zona y escribe la excentricidad que pusiste. No cambia nada más entre las dos ejecuciones.',
+      fields: [
+        { label: 'Ejecución 1: excentricidad' },
+        {
+          label: 'Ejecución 1: fracción del año dentro de la zona',
+          unit: '%',
+        },
+        { label: 'Ejecución 2: excentricidad' },
+        {
+          label: 'Ejecución 2: fracción del año dentro de la zona',
+          unit: '%',
+        },
+      ],
+      tool: {
+        title: 'Ejecútalo dos veces',
+        note: 'Pon la excentricidad con el deslizador, o con las flechas del teclado un paso cada vez. La fracción del año dentro de la zona está en la lectura bajo la imagen.',
+      },
+      tip: 'Sirve cualquier órbita excéntrica que salga de la zona en algún momento de su año. Toma cada lectura con la excentricidad donde dices que está.',
+    },
+    'fraction-of-your-run': {
+      title: 'Qué dice tu fracción',
+      body: 'Tu predicción y tus dos ejecuciones están debajo. Los dos planetas conservan la misma distancia media a la estrella, en el centro de la zona.',
+      compare:
+        'Pon tus dos fracciones junto a lo que predijiste. La distancia media era la misma en las dos ejecuciones, así que di qué cambia y qué no.',
       prompt:
-        '¿Qué te dice «el 56 % del año dentro de la zona» sobre la superficie del planeta?',
+        '¿Qué te dice sobre la superficie del planeta la fracción del año que tu ejecución excéntrica pasó dentro de la zona?',
       options: [
-        'Que tiene agua líquida el 56 % del año y hielo el resto',
+        'Que tiene agua líquida durante esa fracción del año y hielo el resto',
         'Que se congela y se descongela dos veces al año',
         'Menos de lo que sugiere el número: describe la luz estelar que llega, no la temperatura superficial',
         'Nada en absoluto, ya que la zona habitable no es real',
       ],
+      misconceptions: [
+        {
+          say: 'Eso lee la fracción como tiempo con agua líquida. Cuenta el tiempo que la luz estelar está dentro de un rango que dio un modelo climático, y no se pregunta por la superficie.',
+        },
+      ],
       because:
-        'Menos de lo que parece. La fracción describe la luz estelar entrante frente a los límites de un modelo climático. Una atmósfera y un océano transportan una cantidad enorme de calor y tardan mucho en cambiar de temperatura, así que un planeta no sigue minuto a minuto la luz que le llega, igual que una playa no se enfría en el instante en que pasa una nube. Un planeta que salga brevemente de la zona cada año puede estar perfectamente bien. El número es una señal útil, no un pronóstico.',
+        'Menos de lo que parece. El giro tentador es que estar dentro de la zona significa ser habitable, y que una fracción del año dentro significa esa fracción del año habitable. La fracción describe la luz estelar entrante frente a los límites de un modelo climático. Una atmósfera y un océano transportan una cantidad enorme de calor y tardan mucho en cambiar de temperatura, así que un planeta no sigue minuto a minuto la luz que le llega, igual que una playa no se enfría en el instante en que pasa una nube. Un planeta que salga brevemente de la zona cada año puede estar perfectamente bien. El número es una señal útil, no un pronóstico.',
     },
     'a-real-system-forty-light': {
       title: 'Un sistema real, a cuarenta años luz',
-      body: 'Hora de apuntar todo esto a un objeto real.\n\nTRAPPIST-1 es una estrella muy pequeña y muy fría: alrededor del nueve por ciento de la masa del Sol, apenas mayor que Júpiter, con una temperatura superficial de 2566 K frente a los 5772 del Sol. Su luminosidad medida es de 0,000553 Soles, alrededor de una milochocientosava parte de la producción del Sol. Tiene siete planetas rocosos conocidos.',
+      body: 'Hora de apuntar todo esto a un objeto real.\n\nTRAPPIST-1 es una estrella muy pequeña y muy fría: alrededor del nueve por ciento de la masa del Sol, apenas mayor que Júpiter, con una temperatura superficial de 2566 K frente a los 5772 del Sol. Su luminosidad medida es de 0,000553 Soles. Tiene siete planetas rocosos conocidos.\n\nYa tienes la regla que une la luminosidad de una estrella con el lugar de su zona. Úsala antes de que la pantalla siguiente te muestre la zona.',
       prompt:
         'Comparada con la del Sol, la zona habitable de TRAPPIST-1 debería estar…',
       options: [
@@ -399,7 +440,7 @@ export default {
     },
     'all-seven-planets': {
       title: 'Los siete planetas',
-      body: 'Aquí está el sistema real, con la zona habitable del mismo modelo, a partir de la luminosidad de TRAPPIST-1, con el ajuste fijado en su límite inferior de 2600 K porque la estrella es más fría.\n\nEl eje de distancias está comprimido. Lee los números, no los píxeles.\n\nEl segundo panel pone el Sistema Solar en el mismo eje. Todo el sistema de siete planetas cabría cómodamente dentro de la órbita de Mercurio.',
+      body: 'Aquí está el sistema real, con la zona habitable del mismo modelo, a partir de la luminosidad de TRAPPIST-1.\n\nLee los dos bordes como una estimación. La calculadora de la zona solo admite estrellas de 2600 a 7200 K, y TRAPPIST-1 está a 2566 K, por debajo de ese rango. Un panel que da los límites de una estrella (la versión cuantitativa tiene uno) la rechaza. Este panel no: mantiene el ajuste en 2600 K, la temperatura más baja que cubre, y dibuja lo que eso da. Para cualquier estrella fuera del rango, da la zona como una estimación y dilo, o di que la calculadora no la cubre.\n\nEl eje de distancias está comprimido. Lee los números, no los píxeles.\n\nEl segundo panel pone el Sistema Solar en el mismo eje. Todo el sistema de siete planetas cabría cómodamente dentro de la órbita de Mercurio.',
       tool: {
         title: 'TRAPPIST-1',
         note: 'Cada planeta está listado debajo con la luz estelar que recibe y dónde cae respecto a la zona modelada.',
@@ -407,7 +448,7 @@ export default {
       checklist: [
         'Encuentra los planetas b y c, los más cercanos a la estrella, y lee su luz estelar',
         'Encuentra e, f y g y lee la suya',
-        'Lee dónde empieza y dónde acaba la zona en UA',
+        'Lee dónde empieza y dónde acaba la zona en UA, como una estimación',
         'Cambia la definición de zona a optimista y comprueba si algo cambia de categoría',
         'Compara la escala con la órbita de Mercurio en el panel inferior',
       ],
@@ -426,13 +467,13 @@ export default {
     },
     'take-the-readings-yourself': {
       title: 'Toma tú mismo las lecturas',
-      body: 'En lugar de que te digan qué planetas caen dónde, léelo en el instrumento. El panel está de vuelta, en la definición conservadora.\n\nRecorre la lista de debajo de la imagen y anota la luz estelar que recibe cada uno de los tres planetas centrales, en Tierras. Después anota dónde empieza y dónde acaba la zona (en el límite inferior del ajuste).',
+      body: 'En lugar de que te digan qué planetas caen dónde, léelo en el instrumento. El panel se abre con la definición optimista de la zona. Ponlo en la conservadora, la definición que usa esta lección para sus bordes, antes de leer nada.\n\nRecorre la lista de debajo de la imagen y anota la luz estelar que recibe cada uno de los tres planetas centrales, en Tierras. Después anota dónde empieza y dónde acaba la zona. Esos dos son una estimación, porque el ajuste se mantiene en 2600 K, la estrella más fría que cubre.',
       fields: [
-        { label: 'TRAPPIST-1e recibe', unit: 'Tierras', want: '0,65' },
-        { label: 'TRAPPIST-1f recibe', unit: 'Tierras', want: '0,37' },
-        { label: 'TRAPPIST-1g recibe', unit: 'Tierras', want: '0,25' },
-        { label: 'Borde interior de la zona', unit: 'UA', want: '0,0254' },
-        { label: 'Borde exterior de la zona', unit: 'UA', want: '0,0499' },
+        { label: 'TRAPPIST-1e recibe', unit: 'Tierras' },
+        { label: 'TRAPPIST-1f recibe', unit: 'Tierras' },
+        { label: 'TRAPPIST-1g recibe', unit: 'Tierras' },
+        { label: 'Borde interior de la zona', unit: 'UA' },
+        { label: 'Borde exterior de la zona', unit: 'UA' },
       ],
       tool: {
         title: 'Lee aquí los valores',
@@ -456,7 +497,7 @@ export default {
     },
     'three-planets-that-all-look': {
       title: 'Tres planetas que parecen prometedores',
-      body: 'Para ver cuánto margen deja eso, considera tres planetas que reciben todos cerca de una Tierra de luz estelar y están todos dentro de la zona habitable de su estrella.\n\nEn el único número al que esta investigación ha dedicado cuarenta minutos, son idénticos. Mira qué más se sabe de cada uno.\n\nComo referencia de nuestro propio sistema: Venus y la Tierra son casi del mismo tamaño y reciben luz estelar dentro de un factor dos la una de la otra, y sus superficies difieren en más de cuatrocientos grados. Marte recibe 0,43 Tierras y tiene una superficie que estaría mucho más caliente con una atmósfera más gruesa que la fina que tiene. La distancia importa enormemente, y no es lo único que importa.',
+      body: 'Para ver cuánto margen deja eso, considera tres planetas que reciben todos cerca de una Tierra de luz estelar y están todos dentro de la zona habitable de su estrella.\n\nEn el único número al que esta investigación ha dedicado tanto tiempo, son idénticos. Mira qué más se sabe de cada uno.\n\nComo referencia de nuestro propio sistema: Venus y la Tierra son casi del mismo tamaño y reciben luz estelar dentro de un factor dos la una de la otra, y sus superficies difieren en más de cuatrocientos grados. Marte recibe 0,43 Tierras y tiene una superficie que estaría mucho más caliente con una atmósfera más gruesa que la fina que tiene. La distancia importa enormemente, y no es lo único que importa.',
       tool: {
         title: 'Tres candidatos',
         note: 'Los tres reciben luz estelar parecida y los tres están dentro de la zona modelada. Todo lo demás sobre ellos difiere.',

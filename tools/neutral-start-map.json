@@ -43,6 +43,14 @@
       "d3": {
         "control": "distance"
       }
+    },
+    "goldilocks-question/two-runs-one-orbit": {
+      "e1": {
+        "control": "ecc"
+      },
+      "e2": {
+        "control": "ecc"
+      }
     }
   }
 }
