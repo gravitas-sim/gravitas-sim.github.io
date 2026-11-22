@@ -113,6 +113,7 @@ const HOHMANN_TRANSFER = {
       bind: TRANSFER,
       type: 'read',
       title: 'A spacecraft, a station, and no fuel to waste',
+      time: { speed: 60, paused: true },
       setup: LAB,
       body: `A spacecraft is on a circular orbit one astronomical unit from a
              sunlike star, going round once a year at just under thirty
