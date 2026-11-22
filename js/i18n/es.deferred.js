@@ -1399,11 +1399,9 @@ export const ES_DEFERRED = {
   'nb.unknownTarget': 'un objetivo sin nombre',
   'nb.unknownScenario': 'un escenario sin nombre',
   'nb.nothingToSave': 'Todavía no hay ningún resultado terminado que guardar.',
-
   'nb.kind.measured': 'medido',
   'nb.kind.analytic': 'predicho',
   'nb.kind.truth': 'revelado',
-
   'nb.field.title': 'Encabezado',
   'nb.field.claim': 'Afirmación',
   'nb.field.evidence': 'Pruebas que la respaldan',
@@ -1413,7 +1411,6 @@ export const ES_DEFERRED = {
     '¿Cuáles de los números de arriba lo respaldan, y con qué precisión?',
   'nb.placeholder.limitations':
     '¿Qué no resolvería esta medición, por buena que parezca? Una por línea.',
-
   'nb.action.save': 'Guardar en el cuaderno',
   'nb.action.report': 'Informe',
   'nb.action.report.hint':
@@ -1430,13 +1427,11 @@ export const ES_DEFERRED = {
   'nb.action.delete': 'Eliminar «{title}»',
   'nb.confirm.delete':
     '¿Eliminar «{title}»? La medición no se puede volver a tomar en un mundo que ya ha cambiado, y esto no se puede deshacer.',
-
   'nb.draft.heading': 'Guardar esta medición',
   'nb.draft.hint':
     'Los números ya están congelados, así que puedes tomarte tu tiempo con las palabras: cambiar la simulación ahora no alterará lo capturado.',
   'nb.draft.save': 'Guardarla',
   'nb.draft.discard': 'Descartar',
-
   'nb.entry.results': 'Lo que se registró',
   'nb.entry.conditions': 'Condiciones en que se tomó',
   'nb.entry.data': 'Los datos y lo que se hizo con ellos',
@@ -1447,7 +1442,6 @@ export const ES_DEFERRED = {
   },
   'nb.entry.tampered':
     'Esta entrada ya no coincide con su propia suma de control, así que sus números se cambiaron fuera de Gravitas. Se conserva tal como llegó y el informe lo indica.',
-
   'nb.save.ok': '{n} de {max} entradas · {pct}% del espacio usado',
   'nb.save.unavailable':
     'Este navegador no almacenará nada, así que el cuaderno solo existe en esta pestaña. Descárgalo antes de cerrar la página.',
@@ -1492,12 +1486,10 @@ export const ES_DEFERRED = {
     'Una entrada de ese archivo etiqueta un número de una forma que esta versión no conoce.',
   'nb.save.bad-figure':
     'Una entrada de ese archivo contiene una figura ilegible.',
-
   'nb.source.rv-fit': 'Ajuste de velocidad radial',
   'nb.source.bench-comparison': 'Comparación A/B',
   'nb.source.bench-reliability': 'Comprobación de fiabilidad',
   'nb.source.bench-sweep': 'Barrido de parámetro',
-
   'nb.prov.scenario': 'Escenario',
   'nb.prov.target': 'Objetivo',
   'nb.prov.simTime': 'Tiempo de simulación',
@@ -1517,7 +1509,6 @@ export const ES_DEFERRED = {
   'nb.prov.units': 'Unidades',
   'nb.prov.flags': 'Advertencias',
   'nb.prov.stateHash': 'Estado inicial',
-
   'nb.flag.truth-revealed':
     'la verdad de la simulación ya se había revelado antes de guardar esto',
   'nb.flag.degraded-epochs':
@@ -1539,7 +1530,6 @@ export const ES_DEFERRED = {
   'nb.flag.verdict-diverged':
     'las trayectorias se separaron mientras el agregado se mantuvo: caos, no un paso malo',
   'nb.flag.verdict-incomparable': 'las dos ejecuciones no medían lo mismo',
-
   'nb.rv.title': 'Ajuste de velocidad radial de {target}',
   'nb.rv.mcPeriod': 'Período, con intervalo de Monte Carlo',
   'nb.rv.mcK': 'K, con intervalo de Monte Carlo',
@@ -1585,7 +1575,6 @@ export const ES_DEFERRED = {
     'Solo se mide la componente en la línea de visión, así que K restringe M sin i y no una masa.',
   'nb.rv.limit.revealed':
     'La verdad de la simulación se reveló antes de guardar esto, así que cualquier coincidencia de abajo no es una comprobación independiente.',
-
   'nb.bench.title': 'Comparación A/B: {name}',
   'nb.bench.runA': '{metric}, ejecución A',
   'nb.bench.runB': '{metric}, ejecución B',
@@ -1598,7 +1587,6 @@ export const ES_DEFERRED = {
     'Una semilla y un par de ejecuciones: esto muestra lo que pasó, no con qué frecuencia pasa.',
   'nb.bench.limit.multivariable':
     'Difería más de una variable, así que la comparación no aísla ninguna en particular.',
-
   'nb.sweep.title': '{parameter} barrido en {scenario}',
   'nb.sweep.trials': 'Pruebas que produjeron resultado',
   'nb.sweep.duration': 'Duración simulada por prueba',
@@ -1621,7 +1609,6 @@ export const ES_DEFERRED = {
     '{n} pruebas no produjeron resultado, así que el rango no está muestreado de forma uniforme.',
   'nb.sweep.limit.canceled':
     'El barrido se canceló, así que el rango no se cubrió como estaba previsto.',
-
   'nb.rel.title': 'Comprobación de fiabilidad: {scenario}',
   'nb.rel.coarse': '{metric} con el paso de trabajo',
   'nb.rel.fine': '{metric} con la mitad del paso',
@@ -1649,7 +1636,6 @@ export const ES_DEFERRED = {
     'Las trayectorias se separaron mientras el agregado se mantuvo. Cita el estadístico, no la trayectoria.',
   'nb.rel.limit.verdict.incomparable':
     'Las dos ejecuciones no medían lo mismo, así que no se puede concluir nada de su coincidencia o discrepancia.',
-
   'nb.report.title': 'Cuaderno de pruebas',
   'nb.report.subtitle':
     'Mediciones guardadas de una sesión de Gravitas, cada una con las condiciones en que se tomó.',
@@ -1712,7 +1698,6 @@ export const ES_DEFERRED = {
   'nb.unc.method.exact.tip':
     'El análisis tomó el valor como exacto: no se estimó nada.',
   'nb.report.notRecorded': 'no registrado',
-
   'inv.filter.search.placeholder': 'Buscar por título, tema o materia',
   'inv.filter.query': 'Búsqueda',
   'inv.filter.subject': 'Materia',
@@ -1738,7 +1723,6 @@ export const ES_DEFERRED = {
     one: '{n} de {total} investigaciones coincide',
     other: '{n} de {total} investigaciones coinciden',
   },
-
   'inv.tag.chaos': 'Caos',
   'inv.tag.compact-objects': 'Objetos compactos',
   'inv.tag.exoplanets': 'Exoplanetas',
@@ -1753,14 +1737,12 @@ export const ES_DEFERRED = {
   'inv.tag.stellar-evolution': 'Evolución estelar',
   'inv.tag.waves': 'Ondas gravitacionales',
   'inv.tag.stars': 'Estrellas',
-
   'inv.empty.search': 'Nada coincide con «{query}».',
   'inv.empty.filters': 'Ninguna investigación cumple todo eso a la vez.',
   'inv.empty.relax': {
     one: 'Ignorar {filter}: {n} investigación',
     other: 'Ignorar {filter}: {n} investigaciones',
   },
-
   // --- Los recorridos ---------------------------------------------------------
   'inv.seq.heading': 'Recorridos',
   'inv.seq.intro':
@@ -1773,7 +1755,6 @@ export const ES_DEFERRED = {
   'inv.seq.fit.long': 'Más larga que una clase',
   'inv.seq.assign':
     'Recorta una actividad más corta de esta investigación con el generador de actividades',
-
   'inv.seq.sky.title': 'El cielo',
   'inv.seq.sky.blurb':
     'Dónde están las cosas en el cielo y por qué se mueven: el giro de las estrellas, el año del Sol, las fases de la Luna y los eclipses, los lazos de los planetas, y luego planificar una noche en un telescopio. La primera secuencia para un curso introductorio; cada una dura de 10 a 20 minutos.',
@@ -3967,6 +3948,25 @@ export const ES_DEFERRED = {
   'lessonFn.worldNotSwitchedYet23': 'Mundo, todavía sin cambiar',
   'lessonFn.marsDistanceFromEarth25': 'Marte: distancia a la Tierra',
   'lessonFn.marsDirectionFromEarth26': 'Marte: dirección desde la Tierra',
+  'lessonFn.inEachPairTheSecondReading134':
+    'En cada par, la segunda lectura debe ser de un día posterior a la primera. Comprueba que la primera lectura de cada par es la más temprana.',
+  'lessonFn.noReadingInYourFirstPair188':
+    'Ninguna lectura de tu primer par ha bajado: la segunda dirección no es menor que la primera. Sigue avanzando hasta que la dirección haya bajado y toma esa lectura como la segunda del par.',
+  'lessonFn.inYourSecondPairTheSecond169':
+    'En tu segundo par, la segunda dirección no es mayor que la primera. Sigue avanzando pasado el punto más bajo hasta que la dirección vuelva a subir y toma esa lectura.',
+  'lessonFn.yourSecondPairMustComeAfter139':
+    'Tu segundo par debe venir después del primero. Toma las dos lecturas del segundo giro en días posteriores a la segunda lectura del primer par.',
+  'lessonFn.theFirstTurnIsNotBetween210':
+    'El primer giro no está entre los dos días que tomaste. Entre tus dos lecturas la dirección debería dejar de subir y empezar a bajar: comprueba que cada día es el que se mostraba cuando tomaste la dirección que tiene al lado.',
+  'lessonFn.theSecondTurnIsNotBetween211':
+    'El segundo giro no está entre los dos días que tomaste. Entre tus dos lecturas la dirección debería dejar de bajar y empezar a subir: comprueba que cada día es el que se mostraba cuando tomaste la dirección que tiene al lado.',
+  'lessonFn.yourTwoTurnsBelongToDifferent128':
+    'Tus dos giros pertenecen a bucles distintos. El segundo giro es el final del bucle que empezó en el primero, así que tómalo poco después.',
+  'lessonFn.yourTwoBracketsAreWideTogether235':
+    'Tus dos intervalos son anchos: juntos abarcan más de 30 días, así que conoces la duración del bucle con una incertidumbre de más de 15 días. Los dos giros están dentro de ellos, pero retrocede y encierra cada giro de nuevo con las dos lecturas más próximas.',
+  'lessonFn.bothTurnsLieBetweenTheirTwo208':
+    'Los dos giros quedan entre sus dos días. La duración del bucle es el intervalo entre los dos giros, y su incertidumbre es la mitad de las anchuras de tus dos intervalos, sumadas: estrecha un intervalo y la incertidumbre se reduce.',
+  'lessonFn.day3': 'Día',
   'lessonFn.selectMars11': 'Selecciona Marte',
   'lessonFn.world5': 'Mundo',
   'lessonFn.aBody6': 'Un cuerpo',

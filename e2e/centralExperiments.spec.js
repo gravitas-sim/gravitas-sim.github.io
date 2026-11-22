@@ -1339,115 +1339,260 @@ test.describe('the central experiment of each investigation', () => {
     await expectVerdictRevealed(page, plan, predict);
   });
 
-  test('retrograde-motion: seen from Earth, Mars doubles back @accepts:ce.retrograde-motion', async ({
+  test('retrograde-motion: bracket each turn of the direction to Mars and time the loop @accepts:ce.retrograde-motion', async ({
     page,
     app,
   }) => {
-    test.slow();
+    // A reader's stepping, frame by frame, through two turns of one loop.
+    test.setTimeout(900_000);
     const id = 'retrograde-motion';
     const entry = declared(id);
-    const [predictSid, measureSid] = entry.loop;
+    const [predictSid, measureSid, revealSid] = entry.loop;
 
     await openInvestigation(page, app, id);
     const plan = await lessonPlan(page, id);
     const predict = await walkToSid(page, plan, predictSid);
     await commitPredictionHeld(page, predict);
+    expect(predict.reveal).toBe(revealSid);
     await walkToSid(page, plan, measureSid);
 
-    // The declared control is the inspector: stand on Earth. What follows is
-    // one planet's direction in the sky measured from another, and the
-    // reversal is a fact about that pair of orbits and nothing else.
-    const sky = await page.evaluate(async steps => {
+    // The declared control: stand on Earth, as the lesson says to.
+    await page.evaluate(async () => {
       const ls = await import('/js/lessonScene.js');
       const rf = await import('/js/referenceFrame.js');
-      const p = await import('/js/physics.js');
-      const ui = await import('/js/ui.js');
-      const mars = ls.roleBody('mars');
-      const earth = ls.roleBody('earth') || ls.roleBody('home');
-      if (!mars || !earth) return { roles: ls.boundRoles() };
+      const earth = ls.roleBody('earth');
       rf.setFrame(rf.OBJECT, earth.id);
+    });
 
-      // A retrograde loop happens once per synodic period, so the window is
-      // sized from the two orbits. Anything shorter can miss the reversal and
-      // report a working lesson as a broken one.
-      const sun = [...p.stars, ...p.bh_list]
-        .filter(b => b !== mars && b !== earth)
-        .sort((a, b) => b.mass - a.mass)[0];
-      if (!sun) return { roles: ls.boundRoles(), noPrimary: true };
-      const mu = ui.SETTINGS.gravitational_constant * sun.mass;
-      const periodOf = b => {
-        const r = Math.hypot(b.pos.x - sun.pos.x, b.pos.y - sun.pos.y);
-        const v = Math.hypot(b.vel.x - sun.vel.x, b.vel.y - sun.vel.y);
-        const a = 1 / (2 / r - (v * v) / mu);
-        return a > 0 ? 2 * Math.PI * Math.sqrt((a * a * a) / mu) : null;
-      };
-      const te = periodOf(earth);
-      const tm = periodOf(mars);
-      if (!te || !tm || te === tm) return { roles: ls.boundRoles(), te, tm };
-      const synodic = Math.abs(1 / (1 / te - 1 / tm));
-      const dt = (synodic * 1.4) / steps;
-
-      ui.SETTINGS.max_timestep = dt;
-      ui.SETTINGS.sim_speed = 1;
-      p.updatePhysicsSettings(ui.SETTINGS);
-
-      const track = [];
-      let turns = 0;
-      let last = null;
-      for (let i = 0; i < steps; i++) {
-        p.updatePhysics(dt);
-        const raw = Math.atan2(
-          mars.pos.y - earth.pos.y,
-          mars.pos.x - earth.pos.x
+    // What the reader reads: the two rows of the readout beside the step.
+    // The direction is unwrapped as it is read (359.9 then 0.1 is a rise).
+    let last = null;
+    let flat = 0;
+    const rowsNow = () =>
+      page.evaluate(() =>
+        [
+          ...document.querySelectorAll('#investigationProbe .inv-probe-row'),
+        ].map(r => r.innerText)
+      );
+    const sky = async () => {
+      const rows = await rowsNow();
+      const value = re =>
+        Number(
+          String(rows.find(r => re.test(r)) ?? '')
+            .split('\n')
+            .at(-1)
+            .match(/-?\d+(\.\d+)?/)?.[0]
         );
-        // Unwrapped, so a wrap from +pi to -pi is not read as a reversal.
-        if (last !== null) {
-          let d = raw - last;
-          while (d > Math.PI) d -= 2 * Math.PI;
-          while (d < -Math.PI) d += 2 * Math.PI;
-          turns += d;
-        }
-        last = raw;
-        track.push({ t: i * dt, lon: (turns * 180) / Math.PI });
-      }
-      return { frame: rf.frameState(), earthId: earth.id, track, synodic };
-    }, 3000);
-
-    expect(
-      sky.track,
-      `roles ${sky.roles}, periods ${sky.te}/${sky.tm}`
-    ).toBeTruthy();
-    expect(sky.frame.mode, 'the reader is standing on Earth').toBe('object');
-    expect(sky.frame.objectId).toBe(sky.earthId);
-
-    // The deepest backwards excursion: from a local maximum of the unwrapped
-    // longitude down to the lowest point that follows it.
-    let best = null;
-    let peak = sky.track[0];
-    for (const point of sky.track) {
-      if (point.lon >= peak.lon) {
-        peak = point;
-        continue;
-      }
-      const depth = peak.lon - point.lon;
-      if (!best || depth > best.depth) best = { from: peak, to: point, depth };
-    }
-    expect(best, 'the direction to Mars reverses at some point').toBeTruthy();
-    expect(
-      best.depth,
-      'and it really doubles back rather than wobbling'
-    ).toBeGreaterThan(1);
-
-    const evidence = {
-      lon_a: best.from.lon.toFixed(1),
-      day_a: best.from.t.toFixed(1),
-      lon_b: best.to.lon.toFixed(1),
-      day_b: best.to.t.toFixed(1),
+      const raw = value(/direction/i);
+      let d = last === null ? 0 : raw - last;
+      if (d > 180) d -= 360;
+      if (d < -180) d += 360;
+      flat += d;
+      last = raw;
+      return { dir: raw, up: flat, day: value(/^Day/i) };
     };
-    await recordFields(page, id, measureSid, evidence);
-    await expectEvidenceRetained(page, id, measureSid, evidence);
+    const play = page.locator('#timelinePlay');
+    const paused = async () =>
+      /play/i.test(await play.getAttribute('aria-label'));
+    const pause = async () => {
+      if (!(await paused())) await play.click();
+      await expect.poll(paused).toBe(true);
+    };
+    // Run until `done` says so, then pause: a reader watching the number.
+    const runUntil = async done => {
+      const start = await sky();
+      const seen = { ...start, min: start.up, max: start.up, climbed: false };
+      if (await paused()) await play.click();
+      for (let i = 0; i < 4000; i++) {
+        const now = await sky();
+        seen.min = Math.min(seen.min, now.up);
+        seen.max = Math.max(seen.max, now.up);
+        if (now.up >= seen.min + 1) seen.climbed = true;
+        if (done(now, seen)) break;
+        await page.waitForTimeout(30);
+      }
+      await pause();
+      await page.waitForTimeout(150);
+      return sky();
+    };
+    // One frame at a time, as the Step buttons do, waiting for the readout to move.
+    const stepTo = async button => {
+      const before = (await sky()).day;
+      await page.evaluate(b => document.querySelector(b).click(), button);
+      await page.waitForFunction(
+        day => {
+          const row = [
+            ...document.querySelectorAll('#investigationProbe .inv-probe-row'),
+          ].find(r => /^Day/i.test(r.innerText));
+          const now = Number(
+            (row?.innerText ?? '')
+              .split('\n')
+              .at(-1)
+              .match(/-?\d+(\.\d+)?/)?.[0]
+          );
+          return Number.isFinite(now) && now !== day;
+        },
+        before,
+        { timeout: 10_000, polling: 'raf' }
+      );
+      return sky();
+    };
+    const goTo = async day => {
+      for (let i = 0; i < 400; i++) {
+        const now = await sky();
+        if (now.day === day) return now;
+        await stepTo(now.day > day ? '#timelineStepBack' : '#timelineStepFwd');
+      }
+      throw new Error(`could not step to day ${day}`);
+    };
+    const take = async field => {
+      await page.locator(`#investigationBody [data-take="${field}"]`).click();
+      await page.waitForTimeout(120);
+    };
+    const check = page.locator('#investigationBody .inv-check');
+    const box = f =>
+      page.locator(
+        `#investigationBody [data-field="${id}:${measureSid}:${f}"]`
+      );
 
+    // The readout is the observable: it starts with a direction and a day.
+    const first = await sky();
+    expect(Number.isFinite(first.dir)).toBe(true);
+    expect(Number.isFinite(first.day)).toBe(true);
+
+    // The first turn: run until the direction has fallen 3 degrees from a
+    // peak, then step back through the frames to the rising side and bracket it.
+    const afterTurn = await runUntil(
+      (now, seen) => seen.climbed && now.up <= seen.max - 3
+    );
+    const back = [afterTurn];
+    let peak = afterTurn;
+    for (let i = 0; i < 200; i++) {
+      const frame = await stepTo('#timelineStepBack');
+      back.push(frame);
+      if (frame.up > peak.up) peak = frame;
+      // Past the peak and 3 degrees down the rising side.
+      if (peak.up > afterTurn.up && frame.up <= peak.up - 3) break;
+    }
+    // A reading still rising: 0.1 degree under the peak, the earlier side of it.
+    const rising = back.find(f => f.day < peak.day && f.up <= peak.up - 0.1);
+    // The first reading that has fallen below it, after the peak.
+    const fallen = [...back]
+      .reverse()
+      .find(f => f.day > peak.day && f.up < rising.up);
+    expect(rising && fallen, 'a pair that brackets the peak').toBeTruthy();
+    await goTo(rising.day);
+    await take('a1_dir');
+    await take('a1_day');
+    await goTo(fallen.day);
+    await take('a2_dir');
+    await take('a2_day');
+
+    // The second turn: back to the live moment, run until the direction has
+    // risen 3 degrees from its lowest point, and bracket that the same way.
+    await page.locator('#timelineLive').click();
+    const afterEnd = await runUntil(
+      (now, seen) =>
+        seen.climbed && now.up >= seen.min + 3 && now.day > fallen.day + 20
+    );
+    const back2 = [afterEnd];
+    let low = afterEnd;
+    for (let i = 0; i < 200; i++) {
+      const frame = await stepTo('#timelineStepBack');
+      back2.push(frame);
+      if (frame.up < low.up) low = frame;
+      if (low.up < afterEnd.up && frame.up >= low.up + 3) break;
+    }
+    const falling = back2.find(f => f.day < low.day && f.up >= low.up + 0.1);
+    const rose = [...back2]
+      .reverse()
+      .find(f => f.day > low.day && f.up > falling.up);
+    expect(
+      falling && rose,
+      'a pair that brackets the lowest point'
+    ).toBeTruthy();
+    await goTo(falling.day);
+    await take('b1_dir');
+    await take('b1_day');
+    await goTo(rose.day);
+    await take('b2_dir');
+    await take('b2_day');
+
+    // Every reading was taken with provenance, not typed, and the page worked
+    // out the two turns, the length and its uncertainty from them.
+    const v = async f => Number(await box(f).inputValue());
+    for (const f of [
+      'a1_dir',
+      'a1_day',
+      'a2_dir',
+      'a2_day',
+      'b1_dir',
+      'b1_day',
+      'b2_dir',
+      'b2_day',
+    ])
+      expect(await box(f).inputValue(), `${f} was taken`).not.toBe('');
+    await expect(check).toHaveClass(/is-ok/);
+    const widths = [await v('wid_a'), await v('wid_b')];
+    const length = await v('loop_len');
+    const spread = await v('loop_unc');
+    expect(widths[0]).toBeGreaterThan(0);
+    expect(
+      widths[0],
+      'a bracket of a few days, not the whole loop'
+    ).toBeLessThan(12);
+    expect(spread).toBeCloseTo((widths[0] + widths[1]) / 2, 1);
+    // The loop is 72.7 days in the circular model the scene is built from;
+    // the reading is that to within its own uncertainty, and a day of drift.
+    expect(Math.abs(length - 72.7)).toBeLessThanOrEqual(spread + 1);
+
+    // A set in which nothing fell, and a bracket that leaves out the turn, are
+    // refused in the lesson's words and the length is not marked as found.
+    const a1 = await box('a1_dir').inputValue();
+    const a2 = await box('a2_dir').inputValue();
+    await box('a1_dir').fill(a2);
+    await box('a2_dir').fill(a1);
+    await box('a2_dir').dispatchEvent('change');
+    await expect(check).not.toHaveClass(/is-ok/);
+    await expect(check).toContainText(
+      'No reading in your first pair has fallen'
+    );
+    await box('a1_dir').fill(a1);
+    await box('a2_dir').fill(a2);
+    await box('a2_dir').dispatchEvent('change');
+    await expect(check).toHaveClass(/is-ok/);
+    const raw1 = await box('a1_day').inputValue();
+    const raw2 = await box('a2_day').inputValue();
+    await box('a1_day').fill(String(Number(raw1) + 25));
+    await box('a2_day').fill(String(Number(raw2) + 25));
+    await box('a2_day').dispatchEvent('change');
+    await expect(check).not.toHaveClass(/is-ok/);
+    await expect(check).toContainText('first turn is not between');
+    await box('a1_day').fill(raw1);
+    await box('a2_day').fill(raw2);
+    await box('a2_day').dispatchEvent('change');
+    await expect(check).toHaveClass(/is-ok/);
+    // A bracket eighty days wide holds the turn and says almost nothing: the
+    // check says so in its own words and does not mark the length as found.
+    await box('a1_day').fill(String(Number(raw1) - 40));
+    await box('a2_day').fill(String(Number(raw2) + 40));
+    await box('a2_day').dispatchEvent('change');
+    await expect(check).not.toHaveClass(/is-ok/);
+    await expect(check).toContainText('brackets are wide');
+    await box('a1_day').fill(raw1);
+    await box('a2_day').fill(raw2);
+    await box('a2_day').dispatchEvent('change');
+    await expect(check).toHaveClass(/is-ok/);
+
+    // The readings are in saved progress, and the prediction is settled at the reveal.
+    await expectEvidenceRetained(page, id, measureSid, {
+      a1_day: raw1,
+      a2_day: raw2,
+    });
     await expectVerdictRevealed(page, plan, predict);
+    await expect(page.locator('#investigationBody .inv-verdict')).toContainText(
+      'Length of the retrograde loop'
+    );
   });
 
   test('lagrange-points: the Jacobi constant holds, and more speed opens the region @accepts:ce.lagrange-points', async ({

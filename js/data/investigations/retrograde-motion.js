@@ -45,10 +45,53 @@ const RETROGRADE = {
   // the whole set without a second list to keep in step.
   tags: ['orbits', 'solar-system', 'observing'],
   lock: { placement: true, inspector: false },
+  retired: {
+    'catch-the-reversal': {
+      to: 'time-the-reversal',
+      release: '3.1',
+      was: {
+        en: 'Read the direction to Mars and the day twice, once at the first reading and once at a reading that had gone backwards.',
+        es: 'Leer la dirección a Marte y el día dos veces, una en la primera lectura y otra en una lectura que había retrocedido.',
+      },
+    },
+    'how-long-does-a-loop': {
+      to: 'time-the-reversal',
+      release: '3.1',
+      was: {
+        en: 'Give the day the direction starts falling and the day it starts rising again, and the length of the loop between them.',
+        es: 'Dar el día en que la dirección empieza a bajar y el día en que vuelve a subir, y la duración del bucle entre ambos.',
+      },
+    },
+    'a-lap-gained': {
+      to: null,
+      release: '3.1',
+      was: {
+        en: 'Divide 360 degrees by the rate Earth gains on Mars, given as 0.46 degrees a day, to find the synodic period a second way.',
+        es: 'Dividir 360 grados entre el ritmo al que la Tierra gana a Marte, dado como 0,46 grados al día, para hallar el periodo sinódico de otra manera.',
+      },
+    },
+    'what-actually-settled-it': {
+      to: 'frames-are-not-all-equal',
+      release: '3.1',
+      was: {
+        en: 'Read why economy and stellar parallax, not the loop, settled the argument, and why Tycho found no parallax.',
+        es: 'Leer por qué la economía y la paralaje estelar, y no el bucle, zanjaron la discusión, y por qué Tycho no halló paralaje.',
+      },
+    },
+    'mars-or-jupiter': {
+      to: 'jupiters-loops',
+      release: '3.1',
+      was: {
+        en: 'Choose how often Jupiter’s loops come compared with Mars’s, given the subtraction in the text.',
+        es: 'Elegir con qué frecuencia llegan los bucles de Júpiter en comparación con los de Marte, con la resta dada en el texto.',
+      },
+    },
+  },
   objectives: [
     'Describe retrograde motion as an observation, separately from any explanation of it',
     'Compute a synodic period from two orbital periods and say what it counts',
     'Predict and then verify that a retrograde loop happens at opposition',
+    'Time the two turning points of the loop by bracketing each between two readings, and give the length of the loop with its uncertainty',
     'Explain retrograde motion as a consequence of the observer’s own motion, without invoking anything the planet does',
     'Say what a reference frame is, and what changes and what does not when you switch one',
     'State what the retrograde loop does and does not establish about which body is at the center',
@@ -69,8 +112,8 @@ const RETROGRADE = {
              \n\nAnd then, at intervals, one of them stops. It hangs still for a
              few days, reverses, and travels westward for weeks or months. Then
              it stops again and resumes its eastward march, having traced a loop
-             or a zigzag against the background. Mars does this once every 780
-             days, and the reversal lasts about ten weeks.
+             or a zigzag against the background. Mars does this again and
+             again, at regular intervals.
              \n\nThis is not a subtle effect visible only to specialists. Anyone
              who watches Mars for a few months with the naked eye can see it, and
              every civilization that kept sky records noticed it.`,
@@ -162,33 +205,63 @@ const RETROGRADE = {
       bind: INNER_PAIR,
       type: 'measure',
       title: 'The two orbits',
-      body: `Click <strong>Earth</strong> and read its orbital period from the
-             inspector, then click <strong>Mars</strong> and read its. The
-             inspector reports the period of the orbit each body is actually on,
-             computed from its live position and velocity.
-             \n\nWhile you are there, record how far each one is from the Sun.`,
+      body: `Click <strong>Earth</strong>, then <strong>Mars</strong>, and read the
+             orbit each one is actually on: the inspector computes it from the
+             body's live position and velocity.
+             \n\nThe readout beside this step lists both planets. Press
+             <strong>Take reading</strong> beside each box to record the value it
+             shows: each planet's distance from the Sun and its orbital period,
+             in days.`,
       fields: [
-        { id: 'earth_a', label: 'Earth: distance from the Sun', unit: 'AU' },
-        { id: 'mars_a', label: 'Mars: distance from the Sun', unit: 'AU' },
-        { id: 'earth_P', label: 'Earth: orbital period', unit: 'days' },
-        { id: 'mars_P', label: 'Mars: orbital period', unit: 'days' },
+        {
+          id: 'earth_a',
+          label: 'Earth: distance from the Sun',
+          unit: 'AU',
+          source: { probe: 'earth_a' },
+        },
+        {
+          id: 'mars_a',
+          label: 'Mars: distance from the Sun',
+          unit: 'AU',
+          source: { probe: 'mars_a' },
+        },
+        {
+          id: 'earth_P',
+          label: 'Earth: orbital period',
+          unit: 'days',
+          source: { probe: 'earth_P' },
+        },
+        {
+          id: 'mars_P',
+          label: 'Mars: orbital period',
+          unit: 'days',
+          source: { probe: 'mars_P' },
+        },
       ],
       probe: ctx => {
         const rows = [];
         for (const name of ['Earth', 'Mars']) {
           const b = ctx.find(name);
+          const key = name.toLowerCase();
           if (!b) {
-            rows.push({ label: name, value: 'not found' });
+            rows.push(
+              { id: `${key}_a`, label: name, value: 'not found' },
+              { id: `${key}_P`, label: name, value: 'not found' }
+            );
             continue;
           }
           const el = ctx.elements(b);
           rows.push({
+            id: `${key}_a`,
             label: `${name}: distance from the Sun`,
-            value: el ? ctx.distance(el.semiMajorAxis) : '-',
+            value: el ? ctx.distance(el.a) : '-',
           });
           rows.push({
+            id: `${key}_P`,
             label: `${name}: period`,
-            value: el ? ctx.time(el.period) : '-',
+            value: el
+              ? `${(ctx.years(el.period) * 365.25).toFixed(1)} days`
+              : '-',
           });
         }
         return rows;
@@ -213,6 +286,23 @@ const RETROGRADE = {
         'goes round faster only when it is closer to Mars',
       ],
       answer: 0,
+      misconceptions: [
+        {
+          id: 'furtherAround',
+          option: 1,
+          say: 'Earth is on the shorter track, not the longer one. Compare its distance from the Sun with Mars’s, and then the two periods you took.',
+        },
+        {
+          id: 'sameSun',
+          option: 2,
+          say: 'The same Sun does not give the same period: how long an orbit takes depends on how far the body is from the Sun. Compare the two periods you took.',
+        },
+        {
+          id: 'closerToMars',
+          option: 3,
+          say: 'Each planet keeps its own pace round the Sun whatever the other one is doing. A period belongs to one orbit alone.',
+        },
+      ],
       because:
         'Earth takes 365 days and Mars 687, so Earth laps the Sun nearly twice for every one lap of Mars. That is the whole mechanism of retrograde motion, and you have already measured it. The inner planet is on a shorter track and it also moves faster along it: both effects run the same way, which is what Kepler’s third law says.',
     },
@@ -226,18 +316,24 @@ const RETROGRADE = {
       body: `A period is awkward to compare directly. Turn each one into an
              angular speed instead: a full lap is 360°, so a planet covers
              360 ÷ P degrees every day.
-             \n\nCopy across the two periods you measured a moment ago; the
-             three speeds work themselves out.`,
+             \n\nPress <strong>Take reading</strong> beside each period to bring
+             in the value the readout shows; the three speeds work themselves
+             out.`,
       fields: [
-        // The two periods are typed again here rather than read back from the
-        // step they were measured on. A computed field is evaluated against
-        // *this* step's responses only - see fieldValues() in
-        // js/investigations.js - so a compute that reached into an earlier step
-        // silently produced NaN and left all three boxes blank. The checker
-        // catches that now (ref/field), and the fix is to give the arithmetic
-        // its inputs.
-        { id: 'earth_P', label: 'Earth: orbital period', unit: 'days' },
-        { id: 'mars_P', label: 'Mars: orbital period', unit: 'days' },
+        // The periods are taken again here: the arithmetic below reads this
+        // step's own fields, and a step's saved answers stay readable alone.
+        {
+          id: 'earth_P',
+          label: 'Earth: orbital period',
+          unit: 'days',
+          source: { probe: 'earth_P' },
+        },
+        {
+          id: 'mars_P',
+          label: 'Mars: orbital period',
+          unit: 'days',
+          source: { probe: 'mars_P' },
+        },
         {
           id: 'earth_w',
           label: 'Earth: degrees per day',
@@ -263,12 +359,13 @@ const RETROGRADE = {
           const b = ctx.find(name);
           const el = b ? ctx.elements(b) : null;
           rows.push({
+            id: `${name.toLowerCase()}_P`,
             label: `${name}: period`,
             // Two different absences, and they need different answers: no
             // body at all means the world is still building, while a body
             // with no closed orbit means there is no period to report.
             value: el
-              ? ctx.time(el.period)
+              ? `${(ctx.years(el.period) * 365.25).toFixed(1)} days`
               : b
                 ? 'no closed orbit to take a period from'
                 : `${name} is not on the canvas yet`,
@@ -300,7 +397,7 @@ const RETROGRADE = {
     },
     {
       hints: [
-        'Use 1/S = 1/P₁ − 1/P₂ with the shorter period first.',
+        'The formula is in the step before this one, and the two periods are the ones you took above.',
         'Subtract the two reciprocals, then take one over the result.',
       ],
       feedback: {
@@ -313,44 +410,36 @@ const RETROGRADE = {
       title: 'How often does Earth catch up?',
       kind: 'numeric',
       body: `Use your two measured periods in 1/S = 1/P₁ − 1/P₂, with P₁ the
-             shorter one. Work in days.
-             \n\nWith 365 and 687 the subtraction gives 1/S = 0.00274 − 0.00146 =
-             0.00128 per day.`,
+             shorter one. Work in days.`,
       prompt: 'How many days between one opposition of Mars and the next?',
       unit: 'days',
       answer: 780,
       tolerance: 60,
       because:
-        'S = 780 days, about two years and seven weeks. That is why Mars is well placed for observing roughly every other year rather than every year: Earth needs 780 days to gain a full lap on it. Venus, being much faster, comes round to the same alignment every 584 days; Jupiter, being much slower, every 399, barely more than an Earth year, because Jupiter has hardly moved while Earth goes round.',
+        'S = 780 days, about two years and seven weeks. That is why Mars is well placed for observing roughly every other year rather than every year: Earth needs 780 days to gain a full lap on it.',
     },
     {
-      hints: [
-        'A full lap is 360 degrees, and the rate is in degrees per day.',
-        'Time equals the angle to gain divided by the rate.',
-      ],
-      feedback: {
-        close: 'Close. Divide 360 by the rate of gaining, in degrees per day.',
-        off: 'Time is the angle to be gained divided by how fast it is gained.',
-      },
-      sid: 'a-lap-gained',
+      sid: 'share-of-the-cycle',
       bind: INNER_PAIR,
-      // Checked against the gain rate worked out there.
-      requires: ['how-fast-each-one-goes'],
-      type: 'question',
-      title: 'A lap gained',
-      kind: 'numeric',
-      body: `You have the rate at which Earth gains on Mars, in degrees per day.
-             A full lap gained is 360°.
-             \n\nDivide one by the other and you have the synodic period again,
-             by a different route. It should agree with what you got from the
-             reciprocals.`,
+      type: 'predict',
+      reveal: 'the-share-you-found',
+      title: 'How much of the cycle?',
+      body: `You have the interval from one opposition of Mars to the next. Over
+             one such cycle the direction from Earth to Mars spends part of its
+             time climbing and part of it falling.
+             \n\nCommit to how much of the cycle is spent falling before you
+             measure it: the measurement comes later in this investigation.`,
       prompt:
-        'At about 0.46° gained per day, how many days to gain a full 360°?',
-      unit: 'days',
-      answer: 783,
-      tolerance: 60,
+        'Out of one cycle from one opposition to the next, Mars appears to move backwards for about…',
+      options: [
+        'less than 5 percent of it',
+        'between 5 and 15 percent of it',
+        'between 15 and 35 percent of it',
+        'more than 35 percent of it',
+      ],
+      answer: 1,
       because:
-        'The same 780 days, reached without touching a reciprocal. This is worth doing twice because the reciprocal formula is easy to apply and hard to feel: what it counts is laps gained, and gaining a lap at half a degree a day takes a little over two years. Every retrograde loop of Mars is one lap gained.',
+        'The backwards stretch is a small part of each cycle: the short time when Earth is passing Mars. The rest of the cycle the direction climbs. Your own length divided by your own synodic period is the share you found.',
     },
     {
       sid: 'before-you-look',
@@ -420,7 +509,7 @@ const RETROGRADE = {
              \n\nA point older than the origin body's own recorded history cannot
              be re-expressed at all, and is not drawn. So a freshly rebuilt
              system has no loop yet: the trail has to grow first.`,
-      tip: 'The trail here holds about a year of history, several times longer than a whole retrograde episode of about 72 days. That is deliberate: much shorter and the loop never closes.',
+      tip: 'The trail here holds about a year of history, long enough to hold a whole retrograde loop. That is deliberate: much shorter and the loop never closes.',
     },
     {
       sid: 'put-yourself-on-earth',
@@ -431,7 +520,7 @@ const RETROGRADE = {
              <strong>Reference frame</strong> on in the inspector. Or use
              <strong>Tools &gt; Frame</strong> and choose the selected object.
              \n\nGive it half a minute. The trail has to redraw itself over a
-             good fraction of the 780 days you calculated before the loop
+             good fraction of the synodic period you calculated before the loop
              appears, and you may need to wait for Earth to come round to
              opposition.`,
       checklist: [
@@ -483,50 +572,253 @@ const RETROGRADE = {
              described twice.`,
     },
     {
-      sid: 'catch-the-reversal',
+      sid: 'time-the-reversal',
       bind: INNER_PAIR,
       type: 'measure',
-      title: 'Catch the reversal',
-      body: `The picture shows the loop; now put a number on it. With Earth's
-             frame still on and Mars selected, the inspector shows
-             <strong>Direction from Earth</strong> in degrees. That single number
-             is the observable: it is the direction you would point at, and the
-             thing an ancient astronomer recorded against the fixed stars.
-             \n\nLet it run and watch that number. Most of the time it climbs
-             steadily. Record it, wait, record it again, and keep going until you
-             catch a reading that is <em>lower</em> than the one before. Press
-             <strong>Space</strong> to pause when you want to read carefully.
-             \n\nThe day counter is on the timeline at the bottom of the screen.`,
+      time: { paused: true },
+      title: 'Time the reversal',
+      body: `The picture shows the loop; now time it. With Earth's frame still on,
+             the readout beside this step gives the <strong>direction from Earth</strong>
+             to Mars, in degrees, and the day. That direction is the number an
+             ancient astronomer recorded against the fixed stars.
+             \n\nMost of the time the direction climbs. The loop has two turns: where it
+             stops climbing and starts to fall, and where it stops falling and
+             climbs again. Press <strong>Space</strong> to run the scene and
+             again to pause it, then <strong>Step forward</strong> (or the full
+             stop key) to move on one frame at a time.
+             At the first turn, take a reading while the direction is still
+             climbing, then keep stepping until you reach one that is lower: the
+             turn lies between the two. At the second turn do the same the other
+             way, from a reading while it is still falling to the first that is
+             higher. The closer the two days, the better you know the turn.
+             \n\nPress <strong>Take reading</strong> beside each box to record the
+             value the readout shows. The page works out the day of each turn,
+             the loop's length and its uncertainty.`,
       fields: [
         {
-          id: 'lon_a',
-          label: 'Direction from Earth, first reading',
+          id: 'a1_dir',
+          label: 'First turn, last reading still rising: direction',
           unit: '°',
+          source: { probe: 'dir' },
         },
-        { id: 'day_a', label: 'Day of that reading', unit: 'days' },
         {
-          id: 'lon_b',
-          label: 'Direction, a reading that went backwards',
-          unit: '°',
+          id: 'a1_day',
+          label: 'First turn, last reading still rising: day',
+          unit: 'days',
+          source: { probe: 'day' },
         },
-        { id: 'day_b', label: 'Day of that reading', unit: 'days' },
+        {
+          id: 'a2_dir',
+          label: 'First turn, first reading that has fallen: direction',
+          unit: '°',
+          source: { probe: 'dir' },
+        },
+        {
+          id: 'a2_day',
+          label: 'First turn, first reading that has fallen: day',
+          unit: 'days',
+          source: { probe: 'day' },
+        },
+        {
+          id: 'b1_dir',
+          label: 'Second turn, last reading still falling: direction',
+          unit: '°',
+          source: { probe: 'dir' },
+        },
+        {
+          id: 'b1_day',
+          label: 'Second turn, last reading still falling: day',
+          unit: 'days',
+          source: { probe: 'day' },
+        },
+        {
+          id: 'b2_dir',
+          label: 'Second turn, first reading rising again: direction',
+          unit: '°',
+          source: { probe: 'dir' },
+        },
+        {
+          id: 'b2_day',
+          label: 'Second turn, first reading rising again: day',
+          unit: 'days',
+          source: { probe: 'day' },
+        },
+        {
+          id: 'turn_a',
+          label: 'First turn: day, the middle of its bracket',
+          unit: 'days',
+          compute: v => (v.a1_day + v.a2_day) / 2,
+          decimals: 1,
+        },
+        {
+          id: 'wid_a',
+          label: 'First turn: width of its bracket',
+          unit: 'days',
+          compute: v => v.a2_day - v.a1_day,
+          decimals: 1,
+        },
+        {
+          id: 'turn_b',
+          label: 'Second turn: day, the middle of its bracket',
+          unit: 'days',
+          compute: v => (v.b1_day + v.b2_day) / 2,
+          decimals: 1,
+        },
+        {
+          id: 'wid_b',
+          label: 'Second turn: width of its bracket',
+          unit: 'days',
+          compute: v => v.b2_day - v.b1_day,
+          decimals: 1,
+        },
+        {
+          id: 'loop_len',
+          label: 'Length of the retrograde loop',
+          unit: 'days',
+          compute: v => (v.b1_day + v.b2_day) / 2 - (v.a1_day + v.a2_day) / 2,
+          decimals: 1,
+        },
+        {
+          id: 'loop_unc',
+          label: 'Uncertainty in that length: half of the two widths, added',
+          unit: 'days',
+          compute: v => (v.a2_day - v.a1_day + v.b2_day - v.b1_day) / 2,
+          decimals: 1,
+        },
       ],
+      // The days the direction turns, from two circular, coplanar orbits at 1.000 and 1.523 AU
+      // (Earth at 103 degrees and Mars at 198 degrees on day 0, periods 365.21 and 686.43 days):
+      // the first turn is START, the second END, and a loop comes round every EVERY days.
+      // Worked out apart from the engine in tests/retrogradeMotion.test.js, which holds these to it.
+      validate: v => {
+        const START = 169.6;
+        const END = 242.3;
+        const EVERY = 780.44;
+        const own = [
+          'a1_dir',
+          'a1_day',
+          'a2_dir',
+          'a2_day',
+          'b1_dir',
+          'b1_day',
+          'b2_dir',
+          'b2_day',
+        ];
+        if (!own.every(k => Number.isFinite(v[k]))) return null;
+        // A change of direction as a signed step, so that 359.9 to 0.1 is a rise of 0.2.
+        const move = (from, to) => ((((to - from) % 360) + 540) % 360) - 180;
+        if (v.a2_day <= v.a1_day || v.b2_day <= v.b1_day) {
+          return {
+            level: 'error',
+            message:
+              'In each pair the second reading must come on a later day than the first. Check that the first reading of each pair is the earlier one.',
+          };
+        }
+        if (move(v.a1_dir, v.a2_dir) >= 0) {
+          return {
+            level: 'warn',
+            message:
+              'No reading in your first pair has fallen: the second direction is not lower than the first. Keep stepping until the direction has dropped, then take that reading as the second of the pair.',
+          };
+        }
+        if (move(v.b1_dir, v.b2_dir) <= 0) {
+          return {
+            level: 'warn',
+            message:
+              'In your second pair the second direction is not higher than the first. Keep stepping past the lowest point until the direction is climbing again, then take that reading.',
+          };
+        }
+        if (v.b1_day < v.a2_day) {
+          return {
+            level: 'warn',
+            message:
+              'Your second pair must come after your first. Take both readings of the second turn on days later than the second reading of the first pair.',
+          };
+        }
+        // The loops whose turn lies between a pair's two days. The engine's own turns sit within
+        // half a day of the circular ones at the first loop and drift by about a tenth of a day
+        // a loop after it (tests/retrogradeMotion.test.js), so that is all the slack allowed.
+        const loops = (lo, hi, at) => {
+          const out = [];
+          for (let n = 0; n < 60; n++) {
+            const t = at + n * EVERY;
+            const slack = 0.6 + n / 10;
+            if (t + slack >= lo && t - slack <= hi) out.push(n);
+          }
+          return out;
+        };
+        const first = loops(v.a1_day, v.a2_day, START);
+        const second = loops(v.b1_day, v.b2_day, END);
+        if (!first.length) {
+          return {
+            level: 'warn',
+            message:
+              'The first turn is not between the two days you took. Between your two readings the direction should stop climbing and start to fall: check that each day is the one showing when you took the direction beside it.',
+          };
+        }
+        if (!second.length) {
+          return {
+            level: 'warn',
+            message:
+              'The second turn is not between the two days you took. Between your two readings the direction should stop falling and start to climb: check that each day is the one showing when you took the direction beside it.',
+          };
+        }
+        if (!first.some(n => second.includes(n))) {
+          return {
+            level: 'warn',
+            message:
+              'Your two turns belong to different loops. The second turn is the end of the loop that began at the first, so take it soon after.',
+          };
+        }
+        // A bracket of about nine days is what the frames give at the readout's 0.01 degree; much wider tells almost nothing.
+        if (v.a2_day - v.a1_day + v.b2_day - v.b1_day > 30) {
+          return {
+            level: 'warn',
+            message:
+              'Your two brackets are wide: together they are more than 30 days across, so the loop is known only to within more than 15 days. Both turns are inside them, but step back and bracket each turn again with the two readings closer together.',
+          };
+        }
+        return {
+          level: 'ok',
+          message:
+            'Both turns lie between their two days. The length of the loop is the gap between the two turns, and its uncertainty is the half-widths of your two brackets added: narrow a bracket and the uncertainty shrinks.',
+        };
+      },
       probe: ctx => {
         const mars = ctx.find('Mars');
         const seen = mars && ctx.seenFrom ? ctx.seenFrom(mars, 'Earth') : null;
-        if (!seen) return [{ label: 'Select Mars', value: '-' }];
+        if (!seen) {
+          return [
+            { id: 'dir', label: 'Mars: direction from Earth', value: '-' },
+            { id: 'day', label: 'Day', value: '-' },
+          ];
+        }
         return [
           {
+            id: 'dir',
             label: 'Mars: direction from Earth',
-            value: `${seen.longitude.toFixed(1)}°`,
+            value: `${seen.longitude.toFixed(2)}°`,
           },
-          {
-            label: 'Mars: distance from Earth',
-            value: ctx.distance(seen.separation),
-          },
-          { label: 'Day', value: ctx.days().toFixed(0) },
+          { id: 'day', label: 'Day', value: ctx.days().toFixed(1) },
         ];
       },
+    },
+    {
+      sid: 'the-share-you-found',
+      bind: INNER_PAIR,
+      type: 'read',
+      evidence: [
+        { step: 'time-the-reversal', field: 'loop_len' },
+        { step: 'time-the-reversal', field: 'loop_unc' },
+      ],
+      compare:
+        'Your length is the gap between two turns you bracketed yourself, so its uncertainty comes from your own brackets. Divide it by your synodic period for the share of each cycle spent going backwards.',
+      title: 'The share you found',
+      body: `The box above sets the share you predicted beside the length you
+             measured.
+             \n\nDivide your length by the synodic period you calculated: that is
+             the share of each cycle Mars spends moving backwards. For the rest
+             of the cycle the direction climbs, as it did before the loop began.`,
     },
     {
       sid: 'nearest-and-furthest',
@@ -599,6 +891,23 @@ const RETROGRADE = {
         'whenever Mars is at the far point of its own orbit',
       ],
       answer: 1,
+      misconceptions: [
+        {
+          id: 'farSide',
+          option: 0,
+          say: 'At that moment the direction to Mars is changing most slowly, not backwards. Look again at your readings: was the distance at its largest or its smallest when the direction fell?',
+        },
+        {
+          id: 'atRandom',
+          option: 2,
+          say: 'The loops come at regular intervals, the synodic period you worked out, so they are tied to where the two planets are in their orbits.',
+        },
+        {
+          id: 'planetTurnsRound',
+          option: 3,
+          say: 'Mars never turns round at any point of its orbit: its far point is one place on a circle it goes round steadily. What turns round is the direction from Earth, which depends on where Earth is too.',
+        },
+      ],
       because:
         'The reversal happens at opposition, when Earth overtakes Mars on the inside track. That is also when the two are closest, which is why Mars is at its brightest during a retrograde loop. The coincidence of "brightest" and "moving backwards" was known for two thousand years before anyone had an explanation that tied the two together, and in a geocentric model it is a coincidence: nothing about an epicycle requires the planet to be nearest while it loops.',
     },
@@ -615,10 +924,11 @@ const RETROGRADE = {
              forwards at seventy. Once you are well past, it falls behind and
              begins drifting forward again.
              \n\nThe lorry never reversed. You overtook it.
-             \n\nEarth does exactly this to Mars every 780 days. Earth is on the
-             inside track and moving faster, so around opposition it sweeps past,
-             and for those ten weeks Mars slides backwards against the fixed
-             stars. Mars is doing nothing unusual for the whole of it.`,
+             \n\nEarth does exactly this to Mars once every synodic period. Earth is
+             on the inside track and moving faster, so around opposition it
+             sweeps past, and for the stretch you timed Mars slides backwards
+             against the fixed stars. Mars is doing nothing unusual for the
+             whole of it.`,
       tip: 'The fixed stars are the hills. Notice that the starfield behind the simulation does not move when you switch frames: objects that far away do not shift when the observer does, which is exactly why they make a good background to measure against.',
     },
     {
@@ -639,21 +949,16 @@ const RETROGRADE = {
       bind: INNER_PAIR,
       type: 'read',
       title: 'What it cost to explain this',
-      body: `In a model where Earth sits still at the center and everything
-             circles it, retrograde motion is a genuine puzzle. Planets are
-             supposed to move on circles at constant speed. This one stops and
-             goes backwards.
-             \n\nThe answer, refined over centuries and set down by Ptolemy
-             around 150 CE, was the <em>epicycle</em>: the planet rides a small
-             circle whose center rides the large one. Get the two sizes and the
-             two speeds right and the combined path makes a loop, at the right
-             times, of the right size. It worked. It predicted planetary
-             positions well enough to be used for fourteen hundred years.
-             \n\nIt also needed one epicycle per planet, plus an off-center
-             <em>eccentric</em> to fix the timing, plus an <em>equant</em> point
-             about which the motion was uniform instead of about the center.
-             Three separate devices, tuned per planet, to reproduce something no
-             single one of them explained.`,
+      body: `In a model where Earth sits still at the center, retrograde motion
+             is a puzzle: planets are supposed to move on circles at constant
+             speed, and this one stops and goes backwards.
+             \n\nThe answer, set down by Ptolemy around 150 CE, was the
+             <em>epicycle</em>: the planet rides a small circle whose center
+             rides the large one. Get the sizes and speeds right and the path
+             makes a loop at the right times. It worked for fourteen hundred
+             years, but it also needed an off-center <em>eccentric</em> and an
+             <em>equant</em> point: separate devices, tuned per planet, to
+             reproduce something no one of them explained.`,
       quote: {
         text: 'If the Sun be assumed to be the center, the retrogradations of the planets follow of necessity.',
         by: 'Nicolaus Copernicus, De revolutionibus, 1543',
@@ -798,6 +1103,23 @@ const RETROGRADE = {
         'the question is meaningless, because motion is entirely arbitrary',
       ],
       answer: 2,
+      misconceptions: [
+        {
+          id: 'sunFrameProved',
+          option: 0,
+          say: 'The loop also appears in Earth’s frame, and both pictures came from the same simulation: a picture that reproduces what we see has not shown it is the only one that does.',
+        },
+        {
+          id: 'earthFrameProved',
+          option: 1,
+          say: 'What we observe is the direction to Mars, and the Sun-centered description gives that same direction. Seeing the loop from Earth shows that the observer moves, not that Earth is the center.',
+        },
+        {
+          id: 'allFramesAlike',
+          option: 3,
+          say: 'Frames are free to choose but not all equal: only some let every force be traced to a mass.',
+        },
+      ],
       because:
         'The retrograde loop establishes that the observer is moving relative to Mars. It does not, by itself, establish what is at the center. Both descriptions reproduce the observation, which is precisely why the argument lasted so long. What eventually settled it was not this loop: it was that the heliocentric picture explains the one-year epicycle without being told to, gives the planets an ordering by distance that matches their periods, and predicts stellar parallax, which was finally measured in 1838. The last option goes too far the other way: frames are not arbitrary, because only some of them are inertial, and picking the wrong one puts forces in your equations that no object exerts.',
     },
@@ -821,30 +1143,15 @@ const RETROGRADE = {
              building physics in.
              \n\nStrictly the Sun is not at rest either. It orbits the
              barycenter of the Solar System, which is what the
-             <strong>Barycenter</strong> option in the same menu shows you.`,
+             <strong>Barycenter</strong> option in the same menu shows you.
+             \n\nIf the loop does not decide between the two pictures, what did?
+             Copernicus argued economy: one moving Earth in place of five
+             epicycles. The decisive test was <em>stellar parallax</em>: if
+             Earth swings 2 AU across space, nearby stars must shift against
+             distant ones over the year. Tycho Brahe looked, found nothing, and
+             concluded that Earth does not move. The next step asks what his
+             null result could have shown.`,
       tip: 'Try it: switch Frame to Barycenter. For this three-body system the barycenter sits almost exactly on the Sun, because the Sun holds essentially all the mass.',
-    },
-    {
-      sid: 'what-actually-settled-it',
-      bind: INNER_PAIR,
-      type: 'read',
-      title: 'What actually settled it',
-      body: `If the loop does not decide between the two pictures, what did?
-             \n\nCopernicus's own arguments were about economy: one moving Earth
-             in place of five epicycles, and an ordering of the planets by
-             distance that finally matched their periods. Good reasons, not
-             proof, and his model was no more accurate than Ptolemy's because he
-             kept the circles.
-             \n\nThe decisive prediction was <em>stellar parallax</em>. If Earth
-             really swings 2 AU across space every six months, then nearby stars
-             must shift very slightly against more distant ones over the year.
-             Tycho Brahe looked for exactly this, found nothing, and concluded
-             correctly that either Earth does not move or the stars are
-             impossibly far away. He chose the first.
-             \n\nHe was wrong about which, and right that it was the test. The
-             stars are impossibly far away: the largest parallax of any star is
-             0.77 arcseconds, about the width of a coin seen from three miles. It
-             was finally measured in 1838, three centuries after Copernicus.`,
     },
     {
       sid: 'why-tycho-found-nothing',
@@ -867,61 +1174,36 @@ const RETROGRADE = {
         'A null result from an instrument eighty times too coarse tells you nothing about the effect. Tycho’s reasoning was sound and his data were excellent; what he lacked was any way to know how far away the stars were, so he could not tell a small effect from an absent one. This is a general hazard worth carrying out of the investigation: a measurement that finds nothing constrains a theory only once you know what the measurement could have detected.',
     },
     {
-      sid: 'how-long-does-a-loop',
-      bind: INNER_PAIR,
-      type: 'measure',
-      title: 'How long does a loop last?',
-      body: `One last measurement, and it is a prediction you can check against
-             the real sky.
-             \n\nWith Earth's frame on and Mars selected, watch
-             <strong>Direction from Earth</strong> and record the day the number
-             starts falling and the day it starts rising again. The gap between
-             them is the length of the retrograde episode.`,
-      fields: [
+      hints: [
+        'Jupiter’s period is in years: change it to days to match Earth’s.',
+        'Use the same formula as for Mars, with Earth’s period as the shorter one.',
+      ],
+      feedback: {
+        close: 'Close. Subtract the reciprocals first, and only then invert.',
+        off: 'The synodic period is one over the difference of the two rates, not the difference of the two periods.',
+      },
+      misconceptions: [
         {
-          id: 'retro_start',
-          label: 'Day the direction starts falling',
-          unit: 'days',
-        },
-        { id: 'retro_end', label: 'Day it starts rising again', unit: 'days' },
-        {
-          id: 'retro_len',
-          label: 'Length of the retrograde episode',
-          unit: 'days',
-          compute: v => v.retro_end - v.retro_start,
+          id: 'yearsForDays',
+          say: 'That looks like the synodic period in years. The question asks for days, so multiply by 365.',
         },
       ],
-      probe: ctx => {
-        const mars = ctx.find('Mars');
-        const seen = mars && ctx.seenFrom ? ctx.seenFrom(mars, 'Earth') : null;
-        if (!seen) return [{ label: 'Select Mars', value: '-' }];
-        return [
-          {
-            label: 'Mars: direction from Earth',
-            value: `${seen.longitude.toFixed(1)}°`,
-          },
-          { label: 'Day', value: ctx.days().toFixed(0) },
-        ];
-      },
-    },
-    {
-      sid: 'mars-or-jupiter',
+      sid: 'jupiters-loops',
       bind: INNER_PAIR,
       type: 'question',
-      title: 'Mars or Jupiter?',
-      kind: 'choice',
-      body: `Jupiter is at 5.2 AU and takes 11.9 years to go round. Use the
-             synodic formula on Earth and Jupiter: 1/S = 1/365 − 1/4333.`,
-      prompt: 'Compared with Mars, Jupiter’s retrograde loops happen…',
-      options: [
-        'less often, because Jupiter is so much further away',
-        'more often, roughly once an Earth year, because Jupiter has barely moved while Earth goes round',
-        'at the same interval, since both are outer planets',
-        'never: only Mars shows retrograde motion',
-      ],
-      answer: 1,
+      title: 'How often does Jupiter loop?',
+      kind: 'numeric',
+      body: `Mars is not the only planet whose loops you can time. Jupiter is
+             5.2 AU from the Sun and takes 11.9 years to go round it.
+             \n\nWork out Jupiter's synodic period as you did for Mars, and you
+             know how often its loops come. Jupiter is not in this scene, so
+             this one is arithmetic only.`,
+      prompt: 'How many days between one opposition of Jupiter and the next?',
+      unit: 'days',
+      answer: 399,
+      tolerance: 15,
       because:
-        'Jupiter’s synodic period is 399 days, barely more than an Earth year, so it goes retrograde almost every year. Saturn’s is 378 days and Neptune’s 367. The further out a planet is, the less it moves while Earth laps it, so the synodic period converges on one year: in the limit the loop is purely Earth’s own orbit, reflected. That limit is the same fact as the one-year epicycle two steps back, arrived at from the other direction.',
+        'Jupiter’s synodic period is about 399 days, barely more than an Earth year, so its loops come round almost every year, far more often than Mars’s. The further out a planet is, the less it moves while Earth laps it, and the synodic period closes on one year: in the limit the loop is purely Earth’s own motion, reflected. That is the same fact as the one-year epicycle, reached from the other side.',
     },
     {
       sid: 'what-you-did',
@@ -929,9 +1211,11 @@ const RETROGRADE = {
       type: 'read',
       title: 'What you did',
       body: `You measured two orbital periods and computed a synodic period from
-             them. You predicted what a planet would look like from a moving
-             observer, then changed the frame and watched the prediction come
-             true. You located the reversal at opposition, tied it to the
+             them. You predicted what share of the cycle Mars spends going
+             backwards, and what a planet would look like from a moving observer,
+             then changed the frame and watched the second prediction come true.
+             You timed the reversal yourself, with its uncertainty, and set it
+             beside the first. You located the reversal at opposition, tied it to the
              overtaking geometry, and found the one-year epicycle that a
              geocentric model has to accept as a coincidence.
              \n\nThe simulation was doing exactly one thing throughout: two

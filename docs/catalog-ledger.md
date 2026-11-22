@@ -18,7 +18,7 @@ Rows by kind: activity 6, course 6, experiment 4, investigation 146, sequence 11
 
 Baseline (measured at f9277ff8): 146 investigations (124 lessons, 10 Observatory, 9 3-D, 3 mission), 6 activity entries, 4 bench labs, 7 courses (6 rows and 1 out of scope), 11 sequences, 69 scenarios (61 sandbox, 8 3-D lab), 16 datasets.
 
-Editorial: OPEN 168, REVISED 5. Redesign: OPEN 168, REVISED 5. Scenario dispositions: OPEN 69.
+Editorial: OPEN 167, REVISED 6. Redesign: OPEN 167, REVISED 6. Scenario dispositions: OPEN 69.
 
 Scene class of the lessons: portrait or backdrop 94, setup scenario 26, engine-integrated stage 2, model-owned stage 2.
 
@@ -114,7 +114,7 @@ Scene class of the lessons: portrait or backdrop 94, setup scenario 26, engine-i
 | `investigation:radial-velocity`                      | lesson      |   354 | FOCUSED  | setup scenario          | OPEN      | OPEN     | NOT RUN      | authentic leg E1 NOT RUN              |          1 |
 | `investigation:reading-the-hr-diagram`               | lesson      |   382 | REDESIGN | portrait or backdrop    | OPEN      | OPEN     | NOT RUN      | -                                     |          0 |
 | `investigation:refitting-a-transit`                  | lesson      |   362 | FOCUSED  | setup scenario          | OPEN      | OPEN     | NOT RUN      | -                                     |          0 |
-| `investigation:retrograde-motion`                    | lesson      |   346 | FOCUSED  | setup scenario          | OPEN      | OPEN     | NOT RUN      | -                                     |          0 |
+| `investigation:retrograde-motion`                    | lesson      |   346 | FOCUSED  | setup scenario          | REVISED   | REVISED  | NOT RUN      | -                                     |          1 |
 | `investigation:sampling-a-posterior`                 | lesson      |   362 | FOCUSED  | setup scenario          | OPEN      | OPEN     | NOT RUN      | -                                     |          0 |
 | `investigation:scaling-the-main-sequence`            | lesson      |   379 | FOCUSED  | portrait or backdrop    | OPEN      | OPEN     | NOT RUN      | -                                     |          0 |
 | `investigation:signal-noise-and-exposure`            | lesson      |   406 | FOCUSED  | portrait or backdrop    | OPEN      | OPEN     | NOT RUN      | synthetic frame (+1)                  |          0 |

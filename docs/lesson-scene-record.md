@@ -11,16 +11,16 @@ The hand-written, human-reviewed acceptance map is
 [`lesson-acceptance.json`](lesson-acceptance.json); `npm run
 audit:scene:check` fails if it disagrees with what is generated here.
 
-Across 124 investigations and 1528 steps: 1420 steps
-declare a scene, 166 let a reader change one, 180 read the
+Across 124 investigations and 1527 steps: 1419 steps
+declare a scene, 166 let a reader change one, 179 read the
 running integration, 1009 show a prescribed model result, 161 draw
 on a stored dataset, 878 put a self-contained panel beside the text,
-395 keep something, and 59 are prose.
-Of 197 prediction loops, 197 are returned to,
+394 keep something, and 59 are prose.
+Of 198 prediction loops, 198 are returned to,
 197 produce a measurement before they are answered, and
 1 end in an explanation in the reader's own words.
-196 hold their marking until the experiment settles them.
-The canvas behind a step is stated as scene on 0, portrait on 7, quiet on 16; 1505 state none.
+197 hold their marking until the experiment settles them.
+The canvas behind a step is stated as scene on 0, portrait on 7, quiet on 16; 1504 state none.
 
 ## Kepler's Laws (`keplers-laws`)
 
@@ -38,17 +38,17 @@ The canvas behind a step is stated as scene on 0, portrait on 7, quiet on 16; 15
 
 ## Why Mars Goes Backwards (`retrograde-motion`)
 
-- **Steps:** 33. Scene declared on 33; a reader can change something on 0; 33 declare a scene nobody on that step can touch.
-- **Where the numbers come from:** 8 live engine, 0 prescribed model, 0 stored dataset, 0 self-contained panel.
+- **Steps:** 32. Scene declared on 32; a reader can change something on 0; 32 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 7 live engine, 0 prescribed model, 0 stored dataset, 0 self-contained panel.
 - **What students do:** read, open-a-body-inspector, run-the-simulation, tick-a-checklist, record-values, choose-an-option, commit-a-prediction, answer-in-words.
 - **Objects the steps declare:** sun, earth, mars.
 - **Instruments:** none.
 - **Stored data:** none.
 - **Evidence kept:** notebook-fields.
-- **Prediction loops:** before-you-look → put-yourself-on-earth, catch-the-reversal, nearest-and-furthest → put-yourself-on-earth; and-what-about-the-sun → do-it-for-the-sun, how-long-does-a-loop → do-it-for-the-sun.
-- **Recovery:** wrong body: the step binds the object by name, so there is none; reset: rebuilds the scenario on arrival; null result: the probe names what is missing; missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand; ambiguous result: nothing marks these, they are a record; null result: guarded, but the fallback is not spelled out.
+- **Prediction loops:** share-of-the-cycle → nothing measured → the-share-you-found (answered without a number); before-you-look → put-yourself-on-earth, time-the-reversal, nearest-and-furthest → put-yourself-on-earth; and-what-about-the-sun → do-it-for-the-sun → do-it-for-the-sun.
+- **Recovery:** wrong body: the step binds the object by name, so there is none; reset: rebuilds the scenario on arrival; null result: the probe names what is missing; missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand; ambiguous result: nothing marks these, they are a record; null result: guarded, but the fallback is not spelled out; null result: the probe prints a dash and does not say why; ambiguous result: the check says in words how close is close enough.
 - **Scene rebuilds:** 1 step(s) on arrival (the-wandering-stars).
-- **Accepted central experiment** (reviewed 2026-09-11): object `mars`, control the inspector: select Earth and switch on Reference frame, measures the dates and elongations of one retrograde loop, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+- **Accepted central experiment** (reviewed 2026-09-11): object `mars`, control the inspector: select Earth and switch on Reference frame, measures the days of the two turns of the direction to Mars in one retrograde loop, each bracketed between two readings the student takes, and the loop's length with its uncertainty, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 
 ## Finding Planets by Their Shadows (`transit-photometry`)
 
