@@ -99,6 +99,7 @@
       "key:read.evidence",
       "key:read.quote",
       "key:read.setup",
+      "key:read.time",
       "key:read.tip",
       "key:read.type",
       "key:wedges.bind",
@@ -296,7 +297,7 @@
     "investigations": 124,
     "steps": 1991,
     "activityCuts": 6,
-    "lessonTokens": 171,
+    "lessonTokens": 172,
     "activityTokens": 29,
     "stepTypes": {
       "read": 377,

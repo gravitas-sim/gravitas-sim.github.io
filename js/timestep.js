@@ -72,6 +72,30 @@ export function substepPlan(dtSim, maxStep) {
   return { substeps, step: dtSim / substeps, capped: wanted > MAX_SUBSTEPS };
 }
 
+// Who holds the frame time fixed. The loop steps by the last frame's real
+// duration, so a 144 Hz screen and a throttled tab integrate the same scene
+// with different steps. A pin replaces that duration: every frame stands for
+// the same wall time, so the run is the same calculation on any display, at
+// the cost of its pace following the frame rate. Each owner lifts only its
+// own pin: the Experiment Bench ('bench', also any caller that names none),
+// a lesson's controlled run ('runs') and a lesson step that measures from a
+// scene the integrator moves ('lesson') all pin the bench's 1/60 s, and a
+// recording that ends inside a pinned step leaves the step pinned.
+const pins = new Map();
+
+/**
+ * Pin the frame time, or lift this owner's pin.
+ * @param {number} seconds - Wall-clock seconds each frame stands for, or 0
+ * @param {string} [owner] - Who is pinning
+ */
+export function setFixedStep(seconds, owner = 'bench') {
+  if (Number.isFinite(seconds) && seconds > 0) pins.set(owner, seconds);
+  else pins.delete(owner);
+}
+
+/** The pinned frame time (the first owner's), or 0 when nobody pins. */
+export const pinnedStep = () => pins.values().next().value || 0;
+
 /**
  * The simulated time one frame advances by, at a given real-time step.
  *
@@ -86,3 +110,20 @@ export function substepPlan(dtSim, maxStep) {
 export function frameAdvance(seconds, simSpeed, dt) {
   return Math.min(seconds, 0.05) * simSpeed * 50 * dt;
 }
+
+/**
+ * Whether a lesson step holds the clock: a reading step with nothing to watch
+ * (no `motion`, instrument or `pauseAt`, and no `time` unless it starts
+ * paused). js/appState.js holdClock() pauses for it and lets go on the next
+ * step, and a held step is never pinned (js/lesson/stageGate.js).
+ * @param {?object} step - The step on screen
+ * @returns {boolean} Whether it holds
+ */
+export const holdsClock = step =>
+  step?.type === 'read' &&
+  !(
+    step.motion ||
+    step.tool ||
+    step.pauseAt ||
+    (step.time && step.time.paused !== true)
+  );

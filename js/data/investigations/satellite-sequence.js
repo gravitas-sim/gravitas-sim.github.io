@@ -419,6 +419,7 @@ export const WHY_RINGS = {
       type: 'read',
       motion: true,
       title: 'A clump on a pass inside the limit',
+      time: { speed: 0.4, paused: false },
       setup: { scenario: 'Roche Pass', seed: 'roche-pass', paused: false },
       body: `This is a scale model with Newtonian gravity and nothing else: a planet and a
              loose clump of 60 particles on an orbit that passes 1.3 planet radii from the
@@ -476,6 +477,7 @@ export const WHY_RINGS = {
       sid: 'a-ring-with-a-resonance',
       type: 'read',
       title: 'What the ring scenario shows, and does not',
+      time: { speed: 4, paused: true },
       setup: { scenario: 'Ring Gap', seed: 'ring-gap', paused: false },
       body: `A Saturn-mass planet, 200 ring particles, a resonant moon whose 2:1 resonance
              falls in the ring, and a shepherd moon inside it. Both moons are far heavier than
@@ -791,6 +793,7 @@ export const IOS_FIRE = {
     {
       sid: 'a-moon-that-melts',
       bind: IO_BIND,
+      time: { speed: 750, paused: true },
       setup: IO_SETUP,
       type: 'read',
       title: 'The most volcanic body we know',

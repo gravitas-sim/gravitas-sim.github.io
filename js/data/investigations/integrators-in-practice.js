@@ -46,6 +46,7 @@ const INTEGRATORS_IN_PRACTICE = {
     {
       sid: 'one-system-four-steps',
       type: 'read',
+      time: { speed: 1500, paused: true },
       setup: {
         scenario: 'Circumbinary Planet Lab',
         seed: 'binary',

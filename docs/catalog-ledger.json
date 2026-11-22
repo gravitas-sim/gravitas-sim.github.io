@@ -2646,7 +2646,7 @@
       ],
       "walk": "VERIFIED",
       "pr": 676,
-      "hash": "eb7a42472f6ab28ce87d9464a99b5ec09bbbb3005c9ce5bd3c8bf3b193e4ccc7"
+      "hash": "11092e597b552a39a5fb55ad9a1d1060ee920abe5300c758c7b3bf6d7380b14a"
     },
     {
       "id": "investigation:keplers-laws",
@@ -2769,7 +2769,7 @@
       ],
       "walk": "NOT RUN",
       "pr": null,
-      "hash": "287fc0bd0055b82f625bb5b3f999a0ba5c80c37ca36e514ea63b7bf3f7386afc"
+      "hash": "41e3eefd5d40b69a9e63535ed118a6bc3adf5ee3cb2585830b4fbf3950807d5d"
     },
     {
       "id": "investigation:l3-eclipse",
@@ -5868,7 +5868,7 @@
       ],
       "walk": "VERIFIED",
       "pr": 676,
-      "hash": "24b05a00b1bde10550247fb62f1c7d78aaa71b26fe274d21ef6cdd094fe6d8be"
+      "hash": "88fc62b3ffa5892d0294b59a5f6e850bc3a1e4a8d90355d95a5ca71a48c0d6ac"
     },
     {
       "id": "investigation:transit-photometry",

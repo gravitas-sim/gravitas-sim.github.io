@@ -89,6 +89,7 @@ const POWER_LAW_GRAVITY = {
       sid: 'the-exactly',
       type: 'read',
       title: 'The word "exactly"',
+      time: { speed: 1, paused: true },
       setup: {
         scenario: 'Solar System',
         paused: true,

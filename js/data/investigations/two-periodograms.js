@@ -47,6 +47,7 @@ const TWO_PERIODOGRAMS = {
     {
       sid: 'two-ways-to-look-for-a-period',
       type: 'read',
+      time: { speed: 0.03, paused: true },
       setup: { scenario: 'Transit Lab', seed: 'transit-lab', paused: true },
       title: 'Two ways to look for a period',
       body: `A light curve that dips every few days has a period in it, and there are two
