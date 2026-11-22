@@ -327,12 +327,26 @@ The light curve takes no sample while a recorded frame is shown.
 ### In a lesson step (Prompt 323)
 
 A step can use the same two actions on its own event
-(`js/investigations/eventWindow.js`, fetched only by a step that declares one
-of these):
+(`js/investigations/eventWindow.js`, fetched only by a step that declares a
+`pauseAt`; a step that declares only its time applies it without the module):
 
 - `time: { paused, speed }` is applied once, on entering the step (a re-render
   of the step leaves the reader's own changes alone). The lesson's scope puts
-  the reader's pause and speed back when the lesson closes.
+  the reader's pause and speed back when the lesson closes. Every step that
+  builds a scenario declares both (Prompt 342), with the speed of its setup
+  and the start state it had; `tests/lessonStepPins.test.js` holds them to it.
+  A step that declares `time` does not hold the clock.
+- A step whose scene the integrator moves (a scenario setup, or a stage of
+  kind `starPair`, `hole`, `equalMass` or `system`) and that does not hold the
+  clock runs with the frame time pinned to the bench's 1/60 s
+  (`pinLessonStep` in `js/lesson/stageGate.js`, the owner `lesson` of
+  `setFixedStep` in `js/timestep.js`), so a reading taken from it is the same
+  on any display; its pace follows the display's frame rate instead. Closing
+  the lesson lifts the pin; the bench and a controlled run each lift only
+  their own. The steps are listed in `docs/lesson-step-pins.md`. Every event
+  a step watches for arrives within 20 s of the step's start at its declared
+  speed (Prompt 342's wait table, in the same test), so no step offers a
+  skip.
 - `pauseAt.auto: true` arms the step's watch on entry, for a step whose
   question is not the moment itself; the author rule `interaction/auto-arm`
   fails one that asks when or reads a time. A watch the reader armed themselves
