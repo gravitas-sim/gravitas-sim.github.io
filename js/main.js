@@ -233,10 +233,8 @@ document.addEventListener('DOMContentLoaded', () => {
       const { setupOverlayMinimize } = await import('./ui.js');
       setupOverlayMinimize();
 
-      // On a phone the readout starts collapsed - expanded it covers most of
-      // the screen, and the simulation is the point. Collapsed before it is
-      // shown: shown first, it sat open over the canvas until these imports
-      // landed, and a first tap in that gap hit the readout, not the scene.
+      // On a phone the readout starts collapsed, before it is shown: open, it
+      // catches a first tap meant for the scene.
       const { collapseReadoutOnSmallScreens } = await import('./controls.js');
       collapseReadoutOnSmallScreens();
 
