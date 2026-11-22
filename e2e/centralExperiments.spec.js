@@ -1512,10 +1512,17 @@ test.describe('the central experiment of each investigation', () => {
         seen.max = Math.max(seen.max, now.up);
         if (now.up >= seen.min + 1) seen.climbed = true;
         if (done(now, seen)) break;
-        await page.waitForTimeout(30);
+        await page.evaluate(
+          () => new Promise(r => requestAnimationFrame(() => r()))
+        );
       }
       await pause();
-      await page.waitForTimeout(150);
+      await page.evaluate(
+        () => new Promise(r => requestAnimationFrame(() => r()))
+      );
+      await page.evaluate(
+        () => new Promise(r => requestAnimationFrame(() => r()))
+      );
       return sky();
     };
     // One frame at a time, as the Step buttons do, waiting for the readout to move.
@@ -1550,7 +1557,7 @@ test.describe('the central experiment of each investigation', () => {
     };
     const take = async field => {
       await page.locator(`#investigationBody [data-take="${field}"]`).click();
-      await page.waitForTimeout(120);
+      await expect(box(field)).not.toHaveValue('');
     };
     const check = page.locator('#investigationBody .inv-check');
     const box = f =>

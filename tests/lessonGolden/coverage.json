@@ -1,22 +1,22 @@
 {
   "lessons": [
     "keplers-laws",
+    "goldilocks-question",
     "transit-photometry",
-    "the-saturated-star",
-    "binary-star-planets",
+    "what-is-a-gravitational-wave",
+    "measuring-the-moon",
     "weighing-stars",
-    "black-holes",
     "butterfly-effect",
     "extending-an-experiment",
-    "measuring-the-moon",
-    "missing-mass",
+    "binary-star-planets",
+    "black-holes",
     "propose-an-observation",
-    "what-is-a-gravitational-wave",
     "a-night-at-the-telescope",
-    "counts-to-magnitudes",
     "detect-this-planet",
+    "missing-mass",
     "power-law-gravity",
-    "retrograde-motion"
+    "retrograde-motion",
+    "the-saturated-star"
   ],
   "lessonGain": {
     "keplers-laws": [
@@ -124,13 +124,34 @@
       "type:read",
       "type:wedges"
     ],
+    "goldilocks-question": [
+      "depth-step:advanced/measure",
+      "depth-step:advanced/read",
+      "depth-step:quantitative/predict",
+      "depth-step:quantitative/read",
+      "key:explore.pauseAt",
+      "key:explore.setup",
+      "key:explore.stage",
+      "key:explore.tip",
+      "key:explore.tool",
+      "key:measure.tool",
+      "key:predict.after",
+      "key:predict.decides",
+      "key:predict.depth",
+      "key:predict.setup",
+      "key:question.requires",
+      "key:question.tip",
+      "key:question.tool",
+      "key:read.after",
+      "key:read.depth",
+      "key:read.tool",
+      "math:algebra",
+      "prereq:yes"
+    ],
     "transit-photometry": [
       "check:numeric/number+tolerance",
       "key:explore.lightCurve",
       "key:explore.observerAngle",
-      "key:explore.pauseAt",
-      "key:explore.tip",
-      "key:explore.tool",
       "key:measure.checklist",
       "key:measure.compare",
       "key:measure.evidence",
@@ -139,51 +160,33 @@
       "key:measure.series",
       "key:measure.setup",
       "key:question.agrees",
-      "key:question.tool",
       "key:read.figure",
       "key:read.pauseAt",
       "key:read.probe",
-      "lock:{\"placement\":true,\"inspector\":true}",
-      "math:algebra"
+      "lock:{\"placement\":true,\"inspector\":true}"
     ],
-    "the-saturated-star": [
-      "depth-step:advanced/measure",
-      "depth-step:advanced/predict",
-      "depth-step:advanced/read",
-      "depth-step:quantitative/read",
+    "what-is-a-gravitational-wave": [
+      "audience:beginner",
       "key:measure.stage",
-      "key:measure.tool",
-      "key:predict.after",
-      "key:predict.depth",
-      "key:predict.hints",
       "key:predict.stage",
-      "key:predict.tool",
-      "key:read.after",
-      "key:read.depth",
-      "key:read.stage",
-      "key:read.tool"
-    ],
-    "binary-star-planets": [
-      "key:explore.requires",
-      "key:explore.setup",
       "key:predict.tip",
-      "key:question.requires",
-      "key:question.tip",
-      "key:read.motion",
-      "lock:{\"placement\":true}",
-      "prereq:yes"
+      "key:predict.tool",
+      "key:read.checklist",
+      "key:read.stage",
+      "lock:{\"placement\":true,\"inspector\":false,\"areaSweep\":false}",
+      "math:arithmetic"
+    ],
+    "measuring-the-moon": [
+      "key:predict.hints",
+      "key:question.maxUncertainty",
+      "key:question.minUncertainty",
+      "key:question.valueWithin"
     ],
     "weighing-stars": [
       "key:explore.showBarycenter",
-      "key:explore.stage",
       "key:measure.showBarycenter",
-      "key:read.showBarycenter",
-      "math:arithmetic"
-    ],
-    "black-holes": [
-      "key:question.checklist",
-      "key:read.explainView",
-      "lock:{\"placement\":true,\"inspector\":false,\"areaSweep\":false}"
+      "key:read.motion",
+      "key:read.showBarycenter"
     ],
     "butterfly-effect": [
       "key:explore.rubric",
@@ -195,37 +198,35 @@
       "key:measure.compute",
       "key:read.canvas"
     ],
-    "measuring-the-moon": [
-      "key:question.maxUncertainty",
-      "key:question.minUncertainty",
-      "key:question.valueWithin"
+    "binary-star-planets": [
+      "key:explore.requires",
+      "lock:{\"placement\":true}"
     ],
-    "missing-mass": [
-      "key:predict.setup",
-      "key:question.restates"
+    "black-holes": [
+      "key:question.checklist",
+      "key:read.explainView"
     ],
     "propose-an-observation": [
       "key:measure.plan",
       "key:question.rubricCriteria"
     ],
-    "what-is-a-gravitational-wave": [
-      "audience:beginner",
-      "key:read.checklist"
-    ],
     "a-night-at-the-telescope": [
       "key:question.reflect"
     ],
-    "counts-to-magnitudes": [
-      "depth-step:quantitative/predict"
-    ],
     "detect-this-planet": [
       "key:read.allowInspector"
+    ],
+    "missing-mass": [
+      "key:question.restates"
     ],
     "power-law-gravity": [
       "key:question.explain"
     ],
     "retrograde-motion": [
       "lock:{\"placement\":true,\"inspector\":false}"
+    ],
+    "the-saturated-star": [
+      "depth-step:advanced/predict"
     ]
   },
   "activities": [
@@ -297,17 +298,17 @@
   ],
   "totals": {
     "investigations": 124,
-    "steps": 1992,
+    "steps": 1993,
     "activityCuts": 6,
-    "lessonTokens": 174,
+    "lessonTokens": 175,
     "activityTokens": 29,
     "stepTypes": {
-      "read": 377,
-      "predict": 202,
-      "measure": 519,
+      "read": 378,
+      "predict": 205,
+      "measure": 518,
       "ellipse": 1,
-      "question": 751,
-      "explore": 141,
+      "question": 750,
+      "explore": 140,
       "wedges": 1
     }
   }
