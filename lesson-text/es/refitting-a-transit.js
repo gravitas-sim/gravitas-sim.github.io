@@ -12,8 +12,8 @@ export default {
   steps: {
     'same-model-another-route': {
       title: 'El mismo modelo, otro camino',
-      body: `El panel de ajuste del Observatorio ajusta un tránsito a la curva de luz de TESS de HD 209458: una órbita circular, una estrella con oscurecimiento del limbo, una línea de base y siete números buscados dentro de límites. Parte de una búsqueda de caja, refina con un Levenberg-Marquardt acotado e informa la incertidumbre de cada número de tres maneras. Esta investigación ajusta el <strong>mismo modelo a los mismos 1.882 puntos</strong> con otro optimizador, de modo que todo lo que difiera pueda atribuirse al camino y no al modelo.
-             \n\nEl cuaderno parte de los tránsitos que encuentra con <strong>scipy.ndimage</strong>, ajusta con <strong>scipy.optimize.least_squares</strong>, toma cada incertidumbre de la covarianza en el mínimo, y halla el intervalo de perfil del tamaño del planeta y del parámetro de impacto con un buscador de raíces. Su modelo de tránsito se escribió de nuevo en NumPy y coincide con el de la aplicación hasta el último dígito de un doble.
+      body: `¿Cuánto de la respuesta de un tránsito ajustado pertenece al camino que la encontró? El panel de ajuste del Observatorio ajusta un tránsito a la curva de luz de TESS de HD 209458: una órbita circular, una estrella con oscurecimiento del limbo, una línea de base y siete números buscados dentro de límites. Abre primero el panel con esa curva de luz y lee lo que informa; pondrás los números de esta investigación junto a los suyos. Esta investigación ajusta el <strong>mismo modelo a los mismos 1.882 puntos</strong> con otro optimizador, de modo que todo lo que difiera pueda atribuirse al camino y no al modelo.
+             \n\nEl cuaderno parte de los tránsitos que encuentra con <strong>scipy.ndimage</strong>, ajusta con <strong>scipy.optimize.least_squares</strong> (los números que hacen más pequeña la suma de los residuos al cuadrado, cada uno dentro de sus límites), toma cada incertidumbre de la <em>covarianza</em> en el mínimo (cómo se curva el chi cuadrado a su alrededor), y halla el intervalo de perfil del tamaño del planeta y del parámetro de impacto con un buscador de raíces. Su modelo de tránsito se escribió de nuevo en NumPy y coincide con el de la aplicación hasta el último dígito de un doble.
              \n\nAbre la página de cálculo en <strong>/compute/</strong> de este sitio. Solo funciona con conexión y la primera vez descarga unos 23 MB de Python, cuando pulsas el botón. Elige el cuaderno <strong>Reajustar un tránsito con SciPy</strong>, deja su entrada de ejemplo (la curva de luz de TESS) y su único ajuste en 1. Todavía no pulses Ejecutar.`,
     },
     'how-close': {
@@ -58,7 +58,7 @@ export default {
     },
     'why-they-differ': {
       title: 'Por qué el intervalo es asimétrico',
-      body: `El sigma del parámetro de impacto es 0,071, simétrico por construcción. Su intervalo de perfil va de 0,368 a 0,476, 0,062 por debajo del mejor valor y 0,046 por encima.`,
+      body: `Toma el intervalo de perfil del parámetro de impacto que introdujiste y el mejor valor que introdujiste en la primera ejecución. Mide a qué distancia del mejor valor está cada extremo del intervalo. El sigma de una covarianza es simétrico respecto al mejor valor por construcción, así que un intervalo simétrico daría la misma distancia a los dos lados. Estas no lo son.`,
       prompt: '¿Cuál es la mejor explicación de la diferencia?',
       options: [
         'La covarianza describe el chi cuadrado como una parábola simétrica en el mínimo; el valle que el parámetro de impacto comparte con a/R* y el oscurecimiento del limbo es curvo, y el perfil sigue la curva',
@@ -74,7 +74,7 @@ export default {
           say: 'Los dos son un cambio de una unidad en el chi cuadrado (escalado), que es cerca del 68 por ciento para una parábola. La parábola es la suposición que falla aquí.',
         },
         {
-          say: 'El extremo inferior, 0,368, está lejos de cero: nada lo corta. La asimetría viene de la forma del valle.',
+          say: 'El extremo inferior que introdujiste está lejos de cero: nada lo corta. La asimetría viene de la forma del valle.',
         },
       ],
       hints: [
@@ -83,10 +83,25 @@ export default {
       because:
         'La covarianza es la curvatura del chi cuadrado en el mínimo, así que es simétrica y describe una parábola. El valle en que está el parámetro de impacto, con a/R* y el oscurecimiento del limbo, es curvo, y el perfil reajusta los demás en cada valor y lo sigue. Donde los dos difieren, el perfil es el número más honesto.',
     },
-    'hold-the-limb-darkening': {
+    'predict-the-shift': {
+      title: 'Cuánto se moverá',
+      body: `Tu próxima ejecución fija el oscurecimiento del limbo en valores plausibles en lugar de ajustarlo. Antes introdujiste el sigma de Rp/R*, el tamaño del planeta.`,
+      prompt:
+        'Comparado con ese sigma, fijar el oscurecimiento del limbo moverá Rp/R* en&hellip;',
+      options: [
+        'nada, porque el oscurecimiento del limbo cambia la forma del descenso y no su profundidad',
+        'más o menos ese sigma, porque el sigma ya incluye la libertad del oscurecimiento del limbo',
+        'varias veces ese sigma, porque los valores fijos son suposiciones',
+        'una fracción minúscula, porque los dos ajustes hallan el mismo mínimo',
+      ],
+      because:
+        'El sigma ajustado es lo que Rp/R* puede moverse cuando los demás son libres, y el oscurecimiento del limbo es uno de ellos. Un valor fijo dentro del propio rango del ajuste mueve el resultado más o menos su sigma, no varios. Medido aquí: más o menos un sigma (0,97). El desplazamiento es una cantidad fija, y el nuevo sigma, más pequeño, la medirá en otra unidad.',
+    },
+    'shift-from-your-fit': {
       title: 'Fija el oscurecimiento del limbo',
-      body: `Pon el único ajuste del cuaderno en <strong>0</strong>, que fija el oscurecimiento del limbo en q1 = 0,36 y q2 = 0,30 en lugar de ajustarlo, y ejecuta de nuevo. Introduce el nuevo Rp/R*, su nuevo sigma, y cuántos de sus nuevos sigmas se movió desde el valor que hallaste con el oscurecimiento ajustado, 0,11926.`,
+      body: `Pon el único ajuste del cuaderno en <strong>0</strong>, que fija el oscurecimiento del limbo en q1 = 0,36 y q2 = 0,30 en lugar de ajustarlo, y ejecuta de nuevo. Introduce tu propio Rp/R* del ajuste con el oscurecimiento del limbo libre (tu respuesta a <em>Ejecútalo</em>), el nuevo Rp/R*, su nuevo sigma y cuántos de sus nuevos sigmas se movió desde tu propio valor.`,
       fields: [
+        { label: 'Tu Rp/R*, oscurecimiento ajustado' },
         { label: 'Rp/R*, oscurecimiento fijo' },
         { label: 'Su sigma' },
         { label: 'Desplazamiento, en sigmas nuevos' },
@@ -119,7 +134,7 @@ export default {
     'what-you-worked-out': {
       title: 'Lo que has deducido',
       body: `Ajustar el mismo modelo a los mismos puntos por otro camino dio el mismo mínimo: un período de 3,52454 días y un Rp/R* de 0,1193, hasta unas milésimas de una barra de error de los del panel. Lo que un camino distinto sí cambia es lo que puedes decir de la incertidumbre. El sigma de la covarianza es una parábola, el intervalo de perfil sigue el valle, y para el parámetro de impacto difieren en una quinta parte de la anchura y en la simetría.
-             \n\nEl otro punto es lo que un ajuste mantiene fijo. Fijar el oscurecimiento del limbo redujo la barra de error de Rp/R* a un tercio y movió el valor tres de las nuevas barras: la incertidumbre del número fijo no desapareció, salió de la tabla. Y los sigmas cuentan solo ruido blanco, en una curva de luz cuyo ruido no lo es. La ejecución es tuya para conservarla: su cápsula registra el hash del cuaderno y el de la curva de luz, así que un informe puede citarla.`,
+             \n\nEl otro punto es lo que un ajuste mantiene fijo. Fijar el oscurecimiento del limbo redujo la barra de error de Rp/R* a un tercio y movió el valor tres de las nuevas barras: la incertidumbre del número fijo no desapareció, salió de la tabla. Y los sigmas cuentan solo ruido blanco, en una curva de luz cuyo ruido no lo es: lo que el intervalo no cubre es el ruido correlacionado y todo lo que el modelo supone. La ejecución es tuya para conservarla: su cápsula registra el hash del cuaderno y el de la curva de luz, así que un informe puede citarla.`,
     },
   },
 };

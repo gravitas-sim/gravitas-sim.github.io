@@ -480,12 +480,15 @@ export async function recordFields(page, lessonId, sid, values) {
       `#investigationBody [data-field="${lessonId}:${sid}:${field}"]`
     );
     await expect(box, `the step offers a box for "${field}"`).toBeVisible();
-    const readonly = await box.evaluate(el => el.readOnly);
+    const readonly = await box.evaluate(el => Boolean(el.readOnly));
     expect(
       readonly,
       `"${field}" is a box the reader fills, not one the lesson works out`
     ).toBe(false);
-    await box.fill(String(value));
+    // A menu (a select) is chosen from, not typed into.
+    if (await box.evaluate(el => el.tagName === 'SELECT'))
+      await box.selectOption(String(value));
+    else await box.fill(String(value));
     await box.dispatchEvent('input');
     await box.dispatchEvent('change');
   }

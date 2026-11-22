@@ -63,33 +63,6 @@
      "incorrect"
     ]
    ]
-  },
-  {
-   "sid": "what-moved-it",
-   "type": "question",
-   "kind": "choice",
-   "grades": [
-    [
-     0,
-     true,
-     "correct"
-    ],
-    [
-     1,
-     false,
-     "incorrect"
-    ],
-    [
-     2,
-     false,
-     "incorrect"
-    ],
-    [
-     3,
-     false,
-     "incorrect"
-    ]
-   ]
   }
  ],
  "progress": {
@@ -99,13 +72,11 @@
    "stepSid": "what-you-worked-out",
    "responses": {
     "extending-an-experiment:how-well-can-twenty-place-an-edge": 1,
-    "extending-an-experiment:why-the-sample-differs": 0,
-    "extending-an-experiment:what-moved-it": 0
+    "extending-an-experiment:why-the-sample-differs": 0
    },
    "attempts": {
     "extending-an-experiment:how-well-can-twenty-place-an-edge": 1,
-    "extending-an-experiment:why-the-sample-differs": 1,
-    "extending-an-experiment:what-moved-it": 1
+    "extending-an-experiment:why-the-sample-differs": 1
    },
    "visited": [
     "twenty-planets",
@@ -113,8 +84,8 @@
     "the-fit",
     "a-uniform-population",
     "why-the-sample-differs",
-    "move-the-definition",
-    "what-moved-it",
+    "move-the-definition-yours",
+    "which-trial-moved",
     "what-you-worked-out"
    ],
    "startedAt": "2026-01-02T03:04:05.000Z",
@@ -124,22 +95,20 @@
   "read": {
    "responses": {
     "extending-an-experiment:how-well-can-twenty-place-an-edge": 1,
-    "extending-an-experiment:why-the-sample-differs": 0,
-    "extending-an-experiment:what-moved-it": 0
+    "extending-an-experiment:why-the-sample-differs": 0
    },
    "attempts": {
     "extending-an-experiment:how-well-can-twenty-place-an-edge": 1,
-    "extending-an-experiment:why-the-sample-differs": 1,
-    "extending-an-experiment:what-moved-it": 1
+    "extending-an-experiment:why-the-sample-differs": 1
    },
    "visited": [
     "a-uniform-population",
     "how-well-can-twenty-place-an-edge",
-    "move-the-definition",
+    "move-the-definition-yours",
     "the-fit",
     "twenty-planets",
-    "what-moved-it",
     "what-you-worked-out",
+    "which-trial-moved",
     "why-the-sample-differs"
    ],
    "stepSid": "what-you-worked-out",
@@ -172,26 +141,24 @@
      "the-fit",
      "a-uniform-population",
      "why-the-sample-differs",
-     "move-the-definition",
-     "what-moved-it",
+     "move-the-definition-yours",
+     "which-trial-moved",
      "what-you-worked-out"
     ],
     "responses": {
      "extending-an-experiment:how-well-can-twenty-place-an-edge": 1,
-     "extending-an-experiment:why-the-sample-differs": 0,
-     "extending-an-experiment:what-moved-it": 0
+     "extending-an-experiment:why-the-sample-differs": 0
     },
     "attempts": {
      "extending-an-experiment:how-well-can-twenty-place-an-edge": 1,
-     "extending-an-experiment:why-the-sample-differs": 1,
-     "extending-an-experiment:what-moved-it": 1
+     "extending-an-experiment:why-the-sample-differs": 1
     }
    },
    "steps": [
     {
      "index": 0,
      "sid": "twenty-planets",
-     "fingerprint": "read|-|-|Binary Planet Lab|-|-|-",
+     "fingerprint": "read|-|-|-|-|-|-",
      "optionCount": null
     },
     {
@@ -220,15 +187,15 @@
     },
     {
      "index": 5,
-     "sid": "move-the-definition",
-     "fingerprint": "measure|-|-|-|edge+extended|-|-",
+     "sid": "move-the-definition-yours",
+     "fingerprint": "measure|-|-|Binary Planet Lab|cutoff+edge+extended|-|-",
      "optionCount": null
     },
     {
      "index": 6,
-     "sid": "what-moved-it",
-     "fingerprint": "question|choice|-|-|-|4|a=0;c=0",
-     "optionCount": 4
+     "sid": "which-trial-moved",
+     "fingerprint": "measure|-|-|-|from+to+count+where|-|-",
+     "optionCount": null
     },
     {
      "index": 7,
@@ -244,22 +211,20 @@
   "restored": {
    "responses": {
     "extending-an-experiment:how-well-can-twenty-place-an-edge": 1,
-    "extending-an-experiment:why-the-sample-differs": 0,
-    "extending-an-experiment:what-moved-it": 0
+    "extending-an-experiment:why-the-sample-differs": 0
    },
    "attempts": {
     "extending-an-experiment:how-well-can-twenty-place-an-edge": 1,
-    "extending-an-experiment:why-the-sample-differs": 1,
-    "extending-an-experiment:what-moved-it": 1
+    "extending-an-experiment:why-the-sample-differs": 1
    },
    "visited": [
     "a-uniform-population",
     "how-well-can-twenty-place-an-edge",
-    "move-the-definition",
+    "move-the-definition-yours",
     "the-fit",
     "twenty-planets",
-    "what-moved-it",
     "what-you-worked-out",
+    "which-trial-moved",
     "why-the-sample-differs"
    ],
    "stepIndex": 7,
@@ -325,11 +290,6 @@
      "sid": "why-the-sample-differs",
      "value": 0,
      "locale": "es"
-    },
-    {
-     "sid": "what-moved-it",
-     "value": 0,
-     "locale": "es"
     }
    ]
   },
@@ -352,11 +312,6 @@
     },
     {
      "sid": "why-the-sample-differs",
-     "value": 0,
-     "locale": "es"
-    },
-    {
-     "sid": "what-moved-it",
      "value": 0,
      "locale": "es"
     }
@@ -407,11 +362,6 @@
      "sid": "why-the-sample-differs",
      "value": 0,
      "locale": "es"
-    },
-    {
-     "sid": "what-moved-it",
-     "value": 0,
-     "locale": "es"
     }
    ]
   },
@@ -435,11 +385,6 @@
     },
     {
      "sid": "why-the-sample-differs",
-     "value": 0,
-     "locale": "es"
-    },
-    {
-     "sid": "what-moved-it",
      "value": 0,
      "locale": "es"
     }
