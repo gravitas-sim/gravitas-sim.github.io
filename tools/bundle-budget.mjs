@@ -53,7 +53,7 @@ const BUDGETS = [
   {
     id: 'initial',
     label: 'Initial download (CSS + eager JS)',
-    limit: 744.6,
+    limit: 746.6,
     reason:
       'Was 743 KB when this budget was first asked for. The application had ' +
       'already grown to 771 KB on its own - the extracted state module, the ' +
@@ -124,12 +124,13 @@ const BUDGETS = [
       '\n\nThe combined lesson framing, links, reset and saving branch (D-R4-TRAINA-03): raised from 741.9 to 743.5 KB, the measurement by CI of the branch (head f51518237): 761,259 bytes (743.42 KB), rounded up to 0.1 KB. Under the standing approval of 2026-10-10.' +
       '\n\nThe same branch after the lesson sheet and status block repairs (D-R4-TRAINA-03): raised from 743.5 to 743.6 KB, the measurement by CI (head 51ee3a090): 761,442 bytes (743.60 KB), rounded up to 0.1 KB. Under the standing approval of 2026-10-10.' +
       '\n\nWhat pulls on what (D-R4-459-07): the one relation for which bodies pull which, its per-body test and the caveat that reads it are start-up engine code; raised from 743.6 to 744.4 KB, the measurement by CI of the branch merged with v4 b2424e160 (run 44966228334): 762,209 bytes (744.34 KB), rounded up to 0.1 KB. Under the standing approval of 2026-10-10.' +
-      '\n\nThe pinned lesson step (D-R4-342-06): one pin per owner and the clock-hold rule beside it in js/timestep.js, start-up code; raised from 744.4 to 744.6 KB, the measurement of a Node 22.23.4 build of the branch merged with v4 9d4aa6fd: 762,376 bytes (744.51 KB), rounded up to 0.1 KB. Under the standing approval of 2026-10-10.',
+      '\n\nThe pinned lesson step (D-R4-342-06): one pin per owner and the clock-hold rule beside it in js/timestep.js, start-up code; raised from 744.4 to 744.6 KB, the measurement of a Node 22.23.4 build of the branch merged with v4 9d4aa6fd: 762,376 bytes (744.51 KB), rounded up to 0.1 KB. Under the standing approval of 2026-10-10.' +
+      "\n\nThe inspector and conservation readouts (D-R4-461-03): the model energy, its event counters and the stopwatch's step test are start-up engine code; raised from 744.6 to 746.6 KB, the measurement of a Node 22.23.4 build of the branch over v4 93295b2e: 764,465 bytes (746.55 KB), rounded up to 0.1 KB; set to CI's figure before review. Engine and production class (maintainer decision 2026-11-22) under the standing approval of 2026-10-10.",
   },
   {
     id: 'deferred',
     label: 'Deferred JavaScript (lazy chunks, gzipped)',
-    limit: 3251.0,
+    limit: 3254.8,
     reason:
       'Jumped from 1369 KB to 2105 KB when three.js and Chart.js stopped being ' +
       'CDN requests and became bundled chunks. That is the point of the change ' +
@@ -742,7 +743,8 @@ const BUDGETS = [
       '\n\nThe combined lesson framing, links, reset and saving branch (D-R4-TRAINA-03): raised from 3226.3 to 3233.3 KB, the measurement by CI of the branch (head f51518237): 3,310,838 bytes gzipped (3233.24 KB), rounded up to 0.1 KB. Under the standing approval of 2026-10-10.' +
       '\n\nWhat pulls on what (D-R4-459-07): the relation, the scene statement and the inspector row, carried into every bundle that builds the engine; raised from 3233.3 to 3234.5 KB, the measurement by CI of the branch merged with v4 b2424e160 (run 44966228334): 3,312,125 bytes gzipped (3234.50 KB), rounded up to 0.1 KB. Under the standing approval of 2026-10-10.' +
       "\n\nThe pinned lesson step (D-R4-342-06): the pin rule in the stage gate and every setup step's declared speed and start state; raised from 3234.5 to 3235.3 KB, the measurement of a Node 22.23.4 build of the branch merged with v4 9d4aa6fd: 3,312,934 bytes gzipped (3235.29 KB), rounded up to 0.1 KB. Under the standing approval of 2026-10-10." +
-      '\n\nThe combined stars and computing lessons (D-R4-TRAINB-08): raised from 3235.3 to 3251.0 KB, the previous limit plus the 15.7 KB the branch adds over v4 93007c242 (CI measured 3,328,164 B, 3250.16 KB, against v4 3234.5 KB before the pinned lesson step landed). Under the standing approval of 2026-10-10.',
+      '\n\nThe combined stars and computing lessons (D-R4-TRAINB-08): raised from 3235.3 to 3251.0 KB, the previous limit plus the 15.7 KB the branch adds over v4 93007c242 (CI measured 3,328,164 B, 3250.16 KB, against v4 3234.5 KB before the pinned lesson step landed). Under the standing approval of 2026-10-10.' +
+      "\n\nThe inspector and conservation readouts (D-R4-461-03): the shared primary rule, the orbit and radius rows and the energy readout, carried into every bundle that builds the engine; raised from 3251.0 to 3254.8 KB, the measurement of a Node 22.23.4 build of the branch over v4 93295b2e: 3,332,845 bytes gzipped (3254.73 KB), rounded up to 0.1 KB; set to CI's figure before review. Engine and production class (maintainer decision 2026-11-22) under the standing approval of 2026-10-10.",
   },
 ];
 
