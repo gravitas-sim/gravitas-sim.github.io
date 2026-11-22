@@ -90,6 +90,8 @@ export async function readAssignmentLink(fragment) {
       assignment: null,
       reason: check.reason,
       detail: check.detail,
+      // What the link named, so a refusal can offer it on its own.
+      lesson: String(decoded.payload?.l ?? ''),
     };
   }
   return { ok: true, assignment: decoded.payload, reason: null, detail: null };

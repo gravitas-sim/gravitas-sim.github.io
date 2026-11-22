@@ -407,8 +407,7 @@ export const EN_DEFERRED = {
   'reliability.moved': 'moved by {change}',
   'reliability.noValue': 'not measured',
   // --- The A/B experiment bench ---------------------------------------------
-  // Loaded on first press (js/experimentsBridge.js registers it before the panel
-  // builds); failure.load stays in the base catalog for when that import fails.
+  // Loaded on first press (js/experimentsBridge.js registers it before the panel builds); failure.load stays in the base catalog for when that import fails.
   'bench.title': 'A/B Experiment',
   'bench.untitled': 'Untitled experiment',
   'bench.copyOf': 'Copy of {name}',
@@ -588,7 +587,6 @@ export const EN_DEFERRED = {
     '{count} trials ran but did not cover the duration asked for. Their numbers are in the table and are not in the summary above: a curve drawn through them would describe a shorter experiment than the one this sweep says it ran.',
   'sweep.partial':
     'Some trials did not produce a measurement, so this describes the values that ran rather than the range that was asked for.',
-
   // The guided example. One question, one parameter, and a note about what the answer does and does not establish.
   'sweep.guide.title': 'How far out can a planet orbit one star of a pair?',
   'sweep.guide.body':
@@ -899,7 +897,6 @@ export const EN_DEFERRED = {
   'inv.wedge.readout':
     "Each slice is <strong>{share}%</strong> of the orbit's area, and the planet spends <strong>{time}</strong> traversing every one of them.",
   'inv.import.added': 'Added {value}.',
-  'inv.progress.cleared': 'Progress cleared',
   'inv.depth.deeper': 'Go deeper',
   'inv.depth.shallower': 'Fewer steps',
   'inv.answer.needsUncertainty':
@@ -2162,11 +2159,13 @@ export const EN_DEFERRED = {
   'inv.step.kind.ellipse': 'explore',
   'inv.step.kind.wedges': 'explore',
   'inv.save.link': 'See everything in My work',
-  'inv.save.saved': 'Progress saved on this device',
+  'inv.save.saved':
+    'Your answers, slider settings and hints are saved on this device.',
   'inv.save.full':
-    'Progress could not be saved: this browser\u2019s storage is full. Your answers are still here, but they will be lost when you close the tab. Download a progress backup to keep them.',
+    'Not saved: there is no room for it in this browser (its storage is full, or this record is too large). Your answers stay on this page while it is open.',
   'inv.save.unavailable':
-    'Progress cannot be saved in this browser \u2014 private browsing usually blocks it. Your answers are still here, but they will be lost when you close the tab. Download a progress backup to keep them.',
+    'Not saved: this browser does not allow saving (private browsing often blocks it). Your answers stay on this page while it is open.',
+  'inv.save.preview': 'Student preview: nothing is saved.',
   'inv.save.authoring':
     'Authoring preview \u2014 nothing is saved, and no student\u2019s progress is touched.',
   'inv.save.foreign':

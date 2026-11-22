@@ -13,6 +13,8 @@ import {
   KEY_MADE_PREFIX,
   KEY_MISSIONLAB_PREFIX,
   KEY_RESUME,
+  RESUME_ROUTE_MAX,
+  isSiteRoute,
 } from '../names.js';
 
 // Student data in localStorage (STORAGE.md): every writer's way in. Keys and
@@ -108,13 +110,15 @@ export const RESUME_MAX = 6;
 const words = (v, max) =>
   typeof v === 'string' && v.length > 0 && v.length <= max;
 
+// The link limits are in ../names.js.
+export { RESUME_ROUTE_MAX };
+
 /** One entry, cleaned to the shape the record allows, or null. */
 function resumeItem(raw) {
   if (!raw || typeof raw !== 'object') return null;
   const { id, route, step, path, title, at } = raw;
   if (!words(id, 120) || !/^[\w.:/-]+$/.test(id)) return null;
-  if (!words(route, 240) || !route.startsWith('/') || route.startsWith('//'))
-    return null;
+  if (!words(route, RESUME_ROUTE_MAX) || !isSiteRoute(route)) return null;
   const item = { id, route, at: Number.isFinite(at) ? at : 0 };
   if (words(step, 60)) item.step = step;
   if (path && (path.k === 'seq' || path.k === 'course') && words(path.id, 120))
@@ -122,7 +126,7 @@ function resumeItem(raw) {
   if (title && typeof title === 'object') {
     const t = {};
     for (const l of ['en', 'es']) if (words(title[l], 160)) t[l] = title[l];
-    if (t.en) item.title = t;
+    if (t.en || t.es) item.title = t;
   }
   return item;
 }

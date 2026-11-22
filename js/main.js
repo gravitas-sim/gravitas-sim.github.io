@@ -227,6 +227,7 @@ document.addEventListener('DOMContentLoaded', () => {
    * where nobody can see them.
    */
   function revealInterface() {
+    armTouchTips();
     setTimeout(async () => {
       document.querySelector('.ui-container').classList.add('showUI');
       document.getElementById('overlay').classList.add('showUI');
@@ -254,8 +255,6 @@ document.addEventListener('DOMContentLoaded', () => {
         'objectInspector',
       ])
         document.getElementById(id)?.classList.add('showUI');
-
-      armTouchTips();
     }, 200);
   }
 
@@ -393,6 +392,8 @@ document.addEventListener('DOMContentLoaded', () => {
       // A deliberate camera command, so Follow mode starts a fresh camera
       // rather than reading the reset as a drag to be preserved.
       resetFollowCamera(state);
+      // The reader chose this view: a lesson's fit leaves it alone.
+      state.cameraTouchedAt = Date.now();
     },
   });
   canvas.addEventListener('touchstart', e => doubleTap.start(e), {

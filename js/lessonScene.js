@@ -77,7 +77,7 @@ import {
   getWorldGeneration,
   getSimulationTime,
 } from './physics.js';
-import { state } from './appState.js';
+import { command, state } from './appState.js';
 import { setBoundTest } from './bodyLabels.js';
 import { selectBodyInScene, setBodySelector } from './widgetRuntime.js';
 
@@ -420,4 +420,29 @@ export function resetLessonSceneForTests() {
   leaveScope(scope);
   owned = [];
   setBodySelector(null);
+}
+
+/** Put the reader's own world back (the pairs from leaveLessonScope()); true if it was. */
+export function restoreSandbox(saved) {
+  const payload = saved?.sandbox;
+  if (!payload) return false;
+  // An empty capture is never restored (the bodies ride under `b`, js/shareState.js).
+  if (!Array.isArray(payload.b) || payload.b.length === 0) return false;
+  try {
+    command('applyShareState')(JSON.parse(JSON.stringify(payload)));
+    return true;
+  } catch (err) {
+    console.warn(err);
+    return false;
+  }
+}
+
+/** Reselect the body {id} the reader had, after a restore; silent when it is gone. */
+export function restoreSelection(selection) {
+  const id = selection?.id;
+  if (!Number.isFinite(id)) return false;
+  const body = allBodies().find(b => b?.id === id);
+  if (!body) return false;
+  selectBody(body);
+  return true;
 }

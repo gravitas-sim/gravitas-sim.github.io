@@ -731,6 +731,8 @@ export function initCaptureMeasure(ctx) {
     // would measure the difference it just made and fold it into the very offset
     // this button exists to clear.
     resetFollowCamera(state);
+    // The reader chose this view: a lesson's fit leaves it alone.
+    state.cameraTouchedAt = Date.now();
   };
 
   // Screenshot functionality

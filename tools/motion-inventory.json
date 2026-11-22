@@ -306,6 +306,13 @@
       "reason": "A run is started only by the student's press, ends by itself or on Cancel run, and puts the scene back; the motion on the canvas is the main loop's."
     },
     {
+      "file": "js/lessonFrame.js",
+      "kind": "interval",
+      "treatment": "timer",
+      "what": "The lesson panel's saved-status note, checked once a second while a lesson step is open for a change to the scene since it was drawn",
+      "reason": "Text updates on a timer; nothing on the page moves."
+    },
+    {
       "file": "js/main.js",
       "kind": "raf",
       "treatment": "content",

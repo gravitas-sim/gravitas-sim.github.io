@@ -276,6 +276,7 @@ export function writeProgress({
   deepest,
   spent,
   earlier,
+  link,
 }) {
   return {
     schema: PROGRESS_SCHEMA,
@@ -288,6 +289,7 @@ export function writeProgress({
     ...(DEPTHS.includes(depth) ? { depth } : {}),
     ...(deepest && deepest !== 'core' ? { deepest } : {}),
     ...(spent > 0 ? { spent: Math.floor(spent) } : {}),
+    ...(link ? { link } : {}),
   };
 }
 

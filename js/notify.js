@@ -84,6 +84,13 @@ export function toast(message, action) {
   toastTimer = setTimeout(hide, action ? 10000 : 2200);
 }
 
+/** A link was refused: the dialog (js/assignments/linkNotice.js), or a toast without one. */
+export const refuseLink = what =>
+  import('./assignments/linkNotice.js')
+    .then(m => m.refuseLink(what))
+    .catch(() => false)
+    .then(shown => shown || toast(what.why));
+
 let failedAt = 0;
 
 /**

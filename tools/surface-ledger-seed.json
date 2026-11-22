@@ -1622,12 +1622,30 @@
       "locator": {
         "page": "index.html",
         "element": "investigationRestart",
-        "opener": "Restart in the lesson panel's More (js/investigations.js)",
+        "opener": "Start this investigation over in the investigation panel's More (js/investigations/restart.js)",
         "native": true
       },
-      "purpose": "The question before Restart erases a lesson's answers: how many there are, a backup to download first, and a way to cancel.",
+      "purpose": "The question before Start this investigation over deletes an investigation's saved answers: how many there are, that the scene resets too, a backup to download first, and a way to cancel; an undo follows until the investigation closes.",
       "audience": "student",
-      "primary_action": "Download a backup first, or erase the answers and start over",
+      "primary_action": "Download a backup first, or discard the answers and start over",
+      "job": "lesson",
+      "template": null,
+      "owner": 456,
+      "supporting": [],
+      "note": ""
+    },
+    {
+      "id": "dialog:link-notice",
+      "kind": "dialog",
+      "locator": {
+        "page": "index.html",
+        "element": "linkNotice",
+        "opener": "A link that cannot be opened (js/assignments/linkNotice.js, js/notify.js refuseLink)",
+        "native": true
+      },
+      "purpose": "Why an assignment, activity, pack or investigation link could not be opened, who can fix it, and the one way on: the investigation on its own, a reload or the Library.",
+      "audience": "student",
+      "primary_action": "Open the investigation on its own, reload the page or find it in the Library",
       "job": "lesson",
       "template": null,
       "owner": 456,
@@ -1889,7 +1907,7 @@
       "kind": "not-a-surface",
       "locator": {
         "glob": "js/fragments/*.html",
-        "count": 10
+        "count": 11
       },
       "purpose": "Panel markup fetched into the sandbox page at run time; not pages.",
       "audience": "n/a",

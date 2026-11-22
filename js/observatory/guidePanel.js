@@ -874,7 +874,19 @@ export function mountGuidePanel(root, ctx) {
       run.suite = suite;
       if (asked && suite.GUIDES.some(g => g.id === asked))
         start(asked, params.get('path'));
-      else render();
+      else {
+        render();
+        // A link to one that is not here says so, above the list it falls to.
+        if (asked)
+          ui.body.prepend(
+            el('p', {
+              id: 'gdUnknown',
+              class: 'ui-note',
+              role: 'status',
+              text: t('gd.unknown', { id: asked }),
+            })
+          );
+      }
     },
     () => {
       unavailable = true;

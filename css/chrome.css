@@ -2084,6 +2084,24 @@
     .inv-progress-track {
       flex: 0 0 var(--space-8);
     }
+    /* On the sheet the reset control is its icon: the title row has no room
+       for its words. They stay its name (read aloud) and its tooltip. */
+    .inv-reset-scenario {
+      position: relative;
+      width: 26px;
+      padding: 0;
+      justify-content: center;
+      font-size: var(--text-md);
+      line-height: 1;
+    }
+    .inv-reset-scenario > [data-i18n] {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
     .investigation-panel > .inv-body {
       border-top: 1px solid var(--border-subtle);
     }
