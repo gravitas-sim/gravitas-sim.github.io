@@ -955,7 +955,9 @@ function renderStep() {
 function syncEventWatch(step) {
   const entering = step !== windowStep;
   windowStep = step;
-  if (!eventWindow && !step?.pauseAt && !step?.time) return;
+  // A step that only declares its time applies it here: no module to fetch.
+  if (!eventWindow && !step?.pauseAt)
+    return entering && step?.time && windowHost.setTime(step.time);
   eventWindow ??= import('./investigations/eventWindow.js');
   eventWindow
     .then(m => m.syncWindow(step, entering, windowHost))
@@ -1759,9 +1761,8 @@ function renderProbe() {
   // lesson uses the existing overlay rather than drawing its own: the labels
   // have to point at what the renderer actually drew, and a second set drawn
   // by the panel would drift from it the moment either changed.
-  if (els.probe && active) {
+  if (els.probe && active)
     SETTINGS.bh_explain_view = Boolean(step?.explainView);
-  }
 
   // A step can ask for the balance point to be drawn on the main scene. The
   // panel supplies only *which* bodies; js/render.js recomputes the point from
@@ -1937,9 +1938,8 @@ function goToStep(index, { rebuild = false, open = false } = {}) {
   const opened =
     active.lock?.inspector === false ||
     active.steps.some(x => x.allowInspector);
-  if (opened && (currentStep()?.tool || currentStep()?.plot)) {
+  if (opened && (currentStep()?.tool || currentStep()?.plot))
     hideObjectInspector();
-  }
 
   save();
   renderStep();

@@ -187,6 +187,7 @@ const GOLDILOCKS = {
              of that a planet gets, and what does the answer let you say about
              the planet?`,
       tip: 'Nothing here needs algebra. You will move one slider, read three numbers off a panel, and watch a graph draw itself.',
+      time: { speed: 1, paused: true },
       setup: HZ_LAB,
     },
     {
@@ -560,6 +561,7 @@ const GOLDILOCKS = {
       ],
       allowInspector: true,
       probe: zoneRows,
+      time: { speed: 3, paused: false },
       setup: HZ_RINGS,
       bind: SOLAR_WORLDS,
       tip: 'The ring is a calculation, not an object. There is nothing physically present at 0.98 AU; that is simply the distance at which the model says a runaway greenhouse begins for a planet of this type.',
@@ -706,6 +708,7 @@ const GOLDILOCKS = {
       // the readout together, because both are computed from the same setting
       // by the same function. Nothing about Venus changed.
       probe: zoneRows,
+      time: { speed: 3, paused: false },
       setup: HZ_RINGS_WIDE,
       bind: SOLAR_WORLDS,
       tip: 'The optimistic inner edge is the Recent Venus limit, and it is set by Venus itself: the argument is that Venus has had no surface water for at least a billion years, so wherever Venus is must already be too close. Venus therefore sits just sunward of its own limit, by about 0.03 AU. The definition is nearly touching the evidence it was built from.',
@@ -898,6 +901,7 @@ const GOLDILOCKS = {
       // the previous screen staged its own ellipse, and inheriting that would
       // leave a prediction about TRAPPIST-1 in front of a planet called
       // Wanderer.
+      time: { speed: 0.03, paused: false },
       setup: HZ_TRAPPIST,
       type: 'predict',
       reveal: 'all-seven-planets',
@@ -939,6 +943,7 @@ const GOLDILOCKS = {
         title: 'TRAPPIST-1',
         note: 'Every planet is listed underneath with the starlight it receives and where it falls relative to the modeled zone.',
       },
+      time: { speed: 0.03, paused: false },
       setup: HZ_TRAPPIST,
       checklist: [
         'Find planets b and c, closest to the star, and read their starlight',
@@ -973,6 +978,7 @@ const GOLDILOCKS = {
         'Click any planet to open its card and read its orbital period in days.',
         'Notice the note on the ring saying the star is cooler than the model covers.',
       ],
+      time: { speed: 0.03, paused: false },
       setup: HZ_TRAPPIST_RUN,
       allowInspector: true,
       tip: 'The orbital periods here are not typed in. They come out of the same gravity solver as every other scenario, from the measured semi-major axes and the measured stellar mass. If they match the published values, that is the simulation agreeing with the observations.',

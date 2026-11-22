@@ -141,6 +141,7 @@ const WHEN_ORBITS_LOCK = {
       bind: GALILEANS,
       type: 'read',
       title: 'Four moons and a suspicious coincidence',
+      time: { speed: 750, paused: true },
       setup: {
         scenario: 'Galilean Resonance',
         seed: 'resonance-lab',
@@ -201,6 +202,7 @@ const WHEN_ORBITS_LOCK = {
       title: 'Measure the four periods',
       // Step 1 paused it so the student could read without four moons moving
       // behind the text. This step says "let it run", so it has to.
+      time: { speed: 750, paused: false },
       setup: {
         scenario: 'Galilean Resonance',
         seed: 'resonance-lab',
@@ -371,6 +373,7 @@ const WHEN_ORBITS_LOCK = {
       type: 'predict',
       reveal: 'watch-the-line-ups',
       title: 'Where do the line-ups happen?',
+      time: { speed: 750, paused: false },
       setup: {
         scenario: 'Galilean Resonance',
         seed: 'resonance-lab',
@@ -745,6 +748,7 @@ const WHEN_ORBITS_LOCK = {
       probe: laplaceRows,
       type: 'explore',
       title: 'Break it',
+      time: { speed: 750, paused: false },
       setup: {
         scenario: 'Broken Laplace Resonance',
         seed: 'resonance-lab',
@@ -807,6 +811,7 @@ const WHEN_ORBITS_LOCK = {
       bind: GALILEANS,
       type: 'explore',
       title: 'The awkward case',
+      time: { speed: 750, paused: false },
       setup: {
         scenario: 'Galilean Resonance',
         seed: 'resonance-lab',
@@ -888,6 +893,7 @@ const WHEN_ORBITS_LOCK = {
       bind: GALILEANS,
       type: 'read',
       title: 'The orbit that crosses and never collides',
+      time: { speed: 7500, paused: true },
       setup: {
         scenario: 'Pluto and Neptune',
         seed: 'resonance-lab',
@@ -924,6 +930,7 @@ const WHEN_ORBITS_LOCK = {
       bind: GALILEANS,
       type: 'explore',
       title: 'Measure Pluto’s resonance',
+      time: { speed: 7500, paused: false },
       setup: {
         scenario: 'Pluto and Neptune',
         seed: 'resonance-lab',
@@ -1092,6 +1099,7 @@ const WHEN_ORBITS_LOCK = {
       bind: GALILEANS,
       type: 'read',
       title: 'Sixty degrees ahead',
+      time: { speed: 150, paused: true },
       setup: {
         scenario: 'Jupiter Trojans',
         seed: 'resonance-lab',
@@ -1127,6 +1135,7 @@ const WHEN_ORBITS_LOCK = {
       bind: GALILEANS,
       type: 'explore',
       title: 'The rotating frame',
+      time: { speed: 150, paused: false },
       setup: {
         scenario: 'Jupiter Trojans',
         seed: 'resonance-lab',
