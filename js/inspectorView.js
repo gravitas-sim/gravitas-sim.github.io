@@ -97,7 +97,7 @@ const lightingNotes = command('lightingNotes');
 
 /**
  * Check whether an object is still part of the running simulation.
- * Objects leave via absorption, merging or off-screen culling, any of which
+ * Objects leave via absorption, merging or a lifetime's end, any of which
  * can happen while a panel still holds a reference to them.
  * @param {Object} object - Physics object to test
  * @returns {boolean} True if the object is still simulated

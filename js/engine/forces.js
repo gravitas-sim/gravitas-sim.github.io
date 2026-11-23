@@ -128,7 +128,7 @@ export const accelerationBreakdown = body => {
  * Record the acceleration each body is about to be stepped with.
  *
  * Written onto the body rather than into a side table so it cannot go stale
- * against a body that has been culled, and mutated in place rather than
+ * against a body that has been removed, and mutated in place rather than
  * replaced so a scenario with three thousand fragments does not allocate three
  * thousand objects every frame.
  *
@@ -610,7 +610,7 @@ const stepRK4 = (objs, count, dt, halo) => {
 
   for (let i = 0; i < count; i++) {
     // A body that is not alive was held at its starting position through every
-    // stage and is about to be culled; moving it now would be integrating a
+    // stage and is about to be removed; moving it now would be integrating a
     // corpse, which is what the default scheme's own early return avoids.
     if (!objs[i].alive) continue;
     writeState(

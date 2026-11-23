@@ -89,8 +89,8 @@ would have left them out. In the default binary-black-hole scenario that would
 have been a barycenter of the debris.
 
 **Debris and particles are excluded from it.** They carry little mass and they
-are culled when they drift off screen, so counting them would move the frame's
-origin every time a fragment left the visible world.
+come and go in numbers (a collision's shower, a disk particle's lifetime), so
+counting them would move the frame's origin every time one appeared or expired.
 
 **The starfield does not move with the frame.** Deliberate, and correct: the
 background stands in for objects at effectively infinite distance, and
@@ -103,8 +103,8 @@ history is shorter than another body's trail, the older points have no origin
 position to subtract. Drawing them where they happen to sit in world coordinates
 would splice a piece of a different picture onto the end of this one.
 
-**The frame falls back when its body dies.** A body can be absorbed, merged or
-culled while its frame is selected. The renderer resolves to no origin, resets to
+**The frame falls back when its body dies.** A body can be absorbed or merged
+away while its frame is selected. The renderer resolves to no origin, resets to
 the world frame, and the rail stops claiming a frame that no longer exists.
 
 **Speeds are shown in the frame, beside the world speed rather than instead of

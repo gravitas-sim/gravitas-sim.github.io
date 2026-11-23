@@ -253,7 +253,7 @@
       "what": "the camera is not physics: the same world stepped with the view as a visitor sets it must keep the same bodies as the world with no view",
       "run": {
         "frames": 600,
-        "reference": "the same run with a zero-sized canvas, which switches the off-screen cull off (js/engine/step.js is_offscreen)"
+        "reference": "the same run with a zero-sized canvas, which switched the off-screen cull off while there was one (js/engine/step.js is_offscreen, removed by Prompt 496)"
       },
       "checks": {
         "deleted": {
@@ -263,7 +263,7 @@
           "liveBodies": "the count of live bodies must also be equal"
         }
       },
-      "control": "a view panned 100000 AU must delete bodies, to show the cull fires in this harness; recorded, not judged"
+      "control": "a view panned 100000 AU, recorded, not judged: before Prompt 496 it deleted all 35 bodies (the cull fired in this harness); since 496 removed the cull it deletes none"
     },
     "tiers": {
       "scenarios": [
