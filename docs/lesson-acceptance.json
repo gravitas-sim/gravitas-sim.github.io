@@ -89,16 +89,16 @@
       "centralExperimentId": "ce.black-holes",
       "object": "panel:bh-scaling",
       "control": "bh-scaling/mass",
-      "quantity": "Schwarzschild radius against mass, captured at three masses",
+      "quantity": "Schwarzschild radius against mass, read and captured at three masses the student chooses",
       "evidence": "instrument-capture",
       "test": "e2e/centralExperiments.spec.js",
       "loop": [
         "now-make-it-heavier",
-        "three-measurements",
+        "choose-three-masses",
         "say-what-scales-with-what"
       ],
       "evidenceFrom": "model",
-      "decision": "none",
+      "decision": "Which three masses to record, distinct and spread over at least a factor of four without being a chain of doublings, when to take each mass and radius reading, and which mass to set and hold for the four twenty-against-ten readings that meet the factor prediction.",
       "leakFree": true
     },
     "radial-velocity": {

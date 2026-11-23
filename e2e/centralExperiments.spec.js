@@ -650,7 +650,7 @@ test.describe('the central experiment of each investigation', () => {
     const id = 'black-holes';
     const entry = declared(id);
     const { control } = controlOf(entry);
-    const [predictSid, exploreSid] = entry.loop;
+    const [predictSid, measureSid] = entry.loop;
 
     await openInvestigation(page, app, id);
     const plan = await lessonPlan(page, id);
@@ -658,8 +658,10 @@ test.describe('the central experiment of each investigation', () => {
     const predict = await walkToSid(page, plan, predictSid);
     await commitPredictionHeld(page, predict);
 
-    await walkToSid(page, plan, exploreSid);
-    const masses = [5, 10, 20];
+    await walkToSid(page, plan, measureSid);
+    // The student chooses the masses. Spread over a factor of six and a half,
+    // and not a chain of doublings, which the step refuses.
+    const masses = [3, 7, 20];
     const rs = {};
     for (const m of masses) {
       const { before, after } = await setControl(page, control, m);
@@ -680,6 +682,31 @@ test.describe('the central experiment of each investigation', () => {
     );
     expect(n, 'the horizon is linear in the mass').toBeCloseTo(1, 1);
     for (const m of masses) expect(rs[m] / m).toBeCloseTo(2.95, 1);
+
+    const trials = list =>
+      Object.fromEntries(
+        list.flatMap((m, i) => [
+          [`m${i + 1}`, m],
+          [`r${i + 1}`, rs[m] ?? rs[list[0]]],
+        ])
+      );
+    // Three equal masses are one point, and the step says which decision was
+    // badly made. Nothing is accepted.
+    await recordFields(page, id, measureSid, trials([7, 7, 7]));
+    await expect(
+      page.locator('#investigationBody .inv-check.is-error')
+    ).toContainText(/same mass/i);
+    await expect(
+      page.locator('#investigationBody .inv-check.is-ok')
+    ).toHaveCount(0);
+
+    // The three the student recorded: accepted, and kept.
+    const evidence = trials(masses);
+    await recordFields(page, id, measureSid, evidence);
+    await expect(
+      page.locator('#investigationBody .inv-check.is-ok')
+    ).toBeVisible();
+    await expectEvidenceRetained(page, id, measureSid, evidence);
 
     // The declared evidence is an instrument capture, so it has to reach the
     // notebook and survive there.

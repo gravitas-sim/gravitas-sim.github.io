@@ -76,6 +76,24 @@ const BLACK_HOLES = {
   // the object card already computes, and letting a student check the lesson
   // against the simulation is the point rather than a distraction.
   lock: { placement: true, inspector: false, areaSweep: false },
+  retired: {
+    'three-measurements': {
+      to: 'choose-three-masses',
+      release: '3.1',
+      was: {
+        en: 'Record the horizon radius at 5, 10 and 20 solar masses, the three masses the step gave, and capture the run.',
+        es: 'Registrar el radio del horizonte con 5, 10 y 20 masas solares, las tres masas que daba el paso, y capturar la serie.',
+      },
+    },
+    'where-the-room-comes-from': {
+      to: 'count-the-zeros',
+      release: '3.1',
+      was: {
+        en: 'Read why the volume gains three times as many zeros as the mass, then say how many zeros it gains when the mass is multiplied by 1,000.',
+        es: 'Leer por qué el volumen gana el triple de ceros que la masa, y después decir cuántos ceros gana cuando la masa se multiplica por 1000.',
+      },
+    },
+  },
   objectives: [
     'Say what the event horizon of a black hole is, and what it is not',
     'Describe how the Schwarzschild radius changes when the mass changes',
@@ -127,6 +145,23 @@ const BLACK_HOLES = {
         'nothing, because a black hole has no size',
       ],
       answer: 2,
+      misconceptions: [
+        {
+          id: 'sizeIsTheMatter',
+          option: 0,
+          say: 'Whatever fell in is not sitting at the horizon with a width you could measure. The size is a place in space, not a lump of material.',
+        },
+        {
+          id: 'sizeIsGravitysReach',
+          option: 1,
+          say: 'Gravity has no edge: it weakens with distance but never stops, so it cannot give a size.',
+        },
+        {
+          id: 'noSizeAtAll',
+          option: 3,
+          say: 'No surface does not mean no size. There is still a definite distance at which something changes.',
+        },
+      ],
       because:
         'It is the boundary. Not a surface, not an object, not a wall you could touch: a place in space where the situation changes. Outside it, light can still get away. Inside it, nothing can. That boundary is called the event horizon, and how far out it sits is what astronomers mean by the size of a black hole. The second answer is a good guess and a common one, but gravity has no edge; it just gets weaker with distance, and it does that around a black hole exactly as it does around a star.',
     },
@@ -236,13 +271,12 @@ const BLACK_HOLES = {
         title: 'Ten solar masses, against things you know',
         note: 'The black hole and all three bars are drawn at one scale. Nothing here is exaggerated.',
       }),
-      tip: 'For scale in the other direction: to make a black hole the size of the Earth you would need about two thousand solar masses, and to make one the size of the Sun, about two hundred and thirty thousand.',
     },
     {
       sid: 'now-make-it-heavier',
       stage: HOLE,
       type: 'predict',
-      reveal: 'three-measurements',
+      reveal: 'choose-three-masses',
       title: 'Now make it heavier',
       body: `You are about to be handed a mass slider. Before you touch it,
              commit to an answer.
@@ -261,45 +295,164 @@ const BLACK_HOLES = {
         'It doubles. If you picked the last option you are in good company: more mass does mean stronger gravity, and it is very natural to expect a heavier black hole to be a more tightly squeezed one. That is not what happens, and the next few screens are about watching it not happen.',
     },
     {
-      sid: 'three-measurements',
+      sid: 'choose-three-masses',
       stage: HOLE,
-      type: 'explore',
-      title: 'Three measurements',
-      body: `Here is the experiment. The slider sets the mass. The panel works
-             out the Schwarzschild radius. Pressing <strong>Record this
-             trial</strong> puts that pair of numbers into the table underneath
-             and drops a point on the graph.
-             \n\nYou only need three. Take them at 5, 10 and 20 solar masses:
-             each one is double the one before, which will make the pattern easy
-             to see.`,
+      type: 'measure',
+      title: 'Three masses of your own',
+      body: `Here is the experiment, and the masses are yours to choose. The
+             slider sets the mass of the black hole, on the panel and on the
+             canvas. The panel works out the Schwarzschild radius, and
+             <strong>Record this trial</strong> puts the pair into the table
+             under the graph and drops a point on it.
+             \n\nPick three different masses. Spread them out, so that the
+             heaviest is at least four times the lightest, and do not make them
+             a chain of doublings: a pattern you planned is a weaker test than
+             one you did not.
+             \n\nFor each mass, set the slider, press <strong>Record this
+             trial</strong>, then press <strong>Take reading</strong> beside
+             its mass and beside its radius. The readings come from the black
+             hole on the canvas, which follows the slider.`,
       tool: {
         id: 'bh-scaling',
         session: 'rs-vs-m',
-        values: { mass: 5 },
         // The slider is the mass of the hole on the canvas as well as the
         // subject of the graph, so a student sees the consequence of each
         // trial in the scene they took it from.
         scene: true,
         capture: true,
         title: 'Mass against horizon size',
-        note: 'Set a mass, press Record, repeat. The mass is also the mass of the black hole on the canvas.',
+        note: 'Set a mass, press Record, take the two readings, repeat. The mass is also the mass of the black hole on the canvas.',
       },
       checklist: [
-        'Set the slider to 5 M☉ and press Record this trial',
+        'Choose a first mass, set the slider to it and press Record this trial',
+        'Take the mass and radius readings for it',
         'Watch the hole on the canvas change, and its orbiters with it',
-        'Set it to 10 M☉ and press Record again',
-        'Set it to 20 M☉ and press Record once more',
-        'Read the three radii in the table under the graph',
-        'Look at where the three points have landed',
+        'Do the same for two more masses, spread over at least a factor of four',
+        'Look at where your three points have landed',
         'Press Capture these trials to put the run in your notebook',
       ],
+      fields: [
+        {
+          id: 'm1',
+          label: 'Trial A: mass',
+          unit: 'M☉',
+          source: { probe: 'mass' },
+        },
+        {
+          id: 'r1',
+          label: 'Trial A: Schwarzschild radius',
+          unit: 'km',
+          source: { probe: 'rs' },
+        },
+        {
+          id: 'm2',
+          label: 'Trial B: mass',
+          unit: 'M☉',
+          source: { probe: 'mass' },
+        },
+        {
+          id: 'r2',
+          label: 'Trial B: Schwarzschild radius',
+          unit: 'km',
+          source: { probe: 'rs' },
+        },
+        {
+          id: 'm3',
+          label: 'Trial C: mass',
+          unit: 'M☉',
+          source: { probe: 'mass' },
+        },
+        {
+          id: 'r3',
+          label: 'Trial C: Schwarzschild radius',
+          unit: 'km',
+          source: { probe: 'rs' },
+        },
+        {
+          id: 'span',
+          label: 'Your heaviest mass divided by your lightest',
+          unit: '×',
+          compute: v => {
+            const m = [v.m1, v.m2, v.m3];
+            return m.every(x => Number.isFinite(x) && x > 0)
+              ? Math.max(...m) / Math.min(...m)
+              : NaN;
+          },
+          decimals: 1,
+        },
+      ],
+      // The decision is the choice of masses, and it can be made badly: three
+      // copies of one mass are one point, masses bunched together cannot tell
+      // a line from a curve, and a radius taken at another mass belongs to a
+      // different trial. Each refusal names the slip, never the radius.
+      validate: (v, ctx) => {
+        const ms = [v.m1, v.m2, v.m3];
+        const rs = [v.r1, v.r2, v.r3];
+        if (!ms.every(Number.isFinite)) return null;
+        if (ms.some(m => m <= 0)) {
+          return {
+            level: 'error',
+            message: 'A mass has to be a positive number of solar masses.',
+          };
+        }
+        const sorted = [...ms].sort((a, b) => a - b);
+        if (sorted[1] - sorted[0] < 0.5 || sorted[2] - sorted[1] < 0.5) {
+          return {
+            level: 'error',
+            message:
+              'Two of your trials have the same mass, so they are one point on the graph, not two. Choose three different masses.',
+          };
+        }
+        if (sorted[2] / sorted[0] < 4) {
+          return {
+            level: 'error',
+            message:
+              'Your heaviest mass is less than four times your lightest. Spread the three out further, so the graph can tell a straight line from a curve.',
+          };
+        }
+        const near = (a, b) => Math.abs(a / b - 1) < 0.02;
+        if (near(sorted[1], 2 * sorted[0]) && near(sorted[2], 2 * sorted[1])) {
+          return {
+            level: 'error',
+            message:
+              'Each of your masses is double the one before. Change one of them to a mass that is not a doubling, so the rule is tested on a ratio you did not plan.',
+          };
+        }
+        if (!rs.every(Number.isFinite)) return null;
+        const off = ms.findIndex(
+          (m, i) => !(Math.abs(rs[i] / ctx.holeFacts(m).rsKm - 1) < 0.02)
+        );
+        if (off >= 0) {
+          return {
+            level: 'error',
+            message:
+              'One of your radii does not belong to the mass beside it. Set the slider back to that mass and take its radius reading again.',
+          };
+        }
+        return {
+          level: 'ok',
+          message:
+            'Three different masses, well spread, each with its own radius. Press Capture these trials to keep the run in your notebook.',
+        };
+      },
       probe: ctx => {
         const hole = ctx.role('hole');
-        if (!hole) return [{ label: 'The hole', value: 'not on the canvas' }];
+        // The rows keep their ids with no hole on the canvas, so a reading
+        // button names a row that exists and refuses with nothing to take.
+        if (!hole)
+          return [
+            { id: 'mass', label: 'Hole on the canvas', value: '-' },
+            { id: 'rs', label: 'Its Schwarzschild radius', value: '-' },
+          ];
         const m = hole.massInSuns ?? 10;
         return [
-          { label: 'Hole on the canvas', value: `${m.toFixed(1)} M☉` },
           {
+            id: 'mass',
+            label: 'Hole on the canvas',
+            value: `${m.toFixed(1)} M☉`,
+          },
+          {
+            id: 'rs',
             label: 'Its Schwarzschild radius',
             value: `${ctx.holeFacts(m).rsKm.toFixed(1)} km`,
           },
@@ -313,9 +466,12 @@ const BLACK_HOLES = {
       type: 'question',
       title: 'What did doubling do?',
       kind: 'choice',
-      body: `Look at your first two trials. You went from 5 solar masses to 10,
-             which is twice as much mass. The radius went from about 14.8
-             kilometers to about 29.5.`,
+      body: `Look at the table under your graph. Find two trials where one
+             mass is double the other. If none of yours is, set the slider to
+             double one of your masses and press <strong>Record this
+             trial</strong>.
+             \n\nNow divide the larger of those two radii by the smaller. That
+             ratio is what doubling the mass did to the horizon.`,
       prompt: 'When the mass doubled, the Schwarzschild radius…',
       options: [
         'stayed about the same',
@@ -325,7 +481,7 @@ const BLACK_HOLES = {
       ],
       answer: 1,
       because:
-        'It doubled. And going from 10 to 20 doubled it again, from 29.5 to 59.1 kilometers. Twice the mass, twice the radius, every time.',
+        'It doubled. Whichever doubled pair you take from the table, the larger radius is twice the smaller: twice the mass, twice the radius, every time.',
       tool: {
         id: 'bh-scaling',
         session: 'rs-vs-m',
@@ -339,8 +495,8 @@ const BLACK_HOLES = {
       type: 'question',
       title: 'Read the graph',
       kind: 'choice',
-      body: `Now look at the shape your three points make. The dashed line is
-             drawn through them, starting from zero.`,
+      body: `Now look at the shape your points make, at the masses you chose.
+             The dashed line is drawn through them, starting from zero.`,
       prompt:
         'The graph of Schwarzschild radius against mass shows that the radius…',
       options: [
@@ -378,7 +534,10 @@ const BLACK_HOLES = {
              on the top: that is what makes the graph a straight line.
              \n\nThe useful consequence: about 3 kilometers of radius for every
              solar mass. A 20 solar mass black hole, 60 kilometers. A thousand
-             solar masses, 3,000 kilometers. It is that simple, all the way up.`,
+             solar masses, 3,000 kilometers. It is that simple, all the way up:
+             a horizon the size of the Earth takes about two thousand solar
+             masses, and one the size of the Sun about two hundred and thirty
+             thousand.`,
       tip: 'Schwarzschild found this radius in the first few months after Einstein published general relativity, and Einstein did not believe anything real could ever be that compact. It took another fifty years for astronomers to start finding them.',
     },
     {
@@ -525,6 +684,23 @@ const BLACK_HOLES = {
         'It is the edge of the lump of matter that formed the black hole',
       ],
       answer: 2,
+      misconceptions: [
+        {
+          id: 'horizonIsASurface',
+          option: 0,
+          say: 'There is nothing at the horizon to hit. Something crossing it meets no wall; what changes is where signals can still go.',
+        },
+        {
+          id: 'gravitySwitchesOn',
+          option: 1,
+          say: 'The two orbiters on the canvas answer this one: at the same distance from the same mass, the orbit is the same whether the center is a star or a hole.',
+        },
+        {
+          id: 'horizonIsTheMatter',
+          option: 3,
+          say: 'The horizon is not the edge of any material. It is set by the mass alone, at the Schwarzschild radius, wherever the matter itself has gone.',
+        },
+      ],
       because:
         'A boundary, and nothing more solid than that. Two things to be clear about while you are here. There is nothing to hit: an astronaut crossing the horizon of a large black hole would notice nothing at all happening at that moment. And gravity does not switch on there — which is what the two systems on the canvas are for. Eight solar masses is eight solar masses, and at the same distance the orbit is the same orbit, whether the mass is a star you could stand on or a hole you could not. A black hole is not a stronger kind of gravity; it is the same gravity with the mass packed small enough that you can get very close to it. That is the whole difference, and it is why the orbiter on the left is not being dragged in.',
     },
@@ -602,6 +778,23 @@ const BLACK_HOLES = {
         'went up and then back down',
       ],
       answer: 1,
+      misconceptions: [
+        {
+          id: 'biggerMeansDenser',
+          option: 0,
+          say: 'More mass, but not in the same room: the horizon grew too, and the marker on the ladder moved the other way. Look again at which way it went from 10 to 1,000,000.',
+        },
+        {
+          id: 'densityFixed',
+          option: 2,
+          say: 'The marker did move, a long way. Press 10 M☉ and then 1,000,000 M☉ and watch where it goes.',
+        },
+        {
+          id: 'densityTurnsBack',
+          option: 3,
+          say: 'The marker moved one way the whole time. Drag the slider slowly from end to end and watch for a turn: there is none.',
+        },
+      ],
       because:
         'It went down, and it went down hard. A 10 solar mass black hole comes out at roughly the density of an atomic nucleus. A million solar mass one is ten powers of ten below that: still denser than anything you could hold, but the direction of travel is unmistakable. Push it further and it gets stranger. At about 140 million solar masses the average density on this scale drops below the density of water, and the black hole at the center of the galaxy M87, at six and a half billion solar masses, works out thinner than the air in the room you are sitting in.',
       tool: {
@@ -614,43 +807,50 @@ const BLACK_HOLES = {
     },
     {
       hints: [
-        'Volume grows with the cube of the radius.',
-        'If the radius gains some zeros, the volume gains three times as many.',
+        'Set the slider in the panel to ×1,000 first, then find the volume’s bar.',
+        'The bar lengths count zeros: read how far the volume’s bar reaches.',
       ],
       feedback: {
         close:
-          'Close. Volume goes as the cube of the radius, so cubing multiplies the zeros.',
-        off: 'Think of the radius and the volume: how does one number of zeros turn into the other when you cube?',
+          'Close. Check that the slider says ×1,000, and read the volume’s row again.',
+        off: 'Set the slider to ×1,000 and read the volume’s bar, not the mass’s or the density’s.',
       },
-      sid: 'where-the-room-comes-from',
+      misconceptions: [
+        {
+          id: 'volumeLikeRadius',
+          equals: 3,
+          say: 'Three zeros is what the mass gains at ×1,000, and the radius with it, or what the volume gains at ×10. Set the slider to ×1,000 and read the volume’s bar.',
+        },
+        {
+          id: 'densityNotVolume',
+          equals: 6,
+          say: 'Six is what the density loses at ×1,000, or what the volume gains at ×100. Check that the slider says ×1,000, and read the volume’s row.',
+        },
+      ],
+      sid: 'count-the-zeros',
       stage: HOLE,
-      // "That is the rule you measured earlier" - the radius-mass rule from
-      // those three measurements.
-      requires: ['three-measurements'],
+      // The radius-mass rule from the student's own three trials.
+      requires: ['choose-three-masses'],
       type: 'question',
       title: 'Where the room comes from',
       kind: 'numeric',
-      body: `Here is the reason, and it comes down to counting zeros.
-             \n\nWhen mass goes up by some factor, the radius goes up by the
-             same factor: that is the rule you measured earlier. But volume is
-             not radius. Volume grows in all three directions at once, so a
-             sphere with ten times the radius has ten times ten times ten, a
-             thousand times, the room inside it.
-             \n\nSo the mass gains some zeros, and the volume gains three times
-             as many. Density is mass divided by volume, and it loses the
-             difference.
-             \n\nSet the slider in the panel to <strong>×1,000</strong> and read
-             the bars.`,
+      body: `Density fell as the mass rose. The panel shows why by counting
+             zeros: each bar is as long as the number of zeros its quantity
+             gained, or lost, when the mass was multiplied.
+             \n\nSet the slider in the panel to <strong>×1,000</strong>,
+             which gives the mass 3 more zeros, and read the bars.`,
       prompt:
-        'Multiplying the mass by 1,000 adds 3 zeros. How many zeros does the volume gain?',
+        'With the mass multiplied by 1,000, how many zeros does the volume inside the horizon gain?',
       unit: 'zeros',
       answer: 9,
       tolerance: 0.5,
       because:
-        'Nine, because volume grows in three directions at once: 3 + 3 + 3. The mass gained 3 zeros and the volume gained 9, so the density lost the difference, 6 zeros. It fell by a factor of a million. That is the whole surprise, and it is nothing more exotic than the fact that spheres get roomy faster than they get wide.',
+        'Nine. When the mass goes up by some factor, the radius goes up by the same factor: that is the rule you measured. But volume is not radius. It grows in all three directions at once, so a sphere with ten times the radius has ten times ten times ten, a thousand times, the room inside it: 3 + 3 + 3 zeros here. The mass gained 3 zeros and the volume gained 9, so the density, mass divided by volume, lost the difference, 6 zeros. It fell by a factor of a million. That is the whole surprise, and it is nothing more exotic than the fact that spheres get roomy faster than they get wide.',
       tool: {
         id: 'bh-blocks',
-        values: { zeros: 3 },
+        // Opens one notch below the setting the question asks about: the
+        // student sets ×1,000, so the reading is one they reached.
+        values: { zeros: 1 },
         title: 'Counting the zeros',
         note: 'The blue bars gain zeros. The red one loses them. Bar length is the number of zeros, not the number itself.',
       },
@@ -723,7 +923,10 @@ const BLACK_HOLES = {
              produced in a laboratory. The one labeled "the microwave
              background" is the temperature of empty space itself, 2.7 degrees
              above absolute zero, left over from the Big Bang.
-             \n\nUse the buttons to work up through the masses.`,
+             \n\nUse the buttons to work up through the masses. The black hole
+             on the main canvas does not change on this screen, and nothing on
+             it shows a temperature: the thermometer is a calculation from
+             Hawking's formula, not a reading of the scene.`,
       tool: {
         id: 'bh-thermo',
         values: { logm: 0 },
@@ -754,8 +957,25 @@ const BLACK_HOLES = {
         'increases at first and then decreases',
       ],
       answer: 1,
+      misconceptions: [
+        {
+          id: 'biggerMeansHotter',
+          option: 0,
+          say: 'Bigger usually means more of everything, but not here. Watch the level on the thermometer as you go from 1 M☉ to Sagittarius A*: it falls.',
+        },
+        {
+          id: 'temperatureFixed',
+          option: 2,
+          say: 'The level moved by many ticks, and each tick is a factor of ten. Compare 1 M☉ with Sagittarius A* again.',
+        },
+        {
+          id: 'temperatureTurnsBack',
+          option: 3,
+          say: 'The level moved one way from the lightest to the heaviest. There is no turning point on this scale.',
+        },
+      ],
       because:
-        'It decreases, and the rule is as simple as the one for radius, just upside down: T ∝ 1/M. Double the mass and you halve the temperature. The biggest black holes in the universe are the coldest objects in it. A ten solar mass black hole sits at about six billionths of a degree above absolute zero. Sagittarius A*, at the center of our galaxy, is four hundred thousand times colder still. Both are far colder than the empty space around them, which means both are absorbing more energy from the microwave background than they give off, and are very slowly growing rather than shrinking.',
+        'It decreases, and the rule is as simple as the one for radius, just upside down: T ∝ 1/M. Ten times the mass, a tenth of the temperature. The biggest black holes in the universe are the coldest objects in it. A ten solar mass black hole sits at about six billionths of a degree above absolute zero. Sagittarius A*, at the center of our galaxy, is four hundred thousand times colder still. Both are far colder than the empty space around them, which means both are absorbing more energy from the microwave background than they give off, and are very slowly growing rather than shrinking.',
       tool: {
         id: 'bh-thermo',
         // The widget's own Sagittarius A* preset, to the digit. See the note
@@ -802,7 +1022,9 @@ const BLACK_HOLES = {
              \n\nThat is all a bar means here: how many zeros. And each extra
              zero is another factor of ten, so a bar twice as long is not twice
              as long a time. It is unimaginably longer.
-             \n\nWork up through the masses and watch the orange bar.`,
+             \n\nWork up through the masses and watch the orange bar. Nothing on
+             the main canvas is evaporating or keeping time for this: the bars
+             are calculated from Hawking's formula.`,
       tool: {
         id: 'bh-lifetime',
         values: { logm: 1 },
@@ -836,7 +1058,7 @@ const BLACK_HOLES = {
       ],
       answer: 2,
       because:
-        'Far faster. The rule is lifetime ∝ M³: double the mass and the lifetime goes up by eight times. Triple it and it goes up twenty seven times. That is why a factor of four million in mass becomes a factor of 10²⁰ in lifetime. Two things must be said plainly. First, none of this is happening yet: every known black hole is colder than the space around it, so all of them are currently gaining mass, not losing it, and evaporation cannot even begin until the universe has cooled far below its present temperature. Second, these lifetimes are longer than the age of the universe by so much that the comparison stops meaning anything.',
+        'Far faster. The rule is lifetime ∝ M³: ten times the mass, a thousand times the lifetime. That is why a factor of four million in mass becomes a factor of 10²⁰ in lifetime. Two things must be said plainly. First, none of this is happening yet: every known black hole is colder than the space around it, so all of them are currently gaining mass, not losing it, and evaporation cannot even begin until the universe has cooled far below its present temperature. Second, these lifetimes are longer than the age of the universe by so much that the comparison stops meaning anything.',
       tool: {
         id: 'bh-lifetime',
         // The Sagittarius A* preset again, exactly.
@@ -844,6 +1066,51 @@ const BLACK_HOLES = {
         title: 'Sagittarius A*',
         note: 'Compare the length of the orange bar with the age of the universe.',
       },
+    },
+    {
+      sid: 'predict-twenty-against-ten',
+      stage: HOLE,
+      type: 'predict',
+      reveal: 'say-what-scales-with-what',
+      title: 'Four properties, one new mass',
+      body: `You have now met four properties of a black hole: the size of its
+             horizon, its average density on that scale, its Hawking
+             temperature and how long it would take to evaporate. Each one
+             changes with the mass by a rule of its own.
+             \n\nTake the ten solar mass black hole you started with and make it
+             twenty. Before you look at any panel, decide what happens to each
+             of the four. A factor of ×3 would mean three times as large, and
+             ×⅓ a third as large.
+             \n\nYou will check your choice against readings near the end of
+             the investigation.`,
+      prompt:
+        'Going from 10 to 20 solar masses, the four properties change by…',
+      options: [
+        'radius ×2, density ×2, temperature ×2, lifetime ×2',
+        'radius ×2, density ×½, temperature ×½, lifetime ×8',
+        'radius ×2, density ×¼, temperature ×½, lifetime ×8',
+        'radius ×2, density ×¼, temperature ×2, lifetime ×½',
+      ],
+      answer: 2,
+      misconceptions: [
+        {
+          id: 'everythingGrows',
+          option: 0,
+          say: 'Only the radius grows in step with the mass. Density, temperature and lifetime each follow a rule of their own, and two of them fall.',
+        },
+        {
+          id: 'densityLikeTemperature',
+          option: 1,
+          say: 'The density does fall, but faster than one over the mass: the volume inside the horizon grows as the cube of the radius.',
+        },
+        {
+          id: 'biggerBurnsHotter',
+          option: 3,
+          say: 'A heavier black hole is colder, not hotter, and a colder one radiates more slowly, so it lasts longer.',
+        },
+      ],
+      because:
+        'Radius ×2, density ×¼, temperature ×½, lifetime ×8. The radius follows the mass. The volume inside the horizon follows the radius cubed, so it is eight times larger, and twice the mass in eight times the room is a quarter of the average density. The temperature follows one over the mass, and the lifetime the mass cubed.',
     },
     {
       sid: 'from-city-sized-to-solar',
@@ -905,14 +1172,21 @@ const BLACK_HOLES = {
       stage: HOLE,
       // Answered from the two rules found there: radius against mass, and
       // density against mass.
-      requires: ['three-measurements', 'mass-divided-by-volume'],
+      requires: [
+        'choose-three-masses',
+        'mass-divided-by-volume',
+        'predict-twenty-against-ten',
+      ],
       type: 'question',
       title: 'A mystery black hole: size and density',
       kind: 'choice',
       body: `Last of all, a test of whether the trends have stuck. Black hole D
              is far more massive than a stellar-mass black hole, and that is the
              only thing you need to know about it.
-             \n\nAnswer from the rules you found, not by working anything out.`,
+             \n\nAnswer from the four factors you chose for twenty solar
+             masses against ten. D is heavier still, so each property moves
+             further in the direction your factor gave it. Do not work anything
+             out.`,
       prompt:
         'Compared with a stellar-mass black hole, D’s event horizon and its average density are…',
       options: [
@@ -937,7 +1211,12 @@ const BLACK_HOLES = {
       type: 'question',
       title: 'A mystery black hole: temperature and lifetime',
       kind: 'choice',
-      body: `Same black hole, the other two properties.`,
+      // The transfer: the factors the student chose for twenty against ten,
+      // carried to a mass far beyond the slider.
+      requires: ['predict-twenty-against-ten'],
+      body: `Same black hole, the other two properties. Use your factors for
+             temperature and lifetime the same way: which direction did each
+             one go when the mass doubled?`,
       prompt:
         'Compared with a stellar-mass black hole, D’s Hawking temperature and its evaporation lifetime are…',
       options: [
@@ -957,19 +1236,147 @@ const BLACK_HOLES = {
       },
     },
     {
+      sid: 'read-twenty-against-ten',
+      stage: HOLE,
+      type: 'measure',
+      title: 'Twenty against ten, read off',
+      body: `Time to check your four factors. Set the slider in the panel to
+             <strong>20 M☉</strong>. The black hole on the canvas follows it,
+             and the readings beside this step compare that black hole with the
+             ten solar mass one you started with, property by property.
+             \n\nPress <strong>Take reading</strong> beside each of the four.
+             The readings are calculated from the same formulas as the panels
+             you used, not measured from the scene: the simulation moves the
+             orbiters, and computes nothing else on this list.`,
+      tool: {
+        id: 'bh-scaling',
+        session: 'rs-vs-m',
+        scene: true,
+        title: 'The mass of the black hole',
+        note: 'The slider sets the black hole on the canvas. Recording a trial here adds it to your table.',
+      },
+      fields: [
+        {
+          id: 'fr',
+          label: 'Horizon radius, 20 M☉ against 10 M☉',
+          unit: '×',
+          source: { probe: 'fr' },
+        },
+        {
+          id: 'fd',
+          label: 'Average density, 20 M☉ against 10 M☉',
+          unit: '×',
+          source: { probe: 'fd' },
+        },
+        {
+          id: 'ft',
+          label: 'Hawking temperature, 20 M☉ against 10 M☉',
+          unit: '×',
+          source: { probe: 'ft' },
+        },
+        {
+          id: 'fl',
+          label: 'Evaporation lifetime, 20 M☉ against 10 M☉',
+          unit: '×',
+          source: { probe: 'fl' },
+        },
+      ],
+      // The decision is the mass to set and to keep while the four readings
+      // are taken. The radius factor says which mass the readings were taken
+      // at, and the other three have to agree with it.
+      validate: v => {
+        const got = [v.fr, v.fd, v.ft, v.fl];
+        if (!got.every(Number.isFinite)) return null;
+        if (got.some(x => x <= 0)) {
+          return {
+            level: 'error',
+            message: 'A factor is a positive number. Take the reading again.',
+          };
+        }
+        const k = v.fr;
+        const near = (a, b) => Math.abs(a / b - 1) < 0.03;
+        if (!(
+          near(v.fd, 1 / k ** 2) &&
+          near(v.ft, 1 / k) &&
+          near(v.fl, k ** 3)
+        )) {
+          return {
+            level: 'error',
+            message:
+              'Your four readings were not all taken at one mass. Leave the slider at 20 M☉ and take all four again.',
+          };
+        }
+        if (!near(k, 2)) {
+          return {
+            level: 'error',
+            message:
+              'These readings are for a mass other than 20 M☉. Set the slider to 20 M☉ and take all four again.',
+          };
+        }
+        return {
+          level: 'ok',
+          message:
+            'Four readings for twenty solar masses against ten. The next screen sets them beside your prediction.',
+        };
+      },
+      probe: ctx => {
+        const hole = ctx.role('hole');
+        const m = hole ? (hole.massInSuns ?? 10) : NaN;
+        const f = ctx.holeFacts(m);
+        const b = ctx.holeFacts(10);
+        // No hole on the canvas: the rows stay, with nothing to take.
+        const times = x => (Number.isFinite(x) ? `× ${x.toPrecision(3)}` : '-');
+        return [
+          {
+            label: 'Hole on the canvas',
+            value: hole ? `${m.toFixed(1)} M☉` : '-',
+          },
+          {
+            id: 'fr',
+            label: 'Horizon radius, against 10 M☉',
+            value: times(f.rsKm / b.rsKm),
+          },
+          {
+            id: 'fd',
+            label: 'Average density, against 10 M☉',
+            value: times(f.density / b.density),
+          },
+          {
+            id: 'ft',
+            label: 'Hawking temperature, against 10 M☉',
+            value: times(f.temperature / b.temperature),
+          },
+          {
+            id: 'fl',
+            label: 'Evaporation lifetime, against 10 M☉',
+            value: times(f.lifetimeYears / b.lifetimeYears),
+          },
+        ];
+      },
+    },
+    {
       sid: 'say-what-scales-with-what',
       stage: HOLE,
-      // Five loops in this lesson, all of them closed by a multiple choice.
-      // The one thing a tick cannot show is whether the reader can hold four
-      // different scalings apart, which is the whole content of the lesson.
-      requires: ['three-measurements'],
+      // The four-quantity prediction returns here beside the four readings
+      // the student took (K3). The one thing a tick cannot show is whether
+      // the reader can hold four different scalings apart, which is the whole
+      // content of the lesson.
+      requires: ['choose-three-masses', 'read-twenty-against-ten'],
       type: 'question',
       kind: 'short',
+      evidence: [
+        { step: 'read-twenty-against-ten', field: 'fr' },
+        { step: 'read-twenty-against-ten', field: 'fd' },
+        { step: 'read-twenty-against-ten', field: 'ft' },
+        { step: 'read-twenty-against-ten', field: 'fl' },
+      ],
+      compare:
+        'Each reading is the model’s factor for that property. Where your choice and a reading part company, the rule you used for that property is the one to look at again.',
       title: 'Four quantities, four different scalings',
-      body: `You have measured, or read off a model, how each of four
-             quantities changes when the mass of a black hole goes up.`,
+      body: `Your prediction for twenty solar masses against ten is in the box,
+             beside the four factors you read.`,
       prompt:
-        'In two or three sentences, say how radius, average density, Hawking temperature and evaporation time each change when the mass doubles, and explain why the density goes the way it does.',
+        'In two or three sentences, say which of your four factors missed, if any, and what rule the reading follows instead; then say how radius, average density, Hawking temperature and evaporation time each change when the mass doubles, and why the density goes the way it does.',
       rubric:
         'Radius is proportional to mass, so it doubles. Density is mass over the volume inside the horizon, and the volume goes as r\u00b3 \u221d M\u00b3, so density goes as 1/M\u00b2 and falls to a quarter: bigger black holes are less dense, and a supermassive one can be thinner than water. Temperature goes as 1/M and halves. Evaporation time goes as M\u00b3 and becomes eight times longer. The density result is the one worth stating carefully, because the intuition that a black hole is dense comes from stellar-mass ones and does not survive the scaling.',
     },
@@ -983,7 +1390,7 @@ const BLACK_HOLES = {
              million solar masses, was measured by watching stars orbit it for
              thirty years; the work won the Nobel Prize in Physics in 2020. In
              2022 the Event Horizon Telescope published a picture of it.
-             \n\nEverything you predicted about it is right. Its horizon is
+             \n\nEverything the four rules say about it holds. Its horizon is
              about 12.7 million kilometers across the radius, a fifth of the way
              out to Mercury. Its average density on that scale is about a
              million kilograms per cubic meter, roughly two hundred billion times

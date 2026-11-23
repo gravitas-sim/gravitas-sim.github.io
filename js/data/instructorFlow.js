@@ -586,7 +586,7 @@ export default {
       {
         from: 'now-make-it-heavier',
         to: 'the-rule-you-just-found',
-        text: 'The mass experiment. Students record three trials, watch the points land on a straight line through the origin, and only then meet R_s ∝ M.',
+        text: 'The mass experiment. Students choose three masses of their own, record and read each, watch the points land on a straight line through the origin, and only then meet R_s ∝ M.',
       },
       {
         from: 'squeezing-and-getting-away',
@@ -595,7 +595,7 @@ export default {
       },
       {
         from: 'which-one-is-denser',
-        to: 'where-the-room-comes-from',
+        to: 'count-the-zeros',
         text: 'The density surprise: prediction, ladder, then the zero-counting explanation.',
       },
       {
@@ -609,9 +609,9 @@ export default {
         text: 'Evaporation lifetime on a bar chart that counts zeros rather than years.',
       },
       {
-        from: 'from-city-sized-to-solar',
+        from: 'predict-twenty-against-ten',
         to: 'it-has-a-name',
-        text: 'Mass classes, a four-object lineup at clearly labeled separate scales, and the reveal that the mystery object is Sagittarius A*.',
+        text: 'A held prediction of all four factors for 20 against 10 solar masses, mass classes and a four-object lineup at clearly labeled separate scales, the mystery object answered from the student’s own factors, then the four factors read off and set beside the prediction, and the reveal that the mystery object is Sagittarius A*.',
       },
     ],
     'radial-velocity': [

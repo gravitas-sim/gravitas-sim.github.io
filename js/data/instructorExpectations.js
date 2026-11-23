@@ -257,8 +257,8 @@ export default {
         "The card gives 10 M☉ and a Schwarzschild radius of 29.5 km, so 59.1 km right across. The labels on the canvas are the renderer's own: they name the dark region, the disk and the jets, which are what such a system looks like from outside. None of them is the black hole, and it is worth saying that out loud.",
       'thirty-kilometers-is-not-very':
         'The readout puts the two scales side by side on purpose: about 16 world units drawn, 59.1 km real. The drawn size is whatever lets four orbits fit in a window and carries no information. Students who try to measure the horizon off the screen are doing the thing this screen exists to stop.',
-      'three-measurements':
-        'Three trials at 5, 10 and 20 solar masses give 14.8, 29.5 and 59.1 km. The points fall on a straight line through the origin. 5, 10 and 20 M☉ give 14.8, 29.5 and 59.1 km. The hole on the canvas changes with the slider and its orbiters change with it, which is the consequence the graph is about.',
+      'choose-three-masses':
+        'Students choose their own three masses: distinct, the heaviest at least four times the lightest, and not a chain of doublings. Every radius is 2.95 km per solar mass (2 M☉ gives 5.9 km, 25 M☉ gives 73.8 km), so the points fall on a straight line through the origin whatever they choose. The step refuses repeated masses, a spread under a factor of four, three doublings and a radius taken at another mass. The hole on the canvas changes with the slider and its orbiters change with it, which is the consequence the graph is about.',
       'squeeze-the-sun':
         'Squeezing one solar mass: the Sun today gives 0.2% of light speed, Earth-sized 2.2%, 30 km gives 31%, 6 km gives 70%, and 2.95 km gives exactly 100%.',
       'the-right-answer-for-the':
@@ -269,6 +269,8 @@ export default {
         'The thermometer level falls with mass. Sagittarius A* comes out at 1.4×10⁻¹⁴ K, far below the coldest temperature ever produced in a laboratory.',
       'a-timeline-that-will-not':
         'The lifetime bar for a 10 solar mass hole reaches 70 zeros against the universe’s 10.',
+      'read-twenty-against-ten':
+        'At 20 M☉ against 10 M☉ the four readings are radius ×2.00, density ×0.250, temperature ×0.500 and lifetime ×8.00. The step refuses a set taken at another mass, or at two different masses. The density factor is the one most students get wrong at the prediction: they choose ×½, treating it like the temperature.',
     },
     'radial-velocity': {
       'toward-away-toward-again':
