@@ -52,6 +52,7 @@ details{margin:.25rem 0 1rem}
 summary{cursor:pointer}
 a{color:var(--accent)}
 .blank{border-bottom:1px solid var(--rule);height:1.8rem}
+@media (max-width:36rem){dl{grid-template-columns:1fr;gap:0}dd{margin-bottom:.5rem}table{font-size:.8rem}th,td{padding:.25rem .3rem;min-width:3.4rem}}
 @media print{body{max-width:none;padding:0}.pb{break-after:page}details{display:block}summary{display:none}details>*{display:block}}
 `;
 
