@@ -62,15 +62,16 @@ describe('the pointer-target record', () => {
 });
 
 describe('the workflows', () => {
-  test('the list holds the ten student workflows and five instrument workflows, once each', () => {
+  test('the list holds the ten student workflows, five instrument workflows and one lesson workflow, once each', () => {
     const ids = workflows.map(w => w.id);
-    expect(new Set(ids).size).toBe(15);
+    expect(new Set(ids).size).toBe(16);
+    expect(ids).toContain('L1');
     for (let i = 1; i <= 10; i++) expect(ids).toContain(`S${i}`);
     for (let i = 1; i <= 5; i++) expect(ids).toContain(`N${i}`);
   });
 
   test('every workflow named is walked by the spec, and every walk is named', () => {
-    const walked = [...spec.matchAll(/^\s{4}id: '([SN]\d+)',$/gm)].map(
+    const walked = [...spec.matchAll(/^\s{4}id: '([SNL]\d+)',$/gm)].map(
       m => m[1]
     );
     expect(walked.sort()).toEqual(workflows.map(w => w.id).sort());
