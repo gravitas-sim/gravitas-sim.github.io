@@ -131,12 +131,8 @@ import {
   transitAnalysis,
   transitGeometry,
 } from './lightCurve.js';
-import {
-  encodePayload,
-  parseDocument,
-  payloadFromSetup,
-  shareUrl,
-} from './shareState.js';
+import { encodePayload, parseDocument, shareUrl } from './shareState.js';
+import { payloadFromSetup } from './shareState.js';
 // From js/notify.js rather than through js/controls.js, which only re-exports
 // them: going through controls put this module in a cycle (controls
 // dynamic-imports the loader, the loader this) that a convenience re-export alone made.
@@ -169,6 +165,7 @@ import {
   SCALE,
   adoptStage,
   applyStage,
+  carriedStage,
   centerOnSelected,
   clearStage,
   clearSnapshots,
@@ -1874,7 +1871,13 @@ function goToStep(index, { rebuild = false, open = false } = {}) {
   slots.runs?.release();
   const at = Math.max(0, Math.min(active.steps.length - 1, index));
   // A step that stages waits for the stage code; opening rejects on failure.
-  const declared = stageOf(active.steps, active.steps[at]);
+  // Opening a stage-less step from a record stands the stage walking there
+  // would have left to take down (carriedStage), so the scene is the same.
+  const declared =
+    stageOf(active.steps, active.steps[at]) ||
+    (rebuild && canvasNow(at)?.kind !== 'quiet'
+      ? carriedStage(active.steps, at, s => inDepth(s, depth))
+      : null);
   if (declared && !stageLoaded(declared)) {
     const turn = openGeneration;
     els.panel.setAttribute('aria-busy', 'true');
@@ -1904,6 +1907,8 @@ function goToStep(index, { rebuild = false, open = false } = {}) {
   const fresh = rebuild || (setup && setup !== appliedSetup);
   if (fresh) applySetup(setup);
   else applyLocks();
+  if (rebuild && declared && !stageOf(active.steps, active.steps[at]))
+    applyStage(declared, { force: true });
 
   // Before the new step draws anything, so a reader never hears the last
   // step's signal over the new step's instructions.
@@ -2540,8 +2545,8 @@ onLocaleChange(() => {
   if (els?.browser && !els.browser.classList.contains('hidden'))
     renderBrowser();
   if (active && els?.panel && !els.panel.hidden) {
-    els.title.textContent = active.title;
-    els.subtitle.textContent = active.subtitle;
+    els.title.textContent = assignment?.t || active.title;
+    if (!assignment) els.subtitle.textContent = active.subtitle;
     renderStep();
   }
 });

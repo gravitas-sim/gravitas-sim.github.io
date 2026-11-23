@@ -272,6 +272,29 @@ export function stageOf(steps, step) {
   }
 }
 
+/**
+ * The stage a walk had stood by a step that declares none, and that this step
+ * then took down: a stage-less step clears the stage it finds, so the scene
+ * walking there leaves is what the stage left behind, not the setup's world.
+ * Opening there from a saved record stands it first, so the engine takes it
+ * down the same way. Looks back through the steps of the depth to the nearest
+ * setup (which rebuilt the world and ended any stage before it).
+ * @param {Array<object>} steps - The lesson's steps
+ * @param {number} at - The step being opened
+ * @param {function(object): boolean} shown - Whether a step is on this depth's path
+ * @returns {?object} The stage to stand first, or none
+ */
+export function carriedStage(steps, at, shown) {
+  if (steps[at]?.setup || stageOf(steps, steps[at])) return null;
+  for (let i = at - 1; i >= 0; i--) {
+    if (!shown(steps[i])) continue;
+    const stage = stageOf(steps, steps[i]);
+    if (stage) return stage;
+    if (steps[i].setup) return null;
+  }
+  return null;
+}
+
 /** Stage kinds whose bodies the integrator moves (js/lessonStageHole.js, applyStarPairStage). */
 export const ENGINE_STAGES = Object.freeze([
   'starPair',

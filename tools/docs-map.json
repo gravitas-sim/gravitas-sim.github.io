@@ -1058,6 +1058,14 @@
       "student": false
     },
     {
+      "file": "RESUME_SCENE.md",
+      "kind": "feature",
+      "purpose": "Leaving and coming back: what opening a step from a saved record rebuilds, how it is checked against walking there, what the check found, the altered-scene line and what is said on a return.",
+      "owner": 367,
+      "added": "2026-11-22",
+      "student": false
+    },
+    {
       "file": "SAMPLER_GATE.md",
       "kind": "gate",
       "purpose": "The posterior-sampling gate: verdict C, no sampler in the inference core, with its thresholds and register rows.",

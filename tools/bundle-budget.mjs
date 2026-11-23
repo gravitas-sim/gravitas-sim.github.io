@@ -131,7 +131,7 @@ const BUDGETS = [
   {
     id: 'deferred',
     label: 'Deferred JavaScript (lazy chunks, gzipped)',
-    limit: 3265.6,
+    limit: 3266.1,
     reason:
       'Jumped from 1369 KB to 2105 KB when three.js and Chart.js stopped being ' +
       'CDN requests and became bundled chunks. That is the point of the change ' +
@@ -750,7 +750,8 @@ const BUDGETS = [
       '\n\nThe same branch merged with v4 e16734ec6 (D-R4-TRAINC-07): raised from 3258.4 to 3258.5 KB, the measurement by CI of the branch (head a0735a120): 3,336,664 bytes gzipped (3258.46 KB), rounded up to 0.1 KB. Under the standing approval of 2026-10-10.' +
       '\n\nThe combined finding-planets, binary-star and tides lessons (D-R4-TRAINC1-02): raised from 3251.0 to 3258.0 KB, the measurement by CI of the branch (head 4037bbe17): 3,336,093 bytes gzipped, 3257.903 KB, rounded up to 0.1 KB. Under the standing approval of 2026-10-10.' +
       '\n\nThe quiet lesson canvas keeps Settings and precise placement beside its More (D-R4-TRAINC1-05): raised from 3258.0 to 3258.2 KB, the measurement of a Node 22 build of the combined branch, 3,336,342 bytes gzipped (3258.13 KB), rounded up to 0.1 KB; the dock code in js/lessonCanvas.js. Under the standing approval of 2026-10-10.' +
-      '\n\nThis branch merged with v4 78e15afaf (D-R4-TRAINC1-05): v4 holds 3258.5 KB for the solar system scale and missing mass lessons, and the quiet canvas and combined planet, binary star and tides lessons add the 7.1 KB above it (grants dm 6.9 and du 0.2), so the limit is 3265.6 KB, the measurement by CI of the merged branch (head 64731fa43). Under the standing approval of 2026-10-10.',
+      '\n\nThis branch merged with v4 78e15afaf (D-R4-TRAINC1-05): v4 holds 3258.5 KB for the solar system scale and missing mass lessons, and the quiet canvas and combined planet, binary star and tides lessons add the 7.1 KB above it (grants dm 6.9 and du 0.2), so the limit is 3265.6 KB, the measurement by CI of the merged branch (head 64731fa43). Under the standing approval of 2026-10-10.' +
+      '\n\nResuming a lesson at its scene (D-R4-367-11): raised from 3265.6 to 3266.1 KB, the previous limit plus the 0.5 KB the branch adds over v4 (CI measured 3,329,600 bytes gzipped, 3251.5625 KB, against 3,329,004 on v4 before the branch merged with the solar system lessons; set again from the run on the merged branch). Under the standing approval of 2026-10-10 and the engine and production class exemption (maintainer decision, 2026-11-21).',
   },
 ];
 
