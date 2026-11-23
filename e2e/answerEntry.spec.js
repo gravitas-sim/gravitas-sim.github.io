@@ -341,9 +341,9 @@ test.describe('in Spanish', () => {
     page,
     app,
   }) => {
-    await app.boot({ url: '/?author=radial-velocity&step=17' });
+    await app.boot({ url: '/?author=radial-velocity&step=18' });
     await saveLanguage(page, 'es');
-    await app.boot({ url: '/?author=radial-velocity&step=17' });
+    await app.boot({ url: '/?author=radial-velocity&step=18' });
     await expect(page.locator('[data-numeric]')).toBeVisible();
 
     await answer(page).fill('0,69');

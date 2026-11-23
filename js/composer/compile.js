@@ -305,6 +305,14 @@ export function compileInvestigation(pack, api) {
         because: es(s.because),
         ...(estimate ? {} : { options: s.options.map(es) }),
       });
+      if (s.misconceptions) {
+        out.misconceptions = s.misconceptions.map(m => ({
+          id: m.id,
+          option: m.option,
+          say: en(m.say),
+        }));
+        w.misconceptions = s.misconceptions.map(m => ({ say: es(m.say) }));
+      }
     } else if (s.type === 'question') {
       const item =
         s.from !== undefined

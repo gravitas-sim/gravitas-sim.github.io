@@ -64,7 +64,9 @@ describe('the exoplanet instruments are registered and well formed', () => {
     for (const id of IDS) {
       const w = getWidget(id);
       const known = new Set(w.controls.map(c => c.id));
-      for (const p of w.presets ?? []) {
+      const presets =
+        typeof w.presets === 'function' ? w.presets({}) : (w.presets ?? []);
+      for (const p of presets) {
         for (const key of Object.keys(p.values))
           expect(known.has(key)).toBe(true);
       }

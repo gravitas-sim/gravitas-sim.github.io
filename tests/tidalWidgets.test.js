@@ -485,7 +485,9 @@ describe('the lesson and its instruments agree', () => {
 
   test('the distance measurement comes before the expression is shown', () => {
     // Step 12 hands over 2GMR/d³ only after step 10 has measured the d³.
-    const measure = inv.steps.findIndex(s => s.title === 'Four distances');
+    const measure = inv.steps.findIndex(
+      s => s.title === 'Four distances of your own'
+    );
     const formula = inv.steps.findIndex(
       s => s.title === 'The relationship, written down'
     );
@@ -494,7 +496,7 @@ describe('the lesson and its instruments agree', () => {
 
   test('the Roche limit is named only after it has been measured', () => {
     const balance = inv.steps.findIndex(
-      s => s.title === 'Where the balance tips'
+      s => s.title === 'Hunt the crossing for two bodies'
     );
     const named = inv.steps.findIndex(s => /The Roche limit/.test(s.title));
     expect(balance).toBeLessThan(named);
@@ -505,18 +507,27 @@ describe('the lesson and its instruments agree', () => {
   });
 
   test('the numeric answers match what the instruments actually report', () => {
-    const halving = stepFor('How steeply does it fall?');
+    const halving = stepFor('The factor per halving');
     const w = widget('tide-strength');
     const measured =
       w.compute({ dist: 0.5, mass: 1 }).relative /
       w.compute({ dist: 1, mass: 1 }).relative;
     expect(Math.abs(measured - halving.answer)).toBeLessThan(halving.tolerance);
 
-    const tips = stepFor('Where the balance tips');
+    // The hunt: the crossing the student is sent to find is the instrument's.
+    const hunt = stepFor('Hunt the crossing for two bodies');
     const balance = widget('tide-balance');
-    const radii =
-      balance.compute({ dist: 3, density: 3300 }).rigid / EARTH_RADIUS_M;
-    expect(Math.abs(radii - tips.answer)).toBeLessThan(tips.tolerance);
+    for (const [rho, id] of [
+      [600, 'ice'],
+      [6000, 'iron'],
+    ]) {
+      const radii =
+        balance.compute({ dist: 3, density: rho }).rigid / EARTH_RADIUS_M;
+      expect(
+        Math.abs(radii - 2 ** (1 / 3) * Math.cbrt(5514 / rho))
+      ).toBeLessThan(0.01);
+      expect(hunt.fields.some(f => f.id === id)).toBe(true);
+    }
   });
 
   test('the two scenarios the lesson loads are the ones it describes', () => {
@@ -538,6 +549,6 @@ describe('the lesson and its instruments agree', () => {
 
   test('it is the length of a full laboratory session', () => {
     expect(inv.steps.length).toBeGreaterThanOrEqual(24);
-    expect(inv.steps.length).toBeLessThanOrEqual(32);
+    expect(inv.steps.length).toBeLessThanOrEqual(36);
   });
 });
