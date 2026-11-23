@@ -24,7 +24,7 @@
     }
   },
   "sourceFiles": 310,
-  "sourceDigest": "63ad4c2c49d8a40d4e170b3176cd30489873797f8e2c72e5708d1c4526b1103a",
+  "sourceDigest": "415970fe6bb5cf73d06f4ae1b94d37b8bfb23ac6d93314bd876d71a18e0269f7",
   "sources": {
     "js/activities/activities.js": "af9b7e121b9a72c2a5cc18e07331d6ee841934d402b030294d25c442628881ef",
     "js/activities/activityBridge.js": "ddd8015bf88938d98d967942048bc34e30a0099344b1055bd45a0459ec0333fe",
@@ -213,7 +213,7 @@
     "js/data/investigations/es/why-the-bright-ones-win.js": "e44b8549ae8ad24107e75558487552ed4fc01eb59c206c8a9b8907a704192f99",
     "js/data/investigations/exoplanet-sequence.js": "160af2a35dc6bd5099f1307a748d90b630433b50037f687411d0b47077bcef4f",
     "js/data/investigations/exposure-sequence.js": "50240159e15f6f40bd83a22b86874af131d78bc7549ee46174a0d3813a03ccd6",
-    "js/data/investigations/extending-an-experiment.js": "141381a7f5a0bbe1f3ef92a024b4aff595e639cc4f9883a9d0b35817ec5f5317",
+    "js/data/investigations/extending-an-experiment.js": "c34d8c4b96b580f153e14e173ba2788049cdf8ce555410282633d45144ab45bb",
     "js/data/investigations/gaia-sequence.js": "5db2311697c0725bd12fa8d12df45ee12d2ade4d36d4879d4a649b4dedc51ae5",
     "js/data/investigations/goldilocks-question.js": "4870803e7fabe65d118573d2a6ec87190bb45b2e69deccefe512f739b3b5b16f",
     "js/data/investigations/gravity-assist.js": "05d22285b1e787a47fa62edfa3a31a34951b85a1d6933b2e3b9d2cd0fc4c8348",
@@ -221,7 +221,7 @@
     "js/data/investigations/i18n.js": "a8b8d2d93ab1170aaffd92df42faceb74cbbf32cb67227ed13e3ea67bc759567",
     "js/data/investigations/imaging-sequence.js": "692f28186c7672f124a80e244755ce62d85335424ef0ff069a8bcbfda1a84c84",
     "js/data/investigations/inside-a-star.js": "1d818e86352a2a49d5380253ffc1bbd7b749690cceb95ccb7e8242edcc84cfc8",
-    "js/data/investigations/integrators-in-practice.js": "2152de3358f18158015e9149c40e65512acf2783d7ae47cc032d66340b37f7c6",
+    "js/data/investigations/integrators-in-practice.js": "0f7500073630c62414b1b751651b0c16beb2ed8e4422fe517269b042ca5c9458",
     "js/data/investigations/joint-sequence.js": "93054fde514b945412281e919bd0cc4dc0bc30cff66cf043d6da3c78c83f04b5",
     "js/data/investigations/keplers-laws.js": "b4d97e8e4a4de2e58c2780d3fea49bf2ad36ce766bef6c4697ff51b8f776905e",
     "js/data/investigations/lagrange-points.js": "be640b705b21ef8d4b06b2686e59fdd9e170b13f1679c4734dbf0b69e53d10c9",
@@ -337,5 +337,5 @@
     "tools/instructor-freshness.mjs": "96052b2f27080f0243fdd4d5f7608927bd67f0c50808b6eac3345a65c14d1e28",
     "tools/source-closure.mjs": "961828e4d0d40d8a6f8c029fe9b9435ecaf39a74b62640efc0b4145c35c7650a"
   },
-  "contentDigest": "282414131827eb5fbd1549a110d3186e407447fc054aa166b92448b590eac269"
+  "contentDigest": "0e345be8038859ca658c2c5aebef8dca5b7adf86980983164622000227de51f7"
 }
