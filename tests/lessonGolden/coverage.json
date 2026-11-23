@@ -8,9 +8,9 @@
     "weighing-stars",
     "tides",
     "butterfly-effect",
-    "extending-an-experiment",
     "measuring-the-moon",
     "black-holes",
+    "extending-an-experiment",
     "propose-an-observation",
     "radial-velocity",
     "what-is-a-gravitational-wave",
@@ -200,11 +200,6 @@
       "key:predict.requires",
       "lock:null"
     ],
-    "extending-an-experiment": [
-      "key:measure.canvas",
-      "key:measure.compute",
-      "key:read.canvas"
-    ],
     "measuring-the-moon": [
       "key:question.maxUncertainty",
       "key:question.minUncertainty",
@@ -213,6 +208,10 @@
     "black-holes": [
       "key:question.checklist",
       "key:read.explainView"
+    ],
+    "extending-an-experiment": [
+      "key:measure.compute",
+      "key:read.canvas"
     ],
     "propose-an-observation": [
       "key:measure.plan",
@@ -310,7 +309,7 @@
     "investigations": 124,
     "steps": 2003,
     "activityCuts": 6,
-    "lessonTokens": 182,
+    "lessonTokens": 181,
     "activityTokens": 29,
     "stepTypes": {
       "read": 378,
