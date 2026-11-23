@@ -48,7 +48,7 @@ import { t, registerMessages } from './i18n/index.js';
 import { EN_IMAGING } from './i18n/en.imaging.js';
 import { ES_IMAGING } from './i18n/es.imaging.js';
 import { fixed, withUnit } from './format.js';
-import { computeValue } from './quality.js';
+import { computeNote, computeValue } from './quality.js';
 import {
   surface,
   responsiveHeight,
@@ -959,6 +959,13 @@ const BINARY_FIT = {
         { label: t('imgW.o.row.mass95'), value: iv(m.intervals[1]) },
         { label: t('imgW.o.row.frame'), value: t('imgW.o.value.frame') }
       );
+      // A slow machine draws fewer samples for the intervals: said beside them.
+      const low = computeNote(['monteCarloDraws'])?.reduced.monteCarloDraws;
+      if (low)
+        rows.push({
+          label: t('imgW.o.row.draws'),
+          value: t('imgW.o.value.drawsLow', low),
+        });
     }
     if (r.nodeAmbiguity)
       rows.push({

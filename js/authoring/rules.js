@@ -877,12 +877,12 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
             );
           }
 
-          // The author's own hint values are the model answer: a validator that
-          // rejects them tells every student who reads the hints they are wrong.
+          // The hint values are the model answer, unless a field reads an earlier step.
           const hints = hintValues(step);
           const complete =
             Object.keys(hints).length ===
-            step.fields.filter(f => typeof f.compute !== 'function').length;
+              step.fields.filter(f => typeof f.compute !== 'function').length &&
+            !step.fields.some(f => f.compute?.length > 1);
           if (complete && Object.keys(hints).length > 0) {
             const withComputed = { ...hints };
             for (const f of step.fields) {

@@ -101,7 +101,7 @@ test.describe('what an investigation keeps', () => {
     page,
     app,
   }) => {
-    // A walk through thirty-three steps: 4 to 6.5 minutes on a busy machine.
+    // A walk through thirty-one steps: 4 to 6.5 minutes on a busy machine.
     test.setTimeout(600_000);
     await openInvestigation(page, app, ID);
     const plan = await lessonPlan(page, ID);
@@ -133,7 +133,7 @@ test.describe('what an investigation keeps', () => {
     await page.locator('#investigationBody [data-hint]').first().click();
 
     // A written answer, last, so the reload lands on it.
-    await walkToSid(page, plan, 'does-the-curve-decide');
+    await walkToSid(page, plan, 'what-have-you-actually-shown');
     await page
       .locator('#investigationBody [data-answer]')
       .fill('A halo of dark matter.');

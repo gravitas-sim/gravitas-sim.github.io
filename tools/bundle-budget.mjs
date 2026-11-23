@@ -53,7 +53,7 @@ const BUDGETS = [
   {
     id: 'initial',
     label: 'Initial download (CSS + eager JS)',
-    limit: 744.8,
+    limit: 744.9,
     reason:
       'Was 743 KB when this budget was first asked for. The application had ' +
       'already grown to 771 KB on its own - the extracted state module, the ' +
@@ -125,12 +125,13 @@ const BUDGETS = [
       '\n\nThe same branch after the lesson sheet and status block repairs (D-R4-TRAINA-03): raised from 743.5 to 743.6 KB, the measurement by CI (head 51ee3a090): 761,442 bytes (743.60 KB), rounded up to 0.1 KB. Under the standing approval of 2026-10-10.' +
       '\n\nWhat pulls on what (D-R4-459-07): the one relation for which bodies pull which, its per-body test and the caveat that reads it are start-up engine code; raised from 743.6 to 744.4 KB, the measurement by CI of the branch merged with v4 b2424e160 (run 44966228334): 762,209 bytes (744.34 KB), rounded up to 0.1 KB. Under the standing approval of 2026-10-10.' +
       '\n\nThe pinned lesson step (D-R4-342-06): one pin per owner and the clock-hold rule beside it in js/timestep.js, start-up code; raised from 744.4 to 744.6 KB, the measurement of a Node 22.23.4 build of the branch merged with v4 9d4aa6fd: 762,376 bytes (744.51 KB), rounded up to 0.1 KB. Under the standing approval of 2026-10-10.' +
-      '\n\nTidal fragments carried between steps (D-R4-460-05): the carry is start-up engine code in js/engine/bodies.js; raised from 744.6 to 744.8 KB, the measurement by CI of the branch merged with v4 69a644d5 (run 45023976816): 762,573 bytes (744.7002 KB), rounded up to 0.1 KB. Under the standing approval of 2026-10-10.',
+      '\n\nThe low tier cuts the full world (D-R4-343-05): the world builder makes the full population and keeps the bodies the cap allows, start-up engine code; raised from 744.6 to 744.7 KB, the measurement of a Node 22.23.4 build of the branch merged with v4 93007c24: 762,526 bytes (744.65 KB), rounded up to 0.1 KB; 762,568 bytes (744.70 KB) on the branch merged with v4 93295b2e. Under the standing approval of 2026-10-10.' +
+      "\n\nTidal fragments carried between steps (D-R4-460-05): the carry is start-up engine code in js/engine/bodies.js; raised from 744.7 to 744.9 KB, the measurement of a Node 22.23.4 build of the branch merged with v4 78e15afaf: 762,723 bytes (744.85 KB), rounded up to 0.1 KB; set to CI's figure before review. Under the standing approval of 2026-10-10.",
   },
   {
     id: 'deferred',
     label: 'Deferred JavaScript (lazy chunks, gzipped)',
-    limit: 3251.0,
+    limit: 3258.6,
     reason:
       'Jumped from 1369 KB to 2105 KB when three.js and Chart.js stopped being ' +
       'CDN requests and became bundled chunks. That is the point of the change ' +
@@ -743,7 +744,11 @@ const BUDGETS = [
       '\n\nThe combined lesson framing, links, reset and saving branch (D-R4-TRAINA-03): raised from 3226.3 to 3233.3 KB, the measurement by CI of the branch (head f51518237): 3,310,838 bytes gzipped (3233.24 KB), rounded up to 0.1 KB. Under the standing approval of 2026-10-10.' +
       '\n\nWhat pulls on what (D-R4-459-07): the relation, the scene statement and the inspector row, carried into every bundle that builds the engine; raised from 3233.3 to 3234.5 KB, the measurement by CI of the branch merged with v4 b2424e160 (run 44966228334): 3,312,125 bytes gzipped (3234.50 KB), rounded up to 0.1 KB. Under the standing approval of 2026-10-10.' +
       "\n\nThe pinned lesson step (D-R4-342-06): the pin rule in the stage gate and every setup step's declared speed and start state; raised from 3234.5 to 3235.3 KB, the measurement of a Node 22.23.4 build of the branch merged with v4 9d4aa6fd: 3,312,934 bytes gzipped (3235.29 KB), rounded up to 0.1 KB. Under the standing approval of 2026-10-10." +
-      '\n\nThe combined stars and computing lessons (D-R4-TRAINB-08): raised from 3235.3 to 3251.0 KB, the previous limit plus the 15.7 KB the branch adds over v4 93007c242 (CI measured 3,328,164 B, 3250.16 KB, against v4 3234.5 KB before the pinned lesson step landed). Under the standing approval of 2026-10-10.',
+      '\n\nThe combined stars and computing lessons (D-R4-TRAINB-08): raised from 3235.3 to 3251.0 KB, the previous limit plus the 15.7 KB the branch adds over v4 93007c242 (CI measured 3,328,164 B, 3250.16 KB, against v4 3234.5 KB before the pinned lesson step landed). Under the standing approval of 2026-10-10.' +
+      '\n\nThe low tier cuts the full world (D-R4-343-05): the cut and the low-tier draws row of the binary-orbit tool; raised from 3235.3 to 3235.5 KB on v4 93007c24 (3,313,081 bytes gzipped); on the branch merged with v4 93295b2e, CI measures 3,329,004 bytes gzipped (3250.98 KB), inside the v4 limit of 3251.0, so no further raise. Under the standing approval of 2026-10-10.' +
+      '\n\nThe solar system scale, comets, moons and missing mass lessons (D-R4-TRAINC-03): raised from 3251.0 to 3258.4 KB, the measurement by CI of the branch (run 45018162713, d5de9d3d1): 3,336,518 bytes gzipped (3258.32 KB), rounded up to 0.1 KB. Under the standing approval of 2026-10-10.' +
+      '\n\nThe same branch merged with v4 e16734ec6 (D-R4-TRAINC-07): raised from 3258.4 to 3258.5 KB, the measurement by CI of the branch (head a0735a120): 3,336,664 bytes gzipped (3258.46 KB), rounded up to 0.1 KB. Under the standing approval of 2026-10-10.' +
+      "\n\nThe tidal-fragment carry in every bundle that builds the engine (D-R4-460-05): raised from 3258.5 to 3258.6 KB, the measurement of a Node 22.23.4 build of the branch merged with v4 78e15afaf: 3,336,737 bytes gzipped (3258.53 KB), rounded up to 0.1 KB; set to CI's figure before review. Under the standing approval of 2026-10-10.",
   },
 ];
 
