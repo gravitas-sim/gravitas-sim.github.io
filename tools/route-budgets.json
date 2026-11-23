@@ -116,7 +116,7 @@
         "requests": 6
       },
       "course-packs": {
-        "kb": 744.6,
+        "kb": 744.7,
         "requests": 46
       },
       "sky": {
@@ -144,7 +144,7 @@
       "transit": {
         "kb": 943.6,
         "requests": 77,
-        "toolKb": 1028.8,
+        "toolKb": 1028.9,
         "toolRequests": 93
       },
       "power-law": {
