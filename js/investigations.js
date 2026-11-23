@@ -133,7 +133,6 @@ import {
   transitGeometry,
 } from './lightCurve.js';
 import { encodePayload, parseDocument, shareUrl } from './shareState.js';
-import { normalizeSeed, formatSeed } from './rng.js';
 // From js/notify.js rather than through js/controls.js, which only re-exports
 // them: going through controls put this module in a cycle (controls
 // dynamic-imports the loader, the loader this) that a convenience re-export alone made.
@@ -166,6 +165,7 @@ import {
   SCALE,
   adoptStage,
   applyStage,
+  carriedStage,
   centerOnSelected,
   clearStage,
   clearSnapshots,
@@ -175,6 +175,7 @@ import {
   stageContext,
   stageLoaded,
   stageMemo,
+  payloadFromSetup,
   pinLessonStep,
   stageOf,
   stageScale,
@@ -546,30 +547,6 @@ function probeContext() {
 }
 
 // --- Setting up a step's scenario ---------------------------------------------
-
-/**
- * Convert a lesson's declarative setup into a shared-link payload, so a step cannot set up a state that could
- * not be handed out as a URL (the report's "open this exact state" links stay honest).
- * @param {Object} setup - From a step definition
- * @returns {Object} Payload for applyShareState
- */
-function payloadFromSetup(setup) {
-  const payload = {
-    v: 1,
-    s: setup.scenario,
-    seed: formatSeed(normalizeSeed(setup.seed ?? setup.scenario)),
-  };
-  if (setup.settings) payload.d = { ...setup.settings };
-  if (setup.camera) {
-    payload.c = [
-      setup.camera.zoom ?? 1.5,
-      setup.camera.pan?.x ?? 0,
-      setup.camera.pan?.y ?? 0,
-    ];
-  }
-  if (setup.paused) payload.p = 1;
-  return payload;
-}
 
 function applySetup(setup) {
   if (!setup) return;
@@ -1893,7 +1870,13 @@ function goToStep(index, { rebuild = false, open = false } = {}) {
   slots.runs?.release();
   const at = Math.max(0, Math.min(active.steps.length - 1, index));
   // A step that stages waits for the stage code; opening rejects on failure.
-  const declared = stageOf(active.steps, active.steps[at]);
+  // Opening a stage-less step from a record stands the stage walking there
+  // would have left to take down (carriedStage), so the scene is the same.
+  const declared =
+    stageOf(active.steps, active.steps[at]) ||
+    (rebuild && canvasNow(at)?.kind !== 'quiet'
+      ? carriedStage(active.steps, at, s => inDepth(s, depth))
+      : null);
   if (declared && !stageLoaded(declared)) {
     const turn = openGeneration;
     els.panel.setAttribute('aria-busy', 'true');
@@ -1923,6 +1906,8 @@ function goToStep(index, { rebuild = false, open = false } = {}) {
   const fresh = rebuild || (setup && setup !== appliedSetup);
   if (fresh) applySetup(setup);
   else applyLocks();
+  if (rebuild && declared && !stageOf(active.steps, active.steps[at]))
+    applyStage(declared, { force: true });
 
   // Before the new step draws anything, so a reader never hears the last
   // step's signal over the new step's instructions.
@@ -2559,8 +2544,8 @@ onLocaleChange(() => {
   if (els?.browser && !els.browser.classList.contains('hidden'))
     renderBrowser();
   if (active && els?.panel && !els.panel.hidden) {
-    els.title.textContent = active.title;
-    els.subtitle.textContent = active.subtitle;
+    els.title.textContent = assignment?.t || active.title;
+    if (!assignment) els.subtitle.textContent = active.subtitle;
     renderStep();
   }
 });
