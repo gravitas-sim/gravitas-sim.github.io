@@ -1,6 +1,8 @@
 {
  "family": "js/data/investigations",
- "calls": 92,
- "reached": 92,
- "unreached": []
+ "calls": 94,
+ "reached": 93,
+ "unreached": [
+  "js/data/investigations/black-holes.js:1336:57"
+ ]
 }

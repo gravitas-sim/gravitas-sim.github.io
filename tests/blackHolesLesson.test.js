@@ -27,6 +27,7 @@
 import { describe, test, expect } from '@jest/globals';
 import { INVESTIGATIONS } from '../js/data/investigations.js';
 import { blackHoleFacts } from '../js/blackHolePhysics.js';
+import { SOLAR_MASS_UNIT } from '../js/constants.js';
 import { readProgress } from '../js/investigations/progressSchema.js';
 import { earlierAnswers, wasIn } from '../js/investigations/stepView.js';
 
@@ -56,8 +57,13 @@ const formula = suns => {
 const QUANTITIES = ['rsKm', 'density', 'temperature', 'lifetimeYears'];
 const EXPONENT = { rsKm: 1, density: -2, temperature: -1, lifetimeYears: 3 };
 
+// A staged black hole carries its mass in engine units only, as the stage
+// builds it (js/lessonStageHole.js).
 const ctxAt = suns => ({
-  role: r => (r === 'hole' && suns ? { massInSuns: suns } : null),
+  role: r =>
+    r === 'hole' && suns
+      ? { kind: 'BlackHole', mass: suns * SOLAR_MASS_UNIT }
+      : null,
   holeFacts: blackHoleFacts,
 });
 const rows = (sid, suns) =>
@@ -231,6 +237,11 @@ describe('three masses of the student’s own', () => {
     const r = rows('choose-three-masses', 7);
     expect(firstNumber(r.mass)).toBe(7);
     expect(firstNumber(r.rs)).toBeCloseTo(blackHoleFacts(7).rsKm, 1);
+  });
+
+  test('the lesson reads the engine mass in the unit the engine uses', () => {
+    // The lesson file holds the factor as a literal (lessons import nothing).
+    expect(SOLAR_MASS_UNIT).toBe(1000);
   });
 
   test('the zero count opens below the setting it asks about', () => {

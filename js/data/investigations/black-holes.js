@@ -51,6 +51,14 @@ const HOLE = { hole: { massSun: 10, fit: true } };
  */
 const EQUAL_MASS = { equalMass: { massSun: 8, fit: true } };
 
+/**
+ * The staged hole's mass in solar masses. A black hole carries its mass in
+ * the engine's unit only, a thousandth of a solar mass (SOLAR_MASS_UNIT in
+ * js/constants.js, pinned by tests/blackHolesLesson.test.js), so a reading
+ * taken from the canvas follows the slider rather than the declared stage.
+ */
+const sunsOf = hole => hole.massInSuns ?? hole.mass / 1000;
+
 /** The instrument that draws one horizon at a scale that does not move. */
 const horizonTool = (extra = {}) => ({ id: 'bh-horizon', ...extra });
 
@@ -444,7 +452,7 @@ const BLACK_HOLES = {
             { id: 'mass', label: 'Hole on the canvas', value: '-' },
             { id: 'rs', label: 'Its Schwarzschild radius', value: '-' },
           ];
-        const m = hole.massInSuns ?? 10;
+        const m = sunsOf(hole);
         return [
           {
             id: 'mass',
@@ -1321,7 +1329,7 @@ const BLACK_HOLES = {
       },
       probe: ctx => {
         const hole = ctx.role('hole');
-        const m = hole ? (hole.massInSuns ?? 10) : NaN;
+        const m = hole ? sunsOf(hole) : NaN;
         const f = ctx.holeFacts(m);
         const b = ctx.holeFacts(10);
         // No hole on the canvas: the rows stay, with nothing to take.

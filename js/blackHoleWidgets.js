@@ -338,6 +338,9 @@ let trials = { session: null, points: [] };
 
 const SCALING = {
   id: 'bh-scaling',
+  // Handed the lesson context, so a step that declares `scene` can make the
+  // hole on the canvas the one the slider describes.
+  live: true,
   get title() {
     return t('bhW.massAgainstHorizonSize');
   },
@@ -429,7 +432,12 @@ const SCALING = {
     });
     return rows;
   },
-  draw(canvas, v, _ctx, spec = {}) {
+  draw(canvas, v, lesson, spec = {}) {
+    // The staged hole follows the slider where the step asks for it. A
+    // restage, not an edit: the orbiters' speeds belong to one mass, and
+    // restageHole refuses a rebuild that restates the mass already there.
+    if (spec.scene && typeof lesson?.restageHole === 'function')
+      lesson.restageHole({ massSun: v.mass });
     const H = responsiveHeight(292, 244);
     const { ctx, w } = surface(canvas, H);
     sky(ctx, w, H);

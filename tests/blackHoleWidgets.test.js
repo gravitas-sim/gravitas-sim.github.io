@@ -349,7 +349,10 @@ describe('the black hole lesson', () => {
 
   test('is the length a class period can hold', () => {
     expect(inv.steps.length).toBeGreaterThanOrEqual(24);
-    expect(inv.steps.length).toBeLessThanOrEqual(30);
+    // 32 since the four-factor prediction and the four readings it meets were
+    // added inside the same 35-45 minute band (register D-R4-352-03).
+    expect(inv.steps.length).toBeLessThanOrEqual(32);
+    expect(inv.duration).toBe('35-45 min');
   });
 
   test('asks for a prediction before every discovery', () => {

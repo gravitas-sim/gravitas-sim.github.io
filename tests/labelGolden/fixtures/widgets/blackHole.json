@@ -86,28 +86,28 @@
     "defaults": {"mass":"5"}
    },
    "precision": [],
-   "specs": 4,
-   "frames": 37,
+   "specs": 5,
+   "frames": 164,
    "readout": {
-    "calls": 37,
+    "calls": 164,
     "distinct": 11,
     "digest": "0f251f938180d185",
     "samples": [[{"label":"Slider is at","value":"5 M☉ → 14.8 km","emphasis":true}],[{"label":"Slider is at","value":"8 M☉ → 23.6 km","emphasis":true}],[{"label":"Slider is at","value":"2 M☉ → 5.9 km","emphasis":true}],[{"label":"Slider is at","value":"25 M☉ → 73.9 km","emphasis":true}],[{"label":"Slider is at","value":"14 M☉ → 41.4 km","emphasis":true}],[{"label":"Trial 1: 5 M☉","value":"14.8 km"},{"label":"Slider is at","value":"5 M☉ → 14.8 km","emphasis":true}]]
    },
    "canvas": {
-    "calls": 37,
+    "calls": 164,
     "distinct": 2,
     "digest": "66c9aa5ea455542d",
     "samples": [["0","20","40","60","80","0","5","10","15","20","25","Mass of the black hole (M☉)","Schwarzschild radius (km)","no trials recorded yet"],["0","20","40","60","80","0","5","10","15","20","25","Mass of the black hole (M☉)","Schwarzschild radius (km)","1 trial recorded"]]
    },
    "controls": {
-    "calls": 37,
+    "calls": 164,
     "distinct": 10,
     "digest": "da18bf6fb0f305ca",
     "samples": [["5 M☉"],["2 M☉"],["25 M☉"],["14 M☉"]]
    },
    "phases": {
-    "calls": 15,
+    "calls": 60,
     "distinct": 9,
     "digest": "28f532c589ad75e2",
     "samples": [{"action":"record","after":"press","button":"⊕ Record this trial"},{"action":"record","after":"step","button":"⊕ Record this trial"},{"action":"record","after":"press again","button":"⊕ Record this trial"},{"action":"clear","after":"press","button":"↺ Clear trials"},{"action":"clear","after":"step","button":"↺ Clear trials"},{"action":"clear","after":"press again","button":"↺ Clear trials"},{"action":"capture","after":"press","button":"Capture these trials"},{"action":"capture","after":"step","button":"Capture these trials"},{"action":"capture","after":"press again","button":"Capture these trials"}]
@@ -123,28 +123,28 @@
     "defaults": {"mass":"5"}
    },
    "precision": [],
-   "specs": 4,
-   "frames": 37,
+   "specs": 5,
+   "frames": 164,
    "readout": {
-    "calls": 37,
+    "calls": 164,
     "distinct": 11,
     "digest": "aac2643a499120cd",
     "samples": [[{"label":"El deslizador está en","value":"5 M☉ → 14,8 km","emphasis":true}],[{"label":"El deslizador está en","value":"8 M☉ → 23,6 km","emphasis":true}],[{"label":"El deslizador está en","value":"2 M☉ → 5,9 km","emphasis":true}],[{"label":"El deslizador está en","value":"25 M☉ → 73,9 km","emphasis":true}],[{"label":"El deslizador está en","value":"14 M☉ → 41,4 km","emphasis":true}],[{"label":"Trial 1: 5 M☉","value":"14,8 km"},{"label":"El deslizador está en","value":"5 M☉ → 14,8 km","emphasis":true}]]
    },
    "canvas": {
-    "calls": 37,
+    "calls": 164,
     "distinct": 2,
     "digest": "66c9aa5ea455542d",
     "samples": [["0","20","40","60","80","0","5","10","15","20","25","Mass of the black hole (M☉)","Schwarzschild radius (km)","no trials recorded yet"],["0","20","40","60","80","0","5","10","15","20","25","Mass of the black hole (M☉)","Schwarzschild radius (km)","1 trial recorded"]]
    },
    "controls": {
-    "calls": 37,
+    "calls": 164,
     "distinct": 10,
     "digest": "da18bf6fb0f305ca",
     "samples": [["5 M☉"],["2 M☉"],["25 M☉"],["14 M☉"]]
    },
    "phases": {
-    "calls": 15,
+    "calls": 60,
     "distinct": 9,
     "digest": "d5f5c984669900b6",
     "samples": [{"action":"record","after":"press","button":"⊕ Registrar este ensayo"},{"action":"record","after":"step","button":"⊕ Registrar este ensayo"},{"action":"record","after":"press again","button":"⊕ Registrar este ensayo"},{"action":"clear","after":"press","button":"↺ Borrar ensayos"},{"action":"clear","after":"step","button":"↺ Borrar ensayos"},{"action":"clear","after":"press again","button":"↺ Borrar ensayos"},{"action":"capture","after":"press","button":"Capturar estos ensayos"},{"action":"capture","after":"step","button":"Capturar estos ensayos"},{"action":"capture","after":"press again","button":"Capturar estos ensayos"}]
@@ -315,21 +315,21 @@
    },
    "precision": [],
    "specs": 2,
-   "frames": 12,
+   "frames": 11,
    "readout": {
-    "calls": 12,
+    "calls": 11,
     "distinct": 8,
     "digest": "072c1931667134a0",
     "samples": [[{"label":"Starting black hole","value":"10 M☉"},{"label":"After multiplying","value":"10,000 M☉"},{"label":"Volume gained","value":"3 + 3 + 3 = 9 zeros","emphasis":true},{"label":"So density lost","value":"9 − 3 = 6 zeros","emphasis":true},{"label":"New average density","value":"1.8 × 10¹¹ kg/m³"}],[{"label":"Starting black hole","value":"10 M☉"},{"label":"After multiplying","value":"100 M☉"},{"label":"Volume gained","value":"1 + 1 + 1 = 3 zeros","emphasis":true},{"label":"So density lost","value":"3 − 1 = 2 zeros","emphasis":true},{"label":"New average density","value":"1.8 × 10¹⁵ kg/m³"}],[{"label":"Starting black hole","value":"10 M☉"},{"label":"After multiplying","value":"1 billion M☉"},{"label":"Volume gained","value":"8 + 8 + 8 = 24 zeros","emphasis":true},{"label":"So density lost","value":"24 − 8 = 16 zeros","emphasis":true},{"label":"New average density","value":"18 kg/m³"}],[{"label":"Starting black hole","value":"10 M☉"},{"label":"After multiplying","value":"1 million M☉"},{"label":"Volume gained","value":"5 + 5 + 5 = 15 zeros","emphasis":true},{"label":"So density lost","value":"15 − 5 = 10 zeros","emphasis":true},{"label":"New average density","value":"1.8 × 10⁷ kg/m³"}],[{"label":"Starting black hole","value":"10 M☉"},{"label":"After multiplying","value":"10 million M☉"},{"label":"Volume gained","value":"6 + 6 + 6 = 18 zeros","emphasis":true},{"label":"So density lost","value":"18 − 6 = 12 zeros","emphasis":true},{"label":"New average density","value":"1.8 × 10⁵ kg/m³"}],[{"label":"Starting black hole","value":"10 M☉"},{"label":"After multiplying","value":"100 million M☉"},{"label":"Volume gained","value":"7 + 7 + 7 = 21 zeros","emphasis":true},{"label":"So density lost","value":"21 − 7 = 14 zeros","emphasis":true},{"label":"New average density","value":"1,842 kg/m³"}],[{"label":"Starting black hole","value":"10 M☉"},{"label":"After multiplying","value":"1,000 M☉"},{"label":"Volume gained","value":"2 + 2 + 2 = 6 zeros","emphasis":true},{"label":"So density lost","value":"6 − 2 = 4 zeros","emphasis":true},{"label":"New average density","value":"1.8 × 10¹³ kg/m³"}],[{"label":"Starting black hole","value":"10 M☉"},{"label":"After multiplying","value":"100,000 M☉"},{"label":"Volume gained","value":"4 + 4 + 4 = 12 zeros","emphasis":true},{"label":"So density lost","value":"12 − 4 = 8 zeros","emphasis":true},{"label":"New average density","value":"1.8 × 10⁹ kg/m³"}]]
    },
    "canvas": {
-    "calls": 12,
+    "calls": 11,
     "distinct": 8,
     "digest": "3e4ea79db026c2bf",
     "samples": [["10 M☉  →  10,000 M☉","Mass","×1,000","Horizon radius","×1,000","Volume inside it","×1,000,000,000","Average density","÷1,000,000","zeros:  mass +3   radius +3   volume +9   density −6"],["10 M☉  →  100 M☉","Mass","×10","Horizon radius","×10","Volume inside it","×1,000","Average density","÷100","zeros:  mass +1   radius +1   volume +3   density −2"],["10 M☉  →  1 billion M☉","Mass","×100,000,000","Horizon radius","×100,000,000","Volume inside it","×1,000,000,000,000,000,000,000,000","Average density","÷10,000,000,000,000,000","zeros:  mass +8   radius +8   volume +24   density −16"],["10 M☉  →  1 million M☉","Mass","×100,000","Horizon radius","×100,000","Volume inside it","×1,000,000,000,000,000","Average density","÷10,000,000,000","zeros:  mass +5   radius +5   volume +15   density −10"],["10 M☉  →  10 million M☉","Mass","×1,000,000","Horizon radius","×1,000,000","Volume inside it","×1,000,000,000,000,000,000","Average density","÷1,000,000,000,000","zeros:  mass +6   radius +6   volume +18   density −12"],["10 M☉  →  100 million M☉","Mass","×10,000,000","Horizon radius","×10,000,000","Volume inside it","×1,000,000,000,000,000,000,000","Average density","÷100,000,000,000,000","zeros:  mass +7   radius +7   volume +21   density −14"],["10 M☉  →  1,000 M☉","Mass","×100","Horizon radius","×100","Volume inside it","×1,000,000","Average density","÷10,000","zeros:  mass +2   radius +2   volume +6   density −4"],["10 M☉  →  100,000 M☉","Mass","×10,000","Horizon radius","×10,000","Volume inside it","×1,000,000,000,000","Average density","÷100,000,000","zeros:  mass +4   radius +4   volume +12   density −8"]]
    },
    "controls": {
-    "calls": 12,
+    "calls": 11,
     "distinct": 8,
     "digest": "a378e8391e29d62b",
     "samples": [["×1,000"],["×10"],["×100,000,000"],["×100,000"],["×1,000,000"],["×10,000,000"],["×100"],["×10,000"]]
@@ -352,21 +352,21 @@
    },
    "precision": [],
    "specs": 2,
-   "frames": 12,
+   "frames": 11,
    "readout": {
-    "calls": 12,
+    "calls": 11,
     "distinct": 8,
     "digest": "91e1aa9cacb849e4",
     "samples": [[{"label":"Agujero negro de partida","value":"10 M☉"},{"label":"Después de multiplicar","value":"10 000 M☉"},{"label":"Volumen ganado","value":"3 + 3 + 3 = 9 zeros","emphasis":true},{"label":"Así que la densidad perdió","value":"9 − 3 = 6 zeros","emphasis":true},{"label":"Nueva densidad media","value":"1,8 × 10¹¹ kg/m³"}],[{"label":"Agujero negro de partida","value":"10 M☉"},{"label":"Después de multiplicar","value":"100 M☉"},{"label":"Volumen ganado","value":"1 + 1 + 1 = 3 zeros","emphasis":true},{"label":"Así que la densidad perdió","value":"3 − 1 = 2 zeros","emphasis":true},{"label":"Nueva densidad media","value":"1,8 × 10¹⁵ kg/m³"}],[{"label":"Agujero negro de partida","value":"10 M☉"},{"label":"Después de multiplicar","value":"1 billion M☉"},{"label":"Volumen ganado","value":"8 + 8 + 8 = 24 zeros","emphasis":true},{"label":"Así que la densidad perdió","value":"24 − 8 = 16 zeros","emphasis":true},{"label":"Nueva densidad media","value":"18 kg/m³"}],[{"label":"Agujero negro de partida","value":"10 M☉"},{"label":"Después de multiplicar","value":"1 million M☉"},{"label":"Volumen ganado","value":"5 + 5 + 5 = 15 zeros","emphasis":true},{"label":"Así que la densidad perdió","value":"15 − 5 = 10 zeros","emphasis":true},{"label":"Nueva densidad media","value":"1,8 × 10⁷ kg/m³"}],[{"label":"Agujero negro de partida","value":"10 M☉"},{"label":"Después de multiplicar","value":"10 million M☉"},{"label":"Volumen ganado","value":"6 + 6 + 6 = 18 zeros","emphasis":true},{"label":"Así que la densidad perdió","value":"18 − 6 = 12 zeros","emphasis":true},{"label":"Nueva densidad media","value":"1,8 × 10⁵ kg/m³"}],[{"label":"Agujero negro de partida","value":"10 M☉"},{"label":"Después de multiplicar","value":"100 million M☉"},{"label":"Volumen ganado","value":"7 + 7 + 7 = 21 zeros","emphasis":true},{"label":"Así que la densidad perdió","value":"21 − 7 = 14 zeros","emphasis":true},{"label":"Nueva densidad media","value":"1842 kg/m³"}],[{"label":"Agujero negro de partida","value":"10 M☉"},{"label":"Después de multiplicar","value":"1000 M☉"},{"label":"Volumen ganado","value":"2 + 2 + 2 = 6 zeros","emphasis":true},{"label":"Así que la densidad perdió","value":"6 − 2 = 4 zeros","emphasis":true},{"label":"Nueva densidad media","value":"1,8 × 10¹³ kg/m³"}],[{"label":"Agujero negro de partida","value":"10 M☉"},{"label":"Después de multiplicar","value":"100 000 M☉"},{"label":"Volumen ganado","value":"4 + 4 + 4 = 12 zeros","emphasis":true},{"label":"Así que la densidad perdió","value":"12 − 4 = 8 zeros","emphasis":true},{"label":"Nueva densidad media","value":"1,8 × 10⁹ kg/m³"}]]
    },
    "canvas": {
-    "calls": 12,
+    "calls": 11,
     "distinct": 8,
     "digest": "cc022e23469a8a25",
     "samples": [["10 M☉  →  10 000 M☉","Masa","×1000","Radio del horizonte","×1000","Volumen en su interior","×1 000 000 000","Densidad media","÷1 000 000","zeros:  mass +3   radius +3   volume +9   density −6"],["10 M☉  →  100 M☉","Masa","×10","Radio del horizonte","×10","Volumen en su interior","×1000","Densidad media","÷100","zeros:  mass +1   radius +1   volume +3   density −2"],["10 M☉  →  1 billion M☉","Masa","×100 000 000","Radio del horizonte","×100 000 000","Volumen en su interior","×1 000 000 000 000 000 000 000 000","Densidad media","÷10 000 000 000 000 000","zeros:  mass +8   radius +8   volume +24   density −16"],["10 M☉  →  1 million M☉","Masa","×100 000","Radio del horizonte","×100 000","Volumen en su interior","×1 000 000 000 000 000","Densidad media","÷10 000 000 000","zeros:  mass +5   radius +5   volume +15   density −10"],["10 M☉  →  10 million M☉","Masa","×1 000 000","Radio del horizonte","×1 000 000","Volumen en su interior","×1 000 000 000 000 000 000","Densidad media","÷1 000 000 000 000","zeros:  mass +6   radius +6   volume +18   density −12"],["10 M☉  →  100 million M☉","Masa","×10 000 000","Radio del horizonte","×10 000 000","Volumen en su interior","×1 000 000 000 000 000 000 000","Densidad media","÷100 000 000 000 000","zeros:  mass +7   radius +7   volume +21   density −14"],["10 M☉  →  1000 M☉","Masa","×100","Radio del horizonte","×100","Volumen en su interior","×1 000 000","Densidad media","÷10 000","zeros:  mass +2   radius +2   volume +6   density −4"],["10 M☉  →  100 000 M☉","Masa","×10 000","Radio del horizonte","×10 000","Volumen en su interior","×1 000 000 000 000","Densidad media","÷100 000 000","zeros:  mass +4   radius +4   volume +12   density −8"]]
    },
    "controls": {
-    "calls": 12,
+    "calls": 11,
     "distinct": 8,
     "digest": "12117b0be6ff4b4c",
     "samples": [["×1000"],["×10"],["×100 000 000"],["×100 000"],["×1 000 000"],["×10 000 000"],["×100"],["×10 000"]]

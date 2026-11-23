@@ -1128,8 +1128,8 @@
       "source": ["js/data/investigations/black-holes.js"],
       "shadows": ["js/data/investigations/es/black-holes.js"],
       "instrument_files": ["js/blackHoleWidgets.js"],
-      "depths": { "core": 30, "quantitative": 0, "advanced": 0 },
-      "spanish_steps": { "core": 30, "deeper": 0 },
+      "depths": { "core": 32, "quantitative": 0, "advanced": 0 },
+      "spanish_steps": { "core": 32, "deeper": 0 },
       "languages": ["en", "es"],
       "sequences": [{ "id": "gravity-and-orbits", "position": 11 }],
       "courses": [{ "id": "astronomy-semester", "position": 6 }],
@@ -1138,22 +1138,108 @@
       "scene_class": "engine-integrated stage",
       "limits": null,
       "open_items": [],
-      "questions": { "Q1": "", "Q2": "", "Q3": "", "Q4": "", "Q5": "" },
+      "questions": {
+        "Q1": "The student finds by their own choice of masses that the horizon grows in proportion to the mass (a straight line through zero on the trials they recorded, with the hole on the canvas following each trial), and checks four scalings they predicted against readings of that hole; the density, temperature and lifetime panels are closed-form models the lesson names as calculations, not readings of the scene.",
+        "Q2": "Each step names its panel and control (the mass slider, Record this trial, Take reading, Capture these trials, the ×1,000 setting); the temperature and lifetime steps say the canvas shows neither; the held predictions return at the step that answers them, and the four-factor prediction returns at the comparison beside the four readings the student took.",
+        "Q3": "Panel, probe readings, plot, formula and prose name the same black hole, masses in solar masses, radii in kilometers and factors against 10 solar masses; the readings step and the prediction's options use the same four quantities in the same order; every number the lesson quotes is blackHoleFacts' (tests/blackHolesLesson.test.js).",
+        "Q4": "The student chooses three masses (refused if equal, bunched under a factor of four, a chain of doublings, or with a radius from another mass), which two of their trials make a doubling, where to set the zero-count slider, and which mass to set and hold for the four readings (refused at another mass or a mix of masses); each can be made badly.",
+        "Q5": "Not applicable: core only, no deeper version added (prompt 352 item 8)."
+      },
       "leak": {
         "L1": "HOLDS: no field cue or step placeholder holds a numeral at any depth, in either language, and the panel renders none that does (tests/fieldCue.test.js); the expected value is the field's `want`, which no page reads.",
-        "L2": "",
-        "L3": "",
-        "L4": "",
-        "L5": ""
+        "L2": "HOLDS (352): the zero-count panel opens at ×10 and the question asks about ×1,000 (count-the-zeros); the scaling slider opens at the widget default with no step value; the readings step asks for a mass the slider is not at when it opens.",
+        "L3": "HOLDS for the steps revised (352): the zero-count explanation moved from the body into the because (count-the-zeros); the Earth- and Sun-sized horizon masses left the tip before the doubling prediction and sit in the-rule-you-just-found; the doubling factors for temperature and lifetime left the becauses of colder-not-hotter and longer-and-then-much-longer before the four-factor prediction (the proportionalities stay). The rules themselves are found earlier by design: the four-factor prediction is an application of them. Not walked in order as a student against every earlier tip.",
+        "L4": "HOLDS (352): no radius is printed before the student's own table (what-did-doubling-do and read-the-graph point to the student's rows; choose-three-masses names no mass in body or checklist; tested). Not re-audited: longer-and-then-much-longer's body still gives the two lifetimes before asking how lifetime scales (outside this prompt's list; recorded for the editorial pass).",
+        "L5": "UNCHANGED (352): readout and instructor text revised only for the new steps (instructor text names the expected readings for instructors only); misconception texts show only with the verdict."
       },
-      "task_rule_items": [],
-      "editorial": "OPEN",
+      "task_rule_items": [
+        "T1: the masses and radii in choose-three-masses and the four factors in read-twenty-against-ten are taken from the hole on the canvas with Take reading (K1, provenance kept); the page computes the spread of masses and the factors against 10 solar masses.",
+        "T2: the four-factor prediction (predict-twenty-against-ten, held) returns at say-what-scales-with-what beside the four readings (K3), and the short answer asks which factor missed and why.",
+        "T3: the scaling experiment changes the mass only; the four readings compare one mass with another and hold everything else.",
+        "T4: the transfer is the two mystery-object steps, answered from the student's own factors for 20 against 10.",
+        "T5: authored feedback added on what-could-size-even-mean, the-right-answer-for-the, which-way-did-it-go (bigger means denser), colder-not-hotter, predict-twenty-against-ten and count-the-zeros (3 and 6 zeros); the scaling and readings steps refuse each wrong decision in words that name the slip, never the value. Other choice steps carry no authored misconception (open).",
+        "T6: the live hole stage carries the scaling experiment and the readings; on the temperature and lifetime steps the text says the canvas shows neither (K7)."
+      ],
+      "editorial": "REVISED",
       "redesign": "OPEN",
-      "reason": "",
-      "step_revisions": [],
-      "walk": "NOT RUN",
+      "reason": "FOCUSED: the scaling experiment's masses are the student's own and checked, the radius values leave the bodies, the zero count is set before it is answered, and a held four-factor prediction returns beside the student's readings (register D-R4-352-01..03). The student walk ran in a locally served browser; the phone column stays NOT VERIFIED (continuation checkpoint I, I-8), so the redesign question is not closed. Walk: the scaling experiment, the factor prediction, the readings and the reveal were walked in a locally served Chromium at 1366x800 (English and Spanish), 375x812 (Spanish) and 412x915 (English) by scripted clicks; no keyboard-only walk and no real device, so the walk stays NOT VERIFIED.",
+      "step_revisions": [
+        {
+          "sid": "three-measurements",
+          "change": "REVISED: retired to choose-three-masses, where the student chooses three masses (distinct, spread over a factor of four, not all doublings), takes each mass and radius reading and captures the run."
+        },
+        {
+          "sid": "where-the-room-comes-from",
+          "change": "REVISED: retired to count-the-zeros, which opens the panel at ×10, asks the student to set ×1,000 first, and moves the explanation into the because."
+        },
+        {
+          "sid": "predict-twenty-against-ten",
+          "change": "INSERTED: a held choice of the four factors for 20 against 10 solar masses, revealed at say-what-scales-with-what."
+        },
+        {
+          "sid": "read-twenty-against-ten",
+          "change": "INSERTED: the four factors read from the hole on the canvas at 20 solar masses, the evidence the prediction meets."
+        },
+        {
+          "sid": "say-what-scales-with-what",
+          "change": "REWORDED: shows the prediction beside the four readings and asks which factor missed and why; the rubric still checks the four scalings."
+        },
+        {
+          "sid": "what-did-doubling-do",
+          "change": "REWORDED: points to the student's own doubled pair and prints no radius."
+        },
+        {
+          "sid": "read-the-graph",
+          "change": "REWORDED: refers to the masses the student chose."
+        },
+        {
+          "sid": "a-mystery-black-hole-size",
+          "change": "REWORDED: answered from the student's own factors."
+        },
+        {
+          "sid": "a-mystery-black-hole-temperature",
+          "change": "REWORDED: answered from the student's own factors."
+        },
+        {
+          "sid": "what-could-size-even-mean",
+          "change": "REWORDED: three authored misconceptions."
+        },
+        {
+          "sid": "the-right-answer-for-the",
+          "change": "REWORDED: three authored misconceptions."
+        },
+        {
+          "sid": "which-way-did-it-go",
+          "change": "REWORDED: three authored misconceptions (bigger means denser)."
+        },
+        {
+          "sid": "colder-not-hotter",
+          "change": "REWORDED: three authored misconceptions; the doubling factor leaves the because."
+        },
+        {
+          "sid": "longer-and-then-much-longer",
+          "change": "REWORDED: the doubling factor leaves the because."
+        },
+        {
+          "sid": "thirty-kilometers-is-not-very",
+          "change": "REWORDED: the tip giving the Earth- and Sun-sized masses moves to the-rule-you-just-found."
+        },
+        {
+          "sid": "the-thermometer",
+          "change": "REWORDED: says the canvas shows no temperature."
+        },
+        {
+          "sid": "a-timeline-that-will-not",
+          "change": "REWORDED: says the canvas shows no lifetime."
+        },
+        {
+          "sid": "it-has-a-name",
+          "change": "REWORDED: no longer tells the student their predictions were right."
+        }
+      ],
+      "walk": "NOT VERIFIED",
       "pr": null,
-      "hash": null
+      "hash": "8a2da2ebeebf9bf57bcf32eb07543afe23bdafea3d7fbe17c267246f8c13aabc"
     },
     {
       "id": "investigation:butterfly-effect",
