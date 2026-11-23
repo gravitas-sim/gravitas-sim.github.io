@@ -28,6 +28,8 @@ export const setKit = k => {
 // Typed and not yet committed, by step, so a redraw does not empty the boxes; and the step whose box was last announced.
 const draft = {};
 let arrived = '';
+// The evidence tray beside a written answer, fetched with the first short-answer step (js/investigations/tray.js).
+let trayModule = null;
 
 /** The estimate boxes: committed values are shown, held and never marked. */
 export function estimate(step, c) {
@@ -110,9 +112,15 @@ export function verdict(step, c, predicted) {
   return `<section class="inv-verdict ${predicted ? (predicted.right ? 'is-right' : 'is-wrong') : ''}" role="region" aria-labelledby="invVerdictHead" data-verdict><h4 class="inv-verdict-head" id="invVerdictHead">${escape(t('reveal.head'))}</h4>${rows.map(row).join('')}${step.compare ? `<p class="inv-because">${prose(step.compare)}</p>` : ''}</section>`;
 }
 
+/** The tray's markup, once its module has arrived ('' until then, and where a step has nothing to cite). */
+export const tray = (step, c) => trayModule?.tray(step, c, kit) ?? '';
+
 /** Wire the estimate boxes, and say the verdict once when its step is first drawn. */
 export function bind(h, body) {
   const id = h.stepId();
+  if (trayModule) trayModule.bind(h, body, kit);
+  else if (h.currentStep()?.kind === 'short')
+    import('./tray.js').then(m => ((trayModule = m), h.renderStep()));
   const shown = body.querySelector('[data-verdict]');
   if (!shown) arrived = '';
   else if (arrived !== id) {
