@@ -338,9 +338,7 @@ let trials = { session: null, points: [] };
 
 const SCALING = {
   id: 'bh-scaling',
-  // Handed the lesson context, so a step that declares `scene` can make the
-  // hole on the canvas the one the slider describes.
-  live: true,
+  live: true, // the lesson context: a `scene` step restages the hole
   get title() {
     return t('bhW.massAgainstHorizonSize');
   },
@@ -374,9 +372,8 @@ const SCALING = {
         return t('bhW.clearTrials');
       },
     },
-    // Offered only where a step asks for it. What goes to the notebook is the
-    // run the student designed, and the entry is explicit that every radius in
-    // it was computed rather than measured.
+    // Offered only where a step asks for it. The notebook gets the student's
+    // run, and says that every radius in it was computed, not measured.
     ...(spec.capture
       ? [
           {
@@ -389,9 +386,8 @@ const SCALING = {
       : []),
   ],
   reset(v, { spec = {} } = {}) {
-    // Moving between the steps of one experiment keeps the table; arriving
-    // from anywhere else starts it empty, so a graph never opens with points
-    // left over from a run the student does not remember doing.
+    // The steps of one experiment keep the table; arriving from anywhere else
+    // empties it, so a graph never opens on a run the student does not recall.
     const session = spec.session ?? 'default';
     if (trials.session !== session) trials = { session, points: [] };
   },
@@ -433,11 +429,7 @@ const SCALING = {
     return rows;
   },
   draw(canvas, v, lesson, spec = {}) {
-    // The staged hole follows the slider where the step asks for it. A
-    // restage, not an edit: the orbiters' speeds belong to one mass, and
-    // restageHole refuses a rebuild that restates the mass already there.
-    if (spec.scene && typeof lesson?.restageHole === 'function')
-      lesson.restageHole({ massSun: v.mass });
+    if (spec.scene) lesson?.restageHole?.({ massSun: v.mass }); // not an edit
     const H = responsiveHeight(292, 244);
     const { ctx, w } = surface(canvas, H);
     sky(ctx, w, H);

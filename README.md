@@ -28,7 +28,7 @@ the week they are teaching.
 
 **<!--fact:libraryInvestigations-->146<!--/fact--> guided
 investigations**: <!--fact:investigations-->124<!--/fact--> that run in the
-simulation, <!--fact:investigationSteps-->1536<!--/fact--> steps between them
+simulation, <!--fact:investigationSteps-->1538<!--/fact--> steps between them
 (the table below), and <!--fact:guidedInvestigations-->22<!--/fact--> in the
 Observatory, the 3-D lab and the mission lab (the Library lists all of them):
 

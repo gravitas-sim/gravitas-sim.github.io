@@ -14,7 +14,7 @@ audit:scene:check` fails if it disagrees with what is generated here.
 Across 124 investigations and 1538 steps: 1394 steps
 declare a scene, 165 let a reader change one, 179 read the
 running integration, 1004 show a prescribed model result, 159 draw
-on a stored dataset, 875 put a self-contained panel beside the text,
+on a stored dataset, 871 put a self-contained panel beside the text,
 400 keep something, and 79 are prose.
 Of 205 prediction loops, 205 are returned to,
 205 produce a measurement before they are answered, and
@@ -95,7 +95,7 @@ The canvas behind a step is stated as scene on 4, portrait on 7, quiet on 96; 14
 ## Black Holes by the Numbers (`black-holes`)
 
 - **Steps:** 32. Scene declared on 32; a reader can change something on 0; 32 declare a scene nobody on that step can touch.
-- **Where the numbers come from:** 5 live engine, 20 prescribed model, 0 stored dataset, 20 self-contained panel.
+- **Where the numbers come from:** 5 live engine, 20 prescribed model, 0 stored dataset, 16 self-contained panel.
 - **What students do:** read, choose-an-option, open-a-body-inspector, move-an-instrument-control, read-the-labeled-appearance, commit-a-prediction, record-values, press-an-instrument-button, tick-a-checklist, press-an-instrument-preset, answer-in-words.
 - **Objects the steps declare:** none.
 - **Instruments:** bh-horizon, bh-scaling, bh-escape, bh-density, bh-blocks, bh-thermo, bh-lifetime, bh-lineup.

@@ -226,7 +226,7 @@
    "datasets": []
   },
   "bh-scaling": {
-   "live": false,
+   "live": true,
    "controls": [
     "mass"
    ],
@@ -13464,7 +13464,6 @@
       "scene-declared",
       "engine-measurement",
       "model-result",
-      "panel-diagram",
       "captured-evidence"
      ],
      "actions": [
@@ -13544,8 +13543,7 @@
      },
      "kinds": [
       "scene-declared",
-      "model-result",
-      "panel-diagram"
+      "model-result"
      ],
      "actions": [
       "choose-an-option",
@@ -13615,8 +13613,7 @@
      },
      "kinds": [
       "scene-declared",
-      "model-result",
-      "panel-diagram"
+      "model-result"
      ],
      "actions": [
       "choose-an-option",
@@ -15129,7 +15126,6 @@
       "scene-declared",
       "engine-measurement",
       "model-result",
-      "panel-diagram",
       "captured-evidence"
      ],
      "actions": [
@@ -15471,7 +15467,7 @@
     "engine": 5,
     "model": 20,
     "data": 0,
-    "diagram": 20,
+    "diagram": 16,
     "evidence": 2,
     "computation": 0,
     "declaredButInert": 32,
@@ -120951,7 +120947,7 @@
   "engine": 179,
   "model": 1004,
   "data": 159,
-  "diagram": 875,
+  "diagram": 871,
   "evidence": 400,
   "computation": 14,
   "declaredButInert": 1229,
