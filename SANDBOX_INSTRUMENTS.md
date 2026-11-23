@@ -504,6 +504,75 @@ fails is reported with its numbers and its bound is not moved.
 | identity | the engine's source rule moved into one pure function: every coordinate of every body after 500 steps of each scene, at 60 frames a second, against the same run before the move; `e2e/golden/world-construction.json` | bit for bit; unchanged |
 | statement | the bodies the statement says pull against the kinds in `cachedMajorSources`, under all four combinations of mutual gravity and star-only gravity, with every kind present | exact |
 
+## Frames and following
+
+A reader can follow one chosen body by id, and the Frame control offers five
+frames: the world, centered on a body, the barycenter of the system, the
+barycenter of a pair, and a frame rotating with a pair. A pair is the selected
+body and its primary (the rule the barycenter marker uses), heavier body first.
+Frames are view state: the integrator stays in the world frame, and no
+trajectory, default or saved format changes. Links carry the first three
+frames as before; the pair and rotating frames are written as the world frame,
+and the share dialog says so.
+
+### Who reads the frame (listed before any edit)
+
+- **The canvas transform.** `drawScene` in `js/render.js` resolves the frame
+  once per drawn frame and writes `state.frameOffset`; `ctx.translate` then
+  draws in world units every body, trail, habitable-zone ring, hover ring,
+  particle and black hole.
+- **The shared mapping.** `worldToScreen` and `screenToWorld` in `js/utils.js`
+  (wrapped as `world_to_screen` and `screen_to_world` in `js/engine/step.js`).
+  Through it: body labels and the black-hole marks (`js/bodyDraw.js`,
+  `js/bodyDrawSky.js`), bloom and glow positions and body marks
+  (`js/render.js`), the vector overlay's origin (`js/vectorOverlay.js`), the
+  orbit-geometry overlay, the Lagrange panel's markers (`js/cr3bpPanel.js`), the
+  barycenter marker (`js/sceneStatement.js`), the ruler and protractor
+  (`js/sandboxTools.js`), the light-curve marker, placement and its preview
+  (`js/placement.js`), hit-testing and the hover ring (`findObjectAtPosition` on
+  `screen_to_world`), and the potential-well underlay.
+- **Direct readers of `state.frameOffset`.** The follow camera
+  (`js/followCamera.js`, called from `js/engine/step.js`), the crowd's
+  detail centre (`beginCrowdFrame`, `js/bodyDrawSky.js`), the lesson fit
+  (`fitNow`, `js/lessonFrame.js`), and the scene-record tools, which pin the
+  world frame.
+- **Light direction.** `lightDirection` (`js/bodyVisuals.js`) is taken in world
+  units and drawn under the canvas transform, so it follows the transform.
+- **Not frame-aware, and left so.** The physics cull `is_offscreen` reads the
+  pan and zoom only (its removal is the camera-independence work's); the
+  starfield's parallax; the capture tool's zoom-to-box.
+- **What the barycenter pilot landed.** `frameName`, `frameLine` and
+  `frameMetric` in `js/sceneStatement.js` (loaded on first use): the Frame row in
+  the readout, the frame line on the canvas (`js/sandboxTools.js`), and the
+  sentence in the canvas description (`js/canvasSummary.js`). The new frames are
+  named through these.
+
+### Where the rotation lives
+
+In both the shared mapping and the canvas transform, from one angle written
+once per drawn frame beside `state.frameOffset` (`state.frameRotation`, a
+cosine and a sine). Anything placed through the mapping is drawn in screen
+space, so labels, marks and markers stay upright and the pointer selects the
+body drawn under it; the vector overlay turns its arrows by the same angle;
+bodies, trails and their shading are drawn under the transform and turn with
+it, so the lit side still faces the star. The starfield does not turn: it is
+background, not a measurement.
+
+### Tolerances, fixed before the code
+
+Committed in `tests/fixtures/frame-tolerances.json` before any frame, follow or
+trail code. Rotating coordinates are R(-theta)(r - c): the position less the
+pair's mass-weighted centre, turned by minus the angle of the line from the
+heavier body A to the lighter B, so +x runs from A to B. They are read through
+the frame module, not computed beside it.
+
+| | What | Bound |
+|---|---|---|
+| Leg 1, geometry | an analytic circular pair (masses 1 and 0.03, separation 8, centre drifting at a constant velocity) and a point at its L4 position with the co-rotating state, through the frame's per-tick history for 100 ticks: the point's rotating coordinates, and every point of its trail as the frame redraws it, against the analytic L4 coordinates; the pair origin against plain mass-weighted sums | 1e-9 of the separation (rounding only) |
+| Leg 2, engine | `lagrange-point-lab` (seed 1; mu 0.0291 under ROUTH_MU 0.0385, tracer fraction 1e-9 under MAX_TRACER_FRACTION, a circular pair) with the tracer at L4 from `lagrangePoints`, at rest in the rotating frame, stepped as the page steps it for five periods of the pair at 30, 60 and 120 frames a second: the tracer's rotating-frame displacement | 0.02 of the separation, the panel's own meaning of circular. A miss is an integrator finding for the step-policy gate and the physics step; the bound is not widened |
+| Follow | a body followed by id in each of the five frames, `binary-pair` (seed 1) at 60 frames a second for 3600 frames, the camera applied as the page applies it before drawing: the body's screen position against the canvas centre | 0.5 px |
+| Capture | 445's scene record for `solar-system`, put into Earth's frame at the recorded state, captured before and after | the captures match |
+
 ---
 
 ## What is not done
