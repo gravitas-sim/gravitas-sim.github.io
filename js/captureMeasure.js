@@ -21,7 +21,7 @@ import {
   neutron_stars,
   white_dwarfs,
 } from './physics.js';
-import { canRecordClips, framedBodies } from './utils.js';
+import { canRecordClips, sceneFrame } from './utils.js';
 import { state, SETTINGS, current_scenario_name, command } from './appState.js';
 import { solveKepler } from './orbital.js';
 import { t, registerMessages, onLocaleChange } from './i18n/index.js';
@@ -678,36 +678,14 @@ export function initCaptureMeasure(ctx) {
       ...comets,
     ].filter(obj => obj.alive);
 
-    if (allObjects.length > 0) {
-      // Calculate center of mass
-      let totalMass = 0;
-      let centerX = 0;
-      let centerY = 0;
-
-      for (const obj of allObjects) {
-        totalMass += obj.mass;
-        centerX += obj.pos.x * obj.mass;
-        centerY += obj.pos.y * obj.mass;
-      }
-
-      if (totalMass > 0) {
-        centerX /= totalMass;
-        centerY /= totalMass;
-      }
-
-      // Calculate bounds to determine appropriate zoom level
-      let minX = Infinity,
-        maxX = -Infinity;
-      let minY = Infinity,
-        maxY = -Infinity;
-
-      // Fit what the scene is about, not its farthest comet (see framedBodies).
-      for (const obj of framedBodies(allObjects)) {
-        minX = Math.min(minX, obj.pos.x);
-        maxX = Math.max(maxX, obj.pos.x);
-        minY = Math.min(minY, obj.pos.y);
-        maxY = Math.max(maxY, obj.pos.y);
-      }
+    // Fit what the scene is about, not its farthest comet: the frame and its
+    // centre of mass come from the same bodies, the ones the 3-D view frames
+    // too (see sceneFrame).
+    const frame = sceneFrame(allObjects);
+    if (frame) {
+      const { minX, maxX, minY, maxY } = frame;
+      const centerX = frame.center.x;
+      const centerY = frame.center.y;
 
       // Add some padding around the objects
       const padding = 50;

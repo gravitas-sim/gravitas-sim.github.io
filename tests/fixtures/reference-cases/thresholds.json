@@ -42,7 +42,7 @@
       ],
       "zooms": [0.25, 3],
       "panAU": [0, 200],
-      "panNote": "pan is in screen pixels (js/utils.js isOffscreen reads the world centre as -pan/zoom); 200 AU along +x of the world is pan.x = -200 * SIM_UNITS_PER_AU * zoom"
+      "panNote": "pan is in screen pixels (the world centre on screen is -pan/zoom); 200 AU along +x of the world is pan.x = -200 * SIM_UNITS_PER_AU * zoom"
     }
   },
   "scheme": {

@@ -42,7 +42,7 @@ import {
   noteObservationPanelUsed,
 } from './observationLayout.js';
 import { EV_SIMULATION_RESET } from './names.js';
-import { framedBodies } from './utils.js';
+import { sceneFrame } from './utils.js';
 
 let containerEl = null;
 let canvasHost = null;
@@ -1111,19 +1111,31 @@ function focusScene(force = false) {
     return;
   }
 
-  let minX = Infinity;
-  let maxX = -Infinity;
-  let minY = Infinity;
-  let maxY = -Infinity;
-
-  // Fit what the scene is about, not its farthest comet (see framedBodies).
-  const framed = framedBodies(objects);
-  framed.forEach(obj => {
-    if (obj.pos.x < minX) minX = obj.pos.x;
-    if (obj.pos.x > maxX) maxX = obj.pos.x;
-    if (obj.pos.y < minY) minY = obj.pos.y;
-    if (obj.pos.y > maxY) maxY = obj.pos.y;
-  });
+  // Fit what the scene is about, not its farthest comet or its debris; the
+  // 2-D Reset view uses the same frame (sceneFrame, js/utils.js). Nothing
+  // removes a body for leaving the view, so a scene keeps its far wanderers:
+  // the Solar System's Comet ISON starts 3.6 million units out, a thousand
+  // times Neptune's distance, and a frame fitted to every body draws the
+  // planets as nothing. A body is left out of the frame only when it is farther
+  // from the median position than 50 times the median body's reach and holds
+  // under a tenth of the mass. Measured at frame 0: spiral-galaxy, kuiper-belt,
+  // star-cluster, galactic-collision, binary-star-system and rogue-encounter
+  // keep every body in the frame; the Solar System leaves out Hale-Bopp,
+  // Hyakutake, Pan-STARRS and Comet ISON (53 to 10,000 medians out). The
+  // median, not the centre of mass, because one far body drags the centre of
+  // mass towards itself until it no longer looks far. The bodies left out of
+  // the frame are still in the world; only the camera ignores them.
+  const frame = sceneFrame(objects);
+  if (!frame) {
+    // No body has a finite position: the empty-scene view, not a retry.
+    controls.target.set(0, 0, 0);
+    camera.position.set(160, 180, 220);
+    setClipPlanes(400);
+    controls.update();
+    needsFocusReset = false;
+    return;
+  }
+  const { minX, maxX, minY, maxY } = frame;
 
   const spanX = maxX - minX;
   const spanY = maxY - minY;
@@ -1133,7 +1145,9 @@ function focusScene(force = false) {
 
   // The grid has to reach the bodies it is meant to be holding up.
   ensureGridCovers(
-    framed.reduce((r, o) => Math.max(r, Math.hypot(o.pos.x, o.pos.y)), 0)
+    // The framed bodies, not every body: a grid stretched to Comet ISON would
+    // be as coarse as the view fitted to it. Its size is capped anyway.
+    frame.bodies.reduce((r, o) => Math.max(r, Math.hypot(o.pos.x, o.pos.y)), 0)
   );
 
   controls.target.set(centerX, 0, centerZ);

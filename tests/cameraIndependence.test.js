@@ -12,7 +12,7 @@ import { execFile } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 import process from 'node:process';
 import { URL } from 'node:url';
-import { framedBodies } from '../js/utils.js';
+import { framedBodies, sceneFrame } from '../js/utils.js';
 
 const ROOT = new URL('..', import.meta.url).pathname;
 const PLAN = JSON.parse(
@@ -63,27 +63,81 @@ describe('two cameras on one world give the same bodies, bit for bit', () => {
 });
 
 describe('a view that frames the scene fits what the scene is about', () => {
-  // The Solar System's starting distances from the Sun, in world units, with
-  // its three far comets: a fit to every body would put the planets in one
-  // pixel. Nothing is removed from the world; the camera leaves them out.
-  const at = (x, mass) => ({ pos: { x, y: 0 }, mass });
+  // framedBodies leaves a body out of the camera's frame only when it is more
+  // than FRAME_OUTLIER median reaches from the median position and holds less
+  // than a tenth of the mass. Nothing is removed from the world.
+  const at = (x, mass = 1e-4, y = 0, kind = 'Asteroid') => ({
+    pos: { x, y },
+    mass,
+    kind,
+  });
+  // The Solar System's starting reaches, in world units (tools/removal-cost.mjs
+  // at frame 0): median 348; Hale-Bopp, Hyakutake, Pan-STARRS and Comet ISON
+  // are 53 to 10,000 medians out.
   const solar = [
-    at(0, 1000),
-    ...[300, 500, 900, 1900, 3000].map(x => at(x, 1)),
-    ...Array.from({ length: 23 }, (_, i) => at(200 + i * 10, 1e-4)),
-    ...[1784, 18586, 234950, 800015, 3650001].map(x => at(x, 1e-4)),
+    at(0, 1000, 0, 'Star'),
+    ...[39, 72, 100, 152].map(x => at(x, 0.003, 0, 'Planet')),
+    ...[520, 958, 1919, 3007].map(x => at(x, 1, 0, 'GasGiant')),
+    ...Array.from({ length: 16 }, (_, i) => at(200 + i * 10)),
+    ...[660, 1034, 1784, 2608, 3358, 7850].map(x => at(x, 1e-6, 0, 'Comet')),
+    ...[18586, 234950, 800015, 3650001].map(x => at(x, 1e-6, 0, 'Comet')),
   ];
 
-  test('the three far comets are left out of the frame and Hale-Bopp stays in', () => {
-    const framed = framedBodies(solar);
-    expect(solar.length - framed.length).toBe(3);
-    expect(Math.max(...framed.map(b => b.pos.x))).toBe(18586);
+  test('the Solar System frames out to its nearer comets, not to Comet ISON', () => {
+    const frame = sceneFrame(solar);
+    expect(solar.length - frame.bodies.length).toBe(4);
+    expect(frame.maxX).toBe(7850);
+    expect(frame.center.x).toBeLessThan(10);
   });
 
-  test('a small scene, and any body with a hundredth of the mass, is always framed', () => {
-    const few = solar.slice(0, 9);
-    expect(framedBodies(few)).toBe(few);
-    const heavyFar = [...solar, at(5e6, 20)];
-    expect(framedBodies(heavyFar)).toContain(heavyFar.at(-1));
+  test("a galaxy's outer disc stays in the frame", () => {
+    // Ninety tracers spread evenly out to 900, as spiral-galaxy builds them.
+    const disc = [
+      at(0, 1000, 0, 'BlackHole'),
+      ...Array.from({ length: 90 }, (_, i) => {
+        const r = 10 + (890 * i) / 89;
+        const a = i * 2.39996;
+        return at(r * Math.cos(a), 1, r * Math.sin(a), 'Star');
+      }),
+    ];
+    expect(framedBodies(disc)).toHaveLength(disc.length);
+  });
+
+  test('a cluster of equal masses leaves out an escaper far beyond it, and keeps one nearby', () => {
+    const cluster = Array.from({ length: 40 }, (_, i) =>
+      at(100 * Math.cos(i), 1, 100 * Math.sin(i), 'Star')
+    );
+    const far = at(1e6, 1, 0, 'Star');
+    const near = at(800, 1, 0, 'Star');
+    expect(framedBodies([...cluster, far])).not.toContain(far);
+    expect(framedBodies([...cluster, near])).toContain(near);
+  });
+
+  test('a body with a tenth of the mass is framed however far it is', () => {
+    const companion = at(5e6, 300, 0, 'Star');
+    expect(framedBodies([...solar, companion])).toContain(companion);
+  });
+
+  test('fewer than ten bodies are all framed; exactly ten can leave one out', () => {
+    const nine = [...solar.slice(0, 8), at(3650001, 1e-6, 0, 'Comet')];
+    expect(framedBodies(nine)).toHaveLength(9);
+    const ten = [...solar.slice(0, 9), at(3650001, 1e-6, 0, 'Comet')];
+    expect(framedBodies(ten)).toHaveLength(9);
+  });
+
+  test('no mass, or a position that is not a number, does not turn the frame off', () => {
+    const massless = solar.map(b => ({ ...b, mass: 0 }));
+    expect(sceneFrame(massless).maxX).toBe(7850);
+    const broken = [...solar, at(NaN), at(Infinity)];
+    expect(sceneFrame(broken).bodies).toHaveLength(solar.length - 4);
+    expect(sceneFrame([at(NaN)])).toBeNull();
+  });
+
+  test('debris is not framed unless it is all there is', () => {
+    const spray = Array.from({ length: 50 }, (_, i) =>
+      at(1e5 + i, 1e-9, 0, 'Debris')
+    );
+    expect(sceneFrame([...solar, ...spray]).maxX).toBe(7850);
+    expect(sceneFrame(spray).bodies).toHaveLength(50);
   });
 });

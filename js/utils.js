@@ -155,60 +155,53 @@ export const screenToWorld = (screenPos, state, canvas) => {
   };
 };
 
-/**
- * Check if position is offscreen (original method)
- * @param {Object} pos - World position with x, y properties
- * @param {Object} state - State object with zoom, pan properties
- * @param {Object} canvas - Canvas object with width, height properties
- * @param {number} buffer_factor - Buffer factor for offscreen detection
- * @returns {boolean} True if position is offscreen
- */
-export const isOffscreen = (pos, state, canvas, buffer_factor = 1.5) => {
-  const half_width_world = (canvas.width / (2 * state.zoom)) * buffer_factor;
-  const half_height_world = (canvas.height / (2 * state.zoom)) * buffer_factor;
-  const world_center_x = -state.pan.x / state.zoom;
-  const world_center_y = state.pan.y / state.zoom;
-  return (
-    pos.x < world_center_x - half_width_world ||
-    pos.x > world_center_x + half_width_world ||
-    pos.y < world_center_y - half_height_world ||
-    pos.y > world_center_y + half_height_world
-  );
+// The bodies a "frame the scene" view fits, and their box and centre of mass:
+// all but real outliers (beyond FRAME_OUTLIER median reaches from the median
+// position, holding under a tenth of the mass), debris only when it is all
+// there is. Why, and the scenes it was measured on: js/view3d.js focusScene.
+export const FRAME_OUTLIER = 50;
+const placed = b => b && Number.isFinite(b.pos?.x) && Number.isFinite(b.pos?.y);
+const mid = v => v.sort((p, q) => p - q)[(v.length - 1) >> 1];
+const centreOf = bs => {
+  let m = 0;
+  let x = 0;
+  let y = 0;
+  for (const b of bs) {
+    const w = b.mass > 0 ? b.mass : 0;
+    m += w;
+    x += b.pos.x * w;
+    y += b.pos.y * w;
+  }
+  if (m > 0) return { x: x / m, y: y / m, m };
+  for (const b of bs) ((x += b.pos.x), (y += b.pos.y));
+  return { x: x / bs.length, y: y / bs.length, m };
 };
-
-/**
- * The bodies a "frame the scene" view should fit: the nearest nine in ten of
- * them, measured from the centre of mass, plus every body that holds at least
- * a hundredth of the mass. Nothing removes a body for leaving the view any
- * more, so a scene keeps its far wanderers - the Solar System's Comet ISON
- * starts 3.6 million units out, a thousand times Neptune's distance - and a
- * view fitted to every body would show the planets as nothing. The bodies left
- * out of the frame are still in the world; only the camera ignores them.
- * @param {Array<{pos: {x: number, y: number}, mass: number}>} bodies
- * @returns {Array} the bodies to frame (all of them when there are fewer than ten)
- */
 export const framedBodies = bodies => {
-  if (bodies.length < 10) return bodies;
-  let total = 0;
-  let cx = 0;
-  let cy = 0;
-  for (const b of bodies) {
-    const m = b.mass > 0 ? b.mass : 0;
-    total += m;
-    cx += b.pos.x * m;
-    cy += b.pos.y * m;
-  }
-  if (total > 0) {
-    cx /= total;
-    cy /= total;
-  } else {
-    cx = bodies.reduce((s, b) => s + b.pos.x, 0) / bodies.length;
-    cy = bodies.reduce((s, b) => s + b.pos.y, 0) / bodies.length;
-  }
+  const bs = bodies.filter(placed);
+  if (bs.length < 10) return bs;
+  const cx = mid(bs.map(b => b.pos.x));
+  const cy = mid(bs.map(b => b.pos.y));
   const reach = b => Math.hypot(b.pos.x - cx, b.pos.y - cy);
-  const sorted = bodies.map(reach).sort((a, b) => a - b);
-  const limit = sorted[Math.ceil(bodies.length * 0.9) - 1];
-  return bodies.filter(b => reach(b) <= limit || b.mass >= total / 100);
+  const limit = mid(bs.map(reach)) * FRAME_OUTLIER;
+  if (!(limit > 0)) return bs;
+  const { m } = centreOf(bs);
+  return bs.filter(b => reach(b) <= limit || (m > 0 && b.mass >= m / 10));
+};
+export const sceneFrame = bodies => {
+  const solid = bodies.filter(b => b && b.kind !== 'Debris');
+  const bs = framedBodies(solid.some(placed) ? solid : bodies);
+  if (!bs.length) return null;
+  const xs = bs.map(b => b.pos.x);
+  const ys = bs.map(b => b.pos.y);
+  const { x, y } = centreOf(bs);
+  return {
+    bodies: bs,
+    center: { x, y },
+    minX: Math.min(...xs),
+    maxX: Math.max(...xs),
+    minY: Math.min(...ys),
+    maxY: Math.max(...ys),
+  };
 };
 
 /**
