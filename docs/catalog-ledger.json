@@ -3434,8 +3434,8 @@
       "source": ["js/data/investigations/listening-to-spacetime.js"],
       "shadows": ["js/data/investigations/es/listening-to-spacetime.js"],
       "instrument_files": ["js/gwEventWidgets.js", "js/gwWidgets.js"],
-      "depths": { "core": 32, "quantitative": 0, "advanced": 0 },
-      "spanish_steps": { "core": 32, "deeper": 0 },
+      "depths": { "core": 33, "quantitative": 0, "advanced": 0 },
+      "spanish_steps": { "core": 33, "deeper": 0 },
       "languages": ["en", "es"],
       "sequences": [{ "id": "gravity-and-orbits", "position": 13 }],
       "courses": [{ "id": "astronomy-semester", "position": 6 }],
@@ -3444,22 +3444,58 @@
       "scene_class": "model-owned stage",
       "limits": null,
       "open_items": [],
-      "questions": { "Q1": "", "Q2": "", "Q3": "", "Q4": "", "Q5": "" },
+      "questions": {
+        "Q1": "The student counts peaks per orbit, times the band for three masses, sets two different pairs with one chirp mass, aligns real traces, and reads five real recordings under measured, catalog and model headings: things a paragraph could only assert.",
+        "Q2": "Each screen names its view and readout line; the canvas pair is named as the lab’s model on the archive screens and as the model of the new signal on the closing question.",
+        "Q3": "Agree after the corrections: the second chirp-mass pair now shares the first’s chirp mass (28.12 against 28.10), the closing signal’s time in band matches the readout’s 158 s, and “about seven times further” matches the instrument’s own distances (3310 / 470 = 7.04).",
+        "Q4": "Which stretch to count over, where to stop for each reading, which one thing to change against a pinned A, which pair to set before each chirp-mass reading (a reading with the first pair still set is named), and how to rank four recorded mergers before the catalog.",
+        "Q5": "Not applicable: core only, no deeper steps (recorded; no depth added)."
+      },
       "leak": {
         "L1": "HOLDS: no field cue or step placeholder holds a numeral at any depth, in either language, and the panel renders none that does (tests/fieldCue.test.js); the expected value is the field's `want`, which no page reads.",
-        "L2": "",
-        "L3": "",
-        "L4": "",
-        "L5": ""
+        "L2": "HOLDS (353): the chirp-mass step opens at 36 + 29 on purpose, because its first field reads that pair, and declares prepared: true; its second reading needs a pair the student sets.",
+        "L3": "HOLDS (353) for the steps changed: the count step’s tip, body and objective no longer say two, and the chirp-mass tip and title no longer state the result. The GW170817 prediction comes before the five recordings, because their first two screens already show it has no measured end. One prediction-stated-earlier finding remains (rank-before-the-catalog, 190521 named in earlier screens), not in this prompt’s list.",
+        "L4": "HOLDS (353): the validators carry two peaks per orbit and the chirp-mass result after an attempt, not before.",
+        "L5": "CHANGED (353): the rings readout no longer says the rings come twice per orbit, which leaked the count before it was made (en and es); the chirp-mass row gained an id."
       },
-      "task_rule_items": [],
-      "editorial": "OPEN",
-      "redesign": "OPEN",
-      "reason": "Corrections I reworded steps for factual consistency (register D-R4-300-05); editorial pass still OPEN.",
-      "step_revisions": [],
-      "walk": "NOT RUN",
+      "task_rule_items": [
+        "T1: the two chirp masses are taken from the readout by Take reading.",
+        "T2: the GW170817 prediction returns at the-one-you-cannot-measure beside its map.",
+        "T5: a chirp-mass reading taken before the second pair is set is told so.",
+        "Pattern recorded: predict, then compare under measured, catalog-supplied and model headings; a dash is not zero; a matched filter against a pixel threshold."
+      ],
+      "editorial": "REVISED",
+      "redesign": "REVIEWED CLEAR",
+      "reason": "STRONG: leak fixes and one prediction (register D-R4-353-03). Two numbers corrected against the lab’s own model (D-R4-353-04): the second chirp-mass pair did not share the first’s chirp mass, so correct readings failed the check (revised under a new id), and the closing signal’s ninety seconds in band was 158 s in the readout. The “seven times” sentence was checked and stands: 3310 / 470 = 7.04.",
+      "step_revisions": [
+        {
+          "sid": "two-crests-per-orbit",
+          "change": "REWORDED: the tip no longer says two and the body no longer says a factor of two; the validator says it after a count."
+        },
+        {
+          "sid": "compare-two-different-binaries",
+          "change": "REVISED (new id; the-one-mass-that-matters retired with this as successor): the second pair is 50 + 21.6 (chirp mass 28.12) instead of 50 + 19.4 (26.53), the readings are taken from the readout, the tolerance is 0.3, the title and tip no longer state the result."
+        },
+        {
+          "sid": "the-loudest-on-the-map",
+          "change": "INSERTED: a prediction about GW170817’s map, before the five recordings, revealed at the-one-you-cannot-measure."
+        },
+        {
+          "sid": "the-one-you-cannot-measure",
+          "change": "REWORDED: the title and body no longer state the outcome; the explanation is the prediction’s because."
+        },
+        {
+          "sid": "what-the-signal-tells-you",
+          "change": "REWORDED: says which source the canvas shows; ninety seconds corrected to more than two and a half minutes (the readout’s 158 s)."
+        },
+        {
+          "sid": "where-this-leaves-you",
+          "change": "REWORDED: the line through the pair, and minutes in band, as above."
+        }
+      ],
+      "walk": "NOT VERIFIED",
       "pr": null,
-      "hash": null
+      "hash": "938f13ccf4f4f0b1e98099d517e099501bd1e984922c7b21d3f4d97e5787ff26"
     },
     {
       "id": "investigation:lives-of-stars",
@@ -7048,22 +7084,58 @@
       "scene_class": "model-owned stage",
       "limits": null,
       "open_items": [],
-      "questions": { "Q1": "", "Q2": "", "Q3": "", "Q4": "", "Q5": "" },
+      "questions": {
+        "Q1": "The student finds, by switching one control on the canvas, that a still mass and a pulsing sphere send out nothing and a pair does; counts two wave peaks per orbit on an unequal pair; and measures the strain halving as the same source is moved from 400 to 800 to 1600 Mpc: a live model, not a paragraph.",
+        "Q2": "Each screen names what is on the canvas (the source marker, the model pair, the neutron-star pair) and which of illustration, model or observation it is; the strain steps say which readout row to take and where to put the playhead.",
+        "Q3": "The canvas source, the readout and the prose name the same objects; the pattern step now speaks of the line through the 36 + 29 pair, which is what the lab’s count shows, rather than of two identical objects.",
+        "Q4": "Where to stop the playhead for the ring and the strain, which distance to set before each of three readings with the playhead held, and which single control to vary in their own experiment; a reading at another distance is named as a slip.",
+        "Q5": "Not applicable: core only, no deeper steps (recorded; no depth added)."
+      },
       "leak": {
         "L1": "HOLDS: no field cue or step placeholder holds a numeral at any depth, in either language, and the panel renders none that does (tests/fieldCue.test.js); the expected value is the field's `want`, which no page reads.",
-        "L2": "",
-        "L3": "",
-        "L4": "",
-        "L5": ""
+        "L2": "HOLDS (353): the three strain readings open at 410 Mpc, which no field asks for, and opens-at-answer finds nothing.",
+        "L3": "HOLDS (353): what-has-to-change is a recall of the three sources just shown and says so; the spinning-star case left its tip and is in the reveal. The stopped-playhead transfer the audit proposed was not built: pausing holds the emitted rings on the canvas, so a stopped playhead does not show a pair that has stopped radiating. The sphere screen no longer shows the lab row \"Does this radiate?\" or a tip that answered it before the student committed.",
+        "L4": "HOLDS (353): no body gives the strain or the half-orbit answer before its step; the strain body no longer calls the amplitude the largest value the wave reaches, and the half-orbit option and body no longer carry the reason or say the answer comes sooner than expected.",
+        "L5": "CHANGED (353): the rings readout no longer says the rings come twice per orbit, which leaked the count before it was made (en and es); the two readout rows gained ids."
       },
-      "task_rule_items": [],
-      "editorial": "OPEN",
-      "redesign": "OPEN",
-      "reason": "Corrections I reworded steps for factual consistency (register D-R4-300-04); editorial pass still OPEN.",
-      "step_revisions": [],
-      "walk": "NOT RUN",
+      "task_rule_items": [
+        "T1: the strain amplitude in measure-a-change-in-length and the three strains in the-same-source-farther-away are taken from the readout by Take reading, with provenance; nothing is retyped.",
+        "T3: the distance comparison holds the playhead and the masses and says so; a reading at another distance is told so (two authored slips per field).",
+        "T5: authored misconceptions for the-pattern-repeats (a quarter turn, a full orbit), stretch-one-way (all grown, other way unchanged, carried along) and where-the-calculation-stops (objects stopped, wave stopped, detector stopped).",
+        "T7: the-pattern-repeats now says the model is leading-order and leaves out the faint extra tones of very unequal pairs."
+      ],
+      "editorial": "REVISED",
+      "redesign": "REVISED",
+      "reason": "FOCUSED: canvas agreement and the leading-order claim settled by the lab’s own count, reading capture on the two strain steps, misconceptions on three steps (register D-R4-353-01, -02). The proposed transfer for what-has-to-change was not built (pausing holds the rings, so a stopped playhead cannot show a pair that stopped radiating); the step stays recall and is reworded (the roadmap’s stated fallback).",
+      "step_revisions": [
+        {
+          "sid": "what-has-to-change",
+          "change": "REWORDED: the body says it gathers the three sources just shown; the spinning-star case moved from the tip to the because; same task and answer."
+        },
+        {
+          "sid": "the-pattern-repeats",
+          "change": "REWORDED: the line through the pair replaces two identical objects; the unequal-mass claim now says what the lab’s count on 36 + 29 shows and what the model leaves out; two misconceptions added; same task and answer (half an orbit)."
+        },
+        {
+          "sid": "stretch-one-way",
+          "change": "REWORDED: three authored misconceptions added."
+        },
+        {
+          "sid": "measure-a-change-in-length",
+          "change": "REWORDED: the strain amplitude is taken from the readout (Take reading); the body says it is the height at the playhead, not the largest value; same field and answer."
+        },
+        {
+          "sid": "where-the-calculation-stops",
+          "change": "REWORDED: three authored misconceptions added."
+        },
+        {
+          "sid": "the-same-source-farther-away",
+          "change": "REWORDED: the three strains are taken from the readout, the playhead is held, and a reading at another distance is told so; same fields and answer."
+        }
+      ],
+      "walk": "NOT VERIFIED",
       "pr": null,
-      "hash": null
+      "hash": "8a684a459d7248ffefdee6a52351b65b5812d35d2a4a9efe502346db5840c353"
     },
     {
       "id": "investigation:what-is-a-measurement",

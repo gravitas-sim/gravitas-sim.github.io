@@ -106,6 +106,23 @@ const ALL_HIDDEN = [
   'amplify',
 ];
 
+/**
+ * A strain reading taken with the Distance control somewhere other than the
+ * field's own distance, told so. The control moves in steps of 10 Mpc.
+ */
+const notAt = mpc => [
+  {
+    id: 'nearerThanAsked',
+    when: { setting: { distance: { max: mpc - 1 } } },
+    say: 'That reading was taken at a smaller distance than this field asks for. Set Distance to the value in the label, then take the reading again.',
+  },
+  {
+    id: 'fartherThanAsked',
+    when: { setting: { distance: { min: mpc + 1 } } },
+    say: 'That reading was taken at a larger distance than this field asks for. Set Distance to the value in the label, then take the reading again.',
+  },
+];
+
 const WHAT_IS_A_GRAVITATIONAL_WAVE = {
   id: 'what-is-a-gravitational-wave',
   // Its own card, drawn from the opening source by
@@ -199,7 +216,9 @@ const WHAT_IS_A_GRAVITATIONAL_WAVE = {
              \n\nThe important words are <em>sitting still</em>. Nothing
              about that curvature changes. It does not travel. It does not
              arrive. There is no ripple, because there is nothing doing any
-             rippling — and you can see that there is nothing leaving it.`,
+             rippling — and you can see that there is nothing leaving it.
+             \n\nThe panel beside it keeps drawing the lab's binary. On this
+             screen the source is the one on the canvas.`,
       prompt:
         'A single mass that never moves. What reaches a distant observer from it?',
       options: [
@@ -247,10 +266,11 @@ const WHAT_IS_A_GRAVITATIONAL_WAVE = {
       type: 'predict',
       reveal: 'change-the-shape',
       title: 'Now make it move',
-      body: `Same mass, and now it is doing something. Set <strong>What is
-             emitting</strong> to <em>a pulsing sphere</em> and press
-             <strong>Play</strong>. The whole thing swells and shrinks, over
-             and over, staying exactly spherical the whole time.
+      body: `Same mass, and now it is doing something: on the canvas it is a
+             pulsing sphere. Press <strong>Play / pause</strong>. The whole
+             thing swells and shrinks, over and over, staying exactly
+             spherical the whole time. The panel keeps drawing the lab's
+             binary; on this screen, watch the canvas.
              \n\nThis is an enormous amount of motion. Before you look at
              what leaves it, commit to what you expect.`,
       prompt:
@@ -268,9 +288,11 @@ const WHAT_IS_A_GRAVITATIONAL_WAVE = {
         view: 'source',
         autoplay: true,
         values: { source: 1 },
-        hide: ['m1', 'm2', 'distance', 'inclination', 'amplify'],
+        // The source control's readout row says whether the source radiates,
+        // which is this prediction's answer; the next screen offers it.
+        hide: ['m1', 'm2', 'distance', 'inclination', 'amplify', 'source'],
       }),
-      tip: 'Watch the canvas as it pulses. Nothing leaves it — and that is a statement about the model, which draws a crest for every cycle of a changing quadrupole and has none to draw here.',
+      tip: 'Watch the canvas as it pulses, and look for anything leaving it.',
     },
     {
       sid: 'change-the-shape',
@@ -302,14 +324,14 @@ const WHAT_IS_A_GRAVITATIONAL_WAVE = {
       type: 'predict',
       reveal: 'watch-the-pair',
       title: 'What has to change?',
-      body: `Three imaginary sources, all of them massive, all of them
-             perfectly ordinary:
+      body: `The last three screens put three sources on the canvas. Here they
+             are again as ordinary objects rather than settings of a control:
              \n\n<strong>A.</strong> A heavy ball, sitting still.
              \n\n<strong>B.</strong> A heavy ball that swells and shrinks -
              bigger, smaller, bigger - staying a perfect sphere the whole time.
              \n\n<strong>C.</strong> Two heavy balls circling each other.
-             \n\nOne of these three sends out gravitational waves. Commit
-             before reading on.`,
+             \n\nOne of these three sends out gravitational waves. Answer from
+             what you saw, and say the rule to yourself before you commit.`,
       prompt: 'Which one produces a traveling gravitational wave?',
       options: [
         'A, because it has the most concentrated mass',
@@ -319,9 +341,9 @@ const WHAT_IS_A_GRAVITATIONAL_WAVE = {
       ],
       answer: 2,
       because:
-        'Only C. B is the interesting wrong answer and it is worth sitting with: the ball is genuinely moving, every part of it accelerating in and out, and it still emits nothing. A perfect sphere looks the same from outside however much it pulses, so from a distance nothing about it changes, and there is nothing to send. So "moving mass makes waves" is not the rule. The rule is that the mass has to be arranged <em>unevenly</em> and that arrangement has to keep <em>changing</em> - which is exactly what two objects going round each other do.',
+        'Only C. B is the interesting wrong answer and it is worth sitting with: the ball is genuinely moving, every part of it accelerating in and out, and it still emits nothing. A perfect sphere looks the same from outside however much it pulses, so from a distance nothing about it changes, and there is nothing to send. So "moving mass makes waves" is not the rule. The rule is that the mass has to be arranged <em>unevenly</em> and that arrangement has to keep <em>changing</em> - which is exactly what two objects going round each other do. The same rule covers a case you have not seen: a perfectly round star spinning on its axis emits nothing either, and a bump on one side of it would.',
       tool: lab({ view: 'source', autoplay: false, hide: ALL_HIDDEN }),
-      tip: 'A spinning, perfectly round star emits nothing either, for the same reason. Give it a bump on one side and it does.',
+      tip: 'For each one, ask what an observer far away could notice changing.',
     },
 
     // -----------------------------------------------------------------------
@@ -359,27 +381,37 @@ const WHAT_IS_A_GRAVITATIONAL_WAVE = {
       body: `Pause, and step through the orbit a little at a time with the
              playhead.
              \n\nStart with the pair lined up left-to-right. Keep going until
-             the <em>arrangement of the mass</em> looks the same as it did at
-             the start. Not until each object is back where it began - until
-             the shape is back.
-             \n\nFor two equal objects on a circle, that happens sooner than
-             you might expect.`,
+             the <em>line through the two objects</em> points the same way as
+             it did at the start. Not until each object is back where it began
+             - until the line is back.`,
       prompt:
-        'Starting from side by side, how much of a full orbit until the mass is arranged the same way again?',
+        'Starting from side by side, how much of a full orbit until the line through the pair points the same way again?',
       options: [
         'A quarter of an orbit',
-        'Half an orbit — swapping the two objects leaves the same arrangement',
+        'Half an orbit',
         'A full orbit',
         'Two full orbits',
       ],
       answer: 1,
       because:
-        'Half an orbit. Swap two identical objects and you cannot tell: the pair lined up left-to-right at the start is lined up left-to-right again halfway round, with the two objects exchanged. So the pattern the source presents to the outside world repeats twice per orbit - and the wave it sends out does too. That is why the wave frequency for a pair like this is <em>twice</em> the orbital frequency, a fact “Count the rhythm” has you count for yourself. For unequal masses the shape is lopsided but repeats just the same, so the frequency is still twice.',
+        'Half an orbit. Halfway round, the pair is lined up left-to-right again with the two objects at opposite ends. Two identical objects would look exactly as they did. These two are not identical - 36 and 29 times the Sun’s mass - so the heavier one is now on the other side, and the full arrangement takes a whole orbit to come back. The wave this model computes does not follow that detail: it follows how drawn-out the mass is and along which line, and that repeats every half orbit whatever the two masses are. So the wave repeats twice per orbit, and its frequency is <em>twice</em> the orbital frequency - “Count the rhythm” has you count it on this unequal pair. Real pairs of very different masses add faint extra tones that this model leaves out.',
       tool: lab({ view: 'source', autoplay: false }),
       tip: 'Use the playhead in small steps. The readout gives the orbital phase, so you can check your answer against a number rather than by eye.',
       hints: [
-        'Imagine the pair as two identical objects. What happens to the picture if you swap them?',
-        'Count how often the arrangement repeats, not how often each object returns.',
+        'Watch the line joining the two objects, not either object on its own.',
+        'Count how often that line points the same way, not how often each object returns.',
+      ],
+      misconceptions: [
+        {
+          id: 'quarterTurn',
+          option: 0,
+          say: 'A quarter of a turn takes the pair from lined up across to lined up up-and-down: a different line, not the same one.',
+        },
+        {
+          id: 'fullOrbit',
+          option: 2,
+          say: 'A full orbit brings each object back to where it began. The line through the pair is back sooner.',
+        },
       ],
     },
     {
@@ -480,6 +512,23 @@ const WHAT_IS_A_GRAVITATIONAL_WAVE = {
       hints: [
         'The wave stretches space in one direction. What does it do at right angles to that?',
         'The ring becomes an oval, not a bigger circle.',
+      ],
+      misconceptions: [
+        {
+          id: 'allGrown',
+          option: 0,
+          say: 'The ring is not bigger overall. Look at the up-and-down spacing at the widest moment and compare it with the circle you started from.',
+        },
+        {
+          id: 'otherWayUnchanged',
+          option: 2,
+          say: 'Look again at the up-and-down spacing when the ring is widest across: it has changed too, at the same moment.',
+        },
+        {
+          id: 'carriedAlong',
+          option: 3,
+          say: 'The markers do not travel with the wave. What changes is the distance between them.',
+        },
       ],
     },
     {
@@ -590,9 +639,10 @@ const WHAT_IS_A_GRAVITATIONAL_WAVE = {
              \n\nStart with numbers you can hold. A 4-kilometer arm that
              changes by 4 millimeters has a strain of 0.004 divided by 4000,
              which is 0.000001, or one part in a million.
-             \n\nNow the real one. Read <strong>Strain amplitude</strong> off
-             the readout - the largest fraction this wave reaches - and write
-             it down.`,
+             \n\nNow the real one. <strong>Strain amplitude</strong> in the
+             readout is the height of the wobble at the playhead. Move the
+             playhead to where the trace is tallest, then press
+             <strong>Take reading</strong> beside the second field.`,
       fields: [
         {
           id: 'toy',
@@ -604,6 +654,7 @@ const WHAT_IS_A_GRAVITATIONAL_WAVE = {
           id: 'real',
           label: 'Strain amplitude from the readout',
           unit: '',
+          source: { tool: 'strainAmplitude' },
         },
       ],
       validate: v => {
@@ -833,6 +884,23 @@ const WHAT_IS_A_GRAVITATIONAL_WAVE = {
         'Is the plot showing what happened, or how far a model can be trusted?',
         'Consider what chose where to stop drawing.',
       ],
+      misconceptions: [
+        {
+          id: 'objectsStopped',
+          option: 0,
+          say: 'Nothing in the readout says the objects stop. Read the line that says where the plot ends, and why.',
+        },
+        {
+          id: 'waveStopped',
+          option: 2,
+          say: 'The binary does not stop radiating there. Ask what decided where the drawing ends.',
+        },
+        {
+          id: 'detectorStopped',
+          option: 3,
+          say: 'There is no detector recording in this plot: it is a model, and the readout says why the model ends where it does.',
+        },
+      ],
     },
 
     // -----------------------------------------------------------------------
@@ -888,11 +956,32 @@ const WHAT_IS_A_GRAVITATIONAL_WAVE = {
              same orbit, same everything. Only how far off it is.
              \n\nThe plot scale is fixed for this screen, and so is the sound
              level, so that what you see and hear is a comparison rather than
-             an adjustment. Record the strain amplitude at three distances.`,
+             an adjustment. Set the distance, then press <strong>Take
+             reading</strong> beside its field, for three distances. Leave the
+             playhead where it is between readings: the amplitude changes along
+             the signal too.`,
       fields: [
-        { id: 'a400', label: 'Strain amplitude at 400 Mpc', unit: '' },
-        { id: 'a800', label: 'Strain amplitude at 800 Mpc', unit: '' },
-        { id: 'a1600', label: 'Strain amplitude at 1600 Mpc', unit: '' },
+        {
+          id: 'a400',
+          label: 'Strain amplitude at 400 Mpc',
+          unit: '',
+          source: { tool: 'strainAmplitude' },
+          misconceptions: notAt(400),
+        },
+        {
+          id: 'a800',
+          label: 'Strain amplitude at 800 Mpc',
+          unit: '',
+          source: { tool: 'strainAmplitude' },
+          misconceptions: notAt(800),
+        },
+        {
+          id: 'a1600',
+          label: 'Strain amplitude at 1600 Mpc',
+          unit: '',
+          source: { tool: 'strainAmplitude' },
+          misconceptions: notAt(1600),
+        },
       ],
       validate: v => {
         const all = [v.a400, v.a800, v.a1600];
@@ -900,7 +989,7 @@ const WHAT_IS_A_GRAVITATIONAL_WAVE = {
           return {
             level: 'warn',
             message:
-              'Three readings, from "Strain amplitude". Set the distance, then read it off.',
+              'Set Distance to each of the three values in turn, and take a reading at each.',
           };
         }
         if (all.some(x => x <= 0)) {

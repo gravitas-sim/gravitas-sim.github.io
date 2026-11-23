@@ -34,6 +34,8 @@ const load = rel => import(pathToFileURL(path.join(ROOT, rel)).href);
 
 /** Step keys that are prose or identity: they never select an engine branch. */
 const PROSE_KEYS = new Set(['sid', 'title', 'body', 'text', 'summary']);
+/** Step keys only the authoring rules read (tools/authoring/neutralStart.mjs). */
+const AUTHORING_KEYS = new Set(['prepared']);
 
 const answerShape = a =>
   Array.isArray(a) ? 'list' : a === null ? 'null' : typeof a;
@@ -50,7 +52,8 @@ export function lessonFeatures(lesson, { depths, locales }) {
     f.add(`type:${s.type}`);
     if (s.kind) f.add(`kind:${s.type}/${s.kind}`);
     for (const k of Object.keys(s)) {
-      if (!PROSE_KEYS.has(k)) f.add(`key:${s.type}.${k}`);
+      if (!PROSE_KEYS.has(k) && !AUTHORING_KEYS.has(k))
+        f.add(`key:${s.type}.${k}`);
     }
     if (s.type === 'question') {
       f.add(

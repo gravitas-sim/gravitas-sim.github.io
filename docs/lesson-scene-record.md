@@ -11,16 +11,16 @@ The hand-written, human-reviewed acceptance map is
 [`lesson-acceptance.json`](lesson-acceptance.json); `npm run
 audit:scene:check` fails if it disagrees with what is generated here.
 
-Across 124 investigations and 1536 steps: 1392 steps
+Across 124 investigations and 1537 steps: 1393 steps
 declare a scene, 165 let a reader change one, 178 read the
 running integration, 1003 show a prescribed model result, 159 draw
 on a stored dataset, 874 put a self-contained panel beside the text,
 399 keep something, and 79 are prose.
-Of 204 prediction loops, 204 are returned to,
-204 produce a measurement before they are answered, and
+Of 205 prediction loops, 205 are returned to,
+205 produce a measurement before they are answered, and
 2 end in an explanation in the reader's own words.
-202 hold their marking until the experiment settles them.
-The canvas behind a step is stated as scene on 4, portrait on 7, quiet on 96; 1429 state none.
+203 hold their marking until the experiment settles them.
+The canvas behind a step is stated as scene on 4, portrait on 7, quiet on 96; 1430 state none.
 
 ## Kepler's Laws (`keplers-laws`)
 
@@ -291,14 +291,14 @@ The canvas behind a step is stated as scene on 4, portrait on 7, quiet on 96; 14
 
 ## Listening to Spacetime (`listening-to-spacetime`)
 
-- **Steps:** 32. Scene declared on 30; a reader can change something on 22; 8 declare a scene nobody on that step can touch.
+- **Steps:** 33. Scene declared on 31; a reader can change something on 22; 9 declare a scene nobody on that step can touch.
 - **Where the numbers come from:** 0 live engine, 31 prescribed model, 9 stored dataset, 9 self-contained panel.
 - **What students do:** commit-a-prediction, change-a-scene-object, move-an-instrument-control, press-an-instrument-preset, press-an-instrument-button, tick-a-checklist, record-values, answer-in-words, choose-an-option, read.
 - **Objects the steps declare:** bh.
 - **Instruments:** gw-lab, gw-real, gw-events.
 - **Stored data:** GW150914 strain, as published (observation); Five GWOSC events, whitened strain (observation).
 - **Evidence kept:** notebook-fields, instrument-capture.
-- **Prediction loops:** an-unlabeled-signal → three-things-called-a-wave, find-your-way-around → three-things-called-a-wave; predict-as-it-tightens → watch-the-waves, two-crests-per-orbit, frequency-early-and-late, stop-at-a-milestone, explain-the-chirp → watch-the-waves; predict-heavier → change-one-thing, measure-time-in-band, the-one-mass-that-matters → change-one-thing; predict-twice-as-far → test-distance, edge-on, three-sources, where-the-model-stops, add-the-noise, looks-like-is-not-enough, what-they-actually-recorded, model-against-measurement, five-recordings, the-same-moment → test-distance; rank-before-the-catalog → what-the-catalog-says, the-one-you-cannot-measure, the-model-on-five, measured-or-supplied, your-own-experiment, what-the-signal-tells-you → what-the-catalog-says.
+- **Prediction loops:** an-unlabeled-signal → three-things-called-a-wave, find-your-way-around → three-things-called-a-wave; predict-as-it-tightens → watch-the-waves, two-crests-per-orbit, frequency-early-and-late, stop-at-a-milestone, explain-the-chirp → watch-the-waves; predict-heavier → change-one-thing, measure-time-in-band, compare-two-different-binaries → change-one-thing; predict-twice-as-far → test-distance, edge-on, three-sources, where-the-model-stops, add-the-noise, looks-like-is-not-enough, what-they-actually-recorded, model-against-measurement → test-distance; the-loudest-on-the-map → five-recordings, the-same-moment → the-one-you-cannot-measure; rank-before-the-catalog → what-the-catalog-says, the-one-you-cannot-measure, the-model-on-five, measured-or-supplied, your-own-experiment, what-the-signal-tells-you → what-the-catalog-says.
 - **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
 - **Scene rebuilds:** none.
 - **Accepted central experiment** (reviewed 2026-09-11): object `bh`, control gw-lab/m1, measures time in band, and peak strain, against mass and distance, evidence `instrument-capture`, covered by `e2e/centralExperiments.spec.js`.

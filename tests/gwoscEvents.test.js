@@ -690,12 +690,32 @@ describe('the lesson steps', () => {
   const coda = steps.filter(s => s.tool?.id === 'gw-events');
   const at = sid => steps.findIndex(s => s.sid === sid);
 
-  test('seven screens in one block, straight after the published GW150914 traces', () => {
+  test('seven screens in one block, after the GW150914 traces and one prediction', () => {
     expect(coda).toHaveLength(7);
     const first = steps.indexOf(coda[0]);
     expect(steps.slice(first, first + coda.length)).toEqual(coda);
-    expect(first).toBe(at('model-against-measurement') + 1);
+    expect(first).toBe(at('model-against-measurement') + 2);
     expect(at('your-own-experiment')).toBe(first + coda.length);
+  });
+
+  test('GW170817 is predicted before its map is on screen, and marked where it is read', () => {
+    const predict = steps[at('five-recordings') - 1];
+    expect(predict.sid).toBe('the-loudest-on-the-map');
+    expect(predict.type).toBe('predict');
+    expect(predict.tool).toBeUndefined();
+    expect(predict.reveal).toBe('the-one-you-cannot-measure');
+    expect(predict.options[predict.answer]).toMatch(/^No - /);
+    // The catalog's ranking the premise states, and the outcome the reveal
+    // reads: the highest signal-to-noise ratio, and no measured end.
+    const snr = id => EVENTS[id].catalog.network_matched_filter_snr.value;
+    const loudest = [...EVENT_IDS].sort((a, b) => snr(b) - snr(a))[0];
+    expect(loudest).toBe('GW170817');
+    expect(measureEvent('GW170817').end).toBeNull();
+    // Neither the reveal's body nor its title gives the outcome away.
+    const reveal = steps[at('the-one-you-cannot-measure')];
+    expect(`${reveal.title} ${reveal.body}`).not.toMatch(
+      /cannot measure|nothing louder/i
+    );
   });
 
   test('the lesson still ends on its own question and its own summary', () => {

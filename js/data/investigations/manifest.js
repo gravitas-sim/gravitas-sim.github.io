@@ -254,8 +254,8 @@ export const MANIFEST = [
     level: 'Introductory astronomy',
     thumbnail: 'images/investigations/listening-to-spacetime.webp',
     series: 'Gravitational waves',
-    stepCount: 32,
-    gradedCount: 18,
+    stepCount: 33,
+    gradedCount: 19,
     objectiveCount: 9,
   },
   {

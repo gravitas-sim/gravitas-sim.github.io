@@ -312,7 +312,7 @@
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["a-sphere-that-breathes", "change-the-shape", "the-chirp"],
       "evidenceFrom": "model",
-      "decision": "unreviewed",
+      "decision": "Which source to set and when to look in the three-source comparison, where to stop the playhead to read the ring and the strain, which distance to set before each reading in the one controlled change (a reading at another distance, or a moved playhead, spoils the ratio and is told so), and which single control to vary in their own experiment.",
       "leakFree": true
     },
     "listening-to-spacetime": {
@@ -329,7 +329,7 @@
         "explain-the-chirp"
       ],
       "evidenceFrom": "model",
-      "decision": "unreviewed",
+      "decision": "Which stretch of the playhead to count orbits and peaks over, where to stop for each reading, which one thing to change against a pinned A (moving both masses is two changes, and the readout says so), which pair to set before taking each chirp mass, and how to rank four recorded mergers by chirp mass from frequencies they read themselves before the catalog is shown.",
       "leakFree": false
     },
     "a-universe-of-stars": {

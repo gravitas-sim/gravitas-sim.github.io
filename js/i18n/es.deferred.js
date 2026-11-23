@@ -2813,7 +2813,7 @@ export const ES_DEFERRED = {
     'Sí. Dos masas que giran una alrededor de la otra cambian la FORMA de la distribución de masa —su cuadrupolo— y un cuadrupolo cambiante es lo que radia. Los anillos son una ilustración de la propagación; la deformación es lo que calcula el modelo.',
   'gwW.row.rings': 'Los anillos',
   'gwW.value.rings':
-    'Una cresta por cada ciclo de la onda, es decir dos por órbita. Dónde está cada anillo sale del propio historial de emisión del modelo, así que al pausar se quedan quietos y al retroceder se ve el patrón anterior. Su velocidad en pantalla es una decisión de representación, no la velocidad de la luz a escala.',
+    'Una cresta por cada ciclo de la onda. Dónde está cada anillo sale del propio historial de emisión del modelo, así que al pausar se quedan quietos y al retroceder se ve el patrón anterior. Su velocidad en pantalla es una decisión de representación, no la velocidad de la luz a escala.',
   'gwW.control.cursor': 'Posición en la señal',
   'gwW.preset.bbh': 'Dos agujeros negros',
   'gwW.preset.bbh.note':
