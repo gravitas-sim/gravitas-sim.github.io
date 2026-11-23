@@ -101,7 +101,7 @@ current, and the orchestrator checks it.
 | `evaluation-summary.mjs` | npm run evaluation:summary -- <files...> | `npm run evaluation:summary` |
 | `events-trace.mjs` | The engine's events, in the order they fire, with their payloads |  |
 | `evidence-status.mjs` | The evidence-status record (Roadmap III, Prompt 122, rule 7.5.10) |  |
-| `evidence-tray-list.mjs` | Which written answers carry an evidence tray, and which prediction loops end without a written answer | `node tools/evidence-tray-list.mjs --check` |
+| `evidence-tray-list.mjs` | Which written answers carry an evidence tray, as a table |  |
 | `exoplanet-reference.mjs` | The Exoplanet Observatory's reference run, and its answer key | `npm run guides:key` |
 | `experiment-bench.mjs` | npm run bench:experiments - how fast experiments run, and what they cost | `npm run bench:experiments` |
 | `experiment-ensemble-child.mjs` | (no header) |  |
