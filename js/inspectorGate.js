@@ -11,8 +11,7 @@
 // rail's reference-frame selector, and the maneuver planner's loader.
 // =============================================================================
 
-import { barycenterBodies, gravitySourcesFor } from './physics.js';
-import { dominantPrimary } from './orbital.js';
+import { barycenterBodies } from './physics.js';
 import {
   WORLD,
   BARYCENTER,
@@ -25,7 +24,6 @@ import {
 } from './referenceFrame.js';
 import { t, hasMessage } from './i18n/index.js';
 import { loadFailed, announce } from './notify.js';
-import { sceneWords } from './canvasSummary.js';
 import { setBodySelector } from './widgetRuntime.js';
 import { state, SETTINGS, current_scenario_name, command } from './appState.js';
 import { EV_MANEUVER_REQUESTED, EV_SIMULATION_RESET } from './names.js';
@@ -285,20 +283,12 @@ const describeFrame = frame => {
     };
   }
   if (frame.pair) {
-    const rotating = frame.mode === ROTATING;
+    // A pair frame is offered only once the scene's words are here.
     return {
       value: frame.mode,
-      note: rotating
-        ? sceneWord(
-            'frame.note.rotating',
-            null,
-            'Positions and trails in a frame that turns with the pair: both bodies stay on one horizontal line, the heavier on the left.'
-          )
-        : sceneWord(
-            'frame.note.pair',
-            null,
-            'Positions and trails relative to the pair\u2019s center of mass, which now sits still.'
-          ),
+      note: t(
+        frame.mode === ROTATING ? 'frame.note.rotating' : 'frame.note.pair'
+      ),
       active: true,
     };
   }
@@ -318,19 +308,32 @@ const describeFrame = frame => {
   };
 };
 
+// The scene's words (js/sceneStatement.js, loaded on first use), through the
+// command bus: other pages reach this module, and a static import of the
+// canvas description would pull the renderer's chunk apart on all of them.
+const scene = (load = false) => {
+  try {
+    return command('sceneWords')(load);
+  } catch {
+    return null;
+  }
+};
+
 /**
  * The selected body and its primary, heavier first: the pair the pair frames
- * are built on (the barycenter marker's rule, dominantPrimary).
+ * are built on (the barycenter marker's rule, markerMembers). Null until the
+ * scene's words have arrived, and when there is no such pair.
  *
- * @returns {?Array<object>} [A, B], or null when there is no such pair
+ * @returns {?Array<object>} [A, B], or null
  */
 export const selectedPair = () => {
   const sel = state.selectedObject?.object;
-  if (!sel || sel.alive === false || !barycenterBodies().includes(sel))
-    return null;
-  const primary = dominantPrimary(sel, gravitySourcesFor(sel));
-  if (!primary || !barycenterBodies().includes(primary)) return null;
-  return primary.mass >= sel.mass ? [primary, sel] : [sel, primary];
+  const members = sel ? scene()?.markerMembers('pair', sel) : null;
+  if (!members || members.length !== 2) return null;
+  const all = barycenterBodies();
+  if (!members.every(b => all.includes(b))) return null;
+  const [s, primary] = members;
+  return primary.mass >= s.mass ? [primary, s] : [s, primary];
 };
 
 /** Bring the rail control and the inspector row in line with the frame. */
@@ -358,16 +361,16 @@ export const paintFrameControls = () => {
         );
       }
     }
-    for (const [value, id, english] of [
-      [PAIR, 'frame.pair', 'Barycenter of'],
-      [ROTATING, 'frame.rotating', 'Rotating with'],
+    for (const [value, id] of [
+      [PAIR, 'frame.pair'],
+      [ROTATING, 'frame.rotating'],
     ]) {
       const o = option(value);
       if (!o) continue;
       o.disabled = !pair;
       if (pair) {
-        const [a, b] = pair.map(x => x.name || 'object');
-        o.textContent = sceneWord(id, { a, b }, `${english} ${a} and ${b}`);
+        const [a, b] = pair.map(x => x.name || '');
+        o.textContent = t(id, { a, b });
       }
     }
     select.value = shown.value;
@@ -410,6 +413,17 @@ export const setupReferenceFrameControl = () => {
       sayFrame();
     });
   }
+  // The pair frames are named and built from the scene's words: fetch them
+  // when a reader reaches for the control, then offer the pair.
+  const wake = () => {
+    try {
+      command('loadSceneWords')().then(paintFrameControls, () => {});
+    } catch {
+      /* not on this page */
+    }
+  };
+  select?.addEventListener('focus', wake);
+  select?.addEventListener('pointerdown', wake);
   onFrameChange(paintFrameControls);
   paintFrameControls();
 };
@@ -420,7 +434,7 @@ export const setupReferenceFrameControl = () => {
  * inspector's row).
  */
 export const sayFrame = () => {
-  const words = sceneWords(true);
+  const words = scene(true);
   if (words) announce(`${words.frameLine()}.`);
 };
 

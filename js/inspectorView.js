@@ -78,14 +78,13 @@ import {
   frameOriginVelocity,
   resolveFrameOrigin,
   frameState,
-  toFrameCoords,
-  velocityInFrame,
 } from './referenceFrame.js';
+import { toFrameCoords, velocityInFrame } from './frameMotion.js';
 import { t, registerMessages } from './i18n/index.js';
 import { EN_ORBITGEOMETRYROW } from './i18n/en.orbitGeometryRow.js';
 import { ES_ORBITGEOMETRYROW } from './i18n/es.orbitGeometryRow.js';
 import { formatSpeed, formatDistance } from './units.js';
-import { sayFrame } from './inspectorGate.js';
+import { announce } from './notify.js';
 import { state, SETTINGS, current_scenario_name, command } from './appState.js';
 
 // The orbit geometry row's words, so it is named offline; quiet, so a lesson step is not repainted.
@@ -247,7 +246,13 @@ export const wireInspectorOverlayToggles = () => {
       const current = frameState();
       const isOn = current.mode === OBJECT && current.objectId === obj.id;
       setFrame(isOn ? WORLD : OBJECT, isOn ? null : obj.id);
-      sayFrame();
+      // Said as the canvas names it (the scene's words, via the command bus).
+      try {
+        const words = command('sceneWords')(true);
+        if (words) announce(`${words.frameLine()}.`);
+      } catch {
+        /* the words are optional here */
+      }
     };
   }
 

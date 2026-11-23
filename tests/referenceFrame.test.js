@@ -24,8 +24,6 @@ import {
   framePair,
   isRotatingFrame,
   transferFrame,
-  toFrameCoords,
-  velocityInFrame,
   pairSamples,
   hasTrailGap,
   followBody,
@@ -34,6 +32,7 @@ import {
   onFollowChange,
 } from '../js/referenceFrame.js';
 import { trailShifts, framedTrail } from '../js/frameView.js';
+import { velocityInFrame, toFrameCoords } from '../js/frameMotion.js';
 import { readFileSync } from 'node:fs';
 
 const TOL = JSON.parse(

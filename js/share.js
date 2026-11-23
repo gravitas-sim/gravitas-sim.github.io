@@ -23,9 +23,8 @@ import {
   lessonInHash,
   packInHash,
 } from './investigationsLoader.js';
-import { t, hasMessage } from './i18n/index.js';
+import { t } from './i18n/index.js';
 import { frameMode, LINKED_MODES } from './referenceFrame.js';
-import { sceneWords } from './canvasSummary.js';
 import { scenarioTitle } from './i18n/scenario.js';
 import { EV_ESCAPE, EV_SIMULATION_RESET } from './names.js';
 
@@ -33,6 +32,7 @@ const captureShareState = command('captureShareState');
 const applyShareState = command('applyShareState');
 const initialize_simulation = command('initialize_simulation');
 const show_enhanced_scenario_info = command('show_enhanced_scenario_info');
+const sceneWords = command('sceneWords');
 
 /** A scenario as a reader says it: its title, or 'None' for a hand-built world. */
 const said = s => (s && s !== 'None' ? scenarioTitle(s) : s);
@@ -265,10 +265,10 @@ async function refresh() {
     const dropped = !LINKED_MODES.includes(frameMode());
     els.frameNote.hidden = !dropped;
     if (dropped) {
-      const name = sceneWords(true)?.frameName() || '';
-      els.frameNote.textContent = hasMessage('share.frameNotCarried')
-        ? t('share.frameNotCarried', { name })
-        : `This link opens in the world frame: links do not carry the frame ${name}.`;
+      // Only a pair frame is dropped, and one is chosen only once the
+      // scene's words are here.
+      const name = sceneWords()?.frameName() || '';
+      els.frameNote.textContent = t('share.frameNotCarried', { name });
     }
   }
 

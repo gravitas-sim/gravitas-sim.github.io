@@ -46,7 +46,7 @@ import {
   setupOverlayMinimize,
   setupReferenceFrameControl,
 } from './inspectorGate.js';
-import { loadSceneWords } from './canvasSummary.js';
+import { loadSceneWords, sceneWords } from './canvasSummary.js';
 import {
   initPlacement,
   initObjectPicker,
@@ -1093,6 +1093,9 @@ canvas.addEventListener(
 
 // What the modules below this one ask of it (the command bus, js/appState.js).
 registerCommands({
+  // The scene's words (frame names), for modules other pages also reach.
+  sceneWords,
+  loadSceneWords,
   captureShareState,
   applyShareState,
   initialize_simulation,

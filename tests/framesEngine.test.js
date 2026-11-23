@@ -37,7 +37,6 @@ import {
   setFrame,
   resetFrame,
   resolveFrameOrigin,
-  toFrameCoords,
   followBody,
   followedBodyId,
   onFollowChange,
@@ -48,6 +47,7 @@ import {
   ROTATING,
 } from '../js/referenceFrame.js';
 import { resolveView, trailShifts, framedTrail } from '../js/frameView.js';
+import { toFrameCoords } from '../js/frameMotion.js';
 import { frameLine, frameName } from '../js/sceneStatement.js';
 import { setLocale } from '../js/i18n/index.js';
 
