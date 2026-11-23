@@ -9175,10 +9175,10 @@
      ]
     },
     {
-     "sid": "write-down-the-dividing-speed",
+     "sid": "bracket-the-dividing-speed",
      "index": 7,
      "type": "measure",
-     "title": "Write down the speed you found",
+     "title": "Bracket the dividing speed",
      "declares": {
       "stage": null,
       "bound": [
@@ -9247,7 +9247,6 @@
       "notebook-fields"
      ],
      "reset": [
-      "stamps instrument values",
       "lesson locks: placement, inspector"
      ],
      "recovery": [
@@ -9256,72 +9255,8 @@
      ]
     },
     {
-     "sid": "where-is-the-line",
-     "index": 8,
-     "type": "question",
-     "title": "Where is the line?",
-     "declares": {
-      "stage": null,
-      "bound": [
-       "star",
-       "circular",
-       "eccentric"
-      ],
-      "roles": [
-       "star",
-       "circular",
-       "eccentric"
-      ]
-     },
-     "kinds": [
-      "scene-declared"
-     ],
-     "actions": [
-      "choose-an-option"
-     ],
-     "requires": [],
-     "reveal": null,
-     "asks": {
-      "choice": true,
-      "numeric": false,
-      "short": false,
-      "rubric": false,
-      "validated": false
-     },
-     "worldRunning": false,
-     "affordances": {
-      "inspector": "locked",
-      "placement": "locked",
-      "areaSweep": "whole lesson"
-     },
-     "loop": {
-      "declared": "interpret",
-      "actual": [
-       "interpret"
-      ],
-      "handTranscribed": false,
-      "mismatch": null
-     },
-     "scene": {
-      "nameMatches": [],
-      "readsSelection": false,
-      "importsFromSelection": false,
-      "engineReads": [],
-      "mutates": [],
-      "eventWatch": null
-     },
-     "instrument": null,
-     "evidence": [],
-     "reset": [
-      "lesson locks: placement, inspector"
-     ],
-     "recovery": [
-      "wrong body: the step binds the object by name, so there is none"
-     ]
-    },
-    {
      "sid": "what-is-actually-deciding-this",
-     "index": 9,
+     "index": 8,
      "type": "read",
      "title": "What is actually deciding this?",
      "declares": {
@@ -9385,7 +9320,7 @@
     },
     {
      "sid": "watch-the-total",
-     "index": 10,
+     "index": 9,
      "type": "explore",
      "title": "Watch the total",
      "declares": {
@@ -9459,7 +9394,7 @@
     },
     {
      "sid": "reading-the-sign",
-     "index": 11,
+     "index": 10,
      "type": "question",
      "title": "Reading the sign",
      "declares": {
@@ -9523,7 +9458,7 @@
     },
     {
      "sid": "around-a-real-orbit",
-     "index": 12,
+     "index": 11,
      "type": "explore",
      "title": "Around a real orbit",
      "declares": {
@@ -9609,7 +9544,7 @@
     },
     {
      "sid": "what-stays-put",
-     "index": 13,
+     "index": 12,
      "type": "question",
      "title": "What stays put",
      "declares": {
@@ -9673,7 +9608,7 @@
     },
     {
      "sid": "escape-speed",
-     "index": 14,
+     "index": 13,
      "type": "read",
      "title": "Escape speed",
      "declares": {
@@ -9737,7 +9672,7 @@
     },
     {
      "sid": "a-common-misunderstanding",
-     "index": 15,
+     "index": 14,
      "type": "question",
      "title": "A common misunderstanding",
      "declares": {
@@ -9801,7 +9736,7 @@
     },
     {
      "sid": "somewhere-else-entirely",
-     "index": 16,
+     "index": 15,
      "type": "predict",
      "title": "Somewhere else entirely",
      "declares": {
@@ -9862,6 +9797,85 @@
      ],
      "recovery": [
       "wrong body: the step binds the object by name, so there is none"
+     ]
+    },
+    {
+     "sid": "read-the-escape-speeds",
+     "index": 16,
+     "type": "measure",
+     "title": "Read the four escape speeds",
+     "declares": {
+      "stage": null,
+      "bound": [
+       "star",
+       "circular",
+       "eccentric"
+      ],
+      "roles": [
+       "star",
+       "circular",
+       "eccentric"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram",
+      "captured-evidence"
+     ],
+     "actions": [
+      "record-values",
+      "move-an-instrument-control",
+      "press-an-instrument-preset",
+      "run-the-simulation"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": true
+     },
+     "worldRunning": true,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "whole lesson"
+     },
+     "loop": {
+      "declared": "measure",
+      "actual": [
+       "experiment",
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "escape-compare",
+      "capture": false
+     },
+     "evidence": [
+      "notebook-fields"
+     ],
+     "reset": [
+      "stamps instrument values",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the step binds the object by name, so there is none",
+      "ambiguous result: the check says in words how close is close enough"
      ]
     },
     {
@@ -10446,19 +10460,19 @@
      "experiment": [
       "fire-it-again",
       "find-the-dividing-line",
-      "write-down-the-dividing-speed",
+      "bracket-the-dividing-speed",
       "watch-the-total",
       "around-a-real-orbit"
      ],
      "measure": [
       "fire-it-again",
       "find-the-dividing-line",
-      "write-down-the-dividing-speed",
+      "bracket-the-dividing-speed",
       "watch-the-total",
       "around-a-real-orbit"
      ],
      "evidence": [
-      "write-down-the-dividing-speed"
+      "bracket-the-dividing-speed"
      ],
      "interpret": "fire-it-again",
      "measuredBeforeAnswering": true,
@@ -10472,18 +10486,22 @@
      "predictCollects": true,
      "heldUntil": "more-mass-harder-to-leave",
      "experiment": [
+      "read-the-escape-speeds",
       "more-mass-harder-to-leave",
       "further-out-easier-to-leave",
       "three-shapes-one-law",
       "check-it-yourself"
      ],
      "measure": [
+      "read-the-escape-speeds",
       "more-mass-harder-to-leave",
       "further-out-easier-to-leave",
       "three-shapes-one-law",
       "check-it-yourself"
      ],
-     "evidence": [],
+     "evidence": [
+      "read-the-escape-speeds"
+     ],
      "interpret": "more-mass-harder-to-leave",
      "measuredBeforeAnswering": true,
      "explained": false,
@@ -10497,10 +10515,10 @@
     "declared": 24,
     "student": 2,
     "engine": 2,
-    "model": 8,
+    "model": 9,
     "data": 0,
-    "diagram": 8,
-    "evidence": 1,
+    "diagram": 9,
+    "evidence": 2,
     "computation": 0,
     "declaredButInert": 22,
     "prose": 0,
@@ -51390,6 +51408,9 @@
    "id": "power-law-gravity",
    "title": "What If Gravity Were Not Inverse Square?",
    "lock": null,
+   "canvas": [
+    "quiet"
+   ],
    "steps": [
     {
      "sid": "the-exactly",
@@ -51622,6 +51643,7 @@
       "panel-diagram",
       "captured-evidence"
      ],
+     "canvas": "quiet",
      "actions": [
       "record-values",
       "move-an-instrument-control",
@@ -51685,6 +51707,7 @@
       "roles": []
      },
      "kinds": [],
+     "canvas": "quiet",
      "actions": [
       "choose-an-option"
      ],
@@ -51735,6 +51758,7 @@
       "roles": []
      },
      "kinds": [],
+     "canvas": "quiet",
      "actions": [
       "commit-a-prediction"
      ],
@@ -51790,6 +51814,7 @@
       "panel-diagram",
       "captured-evidence"
      ],
+     "canvas": "quiet",
      "actions": [
       "record-values",
       "move-an-instrument-control",
@@ -51852,6 +51877,7 @@
       "roles": []
      },
      "kinds": [],
+     "canvas": "quiet",
      "actions": [
       "choose-an-option"
      ],
@@ -51902,6 +51928,7 @@
       "roles": []
      },
      "kinds": [],
+     "canvas": "quiet",
      "actions": [
       "commit-a-prediction"
      ],
@@ -51957,6 +51984,7 @@
       "panel-diagram",
       "captured-evidence"
      ],
+     "canvas": "quiet",
      "actions": [
       "record-values",
       "move-an-instrument-control",
@@ -52012,10 +52040,61 @@
      ]
     },
     {
-     "sid": "predict-the-slope",
+     "sid": "find-the-slope-rate",
      "index": 12,
      "type": "question",
-     "title": "Use the pattern",
+     "title": "The rule in your readings",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [],
+     "canvas": "quiet",
+     "actions": [
+      "read"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": true,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "open",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "interpret",
+      "actual": [
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [],
+     "recovery": []
+    },
+    {
+     "sid": "predict-the-slope-at-2-9",
+     "index": 13,
+     "type": "question",
+     "title": "Use the rule",
      "declares": {
       "stage": null,
       "bound": [],
@@ -52025,6 +52104,7 @@
       "model-result",
       "panel-diagram"
      ],
+     "canvas": "quiet",
      "actions": [
       "move-an-instrument-control",
       "press-an-instrument-preset"
@@ -52074,7 +52154,7 @@
     },
     {
      "sid": "why-the-slope-and-not-something-else",
-     "index": 13,
+     "index": 14,
      "type": "question",
      "title": "Why this measurement in particular",
      "declares": {
@@ -52083,6 +52163,7 @@
       "roles": []
      },
      "kinds": [],
+     "canvas": "quiet",
      "actions": [
       "choose-an-option"
      ],
@@ -52124,7 +52205,7 @@
     },
     {
      "sid": "predict-what-breaks",
-     "index": 14,
+     "index": 15,
      "type": "predict",
      "title": "What else breaks?",
      "declares": {
@@ -52133,6 +52214,7 @@
       "roles": []
      },
      "kinds": [],
+     "canvas": "quiet",
      "actions": [
       "commit-a-prediction"
      ],
@@ -52175,7 +52257,7 @@
     },
     {
      "sid": "measure-conservation",
-     "index": 15,
+     "index": 16,
      "type": "measure",
      "title": "Check the conservation laws",
      "declares": {
@@ -52188,6 +52270,7 @@
       "panel-diagram",
       "captured-evidence"
      ],
+     "canvas": "quiet",
      "actions": [
       "record-values",
       "move-an-instrument-control",
@@ -52241,7 +52324,7 @@
     },
     {
      "sid": "why-they-survive",
-     "index": 16,
+     "index": 17,
      "type": "question",
      "title": "Why those two survived",
      "declares": {
@@ -52250,6 +52333,7 @@
       "roles": []
      },
      "kinds": [],
+     "canvas": "quiet",
      "actions": [
       "choose-an-option"
      ],
@@ -52291,7 +52375,7 @@
     },
     {
      "sid": "and-energy",
-     "index": 17,
+     "index": 18,
      "type": "read",
      "title": "And energy, with one catch",
      "declares": {
@@ -52300,6 +52384,7 @@
       "roles": []
      },
      "kinds": [],
+     "canvas": "quiet",
      "actions": [
       "read"
      ],
@@ -52341,7 +52426,7 @@
     },
     {
      "sid": "two-lists",
-     "index": 18,
+     "index": 19,
      "type": "read",
      "title": "Two lists",
      "declares": {
@@ -52350,6 +52435,7 @@
       "roles": []
      },
      "kinds": [],
+     "canvas": "quiet",
      "actions": [
       "read"
      ],
@@ -52391,7 +52477,7 @@
     },
     {
      "sid": "near-three",
-     "index": 19,
+     "index": 20,
      "type": "read",
      "title": "Where the instrument stops",
      "declares": {
@@ -52400,6 +52486,7 @@
       "roles": []
      },
      "kinds": [],
+     "canvas": "quiet",
      "actions": [
       "read"
      ],
@@ -52441,7 +52528,7 @@
     },
     {
      "sid": "closing-question",
-     "index": 20,
+     "index": 21,
      "type": "question",
      "title": "One last sort",
      "declares": {
@@ -52450,6 +52537,7 @@
       "roles": []
      },
      "kinds": [],
+     "canvas": "quiet",
      "actions": [
       "choose-an-option"
      ],
@@ -52491,7 +52579,7 @@
     },
     {
      "sid": "the-honest-caveat",
-     "index": 21,
+     "index": 22,
      "type": "read",
      "title": "What this was and was not",
      "declares": {
@@ -52500,6 +52588,7 @@
       "roles": []
      },
      "kinds": [],
+     "canvas": "quiet",
      "actions": [
       "read"
      ],
@@ -52589,11 +52678,11 @@
      "heldUntil": "measure-the-slope",
      "experiment": [
       "measure-the-slope",
-      "predict-the-slope"
+      "predict-the-slope-at-2-9"
      ],
      "measure": [
       "measure-the-slope",
-      "predict-the-slope"
+      "predict-the-slope-at-2-9"
      ],
      "evidence": [
       "measure-the-slope"
@@ -52627,7 +52716,7 @@
     }
    ],
    "totals": {
-    "steps": 21,
+    "steps": 22,
     "declared": 0,
     "student": 0,
     "engine": 0,
@@ -52637,7 +52726,7 @@
     "evidence": 4,
     "computation": 0,
     "declaredButInert": 0,
-    "prose": 15,
+    "prose": 16,
     "mismatched": 0,
     "rebuilds": 1
    }
@@ -120454,24 +120543,24 @@
   }
  ],
  "totals": {
-  "steps": 1529,
+  "steps": 1530,
   "declared": 1411,
   "student": 165,
   "engine": 177,
-  "model": 1001,
+  "model": 1002,
   "data": 159,
-  "diagram": 872,
-  "evidence": 395,
+  "diagram": 873,
+  "evidence": 396,
   "computation": 14,
   "declaredButInert": 1246,
-  "prose": 64,
+  "prose": 65,
   "mismatched": 8,
   "rebuilds": 79,
   "canvas": {
    "scene": 8,
    "portrait": 7,
-   "quiet": 62,
-   "unstated": 1452
+   "quiet": 80,
+   "unstated": 1435
   },
   "lessons": 124,
   "loops": 202,
