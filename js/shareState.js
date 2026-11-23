@@ -33,41 +33,26 @@ import { formatSeed, normalizeSeed, parseSeed } from './rng.js';
 /** 2 names a scenario by id, 1 by its English name; both are read. */
 const VERSION = 2;
 export { VERSION as LINK_VERSION };
-/** The highest version read. Version 3 adds `r`, the scenario's revision. */
+/** Read up to 3, which adds `r`, a scenario's revision. */
 export const LINK_VERSION_READ = 3;
 const INCOMPLETE = 'That link is incomplete or was cut short in transit.';
 const NEWER =
   'This link was made by a newer version of Gravitas. Reload the page and try again.';
 
-// --- Scenario revisions (SCENARIO_REVISIONS.md) --------------------------------
-// A corrected scenario is a new revision of its id. It ships empty: an id that is
-// not here has revision 1 only. Per corrected id, `revision` (2 or more), and for
-// each earlier one `retained` (kept: its row in `rows`, else the table's, and its
-// geometry and builder step, each corrected site gated by the revision) or
-// `{ migrated: { en, es } }` (opens the corrected world under a notice saying why).
+// Scenario revisions (SCENARIO_REVISIONS.md). Ships empty: an id not here has
+// revision 1. Per id: `revision`, and per earlier one `retained` or `{ migrated }`.
 export const SCENARIO_REVISIONS = {};
 const REVISED = id => Object.hasOwn(SCENARIO_REVISIONS, id);
-
-/** The revision a build makes of a scenario now: the registry's, else 1. */
 export const currentRevision = id =>
   REVISED(id) ? SCENARIO_REVISIONS[id].revision : 1;
-
 /** The preset row an earlier revision keeps (undefined: the table's row). */
 export const rowFor = (id, revision) =>
   REVISED(id) ? SCENARIO_REVISIONS[id].rows?.[revision] : undefined;
-
-/** The version a world payload is written as: 3 with `r`, else what is written today. */
 export const linkVersionOf = payload => (payload.r >= 2 ? 3 : VERSION);
-
-/** A payload stamped with a revision: version 3 and `r` from 2 on, else as it is. */
+/** Version 3 and `r` from revision 2 on, else as it is. */
 export const withRevision = (payload, revision) =>
   revision >= 2 ? { ...payload, v: 3, r: revision } : payload;
-
-/**
- * A setup for a scenario, as a new file writes it: its other keys kept and the
- * `revision` key only for an id at revision 2 or more, so a file for an
- * uncorrected id keeps its bytes (the Composer, the course builder).
- */
+/** A setup for an id: `revision` only from 2 on, so old files keep their bytes. */
 export const setupFor = (id, old) => {
   const out = { ...old, scenario: id };
   delete out.revision;
@@ -75,30 +60,20 @@ export const setupFor = (id, old) => {
   return rev >= 2 ? { ...out, revision: rev } : out;
 };
 
-// What a payload came from, held beside it so a JSON clone cannot carry it: a
-// decoded link or file is text and means what it states; a build's own setup
-// means the current revision. Stored text can never be marked a setup.
+// Where a payload came from, beside it so a JSON clone cannot carry it.
 const ORIGINS = new WeakMap();
-/** Mark a payload `origin` ('link', 'setup' or 'capture'); returns it. */
 export const markOrigin = (payload, origin) => (
   ORIGINS.set(payload, origin),
   payload
 );
 
 /**
- * Which revision of its scenario a payload means, and the notice a migrated one
- * needs. By origin, never by `v`: a setup means the current revision; anything
- * else (a link, a capture, an imported declaration) means the revision it states
- * (`r` at version 3), and revision 1 when it states none.
- *
- * @param {Object} payload
- * @param {string} [origin] - 'link' (the default), 'capture' or 'setup'
- * @returns {{revision: number, notice: ?{en: string, es: string}}} The revision
- *   to build and, for a migrated earlier one, the reason in both languages
+ * Which revision a payload means, and the notice a migrated one needs. By
+ * origin, never by `v`: a setup means the current revision, anything else the
+ * revision it states (`r` at version 3), else 1. Throws for a newer one.
  */
 export function resolveRevision(payload, origin) {
   const mark = ORIGINS.get(payload);
-  // Text is never a setup: a marked payload keeps its own origin.
   origin = (origin === 'setup' && mark) || origin || mark || 'link';
   const id = scenarioId(payload.s) ?? payload.s;
   const now = currentRevision(id);
@@ -399,12 +374,9 @@ export function packBody(s, { withId = false } = {}) {
 }
 
 /**
- * A lesson's declarative setup as a link payload, so a step cannot set up a
- * state that could not be handed out as a URL. A setup the running build ships
- * means the current revision (and is written stamped with it); a setup that
- * states `revision` was compiled from a file made elsewhere, so it means the
- * revision it states and is read as the text it came from.
- *
+ * A lesson's setup as a link payload, so a step cannot set up a state that could
+ * not be handed out as a URL. A shipped setup means the current revision; one
+ * that states `revision` came from a file and means that, read as text.
  * @param {Object} setup - From a step definition
  * @returns {Object} Payload for applyShareState
  */
@@ -452,7 +424,6 @@ export function diffSettings(from, to) {
   return out;
 }
 
-/** Every setting a link carries, for a capture written against no row. */
 const allSettings = settings => {
   const out = {};
   for (const k of Object.keys(settings))
@@ -487,11 +458,8 @@ const allSettings = settings => {
  * @param {boolean} [opts.paused] - Whether to open paused
  * @param {Object} [opts.extras] - Experiment extras; see experiments/canonicalState.js
  * @param {Object} [opts.experiment] - An A/B setup to reproduce; see below
- * @param {number} [opts.revision] - The revision of the scenario the world was
- *   built at; the current one by default (a world made now)
- * @param {boolean} [opts.record] - The capture goes into a stored record an
- *   older build may read (SCENARIO_REVISIONS.md, form (i)): at revision 2 or
- *   more `d` holds every setting, so any build restores the same settings
+ * @param {number} [opts.revision] - The world's revision; the current one by default
+ * @param {boolean} [opts.record] - For a stored record: from revision 2 `d` holds every setting
  * @returns {Object} Payload
  */
 export function buildPayload({
