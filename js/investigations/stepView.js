@@ -111,7 +111,7 @@ export function fetchSeams(step, again) {
     runsModule
   );
   get(
-    (step.evidence || step.kind === 'estimate' || step.kind === 'short') &&
+    (step.evidence || ['estimate', 'short'].includes(step.kind)) &&
       !slots.reveal,
     () => import('./reveal.js'),
     revealModule
@@ -133,7 +133,14 @@ export function fieldModule(m) {
 
 /** Install the reveal slot's module (an estimate, and the box where a prediction meets the readings) with the engine functions it needs. */
 export function revealModule(m) {
-  m.setKit({ announce, localeOfAnswer, recordAnswer, stepKey, typedNumber });
+  m.setKit({
+    announce,
+    formatTime,
+    localeOfAnswer,
+    recordAnswer,
+    stepKey,
+    typedNumber,
+  });
   return (slots.reveal = m);
 }
 
@@ -275,21 +282,18 @@ export function stepMarkup(step, c) {
     }
     // A wrong option the author bound to a named mistake says which one.
     const missed = marked ? matchMisconception(step, Number(saved), 0) : null;
-    if (missed) {
+    if (missed)
       parts.push(
         `<p class="inv-feedback is-wrong"><em class="inv-misconception">${prose(misconceptionText(missed))}</em></p>`
       );
-    }
-    if (marked && step.because) {
+    if (marked && step.because)
       parts.push(`<p class="inv-because">${prose(step.because)}</p>`);
-    }
     // A graded choice can be revised, as a number can; a prediction only
     // until its verdict is shown. The first answer and the count are kept.
-    if (locked && (step.kind === 'choice' || held)) {
+    if (locked && (step.kind === 'choice' || held))
       parts.push(
         `<button type="button" class="ui-button subtle" data-change>${escape(t('inv.answer.change'))}</button>`
       );
-    }
   }
 
   // The other half of a held prediction: the step where the result arrives
@@ -318,10 +322,8 @@ export function stepMarkup(step, c) {
       parts.push(
         `<p class="inv-reflect-note">${escape(t('inv.reflect.note'))}</p>`
       );
-    // Where the number came from: a closed-form panel is not the integrator,
-    // and a reader who thinks it was simulated has learned something false.
-    // Shown only where the step asks for an interpretation
-    // (js/data/investigations/provenance.js).
+    // Where the number came from: a closed-form panel is not the integrator, and a reader who thinks it was
+    // simulated has learned something false. Only where the step asks for an interpretation (provenance.js).
     const from = active ? evidenceFrom(active.id) : null;
     if (from)
       parts.push(
@@ -735,10 +737,9 @@ export function bindStepInputs(h) {
       }
       // Whitespace or punctuation is not an answer: say so beside the box.
       const note = els.body.querySelector('#invAnswerNote');
-      if (note) {
-        // Raw length: a box of spaces is typed and not an answer.
+      // Raw length: a box of spaces is typed and not an answer.
+      if (note)
         note.hidden = area.value.length === 0 || isWrittenAnswer(area.value);
-      }
     });
   });
 
@@ -841,9 +842,8 @@ export function bindStepInputs(h) {
       // The first thing they committed to, kept. A student who tries a number,
       // is told it is wrong and revises has done something a report should show;
       // overwriting it leaves only the answer they arrived at with help.
-      if (h.responses()[`${id}:first`] === undefined && numeric.value.trim()) {
+      if (h.responses()[`${id}:first`] === undefined && numeric.value.trim())
         h.responses()[`${id}:first`] = numeric.value;
-      }
       // The text and the convention it was typed under, together: the text alone
       // let a later reader (the PDF, a language switch) misread "1,234".
       recordAnswer(h.responses(), id, numeric.value, getLocale());

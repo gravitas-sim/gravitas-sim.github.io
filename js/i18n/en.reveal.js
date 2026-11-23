@@ -19,9 +19,9 @@ export const EN_REVEAL = {
   'reveal.outside': 'Your reading is outside the range you gave.',
   'tray.head': 'Your evidence to cite: {n}',
   'tray.note':
-    'Your own readings, and predictions once their result is shown. They are saved on this device; the scene they came from is not. Nothing here is added to your answer: copy what you want to cite.',
+    'Your own readings, and predictions once their result is shown. Saved on this device; the scene they came from is not. Nothing here is added to your answer: copy what you want to cite.',
   'tray.empty':
-    'Nothing to cite yet. The readings you take in earlier steps appear here, and a prediction appears once its result has been shown.',
+    'Nothing to cite yet. Readings you take in earlier steps appear here, and predictions once their result is shown.',
   'tray.in': 'In “{title}”.',
   'tray.of': 'Body: {body}.',
   'tray.clock': 'Simulation clock: {time}.',

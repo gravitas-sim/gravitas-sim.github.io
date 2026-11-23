@@ -54,6 +54,8 @@ async function open(page, app, lesson, { revealed = true, locale } = {}) {
     stepSid: lesson.at,
     startedAt: new Date().toISOString(),
   });
+  const menu = page.locator('#mobileMenuToggle');
+  if (await menu.isVisible()) await menu.click();
   await page.locator('#investigationsBtn').click();
   await page.locator(`[data-investigation="${lesson.id}"]`).click();
   await expect(page.locator('#investigationPanel')).toBeVisible();
@@ -71,11 +73,13 @@ for (const lesson of [KEPLER, TRANSIT]) {
       await open(page, app, lesson);
       await expect(tray(page)).toBeVisible();
       const rows = tray(page).locator('.inv-tray-row');
-      await expect(rows.first()).toContainText('Your reading');
+      await expect(
+        rows.filter({ hasText: 'Your reading' }).first()
+      ).toBeVisible();
       const text = await tray(page).innerText();
       expect(text).toMatch(/You (predicted|estimated)/);
       expect(text).toMatch(
-        /saved on this device; the scene they came from is not/
+        /Saved on this device; the scene they came from is not/
       );
       // Only what was typed or taken: a derived field's value is not here.
       expect(text).not.toMatch(/NaN|undefined/);

@@ -2,7 +2,6 @@
 // lesson that declares `evidence` or `kind: 'estimate'`. Nothing here compares or marks before the reveal step.
 
 import { getLocale, registerMessages, t } from '../i18n/index.js';
-import { formatTime } from '../units.js';
 import { EN_REVEAL } from '../i18n/en.reveal.js';
 import { ES_REVEAL } from '../i18n/es.reveal.js';
 import { escapeHtml as escape, prose } from '../lessonMarkup.js';
@@ -153,7 +152,7 @@ export function tray(step, c) {
               t('inv.take.from', { what: how.l }),
               how.b && t('tray.of', { body: how.b }),
               Number.isFinite(how.t) &&
-                t('tray.clock', { time: formatTime(how.t) }),
+                t('tray.clock', { time: kit.formatTime(how.t) }),
             ]
           : [t('inv.take.typed')]
       );

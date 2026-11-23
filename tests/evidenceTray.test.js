@@ -250,7 +250,7 @@ describe('the tray on screen', () => {
       '2'
     );
     expect(body.querySelector('.inv-tray-note').textContent).toMatch(
-      /saved on this device; the scene they came from is not/
+      /Saved on this device; the scene they came from is not/
     );
   });
 
