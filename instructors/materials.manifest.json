@@ -24,7 +24,7 @@
     }
   },
   "sourceFiles": 310,
-  "sourceDigest": "4cc41d5f6d9db71dffdc3635609bc195b61dbdc43f2ae0e4a30356d9f1a3d5ea",
+  "sourceDigest": "4eb8c2c8b009038aeab1d7b9dccf37c05dd0702c10576a8d3abcafcea35cb3ae",
   "sources": {
     "js/activities/activities.js": "af9b7e121b9a72c2a5cc18e07331d6ee841934d402b030294d25c442628881ef",
     "js/activities/activityBridge.js": "ddd8015bf88938d98d967942048bc34e30a0099344b1055bd45a0459ec0333fe",
@@ -45,7 +45,7 @@
     "js/data/instructorContent.es.js": "471a388f9e2abfbe837cdad387388f52f0a547d2ae5f466e66fa5680866d5d3c",
     "js/data/instructorContent.js": "cec37727dee949dc1db985037b02ff892a4ecfdf7bb69a510501f9729ed7eef6",
     "js/data/instructorExpectations.es.js": "5ec751fabe0ed60f692799c260ab8f383ffae25379c4b426efdd4351e0ae00ee",
-    "js/data/instructorExpectations.js": "e6078ac08ac959c6a6ddc6823326a2653764bce9e7e2e91dbb7100c3355421ce",
+    "js/data/instructorExpectations.js": "7b400253fd9de093c117224e00ea1d3d2677f1287b0f34a614cb17533f95e546",
     "js/data/instructorFlow.es.js": "f1c087e5240114351245f6a7fa7ad9b3efd269ec6d415183fd945ac95534fd86",
     "js/data/instructorFlow.js": "c1775a39e40c295c69809002696fcc939ce492f71e71045841fc4c9776ad5cd6",
     "js/data/instructorLabels.js": "e43910350dbc39fc464736852d20357a95adf5b633325ebfdfdeabbb6b029fc7",
@@ -337,5 +337,5 @@
     "tools/instructor-freshness.mjs": "96052b2f27080f0243fdd4d5f7608927bd67f0c50808b6eac3345a65c14d1e28",
     "tools/source-closure.mjs": "961828e4d0d40d8a6f8c029fe9b9435ecaf39a74b62640efc0b4145c35c7650a"
   },
-  "contentDigest": "30cb78db5c458296490892e976fb847beb318e012fb4227ff1aad2038d3a376e"
+  "contentDigest": "20ba335a2e254d2e23c73c4f71042ce289cb7db5124c003d622803de21fc95b0"
 }
