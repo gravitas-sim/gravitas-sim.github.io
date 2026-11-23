@@ -3875,29 +3875,20 @@
     padding: var(--space-2) 0 0;
   }
 
-  /* The student's own readings and revealed predictions beside a written
-     answer: a labelled disclosure, read-only, nothing placed in the box. */
   .inv-tray {
     margin: var(--space-3) 0 0;
     padding: var(--space-2) var(--space-3);
-    border-radius: var(--radius-sm);
     border-left: 3px solid var(--border-strong);
     background: var(--surface-2);
-  }
-  .inv-tray > summary {
-    cursor: pointer;
-    min-height: 32px;
     font-size: var(--text-sm);
-    color: var(--text-primary);
   }
-  .inv-tray-note {
-    margin: var(--space-2) 0 0;
+  .inv-tray-note,
+  .inv-tray-how {
     font-size: var(--text-xs);
-    line-height: 1.5;
     color: var(--text-secondary);
   }
   .inv-tray-list {
-    margin: var(--space-2) 0 0;
+    margin: 0;
     padding: 0;
     list-style: none;
   }
@@ -3908,18 +3899,12 @@
     gap: var(--space-1) var(--space-2);
     padding: var(--space-2) 0;
     border-top: 1px solid var(--border);
-    font-size: var(--text-sm);
-    user-select: text;
   }
   .inv-tray-how {
     flex: 1 1 12rem;
-    font-size: var(--text-xs);
-    color: var(--text-secondary);
   }
   .inv-tray-row .ui-button {
     min-height: 32px;
-    padding: var(--space-1) var(--space-3);
-    font-size: var(--text-xs);
   }
 
   .inv-because {

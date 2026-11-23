@@ -205,6 +205,13 @@ describe('the tray on screen', () => {
     slots.reveal = null;
   });
 
+  test('the tray module is fetched with the first short answer, and the step is drawn again with it', async () => {
+    go('why');
+    expect(body.querySelector('[data-tray]')).toBeNull();
+    await new Promise(r => setTimeout(r, 100));
+    expect(body.querySelector('[data-tray]')).not.toBeNull();
+  });
+
   test('a lesson step with nothing before it offers no tray', () => {
     l = { ...lesson(), steps: [lesson().steps[4]] };
     go('why');

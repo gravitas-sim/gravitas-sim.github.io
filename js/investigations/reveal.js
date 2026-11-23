@@ -7,7 +7,6 @@ import { ES_REVEAL } from '../i18n/es.reveal.js';
 import { escapeHtml as escape, prose } from '../lessonMarkup.js';
 import {
   setKit as evidenceKit,
-  citable,
   estimateFor,
   estimateText,
   fellInside,
@@ -29,8 +28,8 @@ export const setKit = k => {
 // Typed and not yet committed, by step, so a redraw does not empty the boxes; and the step whose box was last announced.
 const draft = {};
 let arrived = '';
-// Whether the tray beside a written answer was left open or shut, by step; unset, it is shut on a phone.
-const left = {};
+// The evidence tray beside a written answer, fetched with the first short-answer step (js/investigations/tray.js).
+let trayModule = null;
 
 /** The estimate boxes: committed values are shown, held and never marked. */
 export function estimate(step, c) {
@@ -113,113 +112,15 @@ export function verdict(step, c, predicted) {
   return `<section class="inv-verdict ${predicted ? (predicted.right ? 'is-right' : 'is-wrong') : ''}" role="region" aria-labelledby="invVerdictHead" data-verdict><h4 class="inv-verdict-head" id="invVerdictHead">${escape(t('reveal.head'))}</h4>${rows.map(row).join('')}${step.compare ? `<p class="inv-because">${prose(step.compare)}</p>` : ''}</section>`;
 }
 
-/**
- * The student's own readings and revealed predictions beside a written answer, as a disclosure to cite from: read-only,
- * nothing placed in the box, nothing required. A prediction appears only once its reveal step has been reached, and
- * only as the student said it and how it compared: the author's key is never printed.
- * @returns {string} Markup, or '' when the lesson gives this step nothing to cite
- */
-export function tray(step, c) {
-  const { id, active, responses, visited } = c;
-  const steps = active?.steps;
-  const { readings, predictions } = steps
-    ? citable(steps, step, active.id)
-    : { readings: [], predictions: [] };
-  if (!readings.length && !predictions.length) return '';
-  const key = sid => kit.stepKey(active.id, sid);
-  const title = sid => steps.find(s => s.sid === sid)?.title || sid;
-  const rows = [];
-  const add = (sid, what, how) => {
-    const n = `${id}-${rows.length}`.replace(/[^\w-]/g, '_');
-    rows.push({
-      at: steps.findIndex(s => s.sid === sid),
-      html: `<li class="inv-tray-row"><span class="inv-tray-what" id="invTrayWhat-${n}">${what}</span> <span class="inv-tray-how">${escape([...how, t('tray.in', { title: title(sid) })].filter(Boolean).join(' '))}</span> <button type="button" class="ui-button subtle" data-cite id="invTrayCite-${n}" aria-labelledby="invTrayCite-${n} invTrayWhat-${n}">${escape(t('tray.cite'))}</button></li>`,
-    });
-  };
-  readingsFor({ evidence: readings }, steps, responses, key).forEach(
-    ({ field, text, how }, i) => {
-      if (!text) return;
-      add(
-        readings[i].step,
-        prose(
-          t('reveal.reading', {
-            what: field.label,
-            value: `${text}${field.unit ? ` ${field.unit}` : ''}`,
-          })
-        ),
-        how && how.k !== 't'
-          ? [
-              t('inv.take.from', { what: how.l }),
-              how.b && t('tray.of', { body: how.b }),
-              Number.isFinite(how.t) &&
-                t('tray.clock', { time: kit.formatTime(how.t) }),
-            ]
-          : [t('inv.take.typed')]
-      );
-    }
-  );
-  for (const p of predictions) {
-    if (!visited.has(p.reveal)) continue;
-    const from = steps.find(s => s.sid === p.step);
-    const saved = responses?.[key(p.step)];
-    if (from.kind === 'estimate') {
-      const said = readEstimate(from, responses, key(p.step));
-      if (!said) continue;
-      const own = readingsFor(
-        steps.find(s => s.sid === p.reveal),
-        steps,
-        responses,
-        key
-      )[0]?.value;
-      const inside = fellInside(said, own);
-      add(
-        p.step,
-        escape(
-          t('reveal.est.said', {
-            value: estimateText(said, from.unit, t('reveal.range')),
-          })
-        ),
-        [inside !== null && t(inside ? 'reveal.inside' : 'reveal.outside')]
-      );
-    } else if (from.options[Number(saved)] != null) {
-      add(
-        p.step,
-        prose(
-          t('inv.predict.youSaid', { choice: from.options[Number(saved)] })
-        ),
-        [
-          from.answer !== undefined &&
-            t(
-              Number(saved) === from.answer
-                ? 'inv.predict.right'
-                : 'tray.differed'
-            ),
-        ]
-      );
-    }
-  }
-  rows.sort((a, b) => a.at - b.at);
-  const open =
-    left[id] ?? !globalThis.matchMedia?.('(max-width: 900px)').matches;
-  return `<details class="inv-tray" data-tray${open ? ' open' : ''}><summary>${escape(t('tray.head', { n: rows.length }))}</summary><p class="inv-tray-note">${escape(t('tray.note'))}</p>${rows.length ? `<ul class="inv-tray-list">${rows.map(r => r.html).join('')}</ul>` : `<p class="inv-tray-note">${escape(t('tray.empty'))}</p>`}</details>`;
-}
+/** The tray's markup, once its module has arrived ('' until then, and where a step has nothing to cite). */
+export const tray = (step, c) => trayModule?.tray(step, c, kit) ?? '';
 
 /** Wire the estimate boxes, and say the verdict once when its step is first drawn. */
 export function bind(h, body) {
   const id = h.stepId();
-  const shut = body.querySelector('[data-tray]');
-  shut?.addEventListener('toggle', () => (left[id] = shut.open));
-  shut?.querySelectorAll('[data-cite]').forEach(b =>
-    b.addEventListener('click', () => {
-      // Nothing is placed in the answer: the student is taken to it, and told so.
-      body.querySelector('[data-answer]')?.focus();
-      kit.announce(
-        t('tray.cited', {
-          what: b.closest('li').querySelector('.inv-tray-what').textContent,
-        })
-      );
-    })
-  );
+  if (trayModule) trayModule.bind(h, body, kit);
+  else if (h.currentStep()?.kind === 'short')
+    import('./tray.js').then(m => ((trayModule = m), h.renderStep()));
   const shown = body.querySelector('[data-verdict]');
   if (!shown) arrived = '';
   else if (arrived !== id) {
