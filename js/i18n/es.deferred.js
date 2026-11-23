@@ -278,7 +278,7 @@ export const ES_DEFERRED = {
   'binaryRun.outcome.ejected':
     'El planeta fue expulsado tras {periods} periodos binarios. Acabó desligado de ambas estrellas y a más de diez separaciones binarias, así que se está marchando y no está en una órbita ancha.',
   'binaryRun.outcome.collided':
-    'El planeta chocó con una estrella tras {periods} periodos binarios. Aquí las estrellas se dibujan unas diez veces más grandes de lo real y la distancia de colisión es la dibujada, así que léelo como "pasó a menos de unas 0,06 AU de una estrella" y no como un impacto medido.',
+    'El planeta chocó con una estrella tras {periods} periodos binarios. Aquí las estrellas miden en el modelo unas diez veces su tamaño real y se dibujan de ese tamaño, y hay colisión cuando el planeta llega a menos del radio del modelo de la estrella más el suyo, así que léelo como "pasó a menos de unas 0,06 AU de una estrella" y no como un impacto medido.',
   'binaryRun.outcome.unreliable':
     'Esta ejecución no es creíble. La energía cambió un {drift}%, por encima del filtro del {limit}%, lo que significa que el paso dejó de resolver algo de lo que depende el resultado: casi siempre un acercamiento. Lo que le pasó al planeta a partir de ahí es cosa de la aritmética. Repítela con la mitad del paso.',
   'binaryRun.outcome.vanished':
@@ -4035,6 +4035,7 @@ export const ES_DEFERRED = {
   'lessonFn.bodiesOnScreen16': 'Cuerpos en pantalla',
   'lessonFn.earthAndTheMoon19': 'la Tierra y la Luna',
   'lessonFn.moonSDistanceNow19': 'Distancia de la Luna ahora',
+  'lessonFn.measuredAcrossTheModelRadius32': 'Medido sobre el radio del modelo',
   'lessonFn.buildingTheSystem20': 'construyendo el sistema…',
   'lessonFn.realSeparation15': 'Separación real',
   'lessonFn.384400KmOnAverage22': '384 400 km, en promedio',

@@ -254,9 +254,11 @@ const TRANSITS = {
              light curve and turn it into a size.
              \n\nOn screen is <strong>HD 209458</strong>, a slightly hotter and
              more massive relative of the Sun about 160 light years away in
-             Pegasus, with a planet on a three and a half day orbit. The star and
-             the planet are drawn at their true relative sizes, which is why the
-             view is zoomed so far in.`,
+             Pegasus, with a planet on a three and a half day orbit. The view is
+             zoomed far in to show the pair. Sizes on screen are not to scale:
+             the planet is drawn smaller against its star than it really is, as
+             every planet is, while the light curve works from the real sizes
+             (details under Sizes).`,
       tip: 'Everything in this investigation is measurable from what is on screen. Clicking selects an object without opening the inspector card, and placing new objects is switched off so a stray click cannot alter the system you are measuring.',
       time: { speed: 0.03, paused: true },
       setup: TRANSIT_LAB,

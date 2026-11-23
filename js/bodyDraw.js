@@ -1090,7 +1090,7 @@ function drawBlackHole(o, ctx) {
  * The nucleus is held at the shared screen-space floor, as an asteroid's is: a
  * comet's physical radius is well under a pixel at any opening zoom, so it
  * would be invisible and unclickable. The floor is a drawing decision only;
- * `this.radius` is what collisions, tidal disruption and the inspector read.
+ * `this.radius` is what collisions and the inspector read.
  *
  * @param {CanvasRenderingContext2D} ctx - The world-transformed context
  */

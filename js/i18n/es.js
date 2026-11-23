@@ -664,7 +664,7 @@ export const ES = {
   'inspector.stat.rings': 'Sistema de anillos',
   'inspector.rings.visible': 'Visible',
   'inspector.tip.radius':
-    'El radio del modelo, con el que funciona la simulación: lo usan las colisiones, las fusiones, los límites de Roche y la geometría del tránsito. En un cuerpo generado se deduce de la masa, así que no siempre es medido. No es el tamaño dibujado: cada tipo de cuerpo se amplía con un factor distinto. Lee los radios aquí, nunca del dibujo.',
+    'El radio del modelo, con el que funciona la simulación: lo usan las colisiones y las fusiones, y también la duración y la forma de un tránsito, aunque su profundidad sale de los radios reales. El radio del modelo de un agujero negro fija además lo cerca que puede pasar un cuerpo antes de empezar a desgarrarse; la simulación no calcula ningún límite de Roche. En un cuerpo generado se deduce de la masa, así que no siempre es medido. No es el tamaño dibujado: cada tipo de cuerpo se amplía con un factor distinto. Lee los radios aquí, nunca del dibujo.',
   'inspector.tip.rings':
     'Este cuerpo se dibuja con un sistema de anillos. Los anillos son ilustrativos: aproximadamente una cuarta parte de los gigantes gaseosos generados los reciben por variedad visual, y un escenario puede activarlos o desactivarlos deliberadamente. No tienen masa ni gravedad, y no afectan a las colisiones, a la profundidad del tránsito ni a ninguna medición.',
   'inspector.stat.radius': 'Radio',
@@ -977,7 +977,7 @@ export const ES = {
     'El primer objeto que se vio atravesar el sistema solar procedente de otro lugar, en su órbita medida: perihelio dentro de la de Mercurio, excentricidad 1,20 y 87,7 km/s en la máxima aproximación. La Tierra aparece como referencia de escala. Al seleccionar al visitante, lo que importa es el signo de su energía total: es positiva, y ahí está toda la historia. No está ligado al Sol, nunca iba a quedarse y no volverá.',
   'scenario.transit-lab.title': 'Laboratorio de tránsitos: HD 209458 b',
   'scenario.transit-lab.summary':
-    'El primer exoplaneta que se sorprendió cruzando por delante de su estrella, hallado en 1999 después de que las velocidades radiales indicaran dónde mirar. Un júpiter caliente en una órbita de 3,5 días, dibujado aquí a escala relativa real: la estrella mide 1,155 radios solares, el planeta 1,38 radios de Júpiter, y la silueta en pantalla mantiene la misma razón de radios del 12 % que indica la curva de luz. Al abrir el panel de curva de luz se ve repetirse la caída del 1,8 %.',
+    'El primer exoplaneta que se sorprendió cruzando por delante de su estrella, hallado en 1999 después de que las velocidades radiales indicaran dónde mirar. Un júpiter caliente en una órbita de 3,5 días, construido con su tamaño relativo real: la estrella mide 1,155 radios solares y el planeta 1,38 radios de Júpiter, una razón de radios del 12 %, que fija tanto la profundidad de la caída como su duración. En pantalla el planeta se dibuja más pequeño que eso, como todos los planetas. Al abrir el panel de curva de luz se ve repetirse la caída del 1,8 %.',
   'scenario.spiral-galaxy.title': 'Galaxia espiral: lo que esperábamos',
   'scenario.spiral-galaxy.summary':
     'Un bulbo galáctico con noventa estrellas orbitándolo, cada una lanzada exactamente a la velocidad que le corresponde según la masa visible. Esto es la predicción, no la observación: con la masa concentrada en el centro, la velocidad orbital decae como la inversa de la raíz cuadrada del radio, igual que ocurre en el sistema solar. Al abrir el panel de curva de rotación se puede leer la pendiente. Después conviene cargar Rotación de la Vía Láctea y volver a leerla.',
@@ -1202,13 +1202,13 @@ export const ES = {
     '¿Con poco tiempo? Las actividades de clase son formatos de enseñanza preparados —una demostración de cinco minutos, una actividad de veinte, una práctica completa— recortados de estas mismas investigaciones.',
   'inv.browser.activities.link': 'Ver las actividades de clase',
   'canvas.sizeDisclosure':
-    'Cuerpos ampliados, no a escala: detalles en Tamaños',
+    'Tamaños de los cuerpos no a escala: detalles en Tamaños',
   'canvas.reducedPopulation':
     'Población reducida en este dispositivo: {n} de {total} cuerpos',
   'canvas.crowdTrails':
     'Estelas: el cuerpo seleccionado y los {n} más masivos de {total} cuerpos',
   'canvas.sizeDisclosure.detail':
-    'Las distancias se dibujan a una sola escala, la que muestra la barra de escala. Los tamaños de los cuerpos no siguen una misma escala: cada tipo de cuerpo se amplía con su propio factor, así que ni un tamaño ni la proporción entre dos tamaños se pueden leer en el lienzo. El botón Tamaños de la lectura dice cuánto, y el inspector da cada radio.',
+    'Las distancias se dibujan a una sola escala, la que muestra la barra de escala. Los tamaños de los cuerpos no siguen una misma escala: cada tipo de cuerpo se dibuja con su propio factor, casi siempre mayor que el real y en algunas escenas de lección menor, así que ni un tamaño ni la proporción entre dos tamaños se pueden leer en el lienzo. El botón Tamaños de la lectura dice cuánto, y el inspector da cada radio.',
   'capture.screenshotFailed': 'No se pudo guardar la captura',
   'chart.notReady': 'El gráfico aún no está listo',
   'chart.exportFailed': 'No se pudo exportar el gráfico',

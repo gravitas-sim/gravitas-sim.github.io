@@ -162,9 +162,9 @@ const clearCachedGravity = () => {
 
 // --- The four radii ----------------------------------------------------------
 //
-// `obj.radius` is the model radius. It decides collisions, merging, Roche
-// limits, the geometric part of a transit and the floor of the hit test, and
-// nothing below changes it.
+// `obj.radius` is the model radius. It decides collisions, merging, a black
+// hole's tidal radius, the geometric part of a transit and the floor of the
+// hit test, and nothing below changes it.
 //
 // What a body is *drawn* at is a different number, and js/bodyVisuals.js owns
 // the policy: a per-family compression that gives a Sun-like star eight times

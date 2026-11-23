@@ -68,14 +68,14 @@ const tideRows = (
     { label: 'Near side, compared with the center', value: pct(r - R) },
     { label: 'Far side, compared with the center', value: pct(r + R) },
     {
-      label: 'Measured across the body as drawn',
-      value: `${on.name} is drawn ${((100 * R) / r).toFixed(1)}% of the way to ${by.name}`,
+      label: 'Measured across the model radius',
+      value: `${on.name}: ${((100 * R) / r).toFixed(1)}% of the way to ${by.name}`,
     },
   ];
-  // The two percentages above are honest arithmetic on what is on screen, and
-  // they are not the real numbers: this scenario draws the Earth far larger
-  // than scale so that it is visible at all, and the difference in pull across
-  // a body scales with its size. Quoting only the on-screen figure would teach
+  // The two percentages above are honest arithmetic on the model, and they are
+  // not the real numbers: this scenario gives the Earth a model radius far
+  // larger than scale so that it is visible at all (it is drawn at 0.375 of
+  // that), and the difference in pull across a body scales with its size. Quoting only the on-screen figure would teach
   // a tide about sixty times too strong, so the true one is printed beside it.
   if (trueRatio) {
     rows.push({
