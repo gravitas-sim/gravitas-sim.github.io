@@ -668,7 +668,6 @@ export const ES_DEFERRED = {
   'assign.notice.moved':
     'Esta actividad se creó con {pinned}, del que este Gravitas ya no toma la investigación. Se abre con la investigación tal como es ahora.',
   'assign.error.badPackage': 'Ese enlace de actividad nombra mal su paquete.',
-
   'burn.title': 'Planificador de maniobras',
   'burn.close': 'Ocultar el planificador de maniobras',
   'burn.body': 'Cuerpo',
