@@ -113,9 +113,9 @@ export default {
       checklist: [
         'Observa la banda de la estela: ¿sigue siendo un anillo, o empieza a respirar cuando las estrellas pasan cerca?',
         'Lee "Integrado" mientras sube: cuenta periodos binarios, no años',
-        'Vigila la fila "Órbita actual del planeta": el semieje mayor apenas se mueve, y la excentricidad no se está quieta',
-        'Vigila "Excentricidad máxima alcanzada": no vuelve a bajar',
-        'Anota la deriva de energía mientras la ejecución está tranquila; querrás la comparación más adelante',
+        'Vigila la fila "Órbita actual del planeta": el semieje mayor y la excentricidad',
+        'Vigila "Excentricidad máxima alcanzada" mientras avanza la ejecución',
+        'Anota la deriva de energía; querrás la comparación más adelante',
         'Déjalo terminar y lee la frase del final del panel',
       ],
       tip: 'Baja la velocidad con los controles de reproducción si quieres ver una órbita concreta en lugar de la banda.',
@@ -148,8 +148,11 @@ export default {
     },
     'why-so-quiet': {
       title: '¿Por qué fue tan tranquilo?',
-      body: `El planeta se mantuvo dentro de unas 0,62 separaciones del baricentro
-             y nunca llegó a un cuarto de separación de la Estrella B.`,
+      body: `Vuelve a mirar las cuatro lecturas que tomaste de la ejecución
+             (cuántos periodos completó, hasta dónde llegó el planeta, cuántos
+             encuentros cercanos tuvo con la Estrella B y la deriva de energía)
+             y la fila <strong>Más cerca de la otra estrella</strong> del
+             panel.`,
       prompt:
         'El planeta a 1,5 AU apenas nota a la estrella compañera. La mejor razón es:',
       options: [
@@ -158,7 +161,9 @@ export default {
         'El planeta es demasiado ligero para verse afectado',
         'La Estrella B nunca se acerca a la órbita del planeta',
       ],
-      because: `La cercanía, no la masa. A 1,5 AU de una estrella de 1,0 masas
+      because: `La cercanía, no la masa. El planeta se mantuvo dentro de unas
+                0,62 separaciones del baricentro y nunca llegó a un cuarto de
+                separación de la Estrella B. A 1,5 AU de una estrella de 1,0 masas
                 solares el planeta siente un tirón unas dieciocho veces mayor que
                 el de una estrella de 0,5 masas solares en su máximo
                 acercamiento, a 4,5 AU. La compañera es una perturbación y no una
@@ -195,14 +200,13 @@ export default {
       body: `Pon <strong>Inicio del planeta</strong> en <strong>0,30</strong> y
              pulsa Ejecutar. El mundo se reconstruye desde cero —las mismas dos
              estrellas, los mismos ángulos iniciales, el planeta en otro sitio—
-             así que este es el mismo experimento con una cosa cambiada.
-             \n\nEste no llegará a veinte periodos.`,
+             así que este es el mismo experimento con una cosa cambiada.`,
       checklist: [
-        'Observa cómo el anillo deja de ser un anillo en el primer periodo o los dos primeros',
-        'Observa cómo la cifra de "Distancia máxima" pasa de 1 y luego de 5',
-        'Lee cuándo se detuvo la ejecución, y por qué',
+        'Observa si el anillo mantiene su forma mientras avanza la ejecución',
+        'Observa la cifra de "Distancia máxima" mientras avanza la ejecución',
+        'Lee cómo terminó la ejecución, y cuándo',
       ],
-      tip: 'La ejecución se detiene sola en cuanto el planeta está desligado y a más de diez separaciones. Integrar un planeta que se marcha durante otros dieciocho periodos no diría nada.',
+      tip: 'Una ejecución puede terminar antes de los veinte periodos, cuando el panel ha visto lo bastante como para dar un resultado: integrar más no diría nada.',
     },
     'when-did-it-leave': {
       title: '¿Cuándo se marchó?',
@@ -295,7 +299,7 @@ export default {
                 al margen: una masa terrestre es una millonésima de la estrella,
                 μ = 0,4 está de sobra dentro del rango ajustado, y cuánto tiempo
                 miraste no es una propiedad del sistema.`,
-      tip: 'Vale la pena probar antes de seguir: ejecuta 0,20, justo fuera de la frontera. El artículo describe islas de inestabilidad dentro de la línea ajustada e islas de estabilidad fuera, y el panel se niega a predecir nada a menos de 0,02 separaciones de ella. Un ajuste a dónde está la transición la mayor parte de las veces no es un muro.',
+      tip: 'Vale la pena probar antes de seguir: ejecuta 0,18, que queda a menos de 0,02 separaciones de la línea publicada, donde el panel se niega a decir de qué lado estás. Después ejecuta 0,20, justo más allá de esa banda, donde sí lo dice.',
     },
     'predict-the-sweep': {
       title: 'Cinco radios de una vez',
@@ -341,7 +345,7 @@ export default {
     },
     'resolve-the-edge': {
       title: '¿El borde es real o es la aritmetica?',
-      body: 'Elige el ensayo donde cambia el resultado — el selector lo marca — y pulsa <strong>Comprobarlo</strong>. Eso repite ese unico radio con <strong>la mitad del paso</strong>, con todo lo demas identico, y compara los dos resultados.\n\nEs la misma prueba que hiciste a mano en 0,25, aplicada al unico valor del barrido donde importa. Una configuracion cuyo destino cambia al reducir el paso a la mitad no ha sido medida con ninguno de los dos pasos.',
+      body: 'Elige el ensayo donde cambia el resultado — el selector lo marca — y pulsa <strong>Comprobarlo</strong>. Eso repite ese unico radio con <strong>la mitad del paso</strong>, con todo lo demas identico, y compara los dos resultados.\n\nEs la misma prueba que hiciste a mano a 0,25 separaciones, aplicada al unico valor del barrido donde importa. Una configuracion cuyo destino cambia al reducir el paso a la mitad no ha sido medida con ninguno de los dos pasos.',
       tip: 'Repite un ensayo y no todo el barrido, y ese es el punto: la comprobacion va donde la respuesta esta en duda.',
     },
     'is-it-resolved': {
@@ -382,39 +386,35 @@ export default {
              de por ciento se niega directamente a informar de un resultado: no
              dice que el planeta fue expulsado, porque no lo sabe.
              \n\nPruébalo. Pon el planeta en <strong>0,50</strong> separaciones,
-             lo que lo sitúa casi encima de la Estrella B, y ejecuta. No
-             obtendrás una respuesta; obtendrás una queja y una instrucción. Haz
-             lo que dice, y sigue haciéndolo hasta que el panel esté dispuesto a
-             contarte algo.
-             \n\nCon una sola reducción no bastará, y eso merece atención.
-             Arreglar un acercamiento mal resuelto no es cuestión de hacerlo un
-             poco mejor: o el paso resuelve la pasada o no la resuelve.`,
+             lo que lo sitúa casi encima de la Estrella B, y ejecuta. Lee lo que
+             informa el panel y lo que te pide, haz lo que dice, y sigue
+             haciéndolo, con dos o tres reducciones como máximo, hasta que el panel
+             esté dispuesto a contarte algo.`,
       checklist: [
-        'Ejecuta 0,50 con el paso por defecto de 1,0 y lee la deriva: alrededor del 0,18%, muy por encima del filtro',
-        'Ya que estás, mira la excentricidad del planeta: sale por encima de 100, que no es una órbita sino una explosión',
-        'Fíjate en que el panel se niega a decir qué le pasó al planeta',
-        'Pulsa "Repetir con la mitad del paso". La deriva es del 0,17%: prácticamente igual, y sigue rechazada',
-        'Púlsalo otra vez. Con un paso de 0,25 la deriva es del 0,0023%, y ahora sí hay respuesta: el planeta chocó con una estrella, a una centésima de periodo binario',
+        'Ejecuta 0,50 con el paso por defecto de 1,0 y lee la deriva y lo que dice el panel sobre el resultado',
+        'Ya que estás, mira la excentricidad del planeta',
+        'Fíjate en si el panel dice qué le pasó al planeta',
+        'Si se niega, pulsa "Repetir con la mitad del paso" y lee otra vez la deriva y el resultado',
+        'Sigue pulsándolo, dos o tres reducciones en total, anotando cada vez el paso, la deriva y lo que dice el panel. Detente cuando informe de un resultado, y no bajes nunca de un paso de 0,1: si aún se niega ahí, detente y dilo',
       ],
-      tip: 'Una décima de por ciento no es una constante natural. Se midió: en estas configuraciones, toda ejecución que derivó más que eso dio un resultado que cambiaba al reducir el paso a la mitad. Fíjate también en cuál resultó ser la respuesta: una colisión, no una expulsión. Dos de las cuatro cosas que le pueden pasar al planeta aquí se parecen de lejos y las distingue el panel, no el ojo.',
+      tip: 'Compruébate en esta misma ejecución, no más tarde: el panel da un resultado solo cuando la deriva está por debajo de su filtro, así que tu última línea de notas debería mostrar una deriva por debajo del 0,1% junto a un resultado dado. Si paraste en un paso de 0,1 con la deriva todavía por encima del filtro, ese es tu resultado, y es legítimo anotarlo. Una décima de por ciento no es una constante natural. Se midió: en estas configuraciones, toda ejecución que derivó más que eso dio un resultado que cambiaba al reducir el paso a la mitad. De las cuatro cosas que le pueden pasar al planeta aquí, dos se parecen de lejos y las distingue el panel, no el ojo.',
     },
     'the-case-that-matters': {
       title: 'Ahora el caso que importa',
       body: `Pon el planeta en <strong>0,25</strong> separaciones, deja el paso en
              <strong>1,0</strong> y ejecuta los veinte periodos completos.
-             \n\nMira este con atención. No es una ejecución tranquila: la banda
-             de la estela se estira y se deforma, y el contador de encuentros
-             sube sin parar. Anota el resultado, el número de encuentros y la
+             \n\nMira este con atención: la banda de la estela y el contador
+             de encuentros. Anota el resultado, el número de encuentros y la
              deriva de energía.
              \n\nDespués pulsa <strong>Repetir con la mitad del paso</strong>.
              Dos veces.`,
       checklist: [
-        'Ejecuta 0,25 con paso 1,0: anota el resultado, los encuentros y la deriva',
-        'Reduce a 0,5: anota las mismas tres cosas',
-        'Reduce a 0,25: anota las mismas tres cosas',
-        'Pregúntate cuál de las tres ejecuciones pondrías en un artículo',
+        'Ejecuta 0,25 separaciones con un paso de 1,0: anota el resultado, los encuentros y la deriva',
+        'Reduce el paso a 0,5: anota las mismas tres cosas',
+        'Redúcelo otra vez, a un paso de 0,25: anota las mismas tres cosas',
+        'Compara los tres registros y decide cuál de ellos, si alguno, pondrías en un artículo',
       ],
-      tip: 'Cada reducción a la mitad duplica el tiempo real. La última tarda un par de minutos; es la ejecución más importante de la investigación.',
+      tip: 'Cada reducción a la mitad duplica el tiempo real, así que la última ejecución es la que más tarda; déjala terminar.',
     },
     'the-drift-was-tiny': {
       title: 'Tres ejecuciones de la misma configuración',
@@ -443,7 +443,7 @@ export default {
       title: '¿Cuál de las respuestas es la buena?',
       body: `Con paso 1,0 el planeta sobrevivió veinte periodos, con decenas de
              encuentros cercanos por el camino. Con paso 0,25 fue expulsado. La
-             deriva de energía estuvo por debajo de una parte en un millón en las
+             deriva de energía estuvo por debajo de dos partes en un millón en las
              dos.`,
       prompt:
         'Lo honesto que se puede informar a partir de estas ejecuciones es:',
@@ -465,7 +465,20 @@ export default {
                 podría moverla otra vez. Lo que puedes afirmar es algo sobre la
                 configuración —que su destino a veinte periodos no lo zanja una
                 integración con estos pasos— y eso es un resultado de verdad, no
-                un fracaso.`,
+                un fracaso.
+                \n\nLa ejecución de 0,50 fue otra clase de resultado sin zanjar,
+                y el filtro de energía la detectó. Con un paso de 1,0 la deriva
+                fue de alrededor del 0,2%, por encima del filtro, y la
+                excentricidad del planeta salió por encima de 100, que no es una
+                órbita sino una explosión. Reducir una vez dejó la deriva en
+                alrededor del 0,17% y el resultado seguía rechazado. Con un paso
+                de 0,25 la deriva fue del 0,0023% y el panel informó de un
+                resultado: el planeta chocó con una estrella, a una centésima de
+                periodo binario. Una sola reducción no bastó porque un
+                acercamiento mal resuelto no se arregla haciéndolo un poco mejor:
+                o el paso resuelve la pasada o no la resuelve. El caso de 0,25
+                separaciones es el que el filtro no puede detectar: la deriva es
+                mínima con los dos pasos y la respuesta cambia igualmente.`,
     },
     'convergence-is-the-test': {
       title: 'La convergencia es la prueba',
@@ -494,9 +507,9 @@ export default {
                 con qué pasos, informa de que el resultado cambió entre ellos y se
                 queda sin dictar veredicto sobre el planeta. Algo así: "A 0,25
                 separaciones, integrado durante 20 periodos binarios, el planeta
-                sobrevivió con un paso de 1,0 y fue expulsado con 0,25, con la
-                energía conservada mejor que 1e-6 en ambos casos. El resultado no
-                ha convergido, así que esta integración no determina el destino
+                sobrevivió con un paso de 1,0 y fue expulsado con un paso de 0,25,
+                con la energía conservada mejor que 2e-6 en ambos casos. El
+                resultado no ha convergido, así que esta integración no determina el destino
                 del planeta; la ejecución a 0,30 separaciones, expulsada con todos
                 los pasos probados, sí."`,
       rubric: `Cuatro cosas puntúan, y la cuarta es la que vale la pena discutir
@@ -569,14 +582,13 @@ export default {
              estrellas están entre sí, y más lejos de lo que ninguna de las dos
              llega nunca— y ejecútalo otra vez.`,
       checklist: [
-        'A 4,0: mira cómo las dos estrellas giran dentro de la órbita del planeta, y compara la distancia máxima con 4,0',
-        'A 4,0: la excentricidad máxima alcanzada se asienta en torno a 0,06 y deja de subir',
-        'A 2,0: mira cómo el anillo deja de cerrarse sobre sí mismo, y mira la fila de excentricidad mientras pasa',
-        'A 2,0: la excentricidad pasa de 0,25 en el primer periodo binario y de 1 en el segundo; pasado 1 la órbita está abierta y el semieje mayor deja de existir',
-        'A 2,0: lee el número de encuentros al terminar; puede sorprenderte',
-        'A 2,0: lee cuándo se marchó',
+        'A 4,0: mira cómo las dos estrellas giran dentro de la órbita del planeta, y lee la distancia máxima',
+        'A 4,0: mira la excentricidad máxima alcanzada mientras avanza la ejecución',
+        'A 2,0: mira el anillo y la fila de excentricidad mientras avanza la ejecución, y anota la excentricidad cada vez que se completa un periodo binario',
+        'A 2,0: lee el número de encuentros al terminar',
+        'A 2,0: lee cómo terminó, y cuándo',
       ],
-      tip: 'En la segunda ejecución nada se acercó a nada. Esta es una forma de perder un planeta distinta de la que viste en la primera mitad de la investigación.',
+      tip: 'Mira juntos el número de encuentros y la fila de excentricidad: miden dos cosas distintas de lo que le pasa al planeta.',
     },
     'no-encounter-at-all': {
       title: 'Se marchó sin tocar nada',
@@ -615,11 +627,15 @@ export default {
                 planeta está cerca de un múltiplo entero pequeño del de la
                 binaria, así que el tirón que recibe no es aleatorio: llega casi
                 en la misma fase de su órbita cada vez y los pequeños empujones se
-                acumulan. Lo has visto pasar: la fila de excentricidad superó 0,25
-                en el primer periodo binario y 1 en el segundo, y pasado 1 una
-                órbita no se cierra. La deriva de energía de siete partes en un
-                millón descarta la primera opción, que es justo para lo que el
-                panel la muestra.`,
+                acumulan. La fila de excentricidad lo muestra: supera 0,25 en el
+                primer periodo binario y 1 en el segundo, y pasado 1 una órbita
+                no se cierra. A 4,0 esa misma fila se asienta en torno a 0,06 y
+                deja de subir, así que el par que bombeó la órbita interior deja
+                en paz a la exterior, y nada se acerca a nada en ninguno de los
+                dos radios: es una forma de perder un planeta distinta de la
+                pasada cercana de la primera mitad. La deriva de energía de siete
+                partes en un millón descarta la primera opción, que es justo para
+                lo que el panel la muestra.`,
     },
     'circumbinary-boundary': {
       title: 'La frontera circumbinaria',
@@ -653,25 +669,33 @@ export default {
       ],
     },
     'sweep-the-circumbinary': {
-      title: 'Opcional: el mismo barrido, aqui fuera',
-      body: '<strong>Opcional, y tarda entre ocho y doce minutos.</strong> Saltatelo si la sesion es corta; nada de lo que viene despues depende de ello.\n\nEl barrido tambien funciona aqui fuera, con su propio rango y su propia ventana: <strong>2,0, 2,5, 3,0, 3,5 y 4,0</strong> separaciones, cuarenta periodos binarios cada uno, porque un planeta circumbinario es lento y veinte periodos de la pareja son solo tres o cuatro orbitas suyas.\n\nLa frontera publicada para esta configuracion es 3,61. Predice que haran los cinco antes de pulsar, como hiciste dentro, y espera el desacuerdo del que acabas de leer en vez de una linea limpia.',
-      tip: 'Ventana mas larga, mismo argumento: un resultado habla de la ventana en la que se observo, y cuarenta periodos aqui fuera es una mirada mas corta que veinte ahi dentro.',
+      title: 'Opcional: el mismo barrido, aquí fuera',
+      body: `<strong>Opcional, y tarda entre ocho y doce minutos.</strong> Sáltatelo
+             si la sesión es corta; nada de lo que viene después depende de
+             ello.
+             \n\nEl barrido también funciona aquí fuera, con su propio rango y
+             su propia ventana: <strong>2,0, 2,5, 3,0, 3,5 y 4,0</strong>
+             separaciones, cuarenta periodos binarios cada uno, porque un
+             planeta circumbinario es lento y veinte periodos de la pareja son
+             solo tres o cuatro órbitas suyas.
+             \n\nLa frontera publicada para esta configuración es 3,61. Predice
+             qué harán los cinco antes de pulsar, como hiciste dentro.`,
+      tip: 'Ventana más larga, mismo argumento: un resultado habla de la ventana en la que se observó, y cuarenta periodos aquí fuera es una mirada más corta que veinte ahí dentro.',
     },
     'where-the-fit-disagrees': {
-      title: 'Donde el ajuste y la simulación no se ponen de acuerdo',
-      body: `El ajuste dice 3,61. Así que un planeta a <strong>3,0</strong>
-             separaciones debería desestabilizarse, y uno a <strong>2,5</strong>
-             todavía más.
-             \n\nEjecuta los dos, los cuarenta periodos completos. Lee el resultado
-             y después lee la <strong>distancia máxima</strong>, que es el número
-             que explica el desacuerdo.`,
+      title: 'Dos radios dentro de la frontera publicada',
+      body: `El ajuste sitúa la frontera en 3,61 separaciones, así que
+             <strong>3,0</strong> y <strong>2,5</strong> quedan los dos dentro
+             de ella.
+             \n\nEjecuta los dos, los cuarenta periodos completos. Lee el
+             resultado y la <strong>distancia máxima</strong> de cada uno.`,
       checklist: [
         'Ejecuta 3,0 durante cuarenta periodos: resultado, distancia máxima y excentricidad máxima alcanzada',
         'Ejecuta 2,5 durante cuarenta periodos: las mismas tres cosas',
-        'Compara las tres con la ejecución de 4,0, donde el planeta se quedó en su anillo con una excentricidad por debajo de 0,07',
+        'Compara las tres con la ejecución de 4,0 que hiciste antes',
         'Opcional: pon dos de ellas una al lado de la otra en el banco A/B, registrando la distancia al primario, y lee la diferencia sobre un mismo eje temporal',
       ],
-      tip: 'Las dos informarán de que el planeta sobrevivió a la integración. Fíjate en lo lejos que llegó antes de volver.',
+      tip: 'Lee primero el resultado, y luego hasta dónde llegó cada planeta.',
     },
     'who-is-wrong': {
       title: 'Entonces, ¿quién se equivoca?',
@@ -723,8 +747,9 @@ export default {
              publicado coincide en que debería.
              \n· Un planeta a 0,30 fue expulsado antes de tres periodos, con todos
              los pasos probados.
-             \n· Un planeta a 0,25 dio respuestas distintas con pasos distintos,
-             así que su destino no lo determinan estas ejecuciones.
+             \n· Un planeta a 0,25 separaciones dio respuestas distintas con
+             pasos distintos, así que su destino no lo determinan estas
+             ejecuciones.
              \n· Un planeta circumbinario a 4,0 mantuvo su órbita cuarenta
              periodos; uno a 2,0 fue empujado fuera en tres, sin acercarse nunca a
              una estrella.

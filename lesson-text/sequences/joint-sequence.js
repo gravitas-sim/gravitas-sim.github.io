@@ -153,7 +153,7 @@ export const RADIAL_VELOCITY_DEEPER_ES = {
       body: `Los 0,33 g/cm³ que acabas de leer tomaron la estrella como dada. No lo era: el radio es el cociente de radios del tránsito por el radio de la
              estrella, la masa necesita la masa de la estrella, y la densidad necesita ambas. El panel de abajo ajusta juntos un tránsito y treinta
              velocidades de un Júpiter caliente sintético de este tamaño, con un período y una época para ambos, y lleva la incertidumbre declarada
-             de la estrella al planeta. Dos cosas más que hace el ajuste y tu lectura no: deja la órbita ser excéntrica (las velocidades fijan entonces
+             de la estrella al planeta (<em>¿De qué está hecho?</em> lleva este panel más lejos). Dos cosas más que hace el ajuste y tu lectura no: deja la órbita ser excéntrica (las velocidades fijan entonces
              <em>e</em> y la duración del tránsito se mueve con ella), y deja que las velocidades se dispersen más de lo que dicen sus barras de
              error, la <em>fluctuación</em>.`,
     },

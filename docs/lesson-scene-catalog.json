@@ -1371,7 +1371,9 @@
     "mag"
    ],
    "presets": 3,
-   "buttons": [],
+   "buttons": [
+    "run"
+   ],
    "engineReads": [],
    "mutates": [],
    "datasets": []
@@ -1537,7 +1539,9 @@
     "inc"
    ],
    "presets": 0,
-   "buttons": [],
+   "buttons": [
+    "run"
+   ],
    "engineReads": [],
    "mutates": [],
    "datasets": [
@@ -15529,7 +15533,8 @@
      ],
      "actions": [
       "move-an-instrument-control",
-      "press-an-instrument-preset"
+      "press-an-instrument-preset",
+      "press-an-instrument-button"
      ],
      "requires": [],
      "reveal": null,
@@ -15640,8 +15645,85 @@
      ]
     },
     {
-     "sid": "watch-it-grow",
+     "sid": "read-the-two-wobbles",
      "index": 6,
+     "type": "measure",
+     "title": "Read two wobbles",
+     "declares": {
+      "stage": null,
+      "bound": [
+       "star",
+       "planet"
+      ],
+      "roles": [
+       "star",
+       "planet"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "model-result",
+      "panel-diagram",
+      "captured-evidence"
+     ],
+     "actions": [
+      "record-values",
+      "move-an-instrument-control",
+      "press-an-instrument-preset",
+      "press-an-instrument-button"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": true
+     },
+     "worldRunning": false,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "whole lesson"
+     },
+     "loop": {
+      "declared": "measure",
+      "actual": [
+       "experiment",
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "reflex-motion",
+      "capture": false
+     },
+     "evidence": [
+      "notebook-fields"
+     ],
+     "reset": [
+      "stamps instrument values",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "wrong body: the step binds the object by name, so there is none",
+      "ambiguous result: the check says in words how close is close enough"
+     ]
+    },
+    {
+     "sid": "watch-it-grow",
+     "index": 7,
      "type": "explore",
      "title": "Watch it grow",
      "declares": {
@@ -15662,7 +15744,8 @@
      ],
      "actions": [
       "move-an-instrument-control",
-      "press-an-instrument-preset"
+      "press-an-instrument-preset",
+      "press-an-instrument-button"
      ],
      "requires": [],
      "reveal": null,
@@ -15711,7 +15794,7 @@
     },
     {
      "sid": "light-carries-the-answer",
-     "index": 7,
+     "index": 8,
      "type": "read",
      "title": "Light carries the answer",
      "declares": {
@@ -15773,7 +15856,7 @@
     },
     {
      "sid": "which-way-is-it-going",
-     "index": 8,
+     "index": 9,
      "type": "question",
      "title": "Which way is it going?",
      "declares": {
@@ -15835,7 +15918,7 @@
     },
     {
      "sid": "toward-away-toward-again",
-     "index": 9,
+     "index": 10,
      "type": "explore",
      "title": "Toward, away, toward again",
      "declares": {
@@ -15859,7 +15942,8 @@
      ],
      "actions": [
       "open-a-body-inspector",
-      "move-an-instrument-control"
+      "move-an-instrument-control",
+      "press-an-instrument-button"
      ],
      "requires": [],
      "reveal": null,
@@ -15911,7 +15995,7 @@
     },
     {
      "sid": "open-the-real-instrument",
-     "index": 10,
+     "index": 11,
      "type": "explore",
      "title": "Open the real instrument",
      "declares": {
@@ -15982,7 +16066,7 @@
     },
     {
      "sid": "reading-the-curve",
-     "index": 11,
+     "index": 12,
      "type": "question",
      "title": "Reading the curve",
      "declares": {
@@ -16044,7 +16128,7 @@
     },
     {
      "sid": "measure-the-period",
-     "index": 12,
+     "index": 13,
      "type": "measure",
      "title": "Measure the period",
      "declares": {
@@ -16123,7 +16207,7 @@
     },
     {
      "sid": "the-semi-amplitude-k",
-     "index": 13,
+     "index": 14,
      "type": "read",
      "title": "The semi-amplitude, K",
      "declares": {
@@ -16185,7 +16269,7 @@
     },
     {
      "sid": "read-k-off-the-panel",
-     "index": 14,
+     "index": 15,
      "type": "measure",
      "title": "Read K off the panel",
      "declares": {
@@ -16201,6 +16285,7 @@
      },
      "kinds": [
       "scene-declared",
+      "engine-measurement",
       "captured-evidence"
      ],
      "actions": [
@@ -16228,14 +16313,16 @@
        "experiment",
        "measure"
       ],
-      "handTranscribed": true,
+      "handTranscribed": false,
       "mismatch": null
      },
      "scene": {
       "nameMatches": [],
       "readsSelection": false,
       "importsFromSelection": false,
-      "engineReads": [],
+      "engineReads": [
+       "rvNow"
+      ],
       "mutates": [],
       "eventWatch": null
      },
@@ -16251,12 +16338,13 @@
       "wrong body: the step binds the object by name, so there is none",
       "missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand",
       "reset: rebuilds the scenario on arrival",
+      "null result: guarded, but the fallback is not spelled out",
       "ambiguous result: nothing marks these, they are a record"
      ]
     },
     {
      "sid": "what-would-make-k-bigger",
-     "index": 15,
+     "index": 16,
      "type": "predict",
      "title": "What would make K bigger?",
      "declares": {
@@ -16319,7 +16407,7 @@
     },
     {
      "sid": "one-thing-at-a-time",
-     "index": 16,
+     "index": 17,
      "type": "explore",
      "title": "One thing at a time",
      "declares": {
@@ -16391,7 +16479,7 @@
     },
     {
      "sid": "weigh-hd-209458-b",
-     "index": 17,
+     "index": 18,
      "type": "question",
      "title": "Weigh HD 209458 b",
      "declares": {
@@ -16466,7 +16554,7 @@
     },
     {
      "sid": "now-tilt-the-whole-system",
-     "index": 18,
+     "index": 19,
      "type": "predict",
      "title": "Now tilt the whole system",
      "declares": {
@@ -16529,7 +16617,7 @@
     },
     {
      "sid": "the-same-planet-four-viewing",
-     "index": 19,
+     "index": 20,
      "type": "explore",
      "title": "The same planet, four viewing angles",
      "declares": {
@@ -16606,7 +16694,7 @@
     },
     {
      "sid": "m-sin-i",
-     "index": 20,
+     "index": 21,
      "type": "read",
      "title": "M sin i",
      "declares": {
@@ -16668,7 +16756,7 @@
     },
     {
      "sid": "what-a-transit-adds",
-     "index": 21,
+     "index": 22,
      "type": "question",
      "title": "What a transit adds",
      "declares": {
@@ -16730,7 +16818,7 @@
     },
     {
      "sid": "a-face-on-system",
-     "index": 22,
+     "index": 23,
      "type": "predict",
      "title": "A face-on system",
      "declares": {
@@ -16793,7 +16881,7 @@
     },
     {
      "sid": "astrometry",
-     "index": 23,
+     "index": 24,
      "type": "read",
      "title": "Astrometry",
      "declares": {
@@ -16855,7 +16943,7 @@
     },
     {
      "sid": "tilt-it-again-and-watch",
-     "index": 24,
+     "index": 25,
      "type": "explore",
      "title": "Tilt it again, and watch the other method",
      "declares": {
@@ -16926,7 +17014,7 @@
     },
     {
      "sid": "two-methods-opposite-weaknesses",
-     "index": 25,
+     "index": 26,
      "type": "question",
      "title": "Two methods, opposite weaknesses",
      "declares": {
@@ -16988,7 +17076,7 @@
     },
     {
      "sid": "all-three-at-once",
-     "index": 26,
+     "index": 27,
      "type": "explore",
      "title": "All three at once",
      "declares": {
@@ -17059,7 +17147,7 @@
     },
     {
      "sid": "move-the-system-further-away",
-     "index": 27,
+     "index": 28,
      "type": "predict",
      "title": "Move the system further away",
      "declares": {
@@ -17122,7 +17210,7 @@
     },
     {
      "sid": "distance-and-orbit-size",
-     "index": 28,
+     "index": 29,
      "type": "explore",
      "title": "Distance, and orbit size",
      "declares": {
@@ -17193,7 +17281,7 @@
     },
     {
      "sid": "different-methods-different-planets",
-     "index": 29,
+     "index": 30,
      "type": "question",
      "title": "Different methods, different planets",
      "declares": {
@@ -17255,7 +17343,7 @@
     },
     {
      "sid": "bring-the-transit-back",
-     "index": 30,
+     "index": 31,
      "type": "read",
      "title": "Bring the transit back",
      "declares": {
@@ -17317,7 +17405,7 @@
     },
     {
      "sid": "characterize-the-planet",
-     "index": 31,
+     "index": 32,
      "type": "explore",
      "title": "Characterize the planet",
      "declares": {
@@ -17387,10 +17475,10 @@
      ]
     },
     {
-     "sid": "how-dense-is-it",
-     "index": 32,
+     "sid": "density-from-your-mass",
+     "index": 33,
      "type": "question",
-     "title": "How dense is it?",
+     "title": "Density from your mass",
      "declares": {
       "stage": null,
       "bound": [
@@ -17408,7 +17496,9 @@
      "actions": [
       "read"
      ],
-     "requires": [],
+     "requires": [
+      "weigh-hd-209458-b"
+     ],
      "reveal": null,
      "asks": {
       "choice": false,
@@ -17450,7 +17540,7 @@
     },
     {
      "sid": "where-does-hd-209458-b",
-     "index": 33,
+     "index": 34,
      "type": "question",
      "title": "Where does HD 209458 b sit?",
      "declares": {
@@ -17512,7 +17602,7 @@
     },
     {
      "sid": "three-candidates",
-     "index": 34,
+     "index": 35,
      "type": "read",
      "title": "Three candidates",
      "declares": {
@@ -17583,7 +17673,7 @@
     },
     {
      "sid": "which-is-the-strongest-candidate",
-     "index": 35,
+     "index": 36,
      "type": "question",
      "title": "Which is the strongest candidate?",
      "declares": {
@@ -17645,7 +17735,7 @@
     },
     {
      "sid": "what-would-you-still-want",
-     "index": 36,
+     "index": 37,
      "type": "question",
      "title": "What would you still want to know?",
      "declares": {
@@ -17707,7 +17797,7 @@
     },
     {
      "sid": "the-point-of-all-this",
-     "index": 37,
+     "index": 38,
      "type": "question",
      "title": "The point of all this",
      "declares": {
@@ -17769,7 +17859,7 @@
     },
     {
      "sid": "what-you-can-now-say",
-     "index": 38,
+     "index": 39,
      "type": "read",
      "title": "What you can now say about a star you cannot resolve",
      "declares": {
@@ -17854,6 +17944,7 @@
      "predictCollects": true,
      "heldUntil": "watch-it-grow",
      "experiment": [
+      "read-the-two-wobbles",
       "watch-it-grow",
       "toward-away-toward-again",
       "open-the-real-instrument",
@@ -17861,6 +17952,7 @@
       "read-k-off-the-panel"
      ],
      "measure": [
+      "read-the-two-wobbles",
       "watch-it-grow",
       "toward-away-toward-again",
       "open-the-real-instrument",
@@ -17868,6 +17960,7 @@
       "read-k-off-the-panel"
      ],
      "evidence": [
+      "read-the-two-wobbles",
       "measure-the-period",
       "read-k-off-the-panel"
      ],
@@ -17960,16 +18053,16 @@
     }
    ],
    "totals": {
-    "steps": 38,
-    "declared": 38,
+    "steps": 39,
+    "declared": 39,
     "student": 3,
-    "engine": 4,
-    "model": 11,
+    "engine": 5,
+    "model": 12,
     "data": 5,
-    "diagram": 11,
-    "evidence": 2,
+    "diagram": 12,
+    "evidence": 3,
     "computation": 0,
-    "declaredButInert": 35,
+    "declaredButInert": 36,
     "prose": 0,
     "mismatched": 0,
     "rebuilds": 4
@@ -22863,6 +22956,10 @@
     "placement": true,
     "inspector": true
    },
+   "canvas": [
+    "quiet",
+    "scene"
+   ],
    "steps": [
     {
      "sid": "twice-a-day-everywhere",
@@ -23293,20 +23390,14 @@
      "title": "What the far-side arrow means",
      "declares": {
       "stage": null,
-      "bound": [
-       "earth",
-       "moon"
-      ],
-      "roles": [
-       "earth",
-       "moon"
-      ]
+      "bound": [],
+      "roles": []
      },
      "kinds": [
-      "scene-declared",
       "model-result",
       "panel-diagram"
      ],
+     "canvas": "quiet",
      "actions": [
       "choose-an-option",
       "move-an-instrument-control",
@@ -23354,9 +23445,7 @@
       "stamps instrument values",
       "lesson locks: placement, inspector"
      ],
-     "recovery": [
-      "wrong body: the step binds the object by name, so there is none"
-     ]
+     "recovery": []
     },
     {
      "sid": "what-a-tide-actually-is",
@@ -23365,18 +23454,11 @@
      "title": "What a tide actually is",
      "declares": {
       "stage": null,
-      "bound": [
-       "earth",
-       "moon"
-      ],
-      "roles": [
-       "earth",
-       "moon"
-      ]
+      "bound": [],
+      "roles": []
      },
-     "kinds": [
-      "scene-declared"
-     ],
+     "kinds": [],
+     "canvas": "quiet",
      "actions": [
       "read"
      ],
@@ -23416,9 +23498,7 @@
      "reset": [
       "lesson locks: placement, inspector"
      ],
-     "recovery": [
-      "wrong body: the step binds the object by name, so there is none"
-     ]
+     "recovery": []
     },
     {
      "sid": "bring-the-companion-closer",
@@ -23427,23 +23507,16 @@
      "title": "Bring the companion closer",
      "declares": {
       "stage": null,
-      "bound": [
-       "earth",
-       "moon"
-      ],
-      "roles": [
-       "earth",
-       "moon"
-      ]
+      "bound": [],
+      "roles": []
      },
-     "kinds": [
-      "scene-declared"
-     ],
+     "kinds": [],
+     "canvas": "quiet",
      "actions": [
       "commit-a-prediction"
      ],
      "requires": [],
-     "reveal": "four-distances",
+     "reveal": "the-factor-per-halving",
      "asks": {
       "choice": true,
       "numeric": false,
@@ -23479,32 +23552,24 @@
      "reset": [
       "lesson locks: placement, inspector"
      ],
-     "recovery": [
-      "wrong body: the step binds the object by name, so there is none"
-     ]
+     "recovery": []
     },
     {
-     "sid": "four-distances",
+     "sid": "choose-four-distances",
      "index": 10,
      "type": "measure",
-     "title": "Four distances",
+     "title": "Four distances of your own",
      "declares": {
       "stage": null,
-      "bound": [
-       "earth",
-       "moon"
-      ],
-      "roles": [
-       "earth",
-       "moon"
-      ]
+      "bound": [],
+      "roles": []
      },
      "kinds": [
-      "scene-declared",
       "model-result",
       "panel-diagram",
       "captured-evidence"
      ],
+     "canvas": "quiet",
      "actions": [
       "record-values",
       "move-an-instrument-control",
@@ -23557,31 +23622,24 @@
       "lesson locks: placement, inspector"
      ],
      "recovery": [
-      "wrong body: the step binds the object by name, so there is none",
       "ambiguous result: the check says in words how close is close enough"
      ]
     },
     {
-     "sid": "how-steeply-does-it-fall",
+     "sid": "the-factor-per-halving",
      "index": 11,
      "type": "question",
-     "title": "How steeply does it fall?",
+     "title": "The factor per halving",
      "declares": {
       "stage": null,
-      "bound": [
-       "earth",
-       "moon"
-      ],
-      "roles": [
-       "earth",
-       "moon"
-      ]
+      "bound": [],
+      "roles": []
      },
      "kinds": [
-      "scene-declared",
       "model-result",
       "panel-diagram"
      ],
+     "canvas": "quiet",
      "actions": [
       "move-an-instrument-control",
       "run-the-simulation"
@@ -23628,29 +23686,205 @@
       "stamps instrument values",
       "lesson locks: placement, inspector"
      ],
+     "recovery": []
+    },
+    {
+     "sid": "pick-a-new-distance",
+     "index": 12,
+     "type": "measure",
+     "title": "Pick a distance you have not used",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [
+      "captured-evidence"
+     ],
+     "canvas": "quiet",
+     "actions": [
+      "record-values",
+      "run-the-simulation"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": true
+     },
+     "worldRunning": true,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "measure",
+      "actual": [
+       "experiment",
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": true,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [
+      "notebook-fields"
+     ],
+     "reset": [
+      "lesson locks: placement, inspector"
+     ],
      "recovery": [
-      "wrong body: the step binds the object by name, so there is none"
+      "missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand",
+      "ambiguous result: the check says in words how close is close enough"
      ]
     },
     {
-     "sid": "the-relationship-written-down",
-     "index": 12,
-     "type": "read",
-     "title": "The relationship, written down",
+     "sid": "estimate-the-new-stretch",
+     "index": 13,
+     "type": "predict",
+     "title": "Estimate the stretch there",
      "declares": {
       "stage": null,
-      "bound": [
-       "earth",
-       "moon"
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [],
+     "canvas": "quiet",
+     "actions": [
+      "read-a-prediction-prompt-that-collects-nothing"
+     ],
+     "requires": [],
+     "reveal": "the-estimate-and-the-reading",
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": true,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "predict",
+      "actual": [
+       "read"
       ],
-      "roles": [
-       "earth",
-       "moon"
-      ]
+      "handTranscribed": false,
+      "mismatch": "typed predict but collects no commitment"
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": []
+    },
+    {
+     "sid": "read-the-new-distance",
+     "index": 14,
+     "type": "measure",
+     "title": "Read the panel at your new distance",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
      },
      "kinds": [
-      "scene-declared"
+      "model-result",
+      "panel-diagram",
+      "captured-evidence"
      ],
+     "canvas": "quiet",
+     "actions": [
+      "record-values",
+      "move-an-instrument-control",
+      "run-the-simulation"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": true
+     },
+     "worldRunning": true,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "measure",
+      "actual": [
+       "experiment",
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "tide-strength",
+      "capture": false
+     },
+     "evidence": [
+      "notebook-fields"
+     ],
+     "reset": [
+      "stamps instrument values",
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": [
+      "ambiguous result: the check says in words how close is close enough"
+     ]
+    },
+    {
+     "sid": "the-estimate-and-the-reading",
+     "index": 15,
+     "type": "read",
+     "title": "Your estimate and the panel",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [],
+     "canvas": "quiet",
      "actions": [
       "read"
      ],
@@ -23690,34 +23924,25 @@
      "reset": [
       "lesson locks: placement, inspector"
      ],
-     "recovery": [
-      "wrong body: the step binds the object by name, so there is none"
-     ]
+     "recovery": []
     },
     {
      "sid": "now-change-the-companion",
-     "index": 13,
+     "index": 16,
      "type": "predict",
      "title": "Now change the companion",
      "declares": {
       "stage": null,
-      "bound": [
-       "earth",
-       "moon"
-      ],
-      "roles": [
-       "earth",
-       "moon"
-      ]
+      "bound": [],
+      "roles": []
      },
-     "kinds": [
-      "scene-declared"
-     ],
+     "kinds": [],
+     "canvas": "quiet",
      "actions": [
       "commit-a-prediction"
      ],
      "requires": [],
-     "reveal": "three-masses",
+     "reveal": "the-relationship-written-down",
      "asks": {
       "choice": true,
       "numeric": false,
@@ -23753,32 +23978,24 @@
      "reset": [
       "lesson locks: placement, inspector"
      ],
-     "recovery": [
-      "wrong body: the step binds the object by name, so there is none"
-     ]
+     "recovery": []
     },
     {
-     "sid": "three-masses",
-     "index": 14,
+     "sid": "choose-three-masses",
+     "index": 17,
      "type": "measure",
-     "title": "Three masses",
+     "title": "Three masses of your own",
      "declares": {
       "stage": null,
-      "bound": [
-       "earth",
-       "moon"
-      ],
-      "roles": [
-       "earth",
-       "moon"
-      ]
+      "bound": [],
+      "roles": []
      },
      "kinds": [
-      "scene-declared",
       "model-result",
       "panel-diagram",
       "captured-evidence"
      ],
+     "canvas": "quiet",
      "actions": [
       "record-values",
       "move-an-instrument-control",
@@ -23831,29 +24048,21 @@
       "lesson locks: placement, inspector"
      ],
      "recovery": [
-      "wrong body: the step binds the object by name, so there is none",
       "ambiguous result: the check says in words how close is close enough"
      ]
     },
     {
      "sid": "what-the-mass-graph-says",
-     "index": 15,
+     "index": 18,
      "type": "question",
      "title": "What the mass graph says",
      "declares": {
       "stage": null,
-      "bound": [
-       "earth",
-       "moon"
-      ],
-      "roles": [
-       "earth",
-       "moon"
-      ]
+      "bound": [],
+      "roles": []
      },
-     "kinds": [
-      "scene-declared"
-     ],
+     "kinds": [],
+     "canvas": "quiet",
      "actions": [
       "choose-an-option"
      ],
@@ -23893,29 +24102,73 @@
      "reset": [
       "lesson locks: placement, inspector"
      ],
-     "recovery": [
-      "wrong body: the step binds the object by name, so there is none"
-     ]
+     "recovery": []
+    },
+    {
+     "sid": "the-relationship-written-down",
+     "index": 19,
+     "type": "read",
+     "title": "The relationship, written down",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [],
+     "canvas": "quiet",
+     "actions": [
+      "read"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": true,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "read",
+      "actual": [
+       "read"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": []
     },
     {
      "sid": "the-sun-against-the-moon",
-     "index": 16,
+     "index": 20,
      "type": "predict",
      "title": "The Sun against the Moon",
      "declares": {
       "stage": null,
-      "bound": [
-       "earth",
-       "moon"
-      ],
-      "roles": [
-       "earth",
-       "moon"
-      ]
+      "bound": [],
+      "roles": []
      },
-     "kinds": [
-      "scene-declared"
-     ],
+     "kinds": [],
+     "canvas": "quiet",
      "actions": [
       "commit-a-prediction"
      ],
@@ -23956,31 +24209,23 @@
      "reset": [
       "lesson locks: placement, inspector"
      ],
-     "recovery": [
-      "wrong body: the step binds the object by name, so there is none"
-     ]
+     "recovery": []
     },
     {
      "sid": "seven-real-tides-on-one",
-     "index": 17,
+     "index": 21,
      "type": "read",
      "title": "Seven real tides on one scale",
      "declares": {
       "stage": null,
-      "bound": [
-       "earth",
-       "moon"
-      ],
-      "roles": [
-       "earth",
-       "moon"
-      ]
+      "bound": [],
+      "roles": []
      },
      "kinds": [
-      "scene-declared",
       "model-result",
       "panel-diagram"
      ],
+     "canvas": "quiet",
      "actions": [
       "move-an-instrument-control",
       "run-the-simulation"
@@ -24026,29 +24271,20 @@
       "stamps instrument values",
       "lesson locks: placement, inspector"
      ],
-     "recovery": [
-      "wrong body: the step binds the object by name, so there is none"
-     ]
+     "recovery": []
     },
     {
      "sid": "locking-and-what-this-simulation",
-     "index": 18,
+     "index": 22,
      "type": "read",
      "title": "Locking, and what this simulation does not do",
      "declares": {
       "stage": null,
-      "bound": [
-       "earth",
-       "moon"
-      ],
-      "roles": [
-       "earth",
-       "moon"
-      ]
+      "bound": [],
+      "roles": []
      },
-     "kinds": [
-      "scene-declared"
-     ],
+     "kinds": [],
+     "canvas": "quiet",
      "actions": [
       "read"
      ],
@@ -24088,29 +24324,20 @@
      "reset": [
       "lesson locks: placement, inspector"
      ],
-     "recovery": [
-      "wrong body: the step binds the object by name, so there is none"
-     ]
+     "recovery": []
     },
     {
      "sid": "say-it-in-your-own",
-     "index": 19,
+     "index": 23,
      "type": "question",
      "title": "Say it in your own words",
      "declares": {
       "stage": null,
-      "bound": [
-       "earth",
-       "moon"
-      ],
-      "roles": [
-       "earth",
-       "moon"
-      ]
+      "bound": [],
+      "roles": []
      },
-     "kinds": [
-      "scene-declared"
-     ],
+     "kinds": [],
+     "canvas": "quiet",
      "actions": [
       "answer-in-words"
      ],
@@ -24150,29 +24377,20 @@
      "reset": [
       "lesson locks: placement, inspector"
      ],
-     "recovery": [
-      "wrong body: the step binds the object by name, so there is none"
-     ]
+     "recovery": []
     },
     {
      "sid": "what-holds-a-moon-together",
-     "index": 20,
+     "index": 24,
      "type": "predict",
      "title": "What holds a moon together?",
      "declares": {
       "stage": null,
-      "bound": [
-       "earth",
-       "moon"
-      ],
-      "roles": [
-       "earth",
-       "moon"
-      ]
+      "bound": [],
+      "roles": []
      },
-     "kinds": [
-      "scene-declared"
-     ],
+     "kinds": [],
+     "canvas": "quiet",
      "actions": [
       "commit-a-prediction"
      ],
@@ -24213,31 +24431,23 @@
      "reset": [
       "lesson locks: placement, inspector"
      ],
-     "recovery": [
-      "wrong body: the step binds the object by name, so there is none"
-     ]
+     "recovery": []
     },
     {
      "sid": "stretch-against-grip",
-     "index": 21,
+     "index": 25,
      "type": "explore",
      "title": "Stretch against grip",
      "declares": {
       "stage": null,
-      "bound": [
-       "earth",
-       "moon"
-      ],
-      "roles": [
-       "earth",
-       "moon"
-      ]
+      "bound": [],
+      "roles": []
      },
      "kinds": [
-      "scene-declared",
       "model-result",
       "panel-diagram"
      ],
+     "canvas": "quiet",
      "actions": [
       "move-an-instrument-control",
       "press-an-instrument-preset",
@@ -24285,41 +24495,28 @@
       "stamps instrument values",
       "lesson locks: placement, inspector"
      ],
-     "recovery": [
-      "wrong body: the step binds the object by name, so there is none"
-     ]
+     "recovery": []
     },
     {
-     "sid": "where-the-balance-tips",
-     "index": 22,
-     "type": "question",
-     "title": "Where the balance tips",
+     "sid": "a-denser-body-closer-in",
+     "index": 26,
+     "type": "predict",
+     "title": "A denser body, closer in?",
      "declares": {
       "stage": null,
-      "bound": [
-       "earth",
-       "moon"
-      ],
-      "roles": [
-       "earth",
-       "moon"
-      ]
+      "bound": [],
+      "roles": []
      },
-     "kinds": [
-      "scene-declared",
-      "model-result",
-      "panel-diagram"
-     ],
+     "kinds": [],
+     "canvas": "quiet",
      "actions": [
-      "move-an-instrument-control",
-      "press-an-instrument-preset",
-      "run-the-simulation"
+      "commit-a-prediction"
      ],
      "requires": [],
-     "reveal": null,
+     "reveal": "how-density-moved-it",
      "asks": {
-      "choice": false,
-      "numeric": true,
+      "choice": true,
+      "numeric": false,
       "short": false,
       "rubric": false,
       "validated": false
@@ -24331,7 +24528,68 @@
       "areaSweep": "locked"
      },
      "loop": {
-      "declared": "interpret",
+      "declared": "predict",
+      "actual": [
+       "predict",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": []
+    },
+    {
+     "sid": "hunt-the-crossing",
+     "index": 27,
+     "type": "measure",
+     "title": "Hunt the crossing for two bodies",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [
+      "model-result",
+      "panel-diagram",
+      "captured-evidence"
+     ],
+     "canvas": "quiet",
+     "actions": [
+      "record-values",
+      "move-an-instrument-control",
+      "press-an-instrument-preset",
+      "run-the-simulation"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": true
+     },
+     "worldRunning": true,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "measure",
       "actual": [
        "experiment",
        "measure",
@@ -24352,36 +24610,85 @@
       "id": "tide-balance",
       "capture": false
      },
-     "evidence": [],
+     "evidence": [
+      "notebook-fields"
+     ],
      "reset": [
       "stamps instrument values",
       "lesson locks: placement, inspector"
      ],
      "recovery": [
-      "wrong body: the step binds the object by name, so there is none"
+      "ambiguous result: the check says in words how close is close enough"
      ]
     },
     {
+     "sid": "how-density-moved-it",
+     "index": 28,
+     "type": "question",
+     "title": "What density did",
+     "declares": {
+      "stage": null,
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [],
+     "canvas": "quiet",
+     "actions": [
+      "answer-in-words"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": true,
+      "rubric": true,
+      "validated": false
+     },
+     "worldRunning": true,
+     "affordances": {
+      "inspector": "locked",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "interpret",
+      "actual": [
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [
+      "lesson locks: placement, inspector"
+     ],
+     "recovery": []
+    },
+    {
      "sid": "the-roche-limit-and-why",
-     "index": 23,
+     "index": 29,
      "type": "read",
      "title": "The Roche limit, and why there are two of them",
      "declares": {
       "stage": null,
-      "bound": [
-       "earth",
-       "moon"
-      ],
-      "roles": [
-       "earth",
-       "moon"
-      ]
+      "bound": [],
+      "roles": []
      },
      "kinds": [
-      "scene-declared",
       "model-result",
       "panel-diagram"
      ],
+     "canvas": "quiet",
      "actions": [
       "move-an-instrument-control",
       "press-an-instrument-preset",
@@ -24428,31 +24735,23 @@
       "stamps instrument values",
       "lesson locks: placement, inspector"
      ],
-     "recovery": [
-      "wrong body: the step binds the object by name, so there is none"
-     ]
+     "recovery": []
     },
     {
      "sid": "change-what-the-moon-is",
-     "index": 24,
+     "index": 30,
      "type": "explore",
      "title": "Change what the moon is made of",
      "declares": {
       "stage": null,
-      "bound": [
-       "earth",
-       "moon"
-      ],
-      "roles": [
-       "earth",
-       "moon"
-      ]
+      "bound": [],
+      "roles": []
      },
      "kinds": [
-      "scene-declared",
       "model-result",
       "panel-diagram"
      ],
+     "canvas": "quiet",
      "actions": [
       "move-an-instrument-control",
       "press-an-instrument-preset",
@@ -24500,29 +24799,20 @@
       "stamps instrument values",
       "lesson locks: placement, inspector"
      ],
-     "recovery": [
-      "wrong body: the step binds the object by name, so there is none"
-     ]
+     "recovery": []
     },
     {
      "sid": "not-one-distance",
-     "index": 25,
+     "index": 31,
      "type": "question",
      "title": "Not one distance",
      "declares": {
       "stage": null,
-      "bound": [
-       "earth",
-       "moon"
-      ],
-      "roles": [
-       "earth",
-       "moon"
-      ]
+      "bound": [],
+      "roles": []
      },
-     "kinds": [
-      "scene-declared"
-     ],
+     "kinds": [],
+     "canvas": "quiet",
      "actions": [
       "choose-an-option"
      ],
@@ -24562,29 +24852,20 @@
      "reset": [
       "lesson locks: placement, inspector"
      ],
-     "recovery": [
-      "wrong body: the step binds the object by name, so there is none"
-     ]
+     "recovery": []
     },
     {
      "sid": "what-a-roche-limit-does",
-     "index": 26,
+     "index": 32,
      "type": "read",
      "title": "What a Roche limit does not tell you",
      "declares": {
       "stage": null,
-      "bound": [
-       "earth",
-       "moon"
-      ],
-      "roles": [
-       "earth",
-       "moon"
-      ]
+      "bound": [],
+      "roles": []
      },
-     "kinds": [
-      "scene-declared"
-     ],
+     "kinds": [],
+     "canvas": "quiet",
      "actions": [
       "read"
      ],
@@ -24624,13 +24905,11 @@
      "reset": [
       "lesson locks: placement, inspector"
      ],
-     "recovery": [
-      "wrong body: the step binds the object by name, so there is none"
-     ]
+     "recovery": []
     },
     {
      "sid": "the-extreme-case-running-live",
-     "index": 27,
+     "index": 33,
      "type": "explore",
      "title": "The extreme case, running live",
      "declares": {
@@ -24649,6 +24928,7 @@
       "student-changes-scene",
       "engine-measurement"
      ],
+     "canvas": "scene",
      "actions": [
       "open-a-body-inspector",
       "run-the-simulation",
@@ -24703,7 +24983,7 @@
     },
     {
      "sid": "a-star-and-a-black",
-     "index": 28,
+     "index": 34,
      "type": "read",
      "title": "A star, and a black hole that is too big",
      "declares": {
@@ -24722,6 +25002,7 @@
       "model-result",
       "panel-diagram"
      ],
+     "canvas": "scene",
      "actions": [
       "move-an-instrument-control",
       "press-an-instrument-preset",
@@ -24774,7 +25055,7 @@
     },
     {
      "sid": "the-whole-lesson-in-three",
-     "index": 29,
+     "index": 35,
      "type": "question",
      "title": "The whole investigation in three sentences",
      "declares": {
@@ -24791,6 +25072,7 @@
      "kinds": [
       "scene-declared"
      ],
+     "canvas": "scene",
      "actions": [
       "answer-in-words"
      ],
@@ -24836,7 +25118,7 @@
     },
     {
      "sid": "what-you-worked-out",
-     "index": 30,
+     "index": 36,
      "type": "read",
      "title": "What you worked out",
      "declares": {
@@ -24853,6 +25135,7 @@
      "kinds": [
       "scene-declared"
      ],
+     "canvas": "scene",
      "actions": [
       "read"
      ],
@@ -24941,19 +25224,42 @@
     {
      "predict": "bring-the-companion-closer",
      "predictCollects": true,
-     "heldUntil": "four-distances",
+     "heldUntil": "the-factor-per-halving",
      "experiment": [
-      "four-distances",
-      "how-steeply-does-it-fall"
+      "choose-four-distances",
+      "the-factor-per-halving",
+      "pick-a-new-distance"
      ],
      "measure": [
-      "four-distances",
-      "how-steeply-does-it-fall"
+      "choose-four-distances",
+      "the-factor-per-halving",
+      "pick-a-new-distance"
      ],
      "evidence": [
-      "four-distances"
+      "choose-four-distances",
+      "pick-a-new-distance"
      ],
-     "interpret": "four-distances",
+     "interpret": "the-factor-per-halving",
+     "measuredBeforeAnswering": true,
+     "explained": false,
+     "answeredByTheExperiment": true,
+     "closed": true,
+     "complete": true
+    },
+    {
+     "predict": "estimate-the-new-stretch",
+     "predictCollects": false,
+     "heldUntil": "the-estimate-and-the-reading",
+     "experiment": [
+      "read-the-new-distance"
+     ],
+     "measure": [
+      "read-the-new-distance"
+     ],
+     "evidence": [
+      "read-the-new-distance"
+     ],
+     "interpret": "the-estimate-and-the-reading",
      "measuredBeforeAnswering": true,
      "explained": false,
      "answeredByTheExperiment": true,
@@ -24963,20 +25269,20 @@
     {
      "predict": "now-change-the-companion",
      "predictCollects": true,
-     "heldUntil": "three-masses",
+     "heldUntil": "the-relationship-written-down",
      "experiment": [
-      "three-masses"
+      "choose-three-masses"
      ],
      "measure": [
-      "three-masses"
+      "choose-three-masses"
      ],
      "evidence": [
-      "three-masses"
+      "choose-three-masses"
      ],
-     "interpret": "three-masses",
+     "interpret": "what-the-mass-graph-says",
      "measuredBeforeAnswering": true,
      "explained": false,
-     "answeredByTheExperiment": true,
+     "answeredByTheExperiment": false,
      "closed": true,
      "complete": true
     },
@@ -25003,20 +25309,10 @@
      "predictCollects": true,
      "heldUntil": "stretch-against-grip",
      "experiment": [
-      "stretch-against-grip",
-      "where-the-balance-tips",
-      "the-roche-limit-and-why",
-      "change-what-the-moon-is",
-      "the-extreme-case-running-live",
-      "a-star-and-a-black"
+      "stretch-against-grip"
      ],
      "measure": [
-      "stretch-against-grip",
-      "where-the-balance-tips",
-      "the-roche-limit-and-why",
-      "change-what-the-moon-is",
-      "the-extreme-case-running-live",
-      "a-star-and-a-black"
+      "stretch-against-grip"
      ],
      "evidence": [],
      "interpret": "stretch-against-grip",
@@ -25025,21 +25321,49 @@
      "answeredByTheExperiment": true,
      "closed": true,
      "complete": true
+    },
+    {
+     "predict": "a-denser-body-closer-in",
+     "predictCollects": true,
+     "heldUntil": "how-density-moved-it",
+     "experiment": [
+      "hunt-the-crossing",
+      "the-roche-limit-and-why",
+      "change-what-the-moon-is",
+      "the-extreme-case-running-live",
+      "a-star-and-a-black"
+     ],
+     "measure": [
+      "hunt-the-crossing",
+      "the-roche-limit-and-why",
+      "change-what-the-moon-is",
+      "the-extreme-case-running-live",
+      "a-star-and-a-black"
+     ],
+     "evidence": [
+      "hunt-the-crossing"
+     ],
+     "interpret": "how-density-moved-it",
+     "measuredBeforeAnswering": true,
+     "explained": true,
+     "answeredByTheExperiment": true,
+     "closed": true,
+     "complete": true
     }
    ],
    "totals": {
-    "steps": 30,
-    "declared": 30,
+    "steps": 36,
+    "declared": 10,
     "student": 3,
     "engine": 4,
-    "model": 13,
+    "model": 14,
     "data": 0,
-    "diagram": 13,
-    "evidence": 2,
+    "diagram": 14,
+    "evidence": 5,
     "computation": 0,
-    "declaredButInert": 27,
-    "prose": 0,
-    "mismatched": 0,
+    "declaredButInert": 7,
+    "prose": 15,
+    "mismatched": 1,
     "rebuilds": 2
    }
   },
@@ -34622,7 +34946,7 @@
      "sid": "where-the-fit-disagrees",
      "index": 34,
      "type": "explore",
-     "title": "Where the fit and the simulation disagree",
+     "title": "Two radii inside the published boundary",
      "declares": {
       "stage": null,
       "bound": [
@@ -120454,30 +120778,30 @@
   }
  ],
  "totals": {
-  "steps": 1529,
-  "declared": 1411,
+  "steps": 1536,
+  "declared": 1392,
   "student": 165,
-  "engine": 177,
-  "model": 1001,
+  "engine": 178,
+  "model": 1003,
   "data": 159,
-  "diagram": 872,
-  "evidence": 395,
+  "diagram": 874,
+  "evidence": 399,
   "computation": 14,
-  "declaredButInert": 1246,
-  "prose": 64,
-  "mismatched": 8,
+  "declaredButInert": 1227,
+  "prose": 79,
+  "mismatched": 9,
   "rebuilds": 79,
   "canvas": {
-   "scene": 8,
+   "scene": 12,
    "portrait": 7,
-   "quiet": 62,
-   "unstated": 1452
+   "quiet": 88,
+   "unstated": 1429
   },
   "lessons": 124,
-  "loops": 202,
-  "closedLoops": 202,
-  "explainedLoops": 1,
-  "heldLoops": 201,
-  "completeLoops": 202
+  "loops": 204,
+  "closedLoops": 204,
+  "explainedLoops": 2,
+  "heldLoops": 202,
+  "completeLoops": 204
  }
 }

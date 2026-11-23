@@ -52,7 +52,7 @@
         "requests": 61
       },
       "observatory": {
-        "kb": 201.6,
+        "kb": 202.1,
         "requests": 18
       },
       "catalog": {
@@ -72,7 +72,7 @@
         "requests": 52
       },
       "composer": {
-        "kb": 548.0,
+        "kb": 548.3,
         "requests": 31
       },
       "course-builder": {
@@ -116,7 +116,7 @@
         "requests": 6
       },
       "course-packs": {
-        "kb": 741.8,
+        "kb": 742.2,
         "requests": 46
       },
       "sky": {
@@ -124,7 +124,7 @@
         "requests": 14
       },
       "compute": {
-        "kb": 182.2,
+        "kb": 182.5,
         "requests": 20
       }
     },
@@ -170,7 +170,7 @@
         "requests": 2
       },
       "figure": {
-        "kb": 684.1,
+        "kb": 684.2,
         "requests": 61
       },
       "experiments": {
@@ -178,7 +178,7 @@
         "requests": 4
       },
       "observatory": {
-        "kb": 96.2,
+        "kb": 96.4,
         "requests": 6
       },
       "catalog": {
@@ -198,7 +198,7 @@
         "requests": 3
       },
       "composer": {
-        "kb": 297.3,
+        "kb": 297.4,
         "requests": 16
       },
       "course-builder": {
@@ -242,7 +242,7 @@
         "requests": 2
       },
       "course-packs": {
-        "kb": 338.9,
+        "kb": 339.1,
         "requests": 13
       },
       "sky": {
@@ -250,7 +250,7 @@
         "requests": 4
       },
       "compute": {
-        "kb": 82.9,
+        "kb": 83.2,
         "requests": 3
       }
     }

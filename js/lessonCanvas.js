@@ -48,6 +48,7 @@ let owns = false;
 let more = null;
 /** The rail and the bar while they are in the More: element to its place. */
 const marks = new Map();
+let dock = null;
 let seen = 0;
 
 /** A portrait is a picture, so its step holds the clock as a reading step does. */
@@ -119,34 +120,47 @@ function words() {
   if (label) label.textContent = t('rail.mainControls.label');
 }
 
-/** Tuck the rail and playback bar behind one More (wireMore, surface 'stage'); put them back after. */
+/** Tuck the rail and playback bar behind one More, Settings and precise placement beside it (wireMore, surface 'stage'); put them back after. */
 function chromeFold(on) {
   if (!on) {
     for (const [el, mark] of marks) mark.replaceWith(el);
     marks.clear();
-    more?.remove();
-    more = null;
+    dock?.remove();
+    dock = more = null;
     return;
   }
   if (more) return;
+  dock = document.createElement('div');
+  dock.id = 'stageDock';
+  dock.className = 'stage-more';
   more = document.createElement('details');
   more.id = 'stageMore';
-  more.className = 'more stage-more';
+  more.className = 'more';
   more.append(document.createElement('summary'));
   const body = document.createElement('div');
   more.append(body);
   const held = document.activeElement;
-  for (const id of ['mainControls', 'timelineBar']) {
+  // Settings and precise placement stay beside the More, not behind it: the
+  // keyboard route to placing a body and the way to the settings never wait
+  // on a disclosure.
+  for (const [id, to] of [
+    ['settingsBtn', dock],
+    ['precisePlaceBtn', dock],
+    ['mainControls', body],
+    ['timelineBar', body],
+  ]) {
     const el = $(id);
     if (!el) continue;
     const mark = document.createComment(id);
     el.replaceWith(mark);
     marks.set(el, mark);
-    body.append(el);
+    to.append(el);
   }
-  document.body.append(more);
+  dock.append(more);
+  document.body.append(dock);
   wireMore(more, 'stage', { say: announce, locale: getLocale });
   if (body.contains(held)) more.firstChild.focus();
+  else if (dock.contains(held)) held.focus();
 }
 
 /**

@@ -1,0 +1,62 @@
+[
+ {
+  "depth": "core",
+  "role": "first",
+  "sid": "twice-a-day-everywhere",
+  "position": [
+   1,
+   36
+  ],
+  "title": "Mareas",
+  "subtitle": "Estira un mundo, mueve una luna y descubre por qué la gravedad puede desgarrar objetos",
+  "body": "<p class=\"inv-step-count\">Paso 1 de 36 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">Dos veces al día, en todas partes</h3><div class=\"inv-step-body\"><p>Ponte en casi cualquier costa y el mar sube y baja aproximadamente dos veces al día. No una. Dos.</p><p>Ese «dos» es todo el rompecabezas. La Luna está a un lado de la Tierra en cada momento, y el océano se abulta en <em>ambos</em> lados a la vez: hay una pleamar bajo la Luna y otra pleamar en la cara opuesta del planeta, a doce mil&nbsp;kilómetros de ella. Cualquier explicación que se reduzca a «la Luna atrae el agua hacia sí» predice un solo abultamiento y por tanto es errónea.</p><p>En pantalla está el sistema Tierra-Luna real: la Tierra en el centro y la Luna, <strong>Luna</strong>, en su órbita de 27,3&nbsp;días. La simulación es newtoniana y sin más artificios, y resulta que eso es todo lo que hace falta. Nada en esta investigación exige una fuerza que no esté ya en esa imagen. Lo que exige es una resta.</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> Mientras una investigación está en marcha, pulsar selecciona un objeto sin abrir la ficha del inspector, y la colocación de objetos nuevos queda desactivada para que un clic accidental no altere el sistema que estás midiendo.</p>",
+  "previousDisabled": true,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "graded",
+  "sid": "is-the-pull-the-same",
+  "position": [
+   2,
+   36
+  ],
+  "title": "Mareas",
+  "subtitle": "Estira un mundo, mueve una luna y descubre por qué la gravedad puede desgarrar objetos",
+  "body": "<p class=\"inv-step-count\">Paso 2 de 36 <span class=\"inv-step-kind\">predicción</span></p><h3 class=\"inv-step-title\">¿Es la atracción la misma en todas partes?</h3><div class=\"inv-step-body\"><p>La Tierra no es un punto. Es una bola de 12 742&nbsp;km de diámetro, y el lado que mira a la Luna está 12 742&nbsp;km más cerca de la Luna que el lado opuesto.</p><p>La gravedad se debilita con la distancia. Comprométete con una respuesta antes de que te muestren nada.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">La atracción gravitatoria de la Luna sobre la Tierra es…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">A</span><span>exactamente igual de intensa en todos los puntos de la Tierra</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">B</span><span>más intensa en el lado que mira a la Luna que en el lado opuesto</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">C</span><span>más intensa en el lado opuesto, porque tiene que llegar más lejos</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">D</span><span>sentida solo en el centro de la Tierra, donde se considera concentrada toda la masa</span></button></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "marked",
+  "sid": "is-the-pull-the-same",
+  "position": [
+   2,
+   36
+  ],
+  "title": "Mareas",
+  "subtitle": "Estira un mundo, mueve una luna y descubre por qué la gravedad puede desgarrar objetos",
+  "body": "<p class=\"inv-step-count\">Paso 2 de 36 <span class=\"inv-step-kind\">predicción</span></p><h3 class=\"inv-step-title\">¿Es la atracción la misma en todas partes?</h3><div class=\"inv-step-body\"><p>La Tierra no es un punto. Es una bola de 12 742&nbsp;km de diámetro, y el lado que mira a la Luna está 12 742&nbsp;km más cerca de la Luna que el lado opuesto.</p><p>La gravedad se debilita con la distancia. Comprométete con una respuesta antes de que te muestren nada.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">La atracción gravitatoria de la Luna sobre la Tierra es…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">A</span><span>exactamente igual de intensa en todos los puntos de la Tierra</span></button><button type=\"button\" class=\"inv-option is-chosen is-held\" data-option=\"1\" role=\"radio\" aria-checked=\"true\" disabled=\"\"><span class=\"inv-option-mark\">B</span><span>más intensa en el lado que mira a la Luna que en el lado opuesto</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">C</span><span>más intensa en el lado opuesto, porque tiene que llegar más lejos</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">D</span><span>sentida solo en el centro de la Tierra, donde se considera concentrada toda la masa</span></button></div><p class=\"inv-held\">Tu respuesta queda registrada. No se corrige hasta que llegues a «Tres puntos, tres atracciones», para que la decida el experimento y no la clave de respuestas.</p><button type=\"button\" class=\"ui-button subtle\" data-change=\"\">Cambiar respuesta</button>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "last",
+  "sid": "what-you-worked-out",
+  "position": [
+   36,
+   36
+  ],
+  "title": "Mareas",
+  "subtitle": "Estira un mundo, mueve una luna y descubre por qué la gravedad puede desgarrar objetos",
+  "body": "<p class=\"inv-step-count\">Paso 36 de 36 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">Lo que has deducido</h3><div class=\"inv-step-body\"><p><strong>Una marea es una diferencia.</strong> No una atracción. Quita la atracción sobre el centro a la atracción donde estás, y lo que queda es lo que deforma las cosas. Es la razón de que haya dos abultamientos y no uno, y la razón de que el lado lejano se abulte sin que nada lo empuje.</p><p><strong>La distancia domina.</strong> Una potencia de masa, tres potencias de separación. Por eso la Luna gana al Sol, por eso las dos últimas filas del gráfico comparativo difieren en cinco órdenes de magnitud, y por eso los efectos de marea suelen ser irrelevantes justo hasta que son catastróficos.</p><p><strong>El tamaño también importa.</strong> Un objeto más grande tiene los extremos más separados, así que siente una diferencia mayor. Tú no sientes prácticamente ninguna marea. La Tierra siente unos metros de ella.</p><p><strong>Romperse es una competición.</strong> El estiramiento contra el agarre propio del cuerpo. Dentro del límite de Roche gana el estiramiento, y ese límite es distinto para cada par de objetos, porque depende de lo que cae tanto como de aquello hacia lo que cae.</p><p><strong>El mismo mecanismo, catorce órdenes de magnitud.</strong> El mar subiendo por una playa, Ío mantenida fundida, la Luna mostrando una sola cara, los anillos de Saturno terminando donde terminan, un cometa estirado en fragmentos, y una estrella convertida en un reguero. Una resta.</p><p>Y una frase para conservar: <em>las mareas ocurren porque la gravedad no es igual de intensa a lo largo de un objeto extenso; la diferencia crece bruscamente a medida que los objetos se acercan, y en casos extremos vence a la propia gravedad del objeto y lo desgarra.</em></p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> La próxima vez que veas una tabla de mareas, fíjate en que lista dos pleamares y dos bajamares al día, y en que son mayores alrededor de la luna nueva y la llena. Ambas cosas son cosas que ahora sabes explicar.</p>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ }
+]
