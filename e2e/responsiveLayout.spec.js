@@ -49,8 +49,14 @@ const DESKTOP_SIZES = [
 ];
 const sizesFor = info => SIZES[info.project.name] ?? DESKTOP_SIZES;
 
-/** The step with an instrument and a graph, and a step of prose. */
+/**
+ * The step with an instrument and a graph, and a step of prose. The tides
+ * measuring step holds a quiet canvas: the transport bar is folded into a
+ * More, and Settings and precise placement stay beside it.
+ */
 const MEASURE_STEP = '/?author=tides&step=10';
+/** A measuring step on a loud canvas, where the transport bar stays in view. */
+const LOUD_MEASURE_STEP = '/?author=power-law-gravity&step=11';
 const READ_STEP = '/?author=tides&step=1';
 
 const APP_REGIONS = {
@@ -71,6 +77,7 @@ const LESSON_REGIONS = {
   tool: '#investigationTool',
   plot: '#investigationPlot',
   tabs: '#investigationDockTabs',
+  dock: '#stageDock',
 };
 /** What the canvas is measured against: the bars and the lesson's panels. */
 const COVERING = ['shell', 'transport', 'lesson', 'tool', 'plot', 'tabs'];
@@ -358,19 +365,23 @@ test.describe('the four layouts', () => {
           'the graph is shown beside it on a desktop only'
         ).toBe(!tabbed);
         expect(overlaps(boxes), 'regions that overlap').toEqual([]);
-        expect(
-          freeShare(boxes, width, height),
-          'the share of the window left to the canvas'
-        ).toBeGreaterThanOrEqual(1 / 3);
+        // The canvas is quiet: nothing is drawn on it, and the instrument takes
+        // the lesson rail's width (e2e/lessonLayoutDesktop.spec.js), so the
+        // share a scene keeps is measured on the loud step below.
         await expectPressable(page, '#investigationNext');
         await expectPressable(page, '#investigationPrev');
-        await expectPressable(page, '#timelinePlay');
+        // The transport waits in the More, and Settings and precise
+        // placement are pressable without opening it.
+        await expect(page.locator('#stageMore')).toBeVisible();
+        await expectPressable(page, '#stageMore > summary');
+        await expectPressable(page, '#settingsBtn');
+        await expectPressable(page, '#precisePlaceBtn');
         await expectNoSidewaysScroll(page);
         await expectFingerSized(page, [
           '#investigationPanel',
           '#investigationTool',
           '#investigationDockTabs',
-          '#timelineBar',
+          '#stageDock',
         ]);
 
         // The phone folds the objects list the first time; elsewhere it opens.
@@ -387,15 +398,31 @@ test.describe('the four layouts', () => {
             false
           );
           expect(overlaps(swapped), 'regions that overlap').toEqual([]);
-          expect(freeShare(swapped, width, height)).toBeGreaterThanOrEqual(
-            1 / 3
-          );
           await expectPressable(page, '#investigationPlotLog');
           // And it is a radio group, so the keyboard moves between them.
           await page.locator('#investigationDockPlot').focus();
           await page.keyboard.press('ArrowLeft');
           await expect(page.locator('#investigationDockTool')).toBeChecked();
         }
+      });
+    }
+
+    // A measuring step on a loud canvas keeps the transport bar in view, and
+    // the share of the window left to the canvas is a third there as well.
+    for (const [width, height] of sizesFor(info)) {
+      await test.step(`loud canvas ${width}x${height}`, async () => {
+        await page.setViewportSize({ width, height });
+        await openStep(page, app, LOUD_MEASURE_STEP);
+        await expect(page.locator('#investigationToolCanvas')).toBeVisible();
+        const boxes = await regions(page, LESSON_REGIONS);
+        expect(Boolean(boxes.tool), 'the instrument is shown').toBe(true);
+        expect(overlaps(boxes), 'regions that overlap').toEqual([]);
+        expect(
+          freeShare(boxes, width, height),
+          'the share of the window left to the canvas'
+        ).toBeGreaterThanOrEqual(1 / 3);
+        await expectPressable(page, '#timelinePlay');
+        await expectNoSidewaysScroll(page);
       });
     }
   });

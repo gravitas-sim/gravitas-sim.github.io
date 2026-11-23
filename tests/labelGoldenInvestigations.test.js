@@ -99,8 +99,9 @@ describe('the recording', () => {
     expect(ellipse.en.all.distinct).toBe(981);
     const steps = Object.values(plots.en).flatMap(l => Object.values(l));
     expect(steps.length).toBe(6);
+    // 14 variants since the four-distance graph stopped offering a transform.
     expect(steps.flatMap(s => Object.keys(s.variants)).length).toBeGreaterThan(
-      14
+      13
     );
     for (const s of steps)
       for (const v of Object.values(s.variants))

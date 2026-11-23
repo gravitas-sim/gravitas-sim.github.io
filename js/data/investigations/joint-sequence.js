@@ -459,14 +459,14 @@ export const RADIAL_VELOCITY_DEEPER = {
   steps: [
     {
       sid: 'the-star-in-the-density',
-      after: 'how-dense-is-it',
+      after: 'density-from-your-mass',
       depth: 'advanced',
       type: 'read',
       title: 'The star in the density',
       body: `The 0.33 g/cm³ you just read took the star as given. It was not: the radius is the transit&rsquo;s radius ratio times the
              star&rsquo;s radius, the mass needs the star&rsquo;s mass, and the density needs both. The panel below fits a transit and
              thirty velocities together for a synthetic hot Jupiter of about this size, with one period and one epoch for both, and
-             carries the star&rsquo;s stated uncertainty into the planet. Two more things the fit does that your reading did not: it
+             carries the star&rsquo;s stated uncertainty into the planet (<em>What Is It Made Of?</em> takes this panel further). Two more things the fit does that your reading did not: it
              lets the orbit be eccentric (the velocities then fix <em>e</em> and the transit&rsquo;s duration moves with it), and it
              lets the velocities scatter more than their error bars say, the <em>jitter</em>.`,
       tool: JOINT(),
@@ -565,7 +565,7 @@ export const RADIAL_VELOCITY_DEEPER_ES = {
       body: `Los 0,33 g/cm³ que acabas de leer tomaron la estrella como dada. No lo era: el radio es el cociente de radios del tránsito por el radio de la
              estrella, la masa necesita la masa de la estrella, y la densidad necesita ambas. El panel de abajo ajusta juntos un tránsito y treinta
              velocidades de un Júpiter caliente sintético de este tamaño, con un período y una época para ambos, y lleva la incertidumbre declarada
-             de la estrella al planeta. Dos cosas más que hace el ajuste y tu lectura no: deja la órbita ser excéntrica (las velocidades fijan entonces
+             de la estrella al planeta (<em>¿De qué está hecho?</em> lleva este panel más lejos). Dos cosas más que hace el ajuste y tu lectura no: deja la órbita ser excéntrica (las velocidades fijan entonces
              <em>e</em> y la duración del tránsito se mueve con ella), y deja que las velocidades se dispersen más de lo que dicen sus barras de
              error, la <em>fluctuación</em>.`,
     },

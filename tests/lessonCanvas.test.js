@@ -132,7 +132,8 @@ describe('the page', () => {
     <div id="mainControls">
       <button class="rail-section-toggle" id="railScenario" aria-expanded="true"></button>
       <button class="rail-section-toggle" id="railState" aria-expanded="false"></button>
-      <div class="object-add" id="objectAdd"></div>
+      <button id="settingsBtn"></button>
+      <div class="object-add" id="objectAdd"><button id="precisePlaceBtn"></button></div>
     </div>
     <div id="timelineBar"><button id="timelinePlay">Play</button></div>`;
   const canvas = () => document.getElementById('simulationCanvas');
@@ -214,6 +215,12 @@ describe('the page', () => {
     expect(more().open).toBe(false);
     expect(more().contains(rail)).toBe(true);
     expect(more().contains(bar())).toBe(true);
+    // Settings and precise placement are beside it, not in it: reachable shut.
+    for (const id of ['settingsBtn', 'precisePlaceBtn']) {
+      const el = document.getElementById(id);
+      expect(more().contains(el)).toBe(false);
+      expect(more().parentElement.contains(el)).toBe(true);
+    }
     // A reader who opens a section of the rail keeps it as it was.
     document.getElementById('railState').click();
     enterCanvas(quiet);
@@ -224,6 +231,11 @@ describe('the page', () => {
     expect(rail.parentElement).toBe(document.body);
     expect(rail.nextElementSibling).toBe(bar());
     expect(rail.previousElementSibling).toBe(reset());
+    // And the two kept controls are home in the rail again.
+    expect(document.getElementById('settingsBtn').parentElement).toBe(rail);
+    expect(document.getElementById('precisePlaceBtn').parentElement).toBe(
+      document.getElementById('objectAdd')
+    );
   });
 
   test('leaving mid-step hands the rail, the bar and the world back', () => {
