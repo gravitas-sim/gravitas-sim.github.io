@@ -131,7 +131,10 @@ test.describe('choosing a source', () => {
     const later = await scene(page);
     expect(later.crests).toBe(0);
     expect(later.waveActive).toBe(false);
-    expect((await rows(page)).join(' ')).toMatch(/Birkhoff/);
+    // The screen is a prediction, so the readout must not answer it: the
+    // "Does this radiate?" row (Birkhoff's theorem) is hidden here, and the
+    // reveal and the next screen give it.
+    expect((await rows(page)).join(' ')).not.toMatch(/Birkhoff/);
   });
 
   test('a binary emits, and the crests are the model’s own', async ({
