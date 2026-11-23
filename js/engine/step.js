@@ -19,7 +19,11 @@ import {
   screenToWorld,
   isOffscreen,
 } from '../utils.js';
-import { recordBarycenter } from '../referenceFrame.js';
+import {
+  recordBarycenter,
+  followedBodyId,
+  followBody,
+} from '../referenceFrame.js';
 import { followCamera, resetFollowCamera } from '../followCamera.js';
 import { hitRadius } from '../bodyVisuals.js';
 import {
@@ -1019,67 +1023,7 @@ export const updatePhysics = dt => {
     )
   );
 
-  // Follow mode logic
-  let target = null;
-  if (physicsSettings.follow_mode !== 'None') {
-    // Every option the settings menu offers. Four of them - Asteroid, Comet,
-    // NeutronStar, WhiteDwarf - were listed in the control and missing from
-    // this map, so choosing one silently followed nothing at all.
-    const follow_map = {
-      Galaxy: galaxies,
-      BlackHole: bh_list,
-      Planet: planets,
-      GasGiant: gas_giants,
-      Star: stars,
-      Asteroid: asteroids,
-      Comet: comets,
-      NeutronStar: neutron_stars,
-      WhiteDwarf: white_dwarfs,
-    };
-    const target_list = follow_map[physicsSettings.follow_mode];
-    if (target_list && target_list.length > 0) {
-      if (target_list.length > 1) {
-        let totalMass = 0,
-          com = { x: 0, y: 0 };
-        target_list.forEach(obj => {
-          com.x += obj.pos.x * obj.mass;
-          com.y += obj.pos.y * obj.mass;
-          totalMass += obj.mass;
-        });
-        if (totalMass > 0)
-          target = { pos: { x: com.x / totalMass, y: com.y / totalMass } };
-      } else {
-        target = target_list[0];
-      }
-    }
-  }
-  if (state) {
-    // What is being followed, as an identity rather than an object: switching
-    // from one black hole to another, or to the center of mass of a pair, is a
-    // new camera and must not inherit the previous one's manual offset.
-    const followKey = target
-      ? `${physicsSettings.follow_mode}:${target.id ?? 'com'}`
-      : null;
-    if (state.followTarget !== followKey) {
-      resetFollowCamera(state);
-      state.followTarget = followKey;
-    }
-
-    if (target) {
-      const applied = followCamera({
-        targetPos: target.pos,
-        frameOffset: state.frameOffset,
-        zoom: state.zoom,
-        pan: state.pan,
-        lastApplied: state.followPan,
-        offset: state.followOffset,
-      });
-      state.pan.x = applied.pan.x;
-      state.pan.y = applied.pan.y;
-      state.followOffset = applied.offset;
-      state.followPan = { x: applied.pan.x, y: applied.pan.y };
-    }
-  }
+  applyFollow();
 
   // Update energy history for all objects (sample every 10 frames for performance)
   if (state && state.frame_count % ENERGY_SAMPLE_RATE === 0) {
@@ -1090,6 +1034,114 @@ export const updatePhysics = dt => {
   // set is empty unless something armed a watch, so the ordinary cost is one
   // size check per step. See onPhysicsStep().
   runStepListeners(dt, simulationTime);
+};
+
+// The name of the body followed by id, kept while it lives, for the one
+// sentence that says the follow stopped when it has gone.
+let followedName = '';
+
+/**
+ * What the camera follows now: a body named by id, or Follow Mode's choice by
+ * type (one body, or the mass-weighted centre of several). Each clears the
+ * other: a Follow Mode chosen after a body was followed ends the follow by id.
+ *
+ * @returns {?{key: string, pos: {x: number, y: number}}} The target, or null
+ */
+const followTargetNow = () => {
+  const id = followedBodyId();
+  if (id !== null) {
+    if (physicsSettings.follow_mode !== 'None') {
+      followBody(null, 'mode');
+      return null;
+    }
+    let body = null;
+    for (const list of [bh_list, galaxies, stars, neutron_stars, white_dwarfs])
+      body ??= list.find(b => b.id === id);
+    body ??= cachedAllPhysicsObjects.find(b => b.id === id);
+    if (!body || body.alive === false) {
+      followBody(null, 'lost', { name: followedName });
+      return null;
+    }
+    followedName = body.name || '';
+    return { key: `id:${id}`, pos: body.pos };
+  }
+  if (physicsSettings.follow_mode === 'None') return null;
+  // Every option the settings menu offers. Four of them - Asteroid, Comet,
+  // NeutronStar, WhiteDwarf - were listed in the control and missing from
+  // this map, so choosing one silently followed nothing at all.
+  const follow_map = {
+    Galaxy: galaxies,
+    BlackHole: bh_list,
+    Planet: planets,
+    GasGiant: gas_giants,
+    Star: stars,
+    Asteroid: asteroids,
+    Comet: comets,
+    NeutronStar: neutron_stars,
+    WhiteDwarf: white_dwarfs,
+  };
+  const target_list = follow_map[physicsSettings.follow_mode];
+  if (!target_list || target_list.length === 0) return null;
+  let target = null;
+  if (target_list.length > 1) {
+    let totalMass = 0,
+      com = { x: 0, y: 0 };
+    target_list.forEach(obj => {
+      com.x += obj.pos.x * obj.mass;
+      com.y += obj.pos.y * obj.mass;
+      totalMass += obj.mass;
+    });
+    if (totalMass > 0)
+      target = { pos: { x: com.x / totalMass, y: com.y / totalMass } };
+  } else {
+    target = target_list[0];
+  }
+  // What is being followed, as an identity rather than an object: switching
+  // from one black hole to another, or to the center of mass of a pair, is a
+  // new camera and must not inherit the previous one's manual offset.
+  return target
+    ? {
+        key: `${physicsSettings.follow_mode}:${target.id ?? 'com'}`,
+        pos: target.pos,
+      }
+    : null;
+};
+
+/**
+ * Put the camera on what is followed. Called at the end of each step and again
+ * by the renderer once it has resolved the frame for the picture it is about to
+ * draw, so the followed body is centred in that picture and not in the last
+ * one. The second call finds the pan it wrote and adds no offset.
+ */
+export const applyFollow = () => {
+  const target = followTargetNow();
+  if (!state) return;
+  const followKey = target ? target.key : null;
+  if (state.followTarget !== followKey) {
+    resetFollowCamera(state);
+    state.followTarget = followKey;
+  }
+  if (!target) return;
+  // The target in the frame's own coordinates (less the origin, turned by a
+  // rotating frame), handed to the camera with no offset of its own, so the
+  // camera's rule is the one it always had.
+  const off = state.frameOffset || { x: 0, y: 0 };
+  let fx = target.pos.x - off.x;
+  let fy = target.pos.y - off.y;
+  const r = state.frameRotation;
+  if (r) [fx, fy] = [r.cos * fx + r.sin * fy, -r.sin * fx + r.cos * fy];
+  const applied = followCamera({
+    targetPos: { x: fx, y: fy },
+    frameOffset: null,
+    zoom: state.zoom,
+    pan: state.pan,
+    lastApplied: state.followPan,
+    offset: state.followOffset,
+  });
+  state.pan.x = applied.pan.x;
+  state.pan.y = applied.pan.y;
+  state.followOffset = applied.offset;
+  state.followPan = { x: applied.pan.x, y: applied.pan.y };
 };
 
 export const findObjectAtPosition = worldPos => {

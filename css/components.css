@@ -6746,6 +6746,12 @@
   outline-offset: 2px;
 }
 
+/* Follow this body, while it is followed. */
+.inspector-follow[aria-pressed='true'] {
+  background: var(--surface-3);
+  color: var(--accent);
+}
+
 #pinnedInspectors {
   /* A positioning context only; the cards themselves are fixed. */
   position: absolute;

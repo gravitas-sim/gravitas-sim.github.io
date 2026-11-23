@@ -78,11 +78,14 @@ import {
   frameOriginVelocity,
   resolveFrameOrigin,
   frameState,
+  toFrameCoords,
+  velocityInFrame,
 } from './referenceFrame.js';
 import { t, registerMessages } from './i18n/index.js';
 import { EN_ORBITGEOMETRYROW } from './i18n/en.orbitGeometryRow.js';
 import { ES_ORBITGEOMETRYROW } from './i18n/es.orbitGeometryRow.js';
 import { formatSpeed, formatDistance } from './units.js';
+import { sayFrame } from './inspectorGate.js';
 import { state, SETTINGS, current_scenario_name, command } from './appState.js';
 
 // The orbit geometry row's words, so it is named offline; quiet, so a lesson step is not repainted.
@@ -244,6 +247,7 @@ export const wireInspectorOverlayToggles = () => {
       const current = frameState();
       const isOn = current.mode === OBJECT && current.objectId === obj.id;
       setFrame(isOn ? WORLD : OBJECT, isOn ? null : obj.id);
+      sayFrame();
     };
   }
 
@@ -340,6 +344,7 @@ export const buildInspectorView = (object, type, info) => {
   const frameOrigin = resolveFrameOrigin(barycenterBodies());
   const frameLabel = () => {
     const frame = frameState();
+    if (frame.pair) return 'the pair\u2019s barycenter';
     return frame.mode === BARYCENTER
       ? 'barycenter'
       : barycenterBodies().find(b => b.id === frame.objectId)?.name ||
@@ -352,8 +357,9 @@ export const buildInspectorView = (object, type, info) => {
   // the Sun. A direction and a distance are also what an observer on the origin
   // body would actually record, which is what makes them the measurable ones.
   if (frameOrigin && object !== null && object.pos) {
-    const dx = object.pos.x - frameOrigin.now.x;
-    const dy = object.pos.y - frameOrigin.now.y;
+    // In the frame's own axes, so a rotating frame's direction is the one
+    // the picture shows.
+    const { x: dx, y: dy } = toFrameCoords(object.pos, frameOrigin);
     const sep = Math.hypot(dx, dy);
     if (sep > 0) {
       const against = frameLabel();
@@ -376,12 +382,10 @@ export const buildInspectorView = (object, type, info) => {
     }
   }
 
-  if (originVel && object.vel) {
+  const inFrame = originVel && velocityInFrame(object, barycenterBodies());
+  if (inFrame) {
     const against = frameLabel();
-    const relative = Math.hypot(
-      object.vel.x - originVel.x,
-      object.vel.y - originVel.y
-    );
+    const relative = Math.hypot(inFrame.x, inFrame.y);
     rows.push({
       key: 'frameRelativeSpeed',
       label: `Speed vs ${against}`,

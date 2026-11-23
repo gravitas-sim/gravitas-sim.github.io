@@ -67,7 +67,13 @@ import {
   updatePhysicsSettings,
 } from './physics.js';
 import { debugLog } from './utils.js';
-import { setFrame, resetFrame, frameState } from './referenceFrame.js';
+import {
+  setFrame,
+  resetFrame,
+  frameState,
+  LINKED_MODES,
+  WORLD,
+} from './referenceFrame.js';
 import {
   getPositionAngle,
   getInclination,
@@ -538,7 +544,13 @@ const captureShareState = ({
   // Written through withExtras(), the one codec, rather than a second
   // serializer alongside it: readExtras() already supplies defaults for links
   // that predate any of this.
-  const frame = frameState();
+  // Links carry the world, barycenter and body frames. The pair and rotating
+  // frames are written as the world frame, which every build opens, and the
+  // share dialog says so (js/share.js).
+  const live = frameState();
+  const frame = LINKED_MODES.includes(live.mode)
+    ? live
+    : { mode: WORLD, objectId: null };
   const starId = observedStarId();
   const extras = withExtras(
     {},

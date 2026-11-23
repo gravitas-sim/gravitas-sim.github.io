@@ -1745,25 +1745,27 @@ try {
             <select
               id="referenceFrameSelect"
               class="rail-select"
-              title="Re-express every position, and every trail, in the frame of the barycenter or of the selected object. Unlike Follow Mode this redraws the paths themselves, so the Solar System seen from Earth shows Mars looping backwards."
+              title="Re-express every position, and every trail, in the frame of the barycenter, of the selected body, or of the selected body and its primary (still or turning with them). Unlike Follow Mode this redraws the paths themselves, so the Solar System seen from Earth shows Mars looping backwards."
               data-i18n-title="rail.referenceFrameSelect.hint"
             >
               <option value="world" data-i18n="rail.referenceFrameSelect">
                 World
               </option>
               <option
-                value="barycenter"
-                data-i18n="rail.referenceFrameSelect.2"
-              >
-                Barycenter
-              </option>
-              <option
                 value="object"
                 disabled=""
                 data-i18n="rail.referenceFrameSelect.3"
               >
-                Selected object
+                Centered on selected body
               </option>
+              <option
+                value="barycenter"
+                data-i18n="rail.referenceFrameSelect.2"
+              >
+                Barycenter of the system
+              </option>
+              <option value="pair" disabled="" data-scene-i18n="rail.frame.pair">Barycenter of selected body and its primary</option>
+              <option value="rotating" disabled="" data-scene-i18n="rail.frame.rotating">Rotating with selected body and its primary</option>
             </select>
           </div>
           <p class="rail-field-note" id="referenceFrameNote" hidden=""></p>
@@ -2451,6 +2453,7 @@ try {
           <strong data-i18n="share.shareStale">Exact state now</strong> to send
           what is on screen.
         </p>
+        <p id="shareFrameNote" class="share-note" hidden=""></p>
         <p
           id="shareWarning"
           class="share-warning"

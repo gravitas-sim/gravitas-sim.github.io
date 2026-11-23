@@ -174,8 +174,15 @@ export function fitNow(points, maxZoom = 3) {
   const scale = canvas?.clientWidth ? canvas.width / canvas.clientWidth : 1;
   const inset = lessonInset();
   const off = state.frameOffset || { x: 0, y: 0 };
+  // In the frame's own coordinates: less the origin, turned by a rotating frame.
+  const r = state.frameRotation;
+  const inFrame = (x, y) =>
+    r ? { x: r.cos * x + r.sin * y, y: -r.sin * x + r.cos * y } : { x, y };
   const camera = fitCamera(
-    points.map(p => ({ x: p.x - off.x, y: p.y - off.y, radius: p.radius })),
+    points.map(p => ({
+      ...inFrame(p.x - off.x, p.y - off.y),
+      radius: p.radius,
+    })),
     { width: window.innerWidth * scale, height: window.innerHeight * scale },
     {
       maxZoom,

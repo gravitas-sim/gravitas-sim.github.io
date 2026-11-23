@@ -29,7 +29,14 @@ import { timeUnitSeconds } from './units.js';
 import { decimal } from './format.js';
 import { dominantPrimary } from './orbital.js';
 import { barycenterOf, drawBarycenterCross } from './lesson/barycenter.js';
-import { frameState, WORLD, BARYCENTER, OBJECT } from './referenceFrame.js';
+import {
+  frameState,
+  hasTrailGap,
+  WORLD,
+  BARYCENTER,
+  OBJECT,
+  ROTATING,
+} from './referenceFrame.js';
 import {
   t,
   getLocale,
@@ -67,27 +74,39 @@ if (typeof document !== 'undefined') {
 /**
  * What the readout and the canvas call the frame the picture is drawn in.
  * @param {Array} [bodies] - Live bodies, for a body frame's name
- * @returns {string} World, Barycenter, or the body's name
+ * @returns {string} World, the system's barycenter, centered on a body, or a
+ *   pair's barycenter or rotating frame, named by its bodies
  */
 export function frameName(bodies = barycenterBodies()) {
   const f = frameState();
-  if (f.mode === BARYCENTER) return t('frame.barycenter');
+  const named = id => {
+    const body = bodies.find(b => b && b.id === id && b.alive !== false);
+    return body ? body.name || t('frame.object') : null;
+  };
+  if (f.mode === BARYCENTER) return t('frame.system');
   if (f.mode === OBJECT) {
-    const body = bodies.find(b => b && b.id === f.objectId);
-    if (body && body.alive !== false) return body.name || t('frame.object');
+    const body = named(f.objectId);
+    if (body) return t('frame.centred', { body });
+  }
+  if (f.pair) {
+    const [a, b] = f.pair.map(named);
+    if (a && b)
+      return t(f.mode === ROTATING ? 'frame.rotating' : 'frame.pair', { a, b });
   }
   return t('frame.world');
 }
 
 /**
- * The frame in one line, saying the trails follow it when it is not the world.
+ * The frame in one line, saying the trails follow it when it is not the world,
+ * and once, when a trail is drawn shorter than it is recorded, that the older
+ * part is not shown (the frame was not recorded then).
  * @param {Array} [bodies] - Live bodies
  * @returns {string} The line
  */
 export function frameLine(bodies = barycenterBodies()) {
   const name = frameName(bodies);
-  const world = frameState().mode === WORLD;
-  return t(world ? 'frame.line' : 'frame.line.trails', { name });
+  if (frameState().mode === WORLD) return t('frame.line', { name });
+  return t(hasTrailGap() ? 'frame.line.gap' : 'frame.line.trails', { name });
 }
 
 /** @returns {Array<[string, string]>} The readout's Frame row */

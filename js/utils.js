@@ -130,11 +130,16 @@ export const worldToScreen = (worldPos, state, canvas) => {
   // The reference frame is subtracted here rather than folded into the pan, so
   // a user who has panned somewhere keeps that pan when they change frames.
   const off = state.frameOffset;
-  const ox = off ? off.x : 0;
-  const oy = off ? off.y : 0;
+  let x = worldPos.x - (off ? off.x : 0);
+  let y = worldPos.y - (off ? off.y : 0);
+  // A rotating frame turns by minus its angle, the same turn the canvas
+  // transform applies (js/render.js), so what is placed here and what is drawn
+  // there agree.
+  const r = state.frameRotation;
+  if (r) [x, y] = [r.cos * x + r.sin * y, -r.sin * x + r.cos * y];
   return {
-    x: (worldPos.x - ox) * state.zoom + state.pan.x + canvas.width / 2,
-    y: -(worldPos.y - oy) * state.zoom + state.pan.y + canvas.height / 2,
+    x: x * state.zoom + state.pan.x + canvas.width / 2,
+    y: -y * state.zoom + state.pan.y + canvas.height / 2,
   };
 };
 
@@ -147,12 +152,11 @@ export const worldToScreen = (worldPos, state, canvas) => {
  */
 export const screenToWorld = (screenPos, state, canvas) => {
   const off = state.frameOffset;
-  const ox = off ? off.x : 0;
-  const oy = off ? off.y : 0;
-  return {
-    x: (screenPos.x - state.pan.x - canvas.width / 2) / state.zoom + ox,
-    y: -(screenPos.y - state.pan.y - canvas.height / 2) / state.zoom + oy,
-  };
+  let x = (screenPos.x - state.pan.x - canvas.width / 2) / state.zoom;
+  let y = -(screenPos.y - state.pan.y - canvas.height / 2) / state.zoom;
+  const r = state.frameRotation;
+  if (r) [x, y] = [r.cos * x - r.sin * y, r.sin * x + r.cos * y];
+  return { x: x + (off ? off.x : 0), y: y + (off ? off.y : 0) };
 };
 
 /**

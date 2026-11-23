@@ -18,7 +18,30 @@ import {
   frameShifts,
   frameOriginVelocity,
   resetFrameModule,
+  PAIR,
+  ROTATING,
+  LINKED_MODES,
+  framePair,
+  isRotatingFrame,
+  transferFrame,
+  toFrameCoords,
+  velocityInFrame,
+  pairSamples,
+  hasTrailGap,
+  followBody,
+  followedBodyId,
+  transferFollow,
+  onFollowChange,
 } from '../js/referenceFrame.js';
+import { trailShifts, framedTrail } from '../js/frameView.js';
+import { readFileSync } from 'node:fs';
+
+const TOL = JSON.parse(
+  readFileSync(
+    new URL('./fixtures/frame-tolerances.json', import.meta.url),
+    'utf8'
+  )
+);
 
 const body = (id, x, y, mass = 1, extra = {}) => ({
   id,
@@ -395,5 +418,221 @@ describe('frameOriginVelocity', () => {
   test('a frame whose body is gone reports nothing', () => {
     setFrame(OBJECT, 9);
     expect(frameOriginVelocity([moving(1, 1, 1)])).toBeNull();
+  });
+});
+
+describe('the pair frames', () => {
+  test('a pair frame takes two different ids, and nothing else', () => {
+    setFrame(PAIR, [1, 2]);
+    expect(frameState()).toEqual({ mode: PAIR, objectId: null, pair: [1, 2] });
+    expect(framePair()).toEqual([1, 2]);
+    expect(isRotatingFrame()).toBe(false);
+    setFrame(ROTATING, [1, 2]);
+    expect(isRotatingFrame()).toBe(true);
+    for (const bad of [null, [1], [1, 1], [1, null], 7]) {
+      setFrame(ROTATING, [1, 2]);
+      setFrame(PAIR, bad);
+      expect(frameState()).toEqual({ mode: WORLD, objectId: null });
+    }
+  });
+
+  test('an unknown mode (a later build’s link) is the world frame', () => {
+    setFrame(OBJECT, 3);
+    setFrame('spiral', 3);
+    expect(frameState()).toEqual({ mode: WORLD, objectId: null });
+  });
+
+  test('links carry the world, barycenter and body frames only', () => {
+    expect([...LINKED_MODES].sort()).toEqual(
+      [BARYCENTER, OBJECT, WORLD].sort()
+    );
+  });
+
+  test('history is recorded only while a pair frame is chosen, and starts with it', () => {
+    const a = body(1, 0, 0, 3);
+    const b = body(2, 4, 0, 1);
+    recordBarycenter(0, [a, b], 10);
+    expect(pairSamples()).toHaveLength(0);
+    setFrame(PAIR, [1, 2]);
+    recordBarycenter(1, [a, b], 10);
+    expect(pairSamples()).toEqual([{ tick: 1, x: 1, y: 0, c: 1, s: 0 }]);
+    setFrame(BARYCENTER);
+    expect(pairSamples()).toHaveLength(0);
+  });
+
+  test('a merger moves a pair frame on, or onto the product', () => {
+    setFrame(ROTATING, [1, 2]);
+    // A new body replaces one member: the pair keeps turning with it.
+    expect(transferFrame([2, 5], 9)).toBe(true);
+    expect(frameState()).toEqual({
+      mode: ROTATING,
+      objectId: null,
+      pair: [1, 9],
+    });
+    // The two members become one: the frame is centered on that body.
+    expect(transferFrame([1, 9], 1)).toBe(true);
+    expect(frameState()).toEqual({ mode: OBJECT, objectId: 1 });
+  });
+
+  test('a frame whose pair member has gone resolves to nothing', () => {
+    setFrame(PAIR, [1, 2]);
+    expect(resolveFrameOrigin([body(1, 0, 0)])).toBeNull();
+  });
+});
+
+describe('leg 1: the rotating frame against an analytic circular pair', () => {
+  // Masses 1 and 0.03, separation 8: the lagrange-point-lab pair. The centre
+  // drifts at a constant velocity so the translation is exercised too.
+  const m1 = 1;
+  const m2 = 0.03;
+  const mu = m2 / (m1 + m2);
+  const d = 8;
+  const n = 0.0731;
+  const L4 = { x: (0.5 - mu) * d, y: (Math.sqrt(3) / 2) * d };
+  const centre = t => ({ x: 5 + 0.3 * t, y: -2 + 0.1 * t });
+  const place = (t, [fx, fy]) => {
+    const th = 0.4 + n * t;
+    const c = centre(t);
+    return {
+      x: c.x + Math.cos(th) * fx - Math.sin(th) * fy,
+      y: c.y + Math.sin(th) * fx + Math.cos(th) * fy,
+    };
+  };
+
+  function run(mode) {
+    const a = body(1, 0, 0, m1);
+    const b = body(2, 0, 0, m2);
+    const p = body(3, 0, 0, 1e-9);
+    setFrame(mode, [1, 2]);
+    let worst = 0;
+    let worstOrigin = 0;
+    for (let t = 0; t < TOL.leg1.ticks; t++) {
+      a.pos = place(t, [-mu * d, 0]);
+      b.pos = place(t, [(1 - mu) * d, 0]);
+      p.pos = place(t, [L4.x, L4.y]);
+      p.trail.push({ x: p.pos.x, y: p.pos.y, tick: t, age: 0, velocity: 1 });
+      recordBarycenter(t, [a, b, p], 1000);
+      const origin = resolveFrameOrigin([a, b, p]);
+      // The origin against plain mass-weighted sums.
+      const cx = (m1 * a.pos.x + m2 * b.pos.x) / (m1 + m2);
+      const cy = (m1 * a.pos.y + m2 * b.pos.y) / (m1 + m2);
+      worstOrigin = Math.max(
+        worstOrigin,
+        Math.hypot(origin.now.x - cx, origin.now.y - cy) / d
+      );
+      if (mode === ROTATING) {
+        const r = toFrameCoords(p.pos, origin);
+        worst = Math.max(worst, Math.hypot(r.x - L4.x, r.y - L4.y) / d);
+      }
+    }
+    return { a, b, p, worst, worstOrigin };
+  }
+
+  test('rotating coordinates of the L4 point hold to rounding for 100 ticks', () => {
+    const { worst, worstOrigin } = run(ROTATING);
+    console.log(
+      `leg 1: L4 in the rotating frame, worst ${worst.toExponential(3)}; origin ${worstOrigin.toExponential(3)} of the separation (bound ${TOL.leg1.relativeToSeparation})`
+    );
+    expect(worst).toBeLessThanOrEqual(TOL.leg1.relativeToSeparation);
+    expect(worstOrigin).toBeLessThanOrEqual(TOL.leg1.relativeToSeparation);
+  });
+
+  test('its trail, redrawn in the rotating frame, collapses onto L4', () => {
+    const { a, b, p } = run(ROTATING);
+    const newest = TOL.leg1.ticks - 1;
+    const origin = resolveFrameOrigin([a, b, p]);
+    const shifts = trailShifts(origin, newest, TOL.leg1.ticks + 2);
+    const drawn = framedTrail(p.trail, shifts, newest);
+    expect(drawn).toHaveLength(TOL.leg1.ticks);
+    let worst = 0;
+    for (const q of drawn) {
+      // The canvas turns what framedTrail returns by minus the angle now,
+      // about the origin now: the same map toFrameCoords applies.
+      const r = toFrameCoords(q, origin);
+      worst = Math.max(worst, Math.hypot(r.x - L4.x, r.y - L4.y) / d);
+    }
+    console.log(
+      `leg 1: trail in the rotating frame, worst ${worst.toExponential(3)}`
+    );
+    expect(worst).toBeLessThanOrEqual(TOL.leg1.relativeToSeparation);
+    expect(hasTrailGap()).toBe(false);
+  });
+
+  test('in the pair frame the same trail is the circle it was, about a still centre', () => {
+    const { a, b, p } = run(PAIR);
+    const newest = TOL.leg1.ticks - 1;
+    const origin = resolveFrameOrigin([a, b, p]);
+    expect(origin.rotation).toBeUndefined();
+    const drawn = framedTrail(
+      p.trail,
+      trailShifts(origin, newest, TOL.leg1.ticks + 2),
+      newest
+    );
+    let worst = 0;
+    drawn.forEach((q, t) => {
+      const want = place(t, [L4.x, L4.y]);
+      const c = centre(t);
+      const r = toFrameCoords(q, origin);
+      worst = Math.max(
+        worst,
+        Math.hypot(r.x - (want.x - c.x), r.y - (want.y - c.y)) / d
+      );
+    });
+    expect(worst).toBeLessThanOrEqual(TOL.leg1.relativeToSeparation);
+  });
+
+  test('a trail older than the frame’s record is cut, and the cut is noted', () => {
+    const a = body(1, 0, 0, m1);
+    const b = body(2, 8, 0, m2);
+    const p = body(3, 4, 4, 1e-9);
+    for (let t = 0; t < 10; t++) {
+      p.trail.push({ x: 4, y: 4, tick: t, age: 0, velocity: 1 });
+      // The frame is chosen at tick 5: nothing recorded before it.
+      if (t === 5) setFrame(ROTATING, [1, 2]);
+      recordBarycenter(t, [a, b, p], 1000);
+    }
+    const origin = resolveFrameOrigin([a, b, p]);
+    const drawn = framedTrail(p.trail, trailShifts(origin, 9, 12), 9);
+    expect(drawn).toHaveLength(5);
+    expect(hasTrailGap()).toBe(true);
+    // A new picture starts with no gap until a trail is cut again.
+    trailShifts(origin, 9, 12);
+    expect(hasTrailGap()).toBe(false);
+  });
+
+  test('a tracer resting at L4 has no velocity in the rotating frame', () => {
+    const a = body(1, -mu * d, 0, m1, { vel: { x: 0, y: -mu * d * n } });
+    const b = body(2, (1 - mu) * d, 0, m2, {
+      vel: { x: 0, y: (1 - mu) * d * n },
+    });
+    const p = body(3, L4.x, L4.y, 1e-9, { vel: { x: -n * L4.y, y: n * L4.x } });
+    setFrame(ROTATING, [1, 2]);
+    const v = velocityInFrame(p, [a, b, p]);
+    expect(Math.hypot(v.x, v.y)).toBeLessThan(1e-12);
+    // In the pair frame it is moving round at n times its distance.
+    setFrame(PAIR, [1, 2]);
+    const w = velocityInFrame(p, [a, b, p]);
+    expect(Math.hypot(w.x, w.y)).toBeCloseTo(n * Math.hypot(L4.x, L4.y), 12);
+  });
+});
+
+describe('following a body by id', () => {
+  test('follow, merge onto the product, stop: each is heard once', () => {
+    const heard = [];
+    onFollowChange(e => heard.push(`${e.why}:${e.id}`));
+    followBody(4);
+    followBody(4);
+    expect(followedBodyId()).toBe(4);
+    expect(transferFollow([3, 5], 9)).toBe(false);
+    expect(transferFollow([4, 5], 9)).toBe(true);
+    expect(followedBodyId()).toBe(9);
+    followBody(null);
+    expect(heard).toEqual(['set:4', 'merged:9', 'stop:null']);
+  });
+
+  test('a rebuilt world forgets the follow, since ids restart', () => {
+    followBody(2);
+    clearFrameHistory();
+    expect(followedBodyId()).toBeNull();
   });
 });

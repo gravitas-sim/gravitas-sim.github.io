@@ -3,7 +3,7 @@
 import { screen_to_world, findObjectAtPosition } from './physics.js';
 
 import { worldToScreen } from './utils.js';
-import { transferFrame } from './referenceFrame.js';
+import { transferFrame, transferFollow } from './referenceFrame.js';
 
 import {
   EV_ESCAPE,
@@ -454,6 +454,7 @@ if (typeof window !== 'undefined') {
     const gone = [primaryId, secondaryId];
 
     transferFrame(gone, resultId);
+    transferFollow(gone, resultId);
 
     const selected = state.selectedObject;
     if (selected?.object && gone.includes(selected.object.id)) {

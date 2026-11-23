@@ -114,7 +114,7 @@ test('the readout and the summary name the frame and the sources', async ({
   await expect(readout).toContainText('Barycenter');
   await expect
     .poll(() => summary(page))
-    .toContain('Frame: Barycenter. Trails drawn in this frame.');
+    .toContain('Frame: Barycenter of the system. Trails drawn in this frame.');
 
   await app.loadScenario('binary-pair');
   await app.waitForFrames(5);

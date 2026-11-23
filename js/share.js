@@ -23,7 +23,9 @@ import {
   lessonInHash,
   packInHash,
 } from './investigationsLoader.js';
-import { t } from './i18n/index.js';
+import { t, hasMessage } from './i18n/index.js';
+import { frameMode, LINKED_MODES } from './referenceFrame.js';
+import { sceneWords } from './canvasSummary.js';
 import { scenarioTitle } from './i18n/scenario.js';
 import { EV_ESCAPE, EV_SIMULATION_RESET } from './names.js';
 
@@ -257,6 +259,19 @@ async function refresh() {
   // discover afterwards.
   els.stale.hidden = isFull || getSimClock() < 5;
 
+  // A pair or rotating frame is not carried (js/world.js writes the world
+  // frame for it), so the link would open on another picture: say so.
+  if (els.frameNote) {
+    const dropped = !LINKED_MODES.includes(frameMode());
+    els.frameNote.hidden = !dropped;
+    if (dropped) {
+      const name = sceneWords(true)?.frameName() || '';
+      els.frameNote.textContent = hasMessage('share.frameNotCarried')
+        ? t('share.frameNotCarried', { name })
+        : `This link opens in the world frame: links do not carry the frame ${name}.`;
+    }
+  }
+
   const n = lastUrl.length;
   const bodies = payload.b ? `${payload.b.length} objects · ` : '';
   els.meta.textContent = `${bodies}${n.toLocaleString()} characters`;
@@ -422,6 +437,7 @@ export function initShare() {
     meta: document.getElementById('shareMeta'),
     warning: document.getElementById('shareWarning'),
     stale: document.getElementById('shareStale'),
+    frameNote: document.getElementById('shareFrameNote'),
     seed: document.getElementById('shareSeed'),
     seedRow: document.getElementById('shareSeedRow'),
     reroll: document.getElementById('shareRerollBtn'),
