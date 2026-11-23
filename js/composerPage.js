@@ -1199,7 +1199,7 @@ function fillStep(card, s, i, d) {
         [['', t('composer.setup.keep')], ...scenarios],
         setup?.scenario,
         v =>
-          import('./shareState.js').then(({ setupFor }) =>
+          panel().then(({ setupFor }) =>
             commit(x =>
               v
                 ? (x.steps[i].setup = setupFor(v, x.steps[i].setup))
@@ -2424,7 +2424,7 @@ function applyRaw() {
 
 function wire() {
   $('cp-new').addEventListener('click', async () => {
-    const { setupFor: f } = await import('./shareState.js');
+    const { setupFor: f } = await panel();
     const pack = blankInvestigation(randomSeed(), f('solar-system'));
     start(pack, t('composer.status.new'));
   });
