@@ -47,6 +47,7 @@ export const ES_JOVIAN = {
   'jovW.p.legend': 'medido · sinusoide ajustada · días desde la primera imagen',
   'jovW.p.row.marks': 'Puntos medidos usados',
   'jovW.p.row.period': 'Período',
+  'jovW.p.row.sigma': 'Incertidumbre del período',
   'jovW.p.row.amplitude': 'Amplitud (el radio de la órbita)',
   'jovW.p.row.amplitudeKm': 'Amplitud en kilómetros',
   'jovW.p.row.fit': 'Chi cuadrado, grados de libertad',

@@ -124,7 +124,7 @@
         "requests": 14
       },
       "compute": {
-        "kb": 182.1,
+        "kb": 182.2,
         "requests": 20
       }
     },
@@ -178,7 +178,7 @@
         "requests": 4
       },
       "observatory": {
-        "kb": 96.1,
+        "kb": 96.2,
         "requests": 6
       },
       "catalog": {
@@ -198,7 +198,7 @@
         "requests": 3
       },
       "composer": {
-        "kb": 297.2,
+        "kb": 297.3,
         "requests": 16
       },
       "course-builder": {

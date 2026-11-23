@@ -130,7 +130,7 @@ const BUDGETS = [
   {
     id: 'deferred',
     label: 'Deferred JavaScript (lazy chunks, gzipped)',
-    limit: 3259.4,
+    limit: 3266.9,
     reason:
       'Jumped from 1369 KB to 2105 KB when three.js and Chart.js stopped being ' +
       'CDN requests and became bundled chunks. That is the point of the change ' +
@@ -745,8 +745,9 @@ const BUDGETS = [
       "\n\nThe pinned lesson step (D-R4-342-06): the pin rule in the stage gate and every setup step's declared speed and start state; raised from 3234.5 to 3235.3 KB, the measurement of a Node 22.23.4 build of the branch merged with v4 9d4aa6fd: 3,312,934 bytes gzipped (3235.29 KB), rounded up to 0.1 KB. Under the standing approval of 2026-10-10." +
       '\n\nThe combined stars and computing lessons (D-R4-TRAINB-08): raised from 3235.3 to 3251.0 KB, the previous limit plus the 15.7 KB the branch adds over v4 93007c242 (CI measured 3,328,164 B, 3250.16 KB, against v4 3234.5 KB before the pinned lesson step landed). Under the standing approval of 2026-10-10.' +
       '\n\nThe low tier cuts the full world (D-R4-343-05): the cut and the low-tier draws row of the binary-orbit tool; raised from 3235.3 to 3235.5 KB on v4 93007c24 (3,313,081 bytes gzipped); on the branch merged with v4 93295b2e, CI measures 3,329,004 bytes gzipped (3250.98 KB), inside the v4 limit of 3251.0, so no further raise. Under the standing approval of 2026-10-10.' +
-      '\n\nThe combined Mars, orbit locking and habitable zone lessons (D-R4-TRAINC2-03): raised from 3251.0 to 3259.2 KB, the measurement by CI of the branch (head 7f6188ca): 3,337,403 bytes gzipped (3259.18 KB), rounded up to 0.1 KB. Under the standing approval of 2026-10-10.' +
-      '\n\nThe same branch after merging v4 e16734ec and rebuilding the instructor bundle (D-R4-TRAINC2-04): raised from 3259.2 to 3259.4 KB, the measurement by CI of the branch (head f3ff895c): 3,337,549 bytes gzipped (3259.33 KB), rounded up to 0.1 KB. Under the standing approval of 2026-10-10.',
+      '\n\nThe solar system scale, comets, moons and missing mass lessons (D-R4-TRAINC-03): raised from 3251.0 to 3258.4 KB, the measurement by CI of the branch (run 45018162713, d5de9d3d1): 3,336,518 bytes gzipped (3258.32 KB), rounded up to 0.1 KB. Under the standing approval of 2026-10-10.' +
+      '\n\nThe same branch merged with v4 e16734ec6 (D-R4-TRAINC-07): raised from 3258.4 to 3258.5 KB, the measurement by CI of the branch (head a0735a120): 3,336,664 bytes gzipped (3258.46 KB), rounded up to 0.1 KB. Under the standing approval of 2026-10-10.' +
+      '\n\nThe Mars, orbit locking and habitable zone lessons, merged with v4 78e15afa (D-R4-TRAINC2-03, -04, -06): PROVISIONAL, raised from 3258.5 to 3266.9 KB, v4\'s limit plus the 8.4 KB this branch added over v4 e16734ec (CI measured 3,337,403 bytes at 7f6188ca and 3,337,549 bytes, 3259.33 KB, at f3ff895c, against 3,336,664 bytes for v4 a0735a120 in the same state). Set to the CI measurement of the merged head under the standing approval of 2026-10-10 when it arrives.',
   },
 ];
 

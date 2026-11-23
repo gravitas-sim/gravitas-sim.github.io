@@ -11,7 +11,7 @@ const MODEL_PAGE = 'https://gravitas-sim.online/model/';
 import { INSTRUCTOR as MEASUREMENT } from './investigations/depth/measurement-sequence.js';
 import { INSTRUCTOR as SATELLITE } from './investigations/depth/satellite-sequence.js';
 import { INSTRUCTOR as ATMOSPHERE } from './investigations/depth/atmosphere-sequence.js';
-import { INSTRUCTOR as PLANETS } from './investigations/planets-sequence.js';
+import { INSTRUCTOR as PLANETS } from './investigations/planets-guides.js';
 import { INSTRUCTOR as EXPOSURE } from './investigations/exposure-sequence.js';
 import { INSTRUCTOR as STRATEGY } from './investigations/strategy-sequence.js';
 import { INSTRUCTOR as BINARIES } from './investigations/binaries-sequence.js';
@@ -3242,7 +3242,7 @@ export const INSTRUCTOR_CONTENT = {
     topic: 'Dark matter',
     difficulty: 'Introductory, with one genuinely open-ended fitting exercise',
     placement:
-      'Anywhere after orbital motion has been covered, and it needs nothing else. It pairs naturally with a unit on galaxies or on cosmology, and it also works as a single-session standalone: thirty-three screens, one argument, and a result students derive rather than receive. If you teach Kepler earlier in the term, this is the investigation that shows what happens when Kepler stops working. The rotation-curve fitting sequence at steps 13-19 is the longest single activity in Gravitas and the closest any of these investigations comes to what research actually feels like; if you are short of time it is the part to protect, and steps 2-3 and 6-8 are the scaffolding that makes it work.',
+      'Anywhere after orbital motion has been covered, and it needs nothing else. It pairs naturally with a unit on galaxies or on cosmology, and it also works as a single-session standalone: thirty-one screens, one argument, and a result students derive rather than receive. If you teach Kepler earlier in the term, this is the investigation that shows what happens when Kepler stops working. The rotation-curve fitting sequence at steps 13-20 is the longest single activity in Gravitas and the closest any of these investigations comes to what research actually feels like; if you are short of time it is the part to protect, and steps 2-3 and 6-8 are the scaffolding that makes it work.',
     overview: `Students weigh systems twice over, once by adding up the mass that is visible and once
       by watching how things move, and discover that the two answers agree for the Solar System and
       disagree badly for anything larger. The investigation opens by making a rotation curve into a tool
@@ -3254,11 +3254,11 @@ export const INSTRUCTOR_CONTENT = {
       \n\nThe center of the investigation is a fitting exercise. Students are handed a rotation curve built
       from NGC 3198's published parameters, labeled as synthetic on the panel, and a model with a
       stellar disc and a dark halo, and asked to reproduce the points. They try the disc alone first,
-      with both of its parameters free, and cannot do it: the best possible stars-only fit misses by
+      from a disc of no mass with both parameters free, and cannot do it: the best possible stars-only fit misses by
       about 15 km/s against error bars of about 5, and it misses worst at
       the outer edge. A choice step draws out why - the shortfall is the wrong shape, not merely the
       wrong size - and then the halo goes in and the fit closes. Students read off how much dark mass
-      per unit of visible mass their own fit implies.
+      per unit of visible mass their fit implies; a deeper step gives it an error bar.
       \n\nThe rest is consequence and context. A single star is launched on a circular orbit and the
       halo is removed underneath it; then the same experiment is run on ninety stars in the live
       simulation and the disc comes apart. Zwicky's 1933 cluster measurement follows, first on the real
@@ -3269,8 +3269,8 @@ export const INSTRUCTOR_CONTENT = {
     priorKnowledge: [
       'That gravity holds orbits together, and that a faster orbit implies more mass inside it',
       'Reading a point off a graph, and the idea that a straight line on a log plot is a power law',
-      'Squaring a number and dividing on a calculator; the arithmetic at steps 25 and 26 is two multiplications',
-      'Comfort with the idea of fitting a model to data with error bars, and that a fit is judged against those errors rather than against zero. Steps 13-19 introduce this from scratch, but a class that has met it before will move faster',
+      'Squaring a number and dividing on a calculator; the arithmetic at steps 27 and 28 is two multiplications',
+      'Comfort with the idea of fitting a model to data with error bars, and that a fit is judged against those errors rather than against zero. Steps 13-20 introduce this from scratch, but a class that has met it before will move faster',
       'Helpful but not required: Kepler’s Laws, for the circular-orbit speed relation the whole investigation leans on',
     ],
     keyConcepts: [
@@ -3313,7 +3313,7 @@ export const INSTRUCTOR_CONTENT = {
     ],
     features: [
       {
-        name: 'The same curve, two explanations (steps 27-30)',
+        name: 'The same curve, two explanations (advanced path)',
         text: 'The MOND comparison. It scores a dark-matter halo and Milgrom\u2019s modified law against the same twelve synthetic measurements, in the same units, and reports both residuals side by side along with how many numbers each explanation had to be given. The halo generated this curve, so it matches exactly with three fitted numbers; MOND has no halo and only the disc mass to adjust, and with one fitted number it lands about 2 km/s from the data, inside the error bars. a\u2080 is displayed and not adjustable, because it is meant to be a constant of nature rather than a property of this galaxy. \n\nThe two want different discs - MOND prefers about two thirds the stellar mass - and that is worth drawing out rather than glossing: a rotation curve does not measure a stellar mass-to-light ratio, so "how heavy is the disc" was never pinned down by the data in either picture. This is the disc-halo degeneracy and it is real. \n\nThe instrument will not declare a winner, and neither should the discussion. What it demonstrates is that this measurement underdetermines the explanation.',
       },
       {
@@ -3329,35 +3329,35 @@ export const INSTRUCTOR_CONTENT = {
         text: 'Two stacked plots — a rotation curve above, the enclosed mass it implies below — joined by one draggable radius marker. The lower plot is the upper one with M = v squared r over G applied to it, and the panel says so. Three curves are selectable: falling, flat, and a real galaxy with the visible contribution drawn as a dashed line. The readout states what happens to the enclosed mass when the radius doubles, which is the sentence step 7 grades.',
       },
       {
-        name: 'Fit a real galaxy (steps 13-19)',
-        text: 'The centerpiece. A synthetic rotation curve with error bars, built from NGC 3198’s published parameters and labeled as synthetic on the canvas, and a four-slider model: disc mass, disc scale length, halo strength and halo core radius. It scores the fit as an RMS residual in km/s and states the mean error bar alongside it, so a student can tell a good fit from a lucky one, and it names the radius of the worst single miss and whether the model is too fast or too slow there. The plot marks FITTED when the residual drops below the errors. Steps 14-16 hide the two halo sliders so the disc has to be tried on its own first.',
+        name: 'Fit a real galaxy (steps 13-20)',
+        text: 'The centerpiece. A synthetic rotation curve with error bars, built from NGC 3198’s published parameters and labeled as synthetic on the canvas, and a four-slider model: disc mass, disc scale length, halo strength and halo core radius. It scores the fit as an RMS residual in km/s and states the mean error bar alongside it, so a student can tell a good fit from a lucky one, and it names the radius of the worst single miss and whether the model is too fast or too slow there. The plot marks FITTED when the residual drops below the errors. Steps 14-16 hide the two halo sliders so the disc has to be tried on its own first, and open with the disc at zero; step 17 holds the disc and leaves the halo to the student.',
       },
       {
-        name: 'What the halo is holding (step 20)',
+        name: 'What the halo is holding (step 21)',
         text: 'A single star launched on a circular orbit at the speed the full model gives it, integrated live, with a halo toggle. Switching the halo off removes the mass without touching the motion, which is precisely the situation a flat rotation curve presents, and the star leaves. The readout shows the launch speed beside the speed the visible disc alone could have held, and the view does not rescale when the star escapes.',
       },
       {
-        name: 'Weigh a cluster by how fast it jitters (step 23)',
+        name: 'Weigh a cluster by how fast it jitters (step 25)',
         text: 'The virial theorem applied to the real Coma Cluster, with sliders for the measured dispersion and the radius, and a third slider that selects how sigma becomes the mean square speed. Two of its three positions are wrong on purpose: sigma without squaring, and sigma squared without the factor of three for the two unobserved directions. The readout warns when a wrong one is selected and says why. Two bars compare the mass the motion demands against the galaxies and the hot gas.',
       },
       {
-        name: 'Where the mass of the universe is (step 28)',
+        name: 'Where the mass of the universe is (step 30)',
         text: 'Planck 2018 fractions revealed one layer at a time: everything, then the matter alone, then the ordinary matter alone, then the stellar share of it. Each layer rescales to the slice above, which is what makes the last number land — every star and nebula ever photographed is about half a per cent of the universe.',
       },
       {
-        name: 'Rotation Curve panel (live, used at steps 4-5, 9-12 and 21-24)',
+        name: 'Rotation Curve panel (live, used at steps 4-5, 9-12 and 22-26)',
         text: 'A live instrument in the Tools list. It plots one point per body from the simulation’s own positions and velocities, over a dashed line showing the speeds the visible mass alone would produce and, when the halo is on, a solid line including it. It reports a power-law fit to the outer curve and names the shape in words. The inner region excluded from the fit is shaded, so the reported slope is visibly the slope of the outer curve.',
       },
       {
-        name: 'Dark-matter halo toggle (step 21)',
+        name: 'Dark-matter halo toggle (step 23)',
         text: 'Inside the Rotation Curve panel. It adds or removes a term in the force law rather than changing the display, which is why the disc physically disperses when it is switched off. The flat-speed and core-radius sliders beside it set the halo’s two parameters.',
       },
       {
-        name: 'Spiral Galaxy and Milky Way Rotation scenarios (steps 9-12 and 21)',
+        name: 'Spiral Galaxy and Milky Way Rotation scenarios (steps 9-12, 22 and 23)',
         text: 'The same disc twice: ninety stars and a central bulge, identical visible mass. In the first, each star is launched at the circular speed the visible mass implies, and the curve falls with an exponent near -0.45. In the second, every star moves at the same speed regardless of radius, and the halo is on because the disc does not survive without it.',
       },
       {
-        name: 'Coma Cluster scenario (steps 22-24)',
+        name: 'Coma Cluster scenario (steps 24 and 26)',
         text: 'Twenty-four galaxies on randomly oriented orbits, named after real members of Coma. Galaxy is a new object type in Gravitas: a point mass with a disc drawn on it, which does not merge or evolve. The scenario is paused and carries a fixed seed, so the numbers a class reads are reproducible.',
       },
       {
@@ -3369,7 +3369,7 @@ export const INSTRUCTOR_CONTENT = {
       {
         claim: 'Dark matter is a theory somebody invented to patch up gravity.',
         response:
-          'The discrepancy is a measurement, made independently in galaxies and in clusters decades apart, and this investigation has students reproduce both. What dark matter names is the explanation, and step 27 exists specifically to separate the two. A student who leaves able to make that distinction has the most valuable thing in the investigation.',
+          'The discrepancy is a measurement, made independently in galaxies and in clusters decades apart, and this investigation has students reproduce both. What dark matter names is the explanation, and step 29 exists specifically to separate the two. A student who leaves able to make that distinction has the most valuable thing in the investigation.',
       },
       {
         claim:
@@ -3381,7 +3381,7 @@ export const INSTRUCTOR_CONTENT = {
         claim:
           'A flat rotation curve means the stars are moving too fast to stay bound.',
         response:
-          'They are moving too fast for the visible mass to hold, which is not the same claim. The galaxies are bound and stable; what the measurement shows is that something is doing the binding that we cannot see. Steps 20 and 21 make the difference concrete: remove the halo and the star, and then the whole disc, really do come apart.',
+          'They are moving too fast for the visible mass to hold, which is not the same claim. The galaxies are bound and stable; what the measurement shows is that something is doing the binding that we cannot see. Steps 21 and 23 make the difference concrete: remove the halo and the star, and then the whole disc, really do come apart.',
       },
       {
         claim:
@@ -3397,7 +3397,7 @@ export const INSTRUCTOR_CONTENT = {
       {
         claim: 'Dark matter has been detected.',
         response:
-          'Its gravitational effects have been measured many times over and in several unrelated ways. The substance itself has never been detected in a laboratory and no candidate particle has been identified, after four decades of searching. Step 29 says this plainly and it is worth saying again out loud.',
+          'Its gravitational effects have been measured many times over and in several unrelated ways. The substance itself has never been detected in a laboratory and no candidate particle has been identified, after four decades of searching. Step 31 says this plainly and it is worth saying again out loud.',
       },
       {
         claim:
@@ -3412,22 +3412,22 @@ export const INSTRUCTOR_CONTENT = {
       },
     ],
     teachingNotes: [
-      'Have the class open the Rotation Curve panel at step 4 and leave it open for the rest of the investigation. The live measurements at steps 4-5, 9-12 and 21-24 all come from that one instrument, and the argument is much clearer when students watch the same plot change under three different systems than when they open and close it. Steps 2-3, 6-8, 13-20, 23 and 28 use their own docked instruments instead and need nothing from the rail.',
+      'Have the class open the Rotation Curve panel at step 4 and leave it open for the rest of the investigation. The live measurements at steps 4-5, 9-12 and 22-26 all come from that one instrument, and the argument is much clearer when students watch the same plot change under three different systems than when they open and close it. Steps 2-3, 6-8, 13-21, 25 and 30 use their own docked instruments instead and need nothing from the rail.',
       'Steps 2 and 3 look like warm-up and are not. Everything after them depends on a student being able to look at a curve and say where the mass is, and this is the only place they get to build that by moving mass around rather than by being told. Ten minutes here saves twenty at step 16.',
       'Collect the step 9 prediction before anyone looks at the panel. Most classes correctly predict a falling curve, which is exactly what you want: the surprise at step 12 only lands for students who had committed to the other answer first.',
-      'Steps 13 to 19 are the investigation. Budget half the session for them and resist the urge to shorten. The intended experience at step 14 is sustained, honest failure: students should push the disc mass to the top of its range, watch the inner curve overshoot, bring it back, try the scale length, and arrive at about 15 km/s of residual convinced there is nothing left to try. Do not rescue them, and do not let a fast student tell the room the answer.',
+      'Steps 13 to 20 are the investigation. Budget half the session for them and resist the urge to shorten. The intended experience at step 14 is sustained, honest failure: students should push the disc mass to the top of its range, watch the inner curve overshoot, bring it back, try the scale length, and arrive at about 15 km/s of residual convinced there is nothing left to try. Do not rescue them, and do not let a fast student tell the room the answer.',
       'Ask for step 15 in writing before anyone touches the halo sliders. The number a student produced themselves, and the fact that their worst miss was at the outer edge, is what makes step 16 an inference rather than a claim.',
       'Step 16 is the pivot of the whole investigation and the one place to run a discussion rather than a click. The distractor about a disc not holding enough mass is the intuitive answer and it is wrong: mass is not the problem, distribution is. If the class can articulate "we need mass where the light is not", they have the argument that settled the question in the literature.',
-      'At step 17, expect a spread of halo parameters that all fit. That is a genuine degeneracy between halo strength and core radius, not a mistake, and it is worth naming out loud: published rotation-curve papers quote these two together with a covariance for exactly this reason. The halo mass, and therefore the ratio at step 19, is far better constrained than either slider on its own.',
-      'Step 20 is the best demonstration in the investigation and takes about thirty seconds. Run it on one screen with the class watching: launch the star, let it complete an orbit, then drag the halo slider to OFF and say nothing. Then ask why the star left, and insist on the answer that nothing was added to the star.',
-      'Step 21 repeats step 20 on ninety stars in the live simulation. It is worth doing both: the single star makes the mechanism clear and the disc makes the consequence visible.',
-      'Let students find both wrong settings at step 23 rather than warning them first. The "forget to square it" case is the valuable one, because the discrepancy vanishes: an answer that shows no missing mass is a signal that the arithmetic went wrong, and recognizing that is a transferable skill.',
-      'At step 24, make sure students actually switch to simulation units before recording anything. In physical units the panel reports a cluster radius in AU, which is a nonsense number for a cluster of galaxies and will produce a mass wrong by many orders of magnitude. The scenario is a scale model and the investigation says so, but the unit switch is the step students skip.',
-      'The commonest arithmetic error at step 25 is using sigma rather than sigma squared, which gives about 86,000 instead of 1.76 million in simulation units. The second commonest is forgetting to divide by 1000 to reach solar masses. Both are worth naming in advance, and both were reachable deliberately at step 23 so that a student may already have met them.',
-      'Steps 25 and 26 can be done on paper in under two minutes, and doing them on paper rather than in the answer box is worth the time: the point is that this calculation is genuinely small, and that Zwicky needed nothing more than this.',
-      'Step 27 is a good exit ticket. Any answer that separates the measured discrepancy from its interpretation earns full credit; naming faint ordinary matter or modified gravity as alternatives earns more, and so does noticing that the rotation-curve result constrains the shape of the missing mass and not only its amount. Students who write only "dark matter exists" have missed the step.',
+      'At step 17, expect a spread of halo parameters that all fit. That is a genuine degeneracy between halo strength and core radius, not a mistake, and it is worth naming out loud: published rotation-curve papers quote these two together with a covariance for exactly this reason. The halo mass, and therefore the ratio at step 20, is far better constrained than either slider on its own.',
+      'Step 21 is the best demonstration in the investigation and takes about thirty seconds. Run it on one screen with the class watching: launch the star, let it complete an orbit, then drag the halo slider to OFF and say nothing. Then ask why the star left, and insist on the answer that nothing was added to the star.',
+      'Steps 22 and 23 repeat step 21 on ninety stars in the live simulation: collect the prediction at step 22 before anyone touches the toggle. It is worth doing both: the single star makes the mechanism clear and the disc makes the consequence visible.',
+      'Let students find both wrong settings at step 25 rather than warning them first. The "forget to square it" case is the valuable one, because the discrepancy vanishes: an answer that shows no missing mass is a signal that the arithmetic went wrong, and recognizing that is a transferable skill.',
+      'At step 26, make sure students actually switch to simulation units before recording anything. In physical units the panel reports a cluster radius in AU, which is a nonsense number for a cluster of galaxies and will produce a mass wrong by many orders of magnitude. The scenario is a scale model and the investigation says so, but the unit switch is the step students skip.',
+      'The commonest arithmetic error at step 27 is using sigma rather than sigma squared, which gives about 86,000 instead of 1.76 million in simulation units. The second commonest is forgetting to divide by 1000 to reach solar masses. Both are worth naming in advance, and both were reachable deliberately at step 25 so that a student may already have met them.',
+      'Steps 27 and 28 can be done on paper in under two minutes, and doing them on paper rather than in the answer box is worth the time: the point is that this calculation is genuinely small, and that Zwicky needed nothing more than this.',
+      'Step 29 is a good exit ticket. Any answer that separates the measured discrepancy from its interpretation earns full credit; naming faint ordinary matter or modified gravity as alternatives earns more, and so does noticing that the rotation-curve result constrains the shape of the missing mass and not only its amount. Students who write only "dark matter exists" have missed the step.',
       'If a student asks whether the halo in this simulation is real physics or a fudge, the honest answer is that it is a fitted model: a pseudo-isothermal profile with two free parameters, chosen because it reproduces real rotation curves. Say so. It is the same status the profile has in the research literature, and the misconceptions section above has a longer answer.',
-      'The rotation curve being fitted at steps 13-19 is synthetic, built from NGC 3198’s published structural parameters rather than transcribed from a data table, and the panel says so. This is deliberate: it means the exercise has an exact right answer, so a student who fits well has genuinely fitted well rather than guessed. If a class asks to see the real thing, the published decomposition of NGC 3198 is in the extensions below.',
+      'The rotation curve being fitted at steps 13-20 is synthetic, built from NGC 3198’s published structural parameters rather than transcribed from a data table, and the panel says so. This is deliberate: it means the exercise has an exact right answer, so a student who fits well has genuinely fitted well rather than guessed. If a class asks to see the real thing, the published decomposition of NGC 3198 is in the extensions below.',
     ],
     discussion: [
       'The Solar System gives an exponent of -0.5 and a galaxy gives roughly zero. Is there a size at which the disagreement starts, and how would you find out?',
@@ -3439,7 +3439,7 @@ export const INSTRUCTOR_CONTENT = {
     ],
     extensions: [
       'Have students look up a published rotation curve for a real galaxy, NGC 3198 and NGC 2403 are the classic cases, and compare its shape with the two Gravitas scenarios. The published figures usually plot the stellar, gas and halo contributions separately, which is exactly the decomposition the panel draws.',
-      'Ask students to quantify the degeneracy they met at step 17. Have them find three different pairs of halo strength and core radius that all fit, record the halo mass inside 30 kpc for each, and compare the spread in the parameters with the spread in the mass. The parameters vary by tens of per cent; the mass barely moves. This is why papers quote the derived mass rather than the fitted parameters.',
+      'Ask students to quantify the degeneracy they met at step 17. A deeper step asks for this as an error bar. Have them find three different pairs of halo strength and core radius that all fit, record the halo mass inside 30 kpc for each, and compare the spread in the parameters with the spread in the mass. The parameters vary by tens of per cent; the mass barely moves. This is why papers quote the derived mass rather than the fitted parameters.',
       'Have students repeat the step 14 sweep systematically rather than by feel: fix the scale length, step the disc mass across its whole range, and tabulate the average miss. The curve of residual against disc mass has a shallow minimum around 8.5, well above the mass the light implies and still three times worse than the errors. Plotting that curve turns "I could not fit it" into "no disc mass fits, and here is the proof".',
       'Have students read about the Bullet Cluster and explain, in a paragraph, why the separation of the lensing mass from the X-ray gas is difficult for modified-gravity explanations to accommodate.',
       'For a mathematically prepared class, derive M(<r) proportional to r from the flat-curve condition, then integrate to show the implied density falls as r to the power -2 and that the total mass diverges. Ask what that divergence means physically, and connect it back to step 8 where students measured that proportionality directly.',
