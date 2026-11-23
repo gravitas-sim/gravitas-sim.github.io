@@ -39,7 +39,7 @@ const byChoice = field =>
 
 const INTEGRATORS_IN_PRACTICE = {
   id: 'integrators-in-practice',
-  thumbnail: 'images/scenarios/circumbinary-planet-lab.webp',
+  thumbnail: 'images/investigations/integrators-in-practice.webp',
   title: 'Integrators in Practice',
   subtitle:
     'Four ways to take a step, compared by the energy each one loses on a real system, in Python on the compute page',
@@ -52,6 +52,8 @@ const INTEGRATORS_IN_PRACTICE = {
   prerequisites: ['orbital-energy'],
   tags: ['orbits'],
   lock: { placement: true, inspector: true },
+  // No scene: the notebook is the subject, so nothing is staged behind it.
+  canvas: 'quiet',
   objectives: [
     'Say what the energy drift of a numerical integration is, and why a method that does not conserve energy can still be useful',
     'Run a reviewed Python notebook on a system from the Orbital System Builder and read its four energy drifts',
@@ -232,13 +234,6 @@ const INTEGRATORS_IN_PRACTICE = {
     },
     {
       sid: 'choose-the-second-step',
-      canvas: 'scene',
-      time: { speed: 1500, paused: true },
-      setup: {
-        scenario: 'Circumbinary Planet Lab',
-        seed: 'binary',
-        paused: true,
-      },
       compute: 'integrators-compared',
       type: 'measure',
       title: 'Choose the second step',

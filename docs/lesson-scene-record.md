@@ -20,7 +20,7 @@ Of 204 prediction loops, 204 are returned to,
 204 produce a measurement before they are answered, and
 2 end in an explanation in the reader's own words.
 202 hold their marking until the experiment settles them.
-The canvas behind a step is stated as scene on 12, portrait on 7, quiet on 88; 1429 state none.
+The canvas behind a step is stated as scene on 4, portrait on 7, quiet on 96; 1429 state none.
 
 ## Kepler's Laws (`keplers-laws`)
 
@@ -800,12 +800,12 @@ The canvas behind a step is stated as scene on 12, portrait on 7, quiet on 88; 1
 - **What students do:** read, commit-a-prediction, record-values, choose-an-option.
 - **Objects the steps declare:** none.
 - **Instruments:** none.
-- **Canvas:** quiet, scene.
+- **Canvas:** quiet.
 - **Stored data:** none.
 - **Evidence kept:** notebook-fields.
 - **Prediction loops:** which-loses-most → four-drifts → four-drifts; predict-the-halving → choose-the-second-step, the-engine → the-engine.
-- **Recovery:** missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand; ambiguous result: the check says in words how close is close enough; reset: rebuilds the scenario on arrival.
-- **Scene rebuilds:** 1 step(s) on arrival (choose-the-second-step).
+- **Recovery:** missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** none.
 - **Accepted central experiment** (reviewed 2026-09-11): object `compute:integrators-compared`, control the compute page's steps-per-period setting (not a lesson widget), and the second step count the student chooses from a menu in the lesson, measures the energy drift of explicit Euler, symplectic Euler, velocity Verlet and Runge-Kutta 4 over three periods of the widest orbit, and how velocity Verlet's and Runge-Kutta 4's drift change at the second step count the student chose, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 
 ## Extending an Experiment (`extending-an-experiment`)
@@ -815,12 +815,12 @@ The canvas behind a step is stated as scene on 12, portrait on 7, quiet on 88; 1
 - **What students do:** read, commit-a-prediction, record-values, choose-an-option.
 - **Objects the steps declare:** none.
 - **Instruments:** none.
-- **Canvas:** quiet, scene.
+- **Canvas:** quiet.
 - **Stored data:** none.
 - **Evidence kept:** notebook-fields.
 - **Prediction loops:** how-well-can-twenty-place-an-edge → the-fit, a-uniform-population, move-the-definition-yours, which-trial-moved → the-fit.
-- **Recovery:** missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand; ambiguous result: the check says in words how close is close enough; reset: rebuilds the scenario on arrival.
-- **Scene rebuilds:** 1 step(s) on arrival (move-the-definition-yours).
+- **Recovery:** missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** none.
 - **Accepted central experiment** (reviewed 2026-09-11): object `compute:population-at-scale`, control the compute page's cutoff and slope settings (not a lesson widget), and the cutoff the student chooses from a menu in the lesson, measures the half-way starting distance and the bound fraction of the twenty trials and of the synthetic population, for the settings run, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 
 ## Refitting a Transit (`refitting-a-transit`)
