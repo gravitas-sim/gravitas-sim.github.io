@@ -4,19 +4,18 @@
     "transit-photometry",
     "the-saturated-star",
     "binary-star-planets",
+    "missing-mass",
     "weighing-stars",
-    "black-holes",
     "butterfly-effect",
     "extending-an-experiment",
     "measuring-the-moon",
-    "orbital-energy",
-    "missing-mass",
+    "black-holes",
+    "propose-an-observation",
     "what-is-a-gravitational-wave",
     "a-night-at-the-telescope",
     "counts-to-magnitudes",
     "detect-this-planet",
     "power-law-gravity",
-    "propose-an-observation",
     "retrograde-motion"
   ],
   "lessonGain": {
@@ -174,17 +173,20 @@
       "lock:{\"placement\":true}",
       "prereq:yes"
     ],
+    "missing-mass": [
+      "depth-step:advanced/explore",
+      "key:explore.after",
+      "key:explore.decides",
+      "key:explore.depth",
+      "key:predict.setup",
+      "lock:{\"placement\":true,\"inspector\":false,\"areaSweep\":false}"
+    ],
     "weighing-stars": [
       "key:explore.showBarycenter",
       "key:explore.stage",
       "key:measure.showBarycenter",
       "key:read.showBarycenter",
       "math:arithmetic"
-    ],
-    "black-holes": [
-      "key:question.checklist",
-      "key:read.explainView",
-      "lock:{\"placement\":true,\"inspector\":false,\"areaSweep\":false}"
     ],
     "butterfly-effect": [
       "key:explore.rubric",
@@ -201,14 +203,13 @@
       "key:question.minUncertainty",
       "key:question.valueWithin"
     ],
-    "orbital-energy": [
-      "key:explore.compare",
-      "key:explore.evidence",
-      "key:question.rubricCriteria"
+    "black-holes": [
+      "key:question.checklist",
+      "key:read.explainView"
     ],
-    "missing-mass": [
-      "key:predict.setup",
-      "key:question.restates"
+    "propose-an-observation": [
+      "key:measure.plan",
+      "key:question.rubricCriteria"
     ],
     "what-is-a-gravitational-wave": [
       "audience:beginner",
@@ -225,9 +226,6 @@
     ],
     "power-law-gravity": [
       "key:question.explain"
-    ],
-    "propose-an-observation": [
-      "key:measure.plan"
     ],
     "retrograde-motion": [
       "lock:{\"placement\":true,\"inspector\":false}"
@@ -302,16 +300,16 @@
   ],
   "totals": {
     "investigations": 124,
-    "steps": 1993,
+    "steps": 1996,
     "activityCuts": 6,
-    "lessonTokens": 176,
+    "lessonTokens": 177,
     "activityTokens": 29,
     "stepTypes": {
       "read": 377,
-      "predict": 202,
-      "measure": 520,
+      "predict": 205,
+      "measure": 521,
       "ellipse": 1,
-      "question": 751,
+      "question": 750,
       "explore": 141,
       "wedges": 1
     }

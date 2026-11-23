@@ -9,7 +9,7 @@ on a 60 Hz screen, a 144 Hz screen and a throttled tab. A reading step
 that holds the clock (`holdsClock` in `js/timestep.js`) does not run and
 is not pinned. Closing the lesson lifts the pin.
 
-564 steps in 25 lessons run on an integrated scene; 445 are pinned and 119 hold the clock.
+580 steps in 25 lessons run on an integrated scene; 457 are pinned and 123 hold the clock.
 
 | Lesson | Step | Id | Type | Scene | Own scene | Pinned step |
 |---|---|---|---|---|---|---|
@@ -108,16 +108,16 @@ is not pinned. Closing the lesson lifts the pin.
 | orbital-energy | 4 | load-it-heavily | predict | Kepler's 2nd Law | inherited | 1/60 s |
 | orbital-energy | 5 | fire-it-again | explore | Kepler's 2nd Law | inherited | 1/60 s |
 | orbital-energy | 6 | find-the-dividing-line | explore | Kepler's 2nd Law | inherited | 1/60 s |
-| orbital-energy | 7 | bracket-the-dividing-speed | measure | Kepler's 2nd Law | inherited | 1/60 s |
-| orbital-energy | 8 | what-is-actually-deciding-this | read | Kepler's 2nd Law | inherited | none (holds the clock) |
-| orbital-energy | 9 | watch-the-total | explore | Kepler's 2nd Law | inherited | 1/60 s |
-| orbital-energy | 10 | reading-the-sign | question | Kepler's 2nd Law | inherited | 1/60 s |
-| orbital-energy | 11 | around-a-real-orbit | explore | Kepler's 2nd Law | yes | 1/60 s |
-| orbital-energy | 12 | what-stays-put | question | Kepler's 2nd Law | inherited | 1/60 s |
-| orbital-energy | 13 | escape-speed | read | Kepler's 2nd Law | inherited | none (holds the clock) |
-| orbital-energy | 14 | a-common-misunderstanding | question | Kepler's 2nd Law | inherited | 1/60 s |
-| orbital-energy | 15 | somewhere-else-entirely | predict | Kepler's 2nd Law | inherited | 1/60 s |
-| orbital-energy | 16 | read-the-escape-speeds | measure | Kepler's 2nd Law | inherited | 1/60 s |
+| orbital-energy | 7 | write-down-the-dividing-speed | measure | Kepler's 2nd Law | inherited | 1/60 s |
+| orbital-energy | 8 | where-is-the-line | question | Kepler's 2nd Law | inherited | 1/60 s |
+| orbital-energy | 9 | what-is-actually-deciding-this | read | Kepler's 2nd Law | inherited | none (holds the clock) |
+| orbital-energy | 10 | watch-the-total | explore | Kepler's 2nd Law | inherited | 1/60 s |
+| orbital-energy | 11 | reading-the-sign | question | Kepler's 2nd Law | inherited | 1/60 s |
+| orbital-energy | 12 | around-a-real-orbit | explore | Kepler's 2nd Law | yes | 1/60 s |
+| orbital-energy | 13 | what-stays-put | question | Kepler's 2nd Law | inherited | 1/60 s |
+| orbital-energy | 14 | escape-speed | read | Kepler's 2nd Law | inherited | none (holds the clock) |
+| orbital-energy | 15 | a-common-misunderstanding | question | Kepler's 2nd Law | inherited | 1/60 s |
+| orbital-energy | 16 | somewhere-else-entirely | predict | Kepler's 2nd Law | inherited | 1/60 s |
 | orbital-energy | 17 | more-mass-harder-to-leave | explore | Kepler's 2nd Law | inherited | 1/60 s |
 | orbital-energy | 18 | further-out-easier-to-leave | explore | Kepler's 2nd Law | inherited | 1/60 s |
 | orbital-energy | 19 | starting-further-out | question | Kepler's 2nd Law | inherited | 1/60 s |
@@ -284,21 +284,19 @@ is not pinned. Closing the lesson lifts the pin.
 | missing-mass | 16 | why-a-heavier-disc-cannot | question | Milky Way Rotation | inherited | 1/60 s |
 | missing-mass | 17 | now-add-the-halo | explore | Milky Way Rotation | inherited | 1/60 s |
 | missing-mass | 18 | record-the-fit-that-works | measure | Milky Way Rotation | inherited | 1/60 s |
-| missing-mass | 19 | how-much-of-it-is | question | Milky Way Rotation | inherited | 1/60 s |
-| missing-mass | 20 | what-the-halo-is-holding | explore | Milky Way Rotation | inherited | 1/60 s |
-| missing-mass | 21 | take-the-halo-away-from | explore | Milky Way Rotation | yes | 1/60 s |
-| missing-mass | 22 | forty-years-earlier | read | Coma Cluster | yes | none (holds the clock) |
-| missing-mass | 23 | zwicky-s-arithmetic-and-the | explore | Coma Cluster | inherited | 1/60 s |
-| missing-mass | 24 | measure-the-simulated-cluster | measure | Coma Cluster | inherited | 1/60 s |
-| missing-mass | 25 | weigh-the-cluster-by-its | question | Coma Cluster | inherited | 1/60 s |
-| missing-mass | 26 | now-compare | question | Coma Cluster | inherited | 1/60 s |
-| missing-mass | 27 | a-different-way-to-read | read | Coma Cluster | inherited | 1/60 s |
-| missing-mass | 28 | fit-it-both-ways | explore | Coma Cluster | inherited | 1/60 s |
-| missing-mass | 29 | the-prediction-mond-makes | question | Coma Cluster | inherited | 1/60 s |
-| missing-mass | 30 | does-the-curve-decide | question | Coma Cluster | inherited | 1/60 s |
-| missing-mass | 31 | what-have-you-actually-shown | question | Coma Cluster | inherited | 1/60 s |
-| missing-mass | 32 | how-much-of-the-universe | read | Coma Cluster | inherited | 1/60 s |
-| missing-mass | 33 | where-it-stands | read | Coma Cluster | inherited | none (holds the clock) |
+| missing-mass | 19 | compare-your-two-fits | measure | Milky Way Rotation | inherited | 1/60 s |
+| missing-mass | 20 | how-much-of-it-is | question | Milky Way Rotation | inherited | 1/60 s |
+| missing-mass | 21 | what-the-halo-is-holding | explore | Milky Way Rotation | inherited | 1/60 s |
+| missing-mass | 22 | predict-the-disc-without-its-halo | predict | Milky Way Rotation | yes | 1/60 s |
+| missing-mass | 23 | take-the-halo-away-from | explore | Milky Way Rotation | yes | 1/60 s |
+| missing-mass | 24 | forty-years-earlier | read | Coma Cluster | yes | none (holds the clock) |
+| missing-mass | 25 | zwicky-s-arithmetic-and-the | explore | Coma Cluster | inherited | 1/60 s |
+| missing-mass | 26 | measure-the-simulated-cluster | measure | Coma Cluster | inherited | 1/60 s |
+| missing-mass | 27 | weigh-the-cluster-by-its | question | Coma Cluster | inherited | 1/60 s |
+| missing-mass | 28 | now-compare | question | Coma Cluster | inherited | 1/60 s |
+| missing-mass | 29 | what-have-you-actually-shown | question | Coma Cluster | inherited | 1/60 s |
+| missing-mass | 30 | how-much-of-the-universe | read | Coma Cluster | inherited | 1/60 s |
+| missing-mass | 31 | where-it-stands | read | Coma Cluster | inherited | none (holds the clock) |
 | tides | 1 | twice-a-day-everywhere | read | Earth-Moon System | yes | none (holds the clock) |
 | tides | 2 | is-the-pull-the-same | predict | Earth-Moon System | inherited | 1/60 s |
 | tides | 3 | three-points-three-pulls | read | Earth-Moon System | inherited | 1/60 s |
@@ -550,6 +548,23 @@ is not pinned. Closing the lesson lifts the pin.
 | power-law-gravity | 2 | why-there-is-a-reference-distance | read | Solar System | inherited | none (holds the clock) |
 | power-law-gravity | 3 | predict-does-small-matter | predict | Solar System | inherited | 1/60 s |
 | power-law-gravity | 4 | first-look-at-the-orbit | explore | Solar System | inherited | 1/60 s |
+| power-law-gravity | 5 | record-the-precession | measure | Solar System | inherited | 1/60 s |
+| power-law-gravity | 6 | what-closes-an-orbit | question | Solar System | inherited | 1/60 s |
+| power-law-gravity | 7 | predict-is-it-the-computer | predict | Solar System | inherited | 1/60 s |
+| power-law-gravity | 8 | refine-the-timestep | measure | Solar System | inherited | 1/60 s |
+| power-law-gravity | 9 | the-refinement-verdict | question | Solar System | inherited | 1/60 s |
+| power-law-gravity | 10 | predict-period-and-distance | predict | Solar System | inherited | 1/60 s |
+| power-law-gravity | 11 | measure-the-slope | measure | Solar System | inherited | 1/60 s |
+| power-law-gravity | 12 | predict-the-slope | question | Solar System | inherited | 1/60 s |
+| power-law-gravity | 13 | why-the-slope-and-not-something-else | question | Solar System | inherited | 1/60 s |
+| power-law-gravity | 14 | predict-what-breaks | predict | Solar System | inherited | 1/60 s |
+| power-law-gravity | 15 | measure-conservation | measure | Solar System | inherited | 1/60 s |
+| power-law-gravity | 16 | why-they-survive | question | Solar System | inherited | 1/60 s |
+| power-law-gravity | 17 | and-energy | read | Solar System | inherited | none (holds the clock) |
+| power-law-gravity | 18 | two-lists | read | Solar System | inherited | none (holds the clock) |
+| power-law-gravity | 19 | near-three | read | Solar System | inherited | none (holds the clock) |
+| power-law-gravity | 20 | closing-question | question | Solar System | inherited | 1/60 s |
+| power-law-gravity | 21 | the-honest-caveat | read | Solar System | inherited | none (holds the clock) |
 | integrators-in-practice | 6 | choose-the-second-step | measure | Circumbinary Planet Lab | yes | 1/60 s |
 | integrators-in-practice | 7 | the-engine | measure | Circumbinary Planet Lab | inherited | 1/60 s |
 | integrators-in-practice | 8 | phase-luck | question | Circumbinary Planet Lab | inherited | 1/60 s |
@@ -565,7 +580,7 @@ is not pinned. Closing the lesson lifts the pin.
 | the-scale-of-the-solar-system | 3 | light-time-predict | predict | Solar System | inherited | 1/60 s |
 | the-scale-of-the-solar-system | 4 | light-time | measure | Solar System | inherited | 1/60 s |
 | the-scale-of-the-solar-system | 5 | earth-as-a-marble | predict | Solar System | inherited | 1/60 s |
-| the-scale-of-the-solar-system | 6 | scale-model | measure | Solar System | inherited | 1/60 s |
+| the-scale-of-the-solar-system | 6 | choose-your-marble | measure | Solar System | inherited | 1/60 s |
 | the-scale-of-the-solar-system | 7 | what-a-diagram-gets-wrong | question | Solar System | inherited | 1/60 s |
 | the-scale-of-the-solar-system | 8 | what-you-worked-out | read | Solar System | inherited | none (holds the clock) |
 | comets-and-the-sun | 1 | a-dirty-snowball | read | Solar System | yes | none (holds the clock) |
@@ -574,6 +589,7 @@ is not pinned. Closing the lesson lifts the pin.
 | comets-and-the-sun | 4 | going-out | question | Solar System | inherited | 1/60 s |
 | comets-and-the-sun | 5 | orbit-ends | measure | Solar System | inherited | 1/60 s |
 | comets-and-the-sun | 6 | heat-at-the-ends | measure | Solar System | inherited | 1/60 s |
-| comets-and-the-sun | 7 | the-real-halley | measure | Solar System | inherited | 1/60 s |
-| comets-and-the-sun | 8 | why-a-tail-near-the-sun | question | Solar System | inherited | 1/60 s |
-| comets-and-the-sun | 9 | what-you-worked-out | read | Solar System | inherited | none (holds the clock) |
+| comets-and-the-sun | 7 | halley-heat-predict | predict | Solar System | inherited | 1/60 s |
+| comets-and-the-sun | 8 | the-real-halley | measure | Solar System | inherited | 1/60 s |
+| comets-and-the-sun | 9 | why-a-tail-near-the-sun | question | Solar System | inherited | 1/60 s |
+| comets-and-the-sun | 10 | what-you-worked-out | read | Solar System | inherited | none (holds the clock) |

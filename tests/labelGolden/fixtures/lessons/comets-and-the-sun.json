@@ -23,16 +23,16 @@
   "answers": [],
   "decimals": [
    [
-    "heat-at-the-ends.t_peri",
-    0
+    "heat-at-the-ends.peri",
+    2
    ],
    [
-    "heat-at-the-ends.t_apo",
-    0
+    "heat-at-the-ends.apo",
+    2
    ],
    [
-    "the-real-halley.t_q",
-    0
+    "the-real-halley.q",
+    3
    ]
   ]
  },
@@ -40,18 +40,17 @@
  "steps": {
   "en": {
    "watch-the-tails": {
-    "probe": [[{"label":"The first comet on a closed orbit","value":"not on the canvas yet"}]]
+    "probe": [[{"label":"Select a comet","value":"-"},{"id":"peri","label":"Closest approach to the Sun","value":"-"},{"id":"apo","label":"Furthest distance from the Sun","value":"-"}]]
    },
    "orbit-ends": {
-    "probe": [[{"label":"The first comet on a closed orbit","value":"not on the canvas yet"}]],
+    "probe": [[{"label":"Select a comet","value":"-"},{"id":"peri","label":"Closest approach to the Sun","value":"-"},{"id":"apo","label":"Furthest distance from the Sun","value":"-"}]],
     "validate": {"calls":232,"distinct":1,"digest":"1d8fc6ceb1f94c63","samples":[null]}
    },
    "heat-at-the-ends": {
-    "probe": [[{"label":"The first comet on a closed orbit","value":"not on the canvas yet"}]],
-    "validate": {"calls":242,"distinct":1,"digest":"1d8fc6ceb1f94c63","samples":[null]}
+    "validate": {"calls":242,"distinct":3,"digest":"412d6697b162ccc9","samples":[null,{"level":"error","message":"The temperature is 275.5 K divided by the square root of the distance in astronomical units: use the closest approach for the first box and the furthest distance for the second."},{"level":"ok","message":" K at closest approach and  K at the far end: a factor of , the square root of the ratio of distances. Water ice turns to gas readily from about 160 K, which a bare nucleus reaches at about 3 AU, where the sandbox starts to draw tails. This comet’s near end is above it, so it can grow a tail there."}]}
    },
    "the-real-halley": {
-    "validate": {"calls":232,"distinct":2,"digest":"ca176a39c66b4ed0","samples":[null,{"level":"error","message":"Type 0.586, the real closest approach in astronomical units."}]}
+    "validate": {"calls":232,"distinct":2,"digest":"570a27bcdc31b158","samples":[null,{"level":"error","message":"Divide 275.5 K by the square root of 0.586, the real closest approach in astronomical units."}]}
    }
   },
   "es": "same"

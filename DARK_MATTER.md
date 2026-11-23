@@ -269,7 +269,7 @@ is running.
 
 ## The lesson
 
-**The Missing Mass**, <!--fact:steps:missing-mass-->33<!--/fact-->
+**The Missing Mass**, <!--fact:steps:missing-mass-->31<!--/fact-->
 steps, <!--fact:duration:missing-mass-->45-60 min<!--/fact-->. It makes one
 argument, and every step in it is either a measurement of that argument or a
 check that the student has not been handed the conclusion.
