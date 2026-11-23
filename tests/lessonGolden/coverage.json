@@ -9,14 +9,14 @@
     "tides",
     "butterfly-effect",
     "measuring-the-moon",
+    "orbital-energy",
     "black-holes",
     "extending-an-experiment",
-    "propose-an-observation",
-    "radial-velocity",
+    "power-law-gravity",
     "what-is-a-gravitational-wave",
     "a-night-at-the-telescope",
     "counts-to-magnitudes",
-    "power-law-gravity",
+    "propose-an-observation",
     "retrograde-motion"
   ],
   "lessonGain": {
@@ -205,6 +205,11 @@
       "key:question.minUncertainty",
       "key:question.valueWithin"
     ],
+    "orbital-energy": [
+      "key:explore.compare",
+      "key:explore.evidence",
+      "key:question.rubricCriteria"
+    ],
     "black-holes": [
       "key:question.checklist",
       "key:read.explainView"
@@ -213,13 +218,9 @@
       "key:measure.compute",
       "key:read.canvas"
     ],
-    "propose-an-observation": [
-      "key:measure.plan",
-      "key:question.rubricCriteria"
-    ],
-    "radial-velocity": [
-      "key:explore.compare",
-      "key:explore.evidence"
+    "power-law-gravity": [
+      "key:measure.canvas",
+      "key:question.explain"
     ],
     "what-is-a-gravitational-wave": [
       "audience:beginner",
@@ -231,8 +232,8 @@
     "counts-to-magnitudes": [
       "depth-step:quantitative/predict"
     ],
-    "power-law-gravity": [
-      "key:question.explain"
+    "propose-an-observation": [
+      "key:measure.plan"
     ],
     "retrograde-motion": [
       "lock:{\"placement\":true,\"inspector\":false}"
@@ -307,14 +308,14 @@
   ],
   "totals": {
     "investigations": 124,
-    "steps": 2003,
+    "steps": 2004,
     "activityCuts": 6,
-    "lessonTokens": 181,
+    "lessonTokens": 182,
     "activityTokens": 29,
     "stepTypes": {
       "read": 378,
       "predict": 207,
-      "measure": 525,
+      "measure": 526,
       "ellipse": 1,
       "question": 750,
       "explore": 141,

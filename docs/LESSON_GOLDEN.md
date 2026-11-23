@@ -89,14 +89,14 @@ The browser half takes about seven minutes on the private port.
 | 7 | `tides` | 4: `key:explore.canvas`, `key:predict.misconceptions`, `key:question.canvas`, `key:read.allowInspector` |
 | 8 | `butterfly-effect` | 3: `key:explore.rubric`, `key:predict.requires`, `lock:null` |
 | 9 | `measuring-the-moon` | 3: `key:question.maxUncertainty`, `key:question.minUncertainty`, `key:question.valueWithin` |
-| 10 | `black-holes` | 2: `key:question.checklist`, `key:read.explainView` |
-| 11 | `extending-an-experiment` | 2: `key:measure.compute`, `key:read.canvas` |
-| 12 | `propose-an-observation` | 2: `key:measure.plan`, `key:question.rubricCriteria` |
-| 13 | `radial-velocity` | 2: `key:explore.compare`, `key:explore.evidence` |
+| 10 | `orbital-energy` | 3: `key:explore.compare`, `key:explore.evidence`, `key:question.rubricCriteria` |
+| 11 | `black-holes` | 2: `key:question.checklist`, `key:read.explainView` |
+| 12 | `extending-an-experiment` | 2: `key:measure.compute`, `key:read.canvas` |
+| 13 | `power-law-gravity` | 2: `key:measure.canvas`, `key:question.explain` |
 | 14 | `what-is-a-gravitational-wave` | 2: `audience:beginner`, `key:read.checklist` |
 | 15 | `a-night-at-the-telescope` | 1: `key:question.reflect` |
 | 16 | `counts-to-magnitudes` | 1: `depth-step:quantitative/predict` |
-| 17 | `power-law-gravity` | 1: `key:question.explain` |
+| 17 | `propose-an-observation` | 1: `key:measure.plan` |
 | 18 | `retrograde-motion` | 1: `lock:{"placement":true,"inspector":false}` |
 
 | # | Activity cut | Tokens it adds |
