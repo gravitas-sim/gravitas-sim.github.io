@@ -54,7 +54,7 @@ const named = c =>
 
 const EXTENDING_AN_EXPERIMENT = {
   id: 'extending-an-experiment',
-  thumbnail: 'images/scenarios/binary-planet-lab.webp',
+  thumbnail: 'images/investigations/extending-an-experiment.webp',
   title: 'Extending an Experiment',
   subtitle:
     'From twenty planets that the engine ran to a population of two hundred thousand, with every uncertainty, in Python on the compute page',
@@ -67,6 +67,8 @@ const EXTENDING_AN_EXPERIMENT = {
   prerequisites: ['binary-star-planets'],
   tags: ['exoplanets'],
   lock: { placement: true, inspector: true },
+  // No scene: the notebook is the subject, so nothing is staged behind it.
+  canvas: 'quiet',
   objectives: [
     'Classify the trials of an experiment result into an outcome, and say how the definition of the outcome moves the result',
     'Run a reviewed Python notebook that fits the chance of an outcome with a bootstrap and extends it to a large synthetic population',
@@ -255,9 +257,6 @@ const EXTENDING_AN_EXPERIMENT = {
     },
     {
       sid: 'move-the-definition-yours',
-      canvas: 'scene',
-      time: { speed: 750, paused: true },
-      setup: { scenario: 'Binary Planet Lab', seed: 'binary', paused: true },
       compute: 'population-at-scale',
       type: 'measure',
       title: 'Move the definition',
