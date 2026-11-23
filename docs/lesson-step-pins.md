@@ -9,7 +9,7 @@ on a 60 Hz screen, a 144 Hz screen and a throttled tab. A reading step
 that holds the clock (`holdsClock` in `js/timestep.js`) does not run and
 is not pinned. Closing the lesson lifts the pin.
 
-560 steps in 25 lessons run on an integrated scene; 441 are pinned and 119 hold the clock.
+553 steps in 23 lessons run on an integrated scene; 436 are pinned and 117 hold the clock.
 
 | Lesson | Step | Id | Type | Scene | Own scene | Pinned step |
 |---|---|---|---|---|---|---|
@@ -48,29 +48,30 @@ is not pinned. Closing the lesson lifts the pin.
 | retrograde-motion | 7 | how-fast-each-one-goes | measure | Retrograde Mars | inherited | 1/60 s |
 | retrograde-motion | 8 | the-synodic-period | read | Retrograde Mars | inherited | none (holds the clock) |
 | retrograde-motion | 9 | how-often-does-earth-catch | question | Retrograde Mars | inherited | 1/60 s |
-| retrograde-motion | 10 | share-of-the-cycle | predict | Retrograde Mars | inherited | 1/60 s |
+| retrograde-motion | 10 | a-lap-gained | question | Retrograde Mars | inherited | 1/60 s |
 | retrograde-motion | 11 | before-you-look | predict | Retrograde Mars | inherited | 1/60 s |
 | retrograde-motion | 12 | reference-frames | read | Retrograde Mars | inherited | none (holds the clock) |
 | retrograde-motion | 13 | what-the-trails-are-doing | read | Retrograde Mars | inherited | none (holds the clock) |
 | retrograde-motion | 14 | put-yourself-on-earth | explore | Retrograde Mars | inherited | 1/60 s |
 | retrograde-motion | 15 | that-is-the-observation | read | Retrograde Mars | inherited | none (holds the clock) |
-| retrograde-motion | 16 | time-the-reversal | measure | Retrograde Mars | inherited | 1/60 s |
-| retrograde-motion | 17 | the-share-you-found | read | Retrograde Mars | inherited | none (holds the clock) |
-| retrograde-motion | 18 | nearest-and-furthest | measure | Retrograde Mars | inherited | 1/60 s |
-| retrograde-motion | 19 | bright-and-backwards-together | question | Retrograde Mars | inherited | 1/60 s |
-| retrograde-motion | 20 | when-does-it-reverse | question | Retrograde Mars | inherited | 1/60 s |
-| retrograde-motion | 21 | overtaking-on-the-inside | read | Retrograde Mars | inherited | none (holds the clock) |
-| retrograde-motion | 22 | say-it-in-your-own | question | Retrograde Mars | inherited | 1/60 s |
-| retrograde-motion | 23 | what-it-cost-to-explain | read | Retrograde Mars | inherited | none (holds the clock) |
-| retrograde-motion | 24 | what-the-epicycle-was-really | question | Retrograde Mars | inherited | 1/60 s |
-| retrograde-motion | 25 | counting-the-machinery | question | Retrograde Mars | inherited | 1/60 s |
-| retrograde-motion | 26 | and-what-about-the-sun | predict | Retrograde Mars | inherited | 1/60 s |
-| retrograde-motion | 27 | do-it-for-the-sun | explore | Retrograde Mars | inherited | 1/60 s |
-| retrograde-motion | 28 | which-one-is-moving | question | Retrograde Mars | inherited | 1/60 s |
-| retrograde-motion | 29 | frames-are-not-all-equal | read | Retrograde Mars | inherited | none (holds the clock) |
+| retrograde-motion | 16 | catch-the-reversal | measure | Retrograde Mars | inherited | 1/60 s |
+| retrograde-motion | 17 | nearest-and-furthest | measure | Retrograde Mars | inherited | 1/60 s |
+| retrograde-motion | 18 | bright-and-backwards-together | question | Retrograde Mars | inherited | 1/60 s |
+| retrograde-motion | 19 | when-does-it-reverse | question | Retrograde Mars | inherited | 1/60 s |
+| retrograde-motion | 20 | overtaking-on-the-inside | read | Retrograde Mars | inherited | none (holds the clock) |
+| retrograde-motion | 21 | say-it-in-your-own | question | Retrograde Mars | inherited | 1/60 s |
+| retrograde-motion | 22 | what-it-cost-to-explain | read | Retrograde Mars | inherited | none (holds the clock) |
+| retrograde-motion | 23 | what-the-epicycle-was-really | question | Retrograde Mars | inherited | 1/60 s |
+| retrograde-motion | 24 | counting-the-machinery | question | Retrograde Mars | inherited | 1/60 s |
+| retrograde-motion | 25 | and-what-about-the-sun | predict | Retrograde Mars | inherited | 1/60 s |
+| retrograde-motion | 26 | do-it-for-the-sun | explore | Retrograde Mars | inherited | 1/60 s |
+| retrograde-motion | 27 | which-one-is-moving | question | Retrograde Mars | inherited | 1/60 s |
+| retrograde-motion | 28 | frames-are-not-all-equal | read | Retrograde Mars | inherited | none (holds the clock) |
+| retrograde-motion | 29 | what-actually-settled-it | read | Retrograde Mars | inherited | none (holds the clock) |
 | retrograde-motion | 30 | why-tycho-found-nothing | question | Retrograde Mars | inherited | 1/60 s |
-| retrograde-motion | 31 | jupiters-loops | question | Retrograde Mars | inherited | 1/60 s |
-| retrograde-motion | 32 | what-you-did | read | Retrograde Mars | inherited | none (holds the clock) |
+| retrograde-motion | 31 | how-long-does-a-loop | measure | Retrograde Mars | inherited | 1/60 s |
+| retrograde-motion | 32 | mars-or-jupiter | question | Retrograde Mars | inherited | 1/60 s |
+| retrograde-motion | 33 | what-you-did | read | Retrograde Mars | inherited | none (holds the clock) |
 | transit-photometry | 1 | a-firefly-beside-a-lighthouse | read | Transit Lab | yes | none (holds the clock) |
 | transit-photometry | 2 | five-ways-to-find-a | read | Transit Lab | inherited | none (holds the clock) |
 | transit-photometry | 3 | estimate-the-dip | predict | Transit Lab | inherited | 1/60 s |
@@ -232,39 +233,40 @@ is not pinned. Closing the lesson lifts the pin.
 | goldilocks-question | 1 | what-does-earth-get-from | read | Solar System | yes | none (holds the clock) |
 | goldilocks-question | 2 | one-earth-of-starlight | read | Solar System | inherited | 1/60 s |
 | goldilocks-question | 3 | move-it-twice-as-far | predict | Solar System | inherited | 1/60 s |
-| goldilocks-question | 4 | three-distances-yours | measure | Solar System | inherited | 1/60 s |
-| goldilocks-question | 5 | what-the-graph-says | question | Solar System | inherited | 1/60 s |
-| goldilocks-question | 6 | the-star-is-not-running | explore | Solar System | inherited | 1/60 s |
-| goldilocks-question | 7 | writing-it-down-then-using | question | Solar System | inherited | 1/60 s |
-| goldilocks-question | 8 | leave-the-planet-change-the | predict | Solar System | inherited | 1/60 s |
-| goldilocks-question | 9 | four-stars-one-planet | explore | Solar System | inherited | 1/60 s |
-| goldilocks-question | 10 | what-luminosity-does | question | Solar System | inherited | 1/60 s |
-| goldilocks-question | 11 | so-where-would-a-planet | explore | Solar System | inherited | 1/60 s |
-| goldilocks-question | 12 | dim-stars-close-bands | question | Solar System | inherited | 1/60 s |
-| goldilocks-question | 13 | saying-it-carefully | read | Solar System | inherited | none (holds the clock) |
-| goldilocks-question | 14 | now-put-it-round-the | explore | Habitable Zone Lab | yes | 1/60 s |
-| goldilocks-question | 15 | reading-the-real-solar-system | question | Habitable Zone Lab | inherited | 1/60 s |
-| goldilocks-question | 16 | the-mars-problem | question | Habitable Zone Lab | inherited | 1/60 s |
-| goldilocks-question | 17 | the-two-edges | read | Habitable Zone Lab | inherited | 1/60 s |
-| goldilocks-question | 18 | two-definitions-of-the-same | explore | Habitable Zone Lab | inherited | 1/60 s |
-| goldilocks-question | 19 | what-actually-changed | question | Habitable Zone Lab | inherited | 1/60 s |
-| goldilocks-question | 20 | the-wider-definition-on-the | explore | Habitable Zone Lab | yes | 1/60 s |
-| goldilocks-question | 21 | what-the-wider-band-bought | question | Habitable Zone Lab | inherited | 1/60 s |
-| goldilocks-question | 22 | venus-by-the-rule-you | question | Habitable Zone Lab | inherited | 1/60 s |
-| goldilocks-question | 23 | a-year-on-a-circular | read | Habitable Zone Lab | inherited | 1/60 s |
-| goldilocks-question | 24 | now-stretch-the-orbit | predict | Habitable Zone Lab | inherited | 1/60 s |
-| goldilocks-question | 25 | run-an-eccentric-year | explore | Habitable Zone Lab | inherited | 1/60 s |
-| goldilocks-question | 26 | crossing-the-edges | explore | stage: system | yes | 1/60 s |
-| goldilocks-question | 27 | reading-the-fraction | question | stage: system | yes | 1/60 s |
-| goldilocks-question | 28 | a-real-system-forty-light | predict | TRAPPIST-1 System | yes | 1/60 s |
-| goldilocks-question | 29 | all-seven-planets | explore | TRAPPIST-1 System | yes | 1/60 s |
-| goldilocks-question | 30 | watch-it-run | explore | TRAPPIST-1 System | yes | 1/60 s |
-| goldilocks-question | 31 | take-the-readings-yourself | measure | TRAPPIST-1 System | inherited | 1/60 s |
-| goldilocks-question | 32 | the-question-the-name-invites | question | TRAPPIST-1 System | inherited | 1/60 s |
-| goldilocks-question | 33 | three-planets-that-all-look | explore | TRAPPIST-1 System | inherited | 1/60 s |
-| goldilocks-question | 34 | which-one-would-you-observe | question | TRAPPIST-1 System | inherited | 1/60 s |
-| goldilocks-question | 35 | one-more-and-then-you | question | TRAPPIST-1 System | inherited | 1/60 s |
-| goldilocks-question | 36 | what-you-worked-out | read | TRAPPIST-1 System | inherited | none (holds the clock) |
+| goldilocks-question | 4 | three-distances | explore | Solar System | inherited | 1/60 s |
+| goldilocks-question | 5 | write-the-three-down | measure | Solar System | inherited | 1/60 s |
+| goldilocks-question | 6 | what-the-graph-says | question | Solar System | inherited | 1/60 s |
+| goldilocks-question | 7 | the-star-is-not-running | explore | Solar System | inherited | 1/60 s |
+| goldilocks-question | 8 | writing-it-down-then-using | question | Solar System | inherited | 1/60 s |
+| goldilocks-question | 9 | leave-the-planet-change-the | predict | Solar System | inherited | 1/60 s |
+| goldilocks-question | 10 | four-stars-one-planet | explore | Solar System | inherited | 1/60 s |
+| goldilocks-question | 11 | what-luminosity-does | question | Solar System | inherited | 1/60 s |
+| goldilocks-question | 12 | so-where-would-a-planet | explore | Solar System | inherited | 1/60 s |
+| goldilocks-question | 13 | dim-stars-close-bands | question | Solar System | inherited | 1/60 s |
+| goldilocks-question | 14 | saying-it-carefully | read | Solar System | inherited | none (holds the clock) |
+| goldilocks-question | 15 | now-put-it-round-the | explore | Habitable Zone Lab | yes | 1/60 s |
+| goldilocks-question | 16 | reading-the-real-solar-system | question | Habitable Zone Lab | inherited | 1/60 s |
+| goldilocks-question | 17 | the-mars-problem | question | Habitable Zone Lab | inherited | 1/60 s |
+| goldilocks-question | 18 | the-two-edges | read | Habitable Zone Lab | inherited | 1/60 s |
+| goldilocks-question | 19 | two-definitions-of-the-same | explore | Habitable Zone Lab | inherited | 1/60 s |
+| goldilocks-question | 20 | what-actually-changed | question | Habitable Zone Lab | inherited | 1/60 s |
+| goldilocks-question | 21 | the-wider-definition-on-the | explore | Habitable Zone Lab | yes | 1/60 s |
+| goldilocks-question | 22 | what-the-wider-band-bought | question | Habitable Zone Lab | inherited | 1/60 s |
+| goldilocks-question | 23 | venus-by-the-rule-you | question | Habitable Zone Lab | inherited | 1/60 s |
+| goldilocks-question | 24 | a-year-on-a-circular | read | Habitable Zone Lab | inherited | 1/60 s |
+| goldilocks-question | 25 | now-stretch-the-orbit | predict | Habitable Zone Lab | inherited | 1/60 s |
+| goldilocks-question | 26 | run-an-eccentric-year | explore | Habitable Zone Lab | inherited | 1/60 s |
+| goldilocks-question | 27 | crossing-the-edges | explore | stage: system | yes | 1/60 s |
+| goldilocks-question | 28 | reading-the-fraction | question | stage: system | yes | 1/60 s |
+| goldilocks-question | 29 | a-real-system-forty-light | predict | TRAPPIST-1 System | yes | 1/60 s |
+| goldilocks-question | 30 | all-seven-planets | explore | TRAPPIST-1 System | yes | 1/60 s |
+| goldilocks-question | 31 | watch-it-run | explore | TRAPPIST-1 System | yes | 1/60 s |
+| goldilocks-question | 32 | take-the-readings-yourself | measure | TRAPPIST-1 System | inherited | 1/60 s |
+| goldilocks-question | 33 | the-question-the-name-invites | question | TRAPPIST-1 System | inherited | 1/60 s |
+| goldilocks-question | 34 | three-planets-that-all-look | explore | TRAPPIST-1 System | inherited | 1/60 s |
+| goldilocks-question | 35 | which-one-would-you-observe | question | TRAPPIST-1 System | inherited | 1/60 s |
+| goldilocks-question | 36 | one-more-and-then-you | question | TRAPPIST-1 System | inherited | 1/60 s |
+| goldilocks-question | 37 | what-you-worked-out | read | TRAPPIST-1 System | inherited | none (holds the clock) |
 | missing-mass | 1 | two-ways-to-weigh-a | read | Solar System | yes | none (holds the clock) |
 | missing-mass | 2 | put-the-mass-somewhere | explore | Solar System | inherited | 1/60 s |
 | missing-mass | 3 | which-arrangement-gives-a-flat | question | Solar System | inherited | 1/60 s |
@@ -337,7 +339,7 @@ is not pinned. Closing the lesson lifts the pin.
 | when-orbits-lock | 1 | four-moons-and-a-suspicious | read | Galilean Resonance | yes | none (holds the clock) |
 | when-orbits-lock | 2 | how-close-is-close | predict | Galilean Resonance | inherited | 1/60 s |
 | when-orbits-lock | 3 | measure-the-four-periods | explore | Galilean Resonance | yes | 1/60 s |
-| when-orbits-lock | 4 | rank-the-three-pairs | measure | Galilean Resonance | inherited | 1/60 s |
+| when-orbits-lock | 4 | write-down-the-ratios | measure | Galilean Resonance | inherited | 1/60 s |
 | when-orbits-lock | 5 | which-is-the-impressive-one | question | Galilean Resonance | inherited | 1/60 s |
 | when-orbits-lock | 6 | what-a-resonance-actually-is | read | Galilean Resonance | inherited | none (holds the clock) |
 | when-orbits-lock | 7 | where-do-the-line-ups | predict | Galilean Resonance | yes | 1/60 s |
@@ -347,7 +349,7 @@ is not pinned. Closing the lesson lifts the pin.
 | when-orbits-lock | 11 | the-laplace-argument | predict | Galilean Resonance | inherited | 1/60 s |
 | when-orbits-lock | 12 | watch-the-laplace-argument | explore | Galilean Resonance | inherited | 1/60 s |
 | when-orbits-lock | 13 | why-the-instrument-refuses | read | Galilean Resonance | inherited | none (holds the clock) |
-| when-orbits-lock | 14 | capture-the-laplace-libration | measure | Galilean Resonance | inherited | 1/60 s |
+| when-orbits-lock | 14 | record-the-laplace-libration | measure | Galilean Resonance | inherited | 1/60 s |
 | when-orbits-lock | 15 | what-180-means | question | Galilean Resonance | inherited | 1/60 s |
 | when-orbits-lock | 16 | one-percent | predict | Galilean Resonance | inherited | 1/60 s |
 | when-orbits-lock | 17 | break-it | explore | Broken Laplace Resonance | yes | 1/60 s |
@@ -356,19 +358,18 @@ is not pinned. Closing the lesson lifts the pin.
 | when-orbits-lock | 20 | the-best-ratio-in-the | question | Galilean Resonance | inherited | 1/60 s |
 | when-orbits-lock | 21 | the-orbit-that-crosses-and | read | Pluto and Neptune | yes | none (holds the clock) |
 | when-orbits-lock | 22 | measure-pluto-s-resonance | explore | Pluto and Neptune | yes | 1/60 s |
-| when-orbits-lock | 23 | capture-pluto-s-libration | measure | Pluto and Neptune | inherited | 1/60 s |
+| when-orbits-lock | 23 | record-pluto-s-libration | measure | Pluto and Neptune | inherited | 1/60 s |
 | when-orbits-lock | 24 | where-the-line-ups-happen | explore | Pluto and Neptune | inherited | 1/60 s |
 | when-orbits-lock | 25 | why-180-protects-pluto | question | Pluto and Neptune | inherited | 1/60 s |
 | when-orbits-lock | 26 | sixty-degrees-ahead | read | Jupiter Trojans | yes | none (holds the clock) |
 | when-orbits-lock | 27 | the-rotating-frame | explore | Jupiter Trojans | yes | 1/60 s |
-| when-orbits-lock | 28 | capture-the-tadpole | measure | Jupiter Trojans | inherited | 1/60 s |
+| when-orbits-lock | 28 | record-the-tadpole | measure | Jupiter Trojans | inherited | 1/60 s |
 | when-orbits-lock | 29 | two-equilibria-one-survivor | question | Jupiter Trojans | inherited | 1/60 s |
-| when-orbits-lock | 30 | predict-the-wide-probe | predict | Jupiter Trojans | inherited | 1/60 s |
-| when-orbits-lock | 31 | one-last-ratio | explore | Jupiter Trojans | inherited | 1/60 s |
-| when-orbits-lock | 32 | what-you-can-and-cannot | read | Jupiter Trojans | inherited | none (holds the clock) |
-| when-orbits-lock | 33 | the-report-you-would-write | question | Jupiter Trojans | inherited | 1/60 s |
-| when-orbits-lock | 34 | say-what-a-libration-shows | question | Jupiter Trojans | inherited | 1/60 s |
-| when-orbits-lock | 35 | where-this-goes | read | Jupiter Trojans | inherited | none (holds the clock) |
+| when-orbits-lock | 30 | one-last-ratio | explore | Jupiter Trojans | inherited | 1/60 s |
+| when-orbits-lock | 31 | what-you-can-and-cannot | read | Jupiter Trojans | inherited | none (holds the clock) |
+| when-orbits-lock | 32 | the-report-you-would-write | question | Jupiter Trojans | inherited | 1/60 s |
+| when-orbits-lock | 33 | say-what-a-libration-shows | question | Jupiter Trojans | inherited | 1/60 s |
+| when-orbits-lock | 34 | where-this-goes | read | Jupiter Trojans | inherited | none (holds the clock) |
 | detect-this-planet | 1 | twelve-nights | read | Exoplanet Characterization Lab | yes | none (holds the clock) |
 | detect-this-planet | 2 | what-decides-whether-you-find | predict | Exoplanet Characterization Lab | inherited | 1/60 s |
 | detect-this-planet | 3 | schedule-a-twelve-nights-one | explore | Exoplanet Characterization Lab | inherited | 1/60 s |
@@ -545,14 +546,6 @@ is not pinned. Closing the lesson lifts the pin.
 | power-law-gravity | 19 | near-three | read | Solar System | inherited | none (holds the clock) |
 | power-law-gravity | 20 | closing-question | question | Solar System | inherited | 1/60 s |
 | power-law-gravity | 21 | the-honest-caveat | read | Solar System | inherited | none (holds the clock) |
-| integrators-in-practice | 6 | choose-the-second-step | measure | Circumbinary Planet Lab | yes | 1/60 s |
-| integrators-in-practice | 7 | the-engine | measure | Circumbinary Planet Lab | inherited | 1/60 s |
-| integrators-in-practice | 8 | phase-luck | question | Circumbinary Planet Lab | inherited | 1/60 s |
-| integrators-in-practice | 9 | trust-at-six-orbits | question | Circumbinary Planet Lab | inherited | 1/60 s |
-| integrators-in-practice | 10 | what-you-worked-out | read | Circumbinary Planet Lab | inherited | none (holds the clock) |
-| extending-an-experiment | 6 | move-the-definition-yours | measure | Binary Planet Lab | yes | 1/60 s |
-| extending-an-experiment | 7 | which-trial-moved | measure | Binary Planet Lab | inherited | 1/60 s |
-| extending-an-experiment | 8 | what-you-worked-out | read | Binary Planet Lab | inherited | none (holds the clock) |
 | why-rings | 5 | a-pass-inside-the-limit | read | Roche Pass | yes | 1/60 s |
 | why-rings | 7 | a-ring-with-a-resonance | read | Ring Gap | yes | none (holds the clock) |
 | the-scale-of-the-solar-system | 1 | a-picture-you-have-seen | read | Solar System | yes | none (holds the clock) |

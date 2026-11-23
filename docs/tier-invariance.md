@@ -8,7 +8,7 @@ Each scene below is built in Node at both tiers from the same seed. The builder 
 
 ## Summary
 
-- Lesson scenes: 40 setups over 28 scenarios in 124 lessons; 0 differ between tiers.
+- Lesson scenes: 39 setups over 28 scenarios in 124 lessons; 0 differ between tiers.
 - Built-in scenarios: 61; 24 differ between tiers.
 - Scenes where a kept body changed: none.
 
@@ -17,18 +17,17 @@ Each scene below is built in Node at both tiers from the same seed. The builder 
 | Scenario | Lessons | Seed | Settings | Full tier | Low tier | Differs | Kept bodies |
 |---|---|---|---|---|---|---|---|
 | binary-pair | butterfly-effect | chaos-binary | sim_speed=20 | 2 star (2) | 2 star (2) | no | identical |
-| binary-planet-lab | binary-star-planets, extending-an-experiment | binary | - | 2 star, 1 planet (3) | 2 star, 1 planet (3) | no | identical |
+| binary-planet-lab | binary-star-planets | binary | - | 2 star, 1 planet (3) | 2 star, 1 planet (3) | no | identical |
 | blended-binary | transit-photometry | transit-lab | - | 2 star, 1 planet (3) | 2 star, 1 planet (3) | no | identical |
-| broken-laplace-resonance | when-orbits-lock | resonance-lab | sim_speed=250 | 1 star, 4 planet (5) | 1 star, 4 planet (5) | no | identical |
-| circumbinary-planet-lab | binary-star-planets, integrators-in-practice | binary | - | 2 star, 1 planet (3) | 2 star, 1 planet (3) | no | identical |
+| broken-laplace-resonance | when-orbits-lock | resonance-lab | - | 1 star, 4 planet (5) | 1 star, 4 planet (5) | no | identical |
+| circumbinary-planet-lab | binary-star-planets | binary | - | 2 star, 1 planet (3) | 2 star, 1 planet (3) | no | identical |
 | coma-cluster | missing-mass | zwicky | - | 24 galaxy (24) | 24 galaxy (24) | no | identical |
 | earth-moon-system | tides | tides-lab | - | 2 planet (2) | 2 planet (2) | no | identical |
 | exoplanet-characterization-lab | radial-velocity | tug | - | 1 star, 1 giant (2) | 1 star, 1 giant (2) | no | identical |
 | exoplanet-characterization-lab | detect-this-planet | detect | - | 1 star, 1 giant (2) | 1 star, 1 giant (2) | no | identical |
 | exoplanet-characterization-lab | design-the-schedule | schedule | - | 1 star, 1 giant (2) | 1 star, 1 giant (2) | no | identical |
 | exoplanet-characterization-lab | twelve-nights | twelve-nights | - | 1 star, 1 giant (2) | 1 star, 1 giant (2) | no | identical |
-| galilean-resonance | when-orbits-lock | resonance-lab | sim_speed=250 | 1 star, 4 planet (5) | 1 star, 4 planet (5) | no | identical |
-| galilean-resonance | ios-fire | resonance-lab | - | 1 star, 4 planet (5) | 1 star, 4 planet (5) | no | identical |
+| galilean-resonance | ios-fire, when-orbits-lock | resonance-lab | - | 1 star, 4 planet (5) | 1 star, 4 planet (5) | no | identical |
 | gravity-assist-heliocentric | gravity-assist | assist | - | 1 star, 1 planet, 1 giant (3) | 1 star, 1 planet, 1 giant (3) | no | identical |
 | gravity-assist-lab | gravity-assist | assist | - | 1 planet, 1 giant (2) | 1 planet, 1 giant (2) | no | identical |
 | habitable-zone-lab | goldilocks-question | goldilocks | habitable_zone_optimism=1 | 1 star, 4 planet (5) | 1 star, 4 planet (5) | no | identical |
@@ -112,8 +111,8 @@ Seed `tier-table`, no settings beyond the scenario's own. "Gallery" marks the sc
 | milky-way-rotation | yes | missing-mass | 91 star (91) | 91 star (91) | no | identical |
 | coma-cluster | yes | missing-mass | 24 galaxy (24) | 24 galaxy (24) | no | identical |
 | exoplanet-characterization-lab | yes | design-the-schedule, detect-this-planet, radial-velocity, twelve-nights | 1 star, 1 giant (2) | 1 star, 1 giant (2) | no | identical |
-| binary-planet-lab | yes | binary-star-planets, extending-an-experiment | 2 star, 1 planet (3) | 2 star, 1 planet (3) | no | identical |
-| circumbinary-planet-lab | yes | binary-star-planets, integrators-in-practice | 2 star, 1 planet (3) | 2 star, 1 planet (3) | no | identical |
+| binary-planet-lab | yes | binary-star-planets | 2 star, 1 planet (3) | 2 star, 1 planet (3) | no | identical |
+| circumbinary-planet-lab | yes | binary-star-planets | 2 star, 1 planet (3) | 2 star, 1 planet (3) | no | identical |
 | gravity-assist-lab | yes | gravity-assist | 1 planet, 1 giant (2) | 1 planet, 1 giant (2) | no | identical |
 | gravity-assist-heliocentric | yes | gravity-assist | 1 star, 1 planet, 1 giant (3) | 1 star, 1 planet, 1 giant (3) | no | identical |
 | lagrange-point-lab | yes | lagrange-points | 2 star, 1 planet (3) | 2 star, 1 planet (3) | no | identical |
