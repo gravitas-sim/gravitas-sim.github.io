@@ -30,14 +30,11 @@ import { t } from './i18n/index.js';
 // directly and never reach the registry.
 // The strings this panel reads live in the deferred catalog, and asking for
 // one before it arrives returns the message id. The load used to be started
-// here and abandoned - `ensureDeferredMessages().catch(() => {})` - which meant
-// two things at once: a synchronous label read in the same tick got a raw id,
-// and a genuine failure to fetch the catalog was discarded without a word.
-//
-// Started here still, because the fetch should be in flight as early as
-// possible, but the promise is kept and the failure is not swallowed.
-// js/widgets.js exports whenWidgetsReady(), which is what a caller awaits
-// before reading a label from this file. See js/i18n/deferredMessages.js.
+// here and abandoned - `ensureDeferredMessages().catch(() => {})` - so a label
+// read in the same tick got a raw id and a failed fetch was discarded unseen.
+// Started here still, as early as possible, but the promise is kept and the
+// failure is not swallowed. js/widgets.js exports whenWidgetsReady(), which a
+// caller awaits before reading a label here. See js/i18n/deferredMessages.js.
 import { awaitDeferredMessages } from './i18n/deferredMessages.js';
 
 /** The load, kept so js/widgets.js can await it. */
@@ -584,6 +581,7 @@ const STRENGTH = {
       });
     }
     rows.push({
+      id: 'stretch',
       get label() {
         return t('tideW.tidalStretch');
       },
@@ -984,7 +982,7 @@ const BALANCE = {
       regime: disruptionRegime(distanceM, rigid, fluid),
     };
   },
-  readout(v) {
+  readout(v, _ctx, spec = {}) {
     const f = BALANCE.compute(v);
     const verdict = {
       safe: 'Its own gravity wins. It stays a ball.',
@@ -992,7 +990,7 @@ const BALANCE = {
         'Comparable. It would be visibly stretched and shedding material.',
       disrupting: 'The tide wins. A body with no strength comes apart here.',
     }[f.regime];
-    return [
+    const rows = [
       {
         get label() {
           return t('tideW.itsOwnGravityAtIts');
@@ -1026,8 +1024,10 @@ const BALANCE = {
         value: verdict,
       },
     ];
+    // A hunt withholds where the bars meet: the student finds it.
+    return spec.hunt ? rows.filter((_, i) => i !== 3) : rows;
   },
-  draw(canvas, v) {
+  draw(canvas, v, _ctx, spec = {}) {
     const H = responsiveHeight(280, 230);
     const { ctx, w } = surface(canvas, H);
     sky(ctx, w, H);
@@ -1093,7 +1093,7 @@ const BALANCE = {
     ctx.lineTo(w - 20, ry);
     ctx.stroke();
     const cross = f.rigid / EARTH_RADIUS_M;
-    if (cross >= scaleLo && cross <= scaleHi) {
+    if (!spec.hunt && cross >= scaleLo && cross <= scaleHi) {
       ctx.strokeStyle = WARN;
       ctx.beginPath();
       ctx.moveTo(rx(cross), ry - 8);
