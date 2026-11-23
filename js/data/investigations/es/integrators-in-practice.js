@@ -164,3 +164,8 @@ export default {
     },
   ],
 };
+
+// The Spanish check messages of this lesson's computed answers, fetched with
+// these words (loaders.js waits for it) and by no one else.
+export const messages = () =>
+  import('../../../i18n/computingMessagesEs.js').catch(() => {});

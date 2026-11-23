@@ -452,10 +452,11 @@ export function loadInvestigation(id, locale = lessonLocale) {
         })
       : null,
   ])
-    .then(([mod, words]) => {
-      const inv = words
+    .then(async ([mod, words]) => {
+      const merged = words
         ? mergeTranslation(mod.default, words.default)
         : mod.default;
+      const inv = (await words?.messages?.())?.speak(merged) ?? merged;
       loaded.set(key, inv);
       pending.delete(key);
       return inv;
