@@ -345,35 +345,37 @@ const ENERGY = {
           };
         }
         // The dividing speed from this cannon: the escape speed at 1.05 Earth
-        // radii, sqrt(2GM/r) = 10.916 km/s (js/energyWidgets.js).
-        if (v.gone <= 10.916) {
+        // radii, sqrt(2GM/r) = 10.916 km/s (js/energyWidgets.js; the lesson
+        // test pins this to the instrument).
+        const line = 10.916;
+        if (v.gone <= line) {
           return {
             level: 'error',
             message:
               'Both of those shots still come back, so the line is higher than either. Fire faster than your larger speed and watch the "Does it come back?" line.',
           };
         }
-        if (v.back >= 10.916) {
+        if (v.back >= line) {
           return {
             level: 'error',
             message:
               'Both of those shots leave for good, so the line is lower than either. Fire slower than your smaller speed and watch the "Does it come back?" line.',
           };
         }
+        const gap = v.gone - v.back;
         const mid = (v.back + v.gone) / 2;
-        if (Math.abs(mid - 10.9) > 0.6) {
+        const half = (gap / 2).toFixed(2);
+        // The pair brackets the line. A bracket is a measurement whose
+        // uncertainty is its width, so a wide one is valid, and says so.
+        if (gap > 0.5 + 1e-9) {
           return {
-            level: 'error',
-            message:
-              mid < 10.9
-                ? 'The line is between your two speeds, but your slower one is a long way under it. Fire speeds between the two and keep the last one that comes back.'
-                : 'The line is between your two speeds, but your faster one is a long way over it. Fire speeds between the two and keep the first one that leaves.',
+            level: 'warn',
+            message: `The line is between your two speeds, but they give an uncertainty of ${half} km/s either way, which is wide. Fire speeds between the two and keep the last that comes back and the first that leaves to close the gap.`,
           };
         }
-        const gap = v.gone - v.back;
         return {
           level: 'ok',
-          message: `Your dividing speed is ${mid.toFixed(2)} km/s, give or take ${(gap / 2).toFixed(2)}. From this height the escape speed is 10.9 km/s, and it sits inside your gap, which is what a measurement with an honest uncertainty looks like.`,
+          message: `Your dividing speed is ${mid.toFixed(2)} km/s, give or take ${half}. From this height the escape speed is 10.9 km/s, and it sits inside your gap, which is what a measurement with an honest uncertainty looks like.`,
         };
       },
       tip: 'Two numbers and the gap between them is a more honest answer than one number on its own. Nobody finds a threshold exactly; they find the last speed on each side of it.',

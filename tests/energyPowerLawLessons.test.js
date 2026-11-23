@@ -20,6 +20,7 @@ import {
   escapeSpeed,
 } from '../js/energyWidgets.js';
 import { expectedKeplerSlope } from '../js/powerLawGravity.js';
+import { POWER_LAW_WIDGETS } from '../js/powerLawWidgets.js';
 import { canvasAt, canvasProblems } from '../js/lesson/canvasKind.js';
 import { predictionState } from '../js/lesson/held.js';
 
@@ -163,33 +164,55 @@ describe('Bound, Unbound and Escape: the dividing speed is found, not handed ove
       }
     });
 
-    test('a bracket either side of the line is accepted whatever its width', () => {
+    test('a bracket either side of the line is accepted, and the narrow ones are graded ok', () => {
       for (const [a, b] of [
         [10.9, 11],
         [10.8, 11],
-        [10.5, 11.3],
-        [9, 13],
-        [9.5, 12.2],
+        [10.5, 11],
+        [10.7, 11.1],
       ]) {
         expect(check(a, b).level).toBe('ok');
       }
     });
 
-    test('the width is the reported uncertainty, not a grade', () => {
-      const narrow = check(10.9, 11);
-      const wide = check(9, 13);
-      expect(narrow.message).toMatch(/give or take 0\.05/);
-      expect(wide.message).toMatch(/give or take 2\.00/);
+    test('the width is the reported uncertainty', () => {
+      expect(check(10.9, 11).message).toMatch(/give or take 0\.05/);
+      expect(check(10.5, 11).message).toMatch(/give or take 0\.25/);
     });
 
-    test('a lopsided bracket is refused and the far speed is named, without a number', () => {
-      const slow = check(6, 12);
-      expect(slow.level).toBe('error');
-      expect(slow.message).toMatch(/slower one is a long way under/);
-      const fast = check(10, 14);
-      expect(fast.level).toBe('error');
-      expect(fast.message).toMatch(/faster one is a long way over/);
-      for (const r of [slow, fast]) expect(r.message).not.toMatch(/\d/);
+    test('a wide bracket is valid but wide, wherever its middle sits', () => {
+      // 10.0 / 11.9 once passed as pinned because its middle was near the
+      // line; the honest coarse 6 / 14 was refused. Width decides now.
+      for (const [a, b] of [
+        [10, 11.9],
+        [6, 14],
+        [9, 13],
+        [9.5, 12.2],
+        [6, 12],
+        [10, 14],
+      ]) {
+        const r = check(a, b);
+        expect(r.level).toBe('warn');
+        expect(r.message).toMatch(/which is wide/);
+        expect(r.message).toContain(
+          `uncertainty of ${((b - a) / 2).toFixed(2)} km/s`
+        );
+        // It brackets the line without saying where the line is.
+        expect(r.message).not.toMatch(/10\.9/);
+      }
+    });
+
+    test("the line the check uses is the instrument's escape speed at the cannon", () => {
+      const v = { v: 9 };
+      launch.reset(v, { autorun: false });
+      const line = launch.compute(v).escape / 1000;
+      expect(line).toBeCloseTo(10.916, 3);
+      expect(escapeSpeed(EARTH.mass, R0) / 1000).toBeCloseTo(10.916, 3);
+      // A pair 2 m/s either side of the line is a bracket; one that ends a
+      // hair short of it is refused as both coming back.
+      expect(check(line - 0.002, line + 0.002).level).toBe('ok');
+      expect(check(10.9, line - 0.002).level).toBe('error');
+      expect(check(line + 0.002, 11.5).level).toBe('error');
     });
   });
 });
@@ -351,6 +374,35 @@ describe('What If Gravity Were Not Inverse Square?: a leak fixed, one task chang
     const use = stepOf(POWER, 'predict-the-slope-at-2-9');
     expect(use.tool.start).toEqual({ n: 2 });
     expect(use.tool.values).toEqual({ n: 2.9 });
+  });
+
+  test('the predicted-slope row is withheld on the steps that ask for the slope, and shown elsewhere', () => {
+    const kepler = POWER_LAW_WIDGETS.find(w => w.id === 'power-law-kepler');
+    const rows = (n, spec) =>
+      kepler.readout({ n }, undefined, spec).map(r => r.id ?? r.label);
+    for (const sid of ['measure-the-slope', 'predict-the-slope-at-2-9']) {
+      const { tool } = stepOf(POWER, sid);
+      expect(tool.id).toBe('power-law-kepler');
+      expect(tool.withhold).toEqual(['expected']);
+      for (const n of [1.8, 2, 2.5, 2.9]) {
+        const shown = kepler.readout({ n }, undefined, tool);
+        expect(shown.map(r => r.id)).not.toContain('expected');
+        // Nothing left on the instrument carries the formula or its value.
+        const text = JSON.stringify(shown);
+        expect(text).not.toMatch(/\(n\+1\)\/2/);
+        expect(text).not.toMatch(/Predicted/);
+        // The measurement itself is still there to be read.
+        expect(shown.find(r => r.emphasis).label).toMatch(/Measured slope/);
+      }
+    }
+    expect(rows(2.9, {})).toContain('expected');
+    expect(rows(2.9, undefined)).toContain('expected');
+    expect(rows(2.9, { withhold: ['expected'] })).toHaveLength(
+      rows(2.9, {}).length - 1
+    );
+    // Everywhere else the instrument still says it, and it is the formula's value.
+    const at = kepler.readout({ n: 2.9 }, undefined, {});
+    expect(at.find(r => r.id === 'expected').value).toBe('1.9500');
   });
 
   test('the rate and the prediction refuse a wrong turn with the author’s words', () => {

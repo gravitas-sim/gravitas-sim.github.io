@@ -400,6 +400,7 @@ const POWER_LAW_GRAVITY = {
       tool: {
         id: 'power-law-kepler',
         values: { n: 2 },
+        withhold: ['expected'],
         title: 'Six circular orbits, timed',
         note: 'Read the row marked "Measured slope of log P against log r".',
       },
@@ -482,6 +483,7 @@ const POWER_LAW_GRAVITY = {
         id: 'power-law-kepler',
         values: { n: 2.9 },
         start: { n: 2 },
+        withhold: ['expected'],
         title: 'Check your prediction here, after you have made it',
         note: 'The instrument is how you find out whether you were right, not how you find the answer.',
       },

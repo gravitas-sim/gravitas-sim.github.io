@@ -76,7 +76,7 @@
     "js/platform/relations.js": 1,
     "js/plot/plot.js": 2,
     "js/powerLawLab.js": 11,
-    "js/powerLawWidgets.js": 7,
+    "js/powerLawWidgets.js": 6,
     "js/precisePlacement.js": 2,
     "js/radialVelocity.js": 1,
     "js/render.js": 7,
