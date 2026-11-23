@@ -45,10 +45,6 @@ import { schwarzschildRadiusM } from '../../js/blackHolePhysics.js';
 import { radialVelocitySemiAmplitude } from '../../js/exoplanetObservables.js';
 import { HD209458 } from '../../js/data/exoplanetSystems.js';
 import { relativeInsolation } from '../../js/habitability.js';
-import {
-  asymptoticSpeed as mondAsymptoticSpeed,
-  A0_GALACTIC,
-} from '../../js/mond.js';
 import { virialMass } from '../../js/darkMatter.js';
 import { hohmann } from '../../js/maneuver.js';
 import { maximumDeltaV } from '../../js/gravityAssist.js';
@@ -292,10 +288,6 @@ export const MODELS = {
   'goldilocks-question/writing-it-down-then-using': {
     via: 'js/habitability.js relativeInsolation at 3 AU of a 1 L_sun star',
     value: () => relativeInsolation(1, 3),
-  },
-  'missing-mass/the-prediction-mond-makes': {
-    via: 'js/mond.js asymptoticSpeed of the 2.15e10 solar-mass disc and bulge at A0_GALACTIC',
-    value: () => mondAsymptoticSpeed(2.15e10, A0_GALACTIC),
   },
   'missing-mass/how-much-of-it-is': {
     via: 'js/darkMatterWidgets.js dm-fit compute() at the published decomposition (disc 3.3, halo 150 km/s, core 6 kpc): halo over visible mass inside 30 kpc',

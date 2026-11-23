@@ -400,7 +400,7 @@ export const NEVER_PRECACHED = [
   // them. The first-visit and idle tiers are at their data-budget ceilings,
   // which the standing size approval does not cover, so none is installed: the
   // service worker keeps each after its first online use.
-  /^js\/data\/investigations\/(es\/)?(planets-sequence|the-scale-of-the-solar-system|moons-of-the-giants|comets-and-the-sun)\.js$/,
+  /^js\/data\/investigations\/(es\/)?(planets-sequence|planets-guides|the-scale-of-the-solar-system|moons-of-the-giants|comets-and-the-sun)\.js$/,
   /^js\/data\/courses\/solar-system-and-the-sun\.js$/,
   /^js\/data\/courses\/stellar-astrophysics\.js$/,
   /^images\/investigations\/moons-of-the-giants\.webp$/,
