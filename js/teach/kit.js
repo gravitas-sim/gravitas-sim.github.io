@@ -130,6 +130,7 @@ async function rowsOf(loc) {
       intro: a.n || '',
       rows: a.s.map(sid => by.get(sid) || sid),
       steps: a.s.length,
+      lessonId: a.l,
     };
   }
   const p = source.pack;
@@ -151,6 +152,7 @@ async function rowsOf(loc) {
     intro: text(p.summary, loc),
     rows,
     steps: rows.length,
+    lessonId: D.itemsOf(p).find(x => x.item.kind === 'lesson')?.item.lesson,
   };
 }
 const T2 = (loc, id, vars) => tr(loc, id, vars);
@@ -161,6 +163,8 @@ async function renderHandout() {
   const choice = $('hoLang').value;
   const locales = choice === 'both' ? ['en', 'es'] : [choice];
   const { qrCode, qrSvg } = await import('../kit/qr.js');
+  // The one function that names the file a student hands in; fetched with the handout, not at start-up.
+  const { handInName } = await import('../handInName.js');
   const code = qrCode(url.url);
   const out = [];
   for (const loc of locales) {
@@ -168,6 +172,9 @@ async function renderHandout() {
     out.push(
       handoutMarkup(loc, {
         ...what,
+        file: what.lessonId
+          ? handInName('Ada Lovelace', what.lessonId, 'pdf')
+          : '',
         kind: source.kind,
         link: url.url,
         roster: source.kind === 'activity' ? $('kitRoster').value.trim() : '',

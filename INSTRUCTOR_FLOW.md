@@ -38,6 +38,29 @@ holds a link and receives a PDF.
 | 4. Instructor judgment | `js/gradebook/marks.js`, the review page | A mark and a comment per written answer, a rubric note where the investigation has one, exported as `entered_by: instructor` |
 | 5. Semester reuse | the kit's reuse check, the course builder's reviewed upgrade | An activity file re-opens with its steps checked and a new link can be issued; a course re-opens with its pins checked (COURSE_PACKS.md) |
 
+## The file to hand in, and what the report carries
+
+The file to hand in is the PDF, named from what the student types as their name
+and the investigation's id: `ada-lovelace-keplers-laws.pdf` (`js/handInName.js`,
+one function for the finish dialog, the kit's handout and the token text file;
+accents are dropped, so `Ángela Núñez` is `angela-nunez`). The web page copy has
+the same name ending in `.html`; the review page reads the PDF, the token text and
+the progress file, not the web page.
+
+The lab report (PDF and web page) and the token carry the same evidence rows
+(`js/reportRows.js`): each reading with the instrument or readout it came from,
+the body, the simulation clock and its figures; each prediction beside the
+student's own result, with only a class (matched, differed, inside, outside) and
+never the key; answers given to a step a later release replaced, under "Answered
+in an earlier version" with the release, never marked against the new question;
+and the table of a controlled run. The tries count stays as it was. The attempts
+record itself (the wrong numbers typed) is not printed: the decision that would
+let the report or the class summary read it is still held (D-R10-276-03).
+
+The review page's results file records each composed report it read as a digest
+and counts (`composedReports`), and its archive keeps the report file
+(`composed`).
+
 ## The roster id, and what a report can identify
 
 A report's token proves which browser made the answers, not who typed them

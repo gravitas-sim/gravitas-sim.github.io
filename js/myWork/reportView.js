@@ -194,6 +194,12 @@ ${cmp ? `<ul class="mw-list" aria-label="${esc(L('Comparisons in the report', 'C
 <div class="mw-actions"><button type="button" class="ui-button is-primary is-small" data-rv="make">${esc(L('Make the report', 'Hacer el informe'))}</button></div>`
     : `<p class="ui-state is-empty">${esc(L('No entry is marked. Tick "For a report" on an entry above to put it in.', 'Ninguna entrada está marcada. Marca «Para un informe» en una entrada de arriba para incluirla.'))}</p>`
 }
+<p class="ui-hint" data-rv="limits">${esc(
+    L(
+      'What this report does not do. The file your instructor reads has no figures: the PDF and the web page draw the notebook figure when you download them. One report is kept, so making another replaces it. An image entry has no link that replays it; the link beside it goes to the page that made it. Gravitas 2.0.0 and 2.1.0 drop a mark when they save the notebook; Mark them again puts it back.',
+      'Lo que este informe no hace. El archivo que lee tu docente no tiene figuras: el PDF y la página web dibujan la figura del cuaderno al descargarlos. Se guarda un solo informe, así que hacer otro reemplaza el anterior. Una entrada de imagen no tiene un enlace que la reproduzca; el enlace junto a ella lleva a la página que la hizo. Gravitas 2.0.0 y 2.1.0 pierden una marca al guardar el cuaderno; Marcarlas de nuevo la devuelve.'
+    )
+  )}</p>
 ${made}</div>`;
 }
 

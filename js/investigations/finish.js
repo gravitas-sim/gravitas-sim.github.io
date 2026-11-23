@@ -16,6 +16,7 @@
 // and the bundler would split them into a shared chunk every lesson route then
 // has to request.
 import { buildLabReport, downloadPdf, reportMessages } from '../labReport.js';
+import { handInName } from '../handInName.js';
 
 /**
  * What the module needs of the engine.
@@ -30,8 +31,6 @@ import { buildLabReport, downloadPdf, reportMessages } from '../labReport.js';
  * @property {() => (Object|null)} plotData - The lesson's plot wherever it lives
  * @property {(index: number) => string} stepId - The key a step's answer is
  *   saved under
- * @property {(name: string) => string} reportSlug - The file name stem a
- *   student's report and token are saved under
  * @property {(name: string) => void} setStudentName - Remember the name
  * @property {(token: string) => void} showToken - Put a token in the dialog
  * @property {() => string} getStudentName - The saved name
@@ -39,7 +38,7 @@ import { buildLabReport, downloadPdf, reportMessages } from '../labReport.js';
  * @property {(restored: Object) => void} restoreInto - Become a restored
  *   progress: set the state, save, go to its step
  * @property {Object} lib - Functions the engine already holds: t, getLocale,
- *   decodeEntities, checkAnswer, localeOfAnswer, helpTaken, helpStages,
+ *   decodeEntities, formatTime, typedNumber, checkAnswer, localeOfAnswer, helpTaken, helpStages,
  *   encodePayload, shareUrl, toast, announce, parseDocument
  */
 
@@ -140,6 +139,18 @@ export async function revealToken(host) {
 }
 
 /**
+ * Save the token as a text file, named as the report is.
+ * @param {FinishHost} host - The engine's side
+ */
+export function saveToken(host) {
+  const els = host.elements();
+  host.saveFile(
+    new Blob([`${els.token.value}\n`], { type: 'text/plain' }),
+    handInName(els.nameInput.value.trim(), host.state().active.id, 'token')
+  );
+}
+
+/**
  * Copy the token, or select it so the reader can.
  * @param {FinishHost} host - The engine's side
  */
@@ -232,9 +243,16 @@ async function report(host, format) {
     const ev = active.steps.some(s => s.evidence || s.kind === 'estimate')
       ? await import('./evidence.js')
       : null;
+    // A page that reloaded straight to the last step never drew a step that needed it, so nothing has given the
+    // module the engine's number reader yet.
+    ev?.ensureKit({ typedNumber: host.lib.typedNumber, localeOfAnswer });
     const bytes = buildLabReport({
       createDoc,
       ev,
+      // The clock a reading was taken at, as the page prints it; the engine's own function, because importing the
+      // units module here would split it into a chunk every lesson route then requests.
+      formatTime: host.lib.formatTime,
+      earlier: host.earlier(active.id),
       helpFor: id => helpTaken(helpStages(responses[`${id}:help`])),
       investigation: active,
       plot,
@@ -267,9 +285,9 @@ async function report(host, format) {
     if (html)
       (await import('../htmlReport.js')).downloadHtml(
         bytes,
-        `${host.reportSlug(name)}.html`
+        handInName(name, active.id, 'html')
       );
-    else downloadPdf(bytes, `${host.reportSlug(name)}.pdf`);
+    else downloadPdf(bytes, handInName(name, active.id, 'pdf'));
     toast(t('inv.report.done'));
     announce(t('inv.report.done'));
   } catch (err) {

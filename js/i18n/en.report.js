@@ -106,6 +106,28 @@ export const EN_REPORT = {
   'rp.reading': 'Your reading: {what}',
   'rp.inside': 'The reading is inside the range given.',
   'rp.outside': 'The reading is outside the range given.',
+  'rp.matched': 'What happened matches your prediction.',
+  'rp.differed': 'What happened differs from your prediction.',
+  'rp.rdg.head': 'Your readings, and how each was taken',
+  'rp.rdg.note':
+    'Each reading as you took or typed it, with the instrument or readout it came from, the body it was read on and the simulation clock at that moment. Values are as printed, in the convention you typed them in.',
+  'rp.rdg.step': 'Step',
+  'rp.rdg.what': 'Reading',
+  'rp.rdg.value': 'Value',
+  'rp.rdg.how': 'How it was taken',
+  'rp.rdg.body': 'Body',
+  'rp.rdg.clock': 'Simulation time',
+  'rp.rdg.figs': 'Significant figures',
+  'rp.rdg.from': 'Taken from {what}',
+  'rp.rdg.taken': 'Taken from an instrument',
+  'rp.rdg.typed': 'Typed by you',
+  'rp.rdg.span': 'Interval of {n} points, {a} to {b}',
+  'rp.runs.cap':
+    'Your runs, step {n}: {title}. Only {param} changed from one run to the next.',
+  'rp.runs.run': 'Run',
+  'rp.earlier.head': 'Answered in an earlier version',
+  'rp.earlier.note':
+    'These answers were given to a step the investigation has since replaced. They are listed as they were given, with the release that replaced the step, and are not marked against the current question or its answer.',
   'led.systems': 'Scenarios and experiments handed in',
   'led.systemsNote':
     'Attached to the evidence above. Open the link to see the same world, or use the file your student sends with the report. The build and engine say what made it.',

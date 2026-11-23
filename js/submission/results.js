@@ -749,12 +749,16 @@ export function questionCsv(records, { includeWritten = false } = {}) {
  * @param {object} [options] - What to include
  * @param {boolean} [options.includeWritten] - Export written answers too
  * @param {Array<{label: string, reason: string}>} [options.refused] - Not read
+ * @param {Array<{file: string, digest: string, sections: number, comparisons: number,
+ *   digestMatches: boolean, statedBy: number}>} [options.composed] - The composed reports (My work's report across
+ *   investigations) read on the page, as their digests and counts; written only when there are some, as the
+ *   additive field `composedReports`. The student's words in them are not exported here (the archive keeps the file).
  * @param {Date} [options.now] - For the timestamp; injectable for tests
  * @returns {string} Pretty-printed JSON with a trailing newline
  */
 export function resultsJson(
   records,
-  { includeWritten = false, refused = [], now = new Date() } = {}
+  { includeWritten = false, refused = [], composed = [], now = new Date() } = {}
 ) {
   const doc = {
     kind: RESULTS_KIND,
@@ -834,6 +838,18 @@ export function resultsJson(
       }),
     })),
     refused: refused.map(r => ({ label: r.label, reason: r.reason })),
+    ...(composed.length
+      ? {
+          composedReports: composed.map(c => ({
+            file: c.file,
+            digest: c.digest,
+            sections: c.sections,
+            comparisons: c.comparisons,
+            digestMatches: c.digestMatches,
+            statedBy: c.statedBy,
+          })),
+        }
+      : {}),
   };
   return `${JSON.stringify(doc, null, 2)}\n`;
 }

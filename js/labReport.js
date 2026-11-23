@@ -6,6 +6,18 @@
 import { createDocument } from './pdf.js';
 import { fnvBase36 } from './hash.js';
 import { predictionState } from './lesson/held.js';
+import { formatNumber } from './format.js';
+import {
+  earlierLine,
+  earlierRows,
+  pairLines,
+  predictionRow,
+  readingCells,
+  readingColumns,
+  readingRows,
+  runCells,
+  runRows,
+} from './reportRows.js';
 import { registerMessages } from './i18n/index.js';
 // Depths, shallowest first (as in investigations/progressSchema.js).
 const LEVELS = ['core', 'quantitative', 'advanced'];
@@ -101,6 +113,10 @@ const plain = text =>
  *   passed in so this file does not pull the grader into the report's chunk
  * @param {?object} [opts.ev] - js/investigations/evidence.js, passed in by a caller whose lesson has estimates or
  *   evidence, so no other report fetches it
+ * @param {?{responses: object}} [opts.earlier] - Answers kept under steps the lesson no longer has
+ *   (stepView.js earlierFor()); listed in their own section, never marked against the current key
+ * @param {(t: number) => string} [opts.formatTime] - The simulation clock as the page prints it, passed in like
+ *   checkAnswer so this file does not reach the units module
  * @param {Function} [opts.createDoc] - The document builder: js/pdf.js
  *   createDocument (the default) or js/htmlReport.js createHtmlDocument, which
  *   has the same interface and makes the accessible HTML report
@@ -131,6 +147,8 @@ export function buildLabReport({
   helpFor = () => null,
   createDoc = createDocument,
   ev = null,
+  earlier = null,
+  formatTime = x => String(x),
 }) {
   // At a depth, the steps are those a student reads there, numbered as they
   // see them (DEPTH.md); `stepIdFor` still takes the index in the whole lesson.
@@ -215,6 +233,27 @@ export function buildLabReport({
 
   // --- Responses -------------------------------------------------------------
   doc.heading(t('rp.resp'), { size: 14 });
+
+  // The rows of what the student gathered (js/reportRows.js): one model, so the PDF, the web page and a token read
+  // back agree. `words` is what turns a row into text.
+  const keyOf = sid =>
+    stepIdFor(investigation.steps.findIndex(s => s.sid === sid));
+  const words = {
+    t,
+    clean: lessonPlain,
+    locale,
+    ev,
+    formatTime,
+    // As the run table in the lesson prints it: three figures, in the page's convention.
+    formatNumber: v => formatNumber(v, { locale }),
+  };
+  const print = lines => {
+    for (const [kind, a, b] of lines) {
+      if (kind === 'field') doc.field(a, b);
+      else if (kind === 'row') doc.row(a, b);
+      else doc.paragraph(a, { size: 9.5, indent: 10, gap: 4 });
+    }
+  };
 
   // How much help a step was given: a fact beside the answer, never a mark.
   const helpRow = id => {
@@ -316,47 +355,22 @@ export function buildLabReport({
     });
 
     if (step.type === 'predict') {
-      const est = step.kind === 'estimate';
-      const said = est && ev?.readEstimate(step, responses, id);
-      const chosen = est
-        ? said
-          ? ev.estimateText(said, step.unit, t('rp.range'))
-          : t('rp.noPred')
-        : typeof value === 'number'
-          ? step.options[value]
-          : t('rp.noPred');
-      // Predictions are reported, never marked. Their value is that the student
-      // committed before seeing the answer.
-      doc.field(
-        t('rp.pred', { prompt: lessonPlain(step.prompt) }),
-        lessonPlain(chosen)
+      // Predictions are reported, never marked. Their value is that the student committed before seeing the answer;
+      // what they then found, and how it compared, is said once the outcome is reached (js/reportRows.js).
+      print(
+        pairLines(
+          predictionRow({
+            steps: inv.steps,
+            all: investigation.steps,
+            step,
+            responses,
+            visited,
+            keyOf,
+            ev,
+          }),
+          words
+        )
       );
-      // The outcome it was held against, where the lesson names one.
-      const out = step.reveal && inv.steps.find(x => x.sid === step.reveal);
-      if (out)
-        doc.row(
-          t('rp.outcome'),
-          `${t('rp.link', {
-            n: inv.steps.indexOf(out) + 1,
-            title: lessonPlain(out.title),
-          })} (${t(visited.has(out.sid) ? 'rp.reached' : 'rp.notReached')})`
-        );
-      // What the student then read, and the author's one sentence, once the outcome is reached.
-      if (ev && out?.evidence && visited.has(out.sid)) {
-        const seen = ev.readingsFor(out, investigation.steps, responses, sid =>
-          stepIdFor(investigation.steps.findIndex(s => s.sid === sid))
-        );
-        for (const r of seen)
-          doc.row(
-            t('rp.reading', { what: lessonPlain(r.field.label) }),
-            r.text ? `${r.text}${r.field.unit ? ` ${r.field.unit}` : ''}` : '-'
-          );
-        const inside = said ? ev.fellInside(said, seen[0]?.value) : null;
-        const para = text =>
-          doc.paragraph(text, { size: 9.5, indent: 10, gap: 4 });
-        if (inside !== null) para(t(inside ? 'rp.inside' : 'rp.outside'));
-        if (out.compare) para(lessonPlain(out.compare));
-      }
       canonical.push(`${id}=${value}`);
       return;
     }
@@ -431,6 +445,41 @@ export function buildLabReport({
       canonical.push(`${id}=${plain(value)}`);
     }
   });
+
+  // --- Where the readings came from -------------------------------------------
+  const readings = readingRows(inv.steps, responses, keyOf);
+  if (readings.length) {
+    doc.heading(t('rp.rdg.head'), { size: 12 });
+    doc.paragraph(t('rp.rdg.note'), { size: 9, color: '0.35 0.35 0.42' });
+    doc.table({
+      columns: readingColumns(t),
+      widths: [0.07, 0.2, 0.14, 0.24, 0.13, 0.12, 0.1],
+      rows: readings.map(r => readingCells(r, words)),
+    });
+  }
+
+  // --- Controlled runs ---------------------------------------------------------
+  for (const run of inv.steps.flatMap(
+    s => runRows(inv.steps, s, responses, keyOf) ?? []
+  )) {
+    const cells = runCells(run, words);
+    doc.heading(cells.caption, { size: 12 });
+    doc.table({ columns: cells.columns, rows: cells.rows });
+  }
+
+  // --- Answers that belong to an earlier version --------------------------------
+  const before = earlierRows(investigation, {
+    ...earlier?.responses,
+    ...responses,
+  });
+  if (before.length) {
+    doc.heading(t('rp.earlier.head'), { size: 12 });
+    doc.paragraph(t('rp.earlier.note'), { size: 9, color: '0.35 0.35 0.42' });
+    for (const e of before) {
+      const [asked, said] = earlierLine(e, words);
+      doc.field(asked, plain(said));
+    }
+  }
 
   // --- The student's own plot ------------------------------------------------
   if (plot?.points?.length) {

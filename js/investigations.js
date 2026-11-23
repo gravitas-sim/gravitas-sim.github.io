@@ -142,6 +142,7 @@ import {
   localeOfAnswer,
   parseNumber,
   recordAnswer,
+  typedNumber,
 } from './answerParse.js';
 import { filterResponses, stepBindings } from './assignments/assignment.js';
 import { stepFingerprint } from './investigations/progressBackup.js';
@@ -2400,7 +2401,6 @@ const finishHost = () => ({
   payloadFromSetup,
   plotData: plotAnywhere,
   stepId,
-  reportSlug,
   setStudentName,
   getStudentName,
   saveFile,
@@ -2419,6 +2419,8 @@ const finishHost = () => ({
     toast,
     announce,
     decodeEntities,
+    formatTime,
+    typedNumber,
     checkAnswer,
     localeOfAnswer,
     helpStages,
@@ -2439,13 +2441,6 @@ const finishAction =
     import('./investigations/finish.js')
       .then(m => m[name](finishHost()))
       .catch(() => toast(t(failedKey)));
-
-/** The file name a student's report and token are saved under. */
-const reportSlug = name =>
-  `${name
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-|-$/g, '')}-${active.id}`;
 
 /**
  * The plot lives on whichever step owns it, so find it rather than relying on
@@ -2821,12 +2816,7 @@ export function initInvestigations({ signal } = {}) {
   on('investigationRestartBackup', backup);
   on('investigationTokenShow', finishAction('revealToken', 'inv.token.failed'));
   on('investigationTokenCopy', finishAction('copyToken', 'inv.token.failed'));
-  on('investigationTokenSave', () =>
-    saveFile(
-      new Blob([`${els.token.value}\n`], { type: 'text/plain' }),
-      `${reportSlug(els.nameInput.value.trim() || 'token')}-token.txt`
-    )
-  );
+  on('investigationTokenSave', finishAction('saveToken', 'inv.token.failed'));
 
   // The widget and plot canvases are sized from their panel's width, which is a
   // percentage of the viewport, so a resized window leaves them stretched.

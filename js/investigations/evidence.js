@@ -4,6 +4,10 @@
 // split a shared chunk and add a request on every lesson route.
 let kit = {};
 export const setKit = k => (kit = k);
+/** Give the module what it reads with when nothing has (the report is built from a page that never drew a reveal step). */
+export const ensureKit = k => {
+  if (!kit.typedNumber) kit = { ...k, ...kit };
+};
 
 export const isEstimate = s => s?.type === 'predict' && s.kind === 'estimate';
 
