@@ -251,7 +251,7 @@ describe('the tray on screen', () => {
     expect(body.querySelector('[data-tray] summary').textContent).toContain(
       '2'
     );
-    expect(body.querySelector('.inv-tray-note').textContent).toMatch(
+    expect(body.querySelector('[data-tray] .inv-verdict-head').textContent).toMatch(
       /Saved on this device; the scene they came from is not/
     );
   });

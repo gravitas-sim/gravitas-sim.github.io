@@ -40,7 +40,7 @@ export function tray(step, c, kit) {
     const n = `${id}-${rows.length}`.replace(/[^\w-]/g, '_');
     rows.push({
       at: steps.findIndex(s => s.sid === sid),
-      html: `<li class="inv-tray-row"><span class="inv-tray-what" id="invTrayWhat-${n}">${what}</span> <span class="inv-tray-how">${escape([...how, t('tray.in', { title: title(sid) })].filter(Boolean).join(' '))}</span> <button type="button" class="ui-button subtle" data-cite id="invTrayCite-${n}" aria-labelledby="invTrayCite-${n} invTrayWhat-${n}">${escape(t('tray.cite'))}</button></li>`,
+      html: `<li class="inv-tray-row"><span class="inv-tray-what" id="invTrayWhat-${n}">${what}</span> <span class="inv-tray-how">${escape([...how, t('tray.in', { title: title(sid) })].filter(Boolean).join(' '))}</span> <button type="button" class="inv-import-btn" data-cite id="invTrayCite-${n}" aria-labelledby="invTrayCite-${n} invTrayWhat-${n}">${escape(t('tray.cite'))}</button></li>`,
     });
   };
   readingsFor({ evidence: readings }, steps, responses, key).forEach(
@@ -108,7 +108,7 @@ export function tray(step, c, kit) {
   rows.sort((a, b) => a.at - b.at);
   const open =
     left[id] ?? !globalThis.matchMedia?.('(max-width: 900px)').matches;
-  return `<details class="inv-tray" data-tray${open ? ' open' : ''}><summary>${escape(t('tray.head', { n: rows.length }))}</summary><p class="inv-tray-note">${escape(t('tray.note'))}</p>${rows.length ? `<ul class="inv-tray-list">${rows.map(r => r.html).join('')}</ul>` : `<p class="inv-tray-note">${escape(t('tray.empty'))}</p>`}</details>`;
+  return `<details class="inv-tray inv-verdict" data-tray${open ? ' open' : ''}><summary>${escape(t('tray.head', { n: rows.length }))}</summary><p class="inv-verdict-head">${escape(t('tray.note'))}</p>${rows.length ? `<ul class="inv-tray-list">${rows.map(r => r.html).join('')}</ul>` : `<p class="inv-verdict-head">${escape(t('tray.empty'))}</p>`}</details>`;
 }
 
 /** Remember the student's open or shut choice, and make Cite go to the box without placing anything in it. */
