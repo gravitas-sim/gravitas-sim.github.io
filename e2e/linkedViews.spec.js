@@ -267,10 +267,18 @@ test.describe('a step that points at an object', () => {
       )
     );
     // Text, not color alone, and set no smaller than the harness's floor.
-    const r = await page.evaluate(readMainCanvasLabels);
-    const all = [...r.bodyLabels, ...r.otherText];
-    const ring = all.filter(b => /Look here: Earth/.test(b.text));
-    expect(ring.length).toBeGreaterThan(0);
+    // Read until the ring is in the last complete frame: one read can land on
+    // a frame drawn before the object was in place, which a loaded runner hits.
+    let ring = [];
+    await expect
+      .poll(async () => {
+        const r = await page.evaluate(readMainCanvasLabels);
+        ring = [...r.bodyLabels, ...r.otherText].filter(b =>
+          /Look here: Earth/.test(b.text)
+        );
+        return ring.length;
+      })
+      .toBeGreaterThan(0);
     expect(judgeLabels(ring).smallest).toBeGreaterThanOrEqual(
       LABEL_FLOOR_CSS_PX
     );
