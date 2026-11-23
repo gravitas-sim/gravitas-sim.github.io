@@ -365,7 +365,7 @@ export function draw(step, vals, { canvas, els, transformed, log, scene }) {
 function inside(st, m, b) {
   const xs = [st.x0, st.x1];
   if (m) xs.push((st.y0 - b) / m, (st.y1 - b) / m);
-  const tol = 1e-9 * (st.y1 - st.y0 || 1);
+  const tol = 1e-9 * (st.y1 - st.y0 || 1) + 1e-12 * Math.abs(st.y1);
   const seen = xs
     .filter(
       x =>
@@ -417,7 +417,7 @@ function fitMark(v, g, st, { sx, sy }, slope, b0, say) {
   const [mx, my] = at(0.5);
   const lean = Math.abs((ey - my) / (ex - mx || 1));
   const k = v.k;
-  const words = `slope ${slope.toFixed(3)}`;
+  const words = `slope ${slope.toFixed(3).replace('-0.000', '0.000')}`;
   say(words, {
     x: slope >= 0 ? ex : ex + 8 * k,
     y:

@@ -104,6 +104,9 @@ test.describe('the canvas behind a lesson', () => {
     await expect(more).not.toHaveAttribute('open', '');
     await expect(page.locator('#timelinePlay')).toBeHidden();
     await expect(page.locator('#railScenario')).toBeHidden();
+    // Settings and precise placement are not behind it: pressable as they are.
+    await expect(page.locator('#settingsBtn')).toBeVisible();
+    await expect(page.locator('#precisePlaceBtn')).toBeVisible();
     await more.locator('summary').focus();
     await page.keyboard.press('Enter');
     await expect(more).toHaveAttribute('open', '');

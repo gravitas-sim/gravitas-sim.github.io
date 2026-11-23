@@ -9,7 +9,7 @@ on a 60 Hz screen, a 144 Hz screen and a throttled tab. A reading step
 that holds the clock (`holdsClock` in `js/timestep.js`) does not run and
 is not pinned. Closing the lesson lifts the pin.
 
-580 steps in 25 lessons run on an integrated scene; 457 are pinned and 123 hold the clock.
+553 steps in 23 lessons run on an integrated scene; 436 are pinned and 117 hold the clock.
 
 | Lesson | Step | Id | Type | Scene | Own scene | Pinned step |
 |---|---|---|---|---|---|---|
@@ -196,39 +196,40 @@ is not pinned. Closing the lesson lifts the pin.
 | radial-velocity | 3 | which-one-moves | predict | Exoplanet Characterization Lab | yes | 1/60 s |
 | radial-velocity | 4 | both-of-them-go-round | explore | Exoplanet Characterization Lab | inherited | 1/60 s |
 | radial-velocity | 5 | make-the-planet-heavier | predict | Exoplanet Characterization Lab | inherited | 1/60 s |
-| radial-velocity | 6 | watch-it-grow | explore | Exoplanet Characterization Lab | inherited | 1/60 s |
-| radial-velocity | 7 | light-carries-the-answer | read | Exoplanet Characterization Lab | inherited | none (holds the clock) |
-| radial-velocity | 8 | which-way-is-it-going | question | Exoplanet Characterization Lab | inherited | 1/60 s |
-| radial-velocity | 9 | toward-away-toward-again | explore | Exoplanet Characterization Lab | inherited | 1/60 s |
-| radial-velocity | 10 | open-the-real-instrument | explore | Exoplanet Characterization Lab | yes | 1/60 s |
-| radial-velocity | 11 | reading-the-curve | question | Exoplanet Characterization Lab | inherited | 1/60 s |
-| radial-velocity | 12 | measure-the-period | measure | Exoplanet Characterization Lab | inherited | 1/60 s |
-| radial-velocity | 13 | the-semi-amplitude-k | read | Exoplanet Characterization Lab | inherited | none (holds the clock) |
-| radial-velocity | 14 | read-k-off-the-panel | measure | Exoplanet Characterization Lab | yes | 1/60 s |
-| radial-velocity | 15 | what-would-make-k-bigger | predict | Exoplanet Characterization Lab | inherited | 1/60 s |
-| radial-velocity | 16 | one-thing-at-a-time | explore | Exoplanet Characterization Lab | inherited | 1/60 s |
-| radial-velocity | 17 | weigh-hd-209458-b | question | Exoplanet Characterization Lab | inherited | 1/60 s |
-| radial-velocity | 18 | now-tilt-the-whole-system | predict | Exoplanet Characterization Lab | inherited | 1/60 s |
-| radial-velocity | 19 | the-same-planet-four-viewing | explore | Exoplanet Characterization Lab | inherited | 1/60 s |
-| radial-velocity | 20 | m-sin-i | read | Exoplanet Characterization Lab | inherited | none (holds the clock) |
-| radial-velocity | 21 | what-a-transit-adds | question | Exoplanet Characterization Lab | inherited | 1/60 s |
-| radial-velocity | 22 | a-face-on-system | predict | Exoplanet Characterization Lab | inherited | 1/60 s |
-| radial-velocity | 23 | astrometry | read | Exoplanet Characterization Lab | inherited | none (holds the clock) |
-| radial-velocity | 24 | tilt-it-again-and-watch | explore | Exoplanet Characterization Lab | inherited | 1/60 s |
-| radial-velocity | 25 | two-methods-opposite-weaknesses | question | Exoplanet Characterization Lab | inherited | 1/60 s |
-| radial-velocity | 26 | all-three-at-once | explore | Exoplanet Characterization Lab | inherited | 1/60 s |
-| radial-velocity | 27 | move-the-system-further-away | predict | Exoplanet Characterization Lab | inherited | 1/60 s |
-| radial-velocity | 28 | distance-and-orbit-size | explore | Exoplanet Characterization Lab | inherited | 1/60 s |
-| radial-velocity | 29 | different-methods-different-planets | question | Exoplanet Characterization Lab | inherited | 1/60 s |
-| radial-velocity | 30 | bring-the-transit-back | read | Exoplanet Characterization Lab | inherited | none (holds the clock) |
-| radial-velocity | 31 | characterize-the-planet | explore | Exoplanet Characterization Lab | inherited | 1/60 s |
-| radial-velocity | 32 | how-dense-is-it | question | Exoplanet Characterization Lab | inherited | 1/60 s |
-| radial-velocity | 33 | where-does-hd-209458-b | question | Exoplanet Characterization Lab | inherited | 1/60 s |
-| radial-velocity | 34 | three-candidates | read | Exoplanet Characterization Lab | inherited | 1/60 s |
-| radial-velocity | 35 | which-is-the-strongest-candidate | question | Exoplanet Characterization Lab | inherited | 1/60 s |
-| radial-velocity | 36 | what-would-you-still-want | question | Exoplanet Characterization Lab | inherited | 1/60 s |
-| radial-velocity | 37 | the-point-of-all-this | question | Exoplanet Characterization Lab | inherited | 1/60 s |
-| radial-velocity | 38 | what-you-can-now-say | read | Exoplanet Characterization Lab | inherited | none (holds the clock) |
+| radial-velocity | 6 | read-the-two-wobbles | measure | Exoplanet Characterization Lab | inherited | 1/60 s |
+| radial-velocity | 7 | watch-it-grow | explore | Exoplanet Characterization Lab | inherited | 1/60 s |
+| radial-velocity | 8 | light-carries-the-answer | read | Exoplanet Characterization Lab | inherited | none (holds the clock) |
+| radial-velocity | 9 | which-way-is-it-going | question | Exoplanet Characterization Lab | inherited | 1/60 s |
+| radial-velocity | 10 | toward-away-toward-again | explore | Exoplanet Characterization Lab | inherited | 1/60 s |
+| radial-velocity | 11 | open-the-real-instrument | explore | Exoplanet Characterization Lab | yes | 1/60 s |
+| radial-velocity | 12 | reading-the-curve | question | Exoplanet Characterization Lab | inherited | 1/60 s |
+| radial-velocity | 13 | measure-the-period | measure | Exoplanet Characterization Lab | inherited | 1/60 s |
+| radial-velocity | 14 | the-semi-amplitude-k | read | Exoplanet Characterization Lab | inherited | none (holds the clock) |
+| radial-velocity | 15 | read-k-off-the-panel | measure | Exoplanet Characterization Lab | yes | 1/60 s |
+| radial-velocity | 16 | what-would-make-k-bigger | predict | Exoplanet Characterization Lab | inherited | 1/60 s |
+| radial-velocity | 17 | one-thing-at-a-time | explore | Exoplanet Characterization Lab | inherited | 1/60 s |
+| radial-velocity | 18 | weigh-hd-209458-b | question | Exoplanet Characterization Lab | inherited | 1/60 s |
+| radial-velocity | 19 | now-tilt-the-whole-system | predict | Exoplanet Characterization Lab | inherited | 1/60 s |
+| radial-velocity | 20 | the-same-planet-four-viewing | explore | Exoplanet Characterization Lab | inherited | 1/60 s |
+| radial-velocity | 21 | m-sin-i | read | Exoplanet Characterization Lab | inherited | none (holds the clock) |
+| radial-velocity | 22 | what-a-transit-adds | question | Exoplanet Characterization Lab | inherited | 1/60 s |
+| radial-velocity | 23 | a-face-on-system | predict | Exoplanet Characterization Lab | inherited | 1/60 s |
+| radial-velocity | 24 | astrometry | read | Exoplanet Characterization Lab | inherited | none (holds the clock) |
+| radial-velocity | 25 | tilt-it-again-and-watch | explore | Exoplanet Characterization Lab | inherited | 1/60 s |
+| radial-velocity | 26 | two-methods-opposite-weaknesses | question | Exoplanet Characterization Lab | inherited | 1/60 s |
+| radial-velocity | 27 | all-three-at-once | explore | Exoplanet Characterization Lab | inherited | 1/60 s |
+| radial-velocity | 28 | move-the-system-further-away | predict | Exoplanet Characterization Lab | inherited | 1/60 s |
+| radial-velocity | 29 | distance-and-orbit-size | explore | Exoplanet Characterization Lab | inherited | 1/60 s |
+| radial-velocity | 30 | different-methods-different-planets | question | Exoplanet Characterization Lab | inherited | 1/60 s |
+| radial-velocity | 31 | bring-the-transit-back | read | Exoplanet Characterization Lab | inherited | none (holds the clock) |
+| radial-velocity | 32 | characterize-the-planet | explore | Exoplanet Characterization Lab | inherited | 1/60 s |
+| radial-velocity | 33 | density-from-your-mass | question | Exoplanet Characterization Lab | inherited | 1/60 s |
+| radial-velocity | 34 | where-does-hd-209458-b | question | Exoplanet Characterization Lab | inherited | 1/60 s |
+| radial-velocity | 35 | three-candidates | read | Exoplanet Characterization Lab | inherited | 1/60 s |
+| radial-velocity | 36 | which-is-the-strongest-candidate | question | Exoplanet Characterization Lab | inherited | 1/60 s |
+| radial-velocity | 37 | what-would-you-still-want | question | Exoplanet Characterization Lab | inherited | 1/60 s |
+| radial-velocity | 38 | the-point-of-all-this | question | Exoplanet Characterization Lab | inherited | 1/60 s |
+| radial-velocity | 39 | what-you-can-now-say | read | Exoplanet Characterization Lab | inherited | none (holds the clock) |
 | goldilocks-question | 1 | what-does-earth-get-from | read | Solar System | yes | none (holds the clock) |
 | goldilocks-question | 2 | one-earth-of-starlight | read | Solar System | inherited | 1/60 s |
 | goldilocks-question | 3 | move-it-twice-as-far | predict | Solar System | inherited | 1/60 s |
@@ -303,30 +304,10 @@ is not pinned. Closing the lesson lifts the pin.
 | tides | 4 | how-different-are-they | question | Earth-Moon System | inherited | 1/60 s |
 | tides | 5 | so-why-two-bulges | predict | Earth-Moon System | inherited | 1/60 s |
 | tides | 6 | take-the-center-away | read | Earth-Moon System | inherited | 1/60 s |
-| tides | 7 | what-the-far-side-arrow | question | Earth-Moon System | inherited | 1/60 s |
-| tides | 8 | what-a-tide-actually-is | read | Earth-Moon System | inherited | none (holds the clock) |
-| tides | 9 | bring-the-companion-closer | predict | Earth-Moon System | inherited | 1/60 s |
-| tides | 10 | four-distances | measure | Earth-Moon System | inherited | 1/60 s |
-| tides | 11 | how-steeply-does-it-fall | question | Earth-Moon System | inherited | 1/60 s |
-| tides | 12 | the-relationship-written-down | read | Earth-Moon System | inherited | none (holds the clock) |
-| tides | 13 | now-change-the-companion | predict | Earth-Moon System | inherited | 1/60 s |
-| tides | 14 | three-masses | measure | Earth-Moon System | inherited | 1/60 s |
-| tides | 15 | what-the-mass-graph-says | question | Earth-Moon System | inherited | 1/60 s |
-| tides | 16 | the-sun-against-the-moon | predict | Earth-Moon System | inherited | 1/60 s |
-| tides | 17 | seven-real-tides-on-one | read | Earth-Moon System | inherited | 1/60 s |
-| tides | 18 | locking-and-what-this-simulation | read | Earth-Moon System | inherited | none (holds the clock) |
-| tides | 19 | say-it-in-your-own | question | Earth-Moon System | inherited | 1/60 s |
-| tides | 20 | what-holds-a-moon-together | predict | Earth-Moon System | inherited | 1/60 s |
-| tides | 21 | stretch-against-grip | explore | Earth-Moon System | inherited | 1/60 s |
-| tides | 22 | where-the-balance-tips | question | Earth-Moon System | inherited | 1/60 s |
-| tides | 23 | the-roche-limit-and-why | read | Earth-Moon System | inherited | 1/60 s |
-| tides | 24 | change-what-the-moon-is | explore | Earth-Moon System | inherited | 1/60 s |
-| tides | 25 | not-one-distance | question | Earth-Moon System | inherited | 1/60 s |
-| tides | 26 | what-a-roche-limit-does | read | Earth-Moon System | inherited | none (holds the clock) |
-| tides | 27 | the-extreme-case-running-live | explore | Tidal Disruption Event | yes | 1/60 s |
-| tides | 28 | a-star-and-a-black | read | Tidal Disruption Event | inherited | 1/60 s |
-| tides | 29 | the-whole-lesson-in-three | question | Tidal Disruption Event | inherited | 1/60 s |
-| tides | 30 | what-you-worked-out | read | Tidal Disruption Event | inherited | none (holds the clock) |
+| tides | 33 | the-extreme-case-running-live | explore | Tidal Disruption Event | yes | 1/60 s |
+| tides | 34 | a-star-and-a-black | read | Tidal Disruption Event | inherited | 1/60 s |
+| tides | 35 | the-whole-lesson-in-three | question | Tidal Disruption Event | inherited | 1/60 s |
+| tides | 36 | what-you-worked-out | read | Tidal Disruption Event | inherited | none (holds the clock) |
 | butterfly-effect | 1 | a-word-that-has-been | read | Three-Body Sensitivity Lab | yes | none (holds the clock) |
 | butterfly-effect | 2 | the-same-numbers-twice | predict | Three-Body Sensitivity Lab | inherited | 1/60 s |
 | butterfly-effect | 3 | how-to-run-the-same | read | Three-Body Sensitivity Lab | inherited | none (holds the clock) |
@@ -565,14 +546,6 @@ is not pinned. Closing the lesson lifts the pin.
 | power-law-gravity | 19 | near-three | read | Solar System | inherited | none (holds the clock) |
 | power-law-gravity | 20 | closing-question | question | Solar System | inherited | 1/60 s |
 | power-law-gravity | 21 | the-honest-caveat | read | Solar System | inherited | none (holds the clock) |
-| integrators-in-practice | 6 | choose-the-second-step | measure | Circumbinary Planet Lab | yes | 1/60 s |
-| integrators-in-practice | 7 | the-engine | measure | Circumbinary Planet Lab | inherited | 1/60 s |
-| integrators-in-practice | 8 | phase-luck | question | Circumbinary Planet Lab | inherited | 1/60 s |
-| integrators-in-practice | 9 | trust-at-six-orbits | question | Circumbinary Planet Lab | inherited | 1/60 s |
-| integrators-in-practice | 10 | what-you-worked-out | read | Circumbinary Planet Lab | inherited | none (holds the clock) |
-| extending-an-experiment | 6 | move-the-definition-yours | measure | Binary Planet Lab | yes | 1/60 s |
-| extending-an-experiment | 7 | which-trial-moved | measure | Binary Planet Lab | inherited | 1/60 s |
-| extending-an-experiment | 8 | what-you-worked-out | read | Binary Planet Lab | inherited | none (holds the clock) |
 | why-rings | 5 | a-pass-inside-the-limit | read | Roche Pass | yes | 1/60 s |
 | why-rings | 7 | a-ring-with-a-resonance | read | Ring Gap | yes | none (holds the clock) |
 | the-scale-of-the-solar-system | 1 | a-picture-you-have-seen | read | Solar System | yes | none (holds the clock) |
