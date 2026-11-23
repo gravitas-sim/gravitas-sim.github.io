@@ -345,6 +345,19 @@ describe('what the generator cannot express is refused', () => {
     expect(() => readFamily('x.js', wrong)).toThrow(/cannot read the id/);
   });
 
+  test('a spread of an array another module exports is read from that module', () => {
+    const inner = `const a = { id: 'one' }; export const MOTION_WIDGETS = [a, { id: 'two' }];`;
+    const src = `
+      import { MOTION_WIDGETS } from './motion.js';
+      export const X_WIDGETS = [...MOTION_WIDGETS, { id: 'three' }];`;
+    expect(readFamily('x.js', src, () => inner).ids).toEqual([
+      'one',
+      'two',
+      'three',
+    ]);
+    expect(() => readFamily('x.js', src)).toThrow(/cannot read the id/);
+  });
+
   test('a builtin id with a prefix it does not know, or an asset it cannot find', () => {
     const m = { id: 'p', assets: [{ path: 'js/data/other/else.js' }] };
     expect(() => sourceOf('model/thing', m)).toThrow(/does not know/);

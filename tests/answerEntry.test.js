@@ -67,7 +67,7 @@ describe('the site and the answer key grade identically', () => {
 
 describe('the radial-velocity questions', () => {
   const mass = stepBySid(RV, 'weigh-hd-209458-b');
-  const density = stepBySid(RV, 'how-dense-is-it');
+  const density = stepBySid(RV, 'density-from-your-mass');
 
   test('the planet mass takes Jupiter masses, Earth masses or kilograms', () => {
     expect(checkAnswer(mass, '0.69')).toBe(true);

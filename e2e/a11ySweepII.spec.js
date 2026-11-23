@@ -656,7 +656,6 @@ test.describe('reduced motion: a page at rest moves nothing', () => {
       .map(e => e.file)
       .sort();
     expect(named).toEqual([
-      'js/exoplanetWidgets.js',
       'js/lab3dLab.js',
       'js/main.js',
       'js/render.js',

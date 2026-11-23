@@ -21,7 +21,7 @@ test.describe('H explains the panel you are in', () => {
     page,
     app,
   }) => {
-    await openStep(app, page, 'tides', 22);
+    await openStep(app, page, 'tides', 27);
     await expect(page.locator('#investigationTool')).toBeVisible();
     const button = page.locator('#investigationToolExplain');
     await expect(button).toHaveAttribute('aria-expanded', 'false');
@@ -48,7 +48,7 @@ test.describe('H explains the panel you are in', () => {
     page,
     app,
   }) => {
-    await openStep(app, page, 'tides', 22);
+    await openStep(app, page, 'tides', 27);
     await page.locator('#investigationToolExplain').click();
     const term = page.locator('#investigationTool .gl-term').first();
     await expect(term).toBeVisible();
@@ -71,7 +71,7 @@ test.describe('H explains the panel you are in', () => {
     await page.addInitScript(() => {
       window.localStorage.setItem('gravitas_locale', 'es');
     });
-    await app.boot({ url: '/?author=tides&step=22' });
+    await app.boot({ url: '/?author=tides&step=27' });
     await expect(page.locator('#investigationTool')).toBeVisible();
     await page
       .locator('#investigationTool')

@@ -341,7 +341,7 @@ function instrumentId(el, consts) {
  * spread, a computed id, two arrays - is an error that names the module: that
  * family keeps a hand entry until the generator is taught its shape.
  */
-export function readFamily(file, source) {
+export function readFamily(file, source, resolve) {
   const program = acorn.parse(source, {
     ecmaVersion: 'latest',
     sourceType: 'module',
@@ -360,14 +360,36 @@ export function readFamily(file, source) {
   const array = consts.get(arrays[0]);
   if (array?.type !== 'ArrayExpression')
     throw new Error(`${file}: ${arrays[0]} is not an array literal`);
-  const ids = array.elements.map(el => {
-    const id = instrumentId(el, consts);
-    if (typeof id !== 'string')
-      throw new Error(
-        `${file}: cannot read the id of an instrument in ${arrays[0]}`
-      );
-    return id;
-  });
+  // A spread of an array another module exports (`...MOTION_WIDGETS`) is read
+  // from that module, which must hold the array as a literal of its own.
+  const imported = new Map();
+  for (const node of program.body)
+    if (node.type === 'ImportDeclaration')
+      for (const sp of node.specifiers)
+        imported.set(sp.local.name, node.source.value);
+  const idsOf = (list, own, from) =>
+    list.flatMap(el => {
+      if (el?.type === 'SpreadElement' && el.argument.type === 'Identifier') {
+        const spec = imported.get(el.argument.name);
+        if (spec && resolve) {
+          const inner = acorn.parse(resolve(spec), {
+            ecmaVersion: 'latest',
+            sourceType: 'module',
+          });
+          const innerConsts = topLevelConsts(inner);
+          const arr = innerConsts.get(el.argument.name);
+          if (arr?.type === 'ArrayExpression')
+            return idsOf(arr.elements, innerConsts);
+        }
+      }
+      const id = instrumentId(el, own);
+      if (typeof id !== 'string')
+        throw new Error(
+          `${file}: cannot read the id of an instrument in ${from}`
+        );
+      return [id];
+    });
+  const ids = idsOf(array.elements, consts, arrays[0]);
   const ready = [...exported].filter(n => /Ready$/.test(n));
   if (ready.length > 1)
     throw new Error(
@@ -402,7 +424,9 @@ export function familyEntries(manifests, root = REPO, order = FAMILY_ORDER) {
     const own = owned.get(`js/${file}`);
     let read1;
     try {
-      read1 = readFamily(file, read(root, `js/${file}`));
+      read1 = readFamily(file, read(root, `js/${file}`), spec =>
+        read(root, path.posix.join('js', spec))
+      );
     } catch (error) {
       // A module the reading cannot follow keeps a hand manifest: a package
       // that owns the family says what it holds, and the generator trusts it
