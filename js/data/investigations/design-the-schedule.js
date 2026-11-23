@@ -175,19 +175,18 @@ const DESIGN_THE_SCHEDULE = {
       sid: 'predict-the-comb',
       bind: TARGET,
       type: 'predict',
-      reveal: 'run-both-schedules',
+      reveal: 'what-the-window-says',
       title: 'Before you observe',
-      body: `Eight observations spread evenly across 24.673 days puts one every
-             <strong>3.525 days</strong>.
-             \n\nThe planet's period, which you are not supposed to know yet but
-             which this investigation will tell you because the point is elsewhere, is
-             <strong>3.5247 days</strong>.
+      body: `Eight observations spread evenly across 24.673 days leave seven
+             equal gaps. Work out how long each one is.
+             \n\nThe planet is the one from the earlier investigations, and its
+             period is close to that spacing. Divide the spacing by the period.
              \n\nCommit to an answer now. You will be asked afterwards what the
              observation changed.`,
       prompt:
-        'Eight nights, one every 3.525 days, on a planet with a 3.5247-day period. What will the run show?',
+        'Eight nights, spaced evenly across the run, on a planet whose period is close to that spacing. What will the run show?',
       options: [
-        'A clean 3.52-day signal: the cadence matches the period exactly',
+        'A clean signal at the planet’s period: the cadence matches it exactly',
         'A velocity that barely changes, because every night lands at the same point in the orbit',
         'Random scatter of about 84 m/s, with no period recoverable',
         'The full amplitude, but with the period recovered as twice its real value',
@@ -208,6 +207,7 @@ const DESIGN_THE_SCHEDULE = {
       title: 'Run both schedules at once',
       time: { speed: 0.03, paused: false },
       setup: RV_LAB,
+      requires: ['set-the-run-up'],
       body: `Now the controlled version of that question. Tick
              <strong>Compare with a second schedule</strong> and set the second
              one to <strong>Irregular</strong>, with <strong>Scatter
@@ -232,7 +232,7 @@ const DESIGN_THE_SCHEDULE = {
       // without having committed to an answer first is the failure mode the
       // lesson exists to prevent, so an assignment that takes this step has to
       // take that one.
-      requires: ['predict-the-comb'],
+      requires: ['predict-the-comb', 'run-both-schedules'],
       body: `The comparison block under the controls reports both arms. Read
              four numbers off it.
              \n\nYour figures will not match these to the digit - a different
@@ -301,6 +301,12 @@ const DESIGN_THE_SCHEDULE = {
       kind: 'choice',
       title: 'A window peak of 100%',
       requires: ['read-the-comparison'],
+      evidence: [
+        'periodRegular',
+        'kRegular',
+        'periodIrregular',
+        'kIrregular',
+      ].map(field => ({ step: 'read-the-comparison', field })),
       body: `The comparison quotes a "worst window peak" for each schedule:
              about <strong>100%</strong> for the regular cadence and about
              <strong>57%</strong> for the irregular one.
