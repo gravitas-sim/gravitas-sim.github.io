@@ -24,7 +24,7 @@
     }
   },
   "sourceFiles": 310,
-  "sourceDigest": "398c78b7a39107e5af72af27e4581de23bfba276b767cc13fdb70d9c7aacb9c1",
+  "sourceDigest": "f7163802ec970c78b1032fac397356461bce4d00f1f455a7a85aa2780bc96ec5",
   "sources": {
     "js/activities/activities.js": "af9b7e121b9a72c2a5cc18e07331d6ee841934d402b030294d25c442628881ef",
     "js/activities/activityBridge.js": "ddd8015bf88938d98d967942048bc34e30a0099344b1055bd45a0459ec0333fe",
@@ -240,7 +240,7 @@
     "js/data/investigations/plan-a-night.js": "aad44979cf3537bb327573adccac95bf8612aa788ccbdcbcf5108124daa86bac",
     "js/data/investigations/planets-guides.js": "87b4dd4d101e5d5604e3a04a1abfca17e12b3687f473dd8e1fc0dabf8082120a",
     "js/data/investigations/planets-sequence.js": "e5be47aa837ae8aeb08e3113d3dda94cc0e7b6822f1a37946d13bf63e1a8cbc3",
-    "js/data/investigations/power-law-gravity.js": "7e69a4291bc72d9d6361284b79e0ff569e55230158f05defb6d8cdcedbc275db",
+    "js/data/investigations/power-law-gravity.js": "faf06840f1d1b204662b7e0e9760be42b450993c612ea2c296d881dc0beb608d",
     "js/data/investigations/radial-velocity.js": "8b7e65d273265060bd542f37277c27a6d64e4e921530672c4c55585747e4a1af",
     "js/data/investigations/refitting-a-transit.js": "232cef3db5c38d2eb2abc9dd1a49b53b9ed8a3c33aa23522e4b30cc3d23ed6d9",
     "js/data/investigations/remnants-sequence.js": "93577ad783d05ee1cf8822d595e6b7ad07d265fb9745a487dfb7bc04884a3421",
