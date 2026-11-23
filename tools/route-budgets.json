@@ -4,11 +4,11 @@
   "routes": {
     "sources": {
       "front-door": {
-        "kb": 1929.6,
+        "kb": 1938,
         "requests": 109
       },
       "sandbox": {
-        "kb": 1929.6,
+        "kb": 1938,
         "requests": 109
       },
       "kepler": {
@@ -28,7 +28,7 @@
         "toolRequests": 145
       },
       "largest-lesson": {
-        "kb": 2955.8,
+        "kb": 2958.8,
         "requests": 150
       },
       "teaching": {
@@ -44,11 +44,11 @@
         "requests": 44
       },
       "figure": {
-        "kb": 2207.3,
+        "kb": 2215.6,
         "requests": 129
       },
       "experiments": {
-        "kb": 1090.5,
+        "kb": 1099.4,
         "requests": 61
       },
       "observatory": {
@@ -68,7 +68,7 @@
         "requests": 10
       },
       "studio": {
-        "kb": 956.1,
+        "kb": 966.3,
         "requests": 52
       },
       "composer": {
@@ -130,32 +130,32 @@
     },
     "build": {
       "front-door": {
-        "kb": 547.6,
+        "kb": 549.6,
         "requests": 59
       },
       "sandbox": {
-        "kb": 547.6,
+        "kb": 549.6,
         "requests": 59
       },
       "kepler": {
-        "kb": 937.4,
+        "kb": 939.4,
         "requests": 77
       },
       "transit": {
-        "kb": 944.8,
+        "kb": 946.7,
         "requests": 77,
-        "toolKb": 1030.1,
+        "toolKb": 1032.1,
         "toolRequests": 93
       },
       "power-law": {
-        "kb": 913.6,
+        "kb": 915.6,
         "requests": 77,
-        "toolKb": 930.2,
+        "toolKb": 932.1,
         "toolRequests": 80
       },
       "largest-lesson": {
-        "kb": 1044.9,
-        "requests": 82
+        "kb": 1052.7,
+        "requests": 83
       },
       "teaching": {
         "kb": 110.8,
@@ -170,11 +170,11 @@
         "requests": 2
       },
       "figure": {
-        "kb": 684.2,
+        "kb": 686.2,
         "requests": 61
       },
       "experiments": {
-        "kb": 298.6,
+        "kb": 300.5,
         "requests": 4
       },
       "observatory": {
