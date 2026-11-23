@@ -131,7 +131,7 @@ const BUDGETS = [
   {
     id: 'deferred',
     label: 'Deferred JavaScript (lazy chunks, gzipped)',
-    limit: 3266.8,
+    limit: 3266.7,
     reason:
       'Jumped from 1369 KB to 2105 KB when three.js and Chart.js stopped being ' +
       'CDN requests and became bundled chunks. That is the point of the change ' +
@@ -751,7 +751,7 @@ const BUDGETS = [
       '\n\nThe combined finding-planets, binary-star and tides lessons (D-R4-TRAINC1-02): raised from 3251.0 to 3258.0 KB, the measurement by CI of the branch (head 4037bbe17): 3,336,093 bytes gzipped, 3257.903 KB, rounded up to 0.1 KB. Under the standing approval of 2026-10-10.' +
       '\n\nThe quiet lesson canvas keeps Settings and precise placement beside its More (D-R4-TRAINC1-05): raised from 3258.0 to 3258.2 KB, the measurement of a Node 22 build of the combined branch, 3,336,342 bytes gzipped (3258.13 KB), rounded up to 0.1 KB; the dock code in js/lessonCanvas.js. Under the standing approval of 2026-10-10.' +
       '\n\nThis branch merged with v4 78e15afaf (D-R4-TRAINC1-05): v4 holds 3258.5 KB for the solar system scale and missing mass lessons, and the quiet canvas and combined planet, binary star and tides lessons add the 7.1 KB above it (grants dm 6.9 and du 0.2), so the limit is 3265.6 KB, the measurement by CI of the merged branch (head 64731fa43). Under the standing approval of 2026-10-10.' +
-      "\n\nThe energy and power-law lessons (D-R4-347-09, D-R4-347-11, D-R4-347-12, D-R4-347-13): raised by 1.1 KB and then 0.1 KB over their own base (3251.0 to 3252.1 and 3252.2 KB; CI measured 3,330,063 and 3,330,203 bytes gzipped at 7e24bf18 and 2af85136), and CI measured 3,337,870 bytes gzipped (3259.64 KB) for the branch merged with v4 78e15afa (limit 3259.7 KB); on the branch merged with v4 44cb0723 the limit is v4's 3265.6 KB plus the 1.2 KB, 3266.8 KB, provisional until CI measures the merged tree. Under the standing approval of 2026-10-10.",
+      "\n\nThe energy and power-law lessons (D-R4-347-09, D-R4-347-11, D-R4-347-12, D-R4-347-13): raised by 1.1 KB and then 0.1 KB over their own base (3251.0 to 3252.1 and 3252.2 KB; CI measured 3,330,063 and 3,330,203 bytes gzipped at 7e24bf18 and 2af85136), and CI measured 3,337,870 bytes gzipped (3259.64 KB) for the branch merged with v4 78e15afa (limit 3259.7 KB); CI measured 3,345,043 bytes gzipped (3266.64 KB) for the branch merged with v4 cb43cf13, so the limit is v4's 3265.6 KB plus 1.1 KB, 3266.7 KB (the 0.1 KB grant dt is withdrawn). Under the standing approval of 2026-10-10.",
   },
 ];
 
