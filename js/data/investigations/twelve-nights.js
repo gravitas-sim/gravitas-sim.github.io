@@ -85,7 +85,7 @@ const TWELVE_NIGHTS = {
   textbook: { chapter: 4, section: '4.3' },
   courseLevel: 'majors',
   mathematics: 'arithmetic',
-  prerequisites: [],
+  prerequisites: ['detect-this-planet', 'design-the-schedule'],
   tags: ['exoplanets', 'observing'],
   lock: { placement: true, inspector: true },
   objectives: [
@@ -105,7 +105,9 @@ const TWELVE_NIGHTS = {
       title: 'Twelve nights',
       time: { speed: 0.03, paused: true },
       setup: RV_LAB,
-      body: `A time allocation committee has given you <strong>twelve
+      body: `This investigation assumes the alias idea from <em>Can You Detect
+             This Planet?</em> and <em>Design the Schedule</em>.
+             \n\nA time allocation committee has given you <strong>twelve
              nights</strong> on one star: HD&nbsp;209458, from
              <strong>La&nbsp;Silla</strong> in Chile, spread anywhere you like
              across a twenty-night run in September. One measurement a night,
@@ -360,8 +362,6 @@ const TWELVE_NIGHTS = {
              of this investigation is elsewhere.
              \n\nA comb at 1.00274 cycles a day puts an alias of that planet at
              every frequency <em>f</em>&nbsp;&plusmn;&nbsp;<em>n</em>&nbsp;&times;&nbsp;1.00274.
-             Working the nearest two out: <strong>1.391 d</strong> and
-             <strong>0.777 d</strong>.
              \n\nYou are about to run both plans on the live spectrograph, with
              the same star, the same 8 m/s errors and the same noise seed. Only
              the twelve times differ.`,
@@ -373,7 +373,8 @@ const TWELVE_NIGHTS = {
         'Neither returns anything: twelve points cannot constrain a period at all',
       ],
       answer: 1,
-      because: `A window power of almost exactly 1 means the alias fits the
+      because: `The nearest aliases are <strong>1.391 d</strong> and
+                <strong>0.777 d</strong>. A window power of almost exactly 1 means the alias fits the
                 data as well as the truth does, so which one comes out lowest is
                 decided by the noise rather than by the planet. At 0.7 the truth
                 usually wins. Note the word "usually": the peak is smaller, not

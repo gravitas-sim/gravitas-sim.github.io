@@ -24,7 +24,7 @@
     }
   },
   "sourceFiles": 310,
-  "sourceDigest": "cbc4241c9142ea2de1182c187789b45fad64b682a5df00d9c35fe2a23a39a785",
+  "sourceDigest": "415970fe6bb5cf73d06f4ae1b94d37b8bfb23ac6d93314bd876d71a18e0269f7",
   "sources": {
     "js/activities/activities.js": "af9b7e121b9a72c2a5cc18e07331d6ee841934d402b030294d25c442628881ef",
     "js/activities/activityBridge.js": "ddd8015bf88938d98d967942048bc34e30a0099344b1055bd45a0459ec0333fe",
@@ -144,9 +144,9 @@
     "js/data/investigations/depth/which-kind-of-variable.js": "b4396e7a2ca7ca7e62c7698da06d72f2f8f93f5b67ca61ec1822f75aa7afc445",
     "js/data/investigations/depth/who-gets-counted.js": "976ca3a207b428cdecef4675c89f6976061fa642de02593d70d34f8d92338100",
     "js/data/investigations/depth/why-the-bright-ones-win.js": "2efd2f0f8f383755a667f7452f9931d527faeed4d3b4d40a536b7a4725918fa1",
-    "js/data/investigations/design-the-schedule.js": "317fff4b78d1a4cbc971284b756c1ca1c5975f51afa303a60717994b911bddaf",
-    "js/data/investigations/detect-this-planet.js": "431dd48a6e5fd72712cd3c738e39af4a157f6395621edf3015879360d7ac346b",
-    "js/data/investigations/discovery.js": "86228098c6faad33df89113389e6b1f0cbfd1b6a0252a1c7063d0dd7cd3a5ed1",
+    "js/data/investigations/design-the-schedule.js": "6dfcd7a6e9d5c1ec6fe9e00e00c0f6186090510b46ab01a39bc6d33c3eb7f444",
+    "js/data/investigations/detect-this-planet.js": "30c06e1d2fcd4f5770d5f86d308cf55cfaa212565a7f11ce8f0a10583c429aa7",
+    "js/data/investigations/discovery.js": "128ae2a3b67b803a40e822ea5836d9390b87cc2188506bec7842cd4a523f37ed",
     "js/data/investigations/einstein-rings-and-arcs.js": "f812b34d131be6830a3e4d1be363cbb0010f0f9048f5ce1c6f8a9925c3471897",
     "js/data/investigations/es/a-lens-passing-by.js": "9f341a46e06db9cf8c17467a8bde8eb392425d6eeba94f1f131ff1e7babcec36",
     "js/data/investigations/es/a-universe-of-stars.js": "be42c497316582f4180ad35e3156bdf5e6ee72a529dde11997b9ca2b9ac88a43",
@@ -158,8 +158,8 @@
     "js/data/investigations/es/butterfly-effect.js": "f9225fc5affbc1f7aed6eb339e8f02e06443fc17146e57d6fba4625e280752b5",
     "js/data/investigations/es/cluster-membership.js": "ce06fed830d6a0288e50766b8b475d396bd8308ec189d249b78a353c478de426",
     "js/data/investigations/es/color-and-temperature.js": "adf69c99005335493a3ab93da14b23780751b20fd65ab719c4664a2d25f1b88d",
-    "js/data/investigations/es/design-the-schedule.js": "2c8f4dd583188fcdf4962e3154f23810ac11874c1727818db79cae1f18b768d4",
-    "js/data/investigations/es/detect-this-planet.js": "3c0f37b0df7bc46b1cfcc3561984ae95f9eef128ccd106e0c176b9a12da4a472",
+    "js/data/investigations/es/design-the-schedule.js": "0ee1b939d338e1c599bf347a1962971941e78a9382399cb2975d3a9c420347e8",
+    "js/data/investigations/es/detect-this-planet.js": "5d7d19c269b3ef7e86e5df66eb56327e8115a0339ee1775e919af51787757cae",
     "js/data/investigations/es/einstein-rings-and-arcs.js": "ba125a60a4627e3ca44297ecca218e6f6ec584159bda12f3268583276851fd38",
     "js/data/investigations/es/extending-an-experiment.js": "719c48b039c62ce57eb6606aeb502272cce07b33278ac410fe4986850cf29339",
     "js/data/investigations/es/goldilocks-question.js": "3e079f44e6ff1bd74888f32de2086294e457f8199a825c7135ccd389ce1222b0",
@@ -199,7 +199,7 @@
     "js/data/investigations/es/the-turning-sky.js": "748aace176c5283602966508f0a09bb47573c5904b5f19b5c090c2b5f2d42f35",
     "js/data/investigations/es/tides.js": "389aaa6d9121eef4bbe35e347f5378b7451d1c481587661a3099c3bf366041f4",
     "js/data/investigations/es/transit-photometry.js": "f2cea4cc29a6ff9d5cccebb73abe9a0d52aa8c586987d83cd4442f40bdf7b447",
-    "js/data/investigations/es/twelve-nights.js": "ce13f07a6329ca5042c4024b28c13a5b15a8060cfb8d4c468612ee829a5d6693",
+    "js/data/investigations/es/twelve-nights.js": "3006d14b6f75dc22a98b759a380b3762c9f5ce15a188c73d02498dab2bb6dbea",
     "js/data/investigations/es/two-periodograms.js": "589aa86151f7b35408872fb17aeffd64bea799ecb7424f9f9f4d08e1adf4676b",
     "js/data/investigations/es/wanderers-on-the-sky.js": "68e7c93c20a6567cf0f44201a794d1a8fbb498bee383aa4738e381380cf16dfd",
     "js/data/investigations/es/weighing-stars.js": "d883cd5e314dc785bfe6ba2cf0f84f7bbfb50c502fc9b8c3df06c0495acce16c",
@@ -271,7 +271,7 @@
     "js/data/investigations/tides.js": "4afd06ef50e2b97ef410c3727746272e67cac3cc276ffbd0650d51dec5248fc1",
     "js/data/investigations/transit-photometry.js": "d8b8cb793648dc70549d73a7ae4324880b245dbadedf3e960b478d20191dca13",
     "js/data/investigations/ttv-sequence.js": "13e0e324362af968fda3fd8be51be2f887f1045bba6006ed31db4caeb179cbba",
-    "js/data/investigations/twelve-nights.js": "cc609516e80a4965e87b6d3a2b0048d52fc0b863f1783988542d76f7a78a5010",
+    "js/data/investigations/twelve-nights.js": "d040a25037b6f7e2d1e359da04aa0081af78eecf5c9b05a6ff74362d453e3ee4",
     "js/data/investigations/two-periodograms.js": "3ad42889651cf07b7708c3af3609bf436b448fced2e1c14193461c4745ac4e31",
     "js/data/investigations/variables-ii-sequence.js": "9ff4d1206a5855ee7d9214c25b7e341c651ecd0d83ed285dc143652254331309",
     "js/data/investigations/vetting-sequence.js": "0556f738ed291414b79d3216eb38e2f20bd9673e37869ac9363aac18a74d3950",
@@ -337,5 +337,5 @@
     "tools/instructor-freshness.mjs": "96052b2f27080f0243fdd4d5f7608927bd67f0c50808b6eac3345a65c14d1e28",
     "tools/source-closure.mjs": "961828e4d0d40d8a6f8c029fe9b9435ecaf39a74b62640efc0b4145c35c7650a"
   },
-  "contentDigest": "cfcf59cf2fdfaddf5b58cbc651b869234bf24d2531259d226889ab0aea1c8291"
+  "contentDigest": "0e345be8038859ca658c2c5aebef8dca5b7adf86980983164622000227de51f7"
 }
