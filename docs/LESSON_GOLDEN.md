@@ -85,17 +85,17 @@ The browser half takes about seven minutes on the private port.
 | 3 | `the-saturated-star` | 15: `depth-step:advanced/measure`, `depth-step:advanced/predict`, `depth-step:advanced/read`, `depth-step:quantitative/read`, `key:measure.stage`, `key:measure.tool`, … |
 | 4 | `binary-star-planets` | 8: `key:explore.requires`, `key:explore.setup`, `key:predict.tip`, `key:question.requires`, `key:question.tip`, `key:read.motion`, … |
 | 5 | `missing-mass` | 6: `depth-step:advanced/explore`, `key:explore.after`, `key:explore.decides`, `key:explore.depth`, `key:predict.setup`, `lock:{"placement":true,"inspector":false,"areaSweep":false}` |
-| 6 | `weighing-stars` | 5: `key:explore.showBarycenter`, `key:explore.stage`, `key:measure.showBarycenter`, `key:read.showBarycenter`, `math:arithmetic` |
-| 7 | `tides` | 4: `key:explore.canvas`, `key:predict.misconceptions`, `key:question.canvas`, `key:read.allowInspector` |
-| 8 | `butterfly-effect` | 3: `key:explore.rubric`, `key:predict.requires`, `lock:null` |
+| 6 | `power-law-gravity` | 5: `key:measure.canvas`, `key:predict.canvas`, `key:question.explain`, `key:read.canvas`, `lock:null` |
+| 7 | `weighing-stars` | 5: `key:explore.showBarycenter`, `key:explore.stage`, `key:measure.showBarycenter`, `key:read.showBarycenter`, `math:arithmetic` |
+| 8 | `tides` | 4: `key:explore.canvas`, `key:predict.misconceptions`, `key:question.canvas`, `key:read.allowInspector` |
 | 9 | `measuring-the-moon` | 3: `key:question.maxUncertainty`, `key:question.minUncertainty`, `key:question.valueWithin` |
 | 10 | `orbital-energy` | 3: `key:explore.compare`, `key:explore.evidence`, `key:question.rubricCriteria` |
 | 11 | `black-holes` | 2: `key:question.checklist`, `key:read.explainView` |
-| 12 | `extending-an-experiment` | 2: `key:measure.compute`, `key:read.canvas` |
-| 13 | `power-law-gravity` | 2: `key:measure.canvas`, `key:question.explain` |
-| 14 | `what-is-a-gravitational-wave` | 2: `audience:beginner`, `key:read.checklist` |
-| 15 | `a-night-at-the-telescope` | 1: `key:question.reflect` |
-| 16 | `counts-to-magnitudes` | 1: `depth-step:quantitative/predict` |
+| 12 | `butterfly-effect` | 2: `key:explore.rubric`, `key:predict.requires` |
+| 13 | `what-is-a-gravitational-wave` | 2: `audience:beginner`, `key:read.checklist` |
+| 14 | `a-night-at-the-telescope` | 1: `key:question.reflect` |
+| 15 | `counts-to-magnitudes` | 1: `depth-step:quantitative/predict` |
+| 16 | `extending-an-experiment` | 1: `key:measure.compute` |
 | 17 | `propose-an-observation` | 1: `key:measure.plan` |
 | 18 | `retrograde-motion` | 1: `lock:{"placement":true,"inspector":false}` |
 

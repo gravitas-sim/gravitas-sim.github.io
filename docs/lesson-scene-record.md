@@ -20,7 +20,7 @@ Of 204 prediction loops, 204 are returned to,
 204 produce a measurement before they are answered, and
 2 end in an explanation in the reader's own words.
 202 hold their marking until the experiment settles them.
-The canvas behind a step is stated as scene on 4, portrait on 7, quiet on 114; 1412 state none.
+The canvas behind a step is stated as scene on 15, portrait on 7, quiet on 103; 1412 state none.
 
 ## Kepler's Laws (`keplers-laws`)
 
@@ -352,7 +352,7 @@ The canvas behind a step is stated as scene on 4, portrait on 7, quiet on 114; 1
 - **What students do:** read, commit-a-prediction, move-an-instrument-control, press-an-instrument-preset, tick-a-checklist, record-values, choose-an-option, build-a-plot.
 - **Objects the steps declare:** none.
 - **Instruments:** power-law-precession, power-law-refinement, power-law-kepler, power-law-conservation.
-- **Canvas:** quiet.
+- **Canvas:** quiet, scene.
 - **Stored data:** none.
 - **Evidence kept:** notebook-fields, plot.
 - **Prediction loops:** predict-does-small-matter → first-look-at-the-orbit, record-the-precession → first-look-at-the-orbit; predict-is-it-the-computer → refine-the-timestep → refine-the-timestep; predict-period-and-distance → measure-the-slope, predict-the-slope-at-2-9 → measure-the-slope; predict-what-breaks → measure-conservation → measure-conservation.

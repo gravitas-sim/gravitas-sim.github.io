@@ -198,10 +198,12 @@ const POWER_LAW_GRAVITY = {
     },
     {
       sid: 'record-the-precession',
-      // The instruments from here on run their own contained orbits, so the
-      // Solar System on the canvas would only be something else to look at.
-      // Declared here, not on the first look, so the canvas code is fetched
-      // after the first instrument is open and not on the way to it.
+      // The instruments run their own contained orbits, so the Solar System on
+      // the canvas would only be something else to look at behind the precession
+      // and the timestep runs and the conservation check. Declared here, not on
+      // the first look, so the canvas code is fetched after the first instrument
+      // is open and not on the way to it. The scene is back for the slope runs
+      // and the closing steps.
       canvas: 'quiet',
       type: 'measure',
       title: 'Record what the axis does',
@@ -352,6 +354,7 @@ const POWER_LAW_GRAVITY = {
     // --- Act 4: the quantitative half --------------------------------------
     {
       sid: 'predict-period-and-distance',
+      canvas: 'scene',
       type: 'predict',
       reveal: 'measure-the-slope',
       title: 'Period against distance',
@@ -548,6 +551,7 @@ const POWER_LAW_GRAVITY = {
     },
     {
       sid: 'measure-conservation',
+      canvas: 'quiet',
       type: 'measure',
       title: 'Check the conservation laws',
       body: `Three stars of different masses, all free to move and all pulling on
@@ -600,6 +604,7 @@ const POWER_LAW_GRAVITY = {
     },
     {
       sid: 'and-energy',
+      canvas: 'scene',
       type: 'read',
       title: 'And energy, with one catch',
       body: `Energy is conserved too — but there is a genuine trap here, and it

@@ -5,17 +5,17 @@
     "the-saturated-star",
     "binary-star-planets",
     "missing-mass",
+    "power-law-gravity",
     "weighing-stars",
     "tides",
-    "butterfly-effect",
     "measuring-the-moon",
     "orbital-energy",
     "black-holes",
-    "extending-an-experiment",
-    "power-law-gravity",
+    "butterfly-effect",
     "what-is-a-gravitational-wave",
     "a-night-at-the-telescope",
     "counts-to-magnitudes",
+    "extending-an-experiment",
     "propose-an-observation",
     "retrograde-motion"
   ],
@@ -182,6 +182,13 @@
       "key:predict.setup",
       "lock:{\"placement\":true,\"inspector\":false,\"areaSweep\":false}"
     ],
+    "power-law-gravity": [
+      "key:measure.canvas",
+      "key:predict.canvas",
+      "key:question.explain",
+      "key:read.canvas",
+      "lock:null"
+    ],
     "weighing-stars": [
       "key:explore.showBarycenter",
       "key:explore.stage",
@@ -194,11 +201,6 @@
       "key:predict.misconceptions",
       "key:question.canvas",
       "key:read.allowInspector"
-    ],
-    "butterfly-effect": [
-      "key:explore.rubric",
-      "key:predict.requires",
-      "lock:null"
     ],
     "measuring-the-moon": [
       "key:question.maxUncertainty",
@@ -214,13 +216,9 @@
       "key:question.checklist",
       "key:read.explainView"
     ],
-    "extending-an-experiment": [
-      "key:measure.compute",
-      "key:read.canvas"
-    ],
-    "power-law-gravity": [
-      "key:measure.canvas",
-      "key:question.explain"
+    "butterfly-effect": [
+      "key:explore.rubric",
+      "key:predict.requires"
     ],
     "what-is-a-gravitational-wave": [
       "audience:beginner",
@@ -231,6 +229,9 @@
     ],
     "counts-to-magnitudes": [
       "depth-step:quantitative/predict"
+    ],
+    "extending-an-experiment": [
+      "key:measure.compute"
     ],
     "propose-an-observation": [
       "key:measure.plan"
@@ -310,7 +311,7 @@
     "investigations": 124,
     "steps": 2004,
     "activityCuts": 6,
-    "lessonTokens": 182,
+    "lessonTokens": 183,
     "activityTokens": 29,
     "stepTypes": {
       "read": 378,

@@ -9,7 +9,7 @@ on a 60 Hz screen, a 144 Hz screen and a throttled tab. A reading step
 that holds the clock (`holdsClock` in `js/timestep.js`) does not run and
 is not pinned. Closing the lesson lifts the pin.
 
-536 steps in 23 lessons run on an integrated scene; 423 are pinned and 113 hold the clock.
+547 steps in 23 lessons run on an integrated scene; 430 are pinned and 117 hold the clock.
 
 | Lesson | Step | Id | Type | Scene | Own scene | Pinned step |
 |---|---|---|---|---|---|---|
@@ -529,6 +529,17 @@ is not pinned. Closing the lesson lifts the pin.
 | power-law-gravity | 2 | why-there-is-a-reference-distance | read | Solar System | inherited | none (holds the clock) |
 | power-law-gravity | 3 | predict-does-small-matter | predict | Solar System | inherited | 1/60 s |
 | power-law-gravity | 4 | first-look-at-the-orbit | explore | Solar System | inherited | 1/60 s |
+| power-law-gravity | 10 | predict-period-and-distance | predict | Solar System | inherited | 1/60 s |
+| power-law-gravity | 11 | measure-the-slope | measure | Solar System | inherited | 1/60 s |
+| power-law-gravity | 12 | find-the-slope-rate | question | Solar System | inherited | 1/60 s |
+| power-law-gravity | 13 | predict-the-slope-at-2-9 | question | Solar System | inherited | 1/60 s |
+| power-law-gravity | 14 | why-the-slope-and-not-something-else | question | Solar System | inherited | 1/60 s |
+| power-law-gravity | 15 | predict-what-breaks | predict | Solar System | inherited | 1/60 s |
+| power-law-gravity | 18 | and-energy | read | Solar System | inherited | none (holds the clock) |
+| power-law-gravity | 19 | two-lists | read | Solar System | inherited | none (holds the clock) |
+| power-law-gravity | 20 | near-three | read | Solar System | inherited | none (holds the clock) |
+| power-law-gravity | 21 | closing-question | question | Solar System | inherited | 1/60 s |
+| power-law-gravity | 22 | the-honest-caveat | read | Solar System | inherited | none (holds the clock) |
 | why-rings | 5 | a-pass-inside-the-limit | read | Roche Pass | yes | 1/60 s |
 | why-rings | 7 | a-ring-with-a-resonance | read | Ring Gap | yes | none (holds the clock) |
 | the-scale-of-the-solar-system | 1 | a-picture-you-have-seen | read | Solar System | yes | none (holds the clock) |

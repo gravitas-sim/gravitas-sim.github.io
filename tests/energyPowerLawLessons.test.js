@@ -371,7 +371,7 @@ describe('What If Gravity Were Not Inverse Square?: a leak fixed, one task chang
     expect(indexOf(POWER, 'predict-the-slope')).toBe(-1);
   });
 
-  test('the canvas is quiet from the second instrument step, and the scene stays before it', () => {
+  test('the canvas is quiet behind the precession, timestep and conservation runs, and the scene is the rest', () => {
     expect(canvasProblems(POWER)).toEqual([]);
     expect(stepOf(POWER, 'record-the-precession').canvas).toBe('quiet');
     expect(
@@ -379,12 +379,33 @@ describe('What If Gravity Were Not Inverse Square?: a leak fixed, one task chang
     ).toBeNull();
     expect(stepOf(POWER, 'the-exactly').setup.scenario).toBe('Solar System');
     expect(canvasAt(POWER, indexOf(POWER, 'the-exactly'))).toBeNull();
+    const quiet = new Set([
+      ...POWER.steps
+        .slice(
+          indexOf(POWER, 'record-the-precession'),
+          indexOf(POWER, 'predict-period-and-distance')
+        )
+        .map(s => s.sid),
+      ...POWER.steps
+        .slice(
+          indexOf(POWER, 'measure-conservation'),
+          indexOf(POWER, 'and-energy')
+        )
+        .map(s => s.sid),
+    ]);
     for (const s of POWER.steps.slice(
       indexOf(POWER, 'record-the-precession')
     )) {
-      expect(canvasAt(POWER, indexOf(POWER, s.sid)).kind).toBe('quiet');
+      expect([s.sid, canvasAt(POWER, indexOf(POWER, s.sid)).kind]).toEqual([
+        s.sid,
+        quiet.has(s.sid) ? 'quiet' : 'scene',
+      ]);
       expect(s.setup).toBeUndefined();
       expect(s.stage).toBeUndefined();
     }
+    // The slope runs, which the layout spec measures on a loud canvas.
+    expect(canvasAt(POWER, indexOf(POWER, 'measure-the-slope')).kind).toBe(
+      'scene'
+    );
   });
 });

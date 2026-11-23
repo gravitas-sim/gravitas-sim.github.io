@@ -830,6 +830,9 @@ function validateStep(step, id) {
 let figures = null;
 let canvasMod = null;
 const canvasNow = (i = stepIndex) => canvasMod?.canvasAt(active, i) ?? null;
+const canvasDue = at =>
+  !canvasMod &&
+  [active, ...active.steps].some((x, i) => x.canvas && i <= at + 1);
 
 /** Fetch the plot, ellipse and import code a lesson needs; the canvas code comes with the first step that declares one. */
 const loadSeams = async ({ steps }) => {
@@ -1887,21 +1890,16 @@ function goToStep(index, { rebuild = false, open = false } = {}) {
   const at = Math.max(0, Math.min(active.steps.length - 1, index));
   // A step that stages waits for the stage code, and the first step that declares a canvas for the canvas code; opening rejects on failure.
   const declared = stageOf(active.steps, active.steps[at]);
-  const canvasDue =
-    !canvasMod &&
-    [active, ...active.steps].some((x, i) => x.canvas && i <= at + 1);
-  if (canvasDue || (declared && !stageLoaded(declared))) {
+  const due = canvasDue(at);
+  if (due || (declared && !stageLoaded(declared))) {
     const turn = openGeneration;
     els.panel.setAttribute('aria-busy', 'true');
     announce(t('inv.tool.loading'));
     if (open) els.body.textContent = t('inv.tool.loading');
     const again = () => goToStep(at, { rebuild, open });
-    // The canvas code and then the stage code are two waits: the first hands
-    // back the second's promise, so opening resolves only once the scene is up
-    // (resolving after the first wait alone left a staged scene to be framed
-    // before its bodies existed, under the instrument).
+    // Canvas code, then stage code: the first wait hands back the second's promise, so opening resolves once the scene is up.
     return (
-      canvasDue
+      due
         ? import('./lessonCanvas.js').then(m => (canvasMod = m))
         : loadStage(declared)
     )
@@ -2137,7 +2135,9 @@ export async function openInvestigation(id, opts = {}) {
   if (authoring?.step) {
     stepIndex = Math.min(Math.max(authoring.step - 1, 0), inv.steps.length - 1);
   }
-
+  // Canvas code due by the first step is fetched before the panel opens, so the layout does not shift under the reader.
+  if (canvasDue(stepIndex)) canvasMod = await import('./lessonCanvas.js');
+  if (generation !== openGeneration) return;
   lockedSettings = { interactive_add: SETTINGS.interactive_add };
   els.panel.hidden = false;
   els.panel.classList.add('is-open');

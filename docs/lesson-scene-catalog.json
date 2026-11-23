@@ -51733,7 +51733,8 @@
    "title": "What If Gravity Were Not Inverse Square?",
    "lock": null,
    "canvas": [
-    "quiet"
+    "quiet",
+    "scene"
    ],
    "steps": [
     {
@@ -52252,7 +52253,7 @@
       "roles": []
      },
      "kinds": [],
-     "canvas": "quiet",
+     "canvas": "scene",
      "actions": [
       "commit-a-prediction"
      ],
@@ -52308,7 +52309,7 @@
       "panel-diagram",
       "captured-evidence"
      ],
-     "canvas": "quiet",
+     "canvas": "scene",
      "actions": [
       "record-values",
       "move-an-instrument-control",
@@ -52374,7 +52375,7 @@
       "roles": []
      },
      "kinds": [],
-     "canvas": "quiet",
+     "canvas": "scene",
      "actions": [
       "read"
      ],
@@ -52428,7 +52429,7 @@
       "model-result",
       "panel-diagram"
      ],
-     "canvas": "quiet",
+     "canvas": "scene",
      "actions": [
       "move-an-instrument-control",
       "press-an-instrument-preset"
@@ -52487,7 +52488,7 @@
       "roles": []
      },
      "kinds": [],
-     "canvas": "quiet",
+     "canvas": "scene",
      "actions": [
       "choose-an-option"
      ],
@@ -52538,7 +52539,7 @@
       "roles": []
      },
      "kinds": [],
-     "canvas": "quiet",
+     "canvas": "scene",
      "actions": [
       "commit-a-prediction"
      ],
@@ -52708,7 +52709,7 @@
       "roles": []
      },
      "kinds": [],
-     "canvas": "quiet",
+     "canvas": "scene",
      "actions": [
       "read"
      ],
@@ -52759,7 +52760,7 @@
       "roles": []
      },
      "kinds": [],
-     "canvas": "quiet",
+     "canvas": "scene",
      "actions": [
       "read"
      ],
@@ -52810,7 +52811,7 @@
       "roles": []
      },
      "kinds": [],
-     "canvas": "quiet",
+     "canvas": "scene",
      "actions": [
       "read"
      ],
@@ -52861,7 +52862,7 @@
       "roles": []
      },
      "kinds": [],
-     "canvas": "quiet",
+     "canvas": "scene",
      "actions": [
       "choose-an-option"
      ],
@@ -52912,7 +52913,7 @@
       "roles": []
      },
      "kinds": [],
-     "canvas": "quiet",
+     "canvas": "scene",
      "actions": [
       "read"
      ],
@@ -120875,9 +120876,9 @@
   "mismatched": 9,
   "rebuilds": 77,
   "canvas": {
-   "scene": 4,
+   "scene": 15,
    "portrait": 7,
-   "quiet": 114,
+   "quiet": 103,
    "unstated": 1412
   },
   "lessons": 124,
