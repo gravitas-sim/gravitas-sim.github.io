@@ -15,7 +15,7 @@
 // its roles; the canvas kind; the clock a step states itself; the instrument's
 // controls. The sampling rule is sampleSteps there; RESUME_ALL=1 compares
 // every step, RESUME_LESSONS=a,b limits the lessons and RESUME_EVERY=n takes every n-th from RESUME_OFFSET
-// (the default is every third, plus the lessons of each kind; 1 takes all).
+// (the default is every sixth, plus the lessons of each kind; 1 takes all).
 // =============================================================================
 
 import { test, expect } from './fixtures.js';
@@ -40,7 +40,7 @@ test.skip(
 
 const ONLY = (process.env.RESUME_LESSONS || '').split(',').filter(Boolean);
 const ALL = process.env.RESUME_ALL === '1';
-// A default run takes every third lesson and always the lessons of each kind
+// A default run takes every sixth lesson and always the lessons of each kind
 // (KIND_LESSONS in the kit); RESUME_EVERY=1 takes them all, which a local run
 // and a manual dispatch do.
 const EVERY = Number(process.env.RESUME_EVERY || DEFAULT_EVERY);

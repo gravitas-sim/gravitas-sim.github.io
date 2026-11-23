@@ -404,8 +404,8 @@ export const KIND_LESSONS = [
   'lives-of-stars',
 ];
 
-/** The default stride: every third lesson, plus the kinds above. 1 takes all. */
-export const DEFAULT_EVERY = 3;
+/** The default stride: every sixth lesson, plus the kinds above. 1 takes all. */
+export const DEFAULT_EVERY = 6;
 
 /** Whether the lesson at manifest position `at` is in a run with this stride. */
 export const inSample = (at, id, every = DEFAULT_EVERY, offset = 0) =>

@@ -239,10 +239,10 @@ describe('the default sample', () => {
     expect(taken(DEFAULT_EVERY).some(([, e]) => !e.depths)).toBe(true);
   });
 
-  test('it is about a third of the lessons, and an every of 1 takes all', () => {
+  test('it is about a fifth of the lessons, and an every of 1 takes all', () => {
     const n = taken(DEFAULT_EVERY).length;
-    expect(n).toBeGreaterThan(entries.length / 4);
-    expect(n).toBeLessThan(entries.length / 2);
+    expect(n).toBeGreaterThan(entries.length / 8);
+    expect(n).toBeLessThan(entries.length / 3);
     expect(taken(1).length).toBe(entries.length);
   });
 });

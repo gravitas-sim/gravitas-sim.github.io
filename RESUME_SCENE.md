@@ -66,20 +66,27 @@ those, and every step a deeper depth adds. `RESUME_ALL=1` compares every step.
 `RESUME_LESSONS=a,b` limits the lessons. The middle depth is not walked on its
 own; a step that is on it is on the deepest path too.
 
-Which lessons run. Walking every lesson is about 226 tests and 107 minutes of
-worker time, too much for every pull request, so the default run takes every
-third lesson of the manifest (positions 0, 3, 6, ...) and always the lessons of
-each kind the rules treat differently (`KIND_LESSONS` in the kit): keplers-laws
-(staged, with a deeper path), weighing-stars (a deeper path whose last steps
-have no stage), listening-to-spacetime and a-universe-of-stars (stage-less
-steps), and lives-of-stars (the remnant instrument); what-is-a-gravitational-wave
-falls on the stride. The assignment test always runs. The sample is fixed and
-does not rotate: the same lessons run each time. `RESUME_EVERY=1` takes every
-lesson, which a local run and a manual dispatch of the e2e job should do before
-a change to the stage, the clock or the rebuild; `RESUME_EVERY=n` with
-`RESUME_OFFSET=k` takes another slice. `tests/resumeSceneCompare.test.js` checks
-that the default holds each kind, a lesson with deeper steps and one without,
-and between a quarter and a half of the lessons.
+Which lessons run. Walking every lesson is 226 tests; on CI each took 35 s on
+average (3 minutes for what-is-a-gravitational-wave, 1 to 1.5 minutes for
+several instrument lessons), about 48 minutes of worker time for the 84 tests
+of an every-third sample, and that sample pushed four of the 17 browser shards
+past their 24 minute step limit because the shard plan had no timing for the
+new tests and planned each at the suite median of a few seconds. So the default
+run takes every sixth lesson of the manifest (positions 0, 6, 12, ...) and
+always the lessons of each kind the rules treat differently (`KIND_LESSONS` in
+the kit): keplers-laws (staged, with a deeper path), weighing-stars (a deeper
+path whose last steps have no stage), listening-to-spacetime and
+a-universe-of-stars (stage-less steps), and lives-of-stars (the remnant
+instrument); what-is-a-gravitational-wave falls on the stride. The assignment
+test always runs. The sample is fixed and does not rotate: the same lessons run
+each time. The measured CI durations of the sampled tests are recorded in
+`tools/e2e-timings.json`, so the shard plan places them by their cost.
+`RESUME_EVERY=1` takes every lesson, which a local run and a manual dispatch of
+the e2e job should do before a change to the stage, the clock or the rebuild;
+`RESUME_EVERY=n` with `RESUME_OFFSET=k` takes another slice.
+`tests/resumeSceneCompare.test.js` checks that the default holds each kind, a
+lesson with deeper steps and one without, and between an eighth and a third of
+the lessons.
 
 ## What it found at the base (v4 69a644d5d, core path, 56 of 124 lessons)
 
