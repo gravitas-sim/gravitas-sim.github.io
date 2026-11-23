@@ -216,7 +216,7 @@
         "the-limits-of-finding-nothing"
       ],
       "evidenceFrom": "model",
-      "decision": "unreviewed",
+      "decision": "Which of the spacing, the number of nights and the precision the student expects to decide whether twelve nights find a planet, what each schedule's readings let them claim (a velocity that changes, not a planet), and, in the transit half, whether more transits can lift the depth over the noise or the floor stops them.",
       "leakFree": false
     },
     "design-the-schedule": {
@@ -233,7 +233,7 @@
         "say-what-the-schedule-decided"
       ],
       "evidenceFrom": "engine",
-      "decision": "unreviewed",
+      "decision": "Which spacing the student expects to hide the planet before any run, which two schedules to compare on one star, and, from one draw of each, how far the comparison goes (what happened here, not that irregular schedules are better); which times to type; and what must travel with a period for someone else to check it.",
       "leakFree": true
     },
     "binary-star-planets": {
@@ -374,7 +374,7 @@
         "why-not-one-day"
       ],
       "evidenceFrom": "model",
-      "decision": "unreviewed",
+      "decision": "Where inside each night's window to place the twelve epochs (the best moment of each night or both ends of the window), which plan the student expects to come back with an alias, and what change would remove the one-day comb (a second longitude, not more nights).",
       "leakFree": true
     },
     "power-law-gravity": {
