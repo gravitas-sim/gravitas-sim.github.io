@@ -8600,7 +8600,7 @@
       "planning": "REVIEW",
       "owner": 466,
       "disposition": "OPEN",
-      "reason": "",
+      "reason": "Prompt 496 (D-R4-496-02): stays on branch N (no body removed for leaving the view); it fails 496's cost gate at the end of the run and no escape rule can pass it, so the case is the maintainer's. Engine time a frame (Node 22, median of three, quiet machine): 1.7 ms at the start and 0.14 ms at the end of 20,000 frames against 1.7 and 0.055 ms with the old box at 375x812; live bodies 255, 198, 189, 187, 189 by quarter against 255 to 156.",
       "pr": null
     },
     {
@@ -8798,7 +8798,7 @@
       "planning": "REVIEW",
       "owner": 466,
       "disposition": "OPEN",
-      "reason": "",
+      "reason": "Prompt 496 (D-R4-496-02): stays on branch N (no body removed for leaving the view); it fails 496's cost gate and no escape rule can pass it, so the case is the maintainer's. Engine time a frame (Node 22, median of three): 103 ms at the start and 143 ms at the end of 20,000 frames against 23.7 and 5.7 ms with the old box at 375x812; live bodies 972, 3446, 3739, 3991, 4165 by quarter (3396 debris and 349 asteroids at the end) against 972 to 855.",
       "pr": null
     },
     {
