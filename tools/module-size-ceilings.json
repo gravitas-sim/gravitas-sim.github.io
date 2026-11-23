@@ -7,7 +7,7 @@
     "js/coursePage.js": 2194,
     "js/darkMatterWidgets.js": 2329,
     "js/data/instructorContent.js": 6761,
-    "js/data/instructorFlow.js": 1928,
+    "js/data/instructorFlow.js": 1923,
     "js/data/investigations/a-universe-of-stars.js": 1748,
     "js/data/investigations/atmosphere-sequence.js": 1632,
     "js/data/investigations/depth/atmosphere-sequence.js": 1619,
@@ -20,7 +20,7 @@
     "js/data/investigations/manifest.js": 1585,
     "js/data/investigations/measurement-sequence.js": 3041,
     "js/data/investigations/observing-sequence.js": 3341,
-    "js/data/investigations/planets-sequence.js": 1775,
+    "js/data/investigations/planets-sequence.js": 1745,
     "js/data/investigations/stellar-sequence.js": 2733,
     "js/data/lab3dAnswerKey.js": 2500,
     "js/exoplanetWidgets.js": 1803,
@@ -36,12 +36,12 @@
     "js/notebook/capture.js": 2076,
     "js/observatory/measurePanel.js": 2023,
     "js/observatoryPage.js": 1542,
-    "js/radialVelocity.js": 1571,
+    "js/radialVelocity.js": 1569,
     "js/render.js": 2779,
     "js/scenarios.js": 2000,
     "js/stellarEvolutionWidgets.js": 1674,
     "js/stellarWidgets.js": 2201,
     "js/tidalWidgets.js": 1655,
-    "js/world/build.js": 2575
+    "js/world/build.js": 2568
   }
 }

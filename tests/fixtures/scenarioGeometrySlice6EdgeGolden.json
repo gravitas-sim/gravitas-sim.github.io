@@ -629,29 +629,29 @@
   },
   "low:solar-system@{\"placement\":\"Random\",\"num_asteroids\":50,\"num_comets\":12}": {
     "rows": {
-      "stars": "1:610054d8",
-      "planets": "4:9901daec",
-      "gas_giants": "4:28788c3b",
-      "asteroids": "16:d3e61f6d",
-      "comets": "8:66a15f88"
+      "stars": "1:8cd8e7bd",
+      "planets": "4:7da326ee",
+      "gas_giants": "4:844fcd3f",
+      "asteroids": "16:50877aa6",
+      "comets": "8:bb6961cf"
     },
     "settings": "b36b83b8",
     "zoom": 0.25,
     "pan": [0, 0],
-    "tail": 0.2956430350895971
+    "tail": 0.4044326788280159
   },
   "low:solar-system@{\"placement\":\"Circular\",\"num_asteroids\":16,\"num_comets\":12}": {
     "rows": {
-      "stars": "1:01520741",
-      "planets": "4:fd67dcb7",
-      "gas_giants": "4:5139e172",
-      "asteroids": "16:5b26ad96",
-      "comets": "8:40b01076"
+      "stars": "1:4ab27420",
+      "planets": "4:bad57c11",
+      "gas_giants": "4:71e5d874",
+      "asteroids": "16:393a2dbb",
+      "comets": "8:2a198e04"
     },
     "settings": "b4d83664",
     "zoom": 0.25,
     "pan": [0, 0],
-    "tail": 0.38715033838525414
+    "tail": 0.7623960969503969
   },
   "low:solar-system@{\"num_asteroids\":50,\"num_comets\":12}": {
     "rows": {

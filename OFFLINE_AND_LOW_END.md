@@ -52,16 +52,16 @@ Measured from the committed `sw-manifest.js` and the files it lists, by
 <!--fact-block:precache-->
 | | Files | Raw |
 | --- | ---: | ---: |
-| JavaScript | 1015 | 16.3 MB |
+| JavaScript | 1022 | 16.3 MB |
 | Images | 121 | 830 KB |
 | Stylesheets | 10 | 500 KB |
 | Fonts | 9 | 140 KB |
 | Panel markup | 11 | 80 KB |
 | Pages | 12 | 330 KB |
 | Other | 16 | 900 KB |
-| **Total** | **1194** | **19.0 MB** |
+| **Total** | **1201** | **19.0 MB** |
 
-Of those, 855 are core (the install fails without them), 129 optional (installed with them; a missing one is reported and costs nothing) and 210 idle (installed after activation, when the browser is idle; a missing one costs that page its offline copy and is fetched again on the next open). The first-visit install is the core and the optional files: 984 files.
+Of those, 855 are core (the install fails without them), 129 optional (installed with them; a missing one is reported and costs nothing) and 217 idle (installed after activation, when the browser is idle; a missing one costs that page its offline copy and is fetched again on the next open). The first-visit install is the core and the optional files: 984 files.
 
 Gzipped, as Pages serves it, the whole is about 6 MB.
 
@@ -109,6 +109,7 @@ The idle tier, by surface (gzip level 6, to the nearest 10 KB: Node versions dif
 | mission lab | 41 | ~230 KB |
 | Sky Lab | 22 | ~170 KB |
 | image measurement | 9 | ~40 KB |
+| lesson canvas | 7 | ~10 KB |
 | Library | 12 | ~120 KB |
 | composed report | 2 | ~20 KB |
 | three.js | 2 | ~240 KB |
@@ -272,8 +273,47 @@ version of the lesson, it is a wrong one. Measured:
 | Kuiper Belt | Multi-Ring | 309 | 49 |
 | Kessler Cascade | Random | 301 | 61 |
 
+The table for every scene is `docs/tier-invariance.md`, written by
+`tools/tier-table.mjs` and held current by `tests/tierInvariance.test.js`: all
+39 lesson setups (28 scenarios) build the same world at both tiers, and 24 of
+the 61 built-in scenarios are capped, none of them loaded by a lesson,
+activity, course pack or bench experiment. For each capped scenario it lists
+what a student reads differently (the canvas line "n of N bodies", the body
+counts read aloud and in a shared link, the conservation lines, and a gallery
+card that states a count: Supermassive Core's "50 planets, 5 gas giants, and
+100 asteroids" is the one the low tier contradicts outright).
+
+**The bodies kept are the full tier's own.** The builder makes the whole
+population and places it, then drops what is past a cap just before it zeroes
+the world's momentum (`js/world/build.js`). Capping the loops instead drew fewer
+numbers from the seeded stream, so every body made or placed after a capped
+population came from a different draw: in every one of the 24 capped
+scenarios, bodies the cap never touched (black holes, neutron stars, white
+dwarfs, the gas giants under their cap) started in other orbits at the low
+tier, and in ten the uncut gas giants had other masses.
+Now every body the low tier keeps has the full tier's id, place, mass and name
+from the same seed; its velocity differs only by one shift common to every
+body, the momentum the cut bodies carried (the table gives its size: 24% of the
+median speed in Stellar Nursery, 14% in Alien Dyson Swarm Collapse and 5.7%
+in Hungry Hungry Holes, where the cut stars are heavy; 1.2% or less
+elsewhere).
+
+**Computations** — the low tier also draws fewer samples (`COMPUTE_TIERS`:
+bootstrap 1000 to 300, Monte Carlo 20,000 to 5,000, profile points 11 to 7).
+One lesson quotes such a result: the binary-star mass sum (A Binary Star's
+Orbit, step "The mass of the pair"), whose 68% interval comes from the Monte
+Carlo. Its answer window holds at both tiers (the low end reads 3.34 at the
+low tier against 3.33, inside its ±0.08; over 400 reseeded runs at 5,000 draws
+the low end varies by 0.008), so the computation stays reduced, and the tool
+says so beside the intervals at the low tier ("5000 random draws on this
+device, at the low tier; the full tier uses 20000"). The 3.76 itself is
+computed without the draws. The bootstrap and profile sizes reach no graded
+lesson number; the Observatory's fit panel states its own reduction. Not
+adopted, and unchanged: the mission lab's transfer grid and the fixed-count
+Monte Carlos of the visual-binary and orbit fits.
+
 **Effects off** — object lensing, lensing quality, gravitational-wave overlay,
-the accretion disc, plus `trail_length` 8. Each is a full-screen or per-body pass an integrated GPU
+and the accretion disc. Each is a full-screen or per-body pass an integrated GPU
 pays for in fill rate. Applied as a read-time override, never written into
 `SETTINGS`: writing them would destroy the reader's own choice the first time a
 machine dipped below the threshold.

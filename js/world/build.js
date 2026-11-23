@@ -1656,14 +1656,24 @@ export const buildWorld = ctx => {
 
   setScenarioName(starting_preset);
 
-  // The low tier's population caps (populationCaps in js/quality.js says why
-  // they are a read-time override and which scenarios they spare), read once.
+  // The low tier's population caps (populationCaps in js/quality.js), read
+  // once. The whole population is made and placed and what is past a cap is
+  // dropped last, so the bodies a slow machine keeps are the full tier's own
+  // from the same seed: the same ids, masses and starting places.
   const caps = populationCaps();
   const capped = caps && SETTINGS.placement !== 'Empty' ? caps : null;
   const pop = key =>
     capped && typeof SETTINGS[key] === 'number' && SETTINGS[key] > capped[key]
       ? capped[key]
       : SETTINGS[key];
+  const surplus = new Set();
+  const fill = (list, key, Body, from = 0) => {
+    for (let i = from; i < (SETTINGS[key] || 0); i++) {
+      const body = new Body({ x: 0, y: 0 }, { x: 0, y: 0 });
+      if (i >= pop(key)) surplus.add(body);
+      list.push(body);
+    }
+  };
 
   // Reset insertion object type to scenario default (or 'Star') and update button
   SETTINGS.input_object_type = SETTINGS.input_object_type || 'Star';
@@ -1736,11 +1746,7 @@ export const buildWorld = ctx => {
   // randomly generated - and the spare was dropped into the belt it was
   // supposed to be lighting.
   const starsAlready = stars.length;
-  if (pop('num_stars')) {
-    for (let i = stars.length; i < pop('num_stars'); i++) {
-      stars.push(new StarObject({ x: 0, y: 0 }, { x: 0, y: 0 }));
-    }
-  }
+  fill(stars, 'num_stars', StarObject, stars.length);
 
   // Add black holes.
   //
@@ -1806,29 +1812,11 @@ export const buildWorld = ctx => {
     white_dwarfs.push(new WhiteDwarf({ x: 0, y: 0 }, { x: 0, y: 0 }));
   }
 
-  // Add planets
-  for (let i = 0; i < pop('num_planets'); i++) {
-    planets.push(new Planet({ x: 0, y: 0 }, { x: 0, y: 0 }));
-  }
-
-  // Add gas giants
-  for (let i = 0; i < pop('num_gas_giants'); i++) {
-    gas_giants.push(new GasGiant({ x: 0, y: 0 }, { x: 0, y: 0 }));
-  }
-
-  // Add asteroids
-  if (SETTINGS.enable_asteroids) {
-    for (let i = 0; i < pop('num_asteroids'); i++) {
-      asteroids.push(new Asteroid({ x: 0, y: 0 }, { x: 0, y: 0 }));
-    }
-  }
-
-  // Add comets
-  if (pop('num_comets')) {
-    for (let i = 0; i < pop('num_comets'); i++) {
-      comets.push(new Comet({ x: 0, y: 0 }, { x: 0, y: 0 }));
-    }
-  }
+  // Planets, gas giants, asteroids and comets
+  fill(planets, 'num_planets', Planet);
+  fill(gas_giants, 'num_gas_giants', GasGiant);
+  if (SETTINGS.enable_asteroids) fill(asteroids, 'num_asteroids', Asteroid);
+  fill(comets, 'num_comets', Comet);
 
   // Apply placement patterns to position objects
   applyPlacement(SETTINGS, starting_preset);
@@ -1847,7 +1835,7 @@ export const buildWorld = ctx => {
   // the setting already claimed to mean, and generated after apply_placement so
   // the cloud is positioned by this block rather than scattered by the generic
   // one.
-  if (pop('num_micro_stars') > 0) {
+  if (SETTINGS.num_micro_stars > 0) {
     const G = SETTINGS.gravitational_constant;
     const gravitating = [
       ...bh_list,
@@ -1861,7 +1849,8 @@ export const buildWorld = ctx => {
     // reads as a cloud rather than a ring.
     const inner = Math.max(40, (central?.radius || 0) * 2.5);
     const outer = inner * 4;
-    const count = Math.min(600, Math.floor(pop('num_micro_stars')));
+    const count = Math.min(600, Math.floor(SETTINGS.num_micro_stars));
+    const keep = Math.min(600, Math.floor(pop('num_micro_stars')));
 
     for (let i = 0; i < count; i++) {
       // A filled annulus: sqrt on the radius so the area density is even
@@ -1888,6 +1877,7 @@ export const buildWorld = ctx => {
       micro.mass = SETTINGS.micro_star_mass * SOLAR_MASS_UNIT;
       micro.massInSuns = SETTINGS.micro_star_mass;
       micro.radius = 1.2;
+      if (i >= keep) surplus.add(micro);
       stars.push(micro);
     }
   }
@@ -2557,9 +2547,12 @@ export const buildWorld = ctx => {
   // them. Scenarios built entirely by hand keep the 'Empty' placement and are
   // left alone - some of them, like Interstellar Visitor, are about something
   // arriving from outside and are supposed to be moving.
-  if (SETTINGS.placement !== 'Empty') {
-    zeroNetMomentum();
+  // What the tier cuts, cut now (the caps above) and before the balance.
+  for (const list of [stars, planets, gas_giants, asteroids, comets]) {
+    if (surplus.size)
+      list.splice(0, list.length, ...list.filter(b => !surplus.has(b)));
   }
+  if (SETTINGS.placement !== 'Empty') zeroNetMomentum();
 
   // Handed in rather than imported. The starfield is a backdrop the renderer
   // draws, and importing it here made the world builder - which is engine -
