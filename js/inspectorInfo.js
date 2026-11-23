@@ -285,9 +285,14 @@ export const getPlanetInfo = planet => {
   // A measured radius where the body carries one (as the light curve reads
   // it, js/lightCurve.js); otherwise the model radius, which is about the
   // contact size and says nothing about density, gravity or escape speed.
-  const radiusInEarths = Number.isFinite(planet.radiusInEarths)
-    ? planet.radiusInEarths
-    : null;
+  // A planet built at its published size may state it in Jupiter radii only
+  // (the Transit Lab's HD 209458 b), as js/sizeFacts.js reads it too.
+  const radiusInEarths =
+    planet.radiusInEarths > 0
+      ? planet.radiusInEarths
+      : planet.radiusInJupiters > 0
+        ? planet.radiusInJupiters * 11.2
+        : null;
   const radiusRows =
     radiusInEarths > 0
       ? [

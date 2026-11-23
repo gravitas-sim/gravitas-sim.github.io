@@ -162,6 +162,15 @@ describe('radius rows', () => {
     expect(card.Mass.value).toContain(format.withUnit(massKg, 'kg'));
   });
 
+  test('a radius stated in Jupiter radii reads as one (HD 209458 b)', () => {
+    const b = named(build('transit-lab'), /^HD 209458 b$/);
+    expect(b.radiusInEarths).toBeUndefined();
+    const radius = info
+      .getPlanetInfo(b)
+      .stats.find(s => s.tooltipKey === 'radiusPhysical');
+    expect(radius.value).toContain(format.withUnit(1.38 * 11.2, 'R⊕'));
+  });
+
   test('a model radius is never called physical and derives nothing', () => {
     const bodies = build('earth-moon-system');
     const earth = named(bodies, /^Earth$/);
