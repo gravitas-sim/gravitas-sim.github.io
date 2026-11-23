@@ -1879,7 +1879,33 @@
     body.investigation-open .investigation-panel {
       max-height: var(--lesson-sheet);
     }
-
+    /* A quiet canvas: the controls follow the picture, ahead of the note and
+       the readout, so the sliders that move a mark are the first thing to
+       scroll into view and the picture stays beside them. Focus order is
+       unchanged: the note and the readout are not focusable. */
+    body[data-lesson-canvas='quiet'].investigation-aux:not(
+        .investigation-split
+      )
+      #investigationTool:not([hidden]) {
+      display: flex;
+      flex-direction: column;
+    }
+    body[data-lesson-canvas='quiet'].investigation-aux
+      #investigationTool
+      > * {
+      flex: none;
+      order: 2;
+    }
+    body[data-lesson-canvas='quiet'].investigation-aux
+      #investigationTool
+      > :is(.inv-plot-panel-head, canvas) {
+      order: 0;
+    }
+    body[data-lesson-canvas='quiet'].investigation-aux
+      #investigationTool
+      > :is(.inv-tool-controls, .inv-tool-actions, .more, .inv-presets) {
+      order: 1;
+    }
   }
 
   /* The footer. On a phone the lesson's sheet stands on the transport bar
@@ -1905,6 +1931,12 @@
       --lesson-col: min(380px, 46vw);
       --dock-left: calc(var(--lesson-col) + var(--space-3) + var(--space-2));
       --dock-room: min(var(--lesson-band), 252px);
+    }
+    /* A quiet canvas has no scene behind the dock, so the instrument is the
+       thing the student looks at and takes the room above the step, as far
+       as the band reaches. */
+    body[data-lesson-canvas='quiet'].investigation-open {
+      --dock-room: var(--lesson-band);
     }
     body.investigation-open .investigation-panel {
       top: calc(var(--space-3) + var(--shell-height, 0px));
@@ -1967,6 +1999,30 @@
     body.investigation-lightcurve .investigation-panel,
     body.investigation-open.observing .investigation-panel {
       height: var(--lesson-sheet);
+    }
+    /* A quiet canvas: nothing is behind the dock, so the sheet and the dock
+       share every pixel between the menu button (44 px and the gaps around
+       it) and the transport bar. The dock keeps what the instrument's picture
+       and its heading need (300 px) and the step's sheet takes the rest, so
+       the picture shows whole and the step's words stay readable beside it.
+       Lowering the sheet by its handle gives the dock up to 480 px, as much
+       as the screen holds (the picture and the first slider in full at 812 px,
+       the second a short scroll below). The instrument is the subject here;
+       the criterion for a scene does not apply. A short screen keeps the
+       rule that follows. */
+    @media (min-height: 561px) {
+      body[data-lesson-canvas='quiet'].investigation-aux {
+        --stage-room: calc(
+          100vh - var(--shell-height, 0px) - var(--transport-reserve, 76px) -
+            44px - env(safe-area-inset-top, 0px) - var(--space-2) * 4
+        );
+        --lesson-sheet: max(calc(var(--stage-room) - 300px), 180px);
+        --dock-sheet: min(300px, calc(var(--stage-room) - var(--lesson-sheet)));
+      }
+      body[data-lesson-canvas='quiet'].investigation-aux.lesson-peek {
+        --lesson-sheet: 150px;
+        --dock-sheet: min(480px, calc(var(--stage-room) - var(--lesson-sheet)));
+      }
     }
     /* A screen this short (a phone held sideways, a laptop at 200% zoom) leaves
        the band so little that the sheet came out at 88px (a floor of 150px: the

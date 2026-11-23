@@ -37,6 +37,11 @@ import { test, expect } from './fixtures.js';
 import { open } from './sweepOpen.js';
 import { measureTargets } from './touchTargets.js';
 import { frameObservation, asFile, SIZE, STARS, DISC } from './mobileFrames.js';
+import {
+  LESSON_PILOTS,
+  openLessonStep,
+  measureLayoutInPage,
+} from '../tools/visual-criteria.mjs';
 
 const contract = JSON.parse(
   readFileSync('tools/interaction-contract.json', 'utf8')
@@ -626,8 +631,8 @@ test.describe('a plot cursor by touch', () => {
 // -----------------------------------------------------------------------------
 // tools/mobile-workflows.json names them: the ten student workflows of
 // ACCESSIBILITY_CONFORMANCE.md (S1 to S10) and five instrument workflows
-// (N1 to N5). Each is a few real taps, an observable result, and no sideways
-// scroll. A walk that needs a long computation runs at one size in each
+// (N1 to N5), and the lesson instrument beside a step (L1). Each is a few real
+// taps, an observable result, and no sideways scroll. A walk that needs a long computation runs at one size in each
 // language, so that both sizes and both languages are still covered.
 
 const LOCALES = ['en', 'es'];
@@ -841,6 +846,31 @@ const WORKFLOWS = [
       await cell.tap();
       const label = await cell.getAttribute('aria-label');
       await expect(page.locator('.mn-grid-cursor')).toHaveText(label);
+    },
+  },
+  {
+    // Measuring the Moon, the step that marks the disc: the lesson opens from
+    // its link, the picture shows whole above the step (nothing of it under
+    // another panel), each end of the reference pair is moved by a tap on its
+    // slider, and the step's own reading is taken from the instrument.
+    id: 'L1',
+    async run(page) {
+      const moon = LESSON_PILOTS.find(p => p.id === 'moon-image');
+      await openLessonStep(page, { ...moon, language: page.__locale });
+      const m = await page.evaluate(measureLayoutInPage);
+      expect(m.instrument.reason).toBe('in view');
+      const left = page.locator('[data-tool-out="x1"]');
+      const right = page.locator('[data-tool-out="x2"]');
+      const [x1, x2] = [await left.innerText(), await right.innerText()];
+      await tapAt(page, page.locator('#invTool-x1'), 0.15, 0.5);
+      await tapAt(page, page.locator('#invTool-x2'), 0.85, 0.5);
+      await expect.poll(() => left.innerText()).not.toBe(x1);
+      await expect.poll(() => right.innerText()).not.toBe(x2);
+      const field = page
+        .locator('#investigationBody input:not([type="range"])')
+        .first();
+      await page.locator('#investigationBody .inv-import-btn').first().tap();
+      await expect(field).toHaveValue(/\d/);
     },
   },
   {

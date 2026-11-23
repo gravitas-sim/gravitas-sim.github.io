@@ -89,7 +89,7 @@ Scene class of the lessons: portrait or backdrop 94, setup scenario 26, engine-i
 | `investigation:lines-and-motion`                     | lesson      |   378 | STRONG   | portrait or backdrop    | OPEN      | OPEN     | NOT RUN      | -                                     |          0 |
 | `investigation:listening-to-spacetime`               | lesson      |   353 | STRONG   | model-owned stage       | OPEN      | OPEN     | NOT RUN      | -                                     |          0 |
 | `investigation:lives-of-stars`                       | lesson      |   360 | FOCUSED  | portrait or backdrop    | REVISED   | REVISED  | NOT RUN      | -                                     |          1 |
-| `investigation:measuring-the-moon`                   | lesson      |   330 | STRONG   | portrait or backdrop    | REVISED   | REVISED  | NOT VERIFIED | -                                     |          4 |
+| `investigation:measuring-the-moon`                   | lesson      |   330 | STRONG   | portrait or backdrop    | REVISED   | REVISED  | VERIFIED     | -                                     |          5 |
 | `investigation:missing-mass`                         | lesson      |   358 | STRONG   | setup scenario          | REVISED   | REVISED  | NOT RUN      | -                                     |          4 |
 | `investigation:ml-cruise`                            | mission     |   420 | STRONG   | -                       | OPEN      | OPEN     | NOT RUN      | -                                     |          1 |
 | `investigation:ml-orbit`                             | mission     |   420 | FOCUSED  | -                       | OPEN      | OPEN     | NOT RUN      | -                                     |          1 |

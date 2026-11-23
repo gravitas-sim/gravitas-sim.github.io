@@ -1,5 +1,5 @@
 {
-  "about": "The workflows e2e/mobileSweep.spec.js walks by touch (Prompt 283), at a phone (375 x 812) and a tablet (768 x 1024), in English and in Spanish: the ten student workflows of ACCESSIBILITY_CONFORMANCE.md and five instrument workflows. Each is a few real taps, an observable result and no sideways scroll. tests/touchTargets.test.js holds this list to the spec's. `sizes` lists where a long computation runs: the cluster fit runs at the phone in English and at the tablet in Spanish, so both sizes and both languages are covered without four fits.",
+  "about": "The workflows e2e/mobileSweep.spec.js walks by touch (Prompt 283), at a phone (375 x 812) and a tablet (768 x 1024), in English and in Spanish: the ten student workflows of ACCESSIBILITY_CONFORMANCE.md, five instrument workflows and one lesson instrument workflow (L1: a lesson that docks an instrument over a quiet canvas). Each is a few real taps, an observable result and no sideways scroll. tests/touchTargets.test.js holds this list to the spec's. `sizes` lists where a long computation runs: the cluster fit runs at the phone in English and at the tablet in Spanish, so both sizes and both languages are covered without four fits.",
   "workflows": [
     { "id": "S1", "name": "Start from the front door and open an investigation", "surface": "/#investigations" },
     { "id": "S2", "name": "Run and change a sandbox scenario: open the scenario browser", "surface": "/" },
@@ -15,6 +15,7 @@
     { "id": "N2", "name": "A photometry batch: measure all marks", "surface": "/observatory/" },
     { "id": "N3", "name": "A spectrum line measurement: fit H-beta for a velocity", "surface": "/observatory/" },
     { "id": "N4", "name": "A porkchop choice: compute the window and choose a cell", "surface": "/mission/" },
-    { "id": "N5", "name": "A cluster fit: fit NGC 2420", "surface": "/observatory/?open=ngc2420-segue", "sizes": ["phone:en", "tablet:es"] }
+    { "id": "N5", "name": "A cluster fit: fit NGC 2420", "surface": "/observatory/?open=ngc2420-segue", "sizes": ["phone:en", "tablet:es"] },
+    { "id": "L1", "name": "A lesson instrument beside its step: mark the Moon's disc by touch", "surface": "/#investigation=measuring-the-moon" }
   ]
 }

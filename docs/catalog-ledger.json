@@ -3527,6 +3527,11 @@
           "ref": "D-R4-330-08",
           "owner": 330,
           "note": "T4 transfer: not added; no honest second case in this lesson (recorded, not a failure)."
+        },
+        {
+          "ref": "D-R4-432-01",
+          "owner": 432,
+          "note": "Phone walk VERIFIED by emulated touch only (Chromium at 375x812, 412x915 and 768x1024, English and Spanish); no real device. The reference pair is set by range sliders (a tap on the track, arrow keys); a step-button alternative for lesson instrument sliders is left to the instrument family table."
         }
       ],
       "questions": {
@@ -3597,7 +3602,7 @@
           "change": "REWORDED: shortened to what the stated uncertainty leaves out and why gray levels are not light."
         }
       ],
-      "walk": "NOT VERIFIED",
+      "walk": "VERIFIED",
       "pr": 675,
       "hash": "e09761405699cb795b24238ed76d7c05bfdee391303a0f0e3dc5fcc925493e82"
     },
