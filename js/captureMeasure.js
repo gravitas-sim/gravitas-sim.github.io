@@ -21,7 +21,7 @@ import {
   neutron_stars,
   white_dwarfs,
 } from './physics.js';
-import { canRecordClips } from './utils.js';
+import { canRecordClips, framedBodies } from './utils.js';
 import { state, SETTINGS, current_scenario_name, command } from './appState.js';
 import { solveKepler } from './orbital.js';
 import { t, registerMessages, onLocaleChange } from './i18n/index.js';
@@ -701,7 +701,8 @@ export function initCaptureMeasure(ctx) {
       let minY = Infinity,
         maxY = -Infinity;
 
-      for (const obj of allObjects) {
+      // Fit what the scene is about, not its farthest comet (see framedBodies).
+      for (const obj of framedBodies(allObjects)) {
         minX = Math.min(minX, obj.pos.x);
         maxX = Math.max(maxX, obj.pos.x);
         minY = Math.min(minY, obj.pos.y);

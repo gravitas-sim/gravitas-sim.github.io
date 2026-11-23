@@ -177,6 +177,41 @@ export const isOffscreen = (pos, state, canvas, buffer_factor = 1.5) => {
 };
 
 /**
+ * The bodies a "frame the scene" view should fit: the nearest nine in ten of
+ * them, measured from the centre of mass, plus every body that holds at least
+ * a hundredth of the mass. Nothing removes a body for leaving the view any
+ * more, so a scene keeps its far wanderers - the Solar System's Comet ISON
+ * starts 3.6 million units out, a thousand times Neptune's distance - and a
+ * view fitted to every body would show the planets as nothing. The bodies left
+ * out of the frame are still in the world; only the camera ignores them.
+ * @param {Array<{pos: {x: number, y: number}, mass: number}>} bodies
+ * @returns {Array} the bodies to frame (all of them when there are fewer than ten)
+ */
+export const framedBodies = bodies => {
+  if (bodies.length < 10) return bodies;
+  let total = 0;
+  let cx = 0;
+  let cy = 0;
+  for (const b of bodies) {
+    const m = b.mass > 0 ? b.mass : 0;
+    total += m;
+    cx += b.pos.x * m;
+    cy += b.pos.y * m;
+  }
+  if (total > 0) {
+    cx /= total;
+    cy /= total;
+  } else {
+    cx = bodies.reduce((s, b) => s + b.pos.x, 0) / bodies.length;
+    cy = bodies.reduce((s, b) => s + b.pos.y, 0) / bodies.length;
+  }
+  const reach = b => Math.hypot(b.pos.x - cx, b.pos.y - cy);
+  const sorted = bodies.map(reach).sort((a, b) => a - b);
+  const limit = sorted[Math.ceil(bodies.length * 0.9) - 1];
+  return bodies.filter(b => reach(b) <= limit || b.mass >= total / 100);
+};
+
+/**
  * Calculate orbital velocity for circular orbit
  * @param {number} centralMass - Mass of central object
  * @param {number} distance - Orbital distance

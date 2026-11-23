@@ -12,6 +12,7 @@ import { execFile } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 import process from 'node:process';
 import { URL } from 'node:url';
+import { framedBodies } from '../js/utils.js';
 
 const ROOT = new URL('..', import.meta.url).pathname;
 const PLAN = JSON.parse(
@@ -58,5 +59,31 @@ describe('two cameras on one world give the same bodies, bit for bit', () => {
     for (const name of PLAN.fixtures.everyBranch.solarSystemComets)
       expect(solar.comets.some(n => n.includes(name))).toBe(true);
     expect(solar.live).toBe(35);
+  });
+});
+
+describe('a view that frames the scene fits what the scene is about', () => {
+  // The Solar System's starting distances from the Sun, in world units, with
+  // its three far comets: a fit to every body would put the planets in one
+  // pixel. Nothing is removed from the world; the camera leaves them out.
+  const at = (x, mass) => ({ pos: { x, y: 0 }, mass });
+  const solar = [
+    at(0, 1000),
+    ...[300, 500, 900, 1900, 3000].map(x => at(x, 1)),
+    ...Array.from({ length: 23 }, (_, i) => at(200 + i * 10, 1e-4)),
+    ...[1784, 18586, 234950, 800015, 3650001].map(x => at(x, 1e-4)),
+  ];
+
+  test('the three far comets are left out of the frame and Hale-Bopp stays in', () => {
+    const framed = framedBodies(solar);
+    expect(solar.length - framed.length).toBe(3);
+    expect(Math.max(...framed.map(b => b.pos.x))).toBe(18586);
+  });
+
+  test('a small scene, and any body with a hundredth of the mass, is always framed', () => {
+    const few = solar.slice(0, 9);
+    expect(framedBodies(few)).toBe(few);
+    const heavyFar = [...solar, at(5e6, 20)];
+    expect(framedBodies(heavyFar)).toContain(heavyFar.at(-1));
   });
 });

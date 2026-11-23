@@ -42,6 +42,7 @@ import {
   noteObservationPanelUsed,
 } from './observationLayout.js';
 import { EV_SIMULATION_RESET } from './names.js';
+import { framedBodies } from './utils.js';
 
 let containerEl = null;
 let canvasHost = null;
@@ -1115,7 +1116,9 @@ function focusScene(force = false) {
   let minY = Infinity;
   let maxY = -Infinity;
 
-  objects.forEach(obj => {
+  // Fit what the scene is about, not its farthest comet (see framedBodies).
+  const framed = framedBodies(objects);
+  framed.forEach(obj => {
     if (obj.pos.x < minX) minX = obj.pos.x;
     if (obj.pos.x > maxX) maxX = obj.pos.x;
     if (obj.pos.y < minY) minY = obj.pos.y;
@@ -1130,7 +1133,7 @@ function focusScene(force = false) {
 
   // The grid has to reach the bodies it is meant to be holding up.
   ensureGridCovers(
-    objects.reduce((r, o) => Math.max(r, Math.hypot(o.pos.x, o.pos.y)), 0)
+    framed.reduce((r, o) => Math.max(r, Math.hypot(o.pos.x, o.pos.y)), 0)
   );
 
   controls.target.set(centerX, 0, centerZ);
