@@ -48,8 +48,7 @@ export function ticks(lo, hi, count = 5) {
   const raw = (hi - lo) / count;
   const mag = 10 ** Math.floor(Math.log10(raw));
   const step = [1, 2, 2.5, 5, 10].map(m => m * mag).find(s => s >= raw) || raw;
-  // A range narrower than the last place of its own ends has one tick: the
-  // step would not move the loop on.
+  // No step to take on a range this narrow.
   if (lo + step === lo) return [lo];
   const out = [];
   for (let v = Math.ceil(lo / step) * step; v <= hi + step * 1e-9; v += step) {
