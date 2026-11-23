@@ -9,7 +9,7 @@ on a 60 Hz screen, a 144 Hz screen and a throttled tab. A reading step
 that holds the clock (`holdsClock` in `js/timestep.js`) does not run and
 is not pinned. Closing the lesson lifts the pin.
 
-580 steps in 25 lessons run on an integrated scene; 457 are pinned and 123 hold the clock.
+579 steps in 25 lessons run on an integrated scene; 456 are pinned and 123 hold the clock.
 
 | Lesson | Step | Id | Type | Scene | Own scene | Pinned step |
 |---|---|---|---|---|---|---|
