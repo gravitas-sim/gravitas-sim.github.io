@@ -13,8 +13,11 @@
 //   0.15 separations   survives 20 binary periods, drift 1.7e-6, no encounters
 //   0.30 separations   ejected at 2.5 periods, drift 5e-4 - clean, unambiguous
 //   0.25 separations   SURVIVES at step 1.0 and is EJECTED at step 0.25, with
-//                      the energy drift under a part in a million at both
-//   0.50 separations   drift 2.1e-3, over the screen: not an answer at all
+//                      the energy drift under two parts in a million at both
+//   0.50 separations   drift 2.1e-3 at step 1.0 and 1.7e-3 at step 0.5, both
+//                      over the screen (the panel shows them as per cent: 0.21
+//                      and 0.17, give or take the step the frame loop used):
+//                      not an answer at all; a collision at step 0.25
 //
 // The third of those is the reason the lesson exists in this shape. A student
 // who runs one integration and writes down what happened has learned a fact
@@ -107,8 +110,6 @@ const runRows = ctx => {
 const BINARY_STAR_PLANETS = {
   id: 'binary-star-planets',
   thumbnail: 'images/scenarios/binary-planet-lab.webp',
-  // The scene's sizes enter a task here: each step carries the Sizes
-  // statement (js/investigations/stepView.js, tests/sizeConsistency.test.js).
   sizes: true,
   title: 'Planets in Binary Stars',
   subtitle: 'What survives around two stars, and how you would know',
@@ -242,9 +243,9 @@ const BINARY_STAR_PLANETS = {
       checklist: [
         'Watch the trail band: does it stay a ring, or does it start to breathe in and out as the stars swing past?',
         'Read "Integrated" as it climbs — it counts binary periods, not years',
-        'Watch the "Planet’s orbit now" row: the semi-major axis barely moves, and the eccentricity does not sit still',
-        'Watch "Highest eccentricity reached" — it does not come back down',
-        'Note the energy drift while the run is quiet; you will want the comparison later',
+        'Watch the "Planet’s orbit now" row: the semi-major axis and the eccentricity',
+        'Watch "Highest eccentricity reached" as the run goes on',
+        'Note the energy drift; you will want the comparison later',
         'Let it finish, and read the sentence at the bottom of the panel',
       ],
       tip: 'Turn the speed down with the transport controls if you want to see a single orbit rather than the band.',
@@ -315,8 +316,10 @@ const BINARY_STAR_PLANETS = {
       type: 'question',
       kind: 'choice',
       title: 'Why was that so quiet?',
-      body: `The planet stayed within about 0.62 separations of the barycenter
-             and never came within a quarter of a separation of Star B.`,
+      body: `Look back at the four readings you took from the run (how many
+             periods it completed, how far out the planet went, how many close
+             encounters it had with Star B, and the energy drift) and at the
+             panel's <strong>Closest to the other star</strong> row.`,
       prompt:
         'The planet at 1.5 AU barely notices the companion star. The best reason is:',
       options: [
@@ -326,7 +329,9 @@ const BINARY_STAR_PLANETS = {
         'Star B never gets close to the planet’s orbit',
       ],
       answer: 1,
-      because: `Proximity, not mass. At 1.5 AU from a 1.0 solar-mass star the
+      because: `Proximity, not mass. The planet stayed within about 0.62
+                separations of the barycenter and never came within a quarter of
+                a separation of Star B. At 1.5 AU from a 1.0 solar-mass star the
                 planet feels a pull about eighteen times stronger than the one
                 from a 0.5 solar-mass star at its very closest, 4.5 AU away. The
                 companion is a perturbation rather than a competitor, and a
@@ -371,14 +376,13 @@ const BINARY_STAR_PLANETS = {
       body: `Set <strong>Planet start</strong> to <strong>0.30</strong> and
              press Run. The world is rebuilt from scratch — same two stars, same
              starting angles, planet in a new place — so this is the same
-             experiment with one thing changed.
-             \n\nThis one will not take twenty periods.`,
+             experiment with one thing changed.`,
       checklist: [
-        'Watch the ring stop being a ring within the first period or two',
-        'Watch the "Farthest out" figure climb past 1, then past 5',
-        'Read when the run stopped, and why',
+        'Watch whether the ring holds its shape as the run goes on',
+        'Watch the "Farthest out" figure as the run goes on',
+        'Read how the run ended, and when',
       ],
-      tip: 'The run ends itself once the planet is unbound and more than ten separations out. Integrating a departing planet for another eighteen periods would tell you nothing.',
+      tip: 'A run can end before the twenty periods are up, when the panel has seen enough to name an outcome: integrating further would tell you nothing.',
     },
     {
       sid: 'when-did-it-leave',
@@ -508,7 +512,7 @@ const BINARY_STAR_PLANETS = {
                 all inside its scope or beside the point: an Earth mass is a
                 millionth of the star, μ = 0.4 is well within the fitted range,
                 and how long you watched is not a property of the system.`,
-      tip: 'Worth trying before you move on: run 0.20, just outside the boundary. The paper reports islands of instability inside the fitted line and islands of stability outside it, and the panel declines to predict at all within 0.02 separations of it. A fit to where a transition mostly sits is not a wall.',
+      tip: 'Worth trying before you move on: run 0.18, which lies within 0.02 separations of the published line, where the panel declines to say which side of it you are on. Then run 0.20, just beyond that band, where it does say.',
     },
 
     // --- Part 3: is the answer about the planet or the arithmetic? -----------
@@ -666,7 +670,7 @@ Watch what it reports as it goes. Each trial ends with an
              and compares the two outcomes.
              
 
-This is the same test you did by hand at 0.25, applied to the
+This is the same test you did by hand at 0.25 separations, applied to the
              one value in the sweep where it matters. A configuration whose
              fate changes when you halve the step has not been measured at
              either step.`,
@@ -731,21 +735,18 @@ This is the same test you did by hand at 0.25, applied to the
              report an outcome at all — it does not say the planet was ejected,
              because it does not know.
              \n\nTry it. Set the planet to <strong>0.50</strong> separations,
-             which starts it almost on top of Star B, and run. You will not get
-             an answer; you will get a complaint and an instruction. Follow the
-             instruction — and keep following it until the panel is willing to
-             tell you something.
-             \n\nOne halving will not be enough, which is worth noticing. Fixing
-             a badly resolved encounter is not a matter of doing slightly better;
-             either the step resolves the pass or it does not.`,
+             which starts it almost on top of Star B, and run. Read what the
+             panel reports and what it asks of you, follow that — and keep
+             following it, for two or three halvings at most, until the panel
+             is willing to tell you something.`,
       checklist: [
-        'Run 0.50 at the default step of 1.0 and read the drift — about 0.18%, well over the screen',
-        'Look at the planet\u2019s eccentricity while you are there: it comes out above 100, which is not an orbit, it is an explosion',
-        'Note that the panel declines to say what happened to the planet',
-        'Press "Repeat at half the step". The drift is 0.17% — essentially unchanged, and still refused',
-        'Press it again. At a step of 0.25 the drift is 0.0023%, and now there is an answer: the planet hit a star, one hundredth of a binary period in',
+        'Run 0.50 at the default step of 1.0, and read the drift and what the panel says about the outcome',
+        'Look at the planet\u2019s eccentricity while you are there',
+        'Note whether the panel says what happened to the planet',
+        'If it declines, press "Repeat at half the step" and read the drift and the outcome again',
+        'Keep pressing it, two or three halvings in all, recording the step, the drift and what the panel says each time. Stop when it reports an outcome, and never go below a step of 0.1: if it still declines there, stop and say so',
       ],
-      tip: 'A tenth of a per cent is not a natural constant. It was measured: on these configurations, every run that drifted more than that gave an outcome that changed when the step was halved. Note also what the answer turned out to be — a collision, not an ejection. Two of the four things that can happen to the planet here look similar from a distance and are told apart by the panel rather than by eye.',
+      tip: 'Check yourself on this run, not later: the panel names an outcome only when the drift is under its screen, so your last line of notes should show a drift under 0.1% beside a named outcome. If you stopped at a step of 0.1 with the drift still over the screen, that is your result, and it is a legitimate one to write down. A tenth of a per cent is not a natural constant. It was measured: on these configurations, every run that drifted more than that gave an outcome that changed when the step was halved. Of the four things that can happen to the planet here, two look similar from a distance and are told apart by the panel rather than by eye.',
     },
     {
       sid: 'the-case-that-matters',
@@ -757,17 +758,17 @@ This is the same test you did by hand at 0.25, applied to the
       setup: S_LAB,
       body: `Set the planet to <strong>0.25</strong> separations, leave the step
              at <strong>1.0</strong>, and run the full twenty periods.
-             \n\nWatch this one properly. It is not a quiet run: the trail band
-             stretches and reshapes, and the encounter counter climbs steadily.
-             Note the outcome, the encounter count and the energy drift.
+             \n\nWatch this one properly: the trail band, and the encounter
+             counter. Note the outcome, the encounter count and the energy
+             drift.
              \n\nThen press <strong>Repeat at half the step</strong>. Twice.`,
       checklist: [
-        'Run 0.25 at step 1.0 — record the outcome, the encounters and the drift',
-        'Halve to 0.5 — record the same three',
-        'Halve to 0.25 — record the same three',
-        'Ask yourself which of the three runs you would put in a paper',
+        'Run 0.25 separations at a step of 1.0 — record the outcome, the encounters and the drift',
+        'Halve the step to 0.5 — record the same three',
+        'Halve it again, to a step of 0.25 — record the same three',
+        'Compare the three records and decide which of them, if any, you would put in a paper',
       ],
-      tip: 'Each halving doubles the wall-clock time. The last one takes a couple of minutes; it is the most important run in the investigation.',
+      tip: 'Each halving doubles the wall-clock time, so the last run takes the longest; leave it to finish.',
     },
     {
       sid: 'the-drift-was-tiny',
@@ -811,7 +812,7 @@ This is the same test you did by hand at 0.25, applied to the
         return {
           level: 'ok',
           message:
-            'Both runs conserve energy to better than a part in a million — and that is exactly what makes this case worth the trouble.',
+            'Both runs conserve energy to under two parts in a million — and that is exactly what makes this case worth the trouble.',
         };
       },
     },
@@ -823,7 +824,7 @@ This is the same test you did by hand at 0.25, applied to the
       title: 'Which answer is right?',
       body: `At step 1.0 the planet survived twenty periods, with dozens of close
              encounters along the way. At step 0.25 it was ejected. The energy
-             drift was under a part in a million in both.`,
+             drift was under two parts in a million in both.`,
       prompt: 'The honest thing to report from these runs is:',
       options: [
         'That the planet survives, since the run that survived conserved energy just as well',
@@ -847,7 +848,19 @@ This is the same test you did by hand at 0.25, applied to the
                 still moving, and the next halving might move it again. The
                 claim you can make is about the configuration — that its fate at
                 twenty periods is not settled by an integration at these steps —
-                and that is a real result, not a failure.`,
+                and that is a real result, not a failure.
+                \n\nThe 0.50 run was a different kind of unsettled, and the
+                energy screen caught it. At a step of 1.0 the drift was about
+                0.2%, over the screen, and the planet's eccentricity came out
+                above 100, which is not an orbit but an explosion. Halving once
+                left the drift at about 0.17% and the outcome still refused. At
+                a step of 0.25 the drift was 0.0023% and the panel reported an
+                outcome: the planet hit a star, about a hundredth of a binary
+                period in. One halving was not enough because a badly resolved
+                encounter is not fixed by doing slightly better: either the step
+                resolves the pass or it does not. The 0.25-separation case is
+                the one the screen cannot catch, with the drift tiny at both
+                steps and the answer changing anyway.`,
     },
     {
       sid: 'convergence-is-the-test',
@@ -883,8 +896,8 @@ This is the same test you did by hand at 0.25, applied to the
                 what steps, reports that the outcome changed between them, and
                 stops short of a verdict on the planet. Something like: "At 0.25
                 separations, integrated for 20 binary periods, the planet
-                survived at a step of 1.0 and was ejected at 0.25, with energy
-                conserved to better than 1e-6 in both. The outcome has not
+                survived at a step of 1.0 and was ejected at a step of 0.25, with energy
+                conserved to better than 2e-6 in both. The outcome has not
                 converged, so this integration does not determine the planet's
                 fate; the run at 0.30 separations, which was ejected at every
                 step tried, does."`,
@@ -974,14 +987,13 @@ This is the same test you did by hand at 0.25, applied to the
              are from each other and further than either of them ever reaches —
              and run it again.`,
       checklist: [
-        'At 4.0: watch the two stars whirl inside the planet’s orbit, and compare the farthest-out figure with 4.0',
-        'At 4.0: the highest eccentricity reached settles around 0.06 and stops climbing',
-        'At 2.0: watch the ring stop closing on itself, and watch the eccentricity row while it does',
-        'At 2.0: the eccentricity passes 0.25 in the first binary period and 1 in the second — past 1 the orbit is open and the semi-major axis stops existing',
-        'At 2.0: read the encounter count when it finishes — it may surprise you',
-        'At 2.0: read when it left',
+        'At 4.0: watch the two stars whirl inside the planet’s orbit, and read the farthest-out figure',
+        'At 4.0: watch the highest eccentricity reached as the run goes on',
+        'At 2.0: watch the ring and the eccentricity row as the run goes on, and note the eccentricity each time a binary period completes',
+        'At 2.0: read the encounter count when it finishes',
+        'At 2.0: read how it ended, and when',
       ],
-      tip: 'Nothing came near anything in the second run. This is a different way of losing a planet from the one you saw in the first half of the investigation.',
+      tip: 'Keep the encounter count and the eccentricity row side by side: they measure two different things about what is happening to the planet.',
     },
     {
       sid: 'no-encounter-at-all',
@@ -1047,12 +1059,16 @@ This is the same test you did by hand at 0.25, applied to the
       because: `Resonant forcing. At 2.0 separations the planet's orbital period
                 is close to a small-integer multiple of the binary's, so the
                 pull it gets is not random — it arrives at nearly the same phase
-                of its orbit each time and the small kicks accumulate. You
-                watched that happen: the eccentricity row went past 0.25 in the
-                first binary period and past 1 in the second, and past 1 an
-                orbit does not close. The energy drift of seven parts in a
-                million rules out the first option, which is exactly why the
-                panel shows it.`,
+                of its orbit each time and the small kicks accumulate. The
+                eccentricity row shows it: it goes past 0.25 in the first
+                binary period and past 1 in the second, and past 1 an orbit does
+                not close. At 4.0 the same row settles around 0.06 and stops
+                climbing, so the pair that pumped the inner orbit leaves the
+                outer one alone, and nothing comes near anything at either
+                radius: this is a different way of losing a planet from the
+                close pass of the first half. The energy drift of seven parts
+                in a million rules out the first option, which is exactly why
+                the panel shows it.`,
     },
     {
       sid: 'circumbinary-boundary',
@@ -1113,9 +1129,7 @@ The sweep works out here too, with its own range and its own
              
 
 The published boundary for this configuration is 3.61. Predict
-             what the five will do before you press it, as you did inside — and
-             expect the disagreement you have just been reading about rather
-             than a clean line.`,
+             what the five will do before you press it, as you did inside.`,
       tip: 'Longer window, same argument: an outcome is about the window it was watched over, and forty periods out here is a shorter look than twenty was inside.',
     },
     {
@@ -1123,21 +1137,20 @@ The published boundary for this configuration is 3.61. Predict
       bind: BINARY_CAST,
       probe: runRows,
       type: 'explore',
-      title: 'Where the fit and the simulation disagree',
+      title: 'Two radii inside the published boundary',
       time: { speed: 1500, paused: false },
       setup: P_LAB,
-      body: `The fit says 3.61. So a planet at <strong>3.0</strong> separations
-             should be disrupted, and one at <strong>2.5</strong> even more so.
-             \n\nRun both, for the full forty periods. Read the outcome — and
-             then read the <strong>farthest out</strong> figure, which is the
-             number that explains the disagreement.`,
+      body: `The fit puts the boundary at 3.61 separations, so
+             <strong>3.0</strong> and <strong>2.5</strong> both lie inside it.
+             \n\nRun both, for the full forty periods. Read the outcome and the
+             <strong>farthest out</strong> figure for each.`,
       checklist: [
         'Run 3.0 for forty periods: outcome, farthest out, and highest eccentricity reached',
         'Run 2.5 for forty periods: the same three',
-        'Compare all three with the 4.0 run, where the planet stayed on its ring at an eccentricity under 0.07',
+        'Compare all three with the 4.0 run you made earlier',
         'Optional: put two of these side by side in the A/B Bench, recording distance to primary, and read the difference off one time axis',
       ],
-      tip: 'Both of these will report that the planet survived the integration. Look at how far it got before it came back.',
+      tip: 'Read the outcome first, and then how far each planet got.',
     },
     {
       sid: 'who-is-wrong',
@@ -1206,8 +1219,8 @@ The published boundary for this configuration is 3.61. Predict
              binary periods untroubled, and the published fit agrees it should.
              \n· A planet at 0.30 was ejected within three periods, at every
              timestep tried.
-             \n· A planet at 0.25 gave different answers at different timesteps,
-             so its fate is not determined by these runs.
+             \n· A planet at 0.25 separations gave different answers at different
+             timesteps, so its fate is not determined by these runs.
              \n· A circumbinary planet at 4.0 held its orbit for forty periods;
              one at 2.0 was driven out in three, without ever coming near a star.
              \n· Two configurations the fit calls unstable survived forty

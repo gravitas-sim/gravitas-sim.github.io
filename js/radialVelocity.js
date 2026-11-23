@@ -523,15 +523,14 @@ export function currentRadialVelocity() {
  * Half the range of whatever has been recorded so far, and whether the run has
  * seen enough of the curve for that number to describe the whole curve.
  *
- * The reasoning - why this is a half-range rather than a semi-amplitude K, and
- * what makes the coverage test defensible - lives with the implementation in
- * js/exoplanetObservables.js, beside the formulas it must not be confused with.
+ * Why a half-range and not a semi-amplitude K: js/exoplanetObservables.js.
  *
- * @returns {{halfRange: number, bracketedBothExtremes: boolean, min: number,
- *   max: number, midlineCrossings: number}|null} The estimate, or null before there is one
+ * @returns {{halfRange: number, shown: string, bracketedBothExtremes: boolean,
+ *   min: number, max: number, midlineCrossings: number}|null} The estimate, or null before there is one
  */
 export function measuredHalfRange() {
-  return halfRangeOfSeries(series, { minSamples: MIN_SAMPLES_FOR_RANGE });
+  const r = halfRangeOfSeries(series, { minSamples: MIN_SAMPLES_FOR_RANGE });
+  return r && { ...r, shown: formatNumber(r.halfRange) };
 }
 
 /** @returns {Array<{x: number, y: number}>} A copy of the recorded series */
@@ -706,7 +705,6 @@ function renderReadout() {
   const e = cacheElements();
   const star = observedStar();
   const rv = currentRadialVelocity();
-
   if (e.target) e.target.textContent = star ? star.name || 'Star' : 'No star';
 
   if (e.current) {

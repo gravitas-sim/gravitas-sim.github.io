@@ -1,0 +1,1374 @@
+{
+ "id": "tides",
+ "locale": "es",
+ "title": "Mareas",
+ "steps": 36,
+ "depths": [
+  [
+   "core",
+   36
+  ]
+ ],
+ "grading": [
+  {
+   "sid": "is-the-pull-the-same",
+   "type": "predict",
+   "kind": null,
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "how-different-are-they",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     true,
+     "correct"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "so-why-two-bulges",
+   "type": "predict",
+   "kind": null,
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     true,
+     "correct"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "what-the-far-side-arrow",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "bring-the-companion-closer",
+   "type": "predict",
+   "kind": null,
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     true,
+     "correct"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "the-factor-per-halving",
+   "type": "question",
+   "kind": "numeric",
+   "tolerance": 0.6,
+   "grades": [
+    [
+     "8",
+     true,
+     "correct",
+     8,
+     null,
+     false,
+     null
+    ],
+    [
+     "8,3",
+     true,
+     "correct",
+     8.3,
+     null,
+     false,
+     null
+    ],
+    [
+     "9,8",
+     false,
+     "incorrect",
+     9.8,
+     null,
+     false,
+     null
+    ],
+    [
+     "8 ×",
+     true,
+     "correct",
+     8,
+     "×",
+     false,
+     null
+    ],
+    [
+     "not a number",
+     false,
+     "unreadable",
+     null,
+     null,
+     false,
+     "notANumber"
+    ],
+    [
+     "",
+     false,
+     "unreadable",
+     null,
+     null,
+     false,
+     "blank"
+    ]
+   ]
+  },
+  {
+   "sid": "estimate-the-new-stretch",
+   "type": "predict",
+   "kind": "estimate",
+   "grades": []
+  },
+  {
+   "sid": "now-change-the-companion",
+   "type": "predict",
+   "kind": null,
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "what-the-mass-graph-says",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     true,
+     "correct"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "the-sun-against-the-moon",
+   "type": "predict",
+   "kind": null,
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     true,
+     "correct"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "say-it-in-your-own",
+   "type": "question",
+   "kind": "short",
+   "grades": [
+    [
+     "ungraded",
+     null
+    ]
+   ]
+  },
+  {
+   "sid": "what-holds-a-moon-together",
+   "type": "predict",
+   "kind": null,
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "a-denser-body-closer-in",
+   "type": "predict",
+   "kind": null,
+   "grades": [
+    [
+     0,
+     true,
+     "correct"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "how-density-moved-it",
+   "type": "question",
+   "kind": "short",
+   "grades": [
+    [
+     "ungraded",
+     null
+    ]
+   ]
+  },
+  {
+   "sid": "not-one-distance",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "the-whole-lesson-in-three",
+   "type": "question",
+   "kind": "short",
+   "grades": [
+    [
+     "ungraded",
+     null
+    ]
+   ]
+  }
+ ],
+ "progress": {
+  "record": {
+   "schema": 2,
+   "lesson": "tides",
+   "stepSid": "what-you-worked-out",
+   "responses": {
+    "tides:is-the-pull-the-same": 1,
+    "tides:how-different-are-they": 2,
+    "tides:so-why-two-bulges": 2,
+    "tides:what-the-far-side-arrow": 1,
+    "tides:bring-the-companion-closer": 2,
+    "tides:the-factor-per-halving": "8",
+    "tides:the-factor-per-halving:locale": "es",
+    "tides:now-change-the-companion": 1,
+    "tides:what-the-mass-graph-says": 0,
+    "tides:the-sun-against-the-moon": 2,
+    "tides:say-it-in-your-own": "A fixed sentence for the golden.",
+    "tides:what-holds-a-moon-together": 1,
+    "tides:a-denser-body-closer-in": 0,
+    "tides:how-density-moved-it": "A fixed sentence for the golden.",
+    "tides:not-one-distance": 1,
+    "tides:the-whole-lesson-in-three": "A fixed sentence for the golden."
+   },
+   "attempts": {
+    "tides:is-the-pull-the-same": 1,
+    "tides:how-different-are-they": 1,
+    "tides:so-why-two-bulges": 1,
+    "tides:what-the-far-side-arrow": 1,
+    "tides:bring-the-companion-closer": 1,
+    "tides:the-factor-per-halving": 1,
+    "tides:now-change-the-companion": 1,
+    "tides:what-the-mass-graph-says": 1,
+    "tides:the-sun-against-the-moon": 1,
+    "tides:what-holds-a-moon-together": 1,
+    "tides:a-denser-body-closer-in": 1,
+    "tides:not-one-distance": 1
+   },
+   "visited": [
+    "twice-a-day-everywhere",
+    "is-the-pull-the-same",
+    "three-points-three-pulls",
+    "how-different-are-they",
+    "so-why-two-bulges",
+    "take-the-center-away",
+    "what-the-far-side-arrow",
+    "what-a-tide-actually-is",
+    "bring-the-companion-closer",
+    "choose-four-distances",
+    "the-factor-per-halving",
+    "pick-a-new-distance",
+    "estimate-the-new-stretch",
+    "read-the-new-distance",
+    "the-estimate-and-the-reading",
+    "now-change-the-companion",
+    "choose-three-masses",
+    "what-the-mass-graph-says",
+    "the-relationship-written-down",
+    "the-sun-against-the-moon",
+    "seven-real-tides-on-one",
+    "locking-and-what-this-simulation",
+    "say-it-in-your-own",
+    "what-holds-a-moon-together",
+    "stretch-against-grip",
+    "a-denser-body-closer-in",
+    "hunt-the-crossing",
+    "how-density-moved-it",
+    "the-roche-limit-and-why",
+    "change-what-the-moon-is",
+    "not-one-distance",
+    "what-a-roche-limit-does",
+    "the-extreme-case-running-live",
+    "a-star-and-a-black",
+    "the-whole-lesson-in-three",
+    "what-you-worked-out"
+   ],
+   "startedAt": "2026-01-02T03:04:05.000Z",
+   "depth": "core",
+   "spent": 600
+  },
+  "read": {
+   "responses": {
+    "tides:is-the-pull-the-same": 1,
+    "tides:how-different-are-they": 2,
+    "tides:so-why-two-bulges": 2,
+    "tides:what-the-far-side-arrow": 1,
+    "tides:bring-the-companion-closer": 2,
+    "tides:the-factor-per-halving": "8",
+    "tides:the-factor-per-halving:locale": "es",
+    "tides:now-change-the-companion": 1,
+    "tides:what-the-mass-graph-says": 0,
+    "tides:the-sun-against-the-moon": 2,
+    "tides:say-it-in-your-own": "A fixed sentence for the golden.",
+    "tides:what-holds-a-moon-together": 1,
+    "tides:a-denser-body-closer-in": 0,
+    "tides:how-density-moved-it": "A fixed sentence for the golden.",
+    "tides:not-one-distance": 1,
+    "tides:the-whole-lesson-in-three": "A fixed sentence for the golden."
+   },
+   "attempts": {
+    "tides:is-the-pull-the-same": 1,
+    "tides:how-different-are-they": 1,
+    "tides:so-why-two-bulges": 1,
+    "tides:what-the-far-side-arrow": 1,
+    "tides:bring-the-companion-closer": 1,
+    "tides:the-factor-per-halving": 1,
+    "tides:now-change-the-companion": 1,
+    "tides:what-the-mass-graph-says": 1,
+    "tides:the-sun-against-the-moon": 1,
+    "tides:what-holds-a-moon-together": 1,
+    "tides:a-denser-body-closer-in": 1,
+    "tides:not-one-distance": 1
+   },
+   "visited": [
+    "a-denser-body-closer-in",
+    "a-star-and-a-black",
+    "bring-the-companion-closer",
+    "change-what-the-moon-is",
+    "choose-four-distances",
+    "choose-three-masses",
+    "estimate-the-new-stretch",
+    "how-density-moved-it",
+    "how-different-are-they",
+    "hunt-the-crossing",
+    "is-the-pull-the-same",
+    "locking-and-what-this-simulation",
+    "not-one-distance",
+    "now-change-the-companion",
+    "pick-a-new-distance",
+    "read-the-new-distance",
+    "say-it-in-your-own",
+    "seven-real-tides-on-one",
+    "so-why-two-bulges",
+    "stretch-against-grip",
+    "take-the-center-away",
+    "the-estimate-and-the-reading",
+    "the-extreme-case-running-live",
+    "the-factor-per-halving",
+    "the-relationship-written-down",
+    "the-roche-limit-and-why",
+    "the-sun-against-the-moon",
+    "the-whole-lesson-in-three",
+    "three-points-three-pulls",
+    "twice-a-day-everywhere",
+    "what-a-roche-limit-does",
+    "what-a-tide-actually-is",
+    "what-holds-a-moon-together",
+    "what-the-far-side-arrow",
+    "what-the-mass-graph-says",
+    "what-you-worked-out"
+   ],
+   "stepSid": "what-you-worked-out",
+   "startedAt": "2026-01-02T03:04:05.000Z",
+   "depth": "core",
+   "deepest": null,
+   "spent": 600,
+   "schema": 2,
+   "migrated": false,
+   "notes": []
+  }
+ },
+ "backup": {
+  "backup": {
+   "kind": "gravitas.investigation.progress",
+   "version": 2,
+   "savedAt": "2026-01-02T04:05:06.000Z",
+   "lesson": {
+    "id": "tides",
+    "title": "Mareas",
+    "stepCount": 36
+   },
+   "student": null,
+   "progress": {
+    "stepSid": "what-you-worked-out",
+    "startedAt": "2026-01-02T03:04:05.000Z",
+    "visited": [
+     "twice-a-day-everywhere",
+     "is-the-pull-the-same",
+     "three-points-three-pulls",
+     "how-different-are-they",
+     "so-why-two-bulges",
+     "take-the-center-away",
+     "what-the-far-side-arrow",
+     "what-a-tide-actually-is",
+     "bring-the-companion-closer",
+     "choose-four-distances",
+     "the-factor-per-halving",
+     "pick-a-new-distance",
+     "estimate-the-new-stretch",
+     "read-the-new-distance",
+     "the-estimate-and-the-reading",
+     "now-change-the-companion",
+     "choose-three-masses",
+     "what-the-mass-graph-says",
+     "the-relationship-written-down",
+     "the-sun-against-the-moon",
+     "seven-real-tides-on-one",
+     "locking-and-what-this-simulation",
+     "say-it-in-your-own",
+     "what-holds-a-moon-together",
+     "stretch-against-grip",
+     "a-denser-body-closer-in",
+     "hunt-the-crossing",
+     "how-density-moved-it",
+     "the-roche-limit-and-why",
+     "change-what-the-moon-is",
+     "not-one-distance",
+     "what-a-roche-limit-does",
+     "the-extreme-case-running-live",
+     "a-star-and-a-black",
+     "the-whole-lesson-in-three",
+     "what-you-worked-out"
+    ],
+    "responses": {
+     "tides:is-the-pull-the-same": 1,
+     "tides:how-different-are-they": 2,
+     "tides:so-why-two-bulges": 2,
+     "tides:what-the-far-side-arrow": 1,
+     "tides:bring-the-companion-closer": 2,
+     "tides:the-factor-per-halving": "8",
+     "tides:the-factor-per-halving:locale": "es",
+     "tides:now-change-the-companion": 1,
+     "tides:what-the-mass-graph-says": 0,
+     "tides:the-sun-against-the-moon": 2,
+     "tides:say-it-in-your-own": "A fixed sentence for the golden.",
+     "tides:what-holds-a-moon-together": 1,
+     "tides:a-denser-body-closer-in": 0,
+     "tides:how-density-moved-it": "A fixed sentence for the golden.",
+     "tides:not-one-distance": 1,
+     "tides:the-whole-lesson-in-three": "A fixed sentence for the golden."
+    },
+    "attempts": {
+     "tides:is-the-pull-the-same": 1,
+     "tides:how-different-are-they": 1,
+     "tides:so-why-two-bulges": 1,
+     "tides:what-the-far-side-arrow": 1,
+     "tides:bring-the-companion-closer": 1,
+     "tides:the-factor-per-halving": 1,
+     "tides:now-change-the-companion": 1,
+     "tides:what-the-mass-graph-says": 1,
+     "tides:the-sun-against-the-moon": 1,
+     "tides:what-holds-a-moon-together": 1,
+     "tides:a-denser-body-closer-in": 1,
+     "tides:not-one-distance": 1
+    }
+   },
+   "steps": [
+    {
+     "index": 0,
+     "sid": "twice-a-day-everywhere",
+     "fingerprint": "read|-|-|Earth-Moon System|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 1,
+     "sid": "is-the-pull-the-same",
+     "fingerprint": "predict|-|-|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 2,
+     "sid": "three-points-three-pulls",
+     "fingerprint": "read|-|tide-vectors|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 3,
+     "sid": "how-different-are-they",
+     "fingerprint": "question|choice|tide-vectors|-|-|4|a=2;c=2",
+     "optionCount": 4
+    },
+    {
+     "index": 4,
+     "sid": "so-why-two-bulges",
+     "fingerprint": "predict|-|-|-|-|4|a=2;c=2",
+     "optionCount": 4
+    },
+    {
+     "index": 5,
+     "sid": "take-the-center-away",
+     "fingerprint": "read|-|tide-vectors|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 6,
+     "sid": "what-the-far-side-arrow",
+     "fingerprint": "question|choice|tide-vectors|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 7,
+     "sid": "what-a-tide-actually-is",
+     "fingerprint": "read|-|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 8,
+     "sid": "bring-the-companion-closer",
+     "fingerprint": "predict|-|-|-|-|4|a=2;c=2",
+     "optionCount": 4
+    },
+    {
+     "index": 9,
+     "sid": "choose-four-distances",
+     "fingerprint": "measure|-|tide-strength|-|d1+t1+d2+t2+d3+t3+d4+t4|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 10,
+     "sid": "the-factor-per-halving",
+     "fingerprint": "question|numeric|tide-strength|-|-|-|a=8;t=0.6;u=×",
+     "optionCount": null
+    },
+    {
+     "index": 11,
+     "sid": "pick-a-new-distance",
+     "fingerprint": "measure|-|-|-|d5+gap|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 12,
+     "sid": "estimate-the-new-stretch",
+     "fingerprint": "predict|estimate|-|-|-|-|u=× lunar tide",
+     "optionCount": null
+    },
+    {
+     "index": 13,
+     "sid": "read-the-new-distance",
+     "fingerprint": "measure|-|tide-strength|-|d5r+t5|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 14,
+     "sid": "the-estimate-and-the-reading",
+     "fingerprint": "read|-|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 15,
+     "sid": "now-change-the-companion",
+     "fingerprint": "predict|-|-|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 16,
+     "sid": "choose-three-masses",
+     "fingerprint": "measure|-|tide-strength|-|m1+s1+m2+s2+m3+s3|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 17,
+     "sid": "what-the-mass-graph-says",
+     "fingerprint": "question|choice|-|-|-|4|a=0;c=0",
+     "optionCount": 4
+    },
+    {
+     "index": 18,
+     "sid": "the-relationship-written-down",
+     "fingerprint": "read|-|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 19,
+     "sid": "the-sun-against-the-moon",
+     "fingerprint": "predict|-|-|-|-|4|a=2;c=2",
+     "optionCount": 4
+    },
+    {
+     "index": 20,
+     "sid": "seven-real-tides-on-one",
+     "fingerprint": "read|-|tide-compare|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 21,
+     "sid": "locking-and-what-this-simulation",
+     "fingerprint": "read|-|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 22,
+     "sid": "say-it-in-your-own",
+     "fingerprint": "question|short|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 23,
+     "sid": "what-holds-a-moon-together",
+     "fingerprint": "predict|-|-|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 24,
+     "sid": "stretch-against-grip",
+     "fingerprint": "explore|-|tide-balance|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 25,
+     "sid": "a-denser-body-closer-in",
+     "fingerprint": "predict|-|-|-|-|4|a=0;c=0",
+     "optionCount": 4
+    },
+    {
+     "index": 26,
+     "sid": "hunt-the-crossing",
+     "fingerprint": "measure|-|tide-balance|-|ice+iron|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 27,
+     "sid": "how-density-moved-it",
+     "fingerprint": "question|short|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 28,
+     "sid": "the-roche-limit-and-why",
+     "fingerprint": "read|-|roche-model|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 29,
+     "sid": "change-what-the-moon-is",
+     "fingerprint": "explore|-|roche-model|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 30,
+     "sid": "not-one-distance",
+     "fingerprint": "question|choice|-|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 31,
+     "sid": "what-a-roche-limit-does",
+     "fingerprint": "read|-|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 32,
+     "sid": "the-extreme-case-running-live",
+     "fingerprint": "explore|-|-|Tidal Disruption Event|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 33,
+     "sid": "a-star-and-a-black",
+     "fingerprint": "read|-|tide-disrupt|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 34,
+     "sid": "the-whole-lesson-in-three",
+     "fingerprint": "question|short|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 35,
+     "sid": "what-you-worked-out",
+     "fingerprint": "read|-|-|-|-|-|-",
+     "optionCount": null
+    }
+   ]
+  },
+  "verdict": {
+   "ok": true
+  },
+  "restored": {
+   "responses": {
+    "tides:is-the-pull-the-same": 1,
+    "tides:how-different-are-they": 2,
+    "tides:so-why-two-bulges": 2,
+    "tides:what-the-far-side-arrow": 1,
+    "tides:bring-the-companion-closer": 2,
+    "tides:the-factor-per-halving": "8",
+    "tides:the-factor-per-halving:locale": "es",
+    "tides:now-change-the-companion": 1,
+    "tides:what-the-mass-graph-says": 0,
+    "tides:the-sun-against-the-moon": 2,
+    "tides:say-it-in-your-own": "A fixed sentence for the golden.",
+    "tides:what-holds-a-moon-together": 1,
+    "tides:a-denser-body-closer-in": 0,
+    "tides:how-density-moved-it": "A fixed sentence for the golden.",
+    "tides:not-one-distance": 1,
+    "tides:the-whole-lesson-in-three": "A fixed sentence for the golden."
+   },
+   "attempts": {
+    "tides:is-the-pull-the-same": 1,
+    "tides:how-different-are-they": 1,
+    "tides:so-why-two-bulges": 1,
+    "tides:what-the-far-side-arrow": 1,
+    "tides:bring-the-companion-closer": 1,
+    "tides:the-factor-per-halving": 1,
+    "tides:now-change-the-companion": 1,
+    "tides:what-the-mass-graph-says": 1,
+    "tides:the-sun-against-the-moon": 1,
+    "tides:what-holds-a-moon-together": 1,
+    "tides:a-denser-body-closer-in": 1,
+    "tides:not-one-distance": 1
+   },
+   "visited": [
+    "a-denser-body-closer-in",
+    "a-star-and-a-black",
+    "bring-the-companion-closer",
+    "change-what-the-moon-is",
+    "choose-four-distances",
+    "choose-three-masses",
+    "estimate-the-new-stretch",
+    "how-density-moved-it",
+    "how-different-are-they",
+    "hunt-the-crossing",
+    "is-the-pull-the-same",
+    "locking-and-what-this-simulation",
+    "not-one-distance",
+    "now-change-the-companion",
+    "pick-a-new-distance",
+    "read-the-new-distance",
+    "say-it-in-your-own",
+    "seven-real-tides-on-one",
+    "so-why-two-bulges",
+    "stretch-against-grip",
+    "take-the-center-away",
+    "the-estimate-and-the-reading",
+    "the-extreme-case-running-live",
+    "the-factor-per-halving",
+    "the-relationship-written-down",
+    "the-roche-limit-and-why",
+    "the-sun-against-the-moon",
+    "the-whole-lesson-in-three",
+    "three-points-three-pulls",
+    "twice-a-day-everywhere",
+    "what-a-roche-limit-does",
+    "what-a-tide-actually-is",
+    "what-holds-a-moon-together",
+    "what-the-far-side-arrow",
+    "what-the-mass-graph-says",
+    "what-you-worked-out"
+   ],
+   "stepIndex": 35,
+   "startedAt": "2026-01-02T03:04:05.000Z",
+   "moved": [],
+   "dropped": [],
+   "quarantined": {},
+   "earlier": {
+    "responses": {},
+    "attempts": {}
+   },
+   "uncertain": 0,
+   "discardedKeys": 0,
+   "byPosition": false
+  }
+ },
+ "ledger": {
+  "entry": "golden-tides",
+  "record": {
+   "ids": [
+    "golden-tides"
+   ],
+   "rows": [
+    [
+     "golden-tides",
+     "q1",
+     3.5247,
+     "d",
+     0.0012,
+     "measured",
+     "simulation",
+     "rv-fit",
+     null,
+     [
+      "s",
+      "d"
+     ]
+    ]
+   ],
+   "total": 1
+  },
+  "digest": "7c312c71c2afe4f1aff790ce8f4ead6cb5f80f0cfc62bd7f8eeab4df17e0f4cd"
+ },
+ "tokens": {
+  "plain": {
+   "comfortable": true,
+   "ok": true,
+   "reason": null,
+   "backupIntact": true,
+   "payload": {
+    "v": 2,
+    "a": null,
+    "r": null,
+    "fl": "es"
+   },
+   "answers": [
+    {
+     "sid": "is-the-pull-the-same",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "how-different-are-they",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "so-why-two-bulges",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "what-the-far-side-arrow",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "bring-the-companion-closer",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "the-factor-per-halving",
+     "value": "8",
+     "locale": "es"
+    },
+    {
+     "sid": "now-change-the-companion",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "what-the-mass-graph-says",
+     "value": 0,
+     "locale": "es"
+    },
+    {
+     "sid": "the-sun-against-the-moon",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "say-it-in-your-own",
+     "value": "A fixed sentence for the golden.",
+     "locale": "es"
+    },
+    {
+     "sid": "what-holds-a-moon-together",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "a-denser-body-closer-in",
+     "value": 0,
+     "locale": "es"
+    },
+    {
+     "sid": "how-density-moved-it",
+     "value": "A fixed sentence for the golden.",
+     "locale": "es"
+    },
+    {
+     "sid": "not-one-distance",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "the-whole-lesson-in-three",
+     "value": "A fixed sentence for the golden.",
+     "locale": "es"
+    }
+   ]
+  },
+  "assignment": {
+   "comfortable": true,
+   "ok": true,
+   "reason": null,
+   "backupIntact": true,
+   "payload": {
+    "v": 2,
+    "a": "golden-assignment",
+    "r": "roster-1",
+    "fl": "es"
+   },
+   "answers": [
+    {
+     "sid": "is-the-pull-the-same",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "how-different-are-they",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "so-why-two-bulges",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "what-the-far-side-arrow",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "bring-the-companion-closer",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "the-factor-per-halving",
+     "value": "8",
+     "locale": "es"
+    },
+    {
+     "sid": "now-change-the-companion",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "what-the-mass-graph-says",
+     "value": 0,
+     "locale": "es"
+    },
+    {
+     "sid": "the-sun-against-the-moon",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "say-it-in-your-own",
+     "value": "A fixed sentence for the golden.",
+     "locale": "es"
+    },
+    {
+     "sid": "what-holds-a-moon-together",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "a-denser-body-closer-in",
+     "value": 0,
+     "locale": "es"
+    },
+    {
+     "sid": "how-density-moved-it",
+     "value": "A fixed sentence for the golden.",
+     "locale": "es"
+    },
+    {
+     "sid": "not-one-distance",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "the-whole-lesson-in-three",
+     "value": "A fixed sentence for the golden.",
+     "locale": "es"
+    }
+   ]
+  },
+  "evidence": {
+   "comfortable": true,
+   "ok": true,
+   "reason": null,
+   "backupIntact": true,
+   "payload": {
+    "v": 2,
+    "ev": {
+     "d": "7c312c71c2afe4f1aff790ce8f4ead6cb5f80f0cfc62bd7f8eeab4df17e0f4cd",
+     "i": [
+      "golden-tides"
+     ],
+     "n": 1,
+     "r": [
+      [
+       "golden-tides",
+       "q1",
+       3.5247,
+       "d",
+       0.0012,
+       "measured",
+       "simulation",
+       "rv-fit",
+       null,
+       [
+        "s",
+        "d"
+       ]
+      ]
+     ]
+    },
+    "a": null,
+    "r": null,
+    "fl": "es"
+   },
+   "answers": [
+    {
+     "sid": "is-the-pull-the-same",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "how-different-are-they",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "so-why-two-bulges",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "what-the-far-side-arrow",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "bring-the-companion-closer",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "the-factor-per-halving",
+     "value": "8",
+     "locale": "es"
+    },
+    {
+     "sid": "now-change-the-companion",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "what-the-mass-graph-says",
+     "value": 0,
+     "locale": "es"
+    },
+    {
+     "sid": "the-sun-against-the-moon",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "say-it-in-your-own",
+     "value": "A fixed sentence for the golden.",
+     "locale": "es"
+    },
+    {
+     "sid": "what-holds-a-moon-together",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "a-denser-body-closer-in",
+     "value": 0,
+     "locale": "es"
+    },
+    {
+     "sid": "how-density-moved-it",
+     "value": "A fixed sentence for the golden.",
+     "locale": "es"
+    },
+    {
+     "sid": "not-one-distance",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "the-whole-lesson-in-three",
+     "value": "A fixed sentence for the golden.",
+     "locale": "es"
+    }
+   ]
+  },
+  "depth": {
+   "comfortable": true,
+   "ok": true,
+   "reason": null,
+   "backupIntact": true,
+   "payload": {
+    "v": 2,
+    "dp": "core",
+    "a": null,
+    "r": null,
+    "fl": "es"
+   },
+   "answers": [
+    {
+     "sid": "is-the-pull-the-same",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "how-different-are-they",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "so-why-two-bulges",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "what-the-far-side-arrow",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "bring-the-companion-closer",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "the-factor-per-halving",
+     "value": "8",
+     "locale": "es"
+    },
+    {
+     "sid": "now-change-the-companion",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "what-the-mass-graph-says",
+     "value": 0,
+     "locale": "es"
+    },
+    {
+     "sid": "the-sun-against-the-moon",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "say-it-in-your-own",
+     "value": "A fixed sentence for the golden.",
+     "locale": "es"
+    },
+    {
+     "sid": "what-holds-a-moon-together",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "a-denser-body-closer-in",
+     "value": 0,
+     "locale": "es"
+    },
+    {
+     "sid": "how-density-moved-it",
+     "value": "A fixed sentence for the golden.",
+     "locale": "es"
+    },
+    {
+     "sid": "not-one-distance",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "the-whole-lesson-in-three",
+     "value": "A fixed sentence for the golden.",
+     "locale": "es"
+    }
+   ]
+  }
+ }
+}

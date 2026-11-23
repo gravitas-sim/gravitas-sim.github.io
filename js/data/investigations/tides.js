@@ -72,11 +72,10 @@ const tideRows = (
       value: `${on.name}: ${((100 * R) / r).toFixed(1)}% of the way to ${by.name}`,
     },
   ];
-  // The two percentages above are honest arithmetic on the model, and they are
-  // not the real numbers: this scenario gives the Earth a model radius far
-  // larger than scale so that it is visible at all (it is drawn at 0.375 of
-  // that), and the difference in pull across a body scales with its size. Quoting only the on-screen figure would teach
-  // a tide about sixty times too strong, so the true one is printed beside it.
+  // The two percentages above are arithmetic on the model radius, far larger
+  // than the Earth's so that it is visible at all, and the pull's difference
+  // across a body scales with its size: quoting them alone would teach a tide
+  // about sixty times too strong, so the true one is printed beside it.
   if (trueRatio) {
     rows.push({
       label: 'The same subtraction at true scale',
@@ -105,16 +104,36 @@ const TIDES_DISRUPTION = {
   paused: false,
 };
 
+/** Rows of two fields: what the student set, then the stretch taken from the panel. */
+const PAIRS = (rows, set, got, unit, setWant, gotWant, ids = ['d', 't']) =>
+  rows.flatMap((n, i) => [
+    { id: `${ids[0]}${n}`, label: `${set} ${n}`, unit, want: setWant[i] },
+    {
+      id: `${ids[1]}${n}`,
+      label: `${got} ${n}`,
+      unit: '× lunar tide',
+      want: gotWant[i],
+      source: { tool: 'stretch' },
+    },
+  ]);
+
+/** The readings of a measuring step, as the evidence a reveal sets beside a prediction. */
+const SHOWN = (step, [a, b], n) =>
+  Array.from({ length: n }, (_, i) => [`${a}${i + 1}`, `${b}${i + 1}`])
+    .flat()
+    .map(field => ({ step, field }));
+
+/** A step this lesson replaced, with its successor and what it asked. */
+const WAS = (to, en, es) => ({ to, release: '3.1', was: { en, es } });
+
 const TIDES = {
   id: 'tides',
   thumbnail: 'images/scenarios/earth-moon-system.webp',
-  // The scene's sizes enter a task here: each step carries the Sizes
-  // statement (js/investigations/stepView.js, tests/sizeConsistency.test.js).
   sizes: true,
   title: 'Tides',
   subtitle:
     'Stretch a world, move a moon, and discover why gravity can tear objects apart',
-  duration: '35-45 min',
+  duration: '40-50 min',
   level: 'Introductory astronomy',
   audience: 'intro',
   textbook: { chapter: 4, section: '4.6' },
@@ -126,6 +145,28 @@ const TIDES = {
   // the whole set without a second list to keep in step.
   tags: ['gravity', 'solar-system'],
   lock: { placement: true, inspector: true },
+  retired: {
+    'four-distances': WAS(
+      'choose-four-distances',
+      'Set the slider to 2, then 1, then 0.5, then 0.25 times the Moon’s distance and type each stretch beside its distance.',
+      'Poner el deslizador en 2, luego 1, luego 0,5 y luego 0,25 veces la distancia de la Luna y escribir cada estiramiento junto a su distancia.'
+    ),
+    'how-steeply-does-it-fall': WAS(
+      'the-factor-per-halving',
+      'Read the factor the stretch rose by between 1.00 and 0.50 times the Moon’s distance in your table.',
+      'Leer en tu tabla el factor en que subió el estiramiento entre 1,00 y 0,50 veces la distancia de la Luna.'
+    ),
+    'three-masses': WAS(
+      'choose-three-masses',
+      'Set the mass slider to 1, then 2, then 4 times the Moon’s mass and type each stretch beside its mass.',
+      'Poner el deslizador de masa en 1, luego 2 y luego 4 veces la masa de la Luna y escribir cada estiramiento junto a su masa.'
+    ),
+    'where-the-balance-tips': WAS(
+      'hunt-the-crossing',
+      'For a body of the Moon’s density, read the distance in Earth radii where the stretch equals the grip.',
+      'Para un cuerpo con la densidad de la Luna, leer la distancia, en radios terrestres, a la que el estiramiento iguala la sujeción.'
+    ),
+  },
   objectives: [
     'Explain why an extended object feels a different gravitational pull at each point in it',
     'State that a tide is the difference between the local pull and the pull on the center, and use that to say why there are two ocean bulges rather than one',
@@ -257,7 +298,6 @@ const TIDES = {
         note: 'Near side, center, far side. The last row does the comparison for you.',
       },
     },
-
     {
       sid: 'so-why-two-bulges',
       bind: EARTH_MOON,
@@ -279,6 +319,23 @@ const TIDES = {
         'the water displaced from the near side has to go somewhere',
       ],
       answer: 2,
+      misconceptions: [
+        {
+          id: 'pushed',
+          option: 0,
+          say: 'Nothing pushes the far side. The Moon’s gravity only ever pulls: the far side is pulled toward the Moon like everything else, just less than the Earth as a whole.',
+        },
+        {
+          id: 'spin',
+          option: 1,
+          say: 'The spin does not make the bulges: an Earth that did not rotate would still have both, and the spin only carries you through them. The cause is the Moon’s pull, taken as a difference.',
+        },
+        {
+          id: 'displaced',
+          option: 3,
+          say: 'The far-side bulge is not near-side water that went somewhere else. It is raised by the same subtraction as the near-side one, so both exist at once.',
+        },
+      ],
       because:
         'The far side is left behind. Nobody pushes it: it is pulled toward the Moon like everything else, just less than average, so relative to the Earth as a whole it lags on the far side. That is the answer, and the next screen shows the arithmetic that produces it. The spin option is a common and stubborn story, and it is worth being clear that it is not the cause: the two bulges are there for a non-rotating Earth too, and the Earth’s rotation is what carries you through them twice a day rather than what creates them.',
     },
@@ -328,7 +385,7 @@ const TIDES = {
 
     {
       sid: 'what-the-far-side-arrow',
-      bind: EARTH_MOON,
+      canvas: 'quiet',
       type: 'question',
       title: 'What the far-side arrow means',
       kind: 'choice',
@@ -343,6 +400,23 @@ const TIDES = {
         'the far side is beyond the Moon’s reach',
       ],
       answer: 1,
+      misconceptions: [
+        {
+          id: 'reverses',
+          option: 0,
+          say: 'The Moon’s pull still points toward the Moon at the far side. What points away is what is left after the motion the whole Earth shares has been taken out.',
+        },
+        {
+          id: 'second-force',
+          option: 2,
+          say: 'There is no second force: both rows come from the Moon’s gravity alone, and the lower row is the upper row with one number subtracted.',
+        },
+        {
+          id: 'out-of-reach',
+          option: 3,
+          say: 'Gravity has no edge. The far side is pulled by the Moon, a little less strongly than the center is.',
+        },
+      ],
       because:
         'Still pulled toward the Moon, just less than average. Gravity never reverses and never switches off; there is no second force. The outward arrow is a bookkeeping result, not a push: it is what is left over after you subtract the acceleration the whole planet shares. If you insist on describing tides without subtracting the center, you are stuck with one bulge and a coastline that disagrees with you twice a day.',
       tool: {
@@ -357,7 +431,6 @@ const TIDES = {
 
     {
       sid: 'what-a-tide-actually-is',
-      bind: EARTH_MOON,
       type: 'read',
       title: 'What a tide actually is',
       body: `A definition worth memorizing, because it is short and it is the
@@ -365,12 +438,9 @@ const TIDES = {
              \n\n<strong>A tide is the difference in gravitational acceleration
              across an object.</strong>
              \n\nNot the strength of gravity. The <em>difference</em> in it.
-             This distinction does real work. You are, right now, being pulled
-             on by the Sun about 180 times harder than by the Moon: the Sun is
-             enormously more massive. And yet the Moon raises the bigger ocean
-             tide, by more than a factor of two. Strong gravity and strong tides
-             are simply not the same thing, and you will measure why in a few
-             screens.
+             This distinction does real work: strong gravity and strong tides
+             are not the same thing, and later you will test a case where they
+             come apart.
              \n\nThe same difference is at work everywhere gravity meets
              something with a size: the seas moving up a beach, a moon kept
              molten by being kneaded, a comet coming apart into a string of
@@ -385,9 +455,8 @@ const TIDES = {
 
     {
       sid: 'bring-the-companion-closer',
-      bind: EARTH_MOON,
       type: 'predict',
-      reveal: 'four-distances',
+      reveal: 'the-factor-per-halving',
       title: 'Bring the companion closer',
       body: `You are about to be handed a distance slider, and a graph that
              records what you read off it. Before you touch either, commit.
@@ -406,52 +475,31 @@ const TIDES = {
     },
 
     {
-      sid: 'four-distances',
-      bind: EARTH_MOON,
+      sid: 'choose-four-distances',
       type: 'measure',
-      title: 'Four distances',
+      title: 'Four distances of your own',
       body: `The panel reports the tidal stretch as a multiple of the real lunar
              tide, so the real Moon reads 1.00 and everything else is measured
              against it.
-             \n\nSet the slider to each of the four distances in turn and type
-             what the panel says. Your points land on the graph as you type, so
-             nothing has to be remembered from one row to the next.`,
-      fields: [
-        { id: 'd1', label: 'Distance 1', unit: '× Moon’s', want: '2' },
-        {
-          id: 't1',
-          label: 'Tidal stretch there',
-          unit: '× lunar tide',
-          want: '0.13',
-        },
-        { id: 'd2', label: 'Distance 2', unit: '× Moon’s', want: '1' },
-        {
-          id: 't2',
-          label: 'Tidal stretch there',
-          unit: '× lunar tide',
-          want: '1',
-        },
-        { id: 'd3', label: 'Distance 3', unit: '× Moon’s', want: '0.5' },
-        {
-          id: 't3',
-          label: 'Tidal stretch there',
-          unit: '× lunar tide',
-          want: '8',
-        },
-        { id: 'd4', label: 'Distance 4', unit: '× Moon’s', want: '0.25' },
-        {
-          id: 't4',
-          label: 'Tidal stretch there',
-          unit: '× lunar tide',
-          want: '64',
-        },
-      ],
-      validate: v => {
+             \n\nChoose four distances of your own, two of them at least four
+             times apart, and leave the companion’s mass alone. For each one,
+             set the slider, press <strong>Take reading</strong> beside the
+             stretch, and type the distance you set. Your points land on the
+             graph as you record them.`,
+      fields: PAIRS(
+        [1, 2, 3, 4],
+        'Distance',
+        'Stretch at distance',
+        '× Moon’s',
+        ['2', '1', '0.5', '0.25'],
+        ['0.13', '1', '8', '64']
+      ),
+      validate: (v, _ctx, got = {}) => {
         const rows = [
-          [v.d1, v.t1],
-          [v.d2, v.t2],
-          [v.d3, v.t3],
-          [v.d4, v.t4],
+          [v.d1, v.t1, 1],
+          [v.d2, v.t2, 2],
+          [v.d3, v.t3, 3],
+          [v.d4, v.t4, 4],
         ].filter(([d, t]) => Number.isFinite(d) && Number.isFinite(t));
         if (rows.length < 2) return null;
         if (rows.some(([d, t]) => d <= 0 || t <= 0)) {
@@ -460,20 +508,54 @@ const TIDES = {
             message: 'Distances and tidal strengths are both positive numbers.',
           };
         }
-        // Every reading should satisfy tide x distance^3 = 1 at unit mass.
-        const products = rows.map(([d, t]) => t * d * d * d);
-        const mean = products.reduce((a, b) => a + b, 0) / products.length;
-        const spread = (Math.max(...products) - Math.min(...products)) / mean;
-        if (spread > 0.35) {
+        const moved = rows.find(([d, , i]) => {
+          const at = got[`t${i}`]?.s?.dist;
+          return Number.isFinite(at) && Math.abs(at - d) > 0.005;
+        });
+        if (moved) {
+          return {
+            level: 'warn',
+            message: `Row ${moved[2]} has a distance that is not where the slider was when you took its reading. Type the distance you set, or take the reading again.`,
+          };
+        }
+        if (rows.some(([d, t]) => rows.some(([e, u]) => d < e && t < u))) {
           return {
             level: 'warn',
             message:
-              'These do not all sit on one relationship. The usual cause is a strength read at a different distance from the one beside it: check each row against the slider position that produced it.',
+              'A nearer companion raises a bigger tide, and two of your rows say the opposite. The near and far readings look swapped: check each stretch against the distance beside it.',
+          };
+        }
+        const products = rows.map(([d, t]) => t * d * d * d);
+        const off = products.filter(p => Math.abs(p - 1) > 0.12).length;
+        if (off) {
+          const mean = products.reduce((a, b) => a + b, 0) / products.length;
+          const spread = (Math.max(...products) - Math.min(...products)) / mean;
+          return {
+            level: 'warn',
+            message:
+              spread < 0.12
+                ? 'Your rows agree with each other but not with the panel. Leave the mass at the Moon’s and read each stretch at the distance beside it.'
+                : 'These do not all sit on one relationship. The usual cause is a stretch read at a different distance from the one beside it: check each row against the slider position that produced it.',
+          };
+        }
+        if (rows.length < 4) return null;
+        const ds = rows.map(([d]) => d);
+        if (new Set(ds).size < 4) {
+          return {
+            level: 'warn',
+            message: 'Two of your distances are the same. Choose four.',
+          };
+        }
+        const span = Math.max(...ds) / Math.min(...ds);
+        if (span < 4) {
+          return {
+            level: 'warn',
+            message: `Your distances span less than a factor of four. Spread them wider, so that one is at least four times another and the curve has room to show its shape.`,
           };
         }
         return {
           level: 'ok',
-          message: `Every one of your readings satisfies stretch × distance × distance × distance = ${mean.toFixed(2)}. Distance appears three times. Nobody told you that; it is in your own numbers.`,
+          message: `Four distances spread over a factor of four or more, each stretch read where you said. Look at the shape of the graph: the next step asks what halving the distance does to the stretch.`,
         };
       },
       plot: {
@@ -487,99 +569,220 @@ const TIDES = {
           { x: v.d3, y: v.t3, label: '3' },
           { x: v.d4, y: v.t4, label: '4' },
         ],
-        transform: {
-          label: 'Try 1 ÷ distance³',
-          xLabel: '1 ÷ distance³',
-          yLabel: 'stretch  (× lunar tide)',
-          map: p => ({ x: 1 / (p.x * p.x * p.x), y: p.y, label: p.label }),
-        },
-        note: `Raw, the points climb away from the axis far too steeply for a
-               straight line. Press <strong>Try 1 ÷ distance³</strong>: if the
-               tide really does go as one over the distance cubed, they will
-               drop onto a straight line through the corner. Straightening a
-               curve by choosing the right axes is how a relationship gets
-               identified rather than guessed.`,
+        note: `Raw, the points climb away from the axis as the distance
+               shrinks. Look at how the curve bends: the next question asks
+               what happens to the stretch each time the distance is halved.`,
       },
       tool: {
         id: 'tide-strength',
-        values: { dist: 2, mass: 1 },
+        values: { dist: 1, mass: 1 },
         hide: ['mass'],
         axis: 'distance',
         title: 'Read each distance here',
-        note: 'Set the slider to 2, then 1, then 0.5, then 0.25, and type each reading into the boxes. The companion’s mass is held at the Moon’s.',
+        note: 'The slider runs from 0.2 to 2 times the Moon’s distance. The companion’s mass is held at the Moon’s.',
       },
-      tip: 'The four suggested distances are only suggestions. Any four will do, so long as each strength was read at the distance beside it.',
+      tip: 'Any four distances will do, so long as each stretch was read at the distance beside it and they are spread out.',
     },
 
     {
       hints: [
         'An ordinary inverse-square pull rises by the square of the distance factor. A tide depends on how fast the pull changes across a body.',
-        'Compare the two rows of your table: the stretch rose by a larger power of the distance ratio than two.',
+        'Find two of your distances where one is half the other, and divide the larger stretch by the smaller.',
       ],
       feedback: {
         close:
-          'Close. Read the two stretches from your own table and divide the larger by the smaller.',
-        off: 'Divide the stretch at half the distance by the stretch at the full distance, both from your table.',
+          'Close. Take two of your own distances where one is half the other, and divide the larger stretch by the smaller.',
+        off: 'Find a pair of distances where one is half the other, in your table or on the panel, and divide the stretch at the nearer one by the stretch at the farther one.',
       },
-      sid: 'how-steeply-does-it-fall',
-      bind: EARTH_MOON,
+      misconceptions: [
+        {
+          id: 'inverse-square',
+          equals: 4,
+          say: 'That is what an ordinary pull would do when the distance is halved. A tide is a difference between pulls, and it grows by more. Read your own two stretches.',
+        },
+        {
+          id: 'wrong-way',
+          equals: 0.125,
+          say: 'Halving the distance makes the tide stronger, so the factor is larger than one. Divide the stretch at the nearer distance by the stretch at the farther one, not the other way round.',
+        },
+      ],
+      sid: 'the-factor-per-halving',
       type: 'question',
-      title: 'How steeply does it fall?',
+      title: 'The factor per halving',
       kind: 'numeric',
-      body: `Look at rows 2 and 3 of your own table: you went from 1.00 to 0.50
-             times the Moon’s distance, which is half the distance.
-             \n\nAn ordinary inverse-square pull would have gone up by four. A
-             tide is not an ordinary pull.`,
+      body: `Look at your own table and graph. Each time the distance is halved,
+             the stretch is multiplied by a factor. Find it from your readings:
+             take two of your distances where one is half the other. If your
+             table has no such pair, set the slider to one on the panel and
+             read the two stretches there.
+             \n\nAn ordinary inverse-square pull would go up by four. A tide is
+             not an ordinary pull.`,
       prompt:
-        'By what factor did the tidal stretch increase when you halved the distance?',
+        'By what factor does the tidal stretch increase each time the distance is halved?',
       unit: '×',
       answer: 8,
       tolerance: 0.6,
+      evidence: SHOWN('choose-four-distances', 'dt', 4),
+      compare:
+        'Set the factor your readings give for a halving beside the one you predicted.',
       because:
-        'Eight, which is two cubed. Halving again multiplies by eight again: your fourth reading, at a quarter of the Moon’s distance, should be about 64 times the lunar tide. Distance enters three times over, not twice: the tide goes as one divided by the separation cubed. That is why the transformed plot straightens, and it is why tidal effects are almost always negligible until something gets close, and then suddenly are not.',
+        'Eight, which is two cubed: every halving of the distance multiplies the tide by eight again, whichever distances you started from. Distance enters three times over, not twice: the tide goes as one divided by the separation cubed. That is why the transformed plot straightens, and it is why tidal effects are almost always negligible until something gets close, and then suddenly are not.',
       tool: {
         id: 'tide-strength',
-        values: { dist: 0.5, mass: 1 },
+        values: { dist: 1, mass: 1 },
         hide: ['mass'],
         axis: 'distance',
         title: 'The curve you measured',
-        note: 'The dot is your slider. Slide from 1.00 to 0.50 and watch the readout, if you want to check the factor directly.',
+        note: 'The dot is your slider. Use it to read a pair of distances, one half the other, if your table has none.',
       },
     },
 
     {
-      sid: 'the-relationship-written-down',
-      bind: EARTH_MOON,
+      sid: 'pick-a-new-distance',
+      type: 'measure',
+      title: 'Pick a distance you have not used',
+      body: `A relationship earns its keep by predicting something you have not
+             measured. Choose a distance between 0.2 and 2 times the Moon’s
+             that is not one of your four, and not close to one of them.
+             \n\nRecord it here, and do not set the slider there yet. The next
+             step asks for your estimate of the stretch first.`,
+      fields: [
+        { id: 'd5', label: 'The new distance', unit: '× Moon’s', want: '0.7' },
+        {
+          id: 'gap',
+          label: 'Your nearest earlier distance is this far away',
+          unit: '× Moon’s',
+          compute: (v, earlier) => {
+            const used = ['d1', 'd2', 'd3', 'd4']
+              .map(f => earlier?.('choose-four-distances', f))
+              .filter(Number.isFinite);
+            return used.length && Number.isFinite(v.d5)
+              ? Math.min(...used.map(u => Math.abs(u - v.d5)))
+              : NaN;
+          },
+          decimals: 2,
+        },
+      ],
+      validate: v => {
+        if (!Number.isFinite(v.d5)) return null;
+        if (v.d5 < 0.2 || v.d5 > 2) {
+          return {
+            level: 'warn',
+            message:
+              'The slider runs from 0.2 to 2 times the Moon’s distance. Choose a distance in that range.',
+          };
+        }
+        if (Math.abs(v.d5 / 0.05 - Math.round(v.d5 / 0.05)) > 0.001) {
+          return {
+            level: 'warn',
+            message:
+              'The slider moves in steps of 0.05, so choose a distance it can be set to exactly, a multiple of 0.05.',
+          };
+        }
+        if (Number.isFinite(v.gap) && v.gap < 0.05) {
+          return {
+            level: 'warn',
+            message:
+              'That is within a few hundredths of a distance you already used, so reading the panel there would prove little. Choose a distance in a gap between two of yours.',
+          };
+        }
+        return {
+          level: 'ok',
+          message:
+            'A distance you have not used. Hold on to it: the next step asks what the stretch will be there.',
+        };
+      },
+    },
+
+    {
+      sid: 'estimate-the-new-stretch',
+      type: 'predict',
+      kind: 'estimate',
+      unit: '× lunar tide',
+      reveal: 'the-estimate-and-the-reading',
+      title: 'Estimate the stretch there',
+      body: `Look back at your four readings and the curve they make. Without
+             setting the slider to the new distance, estimate the stretch there
+             as a multiple of the real lunar tide.
+             \n\nCommit to a number. It stays unmarked until you have read the
+             panel.`,
+      prompt: 'The stretch at the distance you chose will be about',
+    },
+
+    {
+      sid: 'read-the-new-distance',
+      type: 'measure',
+      title: 'Read the panel at your new distance',
+      body: `Set the slider to the distance you chose, press <strong>Take
+             reading</strong> beside the stretch, and compare it with your
+             estimate below. Leave the companion’s mass alone.`,
+      fields: [
+        {
+          id: 'd5r',
+          label: 'The distance you chose',
+          unit: '× Moon’s',
+          compute: (v, earlier) =>
+            earlier?.('pick-a-new-distance', 'd5') ?? NaN,
+          decimals: 2,
+        },
+        {
+          id: 't5',
+          label: 'Stretch at that distance',
+          unit: '× lunar tide',
+          want: '2.9',
+          source: { tool: 'stretch' },
+        },
+      ],
+      validate: v => {
+        if (!Number.isFinite(v.t5)) return null;
+        if (!Number.isFinite(v.d5r)) {
+          return {
+            level: 'warn',
+            message:
+              'Record the distance you chose on the earlier step, then read the panel at it.',
+          };
+        }
+        if (Math.abs(v.t5 * v.d5r ** 3 - 1) > 0.12) {
+          return {
+            level: 'warn',
+            message:
+              'That stretch does not belong to the distance you chose. Set the slider to your distance, read the stretch there, and take the reading again.',
+          };
+        }
+        return {
+          level: 'ok',
+          message:
+            'Read at the distance you chose. Your estimate is set beside it below.',
+        };
+      },
+      tool: {
+        id: 'tide-strength',
+        values: { dist: 1.35, mass: 1 },
+        hide: ['mass'],
+        axis: 'distance',
+        title: 'Read the stretch at your distance',
+        note: 'Set the slider to the distance you chose, and leave the companion’s mass at the Moon’s.',
+      },
+    },
+
+    {
+      sid: 'the-estimate-and-the-reading',
       type: 'read',
-      title: 'The relationship, written down',
-      body: `You have measured it, so here it is in symbols. You are not being
-             asked to derive it or to calculate with it, only to recognize the
-             three things in it.
-             \n\nFor a body of radius <em>R</em> sitting a distance <em>d</em>
-             from a companion of mass <em>M</em>, the tidal stretch across it is
-             about
-             \n\n<strong>2 G M R ÷ d³</strong>
-             \n\nRead it as three statements you already believe:
-             \n\n<strong>M on top.</strong> A heavier companion stretches you
-             harder. You will test this next.
-             \n\n<strong>R on top.</strong> A bigger object gets stretched
-             harder, because its two ends are further apart and so differ more.
-             A pebble feels essentially no tide at all.
-             \n\n<strong>d³ underneath.</strong> The one you just measured.
-             Distance matters far more than anything else in the expression.
-             \n\nOne honest caveat: this is an approximation, good when the
-             object is small compared with its distance. It is excellent for the
-             Moon on the Earth, and it gets worse as a body closes in on
-             something. Later in this investigation, where that matters, the exact
-             difference is used instead.`,
-      tip: 'The 2 is not important. The three letters and where they sit are.',
+      title: 'Your estimate and the panel',
+      body: `Your estimate and the stretch you read are below, at the distance
+             you chose.`,
+      evidence: [
+        { step: 'read-the-new-distance', field: 't5' },
+        { step: 'read-the-new-distance', field: 'd5r' },
+      ],
+      compare:
+        'Set your estimate beside the stretch the panel gave, and say which of your four readings you leaned on.',
     },
 
     {
       sid: 'now-change-the-companion',
-      bind: EARTH_MOON,
       type: 'predict',
-      reveal: 'three-masses',
+      reveal: 'the-relationship-written-down',
       title: 'Now change the companion',
       body: `Put the distance back where it started and change the other thing
              instead. Commit before you measure.
@@ -598,43 +801,30 @@ const TIDES = {
     },
 
     {
-      sid: 'three-masses',
-      bind: EARTH_MOON,
+      sid: 'choose-three-masses',
       type: 'measure',
-      title: 'Three masses',
-      body: `The distance is now held at the Moon’s real distance and the mass
-             slider is yours. Set it to each value in turn and record what the
-             panel reads.
-             \n\nThree points are plenty here, because you are looking for a
+      title: 'Three masses of your own',
+      body: `This time the distance is held at the Moon’s real distance, and
+             only the mass changes. The slider is yours.
+             \n\nChoose three masses of your own, spread far enough apart that
+             the stretch visibly changes. For each one, set the slider, press
+             <strong>Take reading</strong> beside the stretch, and type the mass
+             you set. Three points are plenty, because you are looking for a
              straight line and three points either make one or do not.`,
-      fields: [
-        { id: 'm1', label: 'Mass 1', unit: '× Moon’s', want: '1' },
-        {
-          id: 's1',
-          label: 'Tidal stretch there',
-          unit: '× lunar tide',
-          want: '1',
-        },
-        { id: 'm2', label: 'Mass 2', unit: '× Moon’s', want: '2' },
-        {
-          id: 's2',
-          label: 'Tidal stretch there',
-          unit: '× lunar tide',
-          want: '2',
-        },
-        { id: 'm3', label: 'Mass 3', unit: '× Moon’s', want: '4' },
-        {
-          id: 's3',
-          label: 'Tidal stretch there',
-          unit: '× lunar tide',
-          want: '4',
-        },
-      ],
-      validate: v => {
+      fields: PAIRS(
+        [1, 2, 3],
+        'Mass',
+        'Stretch at mass',
+        '× Moon’s',
+        ['1', '2', '4'],
+        ['1', '2', '4'],
+        ['m', 's']
+      ),
+      validate: (v, _ctx, got = {}) => {
         const rows = [
-          [v.m1, v.s1],
-          [v.m2, v.s2],
-          [v.m3, v.s3],
+          [v.m1, v.s1, 1],
+          [v.m2, v.s2, 2],
+          [v.m3, v.s3, 3],
         ].filter(([m, s]) => Number.isFinite(m) && Number.isFinite(s));
         if (rows.length < 2) return null;
         if (rows.some(([m, s]) => m <= 0 || s <= 0)) {
@@ -643,19 +833,42 @@ const TIDES = {
             message: 'Masses and tidal strengths are both positive numbers.',
           };
         }
+        const moved = rows.find(([m, , i]) => {
+          const at = got[`s${i}`]?.s?.mass;
+          return Number.isFinite(at) && Math.abs(at - m) > 0.005;
+        });
+        if (moved) {
+          return {
+            level: 'warn',
+            message: `Row ${moved[2]} has a mass that is not where the slider was when you took its reading. Type the mass you set, or take the reading again.`,
+          };
+        }
+        // The distance is held at the Moon’s, so each stretch ÷ mass is one.
         const ratios = rows.map(([m, s]) => s / m);
-        const mean = ratios.reduce((a, b) => a + b, 0) / ratios.length;
-        const spread = (Math.max(...ratios) - Math.min(...ratios)) / mean;
-        if (spread > 0.25) {
+        if (ratios.some(r => Math.abs(r - 1) > 0.12)) {
+          const mean = ratios.reduce((a, b) => a + b, 0) / ratios.length;
+          const spread = (Math.max(...ratios) - Math.min(...ratios)) / mean;
           return {
             level: 'warn',
             message:
-              'Stretch ÷ mass is not coming out the same for every row. Check that the distance slider stayed put while you changed the mass: moving both at once hides the relationship you are looking for.',
+              spread < 0.12
+                ? 'Your rows agree with each other but not with the panel. Leave the distance at the Moon’s and read each stretch at the mass beside it.'
+                : 'Stretch ÷ mass is not coming out the same for every row. Check that the distance slider stayed put while you changed the mass: moving both at once hides the relationship you are looking for.',
+          };
+        }
+        if (rows.length < 3) return null;
+        const ms = rows.map(([m]) => m);
+        const span = Math.max(...ms) / Math.min(...ms);
+        if (new Set(ms).size < 3 || span < 2) {
+          return {
+            level: 'warn',
+            message:
+              'Your masses are too close together for a line to show. Choose three that differ by at least a factor of two from the smallest to the largest.',
           };
         }
         return {
           level: 'ok',
-          message: `Stretch ÷ mass is ${mean.toFixed(2)} for every row you filled in. A constant ratio is what a straight line through the corner looks like in a table.`,
+          message: `Three masses held at one distance. Stretch ÷ mass comes out the same for every row: a constant ratio is what a straight line through the corner looks like in a table.`,
         };
       },
       plot: {
@@ -668,9 +881,9 @@ const TIDES = {
           { x: v.m2, y: v.s2, label: '2' },
           { x: v.m3, y: v.s3, label: '3' },
         ],
-        note: `No transformation offered this time, and none needed: if these
-               three land on a straight line through the corner as they are,
-               the relationship is as simple as a relationship gets.`,
+        note: `No transformation is needed: if these three land on a straight
+               line through the corner as they are, the relationship is as
+               simple as a relationship gets.`,
       },
       tool: {
         id: 'tide-strength',
@@ -678,14 +891,13 @@ const TIDES = {
         hide: ['dist'],
         axis: 'mass',
         title: 'Read each mass here',
-        note: 'Set the slider to 1, then 2, then 4 times the Moon’s mass. The distance is held at the Moon’s real distance.',
+        note: 'The mass slider runs from a quarter of the Moon’s to four times it. The distance is held at the Moon’s real distance.',
       },
       tip: 'If your three points make a straight line that goes through the corner of the graph rather than starting partway up an axis, the two quantities are simply proportional.',
     },
 
     {
       sid: 'what-the-mass-graph-says',
-      bind: EARTH_MOON,
       type: 'question',
       title: 'What the mass graph says',
       kind: 'choice',
@@ -705,8 +917,38 @@ const TIDES = {
     },
 
     {
+      sid: 'the-relationship-written-down',
+      type: 'read',
+      title: 'The relationship, written down',
+      body: `You have measured both, so here it is in symbols. You are not being
+             asked to derive it or to calculate with it, only to recognize the
+             three things in it.
+             \n\nFor a body of radius <em>R</em> sitting a distance <em>d</em>
+             from a companion of mass <em>M</em>, the tidal stretch across it is
+             about
+             \n\n<strong>2 G M R ÷ d³</strong>
+             \n\nRead it as three statements you already believe:
+             \n\n<strong>M on top.</strong> A heavier companion stretches you
+             harder, in proportion: the straight line you drew.
+             \n\n<strong>R on top.</strong> A bigger object gets stretched
+             harder, because its two ends are further apart and so differ more.
+             A pebble feels essentially no tide at all.
+             \n\n<strong>d³ underneath.</strong> The cube you found.
+             Distance matters far more than anything else in the expression.
+             \n\nOne honest caveat: this is an approximation, good when the
+             object is small compared with its distance. It is excellent for the
+             Moon on the Earth, and it gets worse as a body closes in on
+             something. The first panel in this investigation used the exact
+             difference; the balance and breakup panels later on use this
+             approximation, so read their distances as good estimates.`,
+      tip: 'The 2 is not important. The three letters and where they sit are.',
+      evidence: SHOWN('choose-three-masses', 'ms', 3),
+      compare:
+        'Divide each of your stretches by its mass: if the answer is the same every time, mass appears once.',
+    },
+
+    {
       sid: 'the-sun-against-the-moon',
-      bind: EARTH_MOON,
       type: 'predict',
       reveal: 'seven-real-tides-on-one',
       title: 'The Sun against the Moon',
@@ -730,7 +972,6 @@ const TIDES = {
 
     {
       sid: 'seven-real-tides-on-one',
-      bind: EARTH_MOON,
       type: 'read',
       title: 'Seven real tides on one scale',
       body: `The panel lists seven real pairings, with the tide the first body
@@ -764,7 +1005,6 @@ const TIDES = {
 
     {
       sid: 'locking-and-what-this-simulation',
-      bind: EARTH_MOON,
       type: 'read',
       title: 'Locking, and what this simulation does not do',
       body: `You always see the same face of the Moon. That is not a
@@ -794,7 +1034,6 @@ const TIDES = {
 
     {
       sid: 'say-it-in-your-own',
-      bind: EARTH_MOON,
       type: 'question',
       title: 'Say it in your own words',
       kind: 'short',
@@ -809,7 +1048,6 @@ const TIDES = {
 
     {
       sid: 'what-holds-a-moon-together',
-      bind: EARTH_MOON,
       type: 'predict',
       reveal: 'stretch-against-grip',
       title: 'What holds a moon together?',
@@ -835,75 +1073,156 @@ const TIDES = {
 
     {
       sid: 'stretch-against-grip',
-      bind: EARTH_MOON,
       type: 'explore',
       title: 'Stretch against grip',
-      body: `The panel takes a body the size of the Moon and lets you walk it in
-             toward the Earth. Two bars, measured at the body’s surface:
+      body: `The panel takes a body the size of the Moon, with the Moon’s own
+             density, and lets you walk it in toward the Earth. Two bars,
+             measured at the body’s surface:
              \n\n<strong>Green</strong> is its own gravity, holding it together.
              It does not change as you move the body, because it depends only on
              the body itself.
              \n\n<strong>Red</strong> is the tidal stretch trying to pull its
              ends apart. It grows as one over the distance cubed, so it climbs
              very fast as you bring the body in.
-             \n\nSomewhere the red bar catches the green one. Find it.
+             \n\nSomewhere the red bar catches the green one. Find it by moving
+             the body, and watch what the verdict line does as you cross it.
              \n\nThe Moon really sits at about sixty Earth radii, far off the
              right-hand end of this slider. You are bringing it in to somewhere
              it has never been.`,
       checklist: [
         'Start at 5 Earth radii and note that the green bar dwarfs the red one',
         'Bring the distance slider down slowly and watch only the red bar',
-        'Find the distance where the two bars are the same length',
-        'Read the verdict line, and the distance the panel reports underneath',
-        'Press Comet ice and find the crossing point again',
-        'Press Iron and find it a third time',
+        'Stop where the two bars are the same length, and notice what the verdict line says there',
       ],
       tool: {
         id: 'tide-balance',
         values: { dist: 5, density: 3300 },
+        hide: ['density'],
+        hunt: true,
         title: 'Its own gravity, against the tide',
-        note: 'Green is grip, red is stretch. The marker on the ruler at the bottom is where you have put the body; the tick is where the two become equal.',
+        note: 'Green is grip, red is stretch. The marker on the ruler at the bottom is where you have put the body. The density is held at the Moon’s own.',
       },
-      tip: 'The green bar never moves when you change the distance, and the red bar never moves when you change the density. Each control drives exactly one bar, which makes the balance easy to reason about.',
+      tip: 'The green bar never moves when you change the distance: it depends only on the body, not on where it is.',
     },
 
     {
-      hints: [
-        'Set the density to the Moon’s value and watch the two bars.',
-        'Read the distance on the line that says the two are equal, in Earth radii.',
-      ],
-      feedback: {
-        close:
-          'Close. Read the distance where the two bars are the same height, in Earth radii.',
-        off: 'The answer is the distance at which the stretch equals the grip; the panel reports it in Earth radii.',
-      },
-      sid: 'where-the-balance-tips',
-      bind: EARTH_MOON,
-      type: 'question',
-      title: 'Where the balance tips',
-      kind: 'numeric',
-      body: `Set the density back to the Moon’s own, 3 300 kg/m³, and read the
-             distance at which the two bars become equal. The panel reports it
-             in Earth radii, on the line that says the two are equal.`,
+      sid: 'a-denser-body-closer-in',
+      type: 'predict',
+      reveal: 'how-density-moved-it',
+      title: 'A denser body, closer in?',
+      body: `You have found where the tide catches a body with the Moon’s
+             density. Now change what the body is made of. Comet ice is a
+             loose, porous snowball; iron is about as dense as a solid body
+             gets.
+             \n\nCommit before you move anything.`,
       prompt:
-        'For a body of the Moon’s density, the stretch equals the grip at a distance of about…',
-      unit: 'Earth radii',
-      answer: 1.5,
-      tolerance: 0.2,
+        'Compared with comet ice, a body made of solid iron will be pulled apart…',
+      options: [
+        'closer to the planet, because it holds itself together harder for its size',
+        'at the same distance, because the planet alone decides where tides win',
+        'farther from the planet, because it has more mass for the planet to pull on',
+        'at the same distance, because the two bodies are the same size',
+      ],
+      answer: 0,
       because:
-        'About 1.5 Earth radii from the Earth’s center, or roughly 9,500 km, which is only about 3,100 km above the ground. That distance has a name: it is the <strong>Roche limit</strong>, after Édouard Roche, who worked it out in 1848. It is not a coincidence that it came out of a comparison you set up yourself: the rigid-body Roche limit is defined by exactly that balance, and its textbook formula is nothing more than the algebra of setting those two bars equal to each other.',
+        'Closer in. A denser body of the same size has more gravity at its surface, so the tide has to grow stronger, and that means getting nearer, before it wins. The planet’s mass is the same in every case; what changes is what is falling toward it.',
+    },
+
+    {
+      sid: 'hunt-the-crossing',
+      type: 'measure',
+      title: 'Hunt the crossing for two bodies',
+      body: `Press <strong>Comet ice</strong>. Bring the distance down until the
+             red and green bars are the same height, and record the distance in
+             Earth radii. Then press <strong>Iron</strong> and find the crossing
+             again.
+             \n\nThe panel does not print where the bars meet this time. You
+             find it by moving the slider, and the ratio of stretch to grip is
+             one at the crossing.`,
+      fields: [
+        {
+          id: 'ice',
+          label: 'Crossing for comet ice',
+          unit: 'Earth radii',
+          want: '2.64',
+        },
+        {
+          id: 'iron',
+          label: 'Crossing for iron',
+          unit: 'Earth radii',
+          want: '1.22',
+        },
+      ],
+      validate: v => {
+        if (![v.ice, v.iron].every(Number.isFinite)) return null;
+        // The panel’s balance in Earth radii; its slider moves in 0.05.
+        const cross = rho => 2 ** (1 / 3) * Math.cbrt(5514 / rho);
+        if (v.iron >= v.ice) {
+          return {
+            level: 'warn',
+            message:
+              'The two distances look swapped between the bodies. Check which density each one was found at.',
+          };
+        }
+        if (Math.abs(v.ice - cross(600)) > 0.12) {
+          return {
+            level: 'warn',
+            message:
+              'The bars are not the same height at that distance for comet ice. Press Comet ice and move the slider until red and green match.',
+          };
+        }
+        if (Math.abs(v.iron - cross(6000)) > 0.12) {
+          return {
+            level: 'warn',
+            message:
+              'The bars are not the same height at that distance for iron. Press Iron and move the slider until red and green match.',
+          };
+        }
+        return {
+          level: 'ok',
+          message:
+            'Two crossings, each found by moving the bars. The next step sets them beside your prediction.',
+        };
+      },
       tool: {
         id: 'tide-balance',
-        values: { dist: 3, density: 3300 },
-        hide: ['density'],
-        title: 'Read the crossing distance',
-        note: 'The density is held at the Moon’s own for this question. Slide the distance until the two bars match, or just read the line that says where they are equal.',
+        values: { dist: 5, density: 3300 },
+        hunt: true,
+        title: 'Where the stretch catches the grip',
+        note: 'Distances are in Earth radii from the Earth’s center. The three buttons set the density; the sliders are yours.',
       },
+      tip: 'The red bar never moves when you change the density, and the green bar never moves when you change the distance. Each control drives exactly one bar.',
+    },
+
+    {
+      sid: 'how-density-moved-it',
+      type: 'question',
+      title: 'What density did',
+      kind: 'short',
+      body: `Your two crossings are below, beside what you predicted.
+             \n\nThe distance where a body’s own gravity equals the tide across
+             it has a name: the <strong>Roche limit</strong>, after Édouard
+             Roche, who worked it out in 1848. This balance gives the
+             rigid-body Roche limit, and its textbook formula is the algebra of
+             setting the two bars equal.
+             \n\nThe size of the body does not enter the balance, so the iron
+             crossing describes a small iron body. A body as large as the Moon
+             could not get there at all: it would touch the Earth at 1.27 Earth
+             radii, before the bars met at 1.22.`,
+      prompt:
+        'In one sentence, say how the density of the body moved the distance where the tide catches it, and why.',
+      rubric:
+        'The denser body is caught closer in. A denser body grips itself harder for its size, so the tide must grow stronger, which means getting nearer, before the stretch equals the grip. Full credit needs the direction and a reason from the body’s own gravity against the tide. Partial credit for the direction alone. Do not credit "denser bodies are heavier, so the planet pulls them harder" or size as the cause: size cancels.',
+      evidence: [
+        { step: 'hunt-the-crossing', field: 'ice' },
+        { step: 'hunt-the-crossing', field: 'iron' },
+      ],
+      compare:
+        'Set your prediction beside the two distances you found, and say what the denser body’s grip did to the crossing.',
     },
 
     {
       sid: 'the-roche-limit-and-why',
-      bind: EARTH_MOON,
       type: 'read',
       title: 'The Roche limit, and why there are two of them',
       body: `The picture moves to Saturn, which is where this idea earns its
@@ -935,7 +1254,6 @@ const TIDES = {
 
     {
       sid: 'change-what-the-moon-is',
-      bind: EARTH_MOON,
       type: 'explore',
       title: 'Change what the moon is made of',
       body: `Leave the distance alone for a moment and change the material
@@ -968,7 +1286,6 @@ const TIDES = {
 
     {
       sid: 'not-one-distance',
-      bind: EARTH_MOON,
       type: 'question',
       title: 'Not one distance',
       kind: 'choice',
@@ -982,13 +1299,29 @@ const TIDES = {
         'the orbital speed of the body falling in',
       ],
       answer: 1,
+      misconceptions: [
+        {
+          id: 'fixed-radius',
+          option: 0,
+          say: 'A planet does not have one limit. Two bodies of different density come apart at different distances from the same planet, as the arcs you moved showed.',
+        },
+        {
+          id: 'bigger-breaks-sooner',
+          option: 2,
+          say: 'Size cancels. Doubling a body’s radius doubles the stretch across it and also doubles its own gravity at the surface, so the balance does not move.',
+        },
+        {
+          id: 'orbital-speed',
+          option: 3,
+          say: 'Orbital speed does not decide where the tide wins; the comparison is the stretch against the body’s own gravity.',
+        },
+      ],
       because:
         'The planet’s mass and the infalling body’s density. Its size cancels out entirely, which surprises most people: doubling a moon’s radius doubles the stretch across it and also doubles its own surface gravity, so the balance is untouched. A single "the Roche limit of Saturn" is therefore an incomplete statement. It has to be the Roche limit of Saturn for something.',
     },
 
     {
       sid: 'what-a-roche-limit-does',
-      bind: EARTH_MOON,
       type: 'read',
       title: 'What a Roche limit does not tell you',
       body: `Four qualifications, because this is the idea in the investigation most
@@ -1019,6 +1352,7 @@ const TIDES = {
 
     {
       sid: 'the-extreme-case-running-live',
+      canvas: 'scene',
       bind: DISRUPTION,
       type: 'explore',
       title: 'The extreme case, running live',

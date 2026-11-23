@@ -1223,7 +1223,7 @@ export const EN = {
   'canvas.crowdTrails':
     'Trails: the selected body and the {n} heaviest of {total} bodies',
   'canvas.sizeDisclosure.detail':
-    'Distances are drawn to one scale, the one the scale bar shows. Body sizes are not to one scale: each kind of body is drawn by its own factor, usually larger than real and in some lesson scenes smaller, so neither a size nor the ratio of two sizes can be read off the canvas. The Sizes button in the readout says by how much, and the inspector gives each radius.',
+    'Distances are drawn to one scale, the one the scale bar shows. Body sizes are not to one scale: each kind of body is drawn by its own factor, usually larger than real and in some scenes smaller, so neither a size nor the ratio of two sizes can be read off the canvas. The Sizes button in the readout says by how much, and the inspector gives each radius.',
   'capture.screenshotFailed': 'The screenshot could not be saved',
   'chart.notReady': 'The chart is not ready yet',
   'chart.exportFailed': 'Could not export the chart',

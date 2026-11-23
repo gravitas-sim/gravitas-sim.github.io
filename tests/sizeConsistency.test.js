@@ -395,7 +395,7 @@ describe('the Sizes statement is beside the task in every lesson that loads one 
       .map(l => l.id)
       .sort();
     expect(have).toEqual(want);
-    expect(want.length).toBeGreaterThanOrEqual(7);
+    expect(want.length).toBeGreaterThanOrEqual(5);
   });
 
   test('the step carries the canvas line as the button that opens the statement', async () => {

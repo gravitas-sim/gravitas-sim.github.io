@@ -291,8 +291,6 @@ const TH = (values = {}, hide = [], start) => ({
 export const WHY_RINGS = {
   id: 'why-rings',
   thumbnail: 'images/investigations/why-rings.webp',
-  // The scene's sizes enter a task here: each step carries the Sizes
-  // statement (js/investigations/stepView.js, tests/sizeConsistency.test.js).
   sizes: true,
   title: 'Why Rings?',
   subtitle:

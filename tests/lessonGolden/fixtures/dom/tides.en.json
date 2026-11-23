@@ -1,0 +1,62 @@
+[
+ {
+  "depth": "core",
+  "role": "first",
+  "sid": "twice-a-day-everywhere",
+  "position": [
+   1,
+   36
+  ],
+  "title": "Tides",
+  "subtitle": "Stretch a world, move a moon, and discover why gravity can tear objects apart",
+  "body": "<p class=\"inv-step-count\">Step 1 of 36 <span class=\"inv-step-kind\">read</span></p><h3 class=\"inv-step-title\">Twice a day, everywhere</h3><div class=\"inv-step-body\"><p>Stand on almost any coast and the sea comes in and goes out roughly twice a day. Not once. Twice.</p><p>That \"twice\" is the whole puzzle. The Moon is on one side of the Earth at a time, and the ocean bulges on <em>both</em> sides at once: there is a high tide under the Moon and another high tide on the opposite face of the planet, twelve thousand&nbsp;kilometers away from it. Any explanation that amounts to \"the Moon pulls the water toward it\" predicts one bulge and is therefore wrong.</p><p>On screen is the real Earth-Moon system: the Earth at the center and the Moon, <strong>Luna</strong>, on its 27.3&nbsp;day orbit. The simulation is a straightforward Newtonian one, and that turns out to be all you need. Nothing in this investigation requires a force that is not already in that picture. What it requires is subtraction.</p></div><p class=\"inv-sizes\"><button type=\"button\" data-open-sizes=\"\">Body sizes not to scale: details under Sizes</button></p><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> While an investigation is running, clicking selects an object without opening the inspector card, and placing new objects is switched off so a stray click cannot alter the system you are measuring.</p>",
+  "previousDisabled": true,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "graded",
+  "sid": "is-the-pull-the-same",
+  "position": [
+   2,
+   36
+  ],
+  "title": "Tides",
+  "subtitle": "Stretch a world, move a moon, and discover why gravity can tear objects apart",
+  "body": "<p class=\"inv-step-count\">Step 2 of 36 <span class=\"inv-step-kind\">predict</span></p><h3 class=\"inv-step-title\">Is the pull the same everywhere?</h3><div class=\"inv-step-body\"><p>The Earth is not a point. It is a ball 12,742&nbsp;km across, and the side facing the Moon is 12,742&nbsp;km closer to the Moon than the side facing away.</p><p>Gravity weakens with distance. Commit to an answer before you are shown anything.</p></div><p class=\"inv-sizes\"><button type=\"button\" data-open-sizes=\"\">Body sizes not to scale: details under Sizes</button></p><p class=\"inv-prompt\" id=\"invChoicePrompt\">The Moon’s gravitational pull on the Earth is…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">A</span><span>exactly the same strength at every point in the Earth</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">B</span><span>stronger on the side facing the Moon than on the far side</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">C</span><span>stronger on the far side, because it has further to reach</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">D</span><span>only felt at the Earth’s center, where all the mass is treated as being</span></button></div>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "marked",
+  "sid": "is-the-pull-the-same",
+  "position": [
+   2,
+   36
+  ],
+  "title": "Tides",
+  "subtitle": "Stretch a world, move a moon, and discover why gravity can tear objects apart",
+  "body": "<p class=\"inv-step-count\">Step 2 of 36 <span class=\"inv-step-kind\">predict</span></p><h3 class=\"inv-step-title\">Is the pull the same everywhere?</h3><div class=\"inv-step-body\"><p>The Earth is not a point. It is a ball 12,742&nbsp;km across, and the side facing the Moon is 12,742&nbsp;km closer to the Moon than the side facing away.</p><p>Gravity weakens with distance. Commit to an answer before you are shown anything.</p></div><p class=\"inv-sizes\"><button type=\"button\" data-open-sizes=\"\">Body sizes not to scale: details under Sizes</button></p><p class=\"inv-prompt\" id=\"invChoicePrompt\">The Moon’s gravitational pull on the Earth is…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">A</span><span>exactly the same strength at every point in the Earth</span></button><button type=\"button\" class=\"inv-option is-chosen is-held\" data-option=\"1\" role=\"radio\" aria-checked=\"true\" disabled=\"\"><span class=\"inv-option-mark\">B</span><span>stronger on the side facing the Moon than on the far side</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">C</span><span>stronger on the far side, because it has further to reach</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">D</span><span>only felt at the Earth’s center, where all the mass is treated as being</span></button></div><p class=\"inv-held\">Your answer is recorded. It stays unmarked until you reach “Three points, three pulls”, so the experiment settles it rather than the answer key.</p><button type=\"button\" class=\"ui-button subtle\" data-change=\"\">Change answer</button>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ },
+ {
+  "depth": "core",
+  "role": "last",
+  "sid": "what-you-worked-out",
+  "position": [
+   36,
+   36
+  ],
+  "title": "Tides",
+  "subtitle": "Stretch a world, move a moon, and discover why gravity can tear objects apart",
+  "body": "<p class=\"inv-step-count\">Step 36 of 36 <span class=\"inv-step-kind\">read</span></p><h3 class=\"inv-step-title\">What you worked out</h3><div class=\"inv-step-body\"><p><strong>A tide is a difference.</strong> Not a pull. Take the pull on the center away from the pull where you are, and what is left is what deforms things. It is the reason there are two bulges and not one, and the reason the far side bulges without anything pushing it.</p><p><strong>Distance dominates.</strong> One power of mass, three powers of separation. This is why the Moon beats the Sun, why the last two rows of the comparison chart differ by five orders of magnitude, and why tidal effects are usually irrelevant right up until they are catastrophic.</p><p><strong>Size matters too.</strong> A bigger object has ends further apart, so it feels a bigger difference. You feel essentially no tide. The Earth feels a few meters of one.</p><p><strong>Breaking is a competition.</strong> Stretch against the body’s own grip. Inside the Roche limit the stretch wins, and that limit is different for every pair of objects, because it depends on what is falling in as well as on what it is falling toward.</p><p><strong>Same mechanism, fourteen orders of magnitude.</strong> The sea coming up a beach, Io kept molten, the Moon showing one face, Saturn’s rings ending where they do, a comet strung out into fragments, and a star pulled into a stream. One subtraction.</p><p>And one sentence to keep: <em>tides happen because gravity is not equally strong across an extended object; the difference grows sharply as objects get closer, and in extreme cases it overcomes the object’s own gravity and tears it apart.</em></p></div><p class=\"inv-sizes\"><button type=\"button\" data-open-sizes=\"\">Body sizes not to scale: details under Sizes</button></p><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> The next time you see a tide table, notice that it lists two highs and two lows per day, and that they are largest around new and full moon. Both of those are things you can now explain.</p>",
+  "previousDisabled": false,
+  "nextDisabled": false,
+  "depthState": ""
+ }
+]

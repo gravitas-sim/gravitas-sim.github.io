@@ -1208,7 +1208,7 @@ export const ES = {
   'canvas.crowdTrails':
     'Estelas: el cuerpo seleccionado y los {n} más masivos de {total} cuerpos',
   'canvas.sizeDisclosure.detail':
-    'Las distancias se dibujan a una sola escala, la que muestra la barra de escala. Los tamaños de los cuerpos no siguen una misma escala: cada tipo de cuerpo se dibuja con su propio factor, casi siempre mayor que el real y en algunas escenas de lección menor, así que ni un tamaño ni la proporción entre dos tamaños se pueden leer en el lienzo. El botón Tamaños de la lectura dice cuánto, y el inspector da cada radio.',
+    'Las distancias se dibujan a una sola escala, la que muestra la barra de escala. Los tamaños de los cuerpos no siguen una misma escala: cada tipo de cuerpo se dibuja con su propio factor, casi siempre mayor que el real y en algunas escenas menor, así que ni un tamaño ni la proporción entre dos tamaños se pueden leer en el lienzo. El botón Tamaños de la lectura dice cuánto, y el inspector da cada radio.',
   'capture.screenshotFailed': 'No se pudo guardar la captura',
   'chart.notReady': 'El gráfico aún no está listo',
   'chart.exportFailed': 'No se pudo exportar el gráfico',

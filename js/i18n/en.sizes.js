@@ -6,7 +6,7 @@ export const EN_SIZES = {
   'sizes.distances':
     'Distances are drawn to one scale, the model’s own, and the scale bar measures them. Where a scenario lays a system out closer than the real one, the drawing is closer too.',
   'sizes.notSizes':
-    'Sizes are not. Each kind of body is drawn by its own factor, usually larger than real and in some lesson scenes smaller, so neither a size nor the ratio of two sizes can be read off the canvas.',
+    'Sizes are not. Each kind of body is drawn by its own factor, usually larger than real and in some scenes smaller, so neither a size nor the ratio of two sizes can be read off the canvas.',
   'sizes.collision':
     'The model radius is the collision radius: two bodies touch when their centers are closer than the sum of their model radii, and merging uses it too. A black hole’s model radius also sets where a body passing it starts to be torn apart; the simulation computes no Roche limit. It is itself larger than real. The drawn radius is the model radius times a factor for the kind of body, and never less than {floor} px on screen, so a small body stays visible.',
   'sizes.caption': 'Radii of the bodies in this world',

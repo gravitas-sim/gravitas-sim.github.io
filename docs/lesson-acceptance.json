@@ -114,7 +114,7 @@
         "what-would-you-still-want"
       ],
       "evidenceFrom": "model",
-      "decision": "unreviewed",
+      "decision": "Which two planet masses to compare and when to take each reading, how many cycles to time for the period, whether to take K from the panel or type it and when the curve has turned at both ends, and which planet mass reproduces the K they took, searched for from an instrument that opens at a mass of its own.",
       "leakFree": true
     },
     "goldilocks-question": {
@@ -154,17 +154,21 @@
       "centralExperimentId": "ce.tides",
       "object": "moon",
       "control": "tide-strength/dist",
-      "quantity": "tidal acceleration at four distances and three masses",
-      "evidence": "plot",
+      "canvas": [
+        "quiet",
+        "scene"
+      ],
+      "quantity": "tidal stretch at four distances the student chooses, at least a factor of four apart, with the companion's mass held, and at three masses with the distance held; the stretch is taken from the panel, which gives one over the distance cubed and the mass once",
+      "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": [
         "bring-the-companion-closer",
-        "four-distances",
-        "say-it-in-your-own"
+        "choose-four-distances",
+        "the-factor-per-halving"
       ],
       "evidenceFrom": "model",
-      "decision": "unreviewed",
-      "leakFree": false
+      "decision": "Which four distances to read, at least a factor of four apart, and where the slider was for each stretch (a swapped near and far, or a reading taken elsewhere, is refused in words); which distance to predict at and what the stretch will be there; which three masses; and where the stretch bar meets the grip bar for comet ice and for iron, found by moving the slider with the crossing withheld.",
+      "leakFree": true
     },
     "butterfly-effect": {
       "centralExperimentId": "ce.butterfly-effect",
@@ -762,7 +766,7 @@
       "leakFree": true
     },
     "integrators-in-practice": {
-      "canvas": ["quiet", "scene"],
+      "canvas": ["quiet"],
       "centralExperimentId": "ce.integrators-in-practice",
       "object": "compute:integrators-compared",
       "control": "the compute page's steps-per-period setting (not a lesson widget), and the second step count the student chooses from a menu in the lesson",
@@ -775,7 +779,7 @@
       "leakFree": true
     },
     "extending-an-experiment": {
-      "canvas": ["quiet", "scene"],
+      "canvas": ["quiet"],
       "centralExperimentId": "ce.extending-an-experiment",
       "object": "compute:population-at-scale",
       "control": "the compute page's cutoff and slope settings (not a lesson widget), and the cutoff the student chooses from a menu in the lesson",
