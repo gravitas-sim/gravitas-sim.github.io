@@ -25,7 +25,12 @@ const digits = n =>
     ? n.toExponential(3)
     : n.toFixed(3);
 
-/** Least-squares slope with a free intercept, for log-log axes. */
+/**
+ * Least-squares slope with a free intercept, for log-log axes. None where the
+ * points do not spread in x: logarithms of readings that agree can differ in
+ * the last place, and a spread of rounding noise would draw a near-vertical
+ * line of slope 1e16 through them.
+ */
 function logSlope(pts) {
   const n = pts.length;
   if (n < 2) return null;
@@ -37,7 +42,7 @@ function logSlope(pts) {
     num += (p.x - mx) * (p.y - my);
     den += (p.x - mx) ** 2;
   }
-  return den === 0 ? null : num / den;
+  return den <= 1e-18 * n * Math.max(1, mx * mx) ? null : num / den;
 }
 
 const rawPoints = (spec, vals) => {
