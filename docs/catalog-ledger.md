@@ -18,7 +18,7 @@ Rows by kind: activity 6, course 6, experiment 4, investigation 146, sequence 11
 
 Baseline (measured at f9277ff8): 146 investigations (124 lessons, 10 Observatory, 9 3-D, 3 mission), 6 activity entries, 4 bench labs, 7 courses (6 rows and 1 out of scope), 11 sequences, 69 scenarios (61 sandbox, 8 3-D lab), 16 datasets.
 
-Editorial: OPEN 161, REVISED 12. Redesign: OPEN 162, REVIEWED CLEAR 1, REVISED 10. Scenario dispositions: OPEN 69.
+Editorial: OPEN 160, REVISED 13. Redesign: OPEN 161, REVIEWED CLEAR 4, REVISED 8. Scenario dispositions: OPEN 69.
 
 Scene class of the lessons: portrait or backdrop 94, setup scenario 26, engine-integrated stage 2, model-owned stage 2.
 
@@ -49,8 +49,8 @@ Scene class of the lessons: portrait or backdrop 94, setup scenario 26, engine-i
 | `investigation:counts-to-magnitudes`                 | lesson      |   409 | FOCUSED  | portrait or backdrop    | OPEN      | OPEN           | NOT RUN      | synthetic nights (+1)                 |          1 |
 | `investigation:craters-by-size`                      | lesson      |   392 | FOCUSED  | portrait or backdrop    | OPEN      | OPEN           | NOT RUN      | -                                     |          0 |
 | `investigation:deep-or-wide`                         | lesson      |   410 | FOCUSED  | portrait or backdrop    | OPEN      | OPEN           | NOT RUN      | -                                     |          0 |
-| `investigation:design-the-schedule`                  | lesson      |   355 | STRONG   | setup scenario          | OPEN      | OPEN           | NOT RUN      | -                                     |          0 |
-| `investigation:detect-this-planet`                   | lesson      |   355 | STRONG   | setup scenario          | OPEN      | OPEN           | NOT RUN      | -                                     |          0 |
+| `investigation:design-the-schedule`                  | lesson      |   355 | STRONG   | setup scenario          | REVISED   | REVIEWED CLEAR | NOT RUN      | -                                     |          0 |
+| `investigation:detect-this-planet`                   | lesson      |   355 | STRONG   | setup scenario          | REVISED   | REVIEWED CLEAR | NOT RUN      | -                                     |          0 |
 | `investigation:einstein-rings-and-arcs`              | lesson      |   400 | FOCUSED  | portrait or backdrop    | OPEN      | OPEN           | NOT RUN      | -                                     |          0 |
 | `investigation:exo-dilution`                         | observatory |   414 | STRONG   | -                       | OPEN      | OPEN           | NOT RUN      | -                                     |          0 |
 | `investigation:exo-find`                             | observatory |   413 | FOCUSED  | -                       | OPEN      | OPEN           | NOT RUN      | -                                     |          0 |
@@ -114,7 +114,7 @@ Scene class of the lessons: portrait or backdrop 94, setup scenario 26, engine-i
 | `investigation:radial-velocity`                      | lesson      |   354 | FOCUSED  | setup scenario          | REVISED   | REVISED        | NOT RUN      | authentic leg E1 NOT RUN              |          1 |
 | `investigation:reading-the-hr-diagram`               | lesson      |   382 | REDESIGN | portrait or backdrop    | OPEN      | OPEN           | NOT RUN      | -                                     |          0 |
 | `investigation:refitting-a-transit`                  | lesson      |   362 | FOCUSED  | setup scenario          | OPEN      | OPEN           | NOT RUN      | -                                     |          0 |
-| `investigation:retrograde-motion`                    | lesson      |   346 | FOCUSED  | setup scenario          | REVISED   | REVISED        | NOT RUN      | -                                     |          1 |
+| `investigation:retrograde-motion`                    | lesson      |   346 | FOCUSED  | setup scenario          | OPEN      | OPEN           | NOT RUN      | -                                     |          0 |
 | `investigation:sampling-a-posterior`                 | lesson      |   362 | FOCUSED  | setup scenario          | OPEN      | OPEN           | NOT RUN      | -                                     |          0 |
 | `investigation:scaling-the-main-sequence`            | lesson      |   379 | FOCUSED  | portrait or backdrop    | OPEN      | OPEN           | NOT RUN      | -                                     |          0 |
 | `investigation:signal-noise-and-exposure`            | lesson      |   406 | FOCUSED  | portrait or backdrop    | OPEN      | OPEN           | NOT RUN      | synthetic frame (+1)                  |          0 |
@@ -142,7 +142,7 @@ Scene class of the lessons: portrait or backdrop 94, setup scenario 26, engine-i
 | `investigation:tides`                                | lesson      |   348 | FOCUSED  | setup scenario          | OPEN      | OPEN           | NOT RUN      | -                                     |          0 |
 | `investigation:tides-that-move-the-moon`             | lesson      |   331 | FOCUSED  | portrait or backdrop    | REVISED   | REVISED        | VERIFIED     | -                                     |          0 |
 | `investigation:transit-photometry`                   | lesson      |   329 | FOCUSED  | setup scenario          | OPEN      | OPEN           | NOT RUN      | -                                     |          0 |
-| `investigation:twelve-nights`                        | lesson      |   355 | STRONG   | setup scenario          | OPEN      | OPEN           | NOT RUN      | -                                     |          0 |
+| `investigation:twelve-nights`                        | lesson      |   355 | STRONG   | setup scenario          | REVISED   | REVIEWED CLEAR | NOT RUN      | -                                     |          0 |
 | `investigation:two-clusters-two-ages`                | lesson      |   381 | FOCUSED  | portrait or backdrop    | OPEN      | OPEN           | NOT RUN      | synthetic clusters (+1)               |          0 |
 | `investigation:two-greenhouse-models`                | lesson      |   387 | FOCUSED  | portrait or backdrop    | OPEN      | OPEN           | NOT RUN      | -                                     |          0 |
 | `investigation:two-periodograms`                     | lesson      |   362 | FOCUSED  | setup scenario          | OPEN      | OPEN           | NOT RUN      | -                                     |          0 |
@@ -164,7 +164,7 @@ Scene class of the lessons: portrait or backdrop 94, setup scenario 26, engine-i
 | `investigation:what-is-it-made-of`                   | lesson      |   396 | FOCUSED  | portrait or backdrop    | OPEN      | OPEN           | NOT RUN      | synthetic data (+1)                   |          0 |
 | `investigation:what-kinds-of-planets-exist`          | lesson      |   396 | REDESIGN | portrait or backdrop    | OPEN      | OPEN           | NOT RUN      | synthetic survey                      |          0 |
 | `investigation:when-a-star-explodes`                 | lesson      |   380 | FOCUSED  | portrait or backdrop    | OPEN      | OPEN           | NOT RUN      | -                                     |          0 |
-| `investigation:when-orbits-lock`                     | lesson      |   349 | FOCUSED  | setup scenario          | REVISED   | REVISED        | NOT RUN      | -                                     |          1 |
+| `investigation:when-orbits-lock`                     | lesson      |   349 | FOCUSED  | setup scenario          | OPEN      | OPEN           | NOT RUN      | -                                     |          2 |
 | `investigation:when-the-method-must-refuse`          | lesson      |   403 | STRONG   | portrait or backdrop    | OPEN      | OPEN           | NOT RUN      | synthetic data with known truth       |          1 |
 | `investigation:where-galaxies-live`                  | lesson      |   402 | REDESIGN | portrait or backdrop    | OPEN      | OPEN           | NOT RUN      | -                                     |          1 |
 | `investigation:which-instrument-for-which-question`  | lesson      |   407 | FOCUSED  | portrait or backdrop    | OPEN      | OPEN           | NOT RUN      | -                                     |          0 |
