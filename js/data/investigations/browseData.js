@@ -50,7 +50,7 @@ export const BROWSE_META = {
   },
   tides: {
     tags: ['gravity', 'solar-system'],
-    numericCount: 2,
+    numericCount: 1,
   },
   'butterfly-effect': {
     tags: ['chaos', 'orbits'],

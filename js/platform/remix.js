@@ -200,7 +200,16 @@ const CARRIED = {
   read: [],
   explore: ['checklist'],
   measure: ['fields'],
-  predict: ['kind', 'unit', 'prompt', 'options', 'answer', 'because', 'reveal'],
+  predict: [
+    'kind',
+    'unit',
+    'prompt',
+    'options',
+    'answer',
+    'because',
+    'reveal',
+    'misconceptions',
+  ],
   question: [
     'kind',
     'prompt',
@@ -268,6 +277,17 @@ function stepToPack(s, es = {}) {
   if (Array.isArray(s.requires)) out.requires = [...s.requires];
   if (isObject(s.when)) out.when = { sid: s.when.sid, is: s.when.is };
 
+  const carryMisconceptions = () => {
+    if (!Array.isArray(s.misconceptions)) return;
+    out.misconceptions = s.misconceptions.map((m, i) => {
+      const o = { id: m.id };
+      for (const k of ['option', 'factor', 'equals'])
+        if (m[k] !== undefined) o[k] = m[k];
+      o.say = text(m.say, es.misconceptions?.[i]?.say);
+      return o;
+    });
+  };
+
   if (s.type === 'explore') out.checklist = texts(s.checklist, es.checklist);
   else if (s.type === 'measure') {
     out.fields = (s.fields || []).map((f, i) => {
@@ -291,6 +311,7 @@ function stepToPack(s, es = {}) {
     }
     put('because', text(s.because, es.because));
     out.reveal = s.reveal;
+    carryMisconceptions();
   } else if (s.type === 'question') {
     out.kind = s.kind;
     put('prompt', text(s.prompt, es.prompt));
@@ -313,15 +334,7 @@ function stepToPack(s, es = {}) {
     if (Array.isArray(s.rubricCriteria))
       out.rubricCriteria = criteriaTexts(s.rubricCriteria, es.rubricCriteria);
     if (s.reflect) out.reflect = true;
-    if (Array.isArray(s.misconceptions))
-      out.misconceptions = s.misconceptions.map((m, i) => {
-        const o = { id: m.id };
-        if (m.option !== undefined) o.option = m.option;
-        if (m.factor !== undefined) o.factor = m.factor;
-        if (m.equals !== undefined) o.equals = m.equals;
-        o.say = text(m.say, es.misconceptions?.[i]?.say);
-        return o;
-      });
+    carryMisconceptions();
     if (isObject(s.feedback)) {
       out.feedback = {};
       for (const [k, v] of Object.entries(s.feedback))

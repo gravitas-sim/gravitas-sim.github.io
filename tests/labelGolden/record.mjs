@@ -202,6 +202,25 @@ const EXTRA_CASES = {
     { back: 6, gone: 12 },
     { back: 10, gone: 14 },
   ],
+  // Tides: rows that follow the panel (stretch is distance to the minus three,
+  // and mass to the first), so the validators reach their last two branches.
+  'choose-four-distances': () => [
+    { d1: 2, t1: 0.125, d2: 1, t2: 1, d3: 0.5, t3: 8, d4: 0.25, t4: 64 },
+    {
+      d1: 1,
+      t1: 1,
+      d2: 1.2,
+      t2: 0.579,
+      d3: 1.5,
+      t3: 0.296,
+      d4: 1.8,
+      t4: 0.171,
+    },
+  ],
+  'choose-three-masses': () => [
+    { m1: 1, s1: 1, m2: 2, s2: 2, m3: 4, s3: 4 },
+    { m1: 1, s1: 1, m2: 1.2, s2: 1.2, m3: 1.5, s3: 1.5 },
+  ],
   // The three later computing investigations: a run typed as the notebook gives it
   // (HD 209458 b, sampler at a/R* 8, box search at 4 hours), and one with a wrong value.
   'shift-from-your-fit': () => [

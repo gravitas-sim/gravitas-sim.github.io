@@ -11,16 +11,16 @@ The hand-written, human-reviewed acceptance map is
 [`lesson-acceptance.json`](lesson-acceptance.json); `npm run
 audit:scene:check` fails if it disagrees with what is generated here.
 
-Across 124 investigations and 1530 steps: 1411 steps
-declare a scene, 165 let a reader change one, 177 read the
-running integration, 1002 show a prescribed model result, 159 draw
-on a stored dataset, 873 put a self-contained panel beside the text,
-396 keep something, and 65 are prose.
-Of 202 prediction loops, 202 are returned to,
-202 produce a measurement before they are answered, and
-1 end in an explanation in the reader's own words.
-201 hold their marking until the experiment settles them.
-The canvas behind a step is stated as scene on 8, portrait on 7, quiet on 80; 1435 state none.
+Across 124 investigations and 1536 steps: 1392 steps
+declare a scene, 165 let a reader change one, 178 read the
+running integration, 1003 show a prescribed model result, 159 draw
+on a stored dataset, 874 put a self-contained panel beside the text,
+399 keep something, and 79 are prose.
+Of 204 prediction loops, 204 are returned to,
+204 produce a measurement before they are answered, and
+2 end in an explanation in the reader's own words.
+202 hold their marking until the experiment settles them.
+The canvas behind a step is stated as scene on 12, portrait on 7, quiet on 88; 1429 state none.
 
 ## Kepler's Laws (`keplers-laws`)
 
@@ -67,13 +67,13 @@ The canvas behind a step is stated as scene on 8, portrait on 7, quiet on 80; 14
 ## Bound, Unbound and Escape (`orbital-energy`)
 
 - **Steps:** 24. Scene declared on 24; a reader can change something on 2; 22 declare a scene nobody on that step can touch.
-- **Where the numbers come from:** 2 live engine, 9 prescribed model, 0 stored dataset, 9 self-contained panel.
+- **Where the numbers come from:** 2 live engine, 8 prescribed model, 0 stored dataset, 8 self-contained panel.
 - **What students do:** read, commit-a-prediction, move-an-instrument-control, press-an-instrument-preset, press-an-instrument-button, tick-a-checklist, record-values, choose-an-option, open-a-body-inspector, select-a-body, run-the-simulation, run-to-an-armed-event, answer-in-words.
 - **Objects the steps declare:** star, circular, eccentric, sun, earth, visitor.
 - **Instruments:** launch, live-energy, escape-compare, shapes.
 - **Stored data:** none.
 - **Evidence kept:** notebook-fields.
-- **Prediction loops:** load-it-lightly → fire-it → fire-it; load-it-heavily → fire-it-again, find-the-dividing-line, bracket-the-dividing-speed, watch-the-total, around-a-real-orbit → fire-it-again; somewhere-else-entirely → read-the-escape-speeds, more-mass-harder-to-leave, further-out-easier-to-leave, three-shapes-one-law, check-it-yourself → more-mass-harder-to-leave.
+- **Prediction loops:** load-it-lightly → fire-it → fire-it; load-it-heavily → fire-it-again, find-the-dividing-line, write-down-the-dividing-speed, watch-the-total, around-a-real-orbit → fire-it-again; somewhere-else-entirely → more-mass-harder-to-leave, further-out-easier-to-leave, three-shapes-one-law, check-it-yourself → more-mass-harder-to-leave.
 - **Recovery:** wrong body: the step binds the object by name, so there is none; reset: rebuilds the scenario on arrival; ambiguous result: the check says in words how close is close enough; missed moment: an event watch stops the run at periapsis; null result: the probe names what is missing.
 - **Scene rebuilds:** 3 step(s) on arrival (how-hard-would-you-have, around-a-real-orbit, something-that-came-from-outside).
 - **Accepted central experiment** (reviewed 2026-09-11): object `visitor`, control launch/v, measures the dividing speed, as the last speed on each side of it, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
@@ -108,15 +108,15 @@ The canvas behind a step is stated as scene on 8, portrait on 7, quiet on 80; 14
 
 ## Finding Planets by Their Tug (`radial-velocity`)
 
-- **Steps:** 38. Scene declared on 38; a reader can change something on 3; 35 declare a scene nobody on that step can touch.
-- **Where the numbers come from:** 4 live engine, 11 prescribed model, 5 stored dataset, 11 self-contained panel.
-- **What students do:** read, choose-an-option, commit-a-prediction, move-an-instrument-control, press-an-instrument-preset, open-a-body-inspector, run-the-simulation, record-values, run-to-an-armed-event, view-from-a-set-angle, answer-in-words.
+- **Steps:** 39. Scene declared on 39; a reader can change something on 3; 36 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 5 live engine, 12 prescribed model, 5 stored dataset, 12 self-contained panel.
+- **What students do:** read, choose-an-option, commit-a-prediction, move-an-instrument-control, press-an-instrument-preset, press-an-instrument-button, record-values, open-a-body-inspector, run-the-simulation, run-to-an-armed-event, view-from-a-set-angle, answer-in-words.
 - **Objects the steps declare:** star, planet.
 - **Instruments:** reflex-motion, rv-observer, rv-mass, rv-inclination, astrometry-signature, method-comparison, planet-characterization.
 - **Stored data:** Published exoplanet system parameters (observation).
 - **Evidence kept:** notebook-fields.
-- **Prediction loops:** which-one-moves → both-of-them-go-round → both-of-them-go-round; make-the-planet-heavier → watch-it-grow, toward-away-toward-again, open-the-real-instrument, measure-the-period, read-k-off-the-panel → watch-it-grow; what-would-make-k-bigger → one-thing-at-a-time, weigh-hd-209458-b → one-thing-at-a-time; now-tilt-the-whole-system → the-same-planet-four-viewing → the-same-planet-four-viewing; a-face-on-system → tilt-it-again-and-watch, all-three-at-once → tilt-it-again-and-watch; move-the-system-further-away → distance-and-orbit-size, characterize-the-planet, three-candidates → distance-and-orbit-size.
-- **Recovery:** wrong body: the step binds the object by name, so there is none; reset: rebuilds the scenario on arrival; null result: guarded, but the fallback is not spelled out; missed moment: an event watch stops the run at rvMaximum; ambiguous result: nothing marks these, they are a record; missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand.
+- **Prediction loops:** which-one-moves → both-of-them-go-round → both-of-them-go-round; make-the-planet-heavier → read-the-two-wobbles, watch-it-grow, toward-away-toward-again, open-the-real-instrument, measure-the-period, read-k-off-the-panel → watch-it-grow; what-would-make-k-bigger → one-thing-at-a-time, weigh-hd-209458-b → one-thing-at-a-time; now-tilt-the-whole-system → the-same-planet-four-viewing → the-same-planet-four-viewing; a-face-on-system → tilt-it-again-and-watch, all-three-at-once → tilt-it-again-and-watch; move-the-system-further-away → distance-and-orbit-size, characterize-the-planet, three-candidates → distance-and-orbit-size.
+- **Recovery:** wrong body: the step binds the object by name, so there is none; reset: rebuilds the scenario on arrival; ambiguous result: the check says in words how close is close enough; null result: guarded, but the fallback is not spelled out; missed moment: an event watch stops the run at rvMaximum; ambiguous result: nothing marks these, they are a record; missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand.
 - **Scene rebuilds:** 4 step(s) on arrival (the-planet-you-already-measured, which-one-moves, open-the-real-instrument, read-k-off-the-panel).
 - **Accepted central experiment** (reviewed 2026-09-11): object `star`, control rv-inclination/inc, measures the semi-amplitude K, and the minimum mass it gives, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 
@@ -150,17 +150,18 @@ The canvas behind a step is stated as scene on 8, portrait on 7, quiet on 80; 14
 
 ## Tides (`tides`)
 
-- **Steps:** 30. Scene declared on 30; a reader can change something on 3; 27 declare a scene nobody on that step can touch.
-- **Where the numbers come from:** 4 live engine, 13 prescribed model, 0 stored dataset, 13 self-contained panel.
-- **What students do:** run-the-simulation, commit-a-prediction, open-a-body-inspector, move-an-instrument-control, choose-an-option, read, record-values, build-a-plot, answer-in-words, press-an-instrument-preset, tick-a-checklist.
+- **Steps:** 36. Scene declared on 10; a reader can change something on 3; 7 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 4 live engine, 14 prescribed model, 0 stored dataset, 14 self-contained panel.
+- **What students do:** run-the-simulation, commit-a-prediction, open-a-body-inspector, move-an-instrument-control, choose-an-option, read, record-values, build-a-plot, read-a-prediction-prompt-that-collects-nothing, answer-in-words, press-an-instrument-preset, tick-a-checklist.
 - **Objects the steps declare:** earth, moon, star, hole.
 - **Instruments:** tide-vectors, tide-strength, tide-compare, tide-balance, roche-model, tide-disrupt.
+- **Canvas:** quiet, scene.
 - **Stored data:** none.
 - **Evidence kept:** notebook-fields, plot.
-- **Prediction loops:** is-the-pull-the-same → three-points-three-pulls, how-different-are-they → three-points-three-pulls; so-why-two-bulges → take-the-center-away, what-the-far-side-arrow → take-the-center-away; bring-the-companion-closer → four-distances, how-steeply-does-it-fall → four-distances; now-change-the-companion → three-masses → three-masses; the-sun-against-the-moon → seven-real-tides-on-one → seven-real-tides-on-one; what-holds-a-moon-together → stretch-against-grip, where-the-balance-tips, the-roche-limit-and-why, change-what-the-moon-is, the-extreme-case-running-live, a-star-and-a-black → stretch-against-grip.
-- **Recovery:** wrong body: the step binds the object by name, so there is none; reset: rebuilds the scenario on arrival; null result: the probe names what is missing; ambiguous result: the check says in words how close is close enough.
+- **Prediction loops:** is-the-pull-the-same → three-points-three-pulls, how-different-are-they → three-points-three-pulls; so-why-two-bulges → take-the-center-away, what-the-far-side-arrow → take-the-center-away; bring-the-companion-closer → choose-four-distances, the-factor-per-halving, pick-a-new-distance → the-factor-per-halving; estimate-the-new-stretch → read-the-new-distance → the-estimate-and-the-reading; now-change-the-companion → choose-three-masses → what-the-mass-graph-says; the-sun-against-the-moon → seven-real-tides-on-one → seven-real-tides-on-one; what-holds-a-moon-together → stretch-against-grip → stretch-against-grip; a-denser-body-closer-in → hunt-the-crossing, the-roche-limit-and-why, change-what-the-moon-is, the-extreme-case-running-live, a-star-and-a-black → how-density-moved-it.
+- **Recovery:** wrong body: the step binds the object by name, so there is none; reset: rebuilds the scenario on arrival; null result: the probe names what is missing; ambiguous result: the check says in words how close is close enough; missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand.
 - **Scene rebuilds:** 2 step(s) on arrival (twice-a-day-everywhere, the-extreme-case-running-live).
-- **Accepted central experiment** (reviewed 2026-09-11): object `moon`, control tide-strength/dist, measures tidal acceleration at four distances and three masses, evidence `plot`, covered by `e2e/centralExperiments.spec.js`.
+- **Accepted central experiment** (reviewed 2026-09-11): object `moon`, control tide-strength/dist, measures tidal stretch at four distances the student chooses, at least a factor of four apart, with the companion's mass held, and at three masses with the distance held; the stretch is taken from the panel, which gives one over the distance cubed and the mass once, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 
 ## The Butterfly Effect in Space (`butterfly-effect`)
 
@@ -346,15 +347,14 @@ The canvas behind a step is stated as scene on 8, portrait on 7, quiet on 80; 14
 
 ## What If Gravity Were Not Inverse Square? (`power-law-gravity`)
 
-- **Steps:** 22. Scene declared on 0; a reader can change something on 0; 0 declare a scene nobody on that step can touch.
+- **Steps:** 21. Scene declared on 0; a reader can change something on 0; 0 declare a scene nobody on that step can touch.
 - **Where the numbers come from:** 0 live engine, 6 prescribed model, 0 stored dataset, 6 self-contained panel.
 - **What students do:** read, commit-a-prediction, move-an-instrument-control, press-an-instrument-preset, tick-a-checklist, record-values, choose-an-option, build-a-plot.
 - **Objects the steps declare:** none.
 - **Instruments:** power-law-precession, power-law-refinement, power-law-kepler, power-law-conservation.
-- **Canvas:** quiet.
 - **Stored data:** none.
 - **Evidence kept:** notebook-fields, plot.
-- **Prediction loops:** predict-does-small-matter → first-look-at-the-orbit, record-the-precession → first-look-at-the-orbit; predict-is-it-the-computer → refine-the-timestep → refine-the-timestep; predict-period-and-distance → measure-the-slope, predict-the-slope-at-2-9 → measure-the-slope; predict-what-breaks → measure-conservation → measure-conservation.
+- **Prediction loops:** predict-does-small-matter → first-look-at-the-orbit, record-the-precession → first-look-at-the-orbit; predict-is-it-the-computer → refine-the-timestep → refine-the-timestep; predict-period-and-distance → measure-the-slope, predict-the-slope → measure-the-slope; predict-what-breaks → measure-conservation → measure-conservation.
 - **Recovery:** reset: rebuilds the scenario on arrival; ambiguous result: the check says in words how close is close enough; ambiguous result: nothing marks these, they are a record.
 - **Scene rebuilds:** 1 step(s) on arrival (the-exactly).
 - **Accepted central experiment** (reviewed 2026-09-11): object `panel:power-law-precession`, control power-law-precession/n, measures apsidal precession in degrees per radial period, at four exponents, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.

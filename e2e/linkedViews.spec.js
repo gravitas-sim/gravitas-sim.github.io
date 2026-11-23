@@ -193,11 +193,10 @@ test.describe('predict, commit, choose a point, measure, reveal', () => {
     const options = page.locator('#investigationBody .inv-option');
     await options.nth(1).click();
     await page.locator('#investigationNext').click();
-    // The reveal: what the reader said, beside what is about to be measured.
+    // The prediction is held while the reader takes their own readings: the
+    // verdict comes at the step that asks for the factor, not before.
     const verdict = page.locator('#investigationBody .inv-verdict');
-    await expect(verdict.locator('.inv-verdict-head')).toContainText(
-      'You predicted: four times as strong'
-    );
+    await expect(verdict).toHaveCount(0);
 
     const inputs = page.locator('#investigationBody input[data-field]');
     const readings = ['2', '1', '0.5', '0.25', '1', '1', '1', '1'];
@@ -234,10 +233,14 @@ test.describe('predict, commit, choose a point, measure, reveal', () => {
     // Space adds to the choice, as it does in the table of any other view.
     await expect(chosen(page)).toHaveCount(2);
 
-    // Nothing of this disturbed the reveal.
+    // Nothing of this disturbed the held prediction: it is marked at the next
+    // step, beside the factor the readings give.
+    await expect(verdict).toHaveCount(0);
+    await page.locator('#investigationNext').click();
     await expect(verdict.locator('.inv-verdict-head')).toContainText(
-      'You predicted: four times as strong'
+      'Your prediction and your readings'
     );
+    await expect(verdict).toContainText('four times as strong');
   });
 });
 

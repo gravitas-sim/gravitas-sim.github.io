@@ -83,7 +83,11 @@ import {
 } from './habitability.js';
 import { habitableZoneModelFromSettings, setFixedStep } from './render.js';
 import { STEP_SECONDS, frameAdvance } from './timestep.js';
-import { currentRadialVelocity, observedStar } from './radialVelocity.js';
+import {
+  currentRadialVelocity,
+  measuredHalfRange,
+  observedStar,
+} from './radialVelocity.js';
 import { orbitalElements, dominantPrimary, pairEnergy } from './orbital.js';
 import {
   formatDistance,
@@ -302,17 +306,14 @@ bindPersistence({
   assignment: () => assignment,
   assignmentKey: () => assignmentKey,
   els: () => els,
-  clock: () => clock(),
+  clock,
 });
 
 // --- Live simulation context --------------------------------------------------
 
 /**
- * Build the object a step's probe reads from.
- *
- * Handing the lesson a prepared context, rather than letting it import the
- * simulation, is what keeps data/investigations.js a description of teaching
- * instead of a piece of the engine.
+ * Build the object a step's probe reads from: a prepared context, so that
+ * data/investigations.js stays a description of teaching, not the engine.
  */
 function probeContext() {
   const G = SETTINGS.gravitational_constant;
@@ -355,17 +356,17 @@ function probeContext() {
     // Photometry, for the steps that ask students to read a light curve rather
     // than an orbit. The clock is the one the light curve plots against, so a
     // time stamped here lands under the dip the student is looking at.
-    flux: () => currentBrightness(),
-    days: () => currentTimeDays(),
-    observerAngle: () => getObserverAngle(),
+    flux: currentBrightness,
+    days: currentTimeDays,
+    observerAngle: getObserverAngle,
     // What the recorded light curve contains: the baseline, every complete
     // transit and a running count (one passes in half a second).
-    photometry: () => transitAnalysis(),
+    photometry: transitAnalysis,
     // The rotation curve and cluster measurements, from the same functions the
     // panel calls, so a lesson and its instrument cannot disagree.
-    rotationCurve: () => rotationCurveState(),
-    cluster: () => clusterState(),
-    haloOn: () => darkMatterHaloOn(),
+    rotationCurve: rotationCurveState,
+    cluster: clusterState,
+    haloOn: darkMatterHaloOn,
     // Which reference frame the view is in, and where a body lies as seen from
     // its origin (retrograde motion rests on both).
     frame: () => frameState(),
@@ -393,7 +394,7 @@ function probeContext() {
     /** Which role, if any, names a body. Null for anything unbound. */
     roleOf,
     /** Every role this step bound, in binding order. */
-    roles: () => boundRoles(),
+    roles: boundRoles,
     /** Select a role's body, as though the reader had clicked it. */
     selectRole,
     /**
@@ -451,16 +452,13 @@ function probeContext() {
      * dark disc is a drawing at a scale chosen so orbits fit, and the Schwarzschild radius is a length in km;
      * the readout that uses this says which is which.
      */
-    holeFacts: massSun => blackHoleFacts(massSun),
-    /**
-     * Where the observed star is in its orbit, and what the spectrograph is
-     * reading at that instant.
-     */
+    holeFacts: blackHoleFacts,
+    /** Where the observed star is in its orbit, what a spectrograph reads now, and the panel's half-range. */
     rvNow: () => {
       const star = observedStar();
       if (!star) return null;
       const velocity = currentRadialVelocity();
-      const primary = star ? primaryOf(star) : null;
+      const primary = primaryOf(star);
       const el = primary ? orbitalElements(star, primary, G) : null;
       const angle = Math.atan2(star.pos.y, star.pos.x);
       return {
@@ -477,6 +475,7 @@ function probeContext() {
         phaseDeg: ((angle * 180) / Math.PI + 360) % 360,
         period: el?.period ?? null,
         observerAngleDeg: getObserverAngle(),
+        range: measuredHalfRange(),
       };
     },
     /**
@@ -508,7 +507,7 @@ function probeContext() {
     /**
      * How far the whole world's conserved quantities have moved.
      */
-    conservation: () => conservationDrift(),
+    conservation: conservationDrift,
     /**
      * Where a transiting body is against its star's disc, right now.
      *
@@ -1157,11 +1156,9 @@ function syncToolPanel(step) {
     els.toolPanel.querySelectorAll('[data-tool]').forEach(input => {
       input.value = String(toolValues[input.dataset.tool]);
     });
-    // A widget that animates restarts its run from the new settings: change
-    // the speed, watch it happen. `fromControl` says a reader moved something,
-    // not that the step opened: a widget that parks itself where the step asked
-    // (the evolutionary playback's phase and track) does that once, on entry,
-    // or the playhead and the track could not be changed (dead controls).
+    // An animating widget restarts from the new settings. `fromControl` says a
+    // reader moved something, not that the step opened: a widget that parks
+    // itself where the step asked does that once, on entry (else dead controls).
     widget.reset?.(toolValues, { autorun: true, spec, fromControl: true });
     paintTool();
   };

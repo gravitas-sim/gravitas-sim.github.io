@@ -53,7 +53,7 @@ const BUDGETS = [
   {
     id: 'initial',
     label: 'Initial download (CSS + eager JS)',
-    limit: 744.7,
+    limit: 744.8,
     reason:
       'Was 743 KB when this budget was first asked for. The application had ' +
       'already grown to 771 KB on its own - the extracted state module, the ' +
@@ -125,12 +125,13 @@ const BUDGETS = [
       '\n\nThe same branch after the lesson sheet and status block repairs (D-R4-TRAINA-03): raised from 743.5 to 743.6 KB, the measurement by CI (head 51ee3a090): 761,442 bytes (743.60 KB), rounded up to 0.1 KB. Under the standing approval of 2026-10-10.' +
       '\n\nWhat pulls on what (D-R4-459-07): the one relation for which bodies pull which, its per-body test and the caveat that reads it are start-up engine code; raised from 743.6 to 744.4 KB, the measurement by CI of the branch merged with v4 b2424e160 (run 44966228334): 762,209 bytes (744.34 KB), rounded up to 0.1 KB. Under the standing approval of 2026-10-10.' +
       '\n\nThe pinned lesson step (D-R4-342-06): one pin per owner and the clock-hold rule beside it in js/timestep.js, start-up code; raised from 744.4 to 744.6 KB, the measurement of a Node 22.23.4 build of the branch merged with v4 9d4aa6fd: 762,376 bytes (744.51 KB), rounded up to 0.1 KB. Under the standing approval of 2026-10-10.' +
-      '\n\nThe low tier cuts the full world (D-R4-343-05): the world builder makes the full population and keeps the bodies the cap allows, start-up engine code; raised from 744.6 to 744.7 KB, the measurement of a Node 22.23.4 build of the branch merged with v4 93007c24: 762,526 bytes (744.65 KB), rounded up to 0.1 KB; 762,568 bytes (744.70 KB) on the branch merged with v4 93295b2e. Under the standing approval of 2026-10-10.',
+      '\n\nThe low tier cuts the full world (D-R4-343-05): the world builder makes the full population and keeps the bodies the cap allows, start-up engine code; raised from 744.6 to 744.7 KB, the measurement of a Node 22.23.4 build of the branch merged with v4 93007c24: 762,526 bytes (744.65 KB), rounded up to 0.1 KB; 762,568 bytes (744.70 KB) on the branch merged with v4 93295b2e. Under the standing approval of 2026-10-10.' +
+      '\n\nThe quiet lesson canvas keeps Settings and precise placement beside its More (D-R4-TRAINC1-05): raised from 744.7 to 744.8 KB, the measurement of a Node 22 build of the combined branch, 762,590 bytes gzipped (744.72 KB), rounded up to 0.1 KB; the CSS that lays the dock out is the growth. Under the standing approval of 2026-10-10.',
   },
   {
     id: 'deferred',
     label: 'Deferred JavaScript (lazy chunks, gzipped)',
-    limit: 3259.7,
+    limit: 3266.8,
     reason:
       'Jumped from 1369 KB to 2105 KB when three.js and Chart.js stopped being ' +
       'CDN requests and became bundled chunks. That is the point of the change ' +
@@ -747,7 +748,10 @@ const BUDGETS = [
       '\n\nThe low tier cuts the full world (D-R4-343-05): the cut and the low-tier draws row of the binary-orbit tool; raised from 3235.3 to 3235.5 KB on v4 93007c24 (3,313,081 bytes gzipped); on the branch merged with v4 93295b2e, CI measures 3,329,004 bytes gzipped (3250.98 KB), inside the v4 limit of 3251.0, so no further raise. Under the standing approval of 2026-10-10.' +
       '\n\nThe solar system scale, comets, moons and missing mass lessons (D-R4-TRAINC-03): raised from 3251.0 to 3258.4 KB, the measurement by CI of the branch (run 45018162713, d5de9d3d1): 3,336,518 bytes gzipped (3258.32 KB), rounded up to 0.1 KB. Under the standing approval of 2026-10-10.' +
       '\n\nThe same branch merged with v4 e16734ec6 (D-R4-TRAINC-07): raised from 3258.4 to 3258.5 KB, the measurement by CI of the branch (head a0735a120): 3,336,664 bytes gzipped (3258.46 KB), rounded up to 0.1 KB. Under the standing approval of 2026-10-10.' +
-      "\n\nThe energy and power-law lessons (D-R4-347-09, D-R4-347-11, D-R4-347-12): raised by 1.1 KB and then 0.1 KB over their own base (3251.0 to 3252.1 and 3252.2 KB; CI measured 3,330,063 and 3,330,203 bytes gzipped, 3252.015 and 3252.15 KB, at 7e24bf18 and 2af85136); on the branch merged with v4 78e15afa the limit is v4's 3258.5 KB plus those 1.2 KB, 3259.7 KB, provisional until CI measures the merged tree. Under the standing approval of 2026-10-10.",
+      '\n\nThe combined finding-planets, binary-star and tides lessons (D-R4-TRAINC1-02): raised from 3251.0 to 3258.0 KB, the measurement by CI of the branch (head 4037bbe17): 3,336,093 bytes gzipped, 3257.903 KB, rounded up to 0.1 KB. Under the standing approval of 2026-10-10.' +
+      '\n\nThe quiet lesson canvas keeps Settings and precise placement beside its More (D-R4-TRAINC1-05): raised from 3258.0 to 3258.2 KB, the measurement of a Node 22 build of the combined branch, 3,336,342 bytes gzipped (3258.13 KB), rounded up to 0.1 KB; the dock code in js/lessonCanvas.js. Under the standing approval of 2026-10-10.' +
+      '\n\nThis branch merged with v4 78e15afaf (D-R4-TRAINC1-05): v4 holds 3258.5 KB for the solar system scale and missing mass lessons, and the quiet canvas and combined planet, binary star and tides lessons add the 7.1 KB above it (grants dm 6.9 and du 0.2), so the limit is 3265.6 KB, the measurement by CI of the merged branch (head 64731fa43). Under the standing approval of 2026-10-10.' +
+      "\n\nThe energy and power-law lessons (D-R4-347-09, D-R4-347-11, D-R4-347-12, D-R4-347-13): raised by 1.1 KB and then 0.1 KB over their own base (3251.0 to 3252.1 and 3252.2 KB; CI measured 3,330,063 and 3,330,203 bytes gzipped at 7e24bf18 and 2af85136), and CI measured 3,337,870 bytes gzipped (3259.64 KB) for the branch merged with v4 78e15afa (limit 3259.7 KB); on the branch merged with v4 44cb0723 the limit is v4's 3265.6 KB plus the 1.2 KB, 3266.8 KB, provisional until CI measures the merged tree. Under the standing approval of 2026-10-10.",
   },
 ];
 

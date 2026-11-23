@@ -54,10 +54,11 @@ describe('the allowlist only shrinks', () => {
     // 52 after Plan an Exposure (Prompt 210): two literals, both model-checked.
     // 65 after the five observing closeout investigations (Prompt 216): 13 more, all model-checked.
     // 64 after Kepler's Laws was reworked: its period question is retired.
-    // 64: Missing Mass moved its MOND steps to the deeper path (the check on
-    // the-prediction-mond-makes now lives in tests/missingMassFits.test.js), and the slope-rate step of
-    // What If Gravity Were Not Inverse Square? is model-checked.
-    expect(literals).toHaveLength(64);
+    // 63 after Missing Mass moved its MOND steps to the deeper path (the check on
+    // the-prediction-mond-makes now lives in tests/missingMassFits.test.js).
+    // 62 with Tides, whose crossing question became a hunt with no numeric answer.
+    // 63 with the slope-rate step of What If Gravity Were Not Inverse Square?, model-checked.
+    expect(literals).toHaveLength(63);
     for (const l of literals) {
       const homes = [MODELS, SOURCED, UNCHECKED].filter(t => t[l.key]);
       expect({ key: l.key, homes: homes.length }).toEqual({
@@ -73,7 +74,7 @@ describe('the allowlist only shrinks', () => {
     expect(UNCHECKED_CEILING).toBe(34);
     expect(
       Object.keys(MODELS).length + Object.keys(SOURCED).length + UNCHECKED_COUNT
-    ).toBe(64);
+    ).toBe(63);
   });
 
   test('every entry names a real literal and gives a reason', () => {
@@ -235,9 +236,9 @@ describe('the instructor expectations record', () => {
     // 556 over v4's 552: the new steps of Weighing the Stars, Transit Photometry and Kepler's Laws, net of the ones they retire.
     // 557 over that: the new steps of Integrators in Practice and Extending an Experiment, net of the ones they retire.
     // 555 over that: Lives of Stars replaces three read-a-number steps with one comparison step (3 retired, 1 new).
-    // 556 after Missing Mass gained the compare-your-two-fits expectation.
-    // 557: the slope-rate step of What If Gravity Were Not Inverse Square?, net of the dividing-speed step's rewording.
-    expect(total).toBe(557);
+    // 556 after Missing Mass gained the compare-your-two-fits expectation; Tides (three more) and Finding Planets by Their Tug (one more, the half-range step of Radial Velocity) add four.
+    // 561: the slope-rate step of What If Gravity Were Not Inverse Square?, net of the dividing-speed step's rewording.
+    expect(total).toBe(561);
     // 542 after How Many Earths? (Prompt 229): 3 more over 539.
     // 547 after the four exoplanet closeout investigations (Prompt 231): 5 more over 542.
   });

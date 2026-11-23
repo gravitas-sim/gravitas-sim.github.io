@@ -280,13 +280,15 @@ export default {
       'measure-the-period':
         'The curve repeats every 3.52 days. Students reading between successive peaks typically land between 3.3 and 3.8; anything in that range is a good measurement off a live plot. The published period is 3.5247 days. The event watch stops the run at the most positive radial velocity. Two stops bracket one period: about 3.5 days. While it is stopped, ask which way the star is actually moving on the canvas and whether the sign agrees - that is the point of stopping rather than reading it off a graph.',
       'read-k-off-the-panel':
-        'The panel reports K near 84 m/s once a full cycle is recorded, which matches the published semi-amplitude for HD 209458 b. A student answer near 168 has taken the full peak-to-peak range rather than the semi-amplitude and should be sent back to step 13.',
+        'The panel reports K near 84 m/s once a full cycle is recorded, which matches the published semi-amplitude for HD 209458 b. A student answer near 168 has taken the full peak-to-peak range rather than the semi-amplitude and should be sent back to step 14.',
+      'read-the-two-wobbles':
+        'Any two masses: the star’s orbit is in proportion (0.3 and 3 Jupiter masses give about 1.4e-5 and 1.4e-4 AU).',
       'one-thing-at-a-time':
-        'The rv-mass instrument holds star, period and viewing angle fixed, so K is strictly proportional to planet mass: an Earth gives 0.38 m/s, a Neptune 6.6, HD 209458 b 84, and a five-Jupiter planet 609. At step 17 students match this instrument to their measured K and should land near 0.69 Jupiter masses, the published value; the accepted range is 0.61 to 0.77, wide enough to absorb a slightly misread K.',
+        'The rv-mass instrument holds star, period and viewing angle fixed, so K is strictly proportional to planet mass: an Earth gives 0.38 m/s, a Neptune 6.6, HD 209458 b 84, and a five-Jupiter planet 609. At step 18 students match the weighing instrument to their measured K and should land near 0.69 Jupiter masses, the published value; the accepted range is 0.61 to 0.77, wide enough to absorb a slightly misread K.',
       'the-same-planet-four-viewing':
         "The observer has been swung to 90 degrees on the live system: one controlled change, nothing about the star or planet touched. The panel's inclination presets are the analytic version of the same idea, and the two should be read together rather than confused - the panel tilts a model, the observer angle moves where we are standing.",
       'characterize-the-planet':
-        'The characterization panel reports HD 209458 b at 1.38 Jupiter radii, 0.69 Jupiter masses and a bulk density of 0.33 g/cm³: about a third the density of water and a sixteenth of Earth’s. It receives roughly 785 times Earth’s starlight and sits far inside the inner edge of the modeled zone. At step 32 the accepted density range is 0.25 to 0.41; a student answering near 5.5 has read Earth’s density from the comparison text rather than the planet’s.',
+        'Set to 1.38 Jupiter radii and 0.69 Jupiter masses (it opens on a Jupiter of its own), the panel reports a bulk density of 0.33 g/cm³: about a third the density of water and a sixteenth of Earth’s. It receives roughly 785 times Earth’s starlight and sits far inside the inner edge of the modeled zone. At step 33 the accepted density range is 0.25 to 0.41; a student answering near 5.5 has read Earth’s density from the comparison text rather than the planet’s.',
     },
     'goldilocks-question': {
       'three-distances':
@@ -357,14 +359,20 @@ export default {
         'At a distance of 1.00 the three arrows are visually indistinguishable, which is the intended reaction. The readout gives 3.43 × 10⁻⁵, 3.32 × 10⁻⁵ and 3.21 × 10⁻⁵ m/s², and the last row reports the near side as 6.9% larger than the far side. Students who slide the distance down to 0.2 will see the arrows separate visibly, which is worth encouraging.',
       'take-the-center-away':
         'The residual row shows about 1.1 × 10⁻⁶ m/s² outward on each side, roughly a thirtieth of the pull itself, and the panel reports the magnification between the two rows. The center shows a dot rather than an arrow, and students regularly ask whether that is a drawing error; it is the answer.',
-      'four-distances':
-        'At mass 1, the readings should be 0.13, 1.00, 8.00 and 64.00 times the lunar tide at distances of 2, 1, 0.5 and 0.25. The validator checks that stretch × distance³ is the same for every row and warns at a spread above 35%, which almost always means a strength read at a different slider position from the distance beside it. The transformed plot straightens to a line through the origin.',
-      'three-masses':
-        'At distance 1, the readings should be 1.00, 2.00 and 4.00 at masses of 1, 2 and 4. The validator checks that stretch ÷ mass is constant and warns if the distance slider was moved during the run, which is the only common failure here.',
+      'choose-four-distances':
+        'Any four distances from 0.2 to 2 times the Moon’s, each stretch read at the slider position beside it. The mass is held at the Moon’s, so every row has stretch × distance³ near 1.00. The check warns on swapped or mismatched rows and on a span under a factor of four.',
+      'pick-a-new-distance':
+        'A multiple of 0.05 between 0.2 and 2, not near their four.',
+      'read-the-new-distance':
+        'Stretch near 1 ÷ distance³ at their distance; the estimate is set beside it.',
+      'choose-three-masses':
+        'Any three masses from 0.25 to 4 times the Moon’s, at distance 1: stretch ÷ mass is 1.00 in every row. The check warns if the distance moved or the masses are within a factor of two.',
       'seven-real-tides-on-one':
         'The seven bars run from 5.05 × 10⁻⁷ m/s² for the Sun on the Earth to 68 m/s² for a stellar-mass black hole on the Sun at three million km. The two comparisons worth drawing out are the Moon beating the Sun by 2.2, and the last two rows differing by 1.2 × 10⁵ for a fifty-fold change in distance alone.',
       'stretch-against-grip':
-        'At 5 Earth radii and lunar density the green bar dwarfs the red one and the verdict reads HOLDS TOGETHER. The bars become equal near 1.50 Earth radii. Comet ice moves the crossing out to about 2.64 Earth radii and iron brings it in to about 1.22, which is the observation step 25 depends on.',
+        'At 5 Earth radii and lunar density the green bar dwarfs the red one and the verdict reads HOLDS TOGETHER. The bars become equal near 1.50 Earth radii; this panel does not print where.',
+      'hunt-the-crossing':
+        'Comet ice crosses near 2.64 Earth radii and iron near 1.22 (the slider moves in 0.05, so 1.20 or 1.25). The check accepts within 0.12 of the model and refuses the two swapped.',
       'the-roche-limit-and-why':
         'With porous ice at 600 kg/m³ the no-strength limit is 2.47 Saturn radii, or about 149,000 km, and the keeps-its-shape limit is 1.27 Saturn radii. The A ring’s outer edge is at 2.27 Saturn radii and Mimas at 3.08, so the rings sit inside the outer limit and the innermost round moon sits outside it. That is the payoff of the screen.',
       'change-what-the-moon-is':
@@ -460,7 +468,7 @@ export default {
       'what-the-quiet-run-did':
         'Twenty periods completed, farthest out about 0.62 separations, zero close encounters, energy drift about 0.00017%. A student reporting fewer than twenty periods has the starting radius wrong - the panel prints the value it actually used. A farthest-out figure above 2 usually means they have read the row in AU rather than in separations.',
       'run-it-at-030':
-        'The planet at 0.30 separations is ejected after about 2.5 binary periods, following one close pass with the companion. Energy drift around 0.0005%, comfortably inside the screen, so this is a physical result and not a numerical one. The run ends itself once the planet is unbound and past ten separations. Exact timing varies with the step: at a timestep of 1.0 it leaves around 2.5 periods and at 0.25 nearer 5, which is expected in a chaotic system and is the subject of step 19 - the runs must agree on whether, not on when.',
+        'The planet at 0.30 separations is ejected after about 2.5 binary periods, following one close pass with the companion. Energy drift around 0.05%, inside the 0.1% screen, so this is a physical result and not a numerical one. The run ends itself once the planet is unbound and past ten separations. Exact timing varies with the step: at a timestep of 1.0 it leaves around 2.5 periods and at 0.25 nearer 5, which is expected in a chaotic system and is the subject of step 19 - the runs must agree on whether, not on when.',
       'when-did-it-leave':
         'About 2.5 binary periods and one close encounter. Any answer of twenty periods means the planet did not leave; check the starting radius. The encounter count is the interesting number here, because the circumbinary case at step 24 records zero and loses its planet anyway.',
       'run-the-sweep':
@@ -470,11 +478,11 @@ export default {
       'resolve-the-edge':
         'The re-run at the change of outcome with half the step gives the same answer, so the ejection is not an artifact of the step. If it disagrees, that is the better investigation: neither run has measured that configuration.',
       'energy-drift-as-a-screen':
-        'At 0.50 separations the planet starts about 1 AU from the companion, which is not really an orbit at all. At a timestep of 1.0 the drift is about 0.18%, past the 0.1% screen, and the panel refuses to name an outcome; the eccentricity readout comes out above 100, which is a useful thing for students to see a number do. The first halving is the instructive part: the drift goes to 0.17%, essentially unchanged, and is still refused. The second, to a timestep of 0.25, takes it to 0.0023% and produces an answer - the planet collided with a star after 0.010 binary periods. Two points to draw out: resolving an encounter is not a matter of doing gradually better, and the outcome turned out to be a collision rather than the ejection most students will have assumed. This is the blunt demonstration; the subtle one is next.',
+        'At 0.50 separations the planet starts about 1 AU from the companion, which is not really an orbit at all. At a timestep of 1.0 the drift is about 0.2% (0.21% stepping at exactly 1.0), past the 0.1% screen, and the panel refuses to name an outcome; the eccentricity readout comes out above 100, which is a useful thing for students to see a number do. The first halving is the instructive part: the drift goes to 0.17%, essentially unchanged, and is still refused. The second, to a timestep of 0.25, takes it to 0.0023% and produces an answer - the planet collided with a star after 0.010 binary periods. Two points to draw out: resolving an encounter is not a matter of doing gradually better, and the outcome turned out to be a collision rather than the ejection most students will have assumed. This is the blunt demonstration; the subtle one is next.',
       'the-case-that-matters':
-        'This is the run to do at the front of the room. At 0.25 separations with a timestep of 1.0 the planet survives all twenty periods while the encounter counter climbs into the dozens - around seventy by the end - and the drift readout sits at about 0.00018%. At a timestep of 0.25 the same configuration is ejected, after roughly thirteen periods, with drift near 0.0000034%. Both runs pass the energy screen and they disagree. Wall clock is about half a minute, one minute and two minutes for the three timesteps; consider splitting them across groups.',
+        'This is the run to do at the front of the room. At 0.25 separations with a timestep of 1.0 the planet survives all twenty periods while the encounter counter climbs into the dozens - around seventy by the end - and the drift readout sits at about 0.00018%. At a timestep of 0.25 the same configuration is ejected, after roughly thirteen periods, with drift near 0.0001%. Both runs pass the energy screen and they disagree. Wall clock is about half a minute, one minute and two minutes for the three timesteps; consider splitting them across groups.',
       'the-drift-was-tiny':
-        'Drift about 0.00018% at a timestep of 1.0 and about 0.0000034% at 0.25 - both several orders of magnitude inside the screen. The third field has no single right answer and is meant to be uncomfortable: students who ran all three steps will usually find two agreeing and one not, and the point is that "two out of three" is not how convergence works. Take the count they report and ask what it would take to make it three.',
+        'Drift about 0.00018% at a timestep of 1.0 and about 0.0001% at 0.25 - both about three orders of magnitude inside the screen. The third field has no single right answer and is meant to be uncomfortable: students who ran all three steps will usually find two agreeing and one not, and the point is that "two out of three" is not how convergence works. Take the count they report and ask what it would take to make it three.',
       'run-the-circumbinary':
         'At 4.0 separations the planet holds its ring for all forty binary periods, with a farthest-out figure of about 4.03 and zero encounters. At 2.0 it is ejected after about 3.4 periods, still with zero encounters and a closest approach of about 0.22 separations - it never comes near either star. Energy drift is around 0.0007% in both, so neither result is numerical. Each run is about half a minute.',
       'no-encounter-at-all':

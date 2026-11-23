@@ -1040,24 +1040,85 @@
           "ref": "D-R10-24",
           "owner": 300,
           "note": "Answer printed to more places than its tolerance resolves; reword the displayed precision only"
+        },
+        {
+          "ref": "D-R4-357-02",
+          "owner": 357,
+          "note": "For Carl: a pre-computed run path for slow machines is a new shared capability and needs a named task it improves; recorded, not built"
         }
       ],
-      "questions": { "Q1": "", "Q2": "", "Q3": "", "Q4": "", "Q5": "" },
+      "questions": {
+        "Q1": "The student finds that one configuration gives three different outcomes at three steps while the energy drift stays under two parts in a million, that an outcome counts only when halving the step leaves it unchanged, and where a published boundary and a short integration disagree: measured on the live Binary and Circumbinary Planet Lab runs, which a paragraph could not show.",
+        "Q2": "Each run names its panel, its starting radius and what to set and watch; the held predictions (starting radius, the sweep, the circumbinary direction) reveal at the step that runs them, and the panel's own rows say which bodies are on the canvas and whether the last run still describes the scene.",
+        "Q3": "Scene, panel, plot, formula and prose name the same two stars and the planet, radii in binary separations, periods in binary periods and the drift in per cent; survived this integration is never written as stable, in both languages.",
+        "Q4": "The student chooses the starting radius, the step to halve to, which sweep trial to recheck, which of three runs to report and what to claim; each can be made badly, and the short answer is graded on whether it claims a verdict.",
+        "Q5": "Met by the core's uncertainty, convergence and model-limit steps (what-the-fit-assumes, who-is-wrong, what-you-can-say): the lesson has no deeper steps."
+      },
       "leak": {
         "L1": "HOLDS: no field cue or step placeholder holds a numeral at any depth, in either language, and the panel renders none that does (tests/fieldCue.test.js); the expected value is the field's `want`, which no page reads.",
-        "L2": "",
-        "L3": "",
-        "L4": "",
-        "L5": ""
+        "L2": "UNCHANGED (357): no panel or stage state was edited; the Binary Planet Run panel opens on the 0.15 configuration the first run reads, as before.",
+        "L3": "HOLDS (357): the starting-radius prediction (before-you-run-anything) comes before any run, and what-survived-will-mean names no radius; the move-it-out, sweep and circumbinary-direction predictions are no longer answered by a body, checklist or tip before their reveal (the islands-of-stability tip on what-the-fit-assumes and the expect-the-disagreement clause of the optional circumbinary sweep are removed).",
+        "L4": "HOLDS (357, rechecked after review): no title, checklist, body or tip of run-the-default, run-it-at-030, energy-drift-as-a-screen, the-case-that-matters, run-the-circumbinary or where-the-fit-disagrees states or hints at what the run shows or when it happens: the circumbinary checklist no longer names the 4.0 figure or the first and second binary period, the 0.30 checklist and tip no longer give a timescale or the ten-separation rule, the 0.50 halvings are bounded without naming a figure the run reaches, and where-the-fit-disagrees is titled and worded neutrally (two radii inside the published boundary, no disagreement). The readings sit in the because of why-so-quiet, which-answer-is-right and how-without-a-pass. The hint-less fields of read-the-sweep hold units only (the expected values are each field's `want`, which no page shows).",
+        "L5": "UNCHANGED (357): readout and instructor text were not edited; the because texts show only after the question is answered."
       },
-      "task_rule_items": [],
-      "editorial": "OPEN",
-      "redesign": "OPEN",
-      "reason": "Corrections I reworded steps for factual consistency (register D-R4-300-26); editorial pass still OPEN.",
-      "step_revisions": [],
+      "task_rule_items": [
+        "T2: the held predictions return at the step that runs them, as before; no step was re-tasked.",
+        "T5: authored feedback unchanged (finerAlwaysRight at which-answer-is-right, usedSType at circumbinary-boundary); the other numeric steps keep their validate messages, which must stay byte-identical.",
+        "PATTERN WORTH COPYING (controlled runs): the student predicts the outcome before any run (before-you-run-anything, move-it-out, predict-the-sweep), runs one configuration and reads it (run-the-default, what-the-quiet-run-did), runs the same configuration at three steps and gets three outcomes that disagree (the-case-that-matters, the-drift-was-tiny), is asked what to report rather than which run is right (which-answer-is-right), is told that an outcome counts only when halving the step leaves it unchanged (convergence-is-the-test), and writes a sentence that names the configuration and the method, reports the disagreement and claims no verdict (report-it). The lesson is the reference for the controlled-run pattern that K6 formalises; K3 and K8 are realised by hand here.",
+        "SLOW-MACHINE CONCERN FOR CARL, recorded and not built (register D-R4-357-02): the runs take minutes and the sweep four to seven (INFERRED from the text), so a slow machine pays for them. A pre-computed run path would be a new shared capability (section 7.2, item 1) and needs a named task it improves before anything is built."
+      ],
+      "editorial": "REVISED",
+      "redesign": "REVIEWED CLEAR",
+      "reason": "STRONG: leak fixes and polish only. Narrated run outcomes moved out of checklists, bodies and tips into the because of the question that follows each run; no validate, answer, tolerance, id or stage changed (register D-R4-357-01).",
+      "step_revisions": [
+        {
+          "sid": "run-the-default",
+          "change": "REWORDED: the checklist no longer says the semi-major axis barely moves, that the eccentricity does not come back down or that the run is quiet."
+        },
+        {
+          "sid": "why-so-quiet",
+          "change": "REWORDED: the body points back to the student's four readings (periods, farthest out, encounters, energy drift) and the panel's Closest to the other star row; the 0.62 separations and the quarter of a separation moved to the because."
+        },
+        {
+          "sid": "run-it-at-030",
+          "change": "REWORDED: the body no longer says the run will not take twenty periods; the checklist and tip no longer say how it ends, when, or how far the planet goes."
+        },
+        {
+          "sid": "what-the-fit-assumes",
+          "change": "REWORDED: the tip no longer states the islands-of-stability finding that answers the next prediction; it now says which radius lies inside the band where the panel declines (0.18) and which just beyond it (0.20), which is what the panel does."
+        },
+        {
+          "sid": "energy-drift-as-a-screen",
+          "change": "REWORDED: the body and checklist no longer give the drift, the eccentricity or the collision; they moved to the because of which-answer-is-right. The halvings are bounded without a figure the run reaches (two or three, never below a step of 0.1, say so if it still declines) and the tip carries a self-check that needs no expected value (the last line of notes shows a drift under the screen beside a named outcome)."
+        },
+        {
+          "sid": "the-case-that-matters",
+          "change": "REWORDED: the body no longer says the run is not quiet or that the counter climbs; the checklist separates the 0.25 separations from the steps 1.0, 0.5 and 0.25 and no longer hints that the runs differ; the tip no longer calls the last run the most important."
+        },
+        {
+          "sid": "which-answer-is-right",
+          "change": "REWORDED: the because now carries the readings of the 0.50 run and contrasts it with the 0.25 case."
+        },
+        {
+          "sid": "run-the-circumbinary",
+          "change": "REWORDED: the checklist no longer gives the eccentricity at 4.0 or at 2.0, the first or second binary period, or the 4.0 figure to compare with, or says the encounter count surprises; the tip no longer says nothing came near anything."
+        },
+        {
+          "sid": "how-without-a-pass",
+          "change": "REWORDED: the because now carries the 4.0 reading and the contrast with the close pass."
+        },
+        {
+          "sid": "sweep-the-circumbinary",
+          "change": "REWORDED: the clause that told the student to expect the disagreement is removed."
+        },
+        {
+          "sid": "where-the-fit-disagrees",
+          "change": "REWORDED: the title, body, checklist and tip no longer say the planets disagree with the fit, survive, or come back; the body states only that both radii lie inside the published boundary."
+        }
+      ],
       "walk": "NOT RUN",
       "pr": null,
-      "hash": null
+      "hash": "01d84baf69ed5442239ee1d570faa1c4e6d7b1816c7d64e0ba48c682e51f195e"
     },
     {
       "id": "investigation:black-holes",
@@ -4692,8 +4753,8 @@
         "js/data/investigations/joint-sequence.js"
       ],
       "instrument_files": ["js/exoplanetWidgets.js", "js/jointWidgets.js"],
-      "depths": { "core": 38, "quantitative": 0, "advanced": 4 },
-      "spanish_steps": { "core": 38, "deeper": 4 },
+      "depths": { "core": 39, "quantitative": 0, "advanced": 4 },
+      "spanish_steps": { "core": 39, "deeper": 4 },
       "languages": ["en", "es"],
       "sequences": [{ "id": "planets-and-exoplanets", "position": 1 }],
       "courses": [
@@ -4716,27 +4777,88 @@
       },
       "open_items": [
         {
-          "ref": "D-R10-279-04",
+          "ref": "D-R4-354-02",
           "owner": 354,
-          "note": "Two exoplanet instruments are among the six that start by themselves"
+          "note": "For Carl: arming the period watch for the student is refused by the author rule interaction/auto-arm (the period field is in days); waive it for this step with a reason, or leave the student's own Arm"
         }
       ],
-      "questions": { "Q1": "", "Q2": "", "Q3": "", "Q4": "", "Q5": "" },
-      "leak": {
-        "L1": "HOLDS: no field cue or step placeholder holds a numeral at any depth, in either language, and the panel renders none that does (tests/fieldCue.test.js); the expected value is the field's `want`, which no page reads.",
-        "L2": "",
-        "L3": "",
-        "L4": "",
-        "L5": ""
+      "questions": {
+        "Q1": "The student watches a star go round a point it shares with a planet, takes the star's own orbit for a light and a heavy planet, builds the radial-velocity curve on the live panel and takes its half-range, then searches for the planet mass whose K reproduces it: measured or worked on the live Exoplanet Characterization Lab and the analytic instruments, which a paragraph could not show.",
+        "Q2": "Each moving diagram says it waits for Run; each step names its box, its button and what to take; the prediction about a heavier planet reveals at the step that sets it beside the two readings.",
+        "Q3": "Scene, panel, instruments and prose name the same star, planet, K (the panel's half-range), AU and Jupiter masses, in both languages.",
+        "Q4": "The student chooses the two masses and when to take each reading, how many cycles to time for the period, whether to take K or type it and when the curve has turned at both ends, and which mass reproduces the K they took; each can be done badly (equal masses, a peak-to-peak K, a mass off by a factor of two).",
+        "Q5": "Met by the advanced steps (the star's share of the planet's uncertainty, jitter and a star that does not fit the transit); they are unchanged apart from a pointer."
       },
-      "task_rule_items": [],
-      "editorial": "OPEN",
-      "redesign": "OPEN",
-      "reason": "",
-      "step_revisions": [],
+      "leak": {
+        "L1": "HOLDS: the K box and the period box start empty and carry no hint; no field cue or placeholder holds a numeral (tests/fieldCue.test.js); the expected value is the field's `want`, which no page reads.",
+        "L2": "HOLDS: reflex-motion, rv-observer and rv-mass open at 0.3 or 0.25 Jupiter masses without the preset that names the real planet; rv-inclination opens at 0.25 (K well away from the K to match); planet-characterization opens on 1 and 1 (tests/findingPlanetsByTug.test.js).",
+        "L3": "HOLDS: the s3 body and because no longer give the planet's mass or the star-to-planet ratio; the heavier-planet prediction is held until the two readings are taken.",
+        "L4": "HOLDS: no step before the weighing says 84, 0.69, two thirds or seventeen (tested); the weighing's method hint no longer gives the K.",
+        "L5": "HOLDS: no description, probe row or because shows the K or the mass before it is taken; the instructor text keeps the key."
+      },
+      "task_rule_items": [
+        "T1: K and the star's orbit are taken from what the panel and the instrument print, with provenance; the density is worked out by the student, not read.",
+        "T2: the prediction returns at its reveal beside the student's two readings (K3).",
+        "T4: the transfer (three candidates) is unchanged.",
+        "T5: the peak-to-peak and Earth-density misconceptions are kept; the new equal-readings step warns without stating a direction.",
+        "NOT BUILT (D-R4-354-02): K5, arming the period watch for the student."
+      ],
+      "editorial": "REVISED",
+      "redesign": "REVISED",
+      "reason": "FOCUSED: neutral starts, captured K, a Run control and a density the student computes (register D-R4-354-01, -02, -03).",
+      "step_revisions": [
+        {
+          "sid": "which-one-moves",
+          "change": "REWORDED: the body and because no longer give the planet's mass or the star-to-planet ratio."
+        },
+        {
+          "sid": "both-of-them-go-round",
+          "change": "REWORDED: waits for Run; opens at a light planet without the preset that names the real one."
+        },
+        {
+          "sid": "read-the-two-wobbles",
+          "change": "INSERTED: takes the star's own orbit at a light and at a heavy planet."
+        },
+        {
+          "sid": "watch-it-grow",
+          "change": "REWORDED: the reveal of the heavier-planet prediction sets it beside the two readings."
+        },
+        {
+          "sid": "toward-away-toward-again",
+          "change": "REWORDED: waits for Run; opens at 0.25 Jupiter masses."
+        },
+        {
+          "sid": "measure-the-period",
+          "change": "REWORDED: the student decides how many cycles to time."
+        },
+        {
+          "sid": "read-k-off-the-panel",
+          "change": "REWORDED: takes the panel's half-range with provenance into an empty box, or types it."
+        },
+        {
+          "sid": "one-thing-at-a-time",
+          "change": "REWORDED: opens at 0.25 without the preset that names the real planet."
+        },
+        {
+          "sid": "weigh-hd-209458-b",
+          "change": "REWORDED: search for the mass that reproduces your K from an instrument that opens at 0.25; answer and tolerance unchanged."
+        },
+        {
+          "sid": "characterize-the-planet",
+          "change": "REWORDED: opens on a Jupiter of its own; the student sets the transit radius and their mass."
+        },
+        {
+          "sid": "how-dense-is-it",
+          "change": "REVISED: retired, successor density-from-your-mass (3.1)."
+        },
+        {
+          "sid": "density-from-your-mass",
+          "change": "NEW ID: the density worked out from the student's own mass and the transit radius, then checked against the panel."
+        }
+      ],
       "walk": "NOT RUN",
-      "pr": null,
-      "hash": null
+      "pr": 702,
+      "hash": "f4601ff9a686149a5006da947f86c50571a14d5fd3b9da23090c457b9a5b4d3c"
     },
     {
       "id": "investigation:reading-the-hr-diagram",
@@ -5968,8 +6090,8 @@
       "source": ["js/data/investigations/tides.js"],
       "shadows": ["js/data/investigations/es/tides.js"],
       "instrument_files": ["js/tidalWidgets.js"],
-      "depths": { "core": 30, "quantitative": 0, "advanced": 0 },
-      "spanish_steps": { "core": 30, "deeper": 0 },
+      "depths": { "core": 36, "quantitative": 0, "advanced": 0 },
+      "spanish_steps": { "core": 36, "deeper": 0 },
       "languages": ["en", "es"],
       "sequences": [{ "id": "gravity-and-orbits", "position": 5 }],
       "courses": [{ "id": "astronomy-semester", "position": 1 }],

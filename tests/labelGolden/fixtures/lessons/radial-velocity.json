@@ -3,12 +3,14 @@
  "static": {
   "en": {
    "units": [
+    ["steps.read-the-two-wobbles.fields.0.unit","AU"],
+    ["steps.read-the-two-wobbles.fields.1.unit","AU"],
     ["steps.measure-the-period.fields.0.unit","days"],
     ["steps.read-k-off-the-panel.fields.0.unit","m/s"],
     ["steps.weigh-hd-209458-b.unit","M_J"],
     ["steps.weigh-hd-209458-b.expect.unit","M_jup"],
-    ["steps.how-dense-is-it.unit","g/cm³"],
-    ["steps.how-dense-is-it.expect.unit","g/cm³"],
+    ["steps.density-from-your-mass.unit","g/cm³"],
+    ["steps.density-from-your-mass.expect.unit","g/cm³"],
     ["steps.a-star-that-does-not-fit-tug.fields.0.unit",""],
     ["steps.a-star-that-does-not-fit-tug.fields.1.unit","g/cm3"]
    ],
@@ -28,7 +30,7 @@
     "unit": "M_J"
    },
    {
-    "sid": "how-dense-is-it",
+    "sid": "density-from-your-mass",
     "answer": "0.33",
     "tolerance": "0.08",
     "unit": "g/cm³"
@@ -39,6 +41,9 @@
  "precision": [],
  "steps": {
   "en": {
+   "read-the-two-wobbles": {
+    "validate": {"calls":232,"distinct":4,"digest":"8647a88c970e3cbd","samples":[null,{"level":"warn","message":"The two readings are the same. Change the planet’s mass and take the second reading again."},{"level":"error","message":"Each reading is a distance, so it has to be above zero."},{"level":"ok","message":"Two readings kept. The next step sets them beside what you said."}]}
+   },
    "toward-away-toward-again": {
     "probe": [[{"label":"Spectrograph","value":"no star to point it at"}],[{"label":"Star","value":"HD 209458"},{"label":"Where it is in its orbit","value":"212°"},{"label":"Line-of-sight velocity","value":"-57.1 m/s — towards us"},{"label":"We are looking from","value":"90°"}],[{"label":"Star","value":"Star A"},{"label":"Where it is in its orbit","value":"12°"},{"label":"Line-of-sight velocity","value":"12.0 m/s — away from us"},{"label":"We are looking from","value":"0°"}],[{"label":"Spectrograph","value":"this scenario pins its star, so there is no reflex motion to report"}]]
    },
@@ -47,6 +52,9 @@
    },
    "measure-the-period": {
     "probe": [[{"label":"Spectrograph","value":"no star to point it at"}],[{"label":"Star","value":"HD 209458"},{"label":"Where it is in its orbit","value":"212°"},{"label":"Line-of-sight velocity","value":"-57.1 m/s — towards us"},{"label":"We are looking from","value":"90°"}],[{"label":"Star","value":"Star A"},{"label":"Where it is in its orbit","value":"12°"},{"label":"Line-of-sight velocity","value":"12.0 m/s — away from us"},{"label":"We are looking from","value":"0°"}],[{"label":"Spectrograph","value":"this scenario pins its star, so there is no reflex motion to report"}]]
+   },
+   "read-k-off-the-panel": {
+    "probe": [[{"label":"Spectrograph","value":"no star to point it at"},{"id":"k","label":"Half-range observed so far","value":"Keep observing…"}],[{"label":"Star","value":"HD 209458"},{"label":"Where it is in its orbit","value":"212°"},{"label":"Line-of-sight velocity","value":"-57.1 m/s — towards us"},{"label":"We are looking from","value":"90°"},{"id":"k","label":"Half-range observed so far","value":"Keep observing…"}],[{"label":"Star","value":"Star A"},{"label":"Where it is in its orbit","value":"12°"},{"label":"Line-of-sight velocity","value":"12.0 m/s — away from us"},{"label":"We are looking from","value":"0°"},{"id":"k","label":"Half-range observed so far","value":"Keep observing…"}],[{"label":"Spectrograph","value":"this scenario pins its star, so there is no reflex motion to report"},{"id":"k","label":"Half-range observed so far","value":"Keep observing…"}]]
    },
    "the-same-planet-four-viewing": {
     "probe": [[{"label":"Spectrograph","value":"no star to point it at"}],[{"label":"Star","value":"HD 209458"},{"label":"Where it is in its orbit","value":"212°"},{"label":"Line-of-sight velocity","value":"-57.1 m/s — towards us"},{"label":"We are looking from","value":"90°"}],[{"label":"Star","value":"Star A"},{"label":"Where it is in its orbit","value":"12°"},{"label":"Line-of-sight velocity","value":"12.0 m/s — away from us"},{"label":"We are looking from","value":"0°"}],[{"label":"Spectrograph","value":"this scenario pins its star, so there is no reflex motion to report"}]]

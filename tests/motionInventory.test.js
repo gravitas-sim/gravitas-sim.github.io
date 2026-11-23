@@ -138,10 +138,7 @@ describe('what each entry promises', () => {
 
   test('a gap says why and what would close it, and the instruments are the ones that lack a Run control', () => {
     const gaps = inventory.js.filter(x => x.treatment === 'gap');
-    expect(gaps.map(g => g.file)).toEqual([
-      'js/exoplanetWidgets.js',
-      'js/resonanceWidgets.js',
-    ]);
+    expect(gaps.map(g => g.file)).toEqual(['js/resonanceWidgets.js']);
     for (const g of gaps) {
       expect(g.reason.length).toBeGreaterThan(30);
       expect(g.proposed.length).toBeGreaterThan(30);
@@ -174,5 +171,79 @@ describe("a step's instrument starts still under reduced motion", () => {
     setMotionPreference('reduce', { remember: false });
     expect(autoruns({})).toBe(false);
     setMotionPreference('system', { remember: false });
+  });
+});
+
+describe('the two exoplanet instruments wait for Run', () => {
+  const instruments = async () => {
+    const { MOTION_WIDGETS } = await import('../js/exoplanetMotion.js');
+    return MOTION_WIDGETS;
+  };
+  const engineOpens = (w, v, motion) =>
+    // What the engine does when a step opens: the step's say and the Motion choice, as `autoruns` reads them.
+    w.reset(v, { autorun: motion, spec: {} });
+
+  test('they are the two the inventory names', async () => {
+    expect((await instruments()).map(w => w.id)).toEqual([
+      'reflex-motion',
+      'rv-observer',
+    ]);
+  });
+
+  test('they open still whatever the step and the Motion choice say, and move only after Run', async () => {
+    const { setMotionPreference } = await import('../js/quality.js');
+    for (const w of await instruments()) {
+      for (const motion of ['system', 'reduce', 'step']) {
+        setMotionPreference(motion, { remember: false });
+        const v = { _phase: 2 };
+        engineOpens(w, v, motion === 'system');
+        w.step(v, 1);
+        expect([w.id, motion, v._phase]).toEqual([w.id, motion, 0]);
+        w.act('run', v);
+        w.step(v, 0.5);
+        expect(v._phase).toBeGreaterThan(0);
+        w.act('run', v);
+      }
+    }
+    setMotionPreference('system', { remember: false });
+  });
+
+  test('Pause stops, a slider or a preset neither starts nor rewinds, and opening a step stops and rewinds', async () => {
+    for (const w of await instruments()) {
+      const v = {};
+      engineOpens(w, v, true);
+      w.act('run', v);
+      w.step(v, 0.5);
+      const ran = v._phase;
+      w.reset(v, { autorun: true, spec: {}, fromControl: true });
+      expect(v._phase).toBe(ran);
+      w.step(v, 0.5);
+      expect(v._phase).toBeGreaterThan(ran);
+      w.act('run', v);
+      const paused = v._phase;
+      w.step(v, 1);
+      expect(v._phase).toBe(paused);
+      w.reset(v, { autorun: true, spec: {}, fromControl: true });
+      w.step(v, 1);
+      expect(v._phase).toBe(paused);
+      w.act('run', v);
+      engineOpens(w, v, true);
+      w.step(v, 1);
+      expect(v._phase).toBe(0);
+    }
+  });
+
+  test('each offers one action, Run, and a step can withhold the preset that names the planet', async () => {
+    for (const w of await instruments()) {
+      expect(w.actions.map(a => a.id)).toEqual(['run']);
+    }
+    const [reflex] = await instruments();
+    const { EXOPLANET_WIDGETS } = await import('../js/exoplanetWidgets.js');
+    const mass = EXOPLANET_WIDGETS.find(w => w.id === 'rv-mass');
+    for (const w of [reflex, mass]) {
+      const named = p => p.label === 'HD 209458 b';
+      expect(w.presets({}).some(named)).toBe(true);
+      expect(w.presets({ noSystem: true }).some(named)).toBe(false);
+    }
   });
 });
