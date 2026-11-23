@@ -882,6 +882,11 @@ const A_UNIVERSE_OF_STARS = {
     },
     {
       sid: 'what-the-trend-covers',
+      cite: [
+        'three-on-the-main-sequence',
+        'predict-mass-and-light',
+        'the-whole-sequence',
+      ],
       stage: shelf(EIGHT, { spacing: 78 }),
       type: 'question',
       title: 'What the trend does and does not cover',
@@ -1366,6 +1371,11 @@ const A_UNIVERSE_OF_STARS = {
     },
     {
       sid: 'what-a-survey-misses',
+      cite: [
+        'predict-the-bright-subset',
+        'a-population',
+        'only-the-bright-ones',
+      ],
       stage: POPULATION_BRIGHT,
       type: 'question',
       title: 'What a catalog of bright stars is a catalog of',
@@ -1627,6 +1637,7 @@ const A_UNIVERSE_OF_STARS = {
     },
     {
       sid: 'spectra-what-color-cannot-give',
+      cite: ['spectra-two-features'],
       stage: shelf(THREE, { fit: true }),
       type: 'question',
       title: 'The claim to take apart',
@@ -1685,6 +1696,14 @@ const A_UNIVERSE_OF_STARS = {
     },
     {
       sid: 'the-argument',
+      cite: [
+        'three-stars-no-labels',
+        'the-numbers-arrive',
+        'measure-the-radius-ratio',
+        'the-whole-sequence',
+        'measure-the-lifetimes',
+        'spectra-two-features',
+      ],
       stage: shelf(THREE, { fit: true }),
       type: 'question',
       title: 'Back to the three stars',

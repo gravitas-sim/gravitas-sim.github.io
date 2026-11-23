@@ -1107,6 +1107,11 @@ const LIVES_OF_STARS = {
     },
     {
       sid: 'why-iron-stops-it',
+      cite: [
+        'core-in-envelope-out',
+        'predict-massive-lifetime',
+        'massive-versus-sun',
+      ],
       stage: protagonist('m2000'),
       type: 'question',
       title: 'Why it cannot keep going',
@@ -1359,6 +1364,14 @@ const LIVES_OF_STARS = {
     },
     {
       sid: 'the-lifecycle-argument',
+      cite: [
+        'three-futures',
+        'core-in-envelope-out',
+        'measure-the-giant',
+        'how-long-was-each-part',
+        'massive-versus-sun',
+        'design-a-comparison',
+      ],
       stage: pair(THREE_FUTURES),
       type: 'question',
       title: 'Back to the three stars',

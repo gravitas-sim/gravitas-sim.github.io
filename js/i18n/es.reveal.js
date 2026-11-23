@@ -17,4 +17,16 @@ export const ES_REVEAL = {
   'reveal.none': 'sin lectura registrada',
   'reveal.inside': 'Tu lectura está dentro del intervalo que diste.',
   'reveal.outside': 'Tu lectura está fuera del intervalo que diste.',
+  'tray.head': 'Tu evidencia para citar: {n}',
+  'tray.note':
+    'Tus propias lecturas y, cuando ya se mostró su resultado, tus predicciones. Se guardan en este dispositivo; la escena de donde salieron no. Nada de esto se añade a tu respuesta: copia lo que quieras citar.',
+  'tray.empty':
+    'Todavía no hay nada que citar. Aquí aparecen las lecturas que tomes en pasos anteriores, y una predicción aparece cuando ya se mostró su resultado.',
+  'tray.in': 'En «{title}».',
+  'tray.of': 'Cuerpo: {body}.',
+  'tray.clock': 'Reloj de la simulación: {time}.',
+  'tray.cite': 'Citar',
+  'tray.cited':
+    'No se añadió nada a tu respuesta. Escríbelo o cópialo de la lista: {what}',
+  'tray.differed': 'Eso no fue lo que ocurrió.',
 };

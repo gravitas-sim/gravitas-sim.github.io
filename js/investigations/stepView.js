@@ -111,7 +111,8 @@ export function fetchSeams(step, again) {
     runsModule
   );
   get(
-    (step.evidence || step.kind === 'estimate') && !slots.reveal,
+    (step.evidence || step.kind === 'estimate' || step.kind === 'short') &&
+      !slots.reveal,
     () => import('./reveal.js'),
     revealModule
   );
@@ -313,21 +314,19 @@ export function stepMarkup(step, c) {
     parts.push(`<p class="inv-prompt">${prose(step.prompt)}</p>`);
     // A reflection is kept with the student's work and read by a person; it
     // has no model answer and nothing marks it, and it says so.
-    if (step.reflect) {
+    if (step.reflect)
       parts.push(
         `<p class="inv-reflect-note">${escape(t('inv.reflect.note'))}</p>`
       );
-    }
     // Where the number came from: a closed-form panel is not the integrator,
     // and a reader who thinks it was simulated has learned something false.
     // Shown only where the step asks for an interpretation
     // (js/data/investigations/provenance.js).
     const from = active ? evidenceFrom(active.id) : null;
-    if (from) {
+    if (from)
       parts.push(
         `<p class="inv-evidence-from">${escape(t(`inv.evidenceFrom.${from}`))}</p>`
       );
-    }
     parts.push(
       `<textarea class="inv-answer" data-answer="${attr(id)}" rows="4"
          aria-describedby="invAnswerNote"
@@ -338,7 +337,8 @@ export function stepMarkup(step, c) {
       String(saved || '').trim().length > 0 && !isWrittenAnswer(saved);
     parts.push(
       `<p class="inv-answer-note" id="invAnswerNote" role="status"
-          ${empty ? '' : 'hidden'}>${escape(t('inv.answer.saysNothing'))}</p>`
+          ${empty ? '' : 'hidden'}>${escape(t('inv.answer.saysNothing'))}</p>`,
+      slots.reveal?.tray(step, c) ?? ''
     );
     // The model answer is offered only once the student has written enough to
     // have committed to something: read first, the step is a copying task.
