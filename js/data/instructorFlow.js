@@ -823,7 +823,7 @@ export default {
       {
         from: 'break-it',
         to: 'the-orbit-that-crosses-and',
-        text: 'The paired control and the awkward case. Europa moved one percent out and the argument circulates in forty-seven Io orbits. Then Callisto’s 7:3, which stays inconclusive for the whole run, and the question of what that establishes.',
+        text: 'The paired control and the awkward case. Europa moved one percent out and the argument circulates in forty to fifty Io orbits. Then Callisto’s 7:3, which stays inconclusive for the whole run, and the question of what that establishes.',
       },
       {
         from: 'measure-pluto-s-resonance',
