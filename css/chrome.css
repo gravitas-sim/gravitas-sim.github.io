@@ -1879,7 +1879,33 @@
     body.investigation-open .investigation-panel {
       max-height: var(--lesson-sheet);
     }
-
+    /* A quiet canvas: the controls follow the picture, ahead of the note and
+       the readout, so the sliders that move a mark are the first thing to
+       scroll into view and the picture stays beside them. Focus order is
+       unchanged: the note and the readout are not focusable. */
+    body[data-lesson-canvas='quiet'].investigation-aux:not(
+        .investigation-split
+      )
+      #investigationTool:not([hidden]) {
+      display: flex;
+      flex-direction: column;
+    }
+    body[data-lesson-canvas='quiet'].investigation-aux
+      #investigationTool
+      > * {
+      flex: none;
+      order: 2;
+    }
+    body[data-lesson-canvas='quiet'].investigation-aux
+      #investigationTool
+      > :is(.inv-plot-panel-head, canvas) {
+      order: 0;
+    }
+    body[data-lesson-canvas='quiet'].investigation-aux
+      #investigationTool
+      > :is(.inv-tool-controls, .inv-tool-actions, .more, .inv-presets) {
+      order: 1;
+    }
   }
 
   /* The footer. On a phone the lesson's sheet stands on the transport bar
@@ -1979,8 +2005,6 @@
        it) and the transport bar. The dock keeps what the instrument's picture
        and its heading need (300 px) and the step's sheet takes the rest, so
        the picture shows whole and the step's words stay readable beside it.
-       The controls follow the picture, ahead of the note and the readout, so
-       the sliders that move a mark are the first thing to scroll into view.
        Lowering the sheet by its handle gives the dock up to 480 px, as much
        as the screen holds (the picture and the first slider in full at 812 px,
        the second a short scroll below). The instrument is the subject here;
@@ -1998,29 +2022,6 @@
       body[data-lesson-canvas='quiet'].investigation-aux.lesson-peek {
         --lesson-sheet: 150px;
         --dock-sheet: min(480px, calc(var(--stage-room) - var(--lesson-sheet)));
-      }
-      body[data-lesson-canvas='quiet'].investigation-aux:not(
-          .investigation-split
-        )
-        #investigationTool:not([hidden]) {
-        display: flex;
-        flex-direction: column;
-      }
-      body[data-lesson-canvas='quiet'].investigation-aux
-        #investigationTool
-        > * {
-        flex: none;
-        order: 2;
-      }
-      body[data-lesson-canvas='quiet'].investigation-aux
-        #investigationTool
-        > :is(.inv-plot-panel-head, canvas) {
-        order: 0;
-      }
-      body[data-lesson-canvas='quiet'].investigation-aux
-        #investigationTool
-        > :is(.inv-tool-controls, .inv-tool-actions, .more, .inv-presets) {
-        order: 1;
       }
     }
     /* A screen this short (a phone held sideways, a laptop at 200% zoom) leaves
