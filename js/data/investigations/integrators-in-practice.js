@@ -40,6 +40,9 @@ const byChoice = field =>
 const INTEGRATORS_IN_PRACTICE = {
   id: 'integrators-in-practice',
   thumbnail: 'images/scenarios/circumbinary-planet-lab.webp',
+  // The scene's sizes enter a task here: each step carries the Sizes
+  // statement (js/investigations/stepView.js, tests/sizeConsistency.test.js).
+  sizes: true,
   title: 'Integrators in Practice',
   subtitle:
     'Four ways to take a step, compared by the energy each one loses on a real system, in Python on the compute page',

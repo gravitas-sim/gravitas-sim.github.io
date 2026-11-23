@@ -108,6 +108,9 @@ const TIDES_DISRUPTION = {
 const TIDES = {
   id: 'tides',
   thumbnail: 'images/scenarios/earth-moon-system.webp',
+  // The scene's sizes enter a task here: each step carries the Sizes
+  // statement (js/investigations/stepView.js, tests/sizeConsistency.test.js).
+  sizes: true,
   title: 'Tides',
   subtitle:
     'Stretch a world, move a moon, and discover why gravity can tear objects apart',

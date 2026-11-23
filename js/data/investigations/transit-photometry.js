@@ -180,6 +180,9 @@ const transitRows = ctx => {
 const TRANSITS = {
   id: 'transit-photometry',
   thumbnail: 'images/scenarios/transit-lab.webp',
+  // The scene's sizes enter a task here: each step carries the Sizes
+  // statement (js/investigations/stepView.js, tests/sizeConsistency.test.js).
+  sizes: true,
   series: 'Detecting exoplanets',
   title: 'Finding Planets by Their Shadows',
   subtitle:

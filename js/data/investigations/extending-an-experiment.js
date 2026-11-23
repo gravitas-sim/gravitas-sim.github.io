@@ -55,6 +55,9 @@ const named = c =>
 const EXTENDING_AN_EXPERIMENT = {
   id: 'extending-an-experiment',
   thumbnail: 'images/scenarios/binary-planet-lab.webp',
+  // The scene's sizes enter a task here: each step carries the Sizes
+  // statement (js/investigations/stepView.js, tests/sizeConsistency.test.js).
+  sizes: true,
   title: 'Extending an Experiment',
   subtitle:
     'From twenty planets that the engine ran to a population of two hundred thousand, with every uncertainty, in Python on the compute page',

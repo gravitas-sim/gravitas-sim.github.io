@@ -361,3 +361,54 @@ describe('the Earth-Moon scene: the tide probe measures across the model radius'
     expect(lesson).toMatch(/Measured across the model radius/);
   });
 });
+
+describe('the Sizes statement is beside the task in every lesson that loads one of these scenes', () => {
+  const SIZE_SCENES = new Set([
+    'Transit Lab',
+    'Blended Binary',
+    'Tidal Disruption Event',
+    'Earth-Moon System',
+    'Roche Pass',
+    'Binary Planet Lab',
+    'Circumbinary Planet Lab',
+    'Lagrange Point Lab',
+  ]);
+
+  test('the flagged lessons are exactly the ones that load a size-dependent scene', async () => {
+    const { INVESTIGATIONS } = await import('../js/data/investigations.js');
+    const loads = l =>
+      [l.scenario, ...(l.steps || []).map(s => s.setup?.scenario)].some(name =>
+        SIZE_SCENES.has(name)
+      );
+    const want = INVESTIGATIONS.filter(loads)
+      .map(l => l.id)
+      .sort();
+    const have = INVESTIGATIONS.filter(l => l.sizes)
+      .map(l => l.id)
+      .sort();
+    expect(have).toEqual(want);
+    expect(want.length).toBeGreaterThanOrEqual(7);
+  });
+
+  test('the step carries the canvas line as the button that opens the statement', async () => {
+    const { INVESTIGATIONS } = await import('../js/data/investigations.js');
+    const { stepMarkup } = await import('../js/investigations/stepView.js');
+    const { t } = await import('../js/i18n/index.js');
+    const markup = l =>
+      stepMarkup(l.steps[0], {
+        id: 'x',
+        saved: undefined,
+        active: l,
+        responses: {},
+        visited: new Set(),
+        shown: () => l.steps,
+        predictionAnsweredHere: () => false,
+        recomputeFields: () => {},
+      }).join('');
+    const transit = INVESTIGATIONS.find(l => l.id === 'transit-photometry');
+    const kepler = INVESTIGATIONS.find(l => l.id === 'keplers-laws');
+    expect(markup(transit)).toContain('data-open-sizes');
+    expect(markup(transit)).toContain(t('canvas.sizeDisclosure'));
+    expect(markup(kepler)).not.toContain('data-open-sizes');
+  });
+});

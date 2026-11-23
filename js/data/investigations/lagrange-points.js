@@ -97,6 +97,9 @@ const neckRows = ctx => {
 const LAGRANGE_POINTS = {
   id: 'lagrange-points',
   thumbnail: 'images/scenarios/lagrange-point-lab.webp',
+  // The scene's sizes enter a task here: each step carries the Sizes
+  // statement (js/investigations/stepView.js, tests/sizeConsistency.test.js).
+  sizes: true,
   title: 'Where Can It Get To?',
   subtitle: 'Forbidden regions, five balance points, and one conserved number',
   // Two screens longer than it was, and one of them runs for about a minute
