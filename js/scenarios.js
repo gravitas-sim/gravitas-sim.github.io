@@ -1761,10 +1761,10 @@ export const scenarioId = key => {
  *
  * @param {Object} SETTINGS - Live settings object, mutated
  * @param {Object} DEFAULT_SETTINGS - Baseline the preset builds on
- * @param {Object} _state - View state. Unused: a scenario's opening zoom is its
- *   preset_zoom setting, which the world builder applies after this runs
+ * @param {Object} _state - Unused: the opening zoom is preset_zoom, set by the build
+ * @param {Object} [row] - The row of an earlier revision (SCENARIO_REVISIONS.md)
  */
-const applyPreset = (SETTINGS, DEFAULT_SETTINGS, _state) => {
+const applyPreset = (SETTINGS, DEFAULT_SETTINGS, _state, row) => {
   const ps = SETTINGS.preset_scenario;
   if (ps === 'None') return;
   const id = scenarioId(ps);
@@ -1793,8 +1793,8 @@ const applyPreset = (SETTINGS, DEFAULT_SETTINGS, _state) => {
   });
   // A copy: rows hold arrays (bh_masses, ns_masses), and a panel that edits
   // the live settings in place must not edit the table.
-  if (id)
-    Object.assign(SETTINGS, JSON.parse(JSON.stringify(SCENARIO_PRESETS[id])));
+  const preset = row ?? SCENARIO_PRESETS[id];
+  if (id) Object.assign(SETTINGS, JSON.parse(JSON.stringify(preset)));
 
   Object.assign(SETTINGS, carried);
 

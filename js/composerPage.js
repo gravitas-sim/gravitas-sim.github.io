@@ -35,6 +35,7 @@ import { SCENARIO_INFO } from './data/scenarioInfo.js';
 import { MANIFEST } from './data/investigations/manifest.js';
 import { scenarioTitle } from './i18n/scenario.js';
 import { randomSeed } from './rng.js';
+import { setupFor } from './shareState.js';
 import {
   BASE_VERSION,
   FORMAT,
@@ -1202,10 +1203,7 @@ function fillStep(card, s, i, d) {
         v =>
           commit(x =>
             v
-              ? (x.steps[i].setup = {
-                  ...(x.steps[i].setup || {}),
-                  scenario: v,
-                })
+              ? (x.steps[i].setup = setupFor(v, x.steps[i].setup))
               : delete x.steps[i].setup
           )
       )
@@ -2242,7 +2240,7 @@ function blankInvestigation(seed) {
         type: 'read',
         title: { en: '' },
         body: { en: '' },
-        setup: { scenario: 'solar-system' },
+        setup: setupFor('solar-system'),
       },
       { sid: 'close', type: 'read', title: { en: '' }, body: { en: '' } },
     ],

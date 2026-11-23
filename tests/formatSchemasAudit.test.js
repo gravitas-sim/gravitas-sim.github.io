@@ -38,7 +38,11 @@ import { lesson } from './compat/kinds/_lesson.mjs';
 import { validateMarks } from '../js/measure/imageRecord.js';
 import { validateCalibration } from '../js/measure/calibrationRecord.js';
 import { readFrames } from '../js/observatory/imagePacks.js';
-import { encodePayload, decodePayload } from '../js/shareState.js';
+import {
+  encodePayload,
+  decodePayload,
+  SCENARIO_REVISIONS,
+} from '../js/shareState.js';
 import { readExperimentBlock } from '../js/experiments/shareExperiment.js';
 import { readExtras } from '../js/experiments/canonicalState.js';
 import { validateSystem } from '../js/lab3d/state.js';
@@ -184,6 +188,7 @@ const fitted = {
 };
 
 const link = { v: 2, s: 'binary-pair', seed: 'abc', p: 1, c: [1, 0, 0] };
+const revised = { ...link, v: 3, r: 2 };
 const xp = {
   v: 1,
   n: 'Mass of the secondary',
@@ -662,6 +667,45 @@ add(
     ['lenient', 'a camera of two numbers', d => (d.c = [1, 0])],
     ['lenient', 'paused as true', d => (d.p = true)],
   ]
+);
+
+// The reader knows a revision only through the registry, which ships empty.
+const readRevised = async d => {
+  SCENARIO_REVISIONS['binary-pair'] = {
+    revision: 2,
+    earlier: { 1: 'retained' },
+  };
+  try {
+    return !!(await decodePayload(await encodePayload(d))).s;
+  } catch {
+    return false;
+  } finally {
+    delete SCENARIO_REVISIONS['binary-pair'];
+  }
+};
+
+add(
+  'world-link-3',
+  'world share link',
+  3,
+  revised,
+  readRevised,
+  [
+    ['fine', 'a seeded link with a delta', d => (d.d = { sim_speed: 2 })],
+    ['both', 'no revision', d => delete d.r],
+    ['both', 'a revision of 1', d => (d.r = 1)],
+    ['both', 'a revision that is not a whole number', d => (d.r = 2.5)],
+    ['both', 'no scenario', d => delete d.s],
+    ['validator', 'a scenario this build does not have', d => (d.s = 'x')],
+    ['validator', 'a revision above the registry', d => (d.r = 3)],
+    [
+      'lenient',
+      'a version 2 payload beside an r (the link prefix decides)',
+      d => (d.v = 2),
+    ],
+    ['lenient', 'a camera of two numbers', d => (d.c = [1, 0])],
+  ],
+  'world share link (with a scenario revision)'
 );
 
 add(

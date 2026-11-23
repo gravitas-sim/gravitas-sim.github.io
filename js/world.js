@@ -102,6 +102,9 @@ import {
   payloadSeed,
   chooseKind,
   migrateSettings,
+  currentRevision,
+  resolveRevision,
+  rowFor,
 } from './shareState.js';
 import { generateStarfield } from './render.js';
 import { stopSignalAudio } from './soundPanel.js';
@@ -125,6 +128,7 @@ import {
   registerSettingsReceiver,
   setSettings,
   current_scenario_name,
+  current_scenario_revision,
   setScenarioName as setCurrentScenarioName,
 } from './appState.js';
 import {
@@ -154,8 +158,12 @@ const apply_preset = () => {
   // DEFAULT_SETTINGS and so was the one leaked key anything noticed. It has an
   // entry now, along with the rest of the scenario-only keys, so the reset
   // inside applyPreset clears it the same way it clears everything else.
-  applyPreset(SETTINGS, DEFAULT_SETTINGS, state);
+  const id = scenarioId(SETTINGS.preset_scenario);
+  const row = id && rowFor(id, buildRevision ?? currentRevision(id));
+  applyPreset(SETTINGS, DEFAULT_SETTINGS, state, row || undefined);
 };
+// The revision of the scenario the build in hand makes (SCENARIO_REVISIONS.md).
+let buildRevision = null;
 /**
  * Show scenario information banner with title and description
  * Displays information about the current simulation scenario for 6 seconds
@@ -233,6 +241,8 @@ let worldPack = null;
  * @param {Object} [options]
  * @param {string|number} [options.seed] - Reuse this seed instead of a new one
  * @param {boolean} [options.keepSeed] - Rebuild with the seed already in use
+ * @param {number} [options.revision] - The revision of the scenario to build; a
+ *   rebuild with the same seed keeps the world's, any other the current one
  * @returns {number} The seed the world was built from
  */
 
@@ -261,6 +271,13 @@ const initialize_simulation = (options = {}) => {
   builtSystem = null;
   worldPack = null;
   const seed = getWorldSeed();
+  const scenario =
+    scenarioId(SETTINGS.preset_scenario) ?? SETTINGS.preset_scenario;
+  buildRevision =
+    options.revision ??
+    (options.keepSeed && scenario === current_scenario_name
+      ? current_scenario_revision
+      : currentRevision(scenario));
   withSeed(seed, () => build_simulation());
   // The object lists have just been repopulated; the physics caches hold the
   // previous set and must not be reused.
@@ -312,6 +329,7 @@ registerSettingsReceiver(updatePhysicsSettings);
 // pieces of user interface it has to touch on the way through.
 const build_simulation = () =>
   buildWorld({
+    revision: buildRevision,
     settings: SETTINGS,
     pushSettings: () => commitSettings('world-build'),
     state,
@@ -321,8 +339,8 @@ const build_simulation = () =>
       pendingSettingsOverride = null;
       return pending;
     },
-    setScenarioName: name => {
-      setCurrentScenarioName(name);
+    setScenarioName: (name, revision) => {
+      setCurrentScenarioName(name, revision);
     },
     hideObjectInspector,
     showScenarioInfo: show_enhanced_scenario_info,
@@ -521,8 +539,14 @@ const captureShareState = ({
   forExperiment = false,
   experiment = null,
 } = {}) => {
+  // A capture of a corrected world that goes into a stored record is full, so
+  // that no older build regenerates it (SCENARIO_REVISIONS.md, form (i)).
   const resolved =
-    kind === 'auto' ? chooseKind({ touched: worldTouched, elapsed }) : kind;
+    forExperiment && current_scenario_revision >= 2
+      ? 'full'
+      : kind === 'auto'
+        ? chooseKind({ touched: worldTouched, elapsed })
+        : kind;
 
   // The observing context, on every link.
   //
@@ -586,6 +610,8 @@ const captureShareState = ({
     settings: SETTINGS,
     generationSettings,
     DEFAULT_SETTINGS,
+    revision: current_scenario_revision,
+    record: forExperiment,
     camera: includeCamera ? { zoom: state.zoom, pan: state.pan } : null,
     bodies:
       resolved === 'full'
@@ -633,13 +659,18 @@ const activeToolIds = () =>
  * Rebuild the simulation described by a decoded payload.
  *
  * @param {Object} payload - From decodePayload()
+ * @param {string} [origin] - 'link' (the default; text, and so a capture too:
+ *   it means the revision it states, else 1) or 'setup' (this build's own, and
+ *   so the current revision); see SCENARIO_REVISIONS.md
  * @returns {{scenario:string, kind:string, bodies:number}} What was restored
  */
-const applyShareState = payload => {
+const applyShareState = (payload, origin) => {
   // By id: a lesson's or a pack's own setup arrives here without passing
   // through decodePayload(), and may name its scenario the way it did before
   // scenarios had ids.
   const scenario = scenarioId(payload.s) ?? payload.s;
+  // Before anything changes: a link from a newer revision is refused whole.
+  const { revision, notice } = resolveRevision(payload, origin);
   if (scenario === 'None') {
     // Blank Simulation, or a built system. Its delta was taken against the
     // defaults, so it is rebuilt from them; otherwise initialize_simulation()
@@ -663,7 +694,7 @@ const applyShareState = payload => {
     // A full payload describes a world no seed reproduces. Build the scenario
     // first so settings, starfield and preset geometry are right, then replace
     // the bodies with the ones the link actually carries.
-    initialize_simulation({ seed });
+    initialize_simulation({ seed, revision });
     rebuildWorldFromStates(payload.b);
     commitSettings('share-link');
     // The baseline was taken over the world these bodies just replaced.
@@ -671,7 +702,7 @@ const applyShareState = payload => {
     markWorldTouched();
     if (scenario === 'None') builtSystem = { link: payload };
   } else {
-    initialize_simulation({ seed });
+    initialize_simulation({ seed, revision });
   }
 
   // Settings the author changed after the world was built are applied now, in
@@ -691,7 +722,7 @@ const applyShareState = payload => {
   }
 
   state.paused = payload.p === 1;
-  setCurrentScenarioName(scenario);
+  setCurrentScenarioName(scenario, revision);
 
   // Everything an experiment needs restored that a link never carried. A
   // payload without an `x` block yields the defaults - clock at zero, world
@@ -753,8 +784,16 @@ const applyShareState = payload => {
   updateSpeedDisplay();
   updateObjectTypeButton();
 
+  // A migrated revision opens the corrected world and says so (never silently).
+  if (notice)
+    import('./scenarioNotice.js')
+      .then(m => m.showRevisionNotice(notice))
+      .catch(() => {});
+
   return {
     scenario,
+    revision,
+    notice,
     kind: payload.b ? 'full' : 'seeded',
     bodies: allBodies().length,
     extras,

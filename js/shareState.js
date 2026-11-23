@@ -28,11 +28,90 @@
 // =============================================================================
 
 import { applyPreset, resetPresetMemory, scenarioId } from './scenarios.js';
-import { formatSeed, parseSeed } from './rng.js';
+import { formatSeed, normalizeSeed, parseSeed } from './rng.js';
 
 /** 2 names a scenario by id, 1 by its English name; both are read. */
 const VERSION = 2;
 export { VERSION as LINK_VERSION };
+/** The highest version read. Version 3 adds `r`, the scenario's revision. */
+export const LINK_VERSION_READ = 3;
+const INCOMPLETE = 'That link is incomplete or was cut short in transit.';
+const NEWER =
+  'This link was made by a newer version of Gravitas. Reload the page and try again.';
+
+// --- Scenario revisions (SCENARIO_REVISIONS.md) --------------------------------
+// A corrected scenario is a new revision of its id. It ships empty: an id that is
+// not here has revision 1 only. Per corrected id, `revision` (2 or more), and for
+// each earlier one `retained` (kept: its row in `rows`, else the table's, and its
+// geometry and builder step, each corrected site gated by the revision) or
+// `{ migrated: { en, es } }` (opens the corrected world under a notice saying why).
+export const SCENARIO_REVISIONS = {};
+const REVISED = id => Object.hasOwn(SCENARIO_REVISIONS, id);
+
+/** The revision a build makes of a scenario now: the registry's, else 1. */
+export const currentRevision = id =>
+  REVISED(id) ? SCENARIO_REVISIONS[id].revision : 1;
+
+/** The preset row an earlier revision keeps (undefined: the table's row). */
+export const rowFor = (id, revision) =>
+  REVISED(id) ? SCENARIO_REVISIONS[id].rows?.[revision] : undefined;
+
+/** The version a world payload is written as: 3 with `r`, else what is written today. */
+export const linkVersionOf = payload => (payload.r >= 2 ? 3 : VERSION);
+
+/** A payload stamped with a revision: version 3 and `r` from 2 on, else as it is. */
+export const withRevision = (payload, revision) =>
+  revision >= 2 ? { ...payload, v: 3, r: revision } : payload;
+
+/**
+ * A setup for a scenario, as a new file writes it: its other keys kept and the
+ * `revision` key only for an id at revision 2 or more, so a file for an
+ * uncorrected id keeps its bytes (the Composer, the course builder).
+ */
+export const setupFor = (id, old) => {
+  const out = { ...old, scenario: id };
+  delete out.revision;
+  const rev = currentRevision(scenarioId(id) ?? id);
+  return rev >= 2 ? { ...out, revision: rev } : out;
+};
+
+// What a payload came from, held beside it so a JSON clone cannot carry it: a
+// decoded link or file is text and means what it states; a build's own setup
+// means the current revision. Stored text can never be marked a setup.
+const ORIGINS = new WeakMap();
+/** Mark a payload `origin` ('link', 'setup' or 'capture'); returns it. */
+export const markOrigin = (payload, origin) => (
+  ORIGINS.set(payload, origin),
+  payload
+);
+
+/**
+ * Which revision of its scenario a payload means, and the notice a migrated one
+ * needs. By origin, never by `v`: a setup means the current revision; anything
+ * else (a link, a capture, an imported declaration) means the revision it states
+ * (`r` at version 3), and revision 1 when it states none.
+ *
+ * @param {Object} payload
+ * @param {string} [origin] - 'link' (the default), 'capture' or 'setup'
+ * @returns {{revision: number, notice: ?{en: string, es: string}}} The revision
+ *   to build and, for a migrated earlier one, the reason in both languages
+ */
+export function resolveRevision(payload, origin) {
+  const mark = ORIGINS.get(payload);
+  // Text is never a setup: a marked payload keeps its own origin.
+  origin = (origin === 'setup' && mark) || origin || mark || 'link';
+  const id = scenarioId(payload.s) ?? payload.s;
+  const now = currentRevision(id);
+  if (origin === 'setup') return { revision: now, notice: null };
+  const asked = payload.v >= 3 ? payload.r : 1;
+  if (!Number.isInteger(asked) || asked < 1) throw new Error(INCOMPLETE);
+  if (asked > now) throw new Error(NEWER);
+  if (asked === now) return { revision: now, notice: null };
+  const how = SCENARIO_REVISIONS[id].earlier?.[asked];
+  return how === 'retained'
+    ? { revision: asked, notice: null }
+    : { revision: now, notice: how?.migrated ?? { en: '', es: '' } };
+}
 
 // Above this the link starts getting refused or line-wrapped by mail clients,
 // LMS text fields and chat apps. Browsers themselves handle far more, so this
@@ -131,7 +210,7 @@ async function inflate(bytes) {
   } catch (err) {
     if (err?.code === 'tooLarge') throw err;
     // Most likely half a URL: mail and chat wrap long ones. Say so.
-    throw new Error('That link is incomplete or was cut short in transit.');
+    throw new Error(INCOMPLETE);
   }
 }
 
@@ -178,9 +257,10 @@ function trim(value) {
  *
  * @param {string} scenario - Scenario id, or a key it was known by
  * @param {Object} DEFAULT_SETTINGS - The baseline settings object
+ * @param {number} [revision] - The revision's row; the current one by default
  * @returns {Object} Settings as the scenario alone would leave them
  */
-export function pristineSettingsFor(scenario, DEFAULT_SETTINGS) {
+export function pristineSettingsFor(scenario, DEFAULT_SETTINGS, revision) {
   const scratch = JSON.parse(JSON.stringify(DEFAULT_SETTINGS));
   scratch.preset_scenario = scenario;
   // A scratch view object, so probing the preset cannot move the real camera.
@@ -188,7 +268,13 @@ export function pristineSettingsFor(scenario, DEFAULT_SETTINGS) {
   // A probe is nobody's rebuild: it must not change what applyPreset carries.
   const remembered = resetPresetMemory();
   try {
-    applyPreset(scratch, DEFAULT_SETTINGS, scratchView);
+    const id = scenarioId(scenario) ?? scenario;
+    applyPreset(
+      scratch,
+      DEFAULT_SETTINGS,
+      scratchView,
+      rowFor(id, revision ?? currentRevision(id))
+    );
   } catch (err) {
     console.warn('Could not derive baseline settings for', scenario, err);
   }
@@ -211,10 +297,11 @@ export function pristineSettingsFor(scenario, DEFAULT_SETTINGS) {
  * @param {Object} settings - Live settings
  * @param {Object} DEFAULT_SETTINGS - Baseline settings object
  * @param {string} scenario - The scenario actually on screen
+ * @param {number} [revision] - The revision the world was built at
  * @returns {Object} Only the changed keys
  */
-export function settingsDelta(settings, DEFAULT_SETTINGS, scenario) {
-  const base = pristineSettingsFor(scenario, DEFAULT_SETTINGS);
+export function settingsDelta(settings, DEFAULT_SETTINGS, scenario, revision) {
+  const base = pristineSettingsFor(scenario, DEFAULT_SETTINGS, revision);
   const delta = {};
   for (const key of Object.keys(settings)) {
     // Carried separately in the payload; duplicating it wastes bytes.
@@ -311,6 +398,40 @@ export function packBody(s, { withId = false } = {}) {
   return out;
 }
 
+/**
+ * A lesson's declarative setup as a link payload, so a step cannot set up a
+ * state that could not be handed out as a URL. A setup the running build ships
+ * means the current revision (and is written stamped with it); a setup that
+ * states `revision` was compiled from a file made elsewhere, so it means the
+ * revision it states and is read as the text it came from.
+ *
+ * @param {Object} setup - From a step definition
+ * @returns {Object} Payload for applyShareState
+ */
+export function payloadFromSetup(setup) {
+  const said = 'revision' in setup;
+  const payload = withRevision(
+    {
+      v: 1,
+      s: setup.scenario,
+      seed: formatSeed(normalizeSeed(setup.seed ?? setup.scenario)),
+    },
+    said
+      ? setup.revision
+      : currentRevision(scenarioId(setup.scenario) ?? setup.scenario)
+  );
+  if (setup.settings) payload.d = { ...setup.settings };
+  if (setup.camera) {
+    payload.c = [
+      setup.camera.zoom ?? 1.5,
+      setup.camera.pan?.x ?? 0,
+      setup.camera.pan?.y ?? 0,
+    ];
+  }
+  if (setup.paused) payload.p = 1;
+  return markOrigin(payload, said ? 'link' : 'setup');
+}
+
 // --- Encode / decode ---------------------------------------------------------
 
 /**
@@ -330,6 +451,15 @@ export function diffSettings(from, to) {
   }
   return out;
 }
+
+/** Every setting a link carries, for a capture written against no row. */
+const allSettings = settings => {
+  const out = {};
+  for (const k of Object.keys(settings))
+    if (k !== 'preset_scenario' && k !== 'quality_tier')
+      out[k] = trim(settings[k]);
+  return out;
+};
 
 /**
  * Build the payload object for a simulation.
@@ -357,6 +487,11 @@ export function diffSettings(from, to) {
  * @param {boolean} [opts.paused] - Whether to open paused
  * @param {Object} [opts.extras] - Experiment extras; see experiments/canonicalState.js
  * @param {Object} [opts.experiment] - An A/B setup to reproduce; see below
+ * @param {number} [opts.revision] - The revision of the scenario the world was
+ *   built at; the current one by default (a world made now)
+ * @param {boolean} [opts.record] - The capture goes into a stored record an
+ *   older build may read (SCENARIO_REVISIONS.md, form (i)): at revision 2 or
+ *   more `d` holds every setting, so any build restores the same settings
  * @returns {Object} Payload
  */
 export function buildPayload({
@@ -370,12 +505,18 @@ export function buildPayload({
   paused,
   extras,
   experiment,
+  revision,
+  record,
 }) {
   // By id; 'None' stays 'None'.
   const s = scenarioId(scenario) ?? scenario;
-  const payload = { v: VERSION, s, seed: formatSeed(seed) };
+  const rev = revision ?? currentRevision(s);
+  const payload = withRevision({ v: VERSION, s, seed: formatSeed(seed) }, rev);
   const atBuild = generationSettings || settings;
-  const delta = settingsDelta(atBuild, DEFAULT_SETTINGS, scenario);
+  const delta =
+    record && rev >= 2
+      ? allSettings(atBuild)
+      : settingsDelta(atBuild, DEFAULT_SETTINGS, scenario, rev);
   if (Object.keys(delta).length) payload.d = delta;
   if (generationSettings) {
     const after = diffSettings(generationSettings, settings);
@@ -409,7 +550,7 @@ export function buildPayload({
  * @returns {Promise<string>} Fragment text
  */
 export async function encodePayload(payload) {
-  return encodeTagged('', VERSION, payload);
+  return encodeTagged('', linkVersionOf(payload), payload);
 }
 
 /**
@@ -549,17 +690,13 @@ export async function decodePayload(fragment) {
 
   const [, versionText, mode, body] = match;
   const version = Number(versionText);
-  if (version > VERSION) {
-    throw new Error(
-      'This link was made by a newer version of Gravitas. Reload the page and try again.'
-    );
-  }
+  if (version > LINK_VERSION_READ) throw new Error(NEWER);
 
   let bytes;
   try {
     bytes = base64UrlToBytes(body);
   } catch {
-    throw new Error('That link is incomplete or was cut short in transit.');
+    throw new Error(INCOMPLETE);
   }
 
   if (mode === 'z') bytes = await inflate(bytes);
@@ -572,7 +709,7 @@ export async function decodePayload(fragment) {
     throw new Error(
       err?.code === 'notPlainData'
         ? 'That link holds data Gravitas will not read.'
-        : 'That link is incomplete or was cut short in transit.'
+        : INCOMPLETE
     );
   }
   if (!payload || typeof payload !== 'object' || !payload.s) {
@@ -591,7 +728,12 @@ export async function decodePayload(fragment) {
   }
   if (payload.a) payload.a = migrateSettings(payload.a);
   if (payload.d) payload.d = migrateSettings(payload.d);
-  return payload;
+  // Version 3 says its revision; an earlier version's payload cannot.
+  if (version >= 3) payload.v = 3;
+  else delete payload.r;
+  if (version >= 3 && !(payload.r >= 2)) throw new Error(INCOMPLETE);
+  resolveRevision(payload, 'link');
+  return markOrigin(payload, 'link');
 }
 
 /**

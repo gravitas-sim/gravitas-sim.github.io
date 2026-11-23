@@ -708,8 +708,9 @@ export const LINKS = [
   {
     link: 'world share link',
     prefix: '(none)',
-    versions: 'v1 (read), v2 (written)',
-    written: 'unchanged by 3.0.0',
-    old: 'not affected',
+    versions: 'v1 (read), v2 (written), v3 (written, new)',
+    written:
+      'v3 only for a scenario at revision 2 or more (none is yet); every other link is v2 (or v1, from the build tools) with the bytes it always had',
+    old: 'a 2.0.0 or 3.0 build refuses a v3 link: "This link was made by a newer version of Gravitas"',
   },
 ];

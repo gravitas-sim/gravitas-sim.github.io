@@ -131,8 +131,12 @@ import {
   transitAnalysis,
   transitGeometry,
 } from './lightCurve.js';
-import { encodePayload, parseDocument, shareUrl } from './shareState.js';
-import { normalizeSeed, formatSeed } from './rng.js';
+import {
+  encodePayload,
+  parseDocument,
+  payloadFromSetup,
+  shareUrl,
+} from './shareState.js';
 // From js/notify.js rather than through js/controls.js, which only re-exports
 // them: going through controls put this module in a cycle (controls
 // dynamic-imports the loader, the loader this) that a convenience re-export alone made.
@@ -547,30 +551,6 @@ function probeContext() {
 }
 
 // --- Setting up a step's scenario ---------------------------------------------
-
-/**
- * Convert a lesson's declarative setup into a shared-link payload, so a step cannot set up a state that could
- * not be handed out as a URL (the report's "open this exact state" links stay honest).
- * @param {Object} setup - From a step definition
- * @returns {Object} Payload for applyShareState
- */
-function payloadFromSetup(setup) {
-  const payload = {
-    v: 1,
-    s: setup.scenario,
-    seed: formatSeed(normalizeSeed(setup.seed ?? setup.scenario)),
-  };
-  if (setup.settings) payload.d = { ...setup.settings };
-  if (setup.camera) {
-    payload.c = [
-      setup.camera.zoom ?? 1.5,
-      setup.camera.pan?.x ?? 0,
-      setup.camera.pan?.y ?? 0,
-    ];
-  }
-  if (setup.paused) payload.p = 1;
-  return payload;
-}
 
 function applySetup(setup) {
   if (!setup) return;

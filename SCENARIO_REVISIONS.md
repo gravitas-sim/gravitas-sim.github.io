@@ -8,28 +8,36 @@ the one rule for which revision of a scenario a payload means, to this build and
 to an older one. Nothing is corrected by it: the registry ships empty, and the
 rule is proven on a fixture the tests register.
 
-Tests: `tests/scenarioRevisions.test.js` (the rule), `tests/scenarioRevisionsSource.test.js`
-(the producer table's closure), `tests/compat/scenarioRevisions.test.js` (the
-2.0.0 and 3.0 readers). The producer table is
-`tests/fixtures/scenarioLinkProducers.json`; the table below is the same rows.
+Tests: `tests/scenarioRevisions.test.js` (the rule, on a fixture, and the
+byte-identity of every shipped link), `tests/scenarioRevisionsFiles.test.js`
+(the three file formats), `tests/scenarioRevisionsSource.test.js` (the producer
+table's closure) and `tests/compat/scenarioRevisions.test.js` (the 2.0.0 and 3.0
+readers). The producer table is `tests/fixtures/scenarioLinkProducers.json`; the
+table below is the same rows.
 
 ## The registry
 
-`SCENARIO_REVISIONS` in `js/scenarios.js`, beside the preset table, so the start
-route loads no further module for it. One entry per corrected id:
+`SCENARIO_REVISIONS` in `js/shareState.js`, beside the codec that reads it (the
+codec imports `js/scenarios.js`, so the table cannot import the codec; the codec
+is on the start route already, so no module is added to any route, and
+`js/scenarios.js` stays at its line ceiling). A tool or a test registers a
+fixture by assigning an entry; shipped code never does. One entry per corrected
+id:
 
 ```js
-'some-id': { revision: 2, earlier: { 1: 'retained' } }
+'some-id': { revision: 2, earlier: { 1: 'retained' }, rows: { 1: { /* its old preset row */ } } }
 'some-id': { revision: 3, earlier: { 1: { migrated: { en: '...', es: '...' } }, 2: 'retained' } }
 ```
 
 - An id that is not in the registry has revision 1 only.
 - `revision` is the current one (2 or more). Every earlier revision is listed,
   as `retained` or as `migrated` with a one-sentence reason in both languages.
-- A `retained` revision keeps its preset row (an optional `rows[revision]` in the
-  entry, otherwise the table's row), its `ENGINE_GEOMETRY` entry and its builder
-  step, each corrected site gated by `atRevision(n)`. The build selects the row,
-  geometry and generator by the revision it is asked for.
+- A `retained` revision keeps its preset row (`rows[revision]` in the entry,
+  otherwise the table's row, which `applyPreset` takes as its fourth argument),
+  its `ENGINE_GEOMETRY` entry and its builder step. The build is handed the
+  revision (`ctx.revision`, absent meaning the latest), and each corrected site in
+  `js/world/build.js` gates on it. The world builds the row, geometry and
+  generator of the revision it is asked for.
 - A revision is **retained** when the correction is confined to that scenario's
   own row, geometry entry and builder step. It is **migrated** when keeping the
   old revision would need a branch inside a generator other scenarios share, or a
@@ -47,7 +55,7 @@ route loads no further module for it. One entry per corrected id:
 
 World share link **version 3** carries a required integer `r`, the revision, 2 or
 more. The highest version read is 3; the version written is chosen per payload by
-one function (`linkVersionOf` in `js/shareState.js`): 3 with `r` for a registry id
+one function (`linkVersionOf` in `js/shareState.js`; `withRevision` stamps a payload): 3 with `r` for a registry id
 at revision 2 or more, otherwise exactly what that producer writes today (prefix
 2 for the dialog, the figure builder, the Studio, the course and the generated
 pages' demos; prefix 1 for the build tools' raw links, whose payload says `v: 1`).
@@ -95,9 +103,14 @@ and the version rule. The table, not this list, is the authority.
 ## The reader, by origin and never by `v`
 
 Four origins. The caller states the origin: `decodePayload` marks what it
-returns as a link; `applyShareState(payload, origin)` takes it (passed through
-`applySharePayload` in `js/share.js`); stored text can supply a revision but
-never the origin `setup`.
+returns as a link; `payloadFromSetup` (now in `js/shareState.js`, where the
+codec is) marks a build's own setup `setup` and a compiled declaration `link`;
+`applyShareState(payload, origin)` takes it as an argument (passed through
+`applySharePayload` in `js/share.js`), and a payload with no mark and no
+argument is read as text. A capture is read by the same rule as text (`r` at
+version 3, else 1), so an unmarked capture is read correctly by default. Stored
+text can supply a revision but never the origin `setup`: a payload marked as text
+stays text when asked to be read as a setup.
 
 - **link**: a payload decoded from text (an address, a pasted link, a link kept
   in a report, a pack or My work) means the revision it carries: `r` at version
@@ -133,7 +146,7 @@ The three refusals are run against the 2.0.0 and 3.0 readers in
 `tests/compat/scenarioRevisions.test.js`. A format whose old reader would have
 ignored the key would use form (ii) below; none does.
 
-The resolver (`resolveRevision` in `js/scenarios.js`) turns an origin and a
+The resolver (`resolveRevision` in `js/shareState.js`) turns an origin and a
 payload into the revision to build and, for a migrated earlier revision, the
 notice. `initialize_simulation` takes the revision; a plain rebuild (a new
 scenario, Refresh) builds the current one, and a rebuild with the same seed
