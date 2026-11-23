@@ -676,7 +676,8 @@ const readRevised = async d => {
     earlier: { 1: 'retained' },
   };
   try {
-    return !!(await decodePayload(await encodePayload(d))).s;
+    // Written with prefix 3 whatever the payload says, as a 3.x writer does.
+    return !!(await decodePayload(await encodeTagged('', 3, d))).s;
   } catch {
     return false;
   } finally {
@@ -1819,10 +1820,10 @@ add('sun-frames-1', 'gravitas.sun-frames', 1, sun, null, [
 ]);
 
 describe('the schemas the format audit added', () => {
-  test('there are thirty-six, and each is a row of FORMATS.md that had no schema before Prompt 290', () => {
-    expect(T.length).toBe(36);
+  test('there are thirty-seven, and each is a row of FORMATS.md that had no schema before Prompt 290', () => {
+    expect(T.length).toBe(37);
     const rows = FORMATS.filter(f => T.some(t => t.rowName === f.name));
-    expect(rows.length).toBe(36);
+    expect(rows.length).toBe(37);
     for (const f of rows)
       expect(T.find(t => t.rowName === f.name).file + '.schema.json').toBe(
         f.schema

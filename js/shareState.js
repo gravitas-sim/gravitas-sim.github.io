@@ -732,7 +732,8 @@ export async function decodePayload(fragment) {
   if (version >= 3) payload.v = 3;
   else delete payload.r;
   if (version >= 3 && !(payload.r >= 2)) throw new Error(INCOMPLETE);
-  resolveRevision(payload, 'link');
+  // The prefix, not a stray `v` inside the text, says which revision rule applies.
+  resolveRevision(version >= 3 ? payload : { ...payload, v: version }, 'link');
   return markOrigin(payload, 'link');
 }
 
