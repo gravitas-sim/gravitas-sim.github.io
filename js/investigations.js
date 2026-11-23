@@ -1898,17 +1898,17 @@ function goToStep(index, { rebuild = false, open = false } = {}) {
     els.panel.setAttribute('aria-busy', 'true');
     announce(t('inv.tool.loading'));
     if (open) els.body.textContent = t('inv.tool.loading');
-    const again = () => goToStep(at, { rebuild });
+    const again = () => goToStep(at, { rebuild, open });
+    // The canvas code and then the stage code are two waits: the first hands
+    // back the second's promise, so opening resolves only once the scene is up
+    // (resolving after the first wait alone left a staged scene to be framed
+    // before its bodies existed, under the instrument).
     return (
       canvasDue
         ? import('./lessonCanvas.js').then(m => (canvasMod = m))
         : loadStage(declared)
     )
-      .then(() => {
-        if (turn !== openGeneration || !active) return false;
-        again();
-        return true;
-      })
+      .then(() => turn === openGeneration && active && again())
       .catch(err => {
         if (open) throw err;
         loadFailed(again, err);
