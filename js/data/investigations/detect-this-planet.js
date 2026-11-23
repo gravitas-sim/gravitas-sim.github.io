@@ -331,17 +331,15 @@ const DETECT_THIS_PLANET = {
       body: `Switch the preset to <strong>Schedule B: one cycle apart</strong>.
              \n\nThe left panel now covers thirty-nine days instead of three and
              a half, and the twelve measurements are almost a flat line. The
-             right panel shows why: fold them onto the cycle and they pile up in
-             two bins out of ten.
+             right panel shows why: fold them onto the cycle and see which of the
+             ten bins hold a point.
              \n\nBe exact about what has changed and what has not. Same star,
              same planet, same instrument precision, same twelve nights, same
              random draw. One thing differs: how far apart the nights are. So
              anything you conclude from comparing these two runs is a conclusion
              about <em>cadence</em>, and about nothing else.
              \n\nThe star on the canvas has not changed either. Watch where it
-             is when each measurement would have been taken — a cadence of one
-             orbit means catching it at nearly the same place in its orbit every
-             time, which is why twelve measurements can tell you almost nothing.`,
+             is when each measurement would have been taken.`,
       tool: {
         id: 'survey-schedule',
         values: SCHEDULE_B,
@@ -709,12 +707,12 @@ const DETECT_THIS_PLANET = {
         },
       },
       checklist: [
-        'Read the depth-over-noise with three nights: about 4',
-        'Drag the transit count to 300 — a hundred times more observing',
-        'Read it again: about 31, an improvement of nearly eight times',
-        'Now read the ceiling row: about 49, and it does not move however far you drag',
+        'Read the depth-over-noise with three nights',
+        'Drag the transit count to 300, a hundred times more observing, and read it again',
+        'Read the ceiling row, and see whether it moves however far you drag',
+        'Compare how much the ratio rose with how far it can ever rise',
       ],
-      tip: 'A hundred times more data bought a factor of eight, not a factor of ten — because part of the budget was already the persistent term. Drag further and the ratio creeps towards 49 and stops. That number, not the number of nights, is what decides whether the measurement is possible.',
+      tip: 'The ceiling row, not the number of nights, is what decides whether the measurement is possible.',
     },
     {
       sid: 'white-noise-and-red-noise',
@@ -828,10 +826,10 @@ const DETECT_THIS_PLANET = {
       type: 'question',
       kind: 'choice',
       title: 'Where does patience stop paying?',
-      body: `From the ground, three transits gave a ratio of about 4 and three
-             hundred gave about 31 — a real improvement, but not the factor of
-             ten that a pure square-root law would predict. Drag further and it
-             creeps towards 49 and stops.`,
+      body: `From the ground you read the ratio at three transits and again at
+             three hundred: a real improvement, but not the factor of ten that
+             a pure square-root law would predict. Drag further and it creeps
+             towards the ceiling row and stops.`,
       prompt: 'The best explanation is:',
       options: [
         'The extra data was lower quality than the first three nights',
@@ -841,7 +839,9 @@ const DETECT_THIS_PLANET = {
       ],
       answer: 1,
       because: `Two of the three terms fall with more observing and one does
-                not. At three nights the atmosphere's night-to-night wander
+                not. The ratio was about 4 at three nights and about 31 at three
+                hundred, a gain of nearly eight times, and the ceiling row said
+                about 49. At three nights the atmosphere's night-to-night wander
                 dominates at about 1,440 ppm and the persistent term is only
                 120; by three hundred nights the wander is down to 144 and the
                 persistent term is the largest thing left. The square root law
@@ -868,11 +868,11 @@ const DETECT_THIS_PLANET = {
              around a Sun-like star. A thirteen-hour transit, once a year.`,
       tool: { id: 'transit-noise' },
       checklist: [
-        'Super-Earth: depth over noise about 10.5 — a real detection, and not a comfortable one',
-        'Rocky planet: about 2.7, from eleven transits gathered over a year',
-        'Earth twin: about 0.6 — the transit is smaller than the noise on it',
-        'On the Earth twin, drag the transits to 200: the ratio reaches about 2.5 and its ceiling is 2.8',
-        'Notice the Earth twin has by far the longest transit and it barely helps',
+        'Super-Earth: read the depth over noise',
+        'Rocky planet: read it, and the number of transits it was gathered from',
+        'Earth twin: read it, and compare the depth with the noise on it',
+        'On the Earth twin, drag the transits to 200 and read the ratio and its ceiling',
+        'Notice the Earth twin has by far the longest transit, and whether that helps',
       ],
       tip: 'TOI-700 d is a real planet, found in 2020, and finding it took eleven sectors of TESS data plus a reanalysis after an error in the original stellar parameters.',
     },

@@ -38,11 +38,11 @@ export default {
     },
     {
       title: 'Antes de observar',
-      body: 'Ocho observaciones repartidas uniformemente en 24,673 días ponen una cada <strong>3,525 días</strong>.\n\nEl periodo del planeta, que se supone que aún no sabes pero que esta investigación te va a decir porque el asunto está en otra parte, es de <strong>3,5247 días</strong>.\n\nComprométete ahora con una respuesta. Después se te preguntará qué cambió la observación.',
+      body: 'Ocho observaciones repartidas uniformemente en 24,673 días dejan siete intervalos iguales. Calcula cuánto dura cada uno.\n\nEl planeta es el de las investigaciones anteriores, y su periodo es cercano a esa separación. Divide la separación entre el periodo.\n\nComprométete ahora con una respuesta. Después se te preguntará qué cambió la observación.',
       prompt:
-        'Ocho noches, una cada 3,525 días, sobre un planeta de periodo 3,5247 días. ¿Qué mostrará la campaña?',
+        'Ocho noches, repartidas uniformemente en la campaña, sobre un planeta cuyo periodo es cercano a esa separación. ¿Qué mostrará la campaña?',
       options: [
-        'Una señal limpia de 3,52 días: la cadencia coincide exactamente con el periodo',
+        'Una señal limpia al periodo del planeta: la cadencia coincide exactamente con él',
         'Una velocidad que apenas cambia, porque cada noche cae en el mismo punto de la órbita',
         'Dispersión aleatoria de unos 84 m/s, sin ningún periodo recuperable',
         'La amplitud completa, pero con el periodo recuperado al doble de su valor real',
