@@ -8,15 +8,15 @@
     "weighing-stars",
     "tides",
     "butterfly-effect",
-    "extending-an-experiment",
     "measuring-the-moon",
-    "orbital-energy",
     "black-holes",
+    "extending-an-experiment",
+    "propose-an-observation",
+    "radial-velocity",
     "what-is-a-gravitational-wave",
     "a-night-at-the-telescope",
     "counts-to-magnitudes",
     "power-law-gravity",
-    "propose-an-observation",
     "retrograde-motion"
   ],
   "lessonGain": {
@@ -200,24 +200,26 @@
       "key:predict.requires",
       "lock:null"
     ],
-    "extending-an-experiment": [
-      "key:measure.canvas",
-      "key:measure.compute",
-      "key:read.canvas"
-    ],
     "measuring-the-moon": [
       "key:question.maxUncertainty",
       "key:question.minUncertainty",
       "key:question.valueWithin"
     ],
-    "orbital-energy": [
-      "key:explore.compare",
-      "key:explore.evidence",
-      "key:question.rubricCriteria"
-    ],
     "black-holes": [
       "key:question.checklist",
       "key:read.explainView"
+    ],
+    "extending-an-experiment": [
+      "key:measure.compute",
+      "key:read.canvas"
+    ],
+    "propose-an-observation": [
+      "key:measure.plan",
+      "key:question.rubricCriteria"
+    ],
+    "radial-velocity": [
+      "key:explore.compare",
+      "key:explore.evidence"
     ],
     "what-is-a-gravitational-wave": [
       "audience:beginner",
@@ -231,9 +233,6 @@
     ],
     "power-law-gravity": [
       "key:question.explain"
-    ],
-    "propose-an-observation": [
-      "key:measure.plan"
     ],
     "retrograde-motion": [
       "lock:{\"placement\":true,\"inspector\":false}"
@@ -308,14 +307,14 @@
   ],
   "totals": {
     "investigations": 124,
-    "steps": 2004,
+    "steps": 2003,
     "activityCuts": 6,
-    "lessonTokens": 182,
+    "lessonTokens": 181,
     "activityTokens": 29,
     "stepTypes": {
       "read": 378,
       "predict": 207,
-      "measure": 526,
+      "measure": 525,
       "ellipse": 1,
       "question": 750,
       "explore": 141,
