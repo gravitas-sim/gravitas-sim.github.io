@@ -186,7 +186,7 @@ Lowering one is the work of the prompt that earns it; raising one needs a decisi
 | `scale.topicRowsUndivided` | 30 |
 | `scale.subtopicRows` | 30 |
 | `scale.sequenceOverlapPercent` | 75 |
-| `scale.libraryJsonKb` | 410.3 |
+| `scale.libraryJsonKb` | 410.4 |
 | `scale.searchIndexKb` | 121 |
 | `scale.startMinutes` | 50 |
 <!-- /navigation:ceilings -->

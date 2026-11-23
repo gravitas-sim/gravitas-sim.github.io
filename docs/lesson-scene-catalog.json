@@ -31754,7 +31754,7 @@
       "commit-a-prediction"
      ],
      "requires": [],
-     "reveal": "run-both-schedules",
+     "reveal": "what-the-window-says",
      "asks": {
       "choice": true,
       "numeric": false,
@@ -31818,7 +31818,9 @@
       "run-the-simulation",
       "run-a-bench-experiment"
      ],
-     "requires": [],
+     "requires": [
+      "set-the-run-up"
+     ],
      "reveal": null,
      "asks": {
       "choice": false,
@@ -31892,7 +31894,8 @@
       "run-the-simulation"
      ],
      "requires": [
-      "predict-the-comb"
+      "predict-the-comb",
+      "run-both-schedules"
      ],
      "reveal": null,
      "asks": {
@@ -32606,7 +32609,7 @@
     {
      "predict": "predict-the-comb",
      "predictCollects": true,
-     "heldUntil": "run-both-schedules",
+     "heldUntil": "what-the-window-says",
      "experiment": [
       "run-both-schedules",
       "read-the-comparison",
@@ -32620,7 +32623,7 @@
      "evidence": [
       "read-the-comparison"
      ],
-     "interpret": "run-both-schedules",
+     "interpret": "what-the-window-says",
      "measuredBeforeAnswering": true,
      "explained": false,
      "answeredByTheExperiment": true,

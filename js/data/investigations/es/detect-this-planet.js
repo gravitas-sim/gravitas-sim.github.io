@@ -99,7 +99,7 @@ export default {
     },
     {
       title: 'El mismo planeta, invisible',
-      body: 'Cambia al ajuste <strong>Calendario B: un ciclo de separación</strong>.\n\nEl panel izquierdo abarca ahora treinta y nueve días en lugar de tres y medio, y las doce medidas son casi una línea plana. El panel derecho enseña por qué: al plegarlas sobre el ciclo se amontonan en dos intervalos de diez.\n\nSé exacto sobre qué ha cambiado y qué no. La misma estrella, el mismo planeta, la misma precisión del instrumento, las mismas doce noches, la misma tirada aleatoria. Difiere una sola cosa: cuánto se separan las noches entre sí. Así que cualquier cosa que concluyas comparando estas dos campañas es una conclusión sobre la <em>cadencia</em>, y sobre nada más.\n\nLa estrella del lienzo tampoco ha cambiado. Fíjate en dónde está cuando se habría tomado cada medida: una cadencia de una órbita significa pillarla casi en el mismo sitio de su órbita cada vez, y por eso doce medidas pueden no decirte casi nada.',
+      body: 'Cambia al ajuste <strong>Calendario B: un ciclo de separación</strong>.\n\nEl panel izquierdo abarca ahora treinta y nueve días en lugar de tres y medio, y las doce medidas son casi una línea plana. El panel derecho enseña por qué: al plegarlas sobre el ciclo, mira cuáles de los diez intervalos contienen un punto.\n\nSé exacto sobre qué ha cambiado y qué no. La misma estrella, el mismo planeta, la misma precisión del instrumento, las mismas doce noches, la misma tirada aleatoria. Difiere una sola cosa: cuánto se separan las noches entre sí. Así que cualquier cosa que concluyas comparando estas dos campañas es una conclusión sobre la <em>cadencia</em>, y sobre nada más.\n\nLa estrella del lienzo tampoco ha cambiado. Fíjate en dónde está cuando se habría tomado cada medida.',
       tool: {
         title: 'Calendario B',
         note: 'Todo excepto la cadencia es idéntico al calendario A.',
@@ -288,12 +288,12 @@ export default {
              tránsitos todo lo que dé de sí y vigila dos números, la razón y la
              fila que dice a qué llegaría una observación ilimitada.`,
       checklist: [
-        'Lee la profundidad sobre ruido con tres noches: unas 4',
-        'Arrastra el número de tránsitos a 300: cien veces más observación',
-        'Vuelve a leerlo: unas 31, una mejora de casi ocho veces',
-        'Ahora lee la fila del techo: unas 49, y no se mueve por mucho que arrastres',
+        'Lee la profundidad sobre ruido con tres noches',
+        'Arrastra el número de tránsitos a 300, cien veces más observación, y vuelve a leerlo',
+        'Lee la fila del techo y mira si se mueve por mucho que arrastres',
+        'Compara cuánto ha subido la razón con hasta dónde podría llegar a subir',
       ],
-      tip: 'Cien veces más datos han comprado un factor de ocho, no de diez, porque parte del presupuesto ya era el término persistente. Sigue arrastrando y la razón se acerca a 49 y se para. Ese número, y no el de noches, es el que decide si la medida es posible.',
+      tip: 'La fila del techo, y no el número de noches, es la que decide si la medida es posible.',
     },
     {
       title: 'Tres clases de ruido, tres respuestas distintas',
@@ -374,10 +374,10 @@ export default {
     },
     {
       title: '¿Dónde deja de pagar la paciencia?',
-      body: `Desde tierra, tres tránsitos daban una razón de unas 4 y trescientos
-             daban unas 31: una mejora real, pero no el factor de diez que
+      body: `Desde tierra leíste la razón con tres tránsitos y otra vez con
+             trescientos: una mejora real, pero no el factor de diez que
              predeciría una ley de raíz cuadrada pura. Sigue arrastrando y se
-             acerca a 49 y se para.`,
+             acerca a la fila del techo y se para.`,
       prompt: 'La mejor explicación es:',
       options: [
         'Los datos extra eran de peor calidad que los de las tres primeras noches',
@@ -385,7 +385,9 @@ export default {
         'Trescientos tránsitos siguen siendo pocos para que importe la raíz cuadrada',
         'La profundidad del tránsito cambia de una noche a otra',
       ],
-      because: `Dos de los tres términos caen al observar más y uno no. Con tres
+      because: `Dos de los tres términos caen al observar más y uno no. La razón
+                era de unas 4 con tres noches y de unas 31 con trescientas, una
+                mejora de casi ocho veces, y la fila del techo decía unas 49. Con tres
                 noches domina el vaivén nocturno de la atmósfera, unas 1.440 ppm,
                 y el persistente es solo 120; con trescientas noches el vaivén ha
                 bajado a 144 y el persistente es lo más grande que queda. La ley
@@ -409,11 +411,11 @@ export default {
              antes, alrededor de una estrella como el Sol. Un tránsito de trece
              horas, una vez al año.`,
       checklist: [
-        'Supertierra: profundidad sobre ruido de unas 5,3, una detección real y no precisamente cómoda',
-        'Planeta rocoso: unas 1,75, a partir de once tránsitos reunidos a lo largo de un año',
-        'Gemela de la Tierra: unas 0,54, el tránsito es más pequeño que el ruido que lo mide',
-        'En la gemela de la Tierra, arrastra los tránsitos a 200 y mira cómo el cociente se para en torno a 1,2',
-        'Fíjate en que la gemela de la Tierra tiene con diferencia el tránsito más largo y no le sirve de nada',
+        'Supertierra: lee la profundidad sobre ruido',
+        'Planeta rocoso: léela, y el número de tránsitos de los que sale',
+        'Gemela de la Tierra: léela y compara la profundidad con el ruido que la mide',
+        'En la gemela de la Tierra, arrastra los tránsitos a 200 y lee la razón y su techo',
+        'Fíjate en que la gemela de la Tierra tiene con diferencia el tránsito más largo, y en si le sirve de algo',
       ],
       tip: 'TOI-700 d es un planeta real, encontrado en 2020, y encontrarlo costó once sectores de datos de TESS más un reanálisis después de un error en los parámetros estelares originales.',
     },
