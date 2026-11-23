@@ -138,23 +138,23 @@
         "requests": 59
       },
       "kepler": {
-        "kb": 936.0,
+        "kb": 937.4,
         "requests": 77
       },
       "transit": {
-        "kb": 943.4,
+        "kb": 944.8,
         "requests": 77,
-        "toolKb": 1028.7,
+        "toolKb": 1030.1,
         "toolRequests": 93
       },
       "power-law": {
-        "kb": 912.2,
+        "kb": 913.6,
         "requests": 77,
-        "toolKb": 928.7,
+        "toolKb": 930.2,
         "toolRequests": 80
       },
       "largest-lesson": {
-        "kb": 1043.5,
+        "kb": 1044.9,
         "requests": 82
       },
       "teaching": {
