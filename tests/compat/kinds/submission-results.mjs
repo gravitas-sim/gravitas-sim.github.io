@@ -22,8 +22,22 @@ export default {
       label: 'report.pdf',
       evidence: null,
     });
+    // With a composed report read on the page: the additive top-level field `composedReports`, which a reader from
+    // before it must read past (this kind measures that, against 2.0.0 and the 3.0 tag).
     return JSON.parse(
-      resultsJson([record], { now: new Date('2026-10-01T00:00:00Z') })
+      resultsJson([record], {
+        now: new Date('2026-10-01T00:00:00Z'),
+        composed: [
+          {
+            file: 'ada.composed-report.json',
+            digest: 'c'.repeat(64),
+            sections: 2,
+            comparisons: 0,
+            digestMatches: true,
+            statedBy: 1,
+          },
+        ],
+      })
     );
   },
   async read(load, doc) {

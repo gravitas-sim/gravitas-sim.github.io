@@ -26,6 +26,7 @@ export const ARCHIVE_VERSION = 1;
 export const MAX_REPORTS = 2000;
 const MAX_LABEL = 200;
 const MAX_NAMED = 40;
+const MAX_COMPOSED = 40;
 
 const KINDS = new Set(['token', 'pdf', 'backup']);
 const isObject = v => v && typeof v === 'object' && !Array.isArray(v);
@@ -40,13 +41,18 @@ export const isArchiveText = text =>
  * The file's text.
  * @param {{reports: Array<{label: string, kind: string, thing: string|object}>,
  *   named: Array<{label: string, text: string}>, marks?: ?string,
- *   term?: ?string, now?: Date}} parts - What the review page holds
+ *   composed?: Array<{label: string, report: object}>,
+ *   term?: ?string, now?: Date}} parts - What the review page holds. A composed
+ *   report (the file a student composed from marked entries) is kept as the
+ *   file was, in the additive top-level field `composed`: an older page reads
+ *   the archive without it.
  * @returns {string} JSON
  */
 export function buildArchive({
   reports,
   named = [],
   marks = null,
+  composed = [],
   term = null,
   now = new Date(),
 }) {
@@ -66,6 +72,14 @@ export function buildArchive({
         text: n.text,
       })),
       ...(marks ? { marks } : {}),
+      ...(composed.length
+        ? {
+            composed: composed.slice(0, MAX_COMPOSED).map(c => ({
+              label: String(c.label).slice(0, MAX_LABEL),
+              report: c.report,
+            })),
+          }
+        : {}),
     },
     null,
     1
@@ -114,9 +128,17 @@ export function readArchive(text) {
       text: n.text,
     });
   }
+  const composed = (Array.isArray(data.composed) ? data.composed : [])
+    .slice(0, MAX_COMPOSED)
+    .filter(c => isObject(c) && isObject(c.report))
+    .map(c => ({
+      label: typeof c.label === 'string' ? c.label.slice(0, MAX_LABEL) : '',
+      report: c.report,
+    }));
   return {
     ok: true,
     archive: {
+      composed,
       savedAt: typeof data.savedAt === 'string' ? data.savedAt : null,
       term: typeof data.term === 'string' ? data.term : null,
       reports,

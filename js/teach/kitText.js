@@ -122,6 +122,8 @@ export const WORDS = {
     'handout.finish': 'When you finish',
     'handout.finish.text':
       'Open your lab report, save it as a PDF and hand in that PDF the way your instructor asked. Your answers travel inside the PDF; nothing else needs to be sent. Your work stays in your own browser until you do.',
+    'handout.file':
+      'The PDF is named from what you type as your name and the investigation, for example {file}. Hand in that file.',
     'handout.minutes': 'about {n} minutes',
     'paste.activity':
       'Open the activity here: {link} Work through the steps. When you finish, open your lab report, save it as a PDF and submit that PDF. {name}',
@@ -243,6 +245,8 @@ export const WORDS = {
     'handout.finish': 'Al terminar',
     'handout.finish.text':
       'Abra su informe de laboratorio, guárdelo como PDF y entregue ese PDF como le indicó su docente. Sus respuestas viajan dentro del PDF; no hace falta enviar nada más. Su trabajo se queda en su propio navegador hasta entonces.',
+    'handout.file':
+      'El PDF se nombra con lo que escriba como nombre y la investigación, por ejemplo {file}. Entregue ese archivo.',
     'handout.minutes': 'unos {n} minutos',
     'paste.activity':
       'Abra la actividad aquí: {link} Complete los pasos. Al terminar, abra su informe de laboratorio, guárdelo como PDF y entregue ese PDF. {name}',

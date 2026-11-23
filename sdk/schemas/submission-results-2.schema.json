@@ -61,6 +61,44 @@
           }
         }
       }
+    },
+    "composedReports": {
+      "description": "Composed reports (the report a student makes across investigations in My work) read on the review page: the digest each states, its counts, whether the file hashes to that digest and how many submissions state it. Written only when one was read. None of the student's words is in it; the archive keeps the file.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "file",
+          "digest",
+          "sections",
+          "comparisons",
+          "digestMatches",
+          "statedBy"
+        ],
+        "properties": {
+          "file": {
+            "type": "string"
+          },
+          "digest": {
+            "type": "string"
+          },
+          "sections": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "comparisons": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "digestMatches": {
+            "type": "boolean"
+          },
+          "statedBy": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      }
     }
   },
   "$defs": {

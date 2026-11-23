@@ -630,6 +630,37 @@ describe('the JSON export', () => {
     });
   });
 
+  test('records the composed reports read, as digests and counts, only when there are some', () => {
+    const composed = [
+      {
+        file: 'ada.composed-report.json',
+        digest: 'b'.repeat(64),
+        sections: 3,
+        comparisons: 1,
+        digestMatches: true,
+        statedBy: 1,
+      },
+    ];
+    const doc = JSON.parse(resultsJson(rows, { now, composed }));
+    expect(doc.version).toBe(RESULTS_VERSION);
+    expect(doc.composedReports).toEqual(composed);
+    // Nothing of the student's own is in it: no title, no section, no word.
+    expect(Object.keys(doc.composedReports[0]).sort()).toEqual(
+      [
+        'comparisons',
+        'digest',
+        'digestMatches',
+        'file',
+        'sections',
+        'statedBy',
+      ].sort()
+    );
+    expect(JSON.parse(resultsJson(rows, { now }))).not.toHaveProperty(
+      'composedReports'
+    );
+    expect(readResults(JSON.stringify(doc)).ok).toBe(true);
+  });
+
   test('counts points per question: earned, zero, or not yet marked', () => {
     const qs = JSON.parse(resultsJson(rows, { now })).submissions[0].questions;
     for (const q of qs) {

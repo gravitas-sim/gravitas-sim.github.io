@@ -17,7 +17,9 @@ import {
   readArchive,
 } from '../js/instructorArchive.js';
 import { WORDS, tr } from '../js/instructorTermText.js';
-import { archiveOld, run } from './compat/harness.js';
+import { pathToFileURL } from 'node:url';
+import path from 'node:path';
+import { V3_COMMIT, archiveOld, run } from './compat/harness.js';
 
 const reports = [
   { label: 'ada.pdf', kind: 'pdf', thing: '#s2zAAAA' },
@@ -123,5 +125,53 @@ describe('a page from 2.0.0', () => {
     expect(read.ok).toBe(true);
     expect(read.value.accepted).toBe(false);
     expect(read.value.problems.join(' ')).toMatch(/\w/);
+  });
+});
+
+describe('a composed report in the archive', () => {
+  const composed = [
+    {
+      label: 'ada.composed-report.json',
+      report: {
+        format: 'gravitas.composed-report',
+        sections: [],
+        digest: 'a'.repeat(64),
+      },
+    },
+  ];
+
+  test('is kept as the file was, read back, and absent unless there is one', () => {
+    const text = buildArchive({ reports, composed, now: NOW });
+    expect(JSON.parse(text).composed).toEqual(composed);
+    expect(readArchive(text).archive.composed).toEqual(composed);
+    expect(JSON.parse(buildArchive({ reports, now: NOW }))).not.toHaveProperty(
+      'composed'
+    );
+    expect(
+      readArchive(buildArchive({ reports, now: NOW })).archive.composed
+    ).toEqual([]);
+  });
+
+  test('a malformed entry is left out, not a reason to refuse the archive', () => {
+    const doc = JSON.parse(buildArchive({ reports, composed, now: NOW }));
+    doc.composed.push({ label: 'x', report: 'text' }, 7);
+    const read = readArchive(JSON.stringify(doc));
+    expect(read.ok).toBe(true);
+    expect(read.archive.composed).toEqual(composed);
+  });
+
+  test('the 3.0 page opens the archive as it did and does not see the report', async () => {
+    const old = archiveOld(V3_COMMIT);
+    try {
+      const m = await import(
+        pathToFileURL(path.join(old.tree, 'js', 'instructorArchive.js')).href
+      );
+      const read = m.readArchive(buildArchive({ reports, composed, now: NOW }));
+      expect(read.ok).toBe(true);
+      expect(read.archive.reports).toEqual(reports);
+      expect(read.archive.composed).toBeUndefined();
+    } finally {
+      old.cleanup();
+    }
   });
 });

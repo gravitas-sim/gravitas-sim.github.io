@@ -124,7 +124,7 @@ When an entry is marked "For a report", or a composed report was made before, th
 **Limits, said plainly.**
 - The digest says the file is the one the digest was made from. It does not say who made it: a file edited and digested again, with a token edited to match, passes (PROVENANCE.md).
 - One composed report is kept at a time; making another replaces it. A token states the report that exists when the token is made.
-- The review page's results file and its archive do not carry the composed report or `cr`; the report is read again by adding its file.
+- The review page's results file records each composed report it read as a digest and counts (`composedReports`, none of the student's words), and its archive keeps the report file (`composed`, checked against its digest again when the archive is opened). A page from before this opens the archive and the results without the field. The report card says these limits where a student makes the report.
 - The report file carries no figure. The PDF and the HTML draw the notebook's figure at download time. In the HTML, the sentence under a drawing ("y against x. The data it draws:") is the shared HTML builder's and is English in a Spanish report.
 - My work says its own strings from the page's language; the report's catalog words (the names of kinds, origins and uncertainty methods) are read in that language too, which the review sets for the visit without storing anything.
 - A number's table leaves out the unit column and the note column when no number of the section has one.

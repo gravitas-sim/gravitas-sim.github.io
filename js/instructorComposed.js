@@ -26,6 +26,26 @@ const format = () => import('./myWork/composedReport.js').catch(() => null);
 /** Remember what a submission states. */
 export const state = (fingerprint, cr) => void stated.set(fingerprint, cr);
 
+/** The report files read, as the archive keeps them: {label, report}. */
+export const held = () =>
+  files.map(f => ({ label: f.label, report: f.report }));
+
+/**
+ * Each report file read, as the results file records it: its digest and counts, whether the file hashes to its digest,
+ * and how many of `records` state that digest. No section, number or word of the student's is in it.
+ */
+export const summary = records =>
+  files.map(f => ({
+    file: f.label,
+    digest: f.report.digest,
+    sections: f.report.sections.length,
+    comparisons: f.report.comparisons.length,
+    digestMatches: f.verified,
+    statedBy: records.filter(
+      r => stated.get(r.fingerprint)?.d === f.report.digest
+    ).length,
+  }));
+
 /** Forget everything, as the page does. */
 export function clear() {
   stated.clear();

@@ -46,12 +46,23 @@ export function pasteText(locale, { kind, link, hint }) {
  *
  * @param {string} locale - 'en' or 'es'
  * @param {object} what - title, intro, rows (a list of strings), link, svg,
- *   roster, hint, kind, minutes
+ *   roster, hint, kind, minutes, and `file`, an example of the file a student hands in (js/handInName.js)
  * @returns {string} A section of markup
  */
 export function handoutMarkup(locale, what) {
-  const { title, intro, rows, link, svg, roster, hint, kind, steps, minutes } =
-    what;
+  const {
+    title,
+    intro,
+    rows,
+    link,
+    svg,
+    roster,
+    hint,
+    kind,
+    steps,
+    minutes,
+    file,
+  } = what;
   return `<section class="kit-handout" lang="${locale}">
 <h1>${esc(title)}</h1>
 ${minutes ? `<p class="kit-sub">${esc(tr(locale, 'handout.minutes', { n: minutes }))}</p>` : ''}
@@ -63,5 +74,6 @@ ${intro ? `<p>${esc(intro)}</p>` : ''}
 <p>${esc(hint ? tr(locale, 'handout.name', { hint }) : tr(locale, 'handout.name.free'))}${roster ? ` ${esc(tr(locale, 'handout.class', { code: roster }))}` : ''}</p>
 <h2>${esc(tr(locale, 'handout.finish'))}</h2>
 <p>${esc(tr(locale, 'handout.finish.text'))}</p>
+${file ? `<p>${esc(tr(locale, 'handout.file', { file }))}</p>` : ''}
 </section>`;
 }

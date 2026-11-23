@@ -106,6 +106,28 @@ export const ES_REPORT = {
   'rp.reading': 'Tu lectura: {what}',
   'rp.inside': 'La lectura está dentro del intervalo dado.',
   'rp.outside': 'La lectura está fuera del intervalo dado.',
+  'rp.matched': 'Lo que ocurrió coincide con tu predicción.',
+  'rp.differed': 'Lo que ocurrió difiere de tu predicción.',
+  'rp.rdg.head': 'Tus lecturas y cómo se tomó cada una',
+  'rp.rdg.note':
+    'Cada lectura tal como la tomaste o la escribiste, con el instrumento o la lectura de la que salió, el cuerpo en el que se leyó y el reloj de la simulación en ese momento. Los valores están como se imprimieron, con la convención en que los escribiste.',
+  'rp.rdg.step': 'Paso',
+  'rp.rdg.what': 'Lectura',
+  'rp.rdg.value': 'Valor',
+  'rp.rdg.how': 'Cómo se tomó',
+  'rp.rdg.body': 'Cuerpo',
+  'rp.rdg.clock': 'Tiempo de simulación',
+  'rp.rdg.figs': 'Cifras significativas',
+  'rp.rdg.from': 'Tomada de {what}',
+  'rp.rdg.taken': 'Tomada de un instrumento',
+  'rp.rdg.typed': 'Escrita por ti',
+  'rp.rdg.span': 'Intervalo de {n} puntos, de {a} a {b}',
+  'rp.runs.cap':
+    'Tus ejecuciones, paso {n}: {title}. Solo cambió {param} de una ejecución a la siguiente.',
+  'rp.runs.run': 'Ejecución',
+  'rp.earlier.head': 'Respondido en una versión anterior',
+  'rp.earlier.note':
+    'Estas respuestas se dieron a un paso que la investigación ha reemplazado desde entonces. Se enumeran tal como se dieron, con la versión que reemplazó el paso, y no se corrigen con la pregunta actual ni con su respuesta.',
   'led.systems': 'Escenarios y experimentos entregados',
   'led.systemsNote':
     'Adjuntos a la evidencia de arriba. Abre el enlace para ver el mismo mundo, o usa el archivo que el estudiante envía con el informe. La versión y el motor dicen qué lo hizo.',

@@ -1118,6 +1118,7 @@ function exportResults(which) {
             label: r.label,
             reason: r.reason,
           })),
+          composed: composed?.summary(records) ?? [],
         }),
         file,
         'application/json'
@@ -1279,6 +1280,7 @@ async function archive() {
     const text = buildArchive({
       reports: kept,
       named: keptNames,
+      composed: composed?.held() ?? [],
       term,
       marks: hasMarks
         ? marksCsv(records, marks, {
@@ -1317,6 +1319,10 @@ async function openArchive(name, text) {
   const { archive: a } = read;
   for (const n of a.named) await takeContext(n.label || name, n.text);
   for (const r of a.reports) await accept(r.label, r.thing, r.kind);
+  // A composed report is read again, so its digest is checked again.
+  for (const c of a.composed)
+    if (await composedPart())
+      await composed.take(c.label || name, c.report, language(), esc);
   let withMarks = false;
   if (a.marks) withMarks = readMarksCsv(a.marks, marks).ok;
   render();

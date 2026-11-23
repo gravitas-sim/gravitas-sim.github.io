@@ -14,6 +14,7 @@
 // =============================================================================
 
 import { endingRows, plain } from '../lesson/opening.js';
+import { handInName } from '../handInName.js';
 import { whatNext } from './next.js';
 
 const fill = (pattern, values) =>
@@ -30,6 +31,30 @@ export function rowText(row, words, take) {
   return `${row.title} — ${said}${how ? ` (${how.replace(/\.$/, '')})` : ''}`;
 }
 
+/** Say what the files will be called, now and each time the name changes. */
+export function fileLine(host) {
+  const line = document.getElementById('investigationFinishFile');
+  const input = document.getElementById('investigationName');
+  if (!line || !input) return;
+  const draw = () => {
+    const { active } = host.state();
+    const es = host.lib.getLocale() === 'es';
+    const name = input.value.trim() || (es ? 'tu nombre' : 'your name');
+    line.textContent = fill(
+      line.getAttribute(`data-file-${es ? 'es' : 'en'}`) || '',
+      {
+        pdf: handInName(name, active.id, 'pdf'),
+        html: handInName(name, active.id, 'html'),
+      }
+    );
+  };
+  draw();
+  if (!line.dataset.live) {
+    line.dataset.live = '1';
+    input.addEventListener('input', draw);
+  }
+}
+
 /**
  * Draw the ending, then what comes next.
  * @param {import('./finish.js').FinishHost} host - The lesson's finish host
@@ -38,6 +63,7 @@ export function rowText(row, words, take) {
  */
 export function ending(host, steps, ctx) {
   const box = document.getElementById('investigationEnding');
+  fileLine(host);
   const { active, responses } = host.state();
   const { t, getLocale } = host.lib;
   if (box) {
