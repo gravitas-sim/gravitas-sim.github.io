@@ -243,9 +243,9 @@ function syncProtagonist(state, ctx, spec = {}) {
   paintScene(state, ctx, role, where);
 
   if (where.stage === STAGE.REMNANT) {
-    // The prescription, not the track. becomeRemnant carries the selection
-    // across and leaves an unfinished model's star alone.
-    if (boundStage !== key && typeof ctx.becomeRemnant === 'function') {
+    // The prescription, not the track; stood again if the scene was rebuilt under it.
+    const again = boundStage !== key || !ctx.remnantKindOf?.(role);
+    if (again && typeof ctx.becomeRemnant === 'function') {
       boundStage = key;
       ctx.becomeRemnant(role, endpointFor(state.trackId));
     }
