@@ -7,7 +7,7 @@
 //
 // One row per short-answer step. The tray beside the answer box offers the
 // readings the measure steps before it take (by step and field) and the
-// predictions whose reveal comes before it; a step that names `cite` narrows
+// predictions whose reveal comes before it; a step that `js/investigations/trayCites.js` names narrows
 // both to those steps. The rule is `citable` in js/investigations/evidence.js,
 // the one the lesson itself runs, so the table and the screen cannot differ.
 // A step with nothing to offer has no tray.
@@ -16,6 +16,7 @@
 import { readFile, writeFile } from 'node:fs/promises';
 import { INVESTIGATIONS } from '../js/data/investigations.js';
 import { citable } from '../js/investigations/evidence.js';
+import { CITES } from '../js/investigations/trayCites.js';
 
 const OUT = new URL('../docs/evidence-tray.md', import.meta.url);
 
@@ -35,13 +36,13 @@ export function trayRows() {
   for (const inv of INVESTIGATIONS)
     inv.steps.forEach((step, i) => {
       if (step.kind !== 'short') return;
-      const { readings, predictions } = citable(inv.steps, step);
+      const { readings, predictions } = citable(inv.steps, step, inv.id);
       rows.push({
         lesson: inv.id,
         index: i + 1,
         sid: step.sid,
         reflect: Boolean(step.reflect),
-        cite: Boolean(step.cite),
+        cite: Boolean(CITES[inv.id]?.[step.sid]),
         readings,
         predictions,
       });
@@ -83,12 +84,12 @@ export function render(rows = trayRows(), loops = openLoops()) {
     '`citable` in `js/investigations/evidence.js`: a short-answer step offers the',
     'readings the measure steps before it take (each field that holds a number the',
     'student read or typed, not a derived one) and the predictions whose reveal',
-    "comes before it. A step that names `cite` offers only those steps'. The tray",
+    "comes before it. A step that `js/investigations/trayCites.js` names offers only those steps'. The tray",
     'is read-only, holds only what the student produced, shows a prediction only',
     'after its reveal and never prints an authored answer.',
     '',
     `${rows.length} short-answer steps in ${new Set(rows.map(r => r.lesson)).size} lessons; ${withTray.length} carry a tray, ` +
-      `${rows.length - withTray.length} have nothing to offer. ${rows.filter(r => r.cite).length} name \`cite\`.`,
+      `${rows.length - withTray.length} have nothing to offer. ${rows.filter(r => r.cite).length} are narrowed by \`trayCites.js\`.`,
     '',
     '| Lesson | Step | Id | Reflection | Narrowed | Readings | Reading steps | Predictions |',
     '|---|---|---|---|---|---|---|---|',

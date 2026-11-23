@@ -1389,11 +1389,6 @@ const LISTENING_TO_SPACETIME = {
     },
     {
       sid: 'measured-or-supplied',
-      cite: [
-        'looks-like-is-not-enough',
-        'the-same-moment',
-        'rank-before-the-catalog',
-      ],
       stage: BBH,
       type: 'question',
       title: 'What came from where',
@@ -1455,14 +1450,6 @@ const LISTENING_TO_SPACETIME = {
     },
     {
       sid: 'what-the-signal-tells-you',
-      cite: [
-        'an-unlabeled-signal',
-        'frequency-early-and-late',
-        'stop-at-a-milestone',
-        'measure-time-in-band',
-        'the-one-mass-that-matters',
-        'test-distance',
-      ],
       stage: BBH,
       type: 'question',
       title: 'What the signal tells you, and what it does not',

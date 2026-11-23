@@ -13,6 +13,7 @@ import { afterEach, beforeEach, describe, expect, test } from '@jest/globals';
 import { execFileSync } from 'node:child_process';
 import { INVESTIGATIONS } from '../js/data/investigations.js';
 import { citable } from '../js/investigations/evidence.js';
+import { CITES } from '../js/investigations/trayCites.js';
 import * as reveal from '../js/investigations/reveal.js';
 import {
   bindStepInputs,
@@ -109,7 +110,7 @@ describe('what a written answer could cite', () => {
   const why = l.steps[4];
 
   test('numbers the student reads or types, from the steps before it, by step and field', () => {
-    expect(citable(l.steps, why)).toEqual({
+    expect(citable(l.steps, why, LESSON)).toEqual({
       readings: [
         { step: 'read', field: 'p' },
         { step: 'read', field: 'q' },
@@ -122,27 +123,33 @@ describe('what a written answer could cite', () => {
   });
 
   test('a prediction whose reveal comes after the answer is not offered', () => {
-    expect(citable(l.steps, why).predictions.map(p => p.step)).not.toContain(
-      'late'
-    );
+    expect(
+      citable(l.steps, why, LESSON).predictions.map(p => p.step)
+    ).not.toContain('late');
   });
 
-  test('cite narrows both lists to the steps named', () => {
-    const only = { ...why, cite: ['guess'] };
-    const steps = [...l.steps.slice(0, 4), only];
-    expect(citable(steps, only)).toEqual({
-      readings: [],
-      predictions: [{ step: 'guess', reveal: 'result' }],
-    });
+  test('a closing question trayCites.js names is narrowed to the steps listed there', () => {
+    CITES[LESSON] = { why: ['guess'] };
+    try {
+      expect(citable(l.steps, why, LESSON)).toEqual({
+        readings: [],
+        predictions: [{ step: 'guess', reveal: 'result' }],
+      });
+    } finally {
+      delete CITES[LESSON];
+    }
   });
 
   test('a step that is not a short answer, or comes first, has nothing', () => {
-    expect(citable(l.steps, l.steps[3])).toEqual({
+    expect(citable(l.steps, l.steps[3], LESSON)).toEqual({
       readings: [],
       predictions: [],
     });
     const first = { ...why };
-    expect(citable([first], first)).toEqual({ readings: [], predictions: [] });
+    expect(citable([first], first, LESSON)).toEqual({
+      readings: [],
+      predictions: [],
+    });
   });
 });
 
@@ -330,22 +337,25 @@ describe('the tray on screen', () => {
 });
 
 describe('the list of steps with a tray', () => {
-  test('every step a cite names is a step of the same lesson, before the answer', () => {
-    for (const inv of INVESTIGATIONS)
-      inv.steps.forEach((step, i) => {
-        for (const sid of step.cite || [])
-          expect(
-            inv.steps.findIndex(s => s.sid === sid)
-          ).toBeGreaterThanOrEqual(0);
-        if (step.cite)
-          for (const sid of step.cite)
-            expect(inv.steps.findIndex(s => s.sid === sid)).toBeLessThan(i);
-      });
+  test('every step a narrowed question names is a step of the same lesson, before it, and the question is a short answer', () => {
+    for (const [id, questions] of Object.entries(CITES)) {
+      const inv = INVESTIGATIONS.find(i => i.id === id);
+      expect(inv).toBeDefined();
+      for (const [sid, cites] of Object.entries(questions)) {
+        const at = inv.steps.findIndex(s => s.sid === sid);
+        expect(inv.steps[at].kind).toBe('short');
+        for (const c of cites) {
+          const i = inv.steps.findIndex(s => s.sid === c);
+          expect(i).toBeGreaterThanOrEqual(0);
+          expect(i).toBeLessThan(at);
+        }
+      }
+    }
   });
 
-  test('cite is only used on a short answer', () => {
-    for (const inv of INVESTIGATIONS)
-      for (const s of inv.steps) if (s.cite) expect(s.kind).toBe('short');
+  test('every narrowed question still has something to offer', () => {
+    for (const r of trayRows().filter(r => r.cite))
+      expect(r.readings.length + r.predictions.length).toBeGreaterThan(0);
   });
 
   test('it lists every short-answer step and the table is current', () => {

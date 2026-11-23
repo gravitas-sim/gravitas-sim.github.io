@@ -124,7 +124,7 @@ export function tray(step, c) {
   const { id, active, responses, visited } = c;
   const steps = active?.steps;
   const { readings, predictions } = steps
-    ? citable(steps, step)
+    ? citable(steps, step, active.id)
     : { readings: [], predictions: [] };
   if (!readings.length && !predictions.length) return '';
   const key = sid => kit.stepKey(active.id, sid);
