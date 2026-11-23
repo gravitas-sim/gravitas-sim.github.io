@@ -1,7 +1,10 @@
 // The student's own readings and revealed predictions beside a written answer. Fetched by reveal.js with the first
 // short-answer step, so a lesson without one pays nothing for it. Words: the `tray.*` keys of en.reveal.js.
 
-import { t } from '../i18n/index.js';
+import { registerMessages, t } from '../i18n/index.js';
+import { EN_TRAY } from '../i18n/en.tray.js';
+import { ES_TRAY } from '../i18n/es.tray.js';
+import { CITES } from './trayCites.js';
 import { escapeHtml as escape, prose } from '../lessonMarkup.js';
 import {
   citable,
@@ -10,6 +13,9 @@ import {
   readEstimate,
   readingsFor,
 } from './evidence.js';
+
+registerMessages('en', EN_TRAY);
+registerMessages('es', ES_TRAY);
 
 // Whether the tray beside a written answer was left open or shut, by step; unset, it is shut on a phone.
 const left = {};
@@ -24,7 +30,7 @@ export function tray(step, c, kit) {
   const { id, active, responses, visited } = c;
   const steps = active?.steps;
   const { readings, predictions } = steps
-    ? citable(steps, step, active.id)
+    ? citable(steps, step, CITES[active.id]?.[step.sid])
     : { readings: [], predictions: [] };
   if (!readings.length && !predictions.length) return '';
   const key = sid => kit.stepKey(active.id, sid);

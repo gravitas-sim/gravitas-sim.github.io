@@ -23,8 +23,8 @@ import {
 } from '../js/investigations/stepView.js';
 import { registerMessages } from '../js/i18n/index.js';
 import { EN_DEFERRED } from '../js/i18n/en.deferred.js';
-import { EN_REVEAL } from '../js/i18n/en.reveal.js';
-import { ES_REVEAL } from '../js/i18n/es.reveal.js';
+import { EN_TRAY } from '../js/i18n/en.tray.js';
+import { ES_TRAY } from '../js/i18n/es.tray.js';
 import { stepKey } from '../js/investigations/progressSchema.js';
 import { trayRows } from '../tools/evidence-tray-list.mjs';
 
@@ -110,7 +110,7 @@ describe('what a written answer could cite', () => {
   const why = l.steps[4];
 
   test('numbers the student reads or types, from the steps before it, by step and field', () => {
-    expect(citable(l.steps, why, LESSON)).toEqual({
+    expect(citable(l.steps, why)).toEqual({
       readings: [
         { step: 'read', field: 'p' },
         { step: 'read', field: 'q' },
@@ -123,30 +123,25 @@ describe('what a written answer could cite', () => {
   });
 
   test('a prediction whose reveal comes after the answer is not offered', () => {
-    expect(
-      citable(l.steps, why, LESSON).predictions.map(p => p.step)
-    ).not.toContain('late');
+    expect(citable(l.steps, why).predictions.map(p => p.step)).not.toContain(
+      'late'
+    );
   });
 
-  test('a closing question trayCites.js names is narrowed to the steps listed there', () => {
-    CITES[LESSON] = { why: ['guess'] };
-    try {
-      expect(citable(l.steps, why, LESSON)).toEqual({
-        readings: [],
-        predictions: [{ step: 'guess', reveal: 'result' }],
-      });
-    } finally {
-      delete CITES[LESSON];
-    }
+  test('a narrowed question offers only the steps listed', () => {
+    expect(citable(l.steps, why, ['guess'])).toEqual({
+      readings: [],
+      predictions: [{ step: 'guess', reveal: 'result' }],
+    });
   });
 
   test('a step that is not a short answer, or comes first, has nothing', () => {
-    expect(citable(l.steps, l.steps[3], LESSON)).toEqual({
+    expect(citable(l.steps, l.steps[3])).toEqual({
       readings: [],
       predictions: [],
     });
     const first = { ...why };
-    expect(citable([first], first, LESSON)).toEqual({
+    expect(citable([first], first)).toEqual({
       readings: [],
       predictions: [],
     });
@@ -380,10 +375,7 @@ describe('the list of steps with a tray', () => {
 
 describe('the words', () => {
   test('English and Spanish carry the same keys', () => {
-    expect(Object.keys(ES_REVEAL).sort()).toEqual(
-      Object.keys(EN_REVEAL).sort()
-    );
-    for (const k of Object.keys(EN_REVEAL).filter(k => k.startsWith('tray.')))
-      expect(ES_REVEAL[k]).toBeTruthy();
+    expect(Object.keys(ES_TRAY).sort()).toEqual(Object.keys(EN_TRAY).sort());
+    for (const k of Object.keys(EN_TRAY)) expect(ES_TRAY[k]).toBeTruthy();
   });
 });

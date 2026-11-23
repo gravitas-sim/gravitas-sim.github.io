@@ -1,9 +1,7 @@
 // A prediction set beside the student's own readings. Pure, shared by the verdict box and the reports.
 
-// Imports only its own data (trayCites.js, used nowhere else): the engine's own functions come from stepView.js
-// (`revealModule`), because an import of them here would split a shared chunk and add a request on every lesson route.
-import { CITES } from './trayCites.js';
-
+// Imports nothing: the engine's own functions come from stepView.js (`revealModule`), because an import here would
+// split a shared chunk and add a request on every lesson route.
 let kit = {};
 export const setKit = k => (kit = k);
 
@@ -79,18 +77,17 @@ const isReading = f => !f.compute && f.kind !== 'text' && !f.options;
 
 /**
  * What a written answer could cite, by step and field: the readings the measure steps before it take, and the
- * predictions whose reveal comes before it. A closing question that trayCites.js names narrows both to the steps
+ * predictions whose reveal comes before it. `only`, where trayCites.js names the question, narrows both to the steps
  * listed there. Nothing is chosen from what the student has typed: this is the lesson's data alone, so it is the same
  * for every student.
  * @param {object[]} steps - The lesson's steps
  * @param {object} step - A short-answer step
- * @param {string} lesson - The lesson's id
+ * @param {string[]} [only] - Sids of the steps to offer from, when the question names them
  * @returns {{readings: {step: string, field: string}[], predictions: {step: string, reveal: string}[]}}
  */
-export function citable(steps, step, lesson) {
+export function citable(steps, step, only) {
   const at = steps.indexOf(step);
   if (at < 0 || step.kind !== 'short') return { readings: [], predictions: [] };
-  const only = CITES[lesson]?.[step.sid];
   const before = steps.slice(0, at).filter(s => !only || only.includes(s.sid));
   const revealed = s => {
     const r = steps.findIndex(x => x.sid === s.reveal);

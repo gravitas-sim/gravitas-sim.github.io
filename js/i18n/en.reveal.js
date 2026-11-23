@@ -17,16 +17,4 @@ export const EN_REVEAL = {
   'reveal.none': 'none recorded',
   'reveal.inside': 'Your reading is inside the range you gave.',
   'reveal.outside': 'Your reading is outside the range you gave.',
-  'tray.head': 'Your evidence to cite: {n}',
-  'tray.note':
-    'Your own readings, and predictions once their result is shown. Saved on this device; the scene they came from is not. Nothing here is added to your answer: copy what you want to cite.',
-  'tray.empty':
-    'Nothing to cite yet. Readings you take in earlier steps appear here, and predictions once their result is shown.',
-  'tray.in': 'In “{title}”.',
-  'tray.of': 'Body: {body}.',
-  'tray.clock': 'Simulation clock: {time}.',
-  'tray.cite': 'Cite',
-  'tray.cited':
-    'Nothing was added to your answer. Type it, or copy it from the list: {what}',
-  'tray.differed': 'That is not what happened.',
 };

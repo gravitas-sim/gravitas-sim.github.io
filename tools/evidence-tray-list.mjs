@@ -36,7 +36,11 @@ export function trayRows() {
   for (const inv of INVESTIGATIONS)
     inv.steps.forEach((step, i) => {
       if (step.kind !== 'short') return;
-      const { readings, predictions } = citable(inv.steps, step, inv.id);
+      const { readings, predictions } = citable(
+        inv.steps,
+        step,
+        CITES[inv.id]?.[step.sid]
+      );
       rows.push({
         lesson: inv.id,
         index: i + 1,
