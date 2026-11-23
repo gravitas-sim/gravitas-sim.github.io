@@ -214,7 +214,7 @@ The canvas behind a step is stated as scene on 15, portrait on 7, quiet on 103; 
 - **Instruments:** none.
 - **Stored data:** none.
 - **Evidence kept:** notebook-fields.
-- **Prediction loops:** predict-the-comb → run-both-schedules, read-the-comparison, break-your-own-result → run-both-schedules; predict-the-weather → lose-a-fortnight, type-the-dates → lose-a-fortnight.
+- **Prediction loops:** predict-the-comb → run-both-schedules, read-the-comparison, break-your-own-result → what-the-window-says; predict-the-weather → lose-a-fortnight, type-the-dates → lose-a-fortnight.
 - **Recovery:** wrong body: the step binds the object by name, so there is none; reset: rebuilds the scenario on arrival; null result: the probe names what is missing; missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand; ambiguous result: the check says in words how close is close enough.
 - **Scene rebuilds:** 6 step(s) on arrival (eight-nights, set-the-run-up, run-both-schedules, break-your-own-result, lose-a-fortnight, type-the-dates).
 - **Accepted central experiment** (reviewed 2026-09-11): object `planet`, control the schedule workspace: set the cadence and run both, measures the period recovered from each schedule, and its alias, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
