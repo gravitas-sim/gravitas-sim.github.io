@@ -35,14 +35,11 @@ import {
   SOLAR_MASS_KG,
   SOLAR_RADIUS_M,
   EARTH_MASS_KG,
-  EARTH_RADIUS_M,
   JUPITER_MASS_KG,
   JUPITER_RADIUS_M,
   AU_METERS,
   tidalAcceleration,
-  tidalToSelfGravity,
   bulkDensity,
-  massFromDensity,
 } from '../../js/tidalPhysics.js';
 import { schwarzschildRadiusM } from '../../js/blackHolePhysics.js';
 import { radialVelocitySemiAmplitude } from '../../js/exoplanetObservables.js';
@@ -284,7 +281,7 @@ export const MODELS = {
         5
       ),
   },
-  'radial-velocity/how-dense-is-it': {
+  'radial-velocity/density-from-your-mass': {
     via: 'js/tidalPhysics.js bulkDensity of the published mass and radius, g/cm^3',
     value: () =>
       bulkDensity(
@@ -310,22 +307,11 @@ export const MODELS = {
     via: "js/darkMatter.js virialMass at the step's printed mean square speed 418.7 and R = 2516 (simulation units, G = 1), 1000 simulation masses to a solar mass",
     value: () => virialMass(418.7, 2516, 1) / 1000,
   },
-  'tides/how-steeply-does-it-fall': {
+  'tides/the-factor-per-halving': {
     via: "js/tidalPhysics.js tidalAcceleration at the Moon's distance and half of it",
     value: () =>
       tidalAcceleration(EARTH_MASS_KG, 3.844e8 / 2, 1.7374e6) /
       tidalAcceleration(EARTH_MASS_KG, 3.844e8, 1.7374e6),
-  },
-  'tides/where-the-balance-tips': {
-    via: 'js/tidalPhysics.js tidalToSelfGravity: the distance where stretch equals grip for a 3300 kg/m^3 moon, in Earth radii',
-    value: () => {
-      const R = 1.7374e6;
-      const m = massFromDensity(3300, R);
-      return (
-        solve(d => tidalToSelfGravity(EARTH_MASS_KG, m, R, d), 1, 1e6, 1e9) /
-        EARTH_RADIUS_M
-      );
-    },
   },
   'when-orbits-lock/what-180-means': {
     via: 'js/resonance/elements.js laplaceArgument: the Ganymede-Europa angle that puts it at 180 when Io and Europa are in conjunction',

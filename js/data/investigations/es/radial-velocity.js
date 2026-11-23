@@ -47,7 +47,7 @@ export default {
     },
     {
       title: '¿Cuál de los dos se mueve?',
-      body: 'Antes de ejecutar nada: la estrella de aquí tiene unas 1,15 veces la masa del Sol. El planeta tiene aproximadamente dos tercios de la masa de Júpiter, lo que lo convierte en cerca de una mil setecientosava parte de la estrella.',
+      body: 'Antes de ejecutar nada: la estrella de aquí tiene unas 1,15 veces la masa del Sol. El planeta es un gigante gaseoso, más de mil veces más ligero que su estrella.',
       prompt:
         'Cuando se ejecute la simulación, ¿qué objetos se moverán de verdad?',
       options: [
@@ -57,11 +57,11 @@ export default {
         'Solo la estrella',
       ],
       because:
-        'Se mueven los dos, alrededor de su centro de masas común. Como la estrella es unas mil setecientas veces más pesada, su propia órbita es unas mil setecientas veces menor. Por eso aquí parece inmóvil y no lo está.',
+        'Se mueven los dos, alrededor de su centro de masas común. Como la estrella es más de mil veces más pesada, su propia órbita es más de mil veces menor. Por eso aquí parece inmóvil y no lo está.',
     },
     {
       title: 'Los dos dan vueltas',
-      body: 'Este instrumento dibuja la misma idea con la órbita de la estrella ampliada para que puedas verla. La órbita del planeta está a escala real; la de la estrella está aumentada en la cantidad escrita al pie de la imagen.\n\nLa cruz es el centro de masas: el punto que ambos rodean. Fíjate en que la estrella y el planeta están siempre en lados opuestos de él.',
+      body: 'Este instrumento dibuja la misma idea con la órbita de la estrella ampliada para que puedas verla. La órbita del planeta está a escala real; la de la estrella está aumentada en la cantidad escrita al pie de la imagen.\n\nEspera a que lo pidas: pulsa <strong>Ejecutar</strong> para ponerlos en marcha, y Pausar para detenerlos.\n\nLa cruz es el centro de masas: el punto que ambos rodean. Fíjate en que la estrella y el planeta están siempre en lados opuestos de él.',
       tool: {
         title: '¿Quién se mueve de verdad?',
         note: 'Prueba los ajustes predefinidos. El aumento cambia; la física no.',
@@ -77,8 +77,22 @@ export default {
         'Un compañero más pesado aleja el punto de equilibrio del centro de la estrella, así que la estrella tiene más recorrido que hacer. Más masa planetaria significa un bamboleo estelar mayor.',
     },
     {
+      title: 'Lee dos bamboleos',
+      body: 'Elige un planeta ligero y otro mucho más pesado, y lee la órbita propia de la estrella para cada uno. Deja quieto el tamaño de la órbita: solo cambia el planeta.\n\nAjusta el deslizador de masa planetaria, pulsa <strong>Ejecutar</strong> para ver cómo da la vuelta la estrella y toma la lectura junto a la casilla. Hazlo otra vez con el otro planeta.\n\nEl aumento cambia la imagen, no el número que tomas.',
+      tool: {
+        title: 'Pesa el bamboleo',
+        note: 'Cambia solo la masa del planeta. Toma cada lectura después de que la estrella haya dado una vuelta.',
+      },
+      fields: [
+        { label: 'Órbita propia de la estrella, planeta más ligero' },
+        { label: 'Órbita propia de la estrella, planeta más pesado' },
+      ],
+    },
+    {
       title: 'Míralo crecer',
-      body: 'Arrastra el deslizador de masa planetaria desde una Tierra hasta un Júpiter pesado y observa cómo se abre el círculo de la estrella. Lee el número etiquetado <strong>Órbita propia de la estrella</strong> mientras lo haces.\n\nDespués prueba el ajuste de la Tierra. El bamboleo físico se vuelve diminuto, y el aumento tiene que subir en un factor de miles antes de que puedas verlo siquiera. Sigue estando ahí.\n\nEsa es toda la idea de esta investigación. Un planeta no tiene que ser brillante para ser encontrado, ni visible en absoluto. Solo tiene que ser lo bastante pesado como para mover su estrella en una cantidad que podamos medir.',
+      compare:
+        'Un planeta más pesado aleja el punto de equilibrio del centro de la estrella, así que la órbita propia de la estrella es mayor: comprueba tus dos lecturas con lo que dijiste.',
+      body: 'Ahora ve más lejos. Arrastra el deslizador de masa planetaria desde una Tierra hasta un Júpiter pesado y observa cómo se abre el círculo de la estrella. Sigue leyendo el número etiquetado <strong>Órbita propia de la estrella</strong>.\n\nDespués prueba el ajuste de la Tierra. El bamboleo físico se vuelve diminuto, y el aumento tiene que subir en un factor de miles antes de que puedas verlo siquiera. Sigue estando ahí.\n\nEsa es toda la idea de esta investigación. Un planeta no tiene que ser brillante para ser encontrado, ni visible en absoluto. Solo tiene que ser lo bastante pesado como para mover su estrella en una cantidad que podamos medir.',
       tool: {
         title: 'Más masa, mayor bamboleo',
       },
@@ -103,7 +117,7 @@ export default {
     },
     {
       title: 'Hacia aquí, hacia allá, hacia aquí otra vez',
-      body: 'A la izquierda, la estrella recorre su pequeña órbita y una flecha muestra qué parte de su movimiento apunta hacia nosotros. A la derecha, esa cantidad se representa mientras la estrella da la vuelta.\n\nObserva qué ocurre en los dos puntos en los que la estrella se mueve justo de través respecto a tu vista.\n\nEl panel es un diagrama de la idea. Debajo está la misma magnitud para la estrella que está de verdad en el lienzo: dónde se encuentra HD 209458 en su órbita ahora mismo, y qué estaría leyendo en este instante un espectrógrafo apuntado hacia ella. Míralos juntos, y fíjate en que una lectura <em>negativa</em> significa que la estrella se acerca.',
+      body: 'Pulsa <strong>Ejecutar</strong> para poner el diagrama en marcha. A la izquierda, la estrella recorre su pequeña órbita y una flecha muestra qué parte de su movimiento apunta hacia nosotros. A la derecha, esa cantidad se representa mientras la estrella da la vuelta.\n\nObserva qué ocurre en los dos puntos en los que la estrella se mueve justo de través respecto a tu vista.\n\nEl panel es un diagrama de la idea. Debajo está la misma magnitud para la estrella que está de verdad en el lienzo: dónde se encuentra HD 209458 en su órbita ahora mismo, y qué estaría leyendo en este instante un espectrógrafo apuntado hacia ella. Míralos juntos, y fíjate en que una lectura <em>negativa</em> significa que la estrella se acerca.',
       tool: {
         title: 'La parte que podemos medir',
       },
@@ -128,7 +142,7 @@ export default {
     },
     {
       title: 'Mide el periodo',
-      body: 'La curva se repite. Encuentra el tiempo entre dos puntos equivalentes, por ejemplo dos máximos sucesivos, y anótalo.\n\nEste es el periodo orbital del planeta, medido sin haber visto nunca el planeta.\n\nHay una manera de cazar un máximo exactamente. El vigilante de sucesos de abajo está puesto para detener la simulación en el momento en que la velocidad radial alcanza su valor más positivo: pulsa <strong>Armar</strong> y se detendrá ahí. Hazlo dos veces y el hueco entre las dos paradas es el periodo, leído del reloj en vez de estimado a ojo en una gráfica.\n\nMientras está detenido, mira el lienzo. ¿Hacia dónde se mueve realmente la estrella, y coincide con el signo de la lectura?',
+      body: 'La curva se repite. Encuentra el tiempo entre dos puntos equivalentes, por ejemplo dos máximos sucesivos, y anótalo.\n\nEste es el periodo orbital del planeta, medido sin haber visto nunca el planeta.\n\nHay una manera de cazar un máximo exactamente. El vigilante de sucesos de abajo está puesto para detener la simulación en el momento en que la velocidad radial alcanza su valor más positivo: pulsa <strong>Armar</strong> y se detendrá ahí. Hazlo dos veces y el hueco entre las dos paradas es el periodo, leído del reloj en vez de estimado a ojo en una gráfica. Puedes cronometrar más ciclos y dividir: cuántos es decisión tuya.\n\nMientras está detenido, mira el lienzo. ¿Hacia dónde se mueve realmente la estrella, y coincide con el signo de la lectura?',
       fields: [
         {
           label: 'Tiempo de un ciclo completo',
@@ -144,7 +158,7 @@ export default {
     },
     {
       title: 'Lee K en el panel',
-      body: 'Con el panel de Velocidad radial abierto y al menos un ciclo completo registrado, lee la semiamplitud que indica.',
+      body: 'Con el panel de Velocidad radial abierto y al menos un ciclo completo registrado, toma el semirrango que indica: pulsa el botón junto a la casilla. Puedes escribir un valor en su lugar, y la casilla dice cuál de las dos cosas hiciste.',
       fields: [
         {
           label: 'Semiamplitud K',
@@ -170,7 +184,7 @@ export default {
     },
     {
       title: 'Pesa HD 209458 b',
-      body: 'Usa el instrumento de abajo. Ajusta la masa real del planeta hasta que la K que indica coincida con la K que mediste en el panel, unos 84 metros por segundo, con la inclinación dejada en 90 grados.\n\n¿Qué masa planetaria da eso?',
+      body: 'Usa el instrumento de abajo. Busca la masa real del planeta cuya K coincida con la K que tomaste del panel, con la inclinación dejada en 90 grados. El instrumento se abre con una masa que no es la tuya: la tuya la tienes que encontrar.\n\n¿Qué masa planetaria da eso?',
       tool: {
         title: 'Iguala la K medida',
       },
@@ -182,7 +196,7 @@ export default {
         concept:
           'K depende de con qué fuerza tira el planeta de su estrella. Planeta más pesado, bamboleo mayor — y todo lo demás de este sistema ya está fijado, así que la masa es lo único que queda por cambiar.',
         method:
-          'Arrastra el control de masa planetaria hasta que la K del panel marque unos 84 m/s. Deja la inclinación en 90 grados: inclinar la órbita cambia K sin cambiar la masa, y ese es el problema de la pantalla siguiente, no de esta.',
+          'Arrastra el control de masa planetaria hasta que la K de la lectura coincida con la K que tomaste. Deja la inclinación en 90 grados: inclinar la órbita cambia K sin cambiar la masa, y ese es el problema de la pantalla siguiente, no de esta.',
       },
       worked:
         'A 90 grados y con un periodo de 3,52 días, K es proporcional a la masa del planeta: una Tierra da 0,38 m/s y un planeta de cinco Júpiter da 609. Por tanto 84 m/s corresponde a unas 0,69 masas de Júpiter, que es el valor publicado.',
@@ -313,18 +327,18 @@ export default {
     },
     {
       title: 'Recupera el tránsito',
-      body: 'Ahora tienes dos medidas independientes del mismo planeta.\n\nDel tránsito, en la investigación anterior: su <strong>radio</strong>, unos 1,38 radios de Júpiter.\n\nDel bamboleo, en esta: su <strong>masa</strong>, unas 0,69 masas de Júpiter.\n\nNinguno de los dos números dice por sí solo qué clase de objeto es este. Juntos, sí.',
+      body: 'Ahora tienes dos medidas independientes del mismo planeta.\n\nDel tránsito, en la investigación anterior: su <strong>radio</strong>, unos 1,38 radios de Júpiter.\n\nDel bamboleo, en esta: su <strong>masa</strong>, la que pesaste.\n\nNinguno de los dos números dice por sí solo qué clase de objeto es este. Juntos, sí.',
     },
     {
       title: 'Caracteriza el planeta',
-      body: 'El panel de abajo toma cada medida por turno y muestra qué compra. Las dos primeras filas son el tránsito y la velocidad radial. La tercera las combina.\n\nLee la densidad media de HD 209458 b y compárala con el agua, 1 gramo por centímetro cúbico, y con la Tierra, 5,5.',
+      body: 'El panel de abajo toma cada medida por turno y muestra qué compra. Las dos primeras filas son el tránsito y la velocidad radial. La tercera las combina.\n\nSe abre con un planeta propio. Ajusta el radio al que dio el tránsito y la masa a la que pesaste, y luego cambia una cosa cada vez y observa qué filas se mueven.',
       tool: {
         title: 'La cadena de inferencia',
       },
     },
     {
-      title: '¿Cómo de denso es?',
-      body: 'Lee la densidad media de HD 209458 b en el panel.',
+      title: 'Densidad a partir de tu masa',
+      body: 'Calcula tú mismo la densidad media del planeta a partir de la masa que pesaste y del radio del tránsito, 1,38 radios de Júpiter. La densidad es masa entre volumen, y el planeta es casi una esfera.\n\nLuego compruébala con el panel del paso anterior: ajusta su radio y su masa a esos dos números y lee la fila del propio planeta.',
       prompt: 'Densidad media, en g/cm³',
       unit: 'g/cm³',
       because:
@@ -338,7 +352,7 @@ export default {
         concept:
           'La densidad es masa dividida por volumen, y tienes ambas: una masa a partir del bamboleo y un radio a partir del tránsito.',
         method:
-          'El panel de caracterización ya las ha combinado. Busca la fila que da la densidad media del propio planeta, no la que la compara con la Tierra.',
+          'Júpiter mismo tiene 1,24 g/cm³ con su radio ecuatorial. Escala eso por tu masa en masas de Júpiter entre el radio en radios de Júpiter, al cubo. Luego compara con la fila propia del panel, no con la que compara el planeta con la Tierra.',
       },
       worked:
         '0,69 masas de Júpiter dentro de una esfera de 1,38 radios de Júpiter dan unos 0,33 g/cm³: un tercio de la densidad del agua y una decimosexta parte de la de la Tierra. Nada rocoso es tan ligero, así que el planeta tiene que ser sobre todo gas.',

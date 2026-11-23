@@ -56,7 +56,8 @@ describe('the allowlist only shrinks', () => {
     // 64 after Kepler's Laws was reworked: its period question is retired.
     // 63 after Missing Mass moved its MOND steps to the deeper path (the check on
     // the-prediction-mond-makes now lives in tests/missingMassFits.test.js).
-    expect(literals).toHaveLength(63);
+    // 62 with Tides, whose crossing question became a hunt with no numeric answer.
+    expect(literals).toHaveLength(62);
     for (const l of literals) {
       const homes = [MODELS, SOURCED, UNCHECKED].filter(t => t[l.key]);
       expect({ key: l.key, homes: homes.length }).toEqual({
@@ -72,7 +73,7 @@ describe('the allowlist only shrinks', () => {
     expect(UNCHECKED_CEILING).toBe(34);
     expect(
       Object.keys(MODELS).length + Object.keys(SOURCED).length + UNCHECKED_COUNT
-    ).toBe(63);
+    ).toBe(62);
   });
 
   test('every entry names a real literal and gives a reason', () => {
@@ -234,10 +235,10 @@ describe('the instructor expectations record', () => {
     // 556 over v4's 552: the new steps of Weighing the Stars, Transit Photometry and Kepler's Laws, net of the ones they retire.
     // 557 over that: the new steps of Integrators in Practice and Extending an Experiment, net of the ones they retire.
     // 555 over that: Lives of Stars replaces three read-a-number steps with one comparison step (3 retired, 1 new).
-    // 554: 556 at v4 after Missing Mass gained the compare-your-two-fits expectation,
-    // less one each for Why Mars Goes Backwards (Prompt 346) and the Goldilocks
-    // Question's distance steps (three-distances-yours).
-    expect(total).toBe(554);
+    // 558: 560 at v4 (Missing Mass's compare-your-two-fits expectation, Tides' three and the
+    // half-range step of Radial Velocity), less one each for Why Mars Goes Backwards
+    // (Prompt 346) and the Goldilocks Question's distance steps (three-distances-yours).
+    expect(total).toBe(558);
     // 542 after How Many Earths? (Prompt 229): 3 more over 539.
     // 547 after the four exoplanet closeout investigations (Prompt 231): 5 more over 542.
   });

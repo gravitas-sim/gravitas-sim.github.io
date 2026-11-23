@@ -11,16 +11,16 @@ The hand-written, human-reviewed acceptance map is
 [`lesson-acceptance.json`](lesson-acceptance.json); `npm run
 audit:scene:check` fails if it disagrees with what is generated here.
 
-Across 124 investigations and 1528 steps: 1411 steps
-declare a scene, 165 let a reader change one, 176 read the
-running integration, 1000 show a prescribed model result, 159 draw
-on a stored dataset, 871 put a self-contained panel beside the text,
-394 keep something, and 64 are prose.
+Across 124 investigations and 1536 steps: 1392 steps
+declare a scene, 165 let a reader change one, 178 read the
+running integration, 1003 show a prescribed model result, 159 draw
+on a stored dataset, 874 put a self-contained panel beside the text,
+399 keep something, and 79 are prose.
 Of 204 prediction loops, 204 are returned to,
-203 produce a measurement before they are answered, and
-1 end in an explanation in the reader's own words.
-203 hold their marking until the experiment settles them.
-The canvas behind a step is stated as scene on 8, portrait on 7, quiet on 62; 1451 state none.
+204 produce a measurement before they are answered, and
+2 end in an explanation in the reader's own words.
+202 hold their marking until the experiment settles them.
+The canvas behind a step is stated as scene on 12, portrait on 7, quiet on 88; 1429 state none.
 
 ## Kepler's Laws (`keplers-laws`)
 
@@ -38,17 +38,17 @@ The canvas behind a step is stated as scene on 8, portrait on 7, quiet on 62; 14
 
 ## Why Mars Goes Backwards (`retrograde-motion`)
 
-- **Steps:** 32. Scene declared on 32; a reader can change something on 0; 32 declare a scene nobody on that step can touch.
-- **Where the numbers come from:** 7 live engine, 0 prescribed model, 0 stored dataset, 0 self-contained panel.
+- **Steps:** 33. Scene declared on 33; a reader can change something on 0; 33 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 8 live engine, 0 prescribed model, 0 stored dataset, 0 self-contained panel.
 - **What students do:** read, open-a-body-inspector, run-the-simulation, tick-a-checklist, record-values, choose-an-option, commit-a-prediction, answer-in-words.
 - **Objects the steps declare:** sun, earth, mars.
 - **Instruments:** none.
 - **Stored data:** none.
 - **Evidence kept:** notebook-fields.
-- **Prediction loops:** share-of-the-cycle → nothing measured → the-share-you-found (answered without a number); before-you-look → put-yourself-on-earth, time-the-reversal, nearest-and-furthest → put-yourself-on-earth; and-what-about-the-sun → do-it-for-the-sun → do-it-for-the-sun.
-- **Recovery:** wrong body: the step binds the object by name, so there is none; reset: rebuilds the scenario on arrival; null result: the probe names what is missing; missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand; ambiguous result: nothing marks these, they are a record; null result: guarded, but the fallback is not spelled out; null result: the probe prints a dash and does not say why; ambiguous result: the check says in words how close is close enough.
+- **Prediction loops:** before-you-look → put-yourself-on-earth, catch-the-reversal, nearest-and-furthest → put-yourself-on-earth; and-what-about-the-sun → do-it-for-the-sun, how-long-does-a-loop → do-it-for-the-sun.
+- **Recovery:** wrong body: the step binds the object by name, so there is none; reset: rebuilds the scenario on arrival; null result: the probe names what is missing; missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand; ambiguous result: nothing marks these, they are a record; null result: guarded, but the fallback is not spelled out.
 - **Scene rebuilds:** 1 step(s) on arrival (the-wandering-stars).
-- **Accepted central experiment** (reviewed 2026-09-11): object `mars`, control the inspector: select Earth and switch on Reference frame, measures the days of the two turns of the direction to Mars in one retrograde loop, each bracketed between two readings the student takes, and the loop's length with its uncertainty, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+- **Accepted central experiment** (reviewed 2026-09-11): object `mars`, control the inspector: select Earth and switch on Reference frame, measures the dates and elongations of one retrograde loop, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 
 ## Finding Planets by Their Shadows (`transit-photometry`)
 
@@ -108,31 +108,31 @@ The canvas behind a step is stated as scene on 8, portrait on 7, quiet on 62; 14
 
 ## Finding Planets by Their Tug (`radial-velocity`)
 
-- **Steps:** 38. Scene declared on 38; a reader can change something on 3; 35 declare a scene nobody on that step can touch.
-- **Where the numbers come from:** 4 live engine, 11 prescribed model, 5 stored dataset, 11 self-contained panel.
-- **What students do:** read, choose-an-option, commit-a-prediction, move-an-instrument-control, press-an-instrument-preset, open-a-body-inspector, run-the-simulation, record-values, run-to-an-armed-event, view-from-a-set-angle, answer-in-words.
+- **Steps:** 39. Scene declared on 39; a reader can change something on 3; 36 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 5 live engine, 12 prescribed model, 5 stored dataset, 12 self-contained panel.
+- **What students do:** read, choose-an-option, commit-a-prediction, move-an-instrument-control, press-an-instrument-preset, press-an-instrument-button, record-values, open-a-body-inspector, run-the-simulation, run-to-an-armed-event, view-from-a-set-angle, answer-in-words.
 - **Objects the steps declare:** star, planet.
 - **Instruments:** reflex-motion, rv-observer, rv-mass, rv-inclination, astrometry-signature, method-comparison, planet-characterization.
 - **Stored data:** Published exoplanet system parameters (observation).
 - **Evidence kept:** notebook-fields.
-- **Prediction loops:** which-one-moves → both-of-them-go-round → both-of-them-go-round; make-the-planet-heavier → watch-it-grow, toward-away-toward-again, open-the-real-instrument, measure-the-period, read-k-off-the-panel → watch-it-grow; what-would-make-k-bigger → one-thing-at-a-time, weigh-hd-209458-b → one-thing-at-a-time; now-tilt-the-whole-system → the-same-planet-four-viewing → the-same-planet-four-viewing; a-face-on-system → tilt-it-again-and-watch, all-three-at-once → tilt-it-again-and-watch; move-the-system-further-away → distance-and-orbit-size, characterize-the-planet, three-candidates → distance-and-orbit-size.
-- **Recovery:** wrong body: the step binds the object by name, so there is none; reset: rebuilds the scenario on arrival; null result: guarded, but the fallback is not spelled out; missed moment: an event watch stops the run at rvMaximum; ambiguous result: nothing marks these, they are a record; missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand.
+- **Prediction loops:** which-one-moves → both-of-them-go-round → both-of-them-go-round; make-the-planet-heavier → read-the-two-wobbles, watch-it-grow, toward-away-toward-again, open-the-real-instrument, measure-the-period, read-k-off-the-panel → watch-it-grow; what-would-make-k-bigger → one-thing-at-a-time, weigh-hd-209458-b → one-thing-at-a-time; now-tilt-the-whole-system → the-same-planet-four-viewing → the-same-planet-four-viewing; a-face-on-system → tilt-it-again-and-watch, all-three-at-once → tilt-it-again-and-watch; move-the-system-further-away → distance-and-orbit-size, characterize-the-planet, three-candidates → distance-and-orbit-size.
+- **Recovery:** wrong body: the step binds the object by name, so there is none; reset: rebuilds the scenario on arrival; ambiguous result: the check says in words how close is close enough; null result: guarded, but the fallback is not spelled out; missed moment: an event watch stops the run at rvMaximum; ambiguous result: nothing marks these, they are a record; missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand.
 - **Scene rebuilds:** 4 step(s) on arrival (the-planet-you-already-measured, which-one-moves, open-the-real-instrument, read-k-off-the-panel).
 - **Accepted central experiment** (reviewed 2026-09-11): object `star`, control rv-inclination/inc, measures the semi-amplitude K, and the minimum mass it gives, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 
 ## The Goldilocks Question (`goldilocks-question`)
 
-- **Steps:** 36. Scene declared on 23; a reader can change something on 6; 17 declare a scene nobody on that step can touch.
-- **Where the numbers come from:** 6 live engine, 17 prescribed model, 2 stored dataset, 13 self-contained panel.
-- **What students do:** read, move-an-instrument-control, press-an-instrument-preset, run-the-simulation, commit-a-prediction, record-values, build-a-plot, choose-an-option, tick-a-checklist, open-a-body-inspector, select-a-body, answer-in-words, press-an-instrument-button, run-to-an-armed-event.
+- **Steps:** 37. Scene declared on 23; a reader can change something on 6; 17 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 6 live engine, 18 prescribed model, 2 stored dataset, 14 self-contained panel.
+- **What students do:** read, move-an-instrument-control, press-an-instrument-preset, run-the-simulation, commit-a-prediction, tick-a-checklist, record-values, build-a-plot, choose-an-option, open-a-body-inspector, select-a-body, answer-in-words, press-an-instrument-button, run-to-an-armed-event.
 - **Objects the steps declare:** venus, earth, mars, ceres, e, f, g.
 - **Instruments:** hz-insolation, hz-spreading, hz-star, hz-boundaries, hz-orbit, hz-trappist, hz-candidates.
 - **Stored data:** TRAPPIST-1 system parameters (observation).
 - **Evidence kept:** notebook-fields, plot.
-- **Prediction loops:** move-it-twice-as-far → three-distances-yours, the-star-is-not-running → what-the-graph-says; leave-the-planet-change-the → four-stars-one-planet, so-where-would-a-planet, now-put-it-round-the, the-two-edges, two-definitions-of-the-same, the-wider-definition-on-the, a-year-on-a-circular → four-stars-one-planet; now-stretch-the-orbit → run-an-eccentric-year, crossing-the-edges, reading-the-fraction → run-an-eccentric-year; a-real-system-forty-light → all-seven-planets, watch-it-run, take-the-readings-yourself, three-planets-that-all-look → all-seven-planets.
+- **Prediction loops:** move-it-twice-as-far → three-distances, write-the-three-down, the-star-is-not-running → three-distances; leave-the-planet-change-the → four-stars-one-planet, so-where-would-a-planet, now-put-it-round-the, the-two-edges, two-definitions-of-the-same, the-wider-definition-on-the, a-year-on-a-circular → four-stars-one-planet; now-stretch-the-orbit → run-an-eccentric-year, crossing-the-edges, reading-the-fraction → run-an-eccentric-year; a-real-system-forty-light → all-seven-planets, watch-it-run, take-the-readings-yourself, three-planets-that-all-look → all-seven-planets.
 - **Recovery:** reset: rebuilds the scenario on arrival; ambiguous result: the check says in words how close is close enough; wrong body: the step binds the object by name, so there is none; null result: the probe names what is missing; wrong body: the object list names what the step staged; missed moment: an event watch stops the run at periapsis.
 - **Scene rebuilds:** 6 step(s) on arrival (what-does-earth-get-from, now-put-it-round-the, the-wider-definition-on-the, a-real-system-forty-light, all-seven-planets, watch-it-run).
-- **Accepted central experiment** (reviewed 2026-09-11): object `earth`, control hz-insolation/distance, measures starlight at three distances the student chooses, one twice another and spread over a factor of two or more, each taken from the panel; the prediction for a doubling is set beside the readings, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
+- **Accepted central experiment** (reviewed 2026-09-11): object `earth`, control hz-insolation/distance, measures insolation at three distances, plotted, evidence `plot`, covered by `e2e/centralExperiments.spec.js`.
 
 ## The Missing Mass (`missing-mass`)
 
@@ -150,17 +150,18 @@ The canvas behind a step is stated as scene on 8, portrait on 7, quiet on 62; 14
 
 ## Tides (`tides`)
 
-- **Steps:** 30. Scene declared on 30; a reader can change something on 3; 27 declare a scene nobody on that step can touch.
-- **Where the numbers come from:** 4 live engine, 13 prescribed model, 0 stored dataset, 13 self-contained panel.
-- **What students do:** run-the-simulation, commit-a-prediction, open-a-body-inspector, move-an-instrument-control, choose-an-option, read, record-values, build-a-plot, answer-in-words, press-an-instrument-preset, tick-a-checklist.
+- **Steps:** 36. Scene declared on 10; a reader can change something on 3; 7 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 4 live engine, 14 prescribed model, 0 stored dataset, 14 self-contained panel.
+- **What students do:** run-the-simulation, commit-a-prediction, open-a-body-inspector, move-an-instrument-control, choose-an-option, read, record-values, build-a-plot, read-a-prediction-prompt-that-collects-nothing, answer-in-words, press-an-instrument-preset, tick-a-checklist.
 - **Objects the steps declare:** earth, moon, star, hole.
 - **Instruments:** tide-vectors, tide-strength, tide-compare, tide-balance, roche-model, tide-disrupt.
+- **Canvas:** quiet, scene.
 - **Stored data:** none.
 - **Evidence kept:** notebook-fields, plot.
-- **Prediction loops:** is-the-pull-the-same → three-points-three-pulls, how-different-are-they → three-points-three-pulls; so-why-two-bulges → take-the-center-away, what-the-far-side-arrow → take-the-center-away; bring-the-companion-closer → four-distances, how-steeply-does-it-fall → four-distances; now-change-the-companion → three-masses → three-masses; the-sun-against-the-moon → seven-real-tides-on-one → seven-real-tides-on-one; what-holds-a-moon-together → stretch-against-grip, where-the-balance-tips, the-roche-limit-and-why, change-what-the-moon-is, the-extreme-case-running-live, a-star-and-a-black → stretch-against-grip.
-- **Recovery:** wrong body: the step binds the object by name, so there is none; reset: rebuilds the scenario on arrival; null result: the probe names what is missing; ambiguous result: the check says in words how close is close enough.
+- **Prediction loops:** is-the-pull-the-same → three-points-three-pulls, how-different-are-they → three-points-three-pulls; so-why-two-bulges → take-the-center-away, what-the-far-side-arrow → take-the-center-away; bring-the-companion-closer → choose-four-distances, the-factor-per-halving, pick-a-new-distance → the-factor-per-halving; estimate-the-new-stretch → read-the-new-distance → the-estimate-and-the-reading; now-change-the-companion → choose-three-masses → what-the-mass-graph-says; the-sun-against-the-moon → seven-real-tides-on-one → seven-real-tides-on-one; what-holds-a-moon-together → stretch-against-grip → stretch-against-grip; a-denser-body-closer-in → hunt-the-crossing, the-roche-limit-and-why, change-what-the-moon-is, the-extreme-case-running-live, a-star-and-a-black → how-density-moved-it.
+- **Recovery:** wrong body: the step binds the object by name, so there is none; reset: rebuilds the scenario on arrival; null result: the probe names what is missing; ambiguous result: the check says in words how close is close enough; missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand.
 - **Scene rebuilds:** 2 step(s) on arrival (twice-a-day-everywhere, the-extreme-case-running-live).
-- **Accepted central experiment** (reviewed 2026-09-11): object `moon`, control tide-strength/dist, measures tidal acceleration at four distances and three masses, evidence `plot`, covered by `e2e/centralExperiments.spec.js`.
+- **Accepted central experiment** (reviewed 2026-09-11): object `moon`, control tide-strength/dist, measures tidal stretch at four distances the student chooses, at least a factor of four apart, with the companion's mass held, and at three masses with the distance held; the stretch is taken from the panel, which gives one over the distance cubed and the mass once, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 
 ## The Butterfly Effect in Space (`butterfly-effect`)
 
@@ -178,14 +179,14 @@ The canvas behind a step is stated as scene on 8, portrait on 7, quiet on 62; 14
 
 ## When Orbits Lock (`when-orbits-lock`)
 
-- **Steps:** 35. Scene declared on 35; a reader can change something on 3; 32 declare a scene nobody on that step can touch.
+- **Steps:** 34. Scene declared on 34; a reader can change something on 3; 31 declare a scene nobody on that step can touch.
 - **Where the numbers come from:** 13 live engine, 0 prescribed model, 0 stored dataset, 0 self-contained panel.
-- **What students do:** read, commit-a-prediction, answer-in-words, press-an-instrument-button, run-the-simulation, tick-a-checklist, record-values, choose-an-option, open-a-body-inspector.
+- **What students do:** read, commit-a-prediction, answer-in-words, run-the-simulation, tick-a-checklist, record-values, choose-an-option, open-a-body-inspector.
 - **Objects the steps declare:** io, europa, ganymede, callisto.
 - **Instruments:** resonance-periods, resonance-conjunctions, resonance-angle, resonance-frame.
 - **Stored data:** none.
 - **Evidence kept:** notebook-fields.
-- **Prediction loops:** how-close-is-close → measure-the-four-periods, rank-the-three-pairs → measure-the-four-periods; where-do-the-line-ups → watch-the-line-ups → watch-the-line-ups; the-laplace-argument → watch-the-laplace-argument, capture-the-laplace-libration → watch-the-laplace-argument; one-percent → break-it, the-awkward-case, measure-pluto-s-resonance, capture-pluto-s-libration, where-the-line-ups-happen, the-rotating-frame, capture-the-tadpole → break-it; predict-the-wide-probe → one-last-ratio → one-last-ratio.
+- **Prediction loops:** how-close-is-close → measure-the-four-periods, write-down-the-ratios → measure-the-four-periods; where-do-the-line-ups → watch-the-line-ups → watch-the-line-ups; the-laplace-argument → watch-the-laplace-argument, record-the-laplace-libration → watch-the-laplace-argument; one-percent → break-it, the-awkward-case, measure-pluto-s-resonance, record-pluto-s-libration, where-the-line-ups-happen, the-rotating-frame, record-the-tadpole, one-last-ratio → break-it.
 - **Recovery:** wrong body: the step binds the object by name, so there is none; reset: rebuilds the scenario on arrival; ambiguous result: the check says in words how close is close enough; null result: the probe names what is missing.
 - **Scene rebuilds:** 9 step(s) on arrival (four-moons-and-a-suspicious, measure-the-four-periods, where-do-the-line-ups, break-it, the-awkward-case, the-orbit-that-crosses-and, measure-pluto-s-resonance, sixty-degrees-ahead, the-rotating-frame).
 - **Accepted central experiment** (reviewed 2026-09-11): object `europa`, control the sandbox: run, and the resonance panels read the scene, measures the Laplace argument, and the amplitude it librates through, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.

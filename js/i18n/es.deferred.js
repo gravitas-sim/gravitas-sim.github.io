@@ -595,7 +595,6 @@ export const ES_DEFERRED = {
   'sweep.guide.after':
     'Fijate donde la medida deja de comportarse suavemente: ese es el limite que tiene este escenario, con esta duracion. Una pasada mas larga solo puede moverlo hacia dentro: una orbita que sobrevivio 20 periodos binarios no ha demostrado sobrevivir 200.',
   'sweep.guide.run': 'Ejecutar el barrido guiado',
-
   // --- Tareas para clase --- shown from lazy chunks (the builder, the link bridge, a lesson panel with an assignment open), never a first visit; ensureDeferredMessages() registers them.
   'assign.title': 'Crear una actividad',
   'assign.hint':
@@ -1190,7 +1189,6 @@ export const ES_DEFERRED = {
     'Así que lee juntos el intervalo y los residuos. Un intervalo estrecho con residuos estructurados significa un parámetro determinado con precisión de un modelo que no ajusta. Lo que hay que creer es la estructura de los residuos.',
   'rvfit.mc.guidance.c':
     'Y cuando los reajustes se separan en familias, esa es la respuesta honesta: los datos admiten varios períodos. Lo que elimina familias son más observaciones, u observaciones espaciadas de otra forma, no más pruebas aquí. Ejecutar diez mil pruebas hace cada intervalo más suave y las familias igual de reales.',
-
   // --- Widget prose, moved off the start-up path ---------------------------
   'resW.periods.title': 'Periodos medidos y las razones entre ellos',
   'resW.periods.note':
@@ -3853,6 +3851,9 @@ export const ES_DEFERRED = {
   'nb.stellar.limit.fitted':
     'La comparación se dibujó con cada estrella ajustada a su recuadro, así que los tamaños aparentes no son comparables.',
   // --- Words a lesson computes ----------------------------------------------
+  'lessonFn.halfRangeMaxMin23': 'Semirrango ½(máx − mín)',
+  'lessonFn.halfRangeObservedSoFar26': 'Semirrango observado hasta ahora',
+  'lessonFn.keepObserving15': 'Sigue observando…',
   'lessonFn.yourErrorBarForThePeriod129':
     'Tu barra de error del periodo es menor que la dispersión de uno de tus propios tiempos: afirma más de lo que mediste. Ensánchala.',
   'lessonFn.thatErrorBarIsMoreThan140':

@@ -307,6 +307,8 @@ describe('the re-baseline command refuses', () => {
       ['di', 15.7],
       ['dk', 7.4],
       ['dr', 0.1],
+      ['dm', 6.9],
+      ['du', 0.2],
       ['do', 8.2],
       ['dq', 0.2],
     ])

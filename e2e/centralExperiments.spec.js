@@ -336,8 +336,10 @@ test.describe('the central experiment of each investigation', () => {
     const predict = await walkToSid(page, plan, predictSid);
     await commitPredictionHeld(page, predict);
 
+    // Four distances of the reader's own, a factor of six apart, none of them
+    // the lesson's to prescribe.
     await walkToSid(page, plan, measureSid);
-    const d = [2, 1, 0.5, 0.25];
+    const d = [1.8, 0.9, 0.45, 0.3];
     const at = {};
     for (const r of d) {
       const { before, after } = await setControl(page, control, r);
@@ -353,19 +355,31 @@ test.describe('the central experiment of each investigation', () => {
       d.map(r => at[r])
     );
     expect(n, 'the tidal stretch goes as 1/d^3').toBeCloseTo(-3, 1);
-    expect(at[0.25]).toBeGreaterThan(at[2]);
+    expect(at[0.3]).toBeGreaterThan(at[1.8]);
 
     const evidence = {
-      d1: 2,
-      t1: at[2].toFixed(2),
-      d2: 1,
-      t2: at[1].toFixed(2),
-      d3: 0.5,
-      t3: at[0.5].toFixed(2),
-      d4: 0.25,
-      t4: at[0.25].toFixed(2),
+      d1: 1.8,
+      t1: at[1.8].toFixed(2),
+      d2: 0.9,
+      t2: at[0.9].toFixed(2),
+      d3: 0.45,
+      t3: at[0.45].toFixed(2),
+      d4: 0.3,
+      t4: at[0.3].toFixed(2),
     };
     await recordFields(page, id, measureSid, evidence);
+    const check = page.locator('#investigationBody [data-check-slot]');
+    await expect(check).toContainText(
+      /Four distances spread over a factor of four or more/
+    );
+    // A swapped near and far is refused in words; the right readings restore it.
+    await recordFields(page, id, measureSid, {
+      t1: evidence.t4,
+      t4: evidence.t1,
+    });
+    await expect(check).toContainText(/swapped|opposite/);
+    await recordFields(page, id, measureSid, evidence);
+    await expect(check).toContainText(/Four distances spread over/);
     await expectEvidenceRetained(page, id, measureSid, evidence);
 
     await expectVerdictRevealed(page, plan, predict);

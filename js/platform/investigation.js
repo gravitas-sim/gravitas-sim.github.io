@@ -134,7 +134,16 @@ const STEP_FIELDS = {
   read: ['motion'],
   explore: ['checklist'],
   measure: ['fields'],
-  predict: ['kind', 'unit', 'prompt', 'options', 'answer', 'because', 'reveal'],
+  predict: [
+    'kind',
+    'unit',
+    'prompt',
+    'options',
+    'answer',
+    'because',
+    'reveal',
+    'misconceptions',
+  ],
   question: [
     'kind',
     'from',
