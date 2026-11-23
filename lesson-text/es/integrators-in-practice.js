@@ -164,3 +164,6 @@ export default {
     },
   },
 };
+
+export const messages = () =>
+  import('../../../i18n/computingMessagesEs.js').catch(() => {});

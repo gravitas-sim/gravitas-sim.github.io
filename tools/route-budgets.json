@@ -76,7 +76,7 @@
         "requests": 31
       },
       "course-builder": {
-        "kb": 1167.6,
+        "kb": 1167.7,
         "requests": 48
       },
       "course-home": {
@@ -116,7 +116,7 @@
         "requests": 6
       },
       "course-packs": {
-        "kb": 742.2,
+        "kb": 742.3,
         "requests": 46
       },
       "sky": {
@@ -144,13 +144,13 @@
       "transit": {
         "kb": 943.4,
         "requests": 77,
-        "toolKb": 1028.7,
+        "toolKb": 1028.8,
         "toolRequests": 93
       },
       "power-law": {
         "kb": 912.2,
         "requests": 77,
-        "toolKb": 928.7,
+        "toolKb": 928.8,
         "toolRequests": 80
       },
       "largest-lesson": {
