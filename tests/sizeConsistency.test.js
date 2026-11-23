@@ -188,6 +188,14 @@ describe('the transit scenes: depth from the real radii, timing from the model r
       // floor instead, so the silhouette there is neither ratio.
       const px = visuals.drawnRadiusPx(planet.radius, 'Planet', 60, 3);
       expect(px).toBe(visuals.DISPLAY_MIN_PX);
+      // The Sizes statement says the same: the model at real size, the
+      // planet drawn at three-eighths of it (the published radius, not the
+      // generator's five units to an Earth radius).
+      const { sizeFacts } = await import('../js/sizeFacts.js');
+      const pf = sizeFacts(planet);
+      expect(pf.modelOverReal).toBeCloseTo(1, 2);
+      expect(pf.drawnOverReal).toBeCloseTo(0.375, 2);
+      expect(sizeFacts(star).drawnOverReal).toBeCloseTo(1, 3);
     }
   );
 

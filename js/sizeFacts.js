@@ -66,9 +66,21 @@ const EARTHS_PER_JUPITER = 11.2;
 export const familyOf = body =>
   body?.kind === 'StarObject' ? 'Star' : body?.kind || '';
 
-/** @returns {?number} The body's real radius in AU, where one is known */
+/**
+ * The body's real radius in AU, where one is known: the published radius a
+ * scenario sets (radiusInEarths, radiusInJupiters) before the generator's
+ * convention of 5 units to an Earth radius, which a body built at its real
+ * size, such as the Transit Lab's planet, does not follow.
+ *
+ * @returns {?number} AU, or null
+ */
 function realRadiusAu(body, family) {
   const m = EARTH_RADIUS_M / AU_METERS;
+  if (family === 'Planet' || family === 'GasGiant') {
+    if (body.radiusInEarths > 0) return body.radiusInEarths * m;
+    if (body.radiusInJupiters > 0)
+      return body.radiusInJupiters * EARTHS_PER_JUPITER * m;
+  }
   if (family === 'Planet') return (body.radius / PLANET_RADIUS) * m;
   if (family === 'GasGiant')
     return (body.radius / GAS_GIANT_RADIUS) * EARTHS_PER_JUPITER * m;
