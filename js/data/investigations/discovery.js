@@ -243,7 +243,7 @@ export const DISCOVERY = {
   'twelve-nights': {
     audience: 'intro',
     mathematics: 'arithmetic',
-    prerequisites: [],
+    prerequisites: ['detect-this-planet', 'design-the-schedule'],
     textbook: {
       chapter: 4,
       section: '4.3',
