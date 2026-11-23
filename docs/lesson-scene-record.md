@@ -11,16 +11,16 @@ The hand-written, human-reviewed acceptance map is
 [`lesson-acceptance.json`](lesson-acceptance.json); `npm run
 audit:scene:check` fails if it disagrees with what is generated here.
 
-Across 124 investigations and 1536 steps: 1392 steps
+Across 124 investigations and 1537 steps: 1392 steps
 declare a scene, 165 let a reader change one, 178 read the
-running integration, 1003 show a prescribed model result, 159 draw
-on a stored dataset, 874 put a self-contained panel beside the text,
-399 keep something, and 79 are prose.
+running integration, 1004 show a prescribed model result, 159 draw
+on a stored dataset, 875 put a self-contained panel beside the text,
+400 keep something, and 80 are prose.
 Of 204 prediction loops, 204 are returned to,
 204 produce a measurement before they are answered, and
 2 end in an explanation in the reader's own words.
 202 hold their marking until the experiment settles them.
-The canvas behind a step is stated as scene on 12, portrait on 7, quiet on 88; 1429 state none.
+The canvas behind a step is stated as scene on 12, portrait on 7, quiet on 106; 1412 state none.
 
 ## Kepler's Laws (`keplers-laws`)
 
@@ -67,13 +67,13 @@ The canvas behind a step is stated as scene on 12, portrait on 7, quiet on 88; 1
 ## Bound, Unbound and Escape (`orbital-energy`)
 
 - **Steps:** 24. Scene declared on 24; a reader can change something on 2; 22 declare a scene nobody on that step can touch.
-- **Where the numbers come from:** 2 live engine, 8 prescribed model, 0 stored dataset, 8 self-contained panel.
+- **Where the numbers come from:** 2 live engine, 9 prescribed model, 0 stored dataset, 9 self-contained panel.
 - **What students do:** read, commit-a-prediction, move-an-instrument-control, press-an-instrument-preset, press-an-instrument-button, tick-a-checklist, record-values, choose-an-option, open-a-body-inspector, select-a-body, run-the-simulation, run-to-an-armed-event, answer-in-words.
 - **Objects the steps declare:** star, circular, eccentric, sun, earth, visitor.
 - **Instruments:** launch, live-energy, escape-compare, shapes.
 - **Stored data:** none.
 - **Evidence kept:** notebook-fields.
-- **Prediction loops:** load-it-lightly → fire-it → fire-it; load-it-heavily → fire-it-again, find-the-dividing-line, write-down-the-dividing-speed, watch-the-total, around-a-real-orbit → fire-it-again; somewhere-else-entirely → more-mass-harder-to-leave, further-out-easier-to-leave, three-shapes-one-law, check-it-yourself → more-mass-harder-to-leave.
+- **Prediction loops:** load-it-lightly → fire-it → fire-it; load-it-heavily → fire-it-again, find-the-dividing-line, bracket-the-dividing-speed, watch-the-total, around-a-real-orbit → fire-it-again; somewhere-else-entirely → read-the-escape-speeds, more-mass-harder-to-leave, further-out-easier-to-leave, three-shapes-one-law, check-it-yourself → more-mass-harder-to-leave.
 - **Recovery:** wrong body: the step binds the object by name, so there is none; reset: rebuilds the scenario on arrival; ambiguous result: the check says in words how close is close enough; missed moment: an event watch stops the run at periapsis; null result: the probe names what is missing.
 - **Scene rebuilds:** 3 step(s) on arrival (how-hard-would-you-have, around-a-real-orbit, something-that-came-from-outside).
 - **Accepted central experiment** (reviewed 2026-09-11): object `visitor`, control launch/v, measures the dividing speed, as the last speed on each side of it, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
@@ -347,14 +347,15 @@ The canvas behind a step is stated as scene on 12, portrait on 7, quiet on 88; 1
 
 ## What If Gravity Were Not Inverse Square? (`power-law-gravity`)
 
-- **Steps:** 21. Scene declared on 0; a reader can change something on 0; 0 declare a scene nobody on that step can touch.
+- **Steps:** 22. Scene declared on 0; a reader can change something on 0; 0 declare a scene nobody on that step can touch.
 - **Where the numbers come from:** 0 live engine, 6 prescribed model, 0 stored dataset, 6 self-contained panel.
 - **What students do:** read, commit-a-prediction, move-an-instrument-control, press-an-instrument-preset, tick-a-checklist, record-values, choose-an-option, build-a-plot.
 - **Objects the steps declare:** none.
 - **Instruments:** power-law-precession, power-law-refinement, power-law-kepler, power-law-conservation.
+- **Canvas:** quiet.
 - **Stored data:** none.
 - **Evidence kept:** notebook-fields, plot.
-- **Prediction loops:** predict-does-small-matter → first-look-at-the-orbit, record-the-precession → first-look-at-the-orbit; predict-is-it-the-computer → refine-the-timestep → refine-the-timestep; predict-period-and-distance → measure-the-slope, predict-the-slope → measure-the-slope; predict-what-breaks → measure-conservation → measure-conservation.
+- **Prediction loops:** predict-does-small-matter → first-look-at-the-orbit, record-the-precession → first-look-at-the-orbit; predict-is-it-the-computer → refine-the-timestep → refine-the-timestep; predict-period-and-distance → measure-the-slope, predict-the-slope-at-2-9 → measure-the-slope; predict-what-breaks → measure-conservation → measure-conservation.
 - **Recovery:** reset: rebuilds the scenario on arrival; ambiguous result: the check says in words how close is close enough; ambiguous result: nothing marks these, they are a record.
 - **Scene rebuilds:** 1 step(s) on arrival (the-exactly).
 - **Accepted central experiment** (reviewed 2026-09-11): object `panel:power-law-precession`, control power-law-precession/n, measures apsidal precession in degrees per radial period, at four exponents, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
