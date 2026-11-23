@@ -2205,6 +2205,7 @@
     .inv-dock-tabs label,
     .floating-close-chip,
     .ui-container :is(.ui-button, #objectTypeBtn),
+    .stage-more .ui-button,
     :is(.investigation-panel, .inv-plot-panel)
       :is(button, select, input[type='text'], input[type='number']) {
       min-width: 44px;
@@ -2809,19 +2810,16 @@
 @layer overrides {
   .stage-more {
     position: fixed;
-    right: var(--space-3);
-    bottom: 48px;
+    inset: auto 0 38px;
+    width: max-content;
+    margin-inline: auto;
     z-index: var(--z-panel);
+    display: flex;
+    align-items: flex-end;
+    gap: var(--space-2);
     background: var(--panel-bg);
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
-  }
-
-  @media (max-width: 900px) {
-    .stage-more {
-      inset: auto auto var(--space-2) 50%;
-      transform: translateX(-50%);
-    }
   }
 
   /* The instrument takes the rail's width; static, as a resized panel stretches its picture.

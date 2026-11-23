@@ -233,9 +233,7 @@ test.describe('a system can be built without a pointer', () => {
     page,
     app,
   }) => {
-    await app.boot({ url: '/?author=keplers-laws&step=10' });
-    // A lesson with text fields and the usual chrome: the tides lesson's
-    // measuring steps hold a quiet canvas, which folds the controls away.
+    await app.boot({ url: '/?author=tides&step=10' });
     // The lesson's panel is open before the form is: it opens a moment after
     // boot, and one that opens after the form un-inerts itself behind it (on a
     // loaded machine this was the whole failure; the count below passes on the

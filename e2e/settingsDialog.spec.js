@@ -198,9 +198,7 @@ test.describe('the settings dialog, open', () => {
     page,
     app,
   }) => {
-    await app.boot({ url: '/?author=keplers-laws&step=10' });
-    // A lesson with text fields and the usual chrome: the tides lesson's
-    // measuring steps hold a quiet canvas, which folds the controls away.
+    await app.boot({ url: '/?author=tides&step=10' });
     // The lesson's panel is open before the dialog is: it opens a moment after
     // boot, and one that opens after the dialog un-inerts itself behind it. The
     // count below passes on the header's own language menu, so on its own it
