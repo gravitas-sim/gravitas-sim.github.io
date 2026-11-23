@@ -9,7 +9,7 @@ on a 60 Hz screen, a 144 Hz screen and a throttled tab. A reading step
 that holds the clock (`holdsClock` in `js/timestep.js`) does not run and
 is not pinned. Closing the lesson lifts the pin.
 
-580 steps in 25 lessons run on an integrated scene; 457 are pinned and 123 hold the clock.
+572 steps in 23 lessons run on an integrated scene; 451 are pinned and 121 hold the clock.
 
 | Lesson | Step | Id | Type | Scene | Own scene | Pinned step |
 |---|---|---|---|---|---|---|
@@ -565,14 +565,6 @@ is not pinned. Closing the lesson lifts the pin.
 | power-law-gravity | 19 | near-three | read | Solar System | inherited | none (holds the clock) |
 | power-law-gravity | 20 | closing-question | question | Solar System | inherited | 1/60 s |
 | power-law-gravity | 21 | the-honest-caveat | read | Solar System | inherited | none (holds the clock) |
-| integrators-in-practice | 6 | choose-the-second-step | measure | Circumbinary Planet Lab | yes | 1/60 s |
-| integrators-in-practice | 7 | the-engine | measure | Circumbinary Planet Lab | inherited | 1/60 s |
-| integrators-in-practice | 8 | phase-luck | question | Circumbinary Planet Lab | inherited | 1/60 s |
-| integrators-in-practice | 9 | trust-at-six-orbits | question | Circumbinary Planet Lab | inherited | 1/60 s |
-| integrators-in-practice | 10 | what-you-worked-out | read | Circumbinary Planet Lab | inherited | none (holds the clock) |
-| extending-an-experiment | 6 | move-the-definition-yours | measure | Binary Planet Lab | yes | 1/60 s |
-| extending-an-experiment | 7 | which-trial-moved | measure | Binary Planet Lab | inherited | 1/60 s |
-| extending-an-experiment | 8 | what-you-worked-out | read | Binary Planet Lab | inherited | none (holds the clock) |
 | why-rings | 5 | a-pass-inside-the-limit | read | Roche Pass | yes | 1/60 s |
 | why-rings | 7 | a-ring-with-a-resonance | read | Ring Gap | yes | none (holds the clock) |
 | the-scale-of-the-solar-system | 1 | a-picture-you-have-seen | read | Solar System | yes | none (holds the clock) |
