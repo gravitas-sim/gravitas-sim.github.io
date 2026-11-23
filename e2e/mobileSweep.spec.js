@@ -879,6 +879,117 @@ for (const size of SIZES) {
   });
 }
 
+// -----------------------------------------------------------------------------
+// 3b. An instrument beside its step
+// -----------------------------------------------------------------------------
+// The Twelve Nights planner, the step that commits the schedule, at both touch
+// sizes and in both languages: the shared band gave every instrument step a
+// 167 px scroller on a phone (and 252 px on a tablet) over a sheet whose
+// readable rows came to 35 px, so the planner's sliders, presets and readout
+// sat below the box's fold. The readout and the note go after the controls, the
+// phone's sheet drops its step line, a tablet's dock is 320 px, and lowering the
+// sheet gives a phone's instrument the room the sheet gave up.
+
+import AxeBuilder from '@axe-core/playwright';
+import { openLessonStep } from '../tools/visual-criteria.mjs';
+
+for (const size of SIZES) {
+  test.describe(`an instrument step at ${size.id} width`, () => {
+    test.use({
+      viewport: { width: size.width, height: size.height },
+      hasTouch: true,
+      isMobile: true,
+    });
+    test.setTimeout(120_000);
+
+    for (const locale of LOCALES)
+      test(`the planner, ${locale}`, async ({ page }) => {
+        await openLessonStep(page, {
+          lesson: 'twelve-nights',
+          sid: 'commit-and-observe',
+          language: locale,
+          subject: 'instrument',
+        });
+        const read = () =>
+          page.evaluate(() => {
+            const box = sel => {
+              const el = document.querySelector(sel);
+              const r = el?.getBoundingClientRect();
+              return r && r.height > 0
+                ? { top: r.top, bottom: r.bottom, height: r.height }
+                : null;
+            };
+            const where = box('.inv-where-row');
+            const tool = document.getElementById('investigationTool');
+            const at = id => document.getElementById(id)?.offsetTop ?? -1;
+            return {
+              tool: box('#investigationTool'),
+              sheet: box('#investigationPanel'),
+              footer: box('#investigationPanel .inv-footer'),
+              progress: box('#investigationPanel .inv-progress'),
+              where,
+              menu: box('#mobileMenuToggle'),
+              scrolls: tool.scrollHeight > tool.clientHeight,
+              controlsAt: at('investigationToolControls'),
+              readoutAt: at('investigationToolReadout'),
+              noteAt: at('investigationToolNote'),
+              vh: window.innerHeight,
+            };
+          });
+        const phone = size.id === 'phone';
+        const m = await read();
+        expect(m.tool, 'the planner is shown').not.toBeNull();
+        // The controls come before the readout and the note, in the box.
+        expect(m.controlsAt, 'sliders before the readout').toBeLessThan(
+          m.readoutAt
+        );
+        expect(m.noteAt, 'note after the sliders').toBeGreaterThan(
+          m.controlsAt
+        );
+        if (phone) {
+          // Nothing overlaps: the box stands clear of the step's sheet.
+          expect(m.tool.bottom).toBeLessThanOrEqual(m.sheet.top + 1);
+          // The step line is gone, so the sheet's rows above the pinned
+          // footer hold more of the step (35 px before, with it).
+          expect(m.where, 'the step line is not in the sheet').toBeNull();
+          const room = m.footer.top - m.progress.bottom;
+          expect(room, 'rows of the step above the footer').toBeGreaterThan(60);
+          // Lowering the sheet by its handle gives the instrument the room.
+          await page.locator('#investigationSheet').tap();
+          await expect(page.locator('body')).toHaveClass(/lesson-peek/);
+          await expect
+            .poll(async () => (await read()).tool.height)
+            .toBeGreaterThan(m.vh * 0.5);
+          const low = await read();
+          expect(low.sheet.height).toBeGreaterThanOrEqual(150);
+          expect(low.tool.top, 'under the menu button').toBeGreaterThanOrEqual(
+            low.menu.bottom
+          );
+          expect(low.tool.bottom).toBeLessThanOrEqual(low.sheet.top + 1);
+          // Next is still where a thumb finds it.
+          await expect(page.locator('#investigationNext')).toBeInViewport({
+            ratio: 1,
+          });
+          // And raising it puts the step back.
+          await page.locator('#investigationSheet').tap();
+          await expect(page.locator('body')).not.toHaveClass(/lesson-peek/);
+          await expect
+            .poll(async () => (await read()).sheet.height)
+            .toBeGreaterThan(low.sheet.height + 40);
+        } else {
+          expect(m.tool.height, 'a tablet dock of 320 px').toBeGreaterThan(300);
+        }
+        // The step and its instrument, in the state left: no axe violation.
+        const found = await new AxeBuilder({ page })
+          .include('#investigationPanel')
+          .include('#investigationTool')
+          .analyze();
+        expect(found.violations.map(v => v.id)).toEqual([]);
+        expect(await noSidewaysScroll(page)).toBeLessThanOrEqual(2);
+      });
+  });
+}
+
 test.afterAll(() => {
   if (!WRITE || !Object.keys(written).length) return;
   const rec = JSON.parse(readFileSync(RECORD, 'utf8'));

@@ -2169,6 +2169,63 @@
 }
 
 /* ==========================================================================
+   A step's instrument on a phone and a tablet
+   --------------------------------------------------------------------------
+   The band above is shared by the step's sheet and what the step docks, and a
+   scene still has to keep its third of the window, so the dock is a short
+   scroller there (167 px at 375x812 for every instrument, whose contents run
+   from 750 to 2,100 px). Three general rules, for every step that docks a
+   tool or a plot, whatever the canvas:
+   - the readout and the note go after the sliders, presets and buttons, so the
+     first scroll of the box brings the picture and what moves it together
+     (neither is focusable: focus order is unchanged);
+   - the sheet's step line (the same words are in the step's own head) leaves
+     the sheet on a phone, so its few rows hold more of the step;
+   - lowering the sheet by its handle (the announced action) gives the dock
+     what the sheet gave up, up to 480 px, as the Moon image's dock does under
+     a quiet canvas (which keeps its own, stronger rules above); and a tablet's
+     dock may be 320 px, the most that keeps a third of the window open.
+   ========================================================================== */
+@layer overrides {
+  @media (max-width: 900px) {
+    body.investigation-aux #investigationTool:not([hidden]) {
+      display: flex;
+      flex-direction: column;
+    }
+    body.investigation-aux #investigationTool > * {
+      flex: none;
+    }
+    body.investigation-aux
+      #investigationTool
+      > :is(.inv-tool-readout, .inv-plot-note) {
+      order: 2;
+    }
+  }
+  @media (min-width: 768px) and (max-width: 900px) {
+    body.investigation-aux:not(.investigation-lightcurve) {
+      --dock-room: min(var(--lesson-band), 320px);
+    }
+  }
+  @media (max-width: 767px) {
+    body.investigation-aux .inv-where-row {
+      display: none;
+    }
+  }
+  @media (max-width: 767px) and (min-height: 561px) {
+    body.investigation-aux {
+      --stage-room: calc(
+        100vh - var(--shell-height, 0px) - var(--transport-reserve, 76px) -
+          44px - env(safe-area-inset-top, 0px) - var(--space-2) * 4
+      );
+    }
+    body.investigation-aux.investigation-open.lesson-peek {
+      --lesson-sheet: 160px;
+      --dock-sheet: min(480px, calc(var(--stage-room) - 160px));
+    }
+  }
+}
+
+/* ==========================================================================
    Touch targets (Roadmap II Prompt 55)
    --------------------------------------------------------------------------
    On a touch screen every control the application puts over the canvas is at
