@@ -762,7 +762,7 @@
       "leakFree": true
     },
     "integrators-in-practice": {
-      "canvas": ["quiet", "scene"],
+      "canvas": ["quiet"],
       "centralExperimentId": "ce.integrators-in-practice",
       "object": "compute:integrators-compared",
       "control": "the compute page's steps-per-period setting (not a lesson widget), and the second step count the student chooses from a menu in the lesson",
@@ -775,7 +775,7 @@
       "leakFree": true
     },
     "extending-an-experiment": {
-      "canvas": ["quiet", "scene"],
+      "canvas": ["quiet"],
       "centralExperimentId": "ce.extending-an-experiment",
       "object": "compute:population-at-scale",
       "control": "the compute page's cutoff and slope settings (not a lesson widget), and the cutoff the student chooses from a menu in the lesson",
