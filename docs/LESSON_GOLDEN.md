@@ -84,12 +84,12 @@ The browser half takes about seven minutes on the private port.
 | 2 | `transit-photometry` | 20: `check:numeric/number+tolerance`, `key:explore.lightCurve`, `key:explore.observerAngle`, `key:explore.pauseAt`, `key:explore.tip`, `key:explore.tool`, … |
 | 3 | `the-saturated-star` | 15: `depth-step:advanced/measure`, `depth-step:advanced/predict`, `depth-step:advanced/read`, `depth-step:quantitative/read`, `key:measure.stage`, `key:measure.tool`, … |
 | 4 | `binary-star-planets` | 8: `key:explore.requires`, `key:explore.setup`, `key:predict.tip`, `key:question.requires`, `key:question.tip`, `key:read.motion`, … |
-| 5 | `weighing-stars` | 5: `key:explore.showBarycenter`, `key:explore.stage`, `key:measure.showBarycenter`, `key:read.showBarycenter`, `math:arithmetic` |
-| 6 | `black-holes` | 3: `key:question.checklist`, `key:read.explainView`, `lock:{"placement":true,"inspector":false,"areaSweep":false}` |
+| 5 | `missing-mass` | 6: `depth-step:advanced/explore`, `key:explore.after`, `key:explore.decides`, `key:explore.depth`, `key:predict.setup`, `lock:{"placement":true,"inspector":false,"areaSweep":false}` |
+| 6 | `weighing-stars` | 5: `key:explore.showBarycenter`, `key:explore.stage`, `key:measure.showBarycenter`, `key:read.showBarycenter`, `math:arithmetic` |
 | 7 | `butterfly-effect` | 3: `key:explore.rubric`, `key:predict.requires`, `lock:null` |
 | 8 | `extending-an-experiment` | 3: `key:measure.canvas`, `key:measure.compute`, `key:read.canvas` |
 | 9 | `measuring-the-moon` | 3: `key:question.maxUncertainty`, `key:question.minUncertainty`, `key:question.valueWithin` |
-| 10 | `missing-mass` | 2: `key:predict.setup`, `key:question.restates` |
+| 10 | `black-holes` | 2: `key:question.checklist`, `key:read.explainView` |
 | 11 | `propose-an-observation` | 2: `key:measure.plan`, `key:question.rubricCriteria` |
 | 12 | `what-is-a-gravitational-wave` | 2: `audience:beginner`, `key:read.checklist` |
 | 13 | `a-night-at-the-telescope` | 1: `key:question.reflect` |

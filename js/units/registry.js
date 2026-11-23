@@ -47,6 +47,7 @@ export const UNITS = Object.freeze({
   Angstrom: { dim: 'length', factor: 1e-10, symbol: 'Å' },
   nm: { dim: 'length', factor: 1e-9, symbol: 'nm' },
   um: { dim: 'length', factor: 1e-6, symbol: 'µm' },
+  cm: { dim: 'length', factor: 1e-2, symbol: 'cm' },
   m: { dim: 'length', factor: 1, symbol: 'm' },
   km: { dim: 'length', factor: 1e3, symbol: 'km' },
   Rearth: { dim: 'length', factor: 6.3781e6, symbol: 'R⊕' },

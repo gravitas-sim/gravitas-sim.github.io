@@ -47,6 +47,7 @@ export const EN_JOVIAN = {
   'jovW.p.legend': 'measured · fitted sinusoid · days from the first frame',
   'jovW.p.row.marks': 'Measured points used',
   'jovW.p.row.period': 'Period',
+  'jovW.p.row.sigma': 'Period uncertainty',
   'jovW.p.row.amplitude': 'Amplitude (the orbit’s radius)',
   'jovW.p.row.amplitudeKm': 'Amplitude in kilometers',
   'jovW.p.row.fit': 'Chi-square, degrees of freedom',
