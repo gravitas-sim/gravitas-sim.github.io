@@ -1,4 +1,6 @@
-import { describe, test, expect } from '@jest/globals';
+import { describe, test, expect, beforeAll } from '@jest/globals';
+import { readFileSync } from 'node:fs';
+import { openGalilean } from '../js/satellites/galilean.js';
 import { checkInvestigationPack } from '../js/composer/api.js';
 import { remixBuiltin, loadOriginal } from '../js/composer/remixApi.js';
 import {
@@ -22,6 +24,14 @@ import { ES_REMIX } from '../js/i18n/es.remix.js';
 // =============================================================================
 
 const clone = v => JSON.parse(JSON.stringify(v));
+
+// The moons' instrument reads two packs the page fetches; a remix of that lesson is
+// only checked against its rows once they are in.
+beforeAll(async () => {
+  const pack = f => JSON.parse(readFileSync(`sky/${f}.json`, 'utf8'));
+  const { provideModel } = await import('../js/jovianWidgets.js');
+  provideModel(openGalilean(pack('galilean-moons'), pack('ephemeris')));
+}, 120000);
 const IDS = MANIFEST.map(m => m.id);
 
 function diff(a, b, path, out) {
