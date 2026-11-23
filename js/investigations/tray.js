@@ -115,7 +115,10 @@ export function tray(step, c, kit) {
 export function bind(h, body, kit) {
   const id = h.stepId();
   const shut = body.querySelector('[data-tray]');
-  shut?.addEventListener('toggle', () => (left[id] = shut.open));
+  const first = shut?.open;
+  shut?.addEventListener('toggle', () => {
+    if (shut.open !== first || id in left) left[id] = shut.open;
+  });
   shut?.querySelectorAll('[data-cite]').forEach(b =>
     b.addEventListener('click', () => {
       body.querySelector('[data-answer]')?.focus();
