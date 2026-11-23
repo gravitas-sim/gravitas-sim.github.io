@@ -597,8 +597,6 @@ export default {
         'A shift near 7 ms with the sign flipped, at which the two traces visibly line up. The readout reports -7.3 ms and a correlation of -0.76 as measured from the published files.',
       'model-against-measurement':
         'The measurement and the reconstruction agreeing closely through the last cycles, and a residual that is as loud before the signal arrives as after it. The rapid die-away at the end is the ringdown and this investigation’s own model does not produce it.',
-      'the-loudest-on-the-map':
-        'A committed answer about GW170817 before its map is on screen. The common choice is the first, that the highest signal-to-noise ratio means the clearest track; the answer is the third, and it is marked at screen 28. In between, the first two screens of the archive already show that no end is measured for it, so many students will have seen their prediction tested before it is marked: that is the point of committing first.',
       'five-recordings':
         'Five maps, four with a visible curve that climbs and stops, and an "End of the chirp" line for each of those four. For GW170817 the line says nothing clears the noise, and no end is measured. Expect some students to say they can see a faint track on its map anyway; that is worth keeping for screen 28, where their prediction from screen 23 is marked.',
       'the-same-moment':
