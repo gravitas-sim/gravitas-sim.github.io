@@ -225,7 +225,8 @@ describe('the digest the derived closure produces', () => {
     // 305 after the exoplanet closeout investigations (Prompt 231, D-R10-231-01) over v3 92e5279d (closure 304): one file, exoplanet-sequence.js, which holds the four lessons, their Spanish, their guides and their deeper steps; the one new closure file per sequence, the cap raise delegated to the coordinator (figures sent before the push).
     // 306 after How far, and how sure? and What Gaia does not see (Prompt 233, D-R10-233-08) over v3 a9c654a2 (closure 305): one file, gaia-sequence.js, which holds the two lessons, their Spanish, their guides and their deeper steps; the one new closure file per sequence, the cap raise delegated to the coordinator (figures sent before the push).
     // 309 after the Moon lesson and its deeper steps moved into their own files (D-R4-330-10, closure 308 over v4 closure 306) and Io's Fire's deeper steps got depth/ios-fire.js (closure +1).
-    expect(current.length).toBeLessThan(310);
+    // 310 after the planet lessons' instructor text moved into planets-guides.js (D-R4-361-05): one new closure file beside planets-sequence.js, which instructorLocale.js still reads for the Spanish shadows; the lesson route stays byte-neutral.
+    expect(current.length).toBeLessThan(311);
     // 230 after the four variable-star investigations (Prompt 96): their shadows, deeper shadows and depth files;
     // 246 after the four cosmology investigations (Prompt 91).
     // 258 after the three calibration investigations (Prompt 86).

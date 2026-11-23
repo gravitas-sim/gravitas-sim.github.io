@@ -128,6 +128,9 @@ export const ES_IMAGING = {
   'imgW.o.row.mass': 'Suma de masas',
   'imgW.o.row.mass68': 'Suma de masas, intervalo del 68 por ciento',
   'imgW.o.row.mass95': 'Suma de masas, intervalo del 95 por ciento',
+  'imgW.o.row.draws': 'Intervalos calculados con',
+  'imgW.o.value.drawsLow':
+    '{used} extracciones aleatorias en este dispositivo, en el nivel bajo; el nivel completo usa {full}. La suma de masas en sí no cambia.',
   'imgW.o.row.plx': 'Paralaje usado',
   'imgW.o.value.plx':
     '{value} mas ± {sigma}, relativo a estrellas de referencia',

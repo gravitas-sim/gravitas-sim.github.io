@@ -511,9 +511,15 @@ const FIT = {
       const q = r.fit;
       rows.push(
         {
+          id: 'period',
           label: t('jovW.p.row.period'),
           value: `${fix(q.periodDays, 4)} ± ${fix(q.sigmaPeriodDays, 4)} d`,
           emphasis: true,
+        },
+        {
+          id: 'sigma',
+          label: t('jovW.p.row.sigma'),
+          value: withUnit(fix(q.sigmaPeriodDays, 5), 'd'),
         },
         {
           label: t('jovW.p.row.amplitude'),

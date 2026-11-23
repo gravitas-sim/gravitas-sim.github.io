@@ -4,11 +4,11 @@
   "routes": {
     "sources": {
       "front-door": {
-        "kb": 1937.8,
+        "kb": 1938.1,
         "requests": 109
       },
       "sandbox": {
-        "kb": 1937.8,
+        "kb": 1938.1,
         "requests": 109
       },
       "kepler": {
@@ -44,11 +44,11 @@
         "requests": 44
       },
       "figure": {
-        "kb": 2215.4,
+        "kb": 2215.7,
         "requests": 129
       },
       "experiments": {
-        "kb": 1099.2,
+        "kb": 1099.4,
         "requests": 61
       },
       "observatory": {
@@ -124,38 +124,38 @@
         "requests": 14
       },
       "compute": {
-        "kb": 182.1,
+        "kb": 182.2,
         "requests": 20
       }
     },
     "build": {
       "front-door": {
-        "kb": 549.5,
+        "kb": 549.6,
         "requests": 59
       },
       "sandbox": {
-        "kb": 549.5,
+        "kb": 549.6,
         "requests": 59
       },
       "kepler": {
-        "kb": 937.8,
+        "kb": 937.9,
         "requests": 77
       },
       "transit": {
-        "kb": 945.2,
+        "kb": 945.3,
         "requests": 77,
-        "toolKb": 1030.6,
+        "toolKb": 1030.7,
         "toolRequests": 93
       },
       "power-law": {
-        "kb": 914.0,
+        "kb": 914.1,
         "requests": 77,
-        "toolKb": 930.6,
+        "toolKb": 930.7,
         "toolRequests": 80
       },
       "largest-lesson": {
-        "kb": 1045.3,
-        "requests": 82
+        "kb": 1051.2,
+        "requests": 83
       },
       "teaching": {
         "kb": 110.8,
@@ -170,7 +170,7 @@
         "requests": 2
       },
       "figure": {
-        "kb": 686.0,
+        "kb": 686.1,
         "requests": 61
       },
       "experiments": {
@@ -178,7 +178,7 @@
         "requests": 4
       },
       "observatory": {
-        "kb": 96.1,
+        "kb": 96.2,
         "requests": 6
       },
       "catalog": {
@@ -198,7 +198,7 @@
         "requests": 3
       },
       "composer": {
-        "kb": 297.2,
+        "kb": 297.3,
         "requests": 16
       },
       "course-builder": {

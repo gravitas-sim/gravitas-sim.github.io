@@ -132,7 +132,6 @@
     "js/data/investigations/power-law-gravity.js": 4,
     "js/data/investigations/retrograde-motion.js": 4,
     "js/data/investigations/saturated-star-sequence.js": 5,
-    "js/data/investigations/telescope-sequence.js": 2,
     "js/data/investigations/tides.js": 16,
     "js/data/investigations/transit-photometry.js": 2,
     "js/data/investigations/when-orbits-lock.js": 1,
