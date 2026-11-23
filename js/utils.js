@@ -155,7 +155,7 @@ export const screenToWorld = (screenPos, state, canvas) => {
   };
 };
 
-// The bodies a "frame the scene" view fits, and their box and centre of mass:
+// The bodies a "frame the scene" view fits, their centre of mass and reach:
 // all but real outliers (beyond FRAME_OUTLIER median reaches from the median
 // position, holding under a tenth of the mass), debris only when it is all
 // there is. Why, and the scenes it was measured on: js/view3d.js focusScene.
@@ -182,7 +182,12 @@ export const framedBodies = bodies => {
   const cx = mid(bs.map(b => b.pos.x));
   const cy = mid(bs.map(b => b.pos.y));
   const reach = b => Math.hypot(b.pos.x - cx, b.pos.y - cy);
-  const limit = mid(bs.map(reach)) * FRAME_OUTLIER;
+  const reaches = bs.map(reach);
+  // Over half the bodies at the median position would make the median reach
+  // 0: the median of the others' reaches instead (a mean would be pulled out
+  // by the very body it should catch).
+  const typical = mid(reaches.slice()) || mid(reaches.filter(r => r > 0));
+  const limit = typical * FRAME_OUTLIER;
   if (!(limit > 0)) return bs;
   const { m } = centreOf(bs);
   return bs.filter(b => reach(b) <= limit || (m > 0 && b.mass >= m / 10));
@@ -191,17 +196,15 @@ export const sceneFrame = bodies => {
   const solid = bodies.filter(b => b && b.kind !== 'Debris');
   const bs = framedBodies(solid.some(placed) ? solid : bodies);
   if (!bs.length) return null;
-  const xs = bs.map(b => b.pos.x);
-  const ys = bs.map(b => b.pos.y);
-  const { x, y } = centreOf(bs);
-  return {
-    bodies: bs,
-    center: { x, y },
-    minX: Math.min(...xs),
-    maxX: Math.max(...xs),
-    minY: Math.min(...ys),
-    maxY: Math.max(...ys),
-  };
+  const center = centreOf(bs);
+  // How far the framed bodies reach from their centre of mass on each axis,
+  // so a view centred on it can be sized to hold them all.
+  const half = { x: 0, y: 0 };
+  for (const b of bs) {
+    half.x = Math.max(half.x, Math.abs(b.pos.x - center.x));
+    half.y = Math.max(half.y, Math.abs(b.pos.y - center.y));
+  }
+  return { bodies: bs, center, half };
 };
 
 /**

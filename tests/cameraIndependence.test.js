@@ -86,7 +86,7 @@ describe('a view that frames the scene fits what the scene is about', () => {
   test('the Solar System frames out to its nearer comets, not to Comet ISON', () => {
     const frame = sceneFrame(solar);
     expect(solar.length - frame.bodies.length).toBe(4);
-    expect(frame.maxX).toBe(7850);
+    expect(frame.center.x + frame.half.x).toBeCloseTo(7850, 6);
     expect(frame.center.x).toBeLessThan(10);
   });
 
@@ -127,17 +127,44 @@ describe('a view that frames the scene fits what the scene is about', () => {
 
   test('no mass, or a position that is not a number, does not turn the frame off', () => {
     const massless = solar.map(b => ({ ...b, mass: 0 }));
-    expect(sceneFrame(massless).maxX).toBe(7850);
+    const still = sceneFrame(massless);
+    expect(still.center.x + still.half.x).toBeCloseTo(7850, 6);
     const broken = [...solar, at(NaN), at(Infinity)];
     expect(sceneFrame(broken).bodies).toHaveLength(solar.length - 4);
     expect(sceneFrame([at(NaN)])).toBeNull();
+  });
+
+  test('a view centred on the centre of mass and sized by half holds every framed body', () => {
+    const frame = sceneFrame(solar);
+    for (const b of frame.bodies) {
+      expect(Math.abs(b.pos.x - frame.center.x)).toBeLessThanOrEqual(
+        frame.half.x
+      );
+      expect(Math.abs(b.pos.y - frame.center.y)).toBeLessThanOrEqual(
+        frame.half.y
+      );
+    }
+    // The Sun is the centre and McNaught the far edge: the box's half-width
+    // (3925) would leave it off screen.
+    expect(frame.half.x).toBeGreaterThan(7840);
+  });
+
+  test('more than half the bodies at one point still lets the cut work', () => {
+    const pile = [
+      ...Array.from({ length: 30 }, () => at(0, 1, 0, 'Star')),
+      ...Array.from({ length: 5 }, (_, i) => at(100 + i, 1, 0, 'Star')),
+    ];
+    const far = at(1e7, 1, 0, 'Star');
+    expect(framedBodies([...pile, far])).not.toContain(far);
+    expect(framedBodies([...pile, far])).toHaveLength(35);
   });
 
   test('debris is not framed unless it is all there is', () => {
     const spray = Array.from({ length: 50 }, (_, i) =>
       at(1e5 + i, 1e-9, 0, 'Debris')
     );
-    expect(sceneFrame([...solar, ...spray]).maxX).toBe(7850);
+    const framed = sceneFrame([...solar, ...spray]);
+    expect(framed.center.x + framed.half.x).toBeCloseTo(7850, 6);
     expect(sceneFrame(spray).bodies).toHaveLength(50);
   });
 });

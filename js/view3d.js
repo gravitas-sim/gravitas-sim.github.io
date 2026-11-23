@@ -1135,13 +1135,11 @@ function focusScene(force = false) {
     needsFocusReset = false;
     return;
   }
-  const { minX, maxX, minY, maxY } = frame;
-
-  const spanX = maxX - minX;
-  const spanY = maxY - minY;
-  const extent = Math.max(80, spanX, spanY);
-  const centerX = (minX + maxX) / 2;
-  const centerZ = -((minY + maxY) / 2);
+  // Centred on the framed bodies' centre of mass and sized by how far they
+  // reach from it, as the 2-D Reset view is, so the two views frame alike.
+  const extent = Math.max(80, 2 * frame.half.x, 2 * frame.half.y);
+  const centerX = frame.center.x;
+  const centerZ = -frame.center.y;
 
   // The grid has to reach the bodies it is meant to be holding up.
   ensureGridCovers(

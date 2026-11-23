@@ -683,14 +683,16 @@ export function initCaptureMeasure(ctx) {
     // too (see sceneFrame).
     const frame = sceneFrame(allObjects);
     if (frame) {
-      const { minX, maxX, minY, maxY } = frame;
       const centerX = frame.center.x;
       const centerY = frame.center.y;
 
       // Add some padding around the objects
       const padding = 50;
-      const width = maxX - minX + padding * 2;
-      const height = maxY - minY + padding * 2;
+      // Centred on the centre of mass, so sized by how far the framed bodies
+      // reach from it on each side, not by their box: in the Solar System the
+      // box runs from the Sun to McNaught and its centre is the Sun.
+      const width = 2 * (frame.half.x + padding);
+      const height = 2 * (frame.half.y + padding);
 
       // Calculate zoom to fit all objects on screen
       const zoomX = canvas.width / width;
