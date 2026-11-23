@@ -356,3 +356,88 @@ describe('the plot component as a lesson uses it', () => {
     expect(selection.focus).toBe(2);
   });
 });
+
+describe('the fit line on log axes', () => {
+  // Readings that agree have equal logarithms, and on an engine whose log10
+  // differs from another's in the last place two of them can still differ by
+  // 1e-16. That is no spread to fit a line through: the plot draws no fit
+  // there instead of one of slope 1e16 (the tides lesson's three-mass step,
+  // asked for the same mass three times).
+  const wrong = new Float64Array(1);
+  const bits = new BigUint64Array(wrong.buffer);
+  const nudged = (every, fn) => {
+    const original = Math.log10;
+    let calls = 0;
+    Math.log10 = x => {
+      const v = original(x);
+      calls++;
+      if (calls % every !== 0) return v;
+      wrong[0] = v;
+      bits[0] += 1n;
+      return wrong[0];
+    };
+    try {
+      return fn();
+    } finally {
+      Math.log10 = original;
+    }
+  };
+  const slopeTexts = svg =>
+    [...svg.querySelectorAll('text')]
+      .map(n => n.textContent)
+      .filter(x => /^slope /.test(x));
+
+  let step;
+  beforeAll(async () => {
+    const lesson = await loadInvestigation('tides', 'en');
+    step = lesson.steps.find(s => s.sid === 'choose-three-masses');
+  });
+
+  /** The step's plot drawn on log axes from three masses and three stretches. */
+  function drawTides(m, mass, stretch) {
+    const typed = [
+      mass[0],
+      stretch[0],
+      mass[1],
+      stretch[1],
+      mass[2],
+      stretch[2],
+    ];
+    const vals = {};
+    for (const [i, f] of step.fields.entries()) {
+      vals[f.id] = typed[i];
+      vals[`${f.id}_text`] = String(typed[i]);
+    }
+    view.draw(step, vals, {
+      canvas: m.svg,
+      els: { body: m.body, plotTable: m.table, plotTableWrap: m.wrap },
+      transformed: false,
+      log: true,
+      scene: { selectRole() {}, selectableBodies: () => [] },
+    });
+  }
+
+  test('three equal masses draw no fit, nudged or not', () => {
+    expect(step).toBeDefined();
+    const mass = [1.12, 1.12, 1.12];
+    const stretch = [1.11987, 1.11999, 33.3636];
+    const plain = mount();
+    drawTides(plain, mass, stretch);
+    expect(slopeTexts(plain.svg)).toEqual([]);
+    // Each position of the one-unit error among the logarithms drawn.
+    for (const every of [1, 2, 3, 4, 5, 6]) {
+      const m = mount();
+      nudged(every, () => drawTides(m, mass, stretch));
+      expect(slopeTexts(m.svg)).toEqual([]);
+    }
+  });
+
+  test('masses that differ still draw their fit', () => {
+    const m = mount();
+    drawTides(m, [1, 2, 4], [1, 2, 4]);
+    expect(slopeTexts(m.svg)).toEqual(['slope 1.000']);
+    const close = mount();
+    drawTides(close, [1, 1.001, 1.002], [1, 1.001, 1.002]);
+    expect(slopeTexts(close.svg)).toEqual(['slope 1.000']);
+  });
+});
