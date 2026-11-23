@@ -132,7 +132,7 @@ const BUDGETS = [
   {
     id: 'deferred',
     label: 'Deferred JavaScript (lazy chunks, gzipped)',
-    limit: 3270.0,
+    limit: 3270.1,
     reason:
       'Jumped from 1369 KB to 2105 KB when three.js and Chart.js stopped being ' +
       'CDN requests and became bundled chunks. That is the point of the change ' +
@@ -754,7 +754,7 @@ const BUDGETS = [
       '\n\nThis branch merged with v4 78e15afaf (D-R4-TRAINC1-05): v4 holds 3258.5 KB for the solar system scale and missing mass lessons, and the quiet canvas and combined planet, binary star and tides lessons add the 7.1 KB above it (grants dm 6.9 and du 0.2), so the limit is 3265.6 KB, the measurement by CI of the merged branch (head 64731fa43). Under the standing approval of 2026-10-10.' +
       '\n\nResuming a lesson at its scene (D-R4-367-11): raised from 3265.6 to 3266.1 KB, the previous limit plus the 0.5 KB the branch adds over v4 (CI measured 3,329,600 bytes gzipped, 3251.5625 KB, against 3,329,004 on v4 before the branch merged with the solar system lessons; set again from the run on the merged branch). Under the standing approval of 2026-10-10 and the engine and production class exemption (maintainer decision, 2026-11-21).' +
       "\n\nThe inspector and conservation readouts (D-R4-461-03): the shared primary rule, the orbit and radius rows and the energy readout, carried into every bundle that builds the engine; raised from 3265.6 to 3269.4 KB, the measurement of a Node 22.23.4 build of the branch merged with v4 cb43cf134: 3,347,815 bytes gzipped (3269.35 KB), rounded up to 0.1 KB; set to CI's figure before review. Engine and production class (maintainer decision 2026-11-22) under the standing approval of 2026-10-10." +
-      '\n\nInspector readouts after merging v4 10088f53c (D-R4-461-04): raised from 3266.1 to 3270.0 KB, the measured overrun rounded up to 0.1 KB (3,348,437 bytes gzipped on a Node 22.23.4 build of the merged branch, 3269.96 KB); this replaces the 3269.4 of D-R4-461-03, measured over an older v4. Set again from the CI figure before review. Under the standing approval of 2026-10-10 and the engine and production class exemption (maintainer decision, 2026-11-21).',
+      '\n\nInspector readouts after merging v4 10088f53c (D-R4-461-04): raised from 3266.1 to 3270.1 KB, CI\'s figure rounded up to 0.1 KB (3,348,491 bytes gzipped, 3270.01 KB; a Node 22.23.4 build of the merged branch read 3,348,437); this replaces the 3269.4 of D-R4-461-03, measured over an older v4. Set again from the CI figure before review. Under the standing approval of 2026-10-10 and the engine and production class exemption (maintainer decision, 2026-11-21).',
   },
 ];
 
