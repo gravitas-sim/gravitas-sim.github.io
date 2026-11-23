@@ -457,7 +457,7 @@ const BLACK_HOLES = {
           {
             id: 'mass',
             label: 'Hole on the canvas',
-            value: `${m.toFixed(1)} M☉`,
+            value: `${m} M☉`,
           },
           {
             id: 'rs',
@@ -1329,16 +1329,29 @@ const BLACK_HOLES = {
       },
       probe: ctx => {
         const hole = ctx.role('hole');
-        const m = hole ? sunsOf(hole) : NaN;
+        // No hole on the canvas: the rows stay, with nothing to take.
+        if (!hole)
+          return [
+            { label: 'Hole on the canvas', value: '-' },
+            { id: 'fr', label: 'Horizon radius, against 10 M☉', value: '-' },
+            { id: 'fd', label: 'Average density, against 10 M☉', value: '-' },
+            {
+              id: 'ft',
+              label: 'Hawking temperature, against 10 M☉',
+              value: '-',
+            },
+            {
+              id: 'fl',
+              label: 'Evaporation lifetime, against 10 M☉',
+              value: '-',
+            },
+          ];
+        const m = sunsOf(hole);
         const f = ctx.holeFacts(m);
         const b = ctx.holeFacts(10);
-        // No hole on the canvas: the rows stay, with nothing to take.
-        const times = x => (Number.isFinite(x) ? `× ${x.toPrecision(3)}` : '-');
+        const times = x => `× ${x.toPrecision(3)}`;
         return [
-          {
-            label: 'Hole on the canvas',
-            value: hole ? `${m.toFixed(1)} M☉` : '-',
-          },
+          { label: 'Hole on the canvas', value: `${m} M☉` },
           {
             id: 'fr',
             label: 'Horizon radius, against 10 M☉',

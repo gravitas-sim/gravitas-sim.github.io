@@ -236,7 +236,8 @@ describe('the instructor expectations record', () => {
     // 557 over that: the new steps of Integrators in Practice and Extending an Experiment, net of the ones they retire.
     // 555 over that: Lives of Stars replaces three read-a-number steps with one comparison step (3 retired, 1 new).
     // 556 after Missing Mass gained the compare-your-two-fits expectation; Tides (three more) and Finding Planets by Their Tug (one more, the half-range step of Radial Velocity) add four.
-    expect(total).toBe(560);
+    // 561: Black Holes by the Numbers adds the four-factor readings step; its scaling step replaces three-measurements one for one.
+    expect(total).toBe(561);
     // 542 after How Many Earths? (Prompt 229): 3 more over 539.
     // 547 after the four exoplanet closeout investigations (Prompt 231): 5 more over 542.
   });
