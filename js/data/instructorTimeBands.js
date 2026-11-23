@@ -67,7 +67,7 @@ export const bandOfMinutes = minutes =>
 import { INSTRUCTOR as MEASUREMENT } from './investigations/depth/measurement-sequence.js';
 import { INSTRUCTOR as SATELLITE } from './investigations/depth/satellite-sequence.js';
 import { INSTRUCTOR as ATMOSPHERE } from './investigations/depth/atmosphere-sequence.js';
-import { INSTRUCTOR as PLANETS } from './investigations/planets-sequence.js';
+import { INSTRUCTOR as PLANETS } from './investigations/planets-guides.js';
 import { INSTRUCTOR as EXPOSURE } from './investigations/exposure-sequence.js';
 import { INSTRUCTOR as STRATEGY } from './investigations/strategy-sequence.js';
 import { INSTRUCTOR as SURVEY } from './investigations/survey-sequence.js';

@@ -8,9 +8,10 @@
     ["steps.three-distances.fields.2.unit","AU"],
     ["steps.light-time.fields.0.unit","AU"],
     ["steps.light-time.fields.1.unit","h"],
-    ["steps.scale-model.fields.0.unit","AU"],
-    ["steps.scale-model.fields.1.unit","m"],
-    ["steps.scale-model.fields.2.unit","km"]
+    ["steps.choose-your-marble.fields.0.unit","cm"],
+    ["steps.choose-your-marble.fields.1.unit","m"],
+    ["steps.choose-your-marble.fields.2.unit","AU"],
+    ["steps.choose-your-marble.fields.3.unit","m"]
    ],
    "numbered": []
   },
@@ -23,15 +24,15 @@
   "answers": [],
   "decimals": [
    [
-    "light-time.hours",
+    "light-time.neptune",
     2
    ],
    [
-    "scale-model.earth_m",
+    "choose-your-marble.au_m",
     1
    ],
    [
-    "scale-model.neptune_km",
+    "choose-your-marble.neptune",
     2
    ]
   ]
@@ -40,15 +41,14 @@
  "steps": {
   "en": {
    "three-distances": {
-    "probe": [[{"label":"Earth: distance from the Sun","value":"not on the canvas yet"},{"label":"Jupiter: distance from the Sun","value":"not on the canvas yet"},{"label":"Neptune: distance from the Sun","value":"not on the canvas yet"}],[{"label":"Earth: distance from the Sun","value":"2.84 AU"},{"label":"Jupiter: distance from the Sun","value":"4.40 AU"},{"label":"Neptune: distance from the Sun","value":"4.46 AU"}]],
-    "validate": {"calls":242,"distinct":2,"digest":"55bf9ae621b418ff","samples":[null,{"level":"error","message":"Read the three rows of the readout. If Neptune is not there yet, let the world finish building."}]}
+    "probe": [[{"label":"Select a planet","value":"-"},{"id":"dist","label":"Distance from the Sun","value":"-"}],[{"label":"Selected","value":"Eccentric Orbiter","emphasis":true},{"id":"dist","label":"Distance from the Sun","value":"1.51 AU"}],[{"label":"Selected","value":"Circular Orbiter","emphasis":true},{"id":"dist","label":"Distance from the Sun","value":"1.51 AU"}],[{"label":"Selected","value":"Far Orbiter","emphasis":true},{"id":"dist","label":"Distance from the Sun","value":"1.91 AU"}]],
+    "validate": {"calls":242,"distinct":2,"digest":"2ce6fd0725a7cce2","samples":[null,{"level":"error","message":"Each box takes the distance of the planet it names. Select that planet and press Take reading; if Neptune is not on the screen, zoom out."}]}
    },
    "light-time": {
-    "probe": [[{"label":"Earth: distance from the Sun","value":"not on the canvas yet"},{"label":"Jupiter: distance from the Sun","value":"not on the canvas yet"},{"label":"Neptune: distance from the Sun","value":"not on the canvas yet"}],[{"label":"Earth: distance from the Sun","value":"2.84 AU"},{"label":"Jupiter: distance from the Sun","value":"4.40 AU"},{"label":"Neptune: distance from the Sun","value":"4.46 AU"}]],
-    "validate": {"calls":232,"distinct":2,"digest":"de4e7f9c893b4e02","samples":[null,{"level":"error","message":"Type Neptune’s distance in astronomical units: about 30."}]}
+    "validate": {"calls":232,"distinct":3,"digest":"df467f59ddb9e824","samples":[null,{"level":"error","message":"The light time is the distance in astronomical units times 499 seconds, divided by 3,600 seconds an hour."},{"level":"ok","message":"4.17 hours. The same arithmetic gives Earth 8.3 minutes and Jupiter 43 minutes; a radio command to a spacecraft at Neptune and its reply would take more than eight hours."}]}
    },
-   "scale-model": {
-    "validate": {"calls":242,"distinct":2,"digest":"de4e7f9c893b4e02","samples":[null,{"level":"error","message":"Type Neptune’s distance in astronomical units: about 30."}]}
+   "choose-your-marble": {
+    "validate": {"calls":242,"distinct":9,"digest":"ac944af91920e1ff","samples":[null,{"level":"ok","message":"Neptune falls 1 meters from the Sun, 0.00 kilometers, in a model whose Earth is 1.00 centimeters across. That is the same 353,000 Earths whatever the marble: halve it and every distance halves. The Sun is 109 Earths across, 11,741 Earths from the Earth, so a model with visible planets cannot be small."},{"level":"error","message":"A marble has a size above zero."},{"level":"error","message":"Multiply the length of one astronomical unit in your model by Neptune’s distance in astronomical units."},{"level":"ok","message":"Neptune falls 36 meters from the Sun, 0.04 kilometers, in a model whose Earth is 0.44 centimeters across. That is the same 353,000 Earths whatever the marble: halve it and every distance halves. The Sun is 109 Earths across, 11,741 Earths from the Earth, so a model with visible planets cannot be small."},{"level":"ok","message":"Neptune falls 30 meters from the Sun, 0.03 kilometers, in a model whose Earth is 0.00 centimeters across. That is the same 353,000 Earths whatever the marble: halve it and every distance halves. The Sun is 109 Earths across, 11,741 Earths from the Earth, so a model with visible planets cannot be small."},{"level":"ok","message":"Neptune falls 1 meters from the Sun, 0.00 kilometers, in a model whose Earth is 29.79 centimeters across. That is the same 353,000 Earths whatever the marble: halve it and every distance halves. The Sun is 109 Earths across, 11,741 Earths from the Earth, so a model with visible planets cannot be small."},{"level":"ok","message":"Neptune falls 30 meters from the Sun, 0.03 kilometers, in a model whose Earth is 29.79 centimeters across. That is the same 353,000 Earths whatever the marble: halve it and every distance halves. The Sun is 109 Earths across, 11,741 Earths from the Earth, so a model with visible planets cannot be small."},{"level":"warn","message":"That is the distance in kilometers: this box is in meters. Multiply by 1,000."}]}
    }
   },
   "es": "same"
