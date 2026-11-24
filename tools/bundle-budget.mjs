@@ -53,7 +53,7 @@ const BUDGETS = [
   {
     id: 'initial',
     label: 'Initial download (CSS + eager JS)',
-    limit: 744.8,
+    limit: 744.9,
     reason:
       'Was 743 KB when this budget was first asked for. The application had ' +
       'already grown to 771 KB on its own - the extracted state module, the ' +
@@ -126,7 +126,8 @@ const BUDGETS = [
       '\n\nWhat pulls on what (D-R4-459-07): the one relation for which bodies pull which, its per-body test and the caveat that reads it are start-up engine code; raised from 743.6 to 744.4 KB, the measurement by CI of the branch merged with v4 b2424e160 (run 44966228334): 762,209 bytes (744.34 KB), rounded up to 0.1 KB. Under the standing approval of 2026-10-10.' +
       '\n\nThe pinned lesson step (D-R4-342-06): one pin per owner and the clock-hold rule beside it in js/timestep.js, start-up code; raised from 744.4 to 744.6 KB, the measurement of a Node 22.23.4 build of the branch merged with v4 9d4aa6fd: 762,376 bytes (744.51 KB), rounded up to 0.1 KB. Under the standing approval of 2026-10-10.' +
       '\n\nThe low tier cuts the full world (D-R4-343-05): the world builder makes the full population and keeps the bodies the cap allows, start-up engine code; raised from 744.6 to 744.7 KB, the measurement of a Node 22.23.4 build of the branch merged with v4 93007c24: 762,526 bytes (744.65 KB), rounded up to 0.1 KB; 762,568 bytes (744.70 KB) on the branch merged with v4 93295b2e. Under the standing approval of 2026-10-10.' +
-      '\n\nThe quiet lesson canvas keeps Settings and precise placement beside its More (D-R4-TRAINC1-05): raised from 744.7 to 744.8 KB, the measurement of a Node 22 build of the combined branch, 762,590 bytes gzipped (744.72 KB), rounded up to 0.1 KB; the CSS that lays the dock out is the growth. Under the standing approval of 2026-10-10.',
+      '\n\nThe quiet lesson canvas keeps Settings and precise placement beside its More (D-R4-TRAINC1-05): raised from 744.7 to 744.8 KB, the measurement of a Node 22 build of the combined branch, 762,590 bytes gzipped (744.72 KB), rounded up to 0.1 KB; the CSS that lays the dock out is the growth. Under the standing approval of 2026-10-10.' +
+      "\n\nTidal fragments carried between steps (D-R4-460-05): the carry is start-up engine code in js/engine/bodies.js; raised from 744.8 to 744.9 KB, the measurement of a Node 22.23.4 build of the branch merged with v4 cb43cf134: 762,749 bytes (744.87 KB), rounded up to 0.1 KB; set to CI's figure before review. Under the standing approval of 2026-10-10.",
   },
   {
     id: 'deferred',
