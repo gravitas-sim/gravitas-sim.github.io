@@ -76,7 +76,7 @@
         "requests": 31
       },
       "course-builder": {
-        "kb": 1186.1,
+        "kb": 1186,
         "requests": 48
       },
       "course-home": {
@@ -155,7 +155,7 @@
       },
       "largest-lesson": {
         "kb": 1052.1,
-        "requests": 82
+        "requests": 83
       },
       "teaching": {
         "kb": 110.8,
