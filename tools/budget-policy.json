@@ -24,15 +24,15 @@
         "requests": 109
       },
       "kepler": {
-        "kb": 2672.3,
+        "kb": 2674.8,
         "requests": 142
       },
       "transit": {
-        "kb": 2679.7,
+        "kb": 2679.9,
         "requests": 142
       },
       "power-law": {
-        "kb": 2639.5,
+        "kb": 2639.7,
         "requests": 142
       },
       "largest-lesson": {
