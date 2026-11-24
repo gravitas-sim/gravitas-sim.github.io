@@ -555,9 +555,9 @@ try {
           <span class="gs-en"><strong>The barycenter is taken over the massive bodies.</strong>
           Stars, black holes, compact remnants, planets, gas giants, asteroids
           and comets. Debris and particles are excluded: they carry little mass
-          and are culled aggressively when they leave the visible region, so
-          including them would make the frame's origin jump whenever a fragment
-          disappeared.</span><span class="gs-es" lang="es"><strong>El baricentro se toma sobre los cuerpos masivos.</strong> Estrellas, agujeros negros, remanentes compactos, planetas, gigantes gaseosos, asteroides y cometas. Los escombros y las partículas se excluyen: tienen poca masa y se descartan de forma agresiva cuando salen de la región visible, de modo que incluirlos haría saltar el origen del marco cada vez que desapareciera un fragmento.</span>
+          and come and go in numbers (a collision scatters debris, and a disk
+          particle lives a minute or three), so including them would make the
+          frame's origin jump whenever one appeared or expired.</span><span class="gs-es" lang="es"><strong>El baricentro se toma sobre los cuerpos masivos.</strong> Estrellas, agujeros negros, remanentes compactos, planetas, gigantes gaseosos, asteroides y cometas. Los escombros y las partículas se excluyen: tienen poca masa y aparecen y desaparecen en cantidad (una colisión dispersa escombros, y una partícula del disco vive entre uno y tres minutos), de modo que incluirlos haría saltar el origen del marco cada vez que apareciera o caducara uno.</span>
         </li>
         <li>
           <span class="gs-en"><strong>The starfield does not move with the frame.</strong> That is
@@ -1829,23 +1829,6 @@ try {
         inspiral scenario is an <em>imposed</em> decay rate, not a computed
         gravitational-wave luminosity; nothing in this simulation calculates
         radiated energy.</span><span class="gs-es" lang="es">Cuando se muestran, los valores aparecen agrupados bajo &ldquo;Conservation check&rdquo; con las razones por las que <em>esta</em> escena no es cerrada junto a ellos &mdash; un agujero estático, gravedad unidireccional, un halo o campo MOND, decaimiento orbital impuesto, fusiones, desgarramiento por marea &mdash; y con el momento en que se tomó la referencia. Un cambio por cualquiera de ellos es el modelo, no el método. Obsérvese en particular que una disminución de energía en un escenario de espiral es una tasa de decaimiento <em>impuesta</em>, no una luminosidad de ondas gravitacionales calculada; nada en esta simulación calcula la energía radiada.</span>
-      </p>
-      <p>
-        <span class="gs-en">There are two energy lines, because no one sum is conserved in every
-        world. The first is the energy this world&rsquo;s model conserves: the
-        kinetic energy of each body that moves, counted once, plus the softened
-        potential of each pair where either body pulls the other, counted once.
-        Where a body pulls one way only, it is labeled &ldquo;in the fixed
-        field&rdquo;, and it is conserved only while that body is at rest and
-        pulled by nothing. Where the model conserves no energy (modified
-        gravity, a halo, orbital decay, a one-way source that moves, a body on a
-        prescribed path, bodies touching in every step) the line says so and
-        why. A collision, merger, absorption, collapse or tidal stripping is an
-        event: the line says how much the energy changed at it and measures
-        drift from after it, so the loss at a bounce is never read as drift.
-        The second line is the old sum over every pair, kept under its own name
-        as &ldquo;all pairs&rdquo;; in a one-way world it changes far more than
-        anything the model conserves.</span><span class="gs-es" lang="es">Hay dos líneas de energía, porque ninguna suma se conserva en todos los mundos. La primera es la energía que conserva el modelo de este mundo: la energía cinética de cada cuerpo que se mueve, contada una vez, más el potencial suavizado de cada par en el que uno de los cuerpos atrae al otro, contado una vez. Donde un cuerpo atrae en un solo sentido, se rotula &ldquo;en el campo fijo&rdquo;, y se conserva solo mientras ese cuerpo esté en reposo y nada lo atraiga. Donde el modelo no conserva ninguna energía (gravedad modificada, un halo, decaimiento orbital, una fuente unidireccional que se mueve, un cuerpo en una trayectoria impuesta, cuerpos en contacto en cada paso) la línea lo dice y por qué. Una colisión, fusión, absorción, colapso o desgarro por mareas es un evento: la línea indica cuánto cambió la energía en él y mide la deriva desde después, de modo que la pérdida en un rebote nunca se lee como deriva. La segunda línea es la suma antigua sobre todos los pares, conservada con su propio nombre como &ldquo;todos los pares&rdquo;; en un mundo unidireccional cambia mucho más que cualquier cosa que el modelo conserve.</span>
       </p>
       <h4><span class="gs-en">What a student can do with it</span><span class="gs-es" lang="es">Lo que un estudiante puede hacer con ello</span></h4>
       <p>
@@ -3286,7 +3269,10 @@ try {
         fixed by choosing a better one. These operations delete information:
         after them the state that came before is not recoverable, because it is
         no longer represented anywhere. The table is generated by scanning
-        <code>js/physics.js</code>, so it cannot fall behind the engine.</span><span class="gs-es" lang="es">La segunda razón no tiene nada que ver con el integrador y no se puede arreglar eligiendo uno mejor. Estas operaciones borran información: después de ellas el estado anterior no es recuperable, porque ya no está representado en ninguna parte. La tabla se genera escaneando <code>js/physics.js</code>, de modo que no puede quedar atrás respecto al motor.</span>
+        <code>js/physics.js</code>, so it cannot fall behind the engine.
+        Leaving the view is not among them: no body is removed for leaving
+        the view, whatever the zoom, the pan or the size of the window, and a
+        body leaves the world only when the physics ends it.</span><span class="gs-es" lang="es">La segunda razón no tiene nada que ver con el integrador y no se puede arreglar eligiendo uno mejor. Estas operaciones borran información: después de ellas el estado anterior no es recuperable, porque ya no está representado en ninguna parte. La tabla se genera escaneando <code>js/physics.js</code>, de modo que no puede quedar atrás respecto al motor. Salir de la vista no está entre ellas: ningún cuerpo se elimina por salir de la vista, sea cual sea el zoom, el desplazamiento o el tamaño de la ventana, y un cuerpo solo deja el mundo cuando la física lo termina.</span>
       </p>
       <div class="doc-table-wrap">
         <table class="doc-table">
@@ -3302,62 +3288,7 @@ try {
             <tr>
               <td>Replaced</td>
               <td>a star past the collapse mass is replaced by a black hole; the star it was is gone, along with its type, temperature and radius</td>
-              <td><code>js/engine/step.js:826</code></td>
-            </tr>
-            <tr>
-              <td>Deleted when far away</td>
-              <td>planets more than 20 view-widths out are deleted</td>
-              <td><code>js/engine/step.js:955</code></td>
-            </tr>
-            <tr>
-              <td>Deleted when far away</td>
-              <td>stars more than 20 view-widths out are deleted</td>
-              <td><code>js/engine/step.js:962</code></td>
-            </tr>
-            <tr>
-              <td>Deleted when far away</td>
-              <td>gas giants more than 20 view-widths out are deleted</td>
-              <td><code>js/engine/step.js:969</code></td>
-            </tr>
-            <tr>
-              <td>Deleted when far away</td>
-              <td>neutron stars more than 20 view-widths out are deleted</td>
-              <td><code>js/engine/step.js:976</code></td>
-            </tr>
-            <tr>
-              <td>Deleted when far away</td>
-              <td>white dwarfs more than 20 view-widths out are deleted</td>
-              <td><code>js/engine/step.js:983</code></td>
-            </tr>
-            <tr>
-              <td>Deleted when far away</td>
-              <td>galaxies more than 20 view-widths out are deleted</td>
-              <td><code>js/engine/step.js:990</code></td>
-            </tr>
-            <tr>
-              <td>Deleted when far away</td>
-              <td>black holes more than 50 view-widths out are deleted</td>
-              <td><code>js/engine/step.js:997</code></td>
-            </tr>
-            <tr>
-              <td>Deleted when far away</td>
-              <td>asteroids more than 5 view-widths out are deleted</td>
-              <td><code>js/engine/step.js:1006</code></td>
-            </tr>
-            <tr>
-              <td>Deleted when far away</td>
-              <td>comets more than 20 view-widths out are deleted</td>
-              <td><code>js/engine/step.js:1010</code></td>
-            </tr>
-            <tr>
-              <td>Deleted when far away</td>
-              <td>debris more than 3 view-widths out are deleted</td>
-              <td><code>js/engine/step.js:1014</code></td>
-            </tr>
-            <tr>
-              <td>Deleted when far away</td>
-              <td>accretion-disk particles more than 2 view-widths out are deleted</td>
-              <td><code>js/engine/step.js:1018</code></td>
+              <td><code>js/engine/step.js:799</code></td>
             </tr>
             <tr>
               <td>Merged</td>
@@ -3380,12 +3311,12 @@ try {
       </div>
       <p>
         <span class="gs-en">None of these is a defect. A sandbox that never merged anything, never
-        discarded a fragment that left the view and never let a star collapse
+        shattered a rocky body and never let a star collapse
         would be a worse sandbox and a slower one. What would be a defect is
         not saying so: a student who watches two bodies merge and asks to see
         it again is asking for something the simulation genuinely cannot
         provide, and the honest answer is that the information is gone rather
-        than that the button is missing.</span><span class="gs-es" lang="es">Ninguno de estos casos es un defecto. Un sandbox que nunca fusionara nada, que nunca descartara un fragmento que salió de la vista y que nunca dejara colapsar una estrella sería un peor sandbox y uno más lento. Lo que sí sería un defecto es no decirlo: un estudiante que ve fusionarse dos cuerpos y pide verlo de nuevo está pidiendo algo que la simulación genuinamente no puede dar, y la respuesta honesta es que la información se ha perdido y no que falte el botón.</span>
+        than that the button is missing.</span><span class="gs-es" lang="es">Ninguno de estos casos es un defecto. Un sandbox que nunca fusionara nada, que nunca hiciera añicos un cuerpo rocoso y que nunca dejara colapsar una estrella sería un peor sandbox y uno más lento. Lo que sí sería un defecto es no decirlo: un estudiante que ve fusionarse dos cuerpos y pide verlo de nuevo está pidiendo algo que la simulación genuinamente no puede dar, y la respuesta honesta es que la información se ha perdido y no que falte el botón.</span>
       </p>
       <p>
         <span class="gs-en">There is also a third thing, which is neither the scheme nor a deleted

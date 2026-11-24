@@ -43,7 +43,6 @@ installDomShim();
 const P = await import('../js/physics.js');
 const { TRAPPIST1_PLANETS, TRAPPIST1_STAR } =
   await import('../js/data/trappist1.js');
-const { IRREVERSIBLE } = await import('../js/data/irreversible.js');
 const asJson = process.argv.includes('--json');
 
 const BODY_LISTS = [
@@ -464,8 +463,8 @@ if (!asJson) {
 // forward-and-back run with the engine as it actually ships, naming which of
 // the audited operations fired and what it took with it.
 //
-// Attribution is by list: the audit knows which array each cull empties, so a
-// list that shrank names the operation that shrank it. A merge and a
+// Attribution is by list. Nothing leaves for leaving the view (D-R4-496-01),
+// so a list that shrank lost its bodies to a merge or an absorption. A merge and a
 // fragmentation are told apart by whether the total went down or up - a merge
 // turns two bodies into one, a shower turns one into several.
 if (!asJson) {
@@ -477,10 +476,6 @@ if (!asJson) {
     '  The runs above disabled them to isolate the integrator. These do not.\n' +
       '  Anything named here is information the engine destroyed, which no\n' +
       '  choice of scheme can give back.\n'
-  );
-
-  const byList = new Map(
-    IRREVERSIBLE.filter(o => o.kind === 'cull').map(o => [o.detail.list, o])
   );
 
   for (const [name, build] of Object.entries(SYSTEMS)) {
@@ -518,15 +513,8 @@ if (!asJson) {
     for (const key of BODY_LISTS) {
       const delta = after[key] - before[key];
       if (delta === 0) continue;
-      const op = byList.get(key);
       if (delta < 0) {
-        hits.push(
-          `${op ? op.id : `lost:${key}`} - ${-delta} ${key} gone (${
-            op
-              ? `${op.detail.buffer}x view-width cull, ${IRREVERSIBLE_LINE(op)}`
-              : 'merged or absorbed'
-          })`
-        );
+        hits.push(`lost:${key} - ${-delta} ${key} gone (merged or absorbed)`);
         continue;
       }
       // Which operation made bodies depends on which list grew. Attributing by
@@ -576,7 +564,7 @@ if (!asJson) {
     for (const h of hits) console.log(`      ${h}`);
     if (!hits.length) {
       console.log(
-        '      nothing fired: no body left the view, nothing touched anything,'
+        '      nothing fired: no body was removed, nothing touched anything,'
       );
       console.log(
         '      and there is no hole here to damp. The scheme is the only thing'
@@ -585,9 +573,4 @@ if (!asJson) {
     }
     console.log('');
   }
-}
-
-/** Where an audited operation lives, for a reader who wants to go and look. */
-function IRREVERSIBLE_LINE(op) {
-  return `js/physics.js:${op.line}`;
 }

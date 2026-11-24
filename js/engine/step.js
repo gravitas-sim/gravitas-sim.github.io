@@ -12,13 +12,7 @@
 // =============================================================================
 
 import { SOLAR_MASS_UNIT } from '../constants.js';
-import {
-  debugLog,
-  hexToRgb,
-  worldToScreen,
-  screenToWorld,
-  isOffscreen,
-} from '../utils.js';
+import { debugLog, hexToRgb, worldToScreen, screenToWorld } from '../utils.js';
 import { recordBarycenter } from '../referenceFrame.js';
 import { followCamera, resetFollowCamera } from '../followCamera.js';
 import { hitRadius } from '../bodyVisuals.js';
@@ -98,8 +92,7 @@ import {
 // validation runner. All three used to throw from inside worldToScreen, which
 // is a long way from anything a caller could act on. A zero-sized canvas gives
 // the same transform with its origin in the corner instead of the middle -
-// still exact, still invertible - and is_offscreen already guards for it
-// explicitly, so the rest of the module is expecting it.
+// still exact, still invertible.
 const canvas = (typeof document !== 'undefined' &&
   document.getElementById('simulationCanvas')) || {
   width: 0,
@@ -208,26 +201,6 @@ export const screen_to_world = spos => {
   if (!state) return { x: 0, y: 0 }; // Fallback if state not set
   return screenToWorld(spos, state, canvas);
 };
-/**
- * Check if a position is offscreen
- * @param {Object} pos - World position with x, y properties
- * @param {number} buffer_factor - Buffer factor for offscreen detection
- * @returns {boolean} True if position is offscreen
- */
-export const is_offscreen = (pos, buffer_factor = 10.0) => {
-  if (!state) return false; // Fallback if state not set
-  if (!canvas) return false; // Fallback if canvas not available
-
-  // A zero-area canvas (page opened in a background tab, a hidden container, a
-  // window mid-restore) would make the visible world zero-width and report
-  // every object as off-screen, wiping the simulation on the first frame.
-  if (!(canvas.width > 0) || !(canvas.height > 0)) return false;
-
-  // Scale buffer factor with zoom level to prevent aggressive culling
-  const zoom_adjusted_buffer = buffer_factor * Math.max(1.0, state.zoom);
-  return isOffscreen(pos, state, canvas, zoom_adjusted_buffer);
-};
-
 // Physics optimization: Cache arrays to avoid repeated spread operations
 let cachedAllPhysicsObjects = [];
 const cachedBarycenterBodies = [];
@@ -320,9 +293,9 @@ const updateCachedArrays = () => {
     // would be a barycenter of the debris.
     //
     // Debris, particles and disk fragments are left out on purpose. They carry
-    // little mass and they are culled aggressively when they drift off screen,
-    // so counting them would make the origin of the frame jump every time a
-    // fragment left the visible world.
+    // little mass and they come and go in numbers (a collision's shower, a
+    // disk particle's lifetime), so counting them would make the origin of the
+    // frame jump every time one appeared or expired.
     cachedBarycenterBodies.length = 0;
     cachedBarycenterBodies.push(
       ...bh_list,
@@ -910,8 +883,7 @@ export const updatePhysics = dt => {
     }
   }
 
-  // Clean up offscreen objects - matching original
-  // Filter out dead objects and objects that are off-screen, clearing energy history for removed objects
+  // Filter out dead objects, clearing the energy history of each one removed
   const filterAndClearEnergy = (objects, filterFn) => {
     const beforeCount = objects.length;
     const filtered = objects.filter(filterFn);
@@ -942,85 +914,33 @@ export const updatePhysics = dt => {
     return filtered;
   };
 
-  // A body a scenario declares as permanent survives the distance cull.
-  //
-  // The cull box is about ten canvas widths of world on each side, which is
-  // generous for a sandbox and far too small for a system whose whole point is
-  // that part of it sits outside the field of view: a stellar companion three
-  // hundred AU from a hot Jupiter is unresolvable from Earth and off-screen
-  // here for the same reason, and deleting it would delete the lesson.
-  const kept = obj => obj.persistent === true;
-
-  // More conservative filtering for important objects - only remove if truly far away
-  setBodyList(
-    'planets',
-    filterAndClearEnergy(
-      planets,
-      p => p.alive && (kept(p) || !is_offscreen(p.pos, 20.0))
-    )
-  );
-  setBodyList(
-    'stars',
-    filterAndClearEnergy(
-      stars,
-      s => s.alive && (kept(s) || !is_offscreen(s.pos, 20.0))
-    )
-  );
-  setBodyList(
-    'gas_giants',
-    filterAndClearEnergy(
-      gas_giants,
-      g => g.alive && (kept(g) || !is_offscreen(g.pos, 20.0))
-    )
-  );
-  setBodyList(
-    'neutron_stars',
-    filterAndClearEnergy(
-      neutron_stars,
-      ns => ns.alive && (kept(ns) || !is_offscreen(ns.pos, 20.0))
-    )
-  );
-  setBodyList(
-    'white_dwarfs',
-    filterAndClearEnergy(
-      white_dwarfs,
-      wd => wd.alive && (kept(wd) || !is_offscreen(wd.pos, 20.0))
-    )
-  );
-  setBodyList(
-    'galaxies',
-    filterAndClearEnergy(
-      galaxies,
-      g => g.alive && (kept(g) || !is_offscreen(g.pos, 20.0))
-    )
-  );
+  // Nothing leaves the world for leaving the view (Prompt 496,
+  // DECISION_REGISTER.md D-R4-496-01). This pass removed every body outside a
+  // box around the view centre, ten to fifty canvas widths across: zooming,
+  // panning or resizing the window deleted bodies, and the solar system lost
+  // three comets on its first step. The camera is not physics, so the box is
+  // gone and a body leaves only when the physics ends it (a merger, an
+  // absorption, a disk particle's lifetime). These filters drop the dead.
+  const ending = {
+    planets,
+    stars,
+    gas_giants,
+    neutron_stars,
+    white_dwarfs,
+    galaxies,
+    asteroids,
+    comets,
+    debris,
+    accretion_disk_particles,
+  };
+  for (const [name, list] of Object.entries(ending))
+    setBodyList(
+      name,
+      filterAndClearEnergy(list, b => b.alive)
+    );
   setBodyList(
     'bh_list',
-    filterAndClearEnergy(
-      bh_list,
-      bh => bh.alive !== false && !is_offscreen(bh.pos, 50.0)
-    )
-  ); // Black holes should never be removed
-
-  // More aggressive filtering for smaller/less important objects
-  setBodyList(
-    'asteroids',
-    filterAndClearEnergy(asteroids, a => a.alive && !is_offscreen(a.pos, 5.0))
-  );
-  setBodyList(
-    'comets',
-    filterAndClearEnergy(comets, c => c.alive && !is_offscreen(c.pos, 20.0))
-  );
-  setBodyList(
-    'debris',
-    filterAndClearEnergy(debris, d => d.alive && !is_offscreen(d.pos, 3.0))
-  );
-  setBodyList(
-    'accretion_disk_particles',
-    filterAndClearEnergy(
-      accretion_disk_particles,
-      ap => ap.alive && !is_offscreen(ap.pos, 2.0)
-    )
+    filterAndClearEnergy(bh_list, b => b.alive !== false)
   );
 
   // Follow mode logic
