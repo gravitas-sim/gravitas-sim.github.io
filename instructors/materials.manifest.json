@@ -24,7 +24,7 @@
     }
   },
   "sourceFiles": 310,
-  "sourceDigest": "c4ff104658413ec41b22d2414d8439b7aa5760e9c13cd5c473e8be21401e7841",
+  "sourceDigest": "0cac4ed8ab28de19754fb79bc32e8cb7b971fac96a505fe57080427c14a3bd1f",
   "sources": {
     "js/activities/activities.js": "af9b7e121b9a72c2a5cc18e07331d6ee841934d402b030294d25c442628881ef",
     "js/activities/activityBridge.js": "ddd8015bf88938d98d967942048bc34e30a0099344b1055bd45a0459ec0333fe",
@@ -45,7 +45,7 @@
     "js/data/instructorContent.es.js": "471a388f9e2abfbe837cdad387388f52f0a547d2ae5f466e66fa5680866d5d3c",
     "js/data/instructorContent.js": "8df41253ea619d17a65921d07986bde1c68b0feaa517accc450448ff3d846e9a",
     "js/data/instructorExpectations.es.js": "5ec751fabe0ed60f692799c260ab8f383ffae25379c4b426efdd4351e0ae00ee",
-    "js/data/instructorExpectations.js": "a085d2920c46a320da8bf6cbc734098641690c788f62c12871494265b4d0b2d3",
+    "js/data/instructorExpectations.js": "b3bca7743e28628b2e7321ea877818fc47ec6c6d686525cbc52d7a3da0954f19",
     "js/data/instructorFlow.es.js": "f1c087e5240114351245f6a7fa7ad9b3efd269ec6d415183fd945ac95534fd86",
     "js/data/instructorFlow.js": "af336cdf1c6a900baa9092197bf657241649488b776aa23a297a2630a9d84a5a",
     "js/data/instructorLabels.js": "e43910350dbc39fc464736852d20357a95adf5b633325ebfdfdeabbb6b029fc7",
@@ -162,7 +162,7 @@
     "js/data/investigations/es/detect-this-planet.js": "5d7d19c269b3ef7e86e5df66eb56327e8115a0339ee1775e919af51787757cae",
     "js/data/investigations/es/einstein-rings-and-arcs.js": "ba125a60a4627e3ca44297ecca218e6f6ec584159bda12f3268583276851fd38",
     "js/data/investigations/es/extending-an-experiment.js": "719c48b039c62ce57eb6606aeb502272cce07b33278ac410fe4986850cf29339",
-    "js/data/investigations/es/goldilocks-question.js": "00086f997001b84b141b739c3b55b7db8e8c35d2bda8131403d8a2dee0864866",
+    "js/data/investigations/es/goldilocks-question.js": "77ff484fcb0a8a42793012cb12f5c202bd94077b1c5de1178efd646940fb12df",
     "js/data/investigations/es/gravity-assist.js": "71c1fdf7a43dd926104dc02d15d6e2a2d2297bdee4c60bde20ff6e8921a66671",
     "js/data/investigations/es/hohmann-transfer.js": "3013356d5c40095233f30b445be241c57d8a97bea509f8e3d53589723d25ec1e",
     "js/data/investigations/es/inside-a-star.js": "1bba3479e3339759666a031cb068f1a31afcdd40985ba656dc905d77ff4a36a9",
@@ -215,7 +215,7 @@
     "js/data/investigations/exposure-sequence.js": "50240159e15f6f40bd83a22b86874af131d78bc7549ee46174a0d3813a03ccd6",
     "js/data/investigations/extending-an-experiment.js": "c34d8c4b96b580f153e14e173ba2788049cdf8ce555410282633d45144ab45bb",
     "js/data/investigations/gaia-sequence.js": "5db2311697c0725bd12fa8d12df45ee12d2ade4d36d4879d4a649b4dedc51ae5",
-    "js/data/investigations/goldilocks-question.js": "8f32b7541c82ff82a25df102c5a359876a4b1b82ce025dc16d11f13c3e61faba",
+    "js/data/investigations/goldilocks-question.js": "674ce9ab68dde28e45dee5811853f353edb8e60520d3005ef1573544fb5c8704",
     "js/data/investigations/gravity-assist.js": "05d22285b1e787a47fa62edfa3a31a34951b85a1d6933b2e3b9d2cd0fc4c8348",
     "js/data/investigations/hohmann-transfer.js": "ec59f45a5d6e404a2f07fe1442847c0cf8dc4f045c7a8ce92c6f78be32c641df",
     "js/data/investigations/i18n.js": "a8b8d2d93ab1170aaffd92df42faceb74cbbf32cb67227ed13e3ea67bc759567",
@@ -337,5 +337,5 @@
     "tools/instructor-freshness.mjs": "96052b2f27080f0243fdd4d5f7608927bd67f0c50808b6eac3345a65c14d1e28",
     "tools/source-closure.mjs": "961828e4d0d40d8a6f8c029fe9b9435ecaf39a74b62640efc0b4145c35c7650a"
   },
-  "contentDigest": "615796dcb6c536968f9dff0871310a0f76c6a662651222e92c9ca7013af160f0"
+  "contentDigest": "6e9401bb6f4802c32e78c68281ea1432498745de5bf77f2a4f9284a733e22f8d"
 }
