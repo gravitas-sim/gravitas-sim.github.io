@@ -315,7 +315,7 @@ describe('the re-baseline command refuses', () => {
     ])
       s = rebaseline(s, request({ kb, release }), clean);
     expect(() =>
-      rebaseline(s, request({ kb: 0.2, release: 'd' }), clean)
+      rebaseline(s, request({ kb: 0.3, release: 'd' }), clean)
     ).toThrow(/cumulative cap/);
   });
 
