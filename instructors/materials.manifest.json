@@ -1,6 +1,6 @@
 {
   "version": "November 2026",
-  "generated": "2026-11-23",
+  "generated": "2026-11-24",
   "documents": 1222,
   "inventory": {
     "documents": 1222,
@@ -24,7 +24,7 @@
     }
   },
   "sourceFiles": 310,
-  "sourceDigest": "397261ebfbaa4c05c1cc1b1ae677e8468a62d34752869dbb9450abf480ffcef4",
+  "sourceDigest": "a99ec0b1033b82c3397c0c554f4ee6be19392809cf70ffc8f646c977a329abfc",
   "sources": {
     "js/activities/activities.js": "af9b7e121b9a72c2a5cc18e07331d6ee841934d402b030294d25c442628881ef",
     "js/activities/activityBridge.js": "ddd8015bf88938d98d967942048bc34e30a0099344b1055bd45a0459ec0333fe",
@@ -37,7 +37,7 @@
     "js/assignments/assignment.js": "2da22cba1c7d35861e8366c3adea21782d6c77200a36863e1c186859d252c857",
     "js/authoring/instructorSchema.js": "e53fac3d680fd804ee5341004c86652bceb01c30015bb50c347a6356b6d9e002",
     "js/constants.js": "4610b3640de5b1c28f336d251e3817ddb440b562f5f72d75051c72f6d0388240",
-    "js/course/pack.js": "4b48801bf2a575c2a5463d02061d8761622d4605eed5cd66ec153567a429419a",
+    "js/course/pack.js": "1552dfa887afbe393c381298bd86102104580a630fca58dc00e50900ad545dda",
     "js/course/review.js": "857393097e8b8bae402904d766575fec503a33f833c7834c74d84f6d05c4654d",
     "js/data/activities.js": "12ade7ef8a645fd9fa19b83c79acff1d86193298fb47adcbc79296748089cd3a",
     "js/data/activityTeaching.js": "7694fc798f8c4130e5aead5357e69bab04d6a5d386013d009430dba9a1c31008",
