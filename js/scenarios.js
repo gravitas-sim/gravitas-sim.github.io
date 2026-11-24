@@ -1257,7 +1257,7 @@ export const SCENARIO_PRESETS = /* @__PURE__ */ Object.freeze({
   // matter of taste, because the lesson's whole claim is that two runs
   // differing in one coordinate diverge for physical reasons. Anything that
   // could inject a second difference - a random asteroid, a merger rule
-  // firing, a body being culled for leaving the view - has to be off.
+  // firing - has to be off.
   'three-body-sensitivity-lab': {
     num_black_holes: 0,
     num_stars: 3,
