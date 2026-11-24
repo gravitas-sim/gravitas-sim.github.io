@@ -12,15 +12,15 @@
   ],
   "workflowCeilings": {
     "note": "PROPOSAL. Each value is today's ceiling, unchanged: classifying them as workflow ceilings moves nothing.",
-    "initialKb": 746.8,
+    "initialKb": 746.9,
     "deferredCoreKb": 1985.8,
     "routes": {
       "front-door": {
-        "kb": 1938,
+        "kb": 1936.9,
         "requests": 109
       },
       "sandbox": {
-        "kb": 1938,
+        "kb": 1936.9,
         "requests": 109
       },
       "kepler": {

@@ -49,7 +49,7 @@ export const IRREVERSIBLE = Object.freeze([
     line: 1073,
     detail: Object.freeze({
       draws: 4,
-      what: 'a rocky collision destroys both bodies and scatters debris whose directions, speeds and offsets come from 4 fresh Math.random draws - unseeded, so the shower cannot be reproduced, let alone reversed',
+      what: "a fast rocky collision takes a tenth of each body's mass and scatters debris whose directions, speeds and offsets come from 4 fresh Math.random draws - unseeded, so the shower cannot be reproduced, let alone reversed",
     }),
   }),
 ]);
