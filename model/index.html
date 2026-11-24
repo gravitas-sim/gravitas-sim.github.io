@@ -1988,12 +1988,16 @@ try {
               <td>
                 <span class="gs-en"><code>object.radius</code>, in simulation length units. What the
                 simulation runs on: contact and separation in
-                <code>handle_collisions</code>, merging, tidal disruption and
-                Roche-limit thresholds, the geometric overlap during a transit,
-                and the floor of the hit target. It is itself a compressed
+                <code>handle_collisions</code>, merging, the geometric overlap
+                during a transit (its timing and shape; the depth uses the real
+                radii) and the floor of the hit target. A black hole&rsquo;s
+                model radius, times a factor for the kind of body passing it (2
+                for a comet, 3 for a planet, 4 for a gas giant, 5 for a star),
+                also sets where tidal stripping starts; the simulation computes
+                no Roche limit. It is itself a compressed
                 stand-in &mdash; the Sun is 15 units and the Earth 5 &mdash; so
                 it is not a physical radius either, and nothing measured is
-                reported in it.</span><span class="gs-es" lang="es"><code>object.radius</code>, en unidades de longitud de simulación. Aquello con lo que corre la simulación: el contacto y la separación en <code>handle_collisions</code>, las fusiones, los umbrales de desgarramiento por marea y del límite de Roche, el traslape geométrico durante un tránsito y el piso del blanco de selección. Es en sí mismo un sustituto comprimido &mdash; el Sol mide 15 unidades y la Tierra 5 &mdash; de modo que tampoco es un radio físico, y nada medido se informa en él.</span>
+                reported in it.</span><span class="gs-es" lang="es"><code>object.radius</code>, en unidades de longitud de simulación. Aquello con lo que corre la simulación: el contacto y la separación en <code>handle_collisions</code>, las fusiones, el traslape geométrico durante un tránsito (su duración y su forma; la profundidad usa los radios reales) y el piso del blanco de selección. El radio del modelo de un agujero negro, multiplicado por un factor según el tipo de cuerpo que pasa (2 para un cometa, 3 para un planeta, 4 para un gigante gaseoso, 5 para una estrella), fija además dónde empieza el desgarramiento por marea; la simulación no calcula ningún límite de Roche. Es en sí mismo un sustituto comprimido &mdash; el Sol mide 15 unidades y la Tierra 5 &mdash; de modo que tampoco es un radio físico, y nada medido se informa en él.</span>
               </td>
             </tr>
             <tr>
@@ -3360,7 +3364,7 @@ try {
             <tr>
               <td>Replaced</td>
               <td>a star past the collapse mass is replaced by a black hole; the star it was is gone, along with its type, temperature and radius</td>
-              <td><code>js/engine/step.js:795</code></td>
+              <td><code>js/engine/step.js:799</code></td>
             </tr>
             <tr>
               <td>Merged</td>
@@ -3375,7 +3379,7 @@ try {
             <tr>
               <td>Fragmented</td>
               <td>a fast rocky collision takes a tenth of each body's mass and scatters debris whose directions, speeds and offsets come from 4 fresh Math.random draws - unseeded, so the shower cannot be reproduced, let alone reversed</td>
-              <td><code>js/engine/collisions.js:1070</code></td>
+              <td><code>js/engine/collisions.js:1073</code></td>
             </tr>
           <!--/fact-block-->
           </tbody>

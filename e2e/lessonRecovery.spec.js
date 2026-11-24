@@ -321,14 +321,14 @@ test.describe('an instrument and the scene describe the same thing', () => {
     const far = Number(text.match(/Far side[\s\S]*?(-?[\d.]+)%/)?.[1]);
     expect(near).toBeGreaterThan(0);
     expect(far).toBeLessThan(0);
-    // And the figure measured off the drawing is not passed off as the real
-    // one: this scenario draws the Earth far larger than scale, so the true
-    // number is printed beside it.
+    // And the figure measured across the model radius is not passed off as
+    // the real one: this scenario makes the Earth far larger than scale, so
+    // the true number is printed beside it.
     await expect(page.locator('#investigationProbe')).toContainText(
       /at true scale/i
     );
     await expect(page.locator('#investigationProbe')).toContainText(
-      /drawn .* of the way to/i
+      /model radius[\s\S]*% of the way to/i
     );
   });
 
