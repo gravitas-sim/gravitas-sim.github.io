@@ -13,18 +13,25 @@
     ["steps.how-fast-each-one-goes.fields.3.unit","°/day"],
     ["steps.how-fast-each-one-goes.fields.4.unit","°/day"],
     ["steps.how-often-does-earth-catch.unit","days"],
-    ["steps.a-lap-gained.unit","days"],
-    ["steps.catch-the-reversal.fields.0.unit","°"],
-    ["steps.catch-the-reversal.fields.1.unit","days"],
-    ["steps.catch-the-reversal.fields.2.unit","°"],
-    ["steps.catch-the-reversal.fields.3.unit","days"],
+    ["steps.time-the-reversal.fields.0.unit","°"],
+    ["steps.time-the-reversal.fields.1.unit","days"],
+    ["steps.time-the-reversal.fields.2.unit","°"],
+    ["steps.time-the-reversal.fields.3.unit","days"],
+    ["steps.time-the-reversal.fields.4.unit","°"],
+    ["steps.time-the-reversal.fields.5.unit","days"],
+    ["steps.time-the-reversal.fields.6.unit","°"],
+    ["steps.time-the-reversal.fields.7.unit","days"],
+    ["steps.time-the-reversal.fields.8.unit","days"],
+    ["steps.time-the-reversal.fields.9.unit","days"],
+    ["steps.time-the-reversal.fields.10.unit","days"],
+    ["steps.time-the-reversal.fields.11.unit","days"],
+    ["steps.time-the-reversal.fields.12.unit","days"],
+    ["steps.time-the-reversal.fields.13.unit","days"],
     ["steps.nearest-and-furthest.fields.0.unit","AU"],
     ["steps.nearest-and-furthest.fields.1.unit","AU"],
     ["steps.nearest-and-furthest.fields.2.unit",""],
     ["steps.counting-the-machinery.unit","devices"],
-    ["steps.how-long-does-a-loop.fields.0.unit","days"],
-    ["steps.how-long-does-a-loop.fields.1.unit","days"],
-    ["steps.how-long-does-a-loop.fields.2.unit","days"]
+    ["steps.jupiters-loops.unit","days"]
    ],
    "numbered": []
   },
@@ -42,19 +49,44 @@
     "unit": "days"
    },
    {
-    "sid": "a-lap-gained",
-    "answer": "783",
-    "tolerance": "60",
-    "unit": "days"
-   },
-   {
     "sid": "counting-the-machinery",
     "answer": "20",
     "tolerance": "1",
     "unit": "devices"
+   },
+   {
+    "sid": "jupiters-loops",
+    "answer": "399",
+    "tolerance": "15",
+    "unit": "days"
    }
   ],
-  "decimals": []
+  "decimals": [
+   [
+    "time-the-reversal.turn_a",
+    1
+   ],
+   [
+    "time-the-reversal.wid_a",
+    1
+   ],
+   [
+    "time-the-reversal.turn_b",
+    1
+   ],
+   [
+    "time-the-reversal.wid_b",
+    1
+   ],
+   [
+    "time-the-reversal.loop_len",
+    1
+   ],
+   [
+    "time-the-reversal.loop_unc",
+    1
+   ]
+  ]
  },
  "precision": [],
  "steps": {
@@ -63,25 +95,23 @@
     "probe": [[{"label":"Earth: speed","value":"Earth is not on the canvas yet"},{"label":"Mars: speed","value":"Mars is not on the canvas yet"},{"label":"Day","value":"0"}],[{"label":"Earth: speed","value":"31.5 km/s"},{"label":"Mars: speed","value":"17.8 km/s"},{"label":"Day","value":"3"}],[{"label":"Earth: speed","value":"31.5 km/s"},{"label":"Mars: speed","value":"17.8 km/s"},{"label":"Day","value":"13"}],[{"label":"Earth: speed","value":"31.5 km/s"},{"label":"Mars: speed","value":"17.8 km/s"},{"label":"Day","value":"400"}]]
    },
    "the-two-orbits": {
-    "probe": [[{"label":"Earth","value":"not found"},{"label":"Mars","value":"not found"}],[{"label":"Earth: distance from the Sun","value":"- AU"},{"label":"Earth: period","value":"10.7 yr"},{"label":"Mars: distance from the Sun","value":"- AU"},{"label":"Mars: period","value":"4.68 yr"}]]
+    "probe": [[{"id":"earth_a","label":"Earth","value":"not found"},{"id":"earth_P","label":"Earth","value":"not found"},{"id":"mars_a","label":"Mars","value":"not found"},{"id":"mars_P","label":"Mars","value":"not found"}],[{"id":"earth_a","label":"Earth: distance from the Sun","value":"4.87 AU"},{"id":"earth_P","label":"Earth: period","value":"3926.1 days"},{"id":"mars_a","label":"Mars: distance from the Sun","value":"2.80 AU"},{"id":"mars_P","label":"Mars: period","value":"1711.1 days"}]]
    },
    "how-fast-each-one-goes": {
-    "probe": [[{"label":"Earth: period","value":"Earth is not on the canvas yet"},{"label":"Mars: period","value":"Mars is not on the canvas yet"}],[{"label":"Earth: period","value":"10.7 yr"},{"label":"Mars: period","value":"4.68 yr"}]]
+    "probe": [[{"id":"earth_P","label":"Earth: period","value":"Earth is not on the canvas yet"},{"id":"mars_P","label":"Mars: period","value":"Mars is not on the canvas yet"}],[{"id":"earth_P","label":"Earth: period","value":"3926.1 days"},{"id":"mars_P","label":"Mars: period","value":"1711.1 days"}]]
    },
    "put-yourself-on-earth": {
     "probe": [[{"label":"Reference frame","value":"World, not switched yet"}],[{"label":"Reference frame","value":"Earth"},{"label":"Mars: distance from Earth","value":"4.30 AU"},{"label":"Mars: direction from Earth","value":"28.6°"}]]
    },
-   "catch-the-reversal": {
-    "probe": [[{"label":"Select Mars","value":"-"}],[{"label":"Mars: direction from Earth","value":"28.6°"},{"label":"Mars: distance from Earth","value":"4.30 AU"},{"label":"Day","value":"3"}],[{"label":"Mars: direction from Earth","value":"28.6°"},{"label":"Mars: distance from Earth","value":"4.30 AU"},{"label":"Day","value":"13"}],[{"label":"Mars: direction from Earth","value":"28.6°"},{"label":"Mars: distance from Earth","value":"4.30 AU"},{"label":"Day","value":"400"}]]
+   "time-the-reversal": {
+    "probe": [[{"id":"dir","label":"Mars: direction from Earth","value":"-"},{"id":"day","label":"Day","value":"-"}],[{"id":"dir","label":"Mars: direction from Earth","value":"28.59°"},{"id":"day","label":"Day","value":"3.1"}],[{"id":"dir","label":"Mars: direction from Earth","value":"28.59°"},{"id":"day","label":"Day","value":"12.5"}],[{"id":"dir","label":"Mars: direction from Earth","value":"28.59°"},{"id":"day","label":"Day","value":"400.0"}]],
+    "validate": {"calls":242,"distinct":6,"digest":"829e52afeebc6a60","samples":[null,{"level":"error","message":"In each pair the second reading must come on a later day than the first. Check that the first reading of each pair is the earlier one."},{"level":"warn","message":"No reading in your first pair has fallen: the second direction is not lower than the first. Keep stepping until the direction has dropped, then take that reading as the second of the pair."},{"level":"warn","message":"Your second pair must come after your first. Take both readings of the second turn on days later than the second reading of the first pair."},{"level":"warn","message":"In your second pair the second direction is not higher than the first. Keep stepping past the lowest point until the direction is climbing again, then take that reading."},{"level":"warn","message":"The first turn is not between the two days you took. Between your two readings the direction should stop climbing and start to fall: check that each day is the one showing when you took the direction beside it."}]}
    },
    "nearest-and-furthest": {
     "probe": [[{"label":"Select Mars","value":"-"}],[{"label":"Mars: distance from Earth","value":"4.30 AU"}]]
    },
    "do-it-for-the-sun": {
     "probe": [[{"label":"Reference frame","value":"World"},{"label":"Sun: as seen from Earth","value":"the Sun is not on the canvas yet"}],[{"label":"Reference frame","value":"A body"},{"label":"Sun: distance from Earth","value":"2.84 AU"},{"label":"Sun: direction from Earth","value":"341.6°"}],[{"label":"Reference frame","value":"World"},{"label":"Sun: distance from Earth","value":"2.84 AU"},{"label":"Sun: direction from Earth","value":"341.6°"}]]
-   },
-   "how-long-does-a-loop": {
-    "probe": [[{"label":"Select Mars","value":"-"}],[{"label":"Mars: direction from Earth","value":"28.6°"},{"label":"Day","value":"3"}],[{"label":"Mars: direction from Earth","value":"28.6°"},{"label":"Day","value":"13"}],[{"label":"Mars: direction from Earth","value":"28.6°"},{"label":"Day","value":"400"}]]
    }
   },
   "es": "same"
