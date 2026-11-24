@@ -29,7 +29,7 @@
       "why": "the lesson roster lists no body for this scenario, so the step binds nothing to frame",
       "expect": "binds no body"
     },
-    "768|when-orbits-lock|record-pluto-s-libration": {
+    "768|when-orbits-lock|capture-pluto-s-libration": {
       "why": "a body stands under the progress strip at the paused reading at 768; passes on most runs",
       "expect": "is under inv-progress"
     },

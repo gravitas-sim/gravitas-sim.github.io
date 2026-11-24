@@ -1100,6 +1100,136 @@ describe('the recorder', () => {
     expect(Math.max(...gaps) / Math.min(...gaps)).toBeLessThan(2.5);
   });
 
+  // Bodies on circular orbits about the Sun at the given longitudes.
+  const at = (clock, ...angles) => {
+    const r = 100;
+    const v = Math.sqrt((G * 1000) / r);
+    return {
+      clock,
+      primary: {
+        name: 'Sun',
+        pos: { x: 0, y: 0 },
+        vel: { x: 0, y: 0 },
+        mass: 1000,
+      },
+      bodies: angles.map((angle, i) => {
+        const th = (angle * Math.PI) / 180;
+        return {
+          name: `b${i}`,
+          pos: { x: r * Math.cos(th), y: r * Math.sin(th) },
+          vel: { x: -v * Math.sin(th), y: v * Math.cos(th) },
+          mass: 0,
+        };
+      }),
+      G,
+    };
+  };
+  const TERMS = [{ name: 'b0', key: 'lambda', c: 1 }];
+  const watched = opts => {
+    const r = createRecorder(opts);
+    r.watch('b0', TERMS);
+    return r;
+  };
+  const verdictOf = (r, referencePeriod) =>
+    classifyAngle(r.continuous('b0'), {
+      referencePeriod,
+      unwrapped: true,
+      frameStepDeg: r.argumentStep('b0'),
+    });
+
+  test('a fast circulation pushed past many decimations is still a circulation', () => {
+    const r = watched({ maxSamples: 64 });
+    for (let t = 0; t < 4000; t++) r.record(at(t, 20 * t));
+    expect(r.stats().halvings).toBeGreaterThan(3);
+    // The stored samples are far further apart than half a turn of the angle,
+    // so the wrapped series cannot be unwrapped any more...
+    const wrapped = r.series().map(s => s.el.b0.lambda);
+    expect(largestStep(wrapped)).toBeGreaterThan(150);
+    // ...and the continuous one still says how far it went.
+    const v = verdictOf(r, 18);
+    expect(v.state).toBe(ANGLE_STATE.CIRCULATION);
+    expect(Math.abs(v.drift)).toBeGreaterThan(70000);
+  });
+
+  test('a slow libration is the same through either path', () => {
+    const angle = t => 180 + 40 * Math.sin((2 * Math.PI * t) / 900);
+    const r = watched({ maxSamples: 64 });
+    for (let t = 0; t < 4000; t++) r.record(at(t, angle(t)));
+    const viaFrames = verdictOf(r, 100);
+    const viaWrapped = classifyAngle(
+      r.series().map(s => ({ t: s.t, phi: s.el.b0.lambda })),
+      { referencePeriod: 100 }
+    );
+    expect(viaFrames.state).toBe(ANGLE_STATE.LIBRATION);
+    expect(viaWrapped.state).toBe(viaFrames.state);
+    expect(viaFrames.center).toBeCloseTo(viaWrapped.center, 6);
+    expect(viaFrames.amplitude).toBeCloseTo(viaWrapped.amplitude, 6);
+    expect(viaFrames.period).toBeCloseTo(viaWrapped.period, 6);
+  });
+
+  test('only a step between frames that is too fast is refused', () => {
+    const r = watched({ maxSamples: 64 });
+    for (let t = 0; t < 400; t++) r.record(at(t, 170 * t));
+    expect(r.argumentStep('b0')).toBeCloseTo(170, 6);
+    const v = verdictOf(r, 2);
+    expect(v.state).toBe(ANGLE_STATE.INCONCLUSIVE);
+    expect(v.reason).toBe('undersampled');
+    // The same angle at a step the frames can follow is accepted, however
+    // sparsely it was stored. A recorder that was not watching has no figure,
+    // and refuses nothing.
+    const q = watched({ maxSamples: 64 });
+    for (let t = 0; t < 4000; t++) q.record(at(t, 100 * t));
+    expect(q.argumentStep('b0')).toBeCloseTo(100, 6);
+    expect(verdictOf(q, 3.6).state).toBe(ANGLE_STATE.CIRCULATION);
+  });
+
+  test('a combination is followed even when its angles each go round many times a frame', () => {
+    // Both go round 170 degrees a frame, so their difference never moves. What
+    // has meaning is the combination, which is only known modulo a turn, and
+    // it is unwrapped as a combination.
+    const r = createRecorder({ maxSamples: 64 });
+    r.watch('pair', [
+      { name: 'b0', key: 'lambda', c: 1 },
+      { name: 'b1', key: 'lambda', c: -1 },
+    ]);
+    for (let t = 0; t < 100; t++) r.record(at(t, 170 * t, 170 * t));
+    expect(r.argumentStep('pair')).toBeLessThan(1e-6);
+  });
+
+  test('frames nobody recorded do not put turns into the argument', () => {
+    // A resonant combination is known modulo a turn, so a stretch of unseen
+    // frames cannot add whole turns to it the way unwrapping each angle would.
+    const r = createRecorder();
+    r.watch('lap', [
+      { name: 'b0', key: 'lambda', c: 1 },
+      { name: 'b1', key: 'lambda', c: -3 },
+      { name: 'b2', key: 'lambda', c: 2 },
+    ]);
+    const slow = t => 180 + 20 * Math.sin(t / 7);
+    for (let t = 0; t < 20; t++)
+      r.record(at(t, 70 * t + slow(t), 50 * t, 40 * t));
+    const before = r.continuous('lap');
+    expect(before.length).toBe(20);
+    // 500 frames pass unseen; the angles have moved by many turns each.
+    for (let t = 520; t < 540; t++)
+      r.record(at(t, 70 * t + slow(t), 50 * t, 40 * t));
+    const all = r.continuous('lap');
+    expect(
+      Math.max(...all.map(s => s.phi)) - Math.min(...all.map(s => s.phi))
+    ).toBeLessThan(200);
+  });
+
+  test('a clock that goes backwards forgets the continuous angle too', () => {
+    const r = createRecorder();
+    r.watch('b0', TERMS);
+    for (let t = 0; t < 10; t++) r.record(at(t, 30 * t));
+    expect(r.argumentStep('b0')).toBeCloseTo(30, 6);
+    r.record(at(2, 10));
+    expect(r.series()).toHaveLength(1);
+    expect(r.continuous('b0')[0].phi).toBeCloseTo(10, 6);
+    expect(r.argumentStep('b0')).toBeNull();
+  });
+
   test('partition picks the heaviest body as the primary', () => {
     const bodies = [
       { name: 'moon', mass: 1, alive: true },

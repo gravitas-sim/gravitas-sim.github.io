@@ -622,12 +622,20 @@ export function turningPoints(values, prominence) {
  * Without it the same test is made against the length of the run, which makes
  * the verdict depend on how long the student watched.
  *
- * @param {Array<{t:number, phi:number}>} samples - Time and wrapped angle
- * @param {Object} [options] - `referencePeriod` plus any ANGLE_CRITERIA override
+ * @param {Array<{t:number, phi:number}>} samples - Time and angle: wrapped, or
+ *   continuous with `unwrapped: true`
+ * @param {Object} [options] - `referencePeriod`; `unwrapped` and `frameStepDeg`
+ *   for a series already followed frame by frame (the refusal is then judged
+ *   on the largest frame step); any ANGLE_CRITERIA override
  * @returns {Object} The classification, always with a `state` and a `reason`
  */
 export function classifyAngle(samples, options = {}) {
-  const { referencePeriod = null, ...overrides } = options;
+  const {
+    referencePeriod = null,
+    unwrapped: continuous = false,
+    frameStepDeg = null,
+    ...overrides
+  } = options;
   const C = { ...ANGLE_CRITERIA, ...overrides };
   const clean = (samples || []).filter(
     s => s && Number.isFinite(s.t) && Number.isFinite(s.phi)
@@ -666,10 +674,23 @@ export function classifyAngle(samples, options = {}) {
   if (clean.length < C.minSamples) return blank('too-few-samples');
   if (!(window > 0)) return blank('no-window');
 
-  const wrapped = clean.map(s => wrap360(s.phi));
-  if (largestStep(wrapped) > C.maxStepDeg) return blank('undersampled');
-
-  const unwrapped = unwrapDegrees(wrapped);
+  let unwrapped;
+  if (continuous) {
+    // The caller followed the angle frame by frame (the recorder does), so
+    // the series is already continuous however coarsely it was stored. What
+    // can still be too fast is a step between FRAMES, and the caller says how
+    // large that was. The series is shifted by whole turns to start where the
+    // wrapped one would, so the figures read the same either way.
+    if (frameStepDeg !== null && frameStepDeg > C.maxStepDeg)
+      return blank('undersampled');
+    const first = clean[0].phi;
+    const shift = first - wrap360(first);
+    unwrapped = clean.map(s => s.phi - shift);
+  } else {
+    const wrapped = clean.map(s => wrap360(s.phi));
+    if (largestStep(wrapped) > C.maxStepDeg) return blank('undersampled');
+    unwrapped = unwrapDegrees(wrapped);
+  }
   // Everything below is measured on the series with the conjunction-frequency
   // ripple averaged out. The raw series is still what gets plotted, because a
   // student should see what was actually recorded, but it is not what the

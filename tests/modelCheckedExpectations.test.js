@@ -26,7 +26,7 @@ import {
 import expectationsDoc from '../js/data/instructorExpectations.js';
 
 /** What the allowlist holds; lower it when an entry is converted, never raise it. */
-const UNCHECKED_COUNT = 7;
+const UNCHECKED_COUNT = 6;
 
 const literals = numericLiterals(INVESTIGATIONS);
 const byKey = Object.fromEntries(literals.map(l => [l.key, l]));
@@ -235,8 +235,10 @@ describe('the instructor expectations record', () => {
     // 556 over v4's 552: the new steps of Weighing the Stars, Transit Photometry and Kepler's Laws, net of the ones they retire.
     // 557 over that: the new steps of Integrators in Practice and Extending an Experiment, net of the ones they retire.
     // 555 over that: Lives of Stars replaces three read-a-number steps with one comparison step (3 retired, 1 new).
-    // 556 after Missing Mass gained the compare-your-two-fits expectation; Tides (three more) and Finding Planets by Their Tug (one more, the half-range step of Radial Velocity) add four.
-    expect(total).toBe(560);
+    // 558: 560 at v4 (Missing Mass's compare-your-two-fits expectation, Tides' three and the
+    // half-range step of Radial Velocity), less one each for Why Mars Goes Backwards
+    // (Prompt 346) and the Goldilocks Question's distance steps (three-distances-yours).
+    expect(total).toBe(558);
     // 542 after How Many Earths? (Prompt 229): 3 more over 539.
     // 547 after the four exoplanet closeout investigations (Prompt 231): 5 more over 542.
   });
