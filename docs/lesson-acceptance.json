@@ -27,12 +27,16 @@
       "centralExperimentId": "ce.retrograde-motion",
       "object": "mars",
       "control": "the inspector: select Earth and switch on Reference frame",
-      "quantity": "the dates and elongations of one retrograde loop",
+      "quantity": "the days of the two turns of the direction to Mars in one retrograde loop, each bracketed between two readings the student takes, and the loop's length with its uncertainty",
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
-      "loop": ["before-you-look", "catch-the-reversal", "say-it-in-your-own"],
+      "loop": [
+        "share-of-the-cycle",
+        "time-the-reversal",
+        "the-share-you-found"
+      ],
       "evidenceFrom": "engine",
-      "decision": "unreviewed",
+      "decision": "When to pause and which frames to step through, so that each turn of the direction is bracketed between a reading still moving the old way and one that has changed course, how narrow to make each bracket, and which two turns belong to the same loop.",
       "leakFree": true
     },
     "transit-photometry": {
@@ -121,17 +125,16 @@
       "centralExperimentId": "ce.goldilocks-question",
       "object": "earth",
       "control": "hz-insolation/distance",
-      "quantity": "insolation at three distances, plotted",
-      "evidence": "plot",
+      "quantity": "starlight at three distances the student chooses, one twice another and spread over a factor of two or more, each taken from the panel; the prediction for a doubling is set beside the readings",
+      "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": [
         "move-it-twice-as-far",
-        "three-distances",
-        "write-the-three-down",
+        "three-distances-yours",
         "what-the-graph-says"
       ],
       "evidenceFrom": "model",
-      "decision": "unreviewed",
+      "decision": "Which three distances to read, which one to double so as to test the prediction, and where the slider was for each starlight (a reading taken at another distance, or a missing doubling, is refused in words).",
       "leakFree": true
     },
     "missing-mass": {
@@ -196,7 +199,7 @@
       "test": "e2e/centralExperiments.spec.js",
       "loop": [
         "the-laplace-argument",
-        "record-the-laplace-libration",
+        "capture-the-laplace-libration",
         "say-what-a-libration-shows"
       ],
       "evidenceFrom": "engine",

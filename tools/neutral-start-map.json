@@ -33,6 +33,17 @@
         "control": "Q"
       }
     },
+    "goldilocks-question/three-distances-yours": {
+      "d1": {
+        "control": "distance"
+      },
+      "d2": {
+        "control": "distance"
+      },
+      "d3": {
+        "control": "distance"
+      }
+    },
     "tides/choose-four-distances": {
       "d1": {
         "control": "dist"

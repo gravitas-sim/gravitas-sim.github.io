@@ -193,14 +193,12 @@ export default {
         'Earth 0.99 degrees per day, Mars 0.52, and a gain of about 0.46 degrees per day. A student getting a negative gain has subtracted the wrong way round.',
       'put-yourself-on-earth':
         'Earth sits still at the center, the Sun circles it once a year, and Mars’s trail carries a loop or a cusp. The loop needs roughly half a minute of running to appear: the trail has to fill and Earth has to reach opposition. Students who switch the frame and immediately switch back will see nothing.',
-      'catch-the-reversal':
-        'The direction from Earth climbs at roughly half a degree a day for most of the cycle, then falls for about ten weeks around opposition. Any pair of readings that brackets a fall is a correct answer; the day numbers themselves depend on when the student started.',
+      'time-the-reversal':
+        'The direction turns near day 170 and again near day 242, then every 780 days: a loop of about 72 days. Any two brackets that contain the turns are accepted and their widths are the uncertainty, so a bracket of a day or two beats one of ten. A pair in which nothing fell is refused.',
       'nearest-and-furthest':
         'Closest about 0.5 AU, furthest about 2.5 AU, a ratio near 5. Readings of 0.53 and 1.98 are typical if the student has not watched a full synodic period, and that is fine: the point is that the ratio is large, not its exact value. The real range is 0.38 to 2.68 AU because of the eccentricities this model leaves out.',
       'do-it-for-the-sun':
         'The Sun traces a closed circle of radius 1 AU around Earth, once a year, with no loop and no cusp anywhere on it. Switching to the world frame stops the Sun dead; switching to the Sun’s own frame puts Earth back on the circle. Students often find this screen more unsettling than the Mars loop, which is a good sign.',
-      'how-long-does-a-loop':
-        'About 70 to 80 days between the direction starting to fall and starting to rise again. The real figure for Mars is about 72 days, and it varies from one opposition to the next by a couple of weeks for reasons this planar circular model does not include.',
     },
     'transit-photometry': {
       'choose-the-two-stretches':
@@ -291,16 +289,14 @@ export default {
         'Set to 1.38 Jupiter radii and 0.69 Jupiter masses (it opens on a Jupiter of its own), the panel reports a bulk density of 0.33 g/cm³: about a third the density of water and a sixteenth of Earth’s. It receives roughly 785 times Earth’s starlight and sits far inside the inner edge of the modeled zone. At step 33 the accepted density range is 0.25 to 0.41; a student answering near 5.5 has read Earth’s density from the comparison text rather than the planet’s.',
     },
     'goldilocks-question': {
-      'three-distances':
-        'At 0.5, 1 and 2 AU the panel reads 4.00, 1.00 and 0.25 Earths. These are exact by construction, not rounded.',
-      'write-the-three-down':
-        'The three pairs should be (0.5, 4), (1, 1) and (2, 0.25). The validator confirms starlight × distance² is constant and says the relationship has appeared in the student’s own numbers; it warns if the rows do not sit on one curve, which almost always means a value was read at the wrong distance.',
+      'three-distances-yours':
+        'Any three distances from 0.3 to 3 AU, one twice another and at least a factor of two overall, with the starlight taken at each: starlight × distance² is 1.00 within 12%. The check names a reading taken at another distance and a missing doubling.',
       'the-star-is-not-running':
         'The shell areas read 1×, 4×, 9× and 16× at 1, 2, 3 and 4 AU, and the third line of the readout gives 1, 0.25, 0.111 and 0.063 Earths. The last line never changes: the total energy crossing the shell is the same at every distance.',
       'four-stars-one-planet':
         'At a fixed 1 AU: the red dwarf gives 0.0015 Earths, the orange dwarf 0.34, the Sun 1.00, the brighter star 5.1. The starlight equals the luminosity exactly, because the distance is 1 AU.',
       'so-where-would-a-planet':
-        'Conservative zones: red dwarf 0.042 to 0.080 AU, Sun 0.98 to 1.69 AU, brighter star 2.11 to 3.58 AU. A factor of about fifty between the extremes.',
+        'One Earth of starlight lies near 0.04 AU for the red dwarf and 2.3 AU for the brighter star. Conservative zones: 0.042 to 0.080, 0.98 to 1.69, 2.11 to 3.58 AU.',
       'now-put-it-round-the':
         'The ring runs from 0.98 to 1.69 AU. Venus at 0.72 AU sits inside the inner edge and Ceres at 2.77 AU well beyond the outer one, so Earth and Mars are the two worlds inside. Mars being inside is the point of the screen and is worth waiting for a student to notice. Venus at 0.72 AU is inside the inner edge, Earth at 1.00 is comfortably in, Mars at 1.52 is just inside the outer edge on the conservative definition, and Ceres at 2.77 is far outside. Have them click each and read the distance and insolation rather than being told: the numbers come from the same functions that draw the ring.',
       'two-definitions-of-the-same':
@@ -399,30 +395,30 @@ export default {
     'when-orbits-lock': {
       'measure-the-four-periods':
         'Periods of about 1.769, 3.552, 7.155 and 16.69 days and ratios of 2.007, 2.014 and 2.333, settling within about thirty Io orbits. The figures to draw attention to are the "closer than chance" numbers, which come out around 2, 1 and 25 depending on how long the run has been going.',
-      'write-down-the-ratios':
-        'The field validation warns rather than blocks. A student who enters exactly 2 gets a note that the instrument does not report exactly 2, which is the point of the step. Expect about 2.008, 2.014 and 2.333; the last figure of each moves a little with the length of the run.',
+      'rank-the-three-pairs':
+        'The three pairs ranked by the "closer than chance" figure: Callisto–Ganymede 1, Europa–Io 2, Ganymede–Europa 3 (figures near 25, 2 and 1, moving with the run). The check warns on any other order.',
       'watch-the-line-ups':
         'The sky dial should be a broad arc rather than a tight clump, and the arrow short. Most students predicted clustering at step 7, so this is the moment the investigation turns; do not rescue it too quickly.',
       'watch-the-laplace-argument':
-        'Three verdicts in order over about three and a half minutes: confined, then one reversal, then libration. If a class has less time, the first two are enough to make the argument as long as the paired control at step 17 is also run.',
-      'record-the-laplace-libration':
-        'A center within a degree or two of 180, an amplitude near 26 degrees and a libration period near 2,100 days. A much shorter period usually means the instrument is still quoting a provisional value from a single swing; leave it running.',
+        'Three verdicts in order over about ten minutes: confined, then one reversal, then libration. If a class has less time, the first two are enough to make the argument as long as the paired control at step 17 is also run.',
+      'capture-the-laplace-libration':
+        'A center within a degree or two of 180, an amplitude near 26 degrees and a period near 2,100 days. A smaller amplitude or a much shorter period was taken too soon, from one swing; the check refuses it: leave it running.',
       'break-it':
-        'CIRCULATION within about ten seconds, with a period near 47 Io orbits. Worth remarking on how much faster this verdict arrives than the libration one, and why: one completed circuit proves circulation, while ruling out a slow circulation takes as long as it takes.',
+        'CIRCULATION within about half a minute, with a period near 47 Io orbits. Worth remarking on how much faster this verdict arrives than the libration one, and why: one completed circuit proves circulation, while ruling out a slow circulation takes as long as it takes.',
       'the-awkward-case':
         'Never LIBRATION. The verdict passes through confined, then either "the center is moving" or "it has turned back once", and the reported amplitude grows through the run. The growing amplitude is the specific evidence and is what step 20 asks about.',
       'measure-pluto-s-resonance':
-        'LIBRATION about 180 degrees with an amplitude near 80 and a period near 19,600 years, against published values of 180, 82 and 19,670. This is the closest agreement with a published measurement anywhere in the investigation, and it takes about ninety seconds.',
-      'record-pluto-s-libration':
+        'LIBRATION about 180 degrees with an amplitude near 80 and a period near 19,600 years, against published values of 180, 82 and about 20,000 (within about 2%). It takes about ninety seconds.',
+      'capture-pluto-s-libration':
         'The same three numbers, recorded. The validation accepts a center within 15 degrees of 180 and a period between 12,000 and 30,000 years; a value near zero for the center means the sign of the argument was read backwards, and the note says so.',
       'where-the-line-ups-happen':
         'The sky dial is a broad smear; the orbit dial clusters near 180 degrees with a spread of about 38. The instrument’s own summary line reads that every line-up happens near the outer body’s aphelion.',
       'the-rotating-frame':
         'Four different behaviors: the L4 probe reported as an equilibrium with an amplitude of 0, Patroclus librating about 296 degrees with an amplitude near 24 and a period near 13 Jupiter years, the L3 probe more than 150 degrees from where it started, and the wide probe circulating. The instrument needs about twenty Jupiter years - roughly forty-five seconds - before it will commit to any of them.',
-      'record-the-tadpole':
-        'A center near 296 degrees, an amplitude near 24 and a period near 13 Jupiter years against a linearized prediction of 12.47. The validation catches a student who has read L4 instead of L5, which is the common slip, and one who has recorded Jupiter’s own period instead of the libration period.',
+      'capture-the-tadpole':
+        'A center near 296 degrees, an amplitude near 24 and a period near 154 years (13 Jupiter years), a few percent above the 148 linearized. The validation catches a student who has read L4 instead of L5, which is the common slip, and one who has recorded Jupiter’s own period instead of the libration period.',
       'one-last-ratio':
-        'A nearest ratio of 7:5, an offset near 0.25%, about 4.6 times closer than chance, and circulation. Ask the class to compare that offset with Pluto’s 0.30% before revealing the verdict.',
+        'A nearest ratio of 7:5, an offset of 0.3 to 0.5% (two to five times closer than chance), and circulation. The prediction before it asks whether it is resonant.',
     },
     'detect-this-planet': {
       'twelve-nights':
