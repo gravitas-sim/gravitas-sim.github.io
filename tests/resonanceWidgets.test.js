@@ -563,12 +563,69 @@ describe('the angle instrument’s verdicts', () => {
     }
   });
 
-  test('a measurement that is not ready reports a status row and nothing else', () => {
-    expect(angleRows(null)).toHaveLength(1);
-    expect(angleRows({ ready: false, reason: 'warming-up' })).toHaveLength(1);
-    expect(
-      angleRows({ ready: false, reason: 'warming-up' })[0].value
-    ).not.toMatch(/^resW\./);
+  test('a measurement that is not ready reports a status row, then dashes a step can name', () => {
+    for (const rows of [
+      angleRows(null),
+      angleRows({ ready: false, reason: 'warming-up' }),
+    ]) {
+      expect(rows[0].value).not.toMatch(/^resW\./);
+      // Nothing to capture yet: the rows exist by id and read as a dash.
+      expect(rows.slice(1).map(r => [r.id, r.value])).toEqual([
+        ['center', '\u2014'],
+        ['amplitude', '\u2014'],
+        ['period', '\u2014'],
+      ]);
+      expect(rows.slice(1).every(r => r.text === undefined)).toBe(true);
+    }
+  });
+
+  test('a bound is not an amplitude: Capture has nothing to take until the angle has turned back', () => {
+    const base = {
+      ready: true,
+      arg: { label: 'x', ratio: null },
+      primary: { name: 'Primary' },
+      pIn: 1,
+      pOut: 2,
+      window: 100,
+      synodic: 10,
+      samples: [],
+      stats: {},
+    };
+    const open = {
+      state: ANGLE_STATE.INCONCLUSIVE,
+      reason: 'confined',
+      center: 180,
+      amplitude: 12.34,
+      amplitudeIsBound: true,
+      period: null,
+      periodResolved: false,
+      minimumCirculationPeriod: 1000,
+      drift: 20,
+      observedCycles: 25,
+    };
+    const rowOf = (m, id) => angleRows(m).find(r => r.id === id);
+    expect(rowOf({ ...base, verdict: open }, 'amplitude').text).toBe('');
+    expect(rowOf({ ...base, verdict: open }, 'amplitude').value).toMatch(
+      /at least/
+    );
+    const librating = {
+      ...open,
+      state: ANGLE_STATE.LIBRATION,
+      reason: 'two-reversals',
+      amplitudeIsBound: false,
+      amplitude: 25.55,
+      period: 5000,
+      periodResolved: true,
+    };
+    expect(rowOf({ ...base, verdict: librating }, 'amplitude').text).toBe(
+      '25.6'
+    );
+    expect(rowOf({ ...base, verdict: librating }, 'center').value).toBe(
+      '180.0\u00b0'
+    );
+    expect(rowOf({ ...base, verdict: librating }, 'period').text).toMatch(
+      /^\d+$/
+    );
   });
 
   test('the readout never leaks an unresolved message key', () => {
@@ -692,5 +749,28 @@ describe('the rotating frame', () => {
     });
     expect(rows[0].value).toBe('Jupiter');
     expect(rows.some(r => r.label === 'trojan')).toBe(true);
+  });
+
+  test('a step that names a body gets that body’s centre, amplitude and period by id', () => {
+    const empty = byId('resonance-frame').readout(
+      {},
+      { bodies: [], G, clock: () => 0 },
+      { secondary: 'Jupiter', read: 'trojan' }
+    );
+    expect(empty.slice(1).map(r => [r.id, r.value])).toEqual([
+      ['center', '\u2014'],
+      ['amplitude', '\u2014'],
+      ['period', '\u2014'],
+    ]);
+    const w = world(1000, [
+      { name: 'Jupiter', period: 100 },
+      { name: 'trojan', period: 100, lambda: 60 },
+    ]);
+    const ctx = w.run(4000, 1);
+    const none = byId('resonance-frame').readout({}, ctx, {
+      secondary: 'Jupiter',
+    });
+    // Without `read` no row carries an id: nothing changes for another step.
+    expect(none.some(r => r.id)).toBe(false);
   });
 });
