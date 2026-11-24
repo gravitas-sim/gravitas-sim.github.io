@@ -3,15 +3,16 @@
  "static": {
   "en": {
    "units": [
-    ["steps.write-the-three-down.fields.0.unit","AU"],
-    ["steps.write-the-three-down.fields.1.unit","Earths"],
-    ["steps.write-the-three-down.fields.2.unit","AU"],
-    ["steps.write-the-three-down.fields.3.unit","Earths"],
-    ["steps.write-the-three-down.fields.4.unit","AU"],
-    ["steps.write-the-three-down.fields.5.unit","Earths"],
+    ["steps.three-distances-yours.fields.0.unit","AU"],
+    ["steps.three-distances-yours.fields.1.unit","Earths"],
+    ["steps.three-distances-yours.fields.2.unit","AU"],
+    ["steps.three-distances-yours.fields.3.unit","Earths"],
+    ["steps.three-distances-yours.fields.4.unit","AU"],
+    ["steps.three-distances-yours.fields.5.unit","Earths"],
     ["steps.writing-it-down-then-using.unit","Earths"],
     ["steps.the-limits-as-starlight.fields.0.unit",""],
     ["steps.the-limits-as-starlight.fields.1.unit",""],
+    ["steps.estimate-the-dim-limit.unit","AU"],
     ["steps.the-same-limit-a-dim-star.fields.0.unit",""],
     ["steps.the-same-limit-a-dim-star.fields.1.unit","AU"],
     ["steps.venus-by-the-rule-you.unit","Earths"],
@@ -31,9 +32,12 @@
     ["steps.take-the-readings-yourself.fields.4.unit","AU"]
    ],
    "numbered": [
-    ["steps.write-the-three-down.fields.0.label","Distance 1"],
-    ["steps.write-the-three-down.fields.2.label","Distance 2"],
-    ["steps.write-the-three-down.fields.4.label","Distance 3"],
+    ["steps.three-distances-yours.fields.0.label","Distance 1"],
+    ["steps.three-distances-yours.fields.1.label","Starlight at distance 1"],
+    ["steps.three-distances-yours.fields.2.label","Distance 2"],
+    ["steps.three-distances-yours.fields.3.label","Starlight at distance 2"],
+    ["steps.three-distances-yours.fields.4.label","Distance 3"],
+    ["steps.three-distances-yours.fields.5.label","Starlight at distance 3"],
     ["steps.the-zone-at-three-ages.fields.0.label","Inner edge at 1 billion years"],
     ["steps.the-zone-at-three-ages.fields.1.label","Inner edge at 4.57 billion years"],
     ["steps.the-zone-at-three-ages.fields.2.label","Inner edge at 8 billion years"],
@@ -45,9 +49,12 @@
   "es": {
    "units": [],
    "numbered": [
-    ["steps.write-the-three-down.fields.0.label","Distancia 1"],
-    ["steps.write-the-three-down.fields.2.label","Distancia 2"],
-    ["steps.write-the-three-down.fields.4.label","Distancia 3"],
+    ["steps.three-distances-yours.fields.0.label","Distancia 1"],
+    ["steps.three-distances-yours.fields.1.label","Luz estelar a la distancia 1"],
+    ["steps.three-distances-yours.fields.2.label","Distancia 2"],
+    ["steps.three-distances-yours.fields.3.label","Luz estelar a la distancia 2"],
+    ["steps.three-distances-yours.fields.4.label","Distancia 3"],
+    ["steps.three-distances-yours.fields.5.label","Luz estelar a la distancia 3"],
     ["steps.the-zone-at-three-ages.fields.0.label","Borde interior a 1000 millones de años"],
     ["steps.the-zone-at-three-ages.fields.1.label","Borde interior a 4570 millones de años"],
     ["steps.the-zone-at-three-ages.fields.2.label","Borde interior a 8000 millones de años"],
@@ -77,8 +84,8 @@
  "precision": [],
  "steps": {
   "en": {
-   "write-the-three-down": {
-    "validate": {"calls":242,"distinct":4,"digest":"8eb981184f08066f","samples":[null,{"level":"ok","message":"Every one of your readings satisfies starlight x distance x distance = 1. That is the pattern, already in your own numbers."},{"level":"error","message":"Distances and starlight are both positive numbers."},{"level":"warn","message":"These do not all sit on the same relationship. Check that each starlight value was read at the distance beside it."}]}
+   "three-distances-yours": {
+    "validate": {"calls":242,"distinct":4,"digest":"c666f807962a8c6a","samples":[null,{"level":"warn","message":"Choose three different distances: two of yours are the same, so they make one point, not two."},{"level":"error","message":"Distances and starlight are both positive numbers."},{"level":"warn","message":"These readings do not belong together. The usual cause is a starlight read at a different distance from the one beside it: check each row against the slider position that produced it."}]}
    },
    "now-put-it-round-the": {
     "probe": [[{"label":"Selected","value":"click a planet on the canvas to read it"}],[{"label":"Planet","value":"Eccentric Orbiter"},{"label":"Distance from its star","value":"1.234 AU"},{"label":"Starlight it receives","value":"0.65 Earths"},{"label":"Zone (conservative)","value":"0.95 to 1.67 AU"},{"label":"Which puts it","value":"inside the habitable zone"}],[{"label":"Planet","value":"Circular Orbiter"},{"label":"Distance from its star","value":"0.046 AU"},{"label":"Starlight it receives","value":"14.20 Earths"},{"label":"Zone (conservative)","value":"0.10 to 0.30 AU"},{"label":"Which puts it","value":"inside the inner edge"}],[{"label":"Planet","value":"Far Orbiter"},{"label":"Distance from its star","value":"9.500 AU"},{"label":"Starlight it receives","value":"0.01 Earths"},{"label":"Zone (conservative)","value":"0.80 to 1.40 AU"},{"label":"Which puts it","value":"outside the outer edge"}]]

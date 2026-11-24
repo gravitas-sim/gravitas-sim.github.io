@@ -3,19 +3,19 @@
  "static": {
   "en": {
    "units": [
-    ["steps.write-down-the-ratios.fields.0.unit",""],
-    ["steps.write-down-the-ratios.fields.1.unit",""],
-    ["steps.write-down-the-ratios.fields.2.unit",""],
-    ["steps.record-the-laplace-libration.fields.0.unit","degrees"],
-    ["steps.record-the-laplace-libration.fields.1.unit","degrees"],
-    ["steps.record-the-laplace-libration.fields.2.unit","days"],
+    ["steps.rank-the-three-pairs.fields.0.unit",""],
+    ["steps.rank-the-three-pairs.fields.1.unit",""],
+    ["steps.rank-the-three-pairs.fields.2.unit",""],
+    ["steps.capture-the-laplace-libration.fields.0.unit","degrees"],
+    ["steps.capture-the-laplace-libration.fields.1.unit","degrees"],
+    ["steps.capture-the-laplace-libration.fields.2.unit","days"],
     ["steps.what-180-means.unit","degrees"],
-    ["steps.record-pluto-s-libration.fields.0.unit","degrees"],
-    ["steps.record-pluto-s-libration.fields.1.unit","degrees"],
-    ["steps.record-pluto-s-libration.fields.2.unit","years"],
-    ["steps.record-the-tadpole.fields.0.unit","degrees"],
-    ["steps.record-the-tadpole.fields.1.unit","degrees"],
-    ["steps.record-the-tadpole.fields.2.unit","Jupiter years"]
+    ["steps.capture-pluto-s-libration.fields.0.unit","degrees"],
+    ["steps.capture-pluto-s-libration.fields.1.unit","degrees"],
+    ["steps.capture-pluto-s-libration.fields.2.unit","years"],
+    ["steps.capture-the-tadpole.fields.0.unit","degrees"],
+    ["steps.capture-the-tadpole.fields.1.unit","degrees"],
+    ["steps.capture-the-tadpole.fields.2.unit","years"]
    ],
    "numbered": []
   },
@@ -38,23 +38,23 @@
  "precision": [],
  "steps": {
   "en": {
-   "write-down-the-ratios": {
-    "validate": {"calls":242,"distinct":2,"digest":"8bd49333323c8055","samples":[null,{"level":"warn","message":"Expected about 2.0075 for Europa over Io. Check you have the outer period on top."}]}
+   "rank-the-three-pairs": {
+    "validate": {"calls":242,"distinct":2,"digest":"8c7ce5dfc9ca0232","samples":[null,{"level":"warn","message":"Give each pair a different rank: 1, 2 and 3, once each."}]}
    },
    "watch-the-laplace-argument": {
     "probe": [[{"label":"The three moons","value":"not all on the canvas"}],[{"label":"Io, where it is now","value":"193°"},{"label":"Europa","value":"183°"},{"label":"Ganymede","value":"329°"},{"label":"Io − 3×Europa + 2×Ganymede","value":"303° — the angle the plot is drawing","emphasis":true},{"label":"What a librating trace is evidence of","value":"the window you have watched, and not a proof that it lasts"}]]
    },
-   "record-the-laplace-libration": {
+   "capture-the-laplace-libration": {
     "probe": [[{"label":"The three moons","value":"not all on the canvas"}],[{"label":"Io, where it is now","value":"193°"},{"label":"Europa","value":"183°"},{"label":"Ganymede","value":"329°"},{"label":"Io − 3×Europa + 2×Ganymede","value":"303° — the angle the plot is drawing","emphasis":true},{"label":"What a librating trace is evidence of","value":"the window you have watched, and not a proof that it lasts"}]],
-    "validate": {"calls":242,"distinct":3,"digest":"f52a5bd484c9bf43","samples":[null,{"level":"warn","message":"The center should be within a few degrees of 180. A value near 0 usually means the angle was read with a sign reversed."},{"level":"error","message":"An amplitude above 180° is more than the whole circle and would mean the angle had circulated."}]}
+    "validate": {"calls":242,"distinct":2,"digest":"7c89115025d7865f","samples":[null,{"level":"warn","message":"The center should be within a few degrees of 180. A value near 0 usually means the angle was read with a sign reversed."}]}
    },
    "break-it": {
     "probe": [[{"label":"The three moons","value":"not all on the canvas"}],[{"label":"Io, where it is now","value":"193°"},{"label":"Europa","value":"183°"},{"label":"Ganymede","value":"329°"},{"label":"Io − 3×Europa + 2×Ganymede","value":"303° — the angle the plot is drawing","emphasis":true},{"label":"What a librating trace is evidence of","value":"the window you have watched, and not a proof that it lasts"}]]
    },
-   "record-pluto-s-libration": {
+   "capture-pluto-s-libration": {
     "validate": {"calls":242,"distinct":2,"digest":"c747f6f4511478e9","samples":[null,{"level":"warn","message":"The center should be close to 180°. A center near 0 would mean conjunctions at Pluto’s perihelion, which is the opposite of what protects it."}]}
    },
-   "record-the-tadpole": {
+   "capture-the-tadpole": {
     "validate": {"calls":242,"distinct":3,"digest":"2ea131c9adedb85b","samples":[null,{"level":"warn","message":"Expected a center near 296° — that is 60° behind Jupiter, which is L5."},{"level":"warn","message":"That is L4, the leading point. Patroclus is in the trailing camp, so its center should be near −60°, which the instrument reports as about 296°."}]}
    }
   },

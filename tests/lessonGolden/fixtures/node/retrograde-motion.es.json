@@ -2,11 +2,11 @@
  "id": "retrograde-motion",
  "locale": "es",
  "title": "Por qué Marte va hacia atrás",
- "steps": 33,
+ "steps": 32,
  "depths": [
   [
    "core",
-   33
+   32
   ]
  ],
  "grading": [
@@ -100,64 +100,29 @@
    ]
   },
   {
-   "sid": "a-lap-gained",
-   "type": "question",
-   "kind": "numeric",
-   "tolerance": 60,
+   "sid": "share-of-the-cycle",
+   "type": "predict",
+   "kind": null,
    "grades": [
     [
-     "783",
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
      true,
-     "correct",
-     783,
-     null,
-     false,
-     null
+     "correct"
     ],
     [
-     "813",
-     true,
-     "correct",
-     813,
-     null,
+     2,
      false,
-     null
+     "incorrect"
     ],
     [
-     "963",
+     3,
      false,
-     "incorrect",
-     963,
-     null,
-     false,
-     null
-    ],
-    [
-     "783 days",
-     true,
-     "correct",
-     783,
-     "days",
-     false,
-     null
-    ],
-    [
-     "not a number",
-     false,
-     "unreadable",
-     null,
-     null,
-     false,
-     "notANumber"
-    ],
-    [
-     "",
-     false,
-     "unreadable",
-     null,
-     null,
-     false,
-     "blank"
+     "incorrect"
     ]
    ]
   },
@@ -424,29 +389,64 @@
    ]
   },
   {
-   "sid": "mars-or-jupiter",
+   "sid": "jupiters-loops",
    "type": "question",
-   "kind": "choice",
+   "kind": "numeric",
+   "tolerance": 15,
    "grades": [
     [
-     0,
-     false,
-     "incorrect"
-    ],
-    [
-     1,
+     "399",
      true,
-     "correct"
+     "correct",
+     399,
+     null,
+     false,
+     null
     ],
     [
-     2,
+     "406,5",
+     true,
+     "correct",
+     406.5,
+     null,
      false,
-     "incorrect"
+     null
     ],
     [
-     3,
+     "444",
      false,
-     "incorrect"
+     "incorrect",
+     444,
+     null,
+     false,
+     null
+    ],
+    [
+     "399 days",
+     true,
+     "correct",
+     399,
+     "days",
+     false,
+     null
+    ],
+    [
+     "not a number",
+     false,
+     "unreadable",
+     null,
+     null,
+     false,
+     "notANumber"
+    ],
+    [
+     "",
+     false,
+     "unreadable",
+     null,
+     null,
+     false,
+     "blank"
     ]
    ]
   }
@@ -460,8 +460,7 @@
     "retrograde-motion:which-one-is-faster": 0,
     "retrograde-motion:how-often-does-earth-catch": "780",
     "retrograde-motion:how-often-does-earth-catch:locale": "es",
-    "retrograde-motion:a-lap-gained": "783",
-    "retrograde-motion:a-lap-gained:locale": "es",
+    "retrograde-motion:share-of-the-cycle": 1,
     "retrograde-motion:before-you-look": 1,
     "retrograde-motion:bright-and-backwards-together": 1,
     "retrograde-motion:when-does-it-reverse": 1,
@@ -472,12 +471,13 @@
     "retrograde-motion:and-what-about-the-sun": 1,
     "retrograde-motion:which-one-is-moving": 2,
     "retrograde-motion:why-tycho-found-nothing": 2,
-    "retrograde-motion:mars-or-jupiter": 1
+    "retrograde-motion:jupiters-loops": "399",
+    "retrograde-motion:jupiters-loops:locale": "es"
    },
    "attempts": {
     "retrograde-motion:which-one-is-faster": 1,
     "retrograde-motion:how-often-does-earth-catch": 1,
-    "retrograde-motion:a-lap-gained": 1,
+    "retrograde-motion:share-of-the-cycle": 1,
     "retrograde-motion:before-you-look": 1,
     "retrograde-motion:bright-and-backwards-together": 1,
     "retrograde-motion:when-does-it-reverse": 1,
@@ -486,7 +486,7 @@
     "retrograde-motion:and-what-about-the-sun": 1,
     "retrograde-motion:which-one-is-moving": 1,
     "retrograde-motion:why-tycho-found-nothing": 1,
-    "retrograde-motion:mars-or-jupiter": 1
+    "retrograde-motion:jupiters-loops": 1
    },
    "visited": [
     "the-wandering-stars",
@@ -498,13 +498,14 @@
     "how-fast-each-one-goes",
     "the-synodic-period",
     "how-often-does-earth-catch",
-    "a-lap-gained",
+    "share-of-the-cycle",
     "before-you-look",
     "reference-frames",
     "what-the-trails-are-doing",
     "put-yourself-on-earth",
     "that-is-the-observation",
-    "catch-the-reversal",
+    "time-the-reversal",
+    "the-share-you-found",
     "nearest-and-furthest",
     "bright-and-backwards-together",
     "when-does-it-reverse",
@@ -517,10 +518,8 @@
     "do-it-for-the-sun",
     "which-one-is-moving",
     "frames-are-not-all-equal",
-    "what-actually-settled-it",
     "why-tycho-found-nothing",
-    "how-long-does-a-loop",
-    "mars-or-jupiter",
+    "jupiters-loops",
     "what-you-did"
    ],
    "startedAt": "2026-01-02T03:04:05.000Z",
@@ -532,8 +531,7 @@
     "retrograde-motion:which-one-is-faster": 0,
     "retrograde-motion:how-often-does-earth-catch": "780",
     "retrograde-motion:how-often-does-earth-catch:locale": "es",
-    "retrograde-motion:a-lap-gained": "783",
-    "retrograde-motion:a-lap-gained:locale": "es",
+    "retrograde-motion:share-of-the-cycle": 1,
     "retrograde-motion:before-you-look": 1,
     "retrograde-motion:bright-and-backwards-together": 1,
     "retrograde-motion:when-does-it-reverse": 1,
@@ -544,12 +542,13 @@
     "retrograde-motion:and-what-about-the-sun": 1,
     "retrograde-motion:which-one-is-moving": 2,
     "retrograde-motion:why-tycho-found-nothing": 2,
-    "retrograde-motion:mars-or-jupiter": 1
+    "retrograde-motion:jupiters-loops": "399",
+    "retrograde-motion:jupiters-loops:locale": "es"
    },
    "attempts": {
     "retrograde-motion:which-one-is-faster": 1,
     "retrograde-motion:how-often-does-earth-catch": 1,
-    "retrograde-motion:a-lap-gained": 1,
+    "retrograde-motion:share-of-the-cycle": 1,
     "retrograde-motion:before-you-look": 1,
     "retrograde-motion:bright-and-backwards-together": 1,
     "retrograde-motion:when-does-it-reverse": 1,
@@ -558,33 +557,32 @@
     "retrograde-motion:and-what-about-the-sun": 1,
     "retrograde-motion:which-one-is-moving": 1,
     "retrograde-motion:why-tycho-found-nothing": 1,
-    "retrograde-motion:mars-or-jupiter": 1
+    "retrograde-motion:jupiters-loops": 1
    },
    "visited": [
-    "a-lap-gained",
     "against-the-fixed-stars",
     "and-what-about-the-sun",
     "before-you-look",
     "bright-and-backwards-together",
-    "catch-the-reversal",
     "counting-the-machinery",
     "do-it-for-the-sun",
     "frames-are-not-all-equal",
     "how-fast-each-one-goes",
-    "how-long-does-a-loop",
     "how-often-does-earth-catch",
-    "mars-or-jupiter",
+    "jupiters-loops",
     "nearest-and-furthest",
     "overtaking-on-the-inside",
     "put-yourself-on-earth",
     "reference-frames",
     "say-it-in-your-own",
+    "share-of-the-cycle",
     "that-is-the-observation",
+    "the-share-you-found",
     "the-synodic-period",
     "the-two-orbits",
     "the-wandering-stars",
+    "time-the-reversal",
     "watch-from-outside-first",
-    "what-actually-settled-it",
     "what-it-cost-to-explain",
     "what-the-epicycle-was-really",
     "what-the-trails-are-doing",
@@ -613,7 +611,7 @@
    "lesson": {
     "id": "retrograde-motion",
     "title": "Por qué Marte va hacia atrás",
-    "stepCount": 33
+    "stepCount": 32
    },
    "student": null,
    "progress": {
@@ -629,13 +627,14 @@
      "how-fast-each-one-goes",
      "the-synodic-period",
      "how-often-does-earth-catch",
-     "a-lap-gained",
+     "share-of-the-cycle",
      "before-you-look",
      "reference-frames",
      "what-the-trails-are-doing",
      "put-yourself-on-earth",
      "that-is-the-observation",
-     "catch-the-reversal",
+     "time-the-reversal",
+     "the-share-you-found",
      "nearest-and-furthest",
      "bright-and-backwards-together",
      "when-does-it-reverse",
@@ -648,18 +647,15 @@
      "do-it-for-the-sun",
      "which-one-is-moving",
      "frames-are-not-all-equal",
-     "what-actually-settled-it",
      "why-tycho-found-nothing",
-     "how-long-does-a-loop",
-     "mars-or-jupiter",
+     "jupiters-loops",
      "what-you-did"
     ],
     "responses": {
      "retrograde-motion:which-one-is-faster": 0,
      "retrograde-motion:how-often-does-earth-catch": "780",
      "retrograde-motion:how-often-does-earth-catch:locale": "es",
-     "retrograde-motion:a-lap-gained": "783",
-     "retrograde-motion:a-lap-gained:locale": "es",
+     "retrograde-motion:share-of-the-cycle": 1,
      "retrograde-motion:before-you-look": 1,
      "retrograde-motion:bright-and-backwards-together": 1,
      "retrograde-motion:when-does-it-reverse": 1,
@@ -670,12 +666,13 @@
      "retrograde-motion:and-what-about-the-sun": 1,
      "retrograde-motion:which-one-is-moving": 2,
      "retrograde-motion:why-tycho-found-nothing": 2,
-     "retrograde-motion:mars-or-jupiter": 1
+     "retrograde-motion:jupiters-loops": "399",
+     "retrograde-motion:jupiters-loops:locale": "es"
     },
     "attempts": {
      "retrograde-motion:which-one-is-faster": 1,
      "retrograde-motion:how-often-does-earth-catch": 1,
-     "retrograde-motion:a-lap-gained": 1,
+     "retrograde-motion:share-of-the-cycle": 1,
      "retrograde-motion:before-you-look": 1,
      "retrograde-motion:bright-and-backwards-together": 1,
      "retrograde-motion:when-does-it-reverse": 1,
@@ -684,7 +681,7 @@
      "retrograde-motion:and-what-about-the-sun": 1,
      "retrograde-motion:which-one-is-moving": 1,
      "retrograde-motion:why-tycho-found-nothing": 1,
-     "retrograde-motion:mars-or-jupiter": 1
+     "retrograde-motion:jupiters-loops": 1
     }
    },
    "steps": [
@@ -744,9 +741,9 @@
     },
     {
      "index": 9,
-     "sid": "a-lap-gained",
-     "fingerprint": "question|numeric|-|-|-|-|a=783;t=60;u=days",
-     "optionCount": null
+     "sid": "share-of-the-cycle",
+     "fingerprint": "predict|-|-|-|-|4|a=1;c=1",
+     "optionCount": 4
     },
     {
      "index": 10,
@@ -780,85 +777,85 @@
     },
     {
      "index": 15,
-     "sid": "catch-the-reversal",
-     "fingerprint": "measure|-|-|-|lon_a+day_a+lon_b+day_b|-|-",
+     "sid": "time-the-reversal",
+     "fingerprint": "measure|-|-|-|a1_dir+a1_day+a2_dir+a2_day+b1_dir+b1_day+b2_dir+b2_day+turn_a+wid_a+turn_b+wid_b+loop_len+loop_unc|-|-",
      "optionCount": null
     },
     {
      "index": 16,
+     "sid": "the-share-you-found",
+     "fingerprint": "read|-|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 17,
      "sid": "nearest-and-furthest",
      "fingerprint": "measure|-|-|-|sep_min+sep_max+sep_ratio|-|-",
      "optionCount": null
     },
     {
-     "index": 17,
+     "index": 18,
      "sid": "bright-and-backwards-together",
      "fingerprint": "question|choice|-|-|-|4|a=1;c=1",
      "optionCount": 4
     },
     {
-     "index": 18,
+     "index": 19,
      "sid": "when-does-it-reverse",
      "fingerprint": "question|choice|-|-|-|4|a=1;c=1",
      "optionCount": 4
     },
     {
-     "index": 19,
+     "index": 20,
      "sid": "overtaking-on-the-inside",
      "fingerprint": "read|-|-|-|-|-|-",
      "optionCount": null
     },
     {
-     "index": 20,
+     "index": 21,
      "sid": "say-it-in-your-own",
      "fingerprint": "question|short|-|-|-|-|-",
      "optionCount": null
     },
     {
-     "index": 21,
+     "index": 22,
      "sid": "what-it-cost-to-explain",
      "fingerprint": "read|-|-|-|-|-|-",
      "optionCount": null
     },
     {
-     "index": 22,
+     "index": 23,
      "sid": "what-the-epicycle-was-really",
      "fingerprint": "question|choice|-|-|-|4|a=1;c=1",
      "optionCount": 4
     },
     {
-     "index": 23,
+     "index": 24,
      "sid": "counting-the-machinery",
      "fingerprint": "question|numeric|-|-|-|-|a=20;t=1;u=devices",
      "optionCount": null
     },
     {
-     "index": 24,
+     "index": 25,
      "sid": "and-what-about-the-sun",
      "fingerprint": "predict|-|-|-|-|4|a=1;c=1",
      "optionCount": 4
     },
     {
-     "index": 25,
+     "index": 26,
      "sid": "do-it-for-the-sun",
      "fingerprint": "explore|-|-|-|-|-|-",
      "optionCount": null
     },
     {
-     "index": 26,
+     "index": 27,
      "sid": "which-one-is-moving",
      "fingerprint": "question|choice|-|-|-|4|a=2;c=2",
      "optionCount": 4
     },
     {
-     "index": 27,
-     "sid": "frames-are-not-all-equal",
-     "fingerprint": "read|-|-|-|-|-|-",
-     "optionCount": null
-    },
-    {
      "index": 28,
-     "sid": "what-actually-settled-it",
+     "sid": "frames-are-not-all-equal",
      "fingerprint": "read|-|-|-|-|-|-",
      "optionCount": null
     },
@@ -870,18 +867,12 @@
     },
     {
      "index": 30,
-     "sid": "how-long-does-a-loop",
-     "fingerprint": "measure|-|-|-|retro_start+retro_end+retro_len|-|-",
+     "sid": "jupiters-loops",
+     "fingerprint": "question|numeric|-|-|-|-|a=399;t=15;u=days",
      "optionCount": null
     },
     {
      "index": 31,
-     "sid": "mars-or-jupiter",
-     "fingerprint": "question|choice|-|-|-|4|a=1;c=1",
-     "optionCount": 4
-    },
-    {
-     "index": 32,
      "sid": "what-you-did",
      "fingerprint": "read|-|-|-|-|-|-",
      "optionCount": null
@@ -896,8 +887,7 @@
     "retrograde-motion:which-one-is-faster": 0,
     "retrograde-motion:how-often-does-earth-catch": "780",
     "retrograde-motion:how-often-does-earth-catch:locale": "es",
-    "retrograde-motion:a-lap-gained": "783",
-    "retrograde-motion:a-lap-gained:locale": "es",
+    "retrograde-motion:share-of-the-cycle": 1,
     "retrograde-motion:before-you-look": 1,
     "retrograde-motion:bright-and-backwards-together": 1,
     "retrograde-motion:when-does-it-reverse": 1,
@@ -908,12 +898,13 @@
     "retrograde-motion:and-what-about-the-sun": 1,
     "retrograde-motion:which-one-is-moving": 2,
     "retrograde-motion:why-tycho-found-nothing": 2,
-    "retrograde-motion:mars-or-jupiter": 1
+    "retrograde-motion:jupiters-loops": "399",
+    "retrograde-motion:jupiters-loops:locale": "es"
    },
    "attempts": {
     "retrograde-motion:which-one-is-faster": 1,
     "retrograde-motion:how-often-does-earth-catch": 1,
-    "retrograde-motion:a-lap-gained": 1,
+    "retrograde-motion:share-of-the-cycle": 1,
     "retrograde-motion:before-you-look": 1,
     "retrograde-motion:bright-and-backwards-together": 1,
     "retrograde-motion:when-does-it-reverse": 1,
@@ -922,33 +913,32 @@
     "retrograde-motion:and-what-about-the-sun": 1,
     "retrograde-motion:which-one-is-moving": 1,
     "retrograde-motion:why-tycho-found-nothing": 1,
-    "retrograde-motion:mars-or-jupiter": 1
+    "retrograde-motion:jupiters-loops": 1
    },
    "visited": [
-    "a-lap-gained",
     "against-the-fixed-stars",
     "and-what-about-the-sun",
     "before-you-look",
     "bright-and-backwards-together",
-    "catch-the-reversal",
     "counting-the-machinery",
     "do-it-for-the-sun",
     "frames-are-not-all-equal",
     "how-fast-each-one-goes",
-    "how-long-does-a-loop",
     "how-often-does-earth-catch",
-    "mars-or-jupiter",
+    "jupiters-loops",
     "nearest-and-furthest",
     "overtaking-on-the-inside",
     "put-yourself-on-earth",
     "reference-frames",
     "say-it-in-your-own",
+    "share-of-the-cycle",
     "that-is-the-observation",
+    "the-share-you-found",
     "the-synodic-period",
     "the-two-orbits",
     "the-wandering-stars",
+    "time-the-reversal",
     "watch-from-outside-first",
-    "what-actually-settled-it",
     "what-it-cost-to-explain",
     "what-the-epicycle-was-really",
     "what-the-trails-are-doing",
@@ -959,7 +949,7 @@
     "which-one-is-moving",
     "why-tycho-found-nothing"
    ],
-   "stepIndex": 32,
+   "stepIndex": 31,
    "startedAt": "2026-01-02T03:04:05.000Z",
    "moved": [],
    "dropped": [],
@@ -1024,8 +1014,8 @@
      "locale": "es"
     },
     {
-     "sid": "a-lap-gained",
-     "value": "783",
+     "sid": "share-of-the-cycle",
+     "value": 1,
      "locale": "es"
     },
     {
@@ -1074,8 +1064,8 @@
      "locale": "es"
     },
     {
-     "sid": "mars-or-jupiter",
-     "value": 1,
+     "sid": "jupiters-loops",
+     "value": "399",
      "locale": "es"
     }
    ]
@@ -1103,8 +1093,8 @@
      "locale": "es"
     },
     {
-     "sid": "a-lap-gained",
-     "value": "783",
+     "sid": "share-of-the-cycle",
+     "value": 1,
      "locale": "es"
     },
     {
@@ -1153,8 +1143,8 @@
      "locale": "es"
     },
     {
-     "sid": "mars-or-jupiter",
-     "value": 1,
+     "sid": "jupiters-loops",
+     "value": "399",
      "locale": "es"
     }
    ]
@@ -1206,8 +1196,8 @@
      "locale": "es"
     },
     {
-     "sid": "a-lap-gained",
-     "value": "783",
+     "sid": "share-of-the-cycle",
+     "value": 1,
      "locale": "es"
     },
     {
@@ -1256,8 +1246,8 @@
      "locale": "es"
     },
     {
-     "sid": "mars-or-jupiter",
-     "value": 1,
+     "sid": "jupiters-loops",
+     "value": "399",
      "locale": "es"
     }
    ]
@@ -1286,8 +1276,8 @@
      "locale": "es"
     },
     {
-     "sid": "a-lap-gained",
-     "value": "783",
+     "sid": "share-of-the-cycle",
+     "value": 1,
      "locale": "es"
     },
     {
@@ -1336,8 +1326,8 @@
      "locale": "es"
     },
     {
-     "sid": "mars-or-jupiter",
-     "value": 1,
+     "sid": "jupiters-loops",
+     "value": "399",
      "locale": "es"
     }
    ]
