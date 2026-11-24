@@ -131,7 +131,7 @@ const BUDGETS = [
   {
     id: 'deferred',
     label: 'Deferred JavaScript (lazy chunks, gzipped)',
-    limit: 3276.6,
+    limit: 3277.2,
     reason:
       'Jumped from 1369 KB to 2105 KB when three.js and Chart.js stopped being ' +
       'CDN requests and became bundled chunks. That is the point of the change ' +
@@ -753,7 +753,7 @@ const BUDGETS = [
       '\n\nThis branch merged with v4 78e15afaf (D-R4-TRAINC1-05): v4 holds 3258.5 KB for the solar system scale and missing mass lessons, and the quiet canvas and combined planet, binary star and tides lessons add the 7.1 KB above it (grants dm 6.9 and du 0.2), so the limit is 3265.6 KB, the measurement by CI of the merged branch (head 64731fa43). Under the standing approval of 2026-10-10.' +
       '\n\nResuming a lesson at its scene (D-R4-367-11): raised from 3265.6 to 3266.1 KB, the previous limit plus the 0.5 KB the branch adds over v4 (CI measured 3,329,600 bytes gzipped, 3251.5625 KB, against 3,329,004 on v4 before the branch merged with the solar system lessons; set again from the run on the merged branch). Under the standing approval of 2026-10-10 and the engine and production class exemption (maintainer decision, 2026-11-21).' +
       "\n\nThe Mars, orbit locking and habitable zone lessons, merged with v4 10088f53 (D-R4-TRAINC2-03, -04, -06): PROVISIONAL, raised from 3266.1 to 3274.5 KB, v4's limit (3266.1, after the planet, binary star, tides and resuming lessons) plus the 8.4 KB this branch added over v4 e16734ec (CI measured 3,337,403 bytes at 7f6188ca, 3,337,549 bytes at f3ff895c and 3,352,525 bytes, 3273.95 KB, at b8fcabca, the branch merged with v4 cb43cf13). Set to the CI measurement of the merged head under the standing approval of 2026-10-10 when it arrives." +
-      "\n\nThe habitable zone lesson's eccentric year (D-R4-356-08): PROVISIONAL, raised from 3274.5 to 3276.6 KB, the local measurement of a Node 24 build of this branch merged with v4 f258bdf29, 3,355,213 bytes gzipped (3276.58 KB), against 3,353,073 bytes (3274.5 KB) of v4 built beside it on the same machine, rounded up to 0.1 KB (grant ee, 2.1 KB). Set to the CI measurement of the merged head under the standing approval of 2026-10-10 when it arrives.",
+      "\n\nThe habitable zone lesson's eccentric year (D-R4-356-08): raised from 3274.5 to 3277.2 KB, the measurement by CI of the branch (head 624029ae6): 3,355,809 bytes gzipped (3277.157 KB), rounded up to 0.1 KB (grant ee, 2.7 KB over v4's 3274.5). Under the standing approval of 2026-10-10.",
   },
 ];
 
