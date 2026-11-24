@@ -4,13 +4,13 @@
     "goldilocks-question",
     "transit-photometry",
     "what-is-a-gravitational-wave",
+    "black-holes",
     "measuring-the-moon",
     "missing-mass",
+    "butterfly-effect",
     "tides",
     "weighing-stars",
-    "butterfly-effect",
     "binary-star-planets",
-    "black-holes",
     "extending-an-experiment",
     "propose-an-observation",
     "radial-velocity",
@@ -177,6 +177,12 @@
       "lock:{\"placement\":true,\"inspector\":false,\"areaSweep\":false}",
       "math:arithmetic"
     ],
+    "black-holes": [
+      "key:predict.misconceptions",
+      "key:question.checklist",
+      "key:read.explainView",
+      "key:read.motion"
+    ],
     "measuring-the-moon": [
       "key:predict.hints",
       "key:question.maxUncertainty",
@@ -189,30 +195,24 @@
       "key:explore.decides",
       "key:explore.depth"
     ],
+    "butterfly-effect": [
+      "key:explore.rubric",
+      "key:predict.requires",
+      "lock:null"
+    ],
     "tides": [
       "key:explore.canvas",
-      "key:predict.misconceptions",
       "key:question.canvas",
       "key:read.allowInspector"
     ],
     "weighing-stars": [
       "key:explore.showBarycenter",
       "key:measure.showBarycenter",
-      "key:read.motion",
       "key:read.showBarycenter"
-    ],
-    "butterfly-effect": [
-      "key:explore.rubric",
-      "key:predict.requires",
-      "lock:null"
     ],
     "binary-star-planets": [
       "key:explore.requires",
       "lock:{\"placement\":true}"
-    ],
-    "black-holes": [
-      "key:question.checklist",
-      "key:read.explainView"
     ],
     "extending-an-experiment": [
       "key:measure.compute",
@@ -308,17 +308,17 @@
   ],
   "totals": {
     "investigations": 124,
-    "steps": 2004,
+    "steps": 2006,
     "activityCuts": 6,
     "lessonTokens": 182,
     "activityTokens": 29,
     "stepTypes": {
       "read": 379,
-      "predict": 210,
-      "measure": 524,
+      "predict": 211,
+      "measure": 526,
       "ellipse": 1,
       "question": 749,
-      "explore": 140,
+      "explore": 139,
       "wedges": 1
     }
   }

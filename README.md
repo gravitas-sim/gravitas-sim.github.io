@@ -28,7 +28,7 @@ the week they are teaching.
 
 **<!--fact:libraryInvestigations-->146<!--/fact--> guided
 investigations**: <!--fact:investigations-->124<!--/fact--> that run in the
-simulation, <!--fact:investigationSteps-->1535<!--/fact--> steps between them
+simulation, <!--fact:investigationSteps-->1537<!--/fact--> steps between them
 (the table below), and <!--fact:guidedInvestigations-->22<!--/fact--> in the
 Observatory, the 3-D lab and the mission lab (the Library lists all of them):
 
@@ -341,7 +341,7 @@ run directly, so debugging never requires a build step.
 ### Everything else
 
 ```bash
-npm test                  # <!--fact:jestTests-->23015<!--/fact--> tests across <!--fact:jestSuites-->701<!--/fact--> suites
+npm test                  # <!--fact:jestTests-->23040<!--/fact--> tests across <!--fact:jestSuites-->702<!--/fact--> suites
 npm run validate:physics  # the physics validation table
 npm run e2e               # browser smoke tests, against the sources
 npm run lint              # eslint
@@ -367,7 +367,7 @@ reports what the browser downloads at start-up separately from what is deferred:
 | ---------------------- | ------------------------------------------------------ | --------------------------------------------- |
 | CSS                    | <!--fact:buildCss-->211<!--/fact--> KB                 | 1                                             |
 | JavaScript at start-up | <!--fact:buildStartupJs-->534<!--/fact--> KB           | <!--fact:buildStartupFiles-->55<!--/fact-->   |
-| JavaScript on demand   | <!--fact:buildDeferredJs-->9108<!--/fact--> KB         | <!--fact:buildDeferredChunks-->857<!--/fact--> |
+| JavaScript on demand   | <!--fact:buildDeferredJs-->9128<!--/fact--> KB         | <!--fact:buildDeferredChunks-->857<!--/fact--> |
 | **Initial download**   | **<!--fact:buildInitialDownload-->745<!--/fact--> KB** |                                               |
 
 Those figures are the last build's, to the nearest kilobyte, and are written
