@@ -17,9 +17,14 @@ export default {
         note: 'Cada punto es un límite: cuánta luz estelar y a qué distancia. Las filas de abajo dan primero la cantidad de luz estelar.',
       },
     },
+    'estimate-the-dim-limit': {
+      title: 'Estima el límite para una estrella tenue',
+      body: 'Tienes la cantidad de luz estelar en el límite del invernadero desbocado del Sol, del paso anterior. Supón que una enana M de 3200 K, con cerca del 0,4 por ciento de la luminosidad del Sol (0,004 Soles), tuviera su límite en esa misma cantidad de luz estelar.\n\nSin abrir el panel, usa lo que hallaste sobre la luz estelar y la distancia (cae como el inverso del cuadrado de la distancia) y sobre la luminosidad (es proporcional a la luminosidad de la estrella) para estimar a qué distancia de la estrella estaría ese límite. Comprométete con un número. Queda sin marcar hasta que hayas leído el panel.',
+      prompt: 'El límite estaría a unos',
+    },
     'the-same-limit-a-dim-star': {
       title: 'El mismo límite junto a una estrella tenue',
-      body: 'Elige <strong>una enana M (3200 K)</strong>, una estrella con cerca del 0,4 por ciento de la luminosidad del Sol. Lee la luz estelar en su límite del invernadero desbocado y la distancia a la que un planeta la recibe.\n\nLa cantidad de luz estelar cambia poco de una estrella a otra (el ajuste depende débilmente de la temperatura de la estrella). La distancia cambia mucho, porque cambia la luminosidad.',
+      body: 'Elige <strong>una enana M (3200 K)</strong>, la estrella de tu estimación. Lee la luz estelar en su límite del invernadero desbocado y la distancia a la que un planeta la recibe. Tu estimación se pone junto a la distancia en la pantalla siguiente.',
       fields: [
         {
           label: 'Luz estelar en el límite del invernadero desbocado (Tierras)',
@@ -30,6 +35,12 @@ export default {
         title: 'El mismo límite, una estrella tenue',
         note: 'El eje de distancia se reescala a la estrella. La posición horizontal de cada punto es su distancia; su altura es la cantidad de luz estelar.',
       },
+    },
+    'the-estimate-and-the-limit': {
+      title: 'Tu estimación y el panel',
+      body: 'Tu estimación y la lectura del panel están debajo.\n\nLa estimación trasladó a la estrella tenue las 1,04 Tierras del Sol. El panel da 0,87 Tierras: el ajuste depende débilmente de la temperatura de la estrella, así que la cantidad de luz estelar en un límite cambia poco de una estrella a otra, y una cantidad algo menor sitúa el límite algo más lejos. La distancia cambia mucho, porque cambia la luminosidad: frente a 0,98 UA para el Sol, este límite está catorce veces más cerca. Compruébalo con la ley del inverso del cuadrado: la raíz cuadrada de 0,004 dividido entre 0,868 es 0,068.',
+      compare:
+        'Pon tu estimación junto a la distancia que dio el panel, y di qué cantidad de luz estelar, la que supusiste o la que dio el panel, situó el límite más lejos.',
     },
     'a-star-the-fit-refuses': {
       title: 'Una estrella para la que el ajuste no se hizo',

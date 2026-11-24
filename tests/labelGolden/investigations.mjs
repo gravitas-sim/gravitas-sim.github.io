@@ -302,6 +302,48 @@ export function summarize(list, keyOf = item => shapeOf(JSON.stringify(item))) {
   };
 }
 
+// --- One plot the last-place check cannot judge ------------------------------------
+
+/**
+ * The one reading the last-place check does not compare: the log variant of
+ * the tides lesson's "choose-three-masses" plot (its digest and every sample,
+ * because the flip below moves which vectors the samples are and so every one
+ * after it). Whether that plot draws on a log axis is `pts.every(p => p.x > 0 &&
+ * p.y > 0)` in js/investigations/plotView.js, and one of the generic vectors
+ * the recorder feeds it sits on that edge: one unit in the last place from
+ * Math.pow or Math.log10 on the call that happens to be nudged turns the table
+ * between its plain numbers ("0.049") and its logarithms ("-1.500"). Which call
+ * is nudged depends on how many Math calls came before, so a change anywhere
+ * earlier in the recording moves it. It is a knife-edge in that step's plot
+ * data, recorded here for the step's owner (D-R4-TRAINC2-07) and not hidden:
+ * the recorded value itself is still checked against the committed golden.
+ * Nothing else is exempt.
+ */
+export const LAST_PLACE_KNIFE_EDGE = {
+  surface: 'plots',
+  lesson: 'tides',
+  step: 'choose-three-masses',
+  variant: 'log',
+};
+
+/** A copy of the surfaces without the knife-edge reading, for the last-place comparison only. */
+export function withoutKnifeEdge(surfaces) {
+  const { surface, lesson, step, variant } = LAST_PLACE_KNIFE_EDGE;
+  const copy = JSON.parse(JSON.stringify(surfaces));
+  // A locale identical to English is recorded as the word "same"; written out,
+  // so that a run in which the two differ only here compares with one in which
+  // they do not.
+  for (const locale of Object.keys(copy[surface] || {}))
+    if (copy[surface][locale] === 'same')
+      copy[surface][locale] = JSON.parse(JSON.stringify(copy[surface].en));
+  for (const locale of Object.keys(copy[surface] || {})) {
+    const v = copy[surface][locale]?.[lesson]?.[step]?.variants?.[variant];
+    if (!v) continue;
+    delete copy[surface][locale][lesson][step].variants[variant];
+  }
+  return copy;
+}
+
 // --- The ellipse figure ------------------------------------------------------------
 
 /** The slider's own positions, js/fragments/lesson.html: 0 to 0.98 by 0.001. */

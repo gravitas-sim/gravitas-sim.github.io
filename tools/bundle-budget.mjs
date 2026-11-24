@@ -131,7 +131,7 @@ const BUDGETS = [
   {
     id: 'deferred',
     label: 'Deferred JavaScript (lazy chunks, gzipped)',
-    limit: 3268.3,
+    limit: 3276.7,
     reason:
       'Jumped from 1369 KB to 2105 KB when three.js and Chart.js stopped being ' +
       'CDN requests and became bundled chunks. That is the point of the change ' +
@@ -752,7 +752,8 @@ const BUDGETS = [
       '\n\nThe quiet lesson canvas keeps Settings and precise placement beside its More (D-R4-TRAINC1-05): raised from 3258.0 to 3258.2 KB, the measurement of a Node 22 build of the combined branch, 3,336,342 bytes gzipped (3258.13 KB), rounded up to 0.1 KB; the dock code in js/lessonCanvas.js. Under the standing approval of 2026-10-10.' +
       '\n\nThis branch merged with v4 78e15afaf (D-R4-TRAINC1-05): v4 holds 3258.5 KB for the solar system scale and missing mass lessons, and the quiet canvas and combined planet, binary star and tides lessons add the 7.1 KB above it (grants dm 6.9 and du 0.2), so the limit is 3265.6 KB, the measurement by CI of the merged branch (head 64731fa43). Under the standing approval of 2026-10-10.' +
       '\n\nResuming a lesson at its scene (D-R4-367-11): raised from 3265.6 to 3266.1 KB, the previous limit plus the 0.5 KB the branch adds over v4 (CI measured 3,329,600 bytes gzipped, 3251.5625 KB, against 3,329,004 on v4 before the branch merged with the solar system lessons; set again from the run on the merged branch). Under the standing approval of 2026-10-10 and the engine and production class exemption (maintainer decision, 2026-11-21).' +
-      '\n\nThe two gravitational-wave lessons revised against the lab model (D-R4-353-06): raised from 3266.1 to 3268.3 KB, the measurement by CI of the branch merged with v4 (run 45265650785 on 9719dc510): 3,346,656 bytes gzipped (3268.22 KB), rounded up to 0.1 KB. A local Node 22 build measured 3,344,549 bytes on v4 10088f53c and 3,346,598 on the branch, 2,049 bytes of growth, all of it lesson text in the two lesson modules and their Spanish shadows, which load only with those lessons. Under the standing approval of 2026-10-10.',
+      "\n\nThe Mars, orbit locking and habitable zone lessons, merged with v4 10088f53 (D-R4-TRAINC2-03, -04, -06): PROVISIONAL, raised from 3266.1 to 3274.5 KB, v4's limit (3266.1, after the planet, binary star, tides and resuming lessons) plus the 8.4 KB this branch added over v4 e16734ec (CI measured 3,337,403 bytes at 7f6188ca, 3,337,549 bytes at f3ff895c and 3,352,525 bytes, 3273.95 KB, at b8fcabca, the branch merged with v4 cb43cf13). Set to the CI measurement of the merged head under the standing approval of 2026-10-10 when it arrives." +
+      '\n\nThe two gravitational-wave lessons revised against the lab model (D-R4-353-06): raised from 3274.5 to 3276.7 KB, restacked on the Mars, orbit locking and habitable zone lessons with the same 2.2 KB as before them: CI measured the branch merged with v4 10088f53c at 3,346,656 bytes gzipped (3268.22 KB, run 45265650785 on 9719dc510) against a 3266.1 KB limit, rounded up to 0.1 KB. A local Node 22 build measured 2,049 bytes of growth over v4 (3,344,549 to 3,346,598), all of it lesson text in the two lesson modules and their Spanish shadows, which load only with those lessons. Under the standing approval of 2026-10-10.',
   },
 ];
 
