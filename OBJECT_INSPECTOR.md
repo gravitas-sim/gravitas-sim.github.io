@@ -94,8 +94,8 @@ hold one set of numbers still beside another.
 
 The cards are live, not snapshots. They run their own update loop rather than
 borrowing the inspector's, because the inspector's stops when it closes and a
-pinned card has to outlive that. A card whose object is absorbed or culled
-removes itself.
+pinned card has to outlive that. A card whose object is absorbed or merged
+away removes itself.
 
 They fill a column to the left of the panel, from its top edge downward, and
 start a new column further left when the next card would not fit, so pinning a
