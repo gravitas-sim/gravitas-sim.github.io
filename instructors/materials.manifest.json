@@ -24,7 +24,7 @@
     }
   },
   "sourceFiles": 310,
-  "sourceDigest": "2ad823451d8393bdde89283699e70b8870da4f78d369178c08f62d9821eedf23",
+  "sourceDigest": "1a54df86ced45d945e106d63b8a524323f679ddc7e637ab0d3a39a91af81ffc2",
   "sources": {
     "js/activities/activities.js": "af9b7e121b9a72c2a5cc18e07331d6ee841934d402b030294d25c442628881ef",
     "js/activities/activityBridge.js": "ddd8015bf88938d98d967942048bc34e30a0099344b1055bd45a0459ec0333fe",
@@ -234,7 +234,7 @@
     "js/data/investigations/missing-mass.js": "bf2284bf4f7449bf2215713cd567b98f0043be7c95e1a9fd195e7e668f571e0d",
     "js/data/investigations/observing-sequence.js": "cf580253a16217aaabeae2c3bb96c56b0b90fa72703cc8028f5538f9d702cc82",
     "js/data/investigations/occurrence-sequence.js": "e61d6be26574f7f32120eb8e3c9e376480a545d1f8555b857060642c89256387",
-    "js/data/investigations/orbital-energy.js": "33f6f2df5beca80478c3433afc3b4a92905409e30ccb8e8c208ba6c892f27f8e",
+    "js/data/investigations/orbital-energy.js": "75385bc25eb8cb93fbd3fca9561da9f8890ac73382c2f514faabc498c7113c70",
     "js/data/investigations/phases-and-eclipses.js": "80696f8ad21b26df2bbb508da4c8e95ea03dd88e839cb8abca4907b961d51d2b",
     "js/data/investigations/photometric-calibration-sequence.js": "5d41f7404360b798ae64cec372a0d7b2b2cee8ef6e166ed14b54be1bfe960219",
     "js/data/investigations/plan-a-night.js": "aad44979cf3537bb327573adccac95bf8612aa788ccbdcbcf5108124daa86bac",
