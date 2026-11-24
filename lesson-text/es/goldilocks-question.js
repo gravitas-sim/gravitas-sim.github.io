@@ -54,31 +54,19 @@ export default {
       because:
         'La cuarta parte. La mitad es la respuesta que casi todo el mundo elige de primeras, y merece la pena notar por qué es errónea: la luz no se está repartiendo a lo largo de una línea, se está repartiendo sobre una superficie. Dobla la distancia y esa superficie es cuatro veces mayor. Estás a punto de medirlo en lugar de creértelo.',
     },
-    'three-distances': {
-      title: 'Tres distancias',
-      body: 'El deslizador mueve el planeta. Toma una lectura en cada una de las tres distancias de abajo y anota los números, o deja este panel abierto: la pantalla siguiente te pide que los registres.\n\nEl número que hay que leer es el etiquetado <strong>luz estelar que llega a cada metro cuadrado</strong>.',
-      tool: {
-        title: 'Mueve el planeta',
-        note: 'Usa los botones de abajo para las tres distancias, o arrastra el deslizador a cualquier punto intermedio.',
-      },
-      checklist: [
-        'Pon el planeta a 0,5 UA y lee la luz estelar',
-        'Ponlo a 1 UA y léela otra vez',
-        'Ponlo a 2 UA y léela una tercera vez',
-        'Fíjate en lo que ocurrió entre 1 UA y 2 UA',
-      ],
-      tip: 'La barra cambia de longitud y el número de debajo cambia con ella. Ambos dicen lo mismo; la barra está ahí para que el cambio se vea antes de leer las cifras.',
-    },
-    'write-the-three-down': {
-      title: 'Anota las tres',
-      body: 'Pon el deslizador en cada distancia por turno y escribe lo que marque el panel. El instrumento y la gráfica están ambos en esta pantalla, así que no hay que recordar nada de la anterior: lee un valor, introdúcelo, observa cómo cae el punto.',
+    'three-distances-yours': {
+      title: 'Tres distancias tuyas',
+      body: 'El panel es el Sol con un planeta en un deslizador. Elige tres distancias tuyas, y haz que una sea el doble de otra, para poner a prueba lo que predijiste.\n\nPara cada distancia, pon el deslizador, pulsa <strong>Tomar la lectura</strong> junto a la luz estelar y escribe la distancia que pusiste. El número que hay que leer es el etiquetado <strong>luz estelar que llega a cada metro cuadrado</strong>. Tus puntos caen en la gráfica a medida que los registras.',
       fields: [
-        { label: 'Distancia 1', unit: 'UA', want: '0,5' },
-        { label: 'Luz estelar allí', unit: 'Tierras', want: '4' },
-        { label: 'Distancia 2', unit: 'UA', want: '1' },
-        { label: 'Luz estelar allí', unit: 'Tierras', want: '1' },
-        { label: 'Distancia 3', unit: 'UA', want: '2' },
-        { label: 'Luz estelar allí', unit: 'Tierras', want: '0,25' },
+        { label: 'Distancia 1', unit: 'UA' },
+        { label: 'Luz estelar a la distancia 1', unit: 'Tierras' },
+        { label: 'Distancia 2', unit: 'UA' },
+        { label: 'Luz estelar a la distancia 2', unit: 'Tierras' },
+        { label: 'Distancia 3', unit: 'UA' },
+        {
+          label: 'Luz estelar a la distancia 3',
+          unit: 'Tierras',
+        },
       ],
       plot: {
         title: 'Tus tres lecturas',
@@ -87,14 +75,16 @@ export default {
         note: 'Distancia en horizontal, luz estelar en vertical. Tres puntos bastan para ver la forma.',
       },
       tool: {
-        title: 'Lee aquí cada distancia',
-        note: 'Arrastra el deslizador a 0,5, luego 1, luego 2 UA. Escribe cada lectura en las casillas.',
+        title: 'Mueve el planeta',
+        note: 'El deslizador va de 0,3 a 3 UA en pasos de 0,05; las flechas del teclado lo mueven un paso.',
       },
-      tip: 'Las tres distancias sugeridas son solo sugerencias. Sirven tres cualesquiera, siempre que el valor de luz estelar de al lado se leyera a esa distancia.',
+      tip: 'Sirven tres distancias cualesquiera, siempre que la luz estelar de al lado se leyera a esa distancia y una sea el doble de otra.',
     },
     'what-the-graph-says': {
       title: 'Qué dice la gráfica',
-      body: 'Mira la curva que forman tus tres puntos. Empieza alta a la izquierda, cae con fuerza y después se aplana hacia la derecha sin llegar nunca del todo a cero.',
+      body: 'Tu predicción y tus tres lecturas están debajo. Mira la curva que forman tus tres puntos y cómo cambia la luz estelar a medida que el planeta se aleja.',
+      compare:
+        'Busca tus dos distancias en las que una es el doble de la otra, y pon cuánto cayó la luz estelar entre ellas junto a lo que predijiste.',
       prompt:
         'A medida que un planeta se aleja de su estrella, la luz estelar que recibe…',
       options: [
@@ -112,7 +102,7 @@ export default {
       checklist: [
         'A 1 UA, fíjate en lo grande que es el trozo iluminado.',
         'Muévete a 2 UA. La cáscara tiene el doble de radio. Lee cuántas veces mayor es su área.',
-        'Muévete a 3 UA y luego a 4 UA, leyendo el área cada vez: 1, 4, 9, 16.',
+        'Muévete a 3 UA y luego a 4 UA, leyendo el área cada vez. ¿Cómo crece el área con el radio?',
         'Fíjate en la línea inferior del panel: la energía total que cruza la cáscara no cambia nunca.',
       ],
       tool: {
@@ -133,7 +123,7 @@ export default {
           'Te pasas en una potencia de diez; comprueba que elevaste la distancia al cuadrado.',
       },
       title: 'Escribirlo, y después usarlo',
-      body: 'Las áreas que acabas de leer eran 1, 4, 9 y 16: los cuadrados de 1, 2, 3 y 4. Eso no es una casualidad de las cáscaras, es lo que hace la superficie de una esfera. Dobla el radio y el área sube por cuatro.\n\nLa misma energía, cuatro veces el área, la cuarta parte en cada metro cuadrado. Escrito:\n\n<strong>luz estelar ∝ 1 / d²</strong>\n\no, en su forma completa, F = L / (4πd²), donde L es la luminosidad de la estrella y 4πd² es el área de esa cáscara. No se te pedirá despejarla. Lo que importa es la frase: <strong>al doble de distancia, la cuarta parte</strong>.\n\nAsí que, sin el panel: un planeta está tres veces más lejos de su estrella que la Tierra del Sol. Tres al cuadrado es nueve.',
+      body: 'Las áreas que acabas de leer crecían como el cuadrado del radio. Eso no es una casualidad de las cáscaras, es lo que hace la superficie de una esfera. Dobla el radio y el área sube por cuatro.\n\nLa misma energía, cuatro veces el área, la cuarta parte en cada metro cuadrado. Escrito:\n\n<strong>luz estelar ∝ 1 / d²</strong>\n\no, en su forma completa, F = L / (4πd²), donde L es la luminosidad de la estrella y 4πd² es el área de esa cáscara. No se te pedirá despejarla. Lo que importa es la frase: <strong>al doble de distancia, la cuarta parte</strong>.\n\nAsí que, sin el panel: un planeta está tres veces más lejos de su estrella que la Tierra del Sol.',
       prompt: 'Luz estelar a 3 UA, en Tierras',
       unit: 'Tierras',
       because:
@@ -142,7 +132,7 @@ export default {
     },
     'leave-the-planet-change-the': {
       title: 'Deja el planeta, cambia la estrella',
-      body: 'Hasta ahora la estrella ha sido el Sol y solo se ha movido el planeta. Ahora dale la vuelta.\n\nPon un planeta a 1 UA, exactamente donde está la Tierra, y cambia el Sol por una enana roja: una estrella pequeña, fría y muy tenue. Las enanas rojas son con diferencia el tipo de estrella más común de la galaxia, y la estrella más cercana al Sol es una.',
+      body: 'Hasta ahora la estrella ha sido el Sol y solo se ha movido el planeta. Ahora dale la vuelta.\n\nPon un planeta a 1 UA, exactamente donde está la Tierra, y cambia el Sol por una enana roja: una estrella pequeña y fría. Las enanas rojas son con diferencia el tipo de estrella más común de la galaxia, y la estrella más cercana al Sol es una.',
       prompt: 'Ese planeta, todavía a 1 UA, recibiría ahora…',
       options: [
         'la misma luz estelar, porque no se ha movido',
@@ -166,7 +156,7 @@ export default {
         'Cambia a la enana naranja, y luego a la estrella más brillante',
         'Mira la fila de luminosidad cada vez, y la fila de luz estelar',
       ],
-      tip: 'Una estrella unas 670 veces más tenue entrega unas 670 veces menos luz a un planeta a la misma distancia.',
+      tip: 'La luminosidad de la enana roja es unas 670 veces menor que la del Sol. Compruébalo con la fila de luminosidad y luego mira la fila de luz estelar.',
     },
     'what-luminosity-does': {
       title: 'Qué hace la luminosidad',
@@ -183,22 +173,22 @@ export default {
     },
     'so-where-would-a-planet': {
       title: 'Entonces, ¿dónde tendría que estar un planeta?',
-      body: 'Junta esas dos cosas y surge una pregunta obvia. Si una estrella tenue entrega mucha menos luz, entonces un planeta tendría que estar mucho más cerca de ella para recibir tanto como recibe la Tierra del Sol.\n\nLos astrónomos convierten eso en una banda, y el panel dibuja ahora una: el rango de distancias en el que la luz estelar está en un intervalo que podría permitir agua líquida en la superficie, dadas condiciones adecuadas en el planeta. Está delimitada por una línea discontinua en el lado caliente y una punteada en el frío, y los números de abajo dan sus bordes interior y exterior para la estrella que se esté mostrando.\n\nCambia la estrella y observa la banda en lugar del planeta.',
+      body: 'Junta esas dos cosas y surge una pregunta. Un planeta a 1 UA de una estrella tenue recibe muy poca luz. ¿A qué distancia de la estrella tenue tendría que estar para recibir tanto como recibe la Tierra del Sol? ¿Y de una estrella más brillante?\n\nEl panel se abre con el Sol, con un planeta a 1 UA, y ahora dibuja una banda: el rango de distancias en el que la luz estelar está en un intervalo que podría permitir agua líquida en la superficie, dadas condiciones adecuadas en el planeta. Está delimitada por una línea discontinua en el lado caliente y una punteada en el frío, y los números de abajo dan sus bordes interior y exterior para la estrella que se esté mostrando.\n\nCambia la estrella, luego mueve el planeta hasta encontrar la distancia que buscas, y observa la banda además del planeta.',
       tool: {
         title: 'Aparece la banda',
         note: 'La banda sombreada es un rango calculado de distancias orbitales, no una región física del espacio. Allí no hay nada. La escala de distancias cambia con la estrella, así que lee el eje y no los píxeles.',
       },
       checklist: [
-        'Con la enana roja tenue, lee dónde empieza y dónde acaba la banda',
-        'Cambia al Sol y lee la banda otra vez',
-        'Cambia a la estrella más brillante y léela una tercera vez',
+        'Elige la enana roja tenue. Acerca el planeta hasta que reciba más o menos una Tierra de luz estelar, y anota la distancia',
+        'Elige la estrella más caliente y brillante y aleja el planeta hasta que reciba más o menos una Tierra, y anota esa distancia',
+        'En cada estrella, lee dónde empieza y dónde acaba la banda y compáralo con la distancia que encontraste',
         'Coloca el planeta dentro de la banda para cada estrella por turno',
       ],
-      tip: 'Para la enana roja la banda va de unas 0,042 a unas 0,080 UA. Para la estrella brillante va de unas 2,1 a unas 3,6 UA. Eso es un factor de cincuenta entre ambas, y es enteramente cosa de la estrella.',
+      tip: 'La banda se calcula solo a partir de la estrella: mover el planeta nunca la mueve. El cálculo cubre solo estrellas de 2600 a 7200 K. Fuera de ese rango no da límites, y se dice así en lugar de adivinar.',
     },
     'dim-stars-close-bands': {
       title: 'Estrellas tenues, bandas cercanas',
-      body: 'Has visto la banda saltar de sitio a medida que cambiaba la estrella.',
+      body: 'Has movido el planeta para encontrar dónde está una Tierra de luz estelar en cada estrella, y has visto moverse la banda con la estrella.',
       prompt:
         'Comparada con la del Sol, la banda alrededor de una estrella mucho más tenue está…',
       options: [
@@ -321,7 +311,7 @@ export default {
         off: 'Venus está más cerca del Sol que la Tierra, así que la respuesta debe ser más que la de una Tierra: invierte la distancia al cuadrado.',
       },
       title: 'Venus, con la regla que ya tienes',
-      body: 'No necesitas un modelo climático para ver por qué Venus es un caso difícil. Venus orbita a 0,72 UA. Usa la regla de la primera mitad de esta investigación: la luz estelar va como 1 / d².\n\n0,72 al cuadrado es alrededor de 0,52.',
+      body: 'No necesitas un modelo climático para ver por qué Venus es un caso difícil. Venus orbita a 0,72 UA. Usa la regla de la primera mitad de esta investigación: la luz estelar va como 1 / d². Calcúlalo primero.',
       prompt: 'Luz estelar en Venus, en Tierras',
       unit: 'Tierras',
       because:

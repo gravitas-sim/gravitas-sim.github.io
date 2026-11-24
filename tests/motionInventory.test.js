@@ -138,7 +138,7 @@ describe('what each entry promises', () => {
 
   test('a gap says why and what would close it, and the instruments are the ones that lack a Run control', () => {
     const gaps = inventory.js.filter(x => x.treatment === 'gap');
-    expect(gaps.map(g => g.file)).toEqual(['js/resonanceWidgets.js']);
+    expect(gaps.map(g => g.file)).toEqual([]);
     for (const g of gaps) {
       expect(g.reason.length).toBeGreaterThan(30);
       expect(g.proposed.length).toBeGreaterThan(30);
@@ -171,6 +171,50 @@ describe("a step's instrument starts still under reduced motion", () => {
     setMotionPreference('reduce', { remember: false });
     expect(autoruns({})).toBe(false);
     setMotionPreference('system', { remember: false });
+  });
+});
+
+describe('the resonance instruments open held and run on press', () => {
+  test('under Reduced and Step by step each holds the world until Run, and Pause holds it again', async () => {
+    const { autoruns } = await import('../js/widgets.js');
+    const { setMotionPreference } = await import('../js/quality.js');
+    const { state } = await import('../js/appState.js');
+    const { registerMessages } = await import('../js/i18n/index.js');
+    const { EN_DEFERRED } = await import('../js/i18n/en.deferred.js');
+    registerMessages('en', EN_DEFERRED);
+    const { RESONANCE_WIDGETS } = await import('../js/resonanceWidgets.js');
+    expect(RESONANCE_WIDGETS.map(w => w.id)).toEqual([
+      'resonance-periods',
+      'resonance-angle',
+      'resonance-conjunctions',
+      'resonance-frame',
+    ]);
+    const open = (w, spec = {}) =>
+      w.reset({}, { autorun: autoruns(spec), spec });
+    const name = w => w.actions.find(a => a.id === 'run').label;
+    for (const choice of ['reduce', 'step']) {
+      for (const w of RESONANCE_WIDGETS) {
+        setMotionPreference(choice, { remember: false });
+        state.paused = false;
+        open(w);
+        expect([w.id, choice, state.paused]).toEqual([w.id, choice, true]);
+        expect(name(w)).toBe('Run');
+        w.act('run', {});
+        expect(state.paused).toBe(false);
+        expect(name(w)).toBe('Pause');
+        w.act('run', {});
+        expect(state.paused).toBe(true);
+      }
+    }
+    // Otherwise it runs as the step's scene set it.
+    setMotionPreference('system', { remember: false });
+    for (const w of RESONANCE_WIDGETS) {
+      state.paused = false;
+      open(w);
+      expect([w.id, state.paused]).toEqual([w.id, false]);
+      expect(name(w)).toBe('Pause');
+    }
+    state.paused = false;
   });
 });
 

@@ -21,6 +21,15 @@
 //   keyed on the simulated clock, so the second and later calls in a frame are
 //   no-ops and every instrument sees exactly the same series.
 //
+//   Decimation must not alias. An angle that goes round faster than the
+//   stored interval allows cannot be unwrapped from the stored samples, so the
+//   recorder unwraps each body's angles on every frame, while it still sees
+//   them one frame apart, and stores the continuous value beside the wrapped
+//   one. Every resonant argument is an integer combination of those angles, so
+//   the combination of the continuous values is a continuous series however
+//   many times the buffer has halved. The only refusal left is the honest one,
+//   a frame-to-frame step too large to follow, and it is judged on frames.
+//
 //   A world can be replaced underneath it. Reloading the scenario, scrubbing
 //   the timeline backwards or switching to a different one has to clear the
 //   history rather than splice two incompatible runs together, and the tell is
@@ -28,7 +37,7 @@
 //   changed.
 // =============================================================================
 
-import { resonanceElements } from './elements.js';
+import { resonanceElements, wrap180, wrap360 } from './elements.js';
 
 /** Above this the buffer halves itself rather than growing. */
 const MAX_SAMPLES = 2000;
@@ -48,12 +57,48 @@ export function createRecorder(opts = {}) {
   let interval = 0;
   let signature = '';
   let discarded = 0;
+  /**
+   * Arguments being followed: key -> {terms, last, value, worst}. `value` is
+   * the continuous argument, `last` its wrapped value on the previous frame and
+   * `worst` the largest step between consecutive frames. Kept across resets.
+   */
+  const watched = new Map();
 
   const reset = () => {
     samples = [];
     lastClock = null;
     interval = 0;
     discarded = 0;
+    for (const w of watched.values()) {
+      w.last = null;
+      w.value = null;
+      w.worst = null;
+    }
+  };
+
+  /** The wrapped value of a combination of angles, or NaN. */
+  const combine = (terms, el) => {
+    let phi = 0;
+    for (const x of terms) phi += x.c * el[x.name]?.[x.key];
+    return Number.isFinite(phi) ? wrap360(phi) : NaN;
+  };
+
+  /** Carry a watched argument on by one frame, by the short way round. */
+  const advance = (w, el) => {
+    const wrapped = combine(w.terms, el);
+    if (!Number.isFinite(wrapped)) {
+      w.last = null;
+      return NaN;
+    }
+    if (w.last === null) {
+      w.value = wrapped;
+    } else {
+      const step = wrap180(wrapped - w.last);
+      w.value += step;
+      w.worst = Math.max(w.worst ?? 0, Math.abs(step));
+    }
+    w.last = wrapped;
+    return w.value;
   };
 
   return {
@@ -83,6 +128,16 @@ export function createRecorder(opts = {}) {
 
       // One sample per frame, whichever instrument asks first.
       if (lastClock !== null && clock <= lastClock) return false;
+      // Every frame carries each watched argument on, stored or not: the
+      // continuous angle has to be followed at the frame rate to be followed.
+      const el = {};
+      for (const body of bodies) {
+        const e = resonanceElements(body, primary, G);
+        if (e) el[body.name] = e;
+      }
+      const phi = {};
+      for (const [key, w] of watched) phi[key] = advance(w, el);
+
       // ...and no more often than the current decimation allows, so that the
       // series a caller reads is evenly spaced whatever the frame rate did.
       if (samples.length && clock - samples[samples.length - 1].t < interval) {
@@ -90,12 +145,7 @@ export function createRecorder(opts = {}) {
         return false;
       }
 
-      const el = {};
-      for (const body of bodies) {
-        const e = resonanceElements(body, primary, G);
-        if (e) el[body.name] = e;
-      }
-      samples.push({ t: clock, el });
+      samples.push({ t: clock, el, phi });
       lastClock = clock;
 
       if (samples.length > maxSamples) {
@@ -127,6 +177,42 @@ export function createRecorder(opts = {}) {
       interval,
       halvings: discarded,
     }),
+
+    /**
+     * Start following an integer combination of angles (a resonant argument)
+     * so that it is stored continuous, frame by frame, beside the wrapped
+     * elements. Idempotent. The history already held is carried on from its
+     * stored samples, which is all there is of it.
+     *
+     * The combination is unwrapped, not each angle: the combination is what
+     * has meaning modulo a turn, so it survives a stretch of frames nobody
+     * recorded, and it stays continuous after any number of halvings.
+     *
+     * @param {string} key - Names the argument
+     * @param {Array<{name:string, key:string, c:number}>} terms - Its terms
+     */
+    watch(key, terms) {
+      if (watched.has(key)) return;
+      const w = { terms, last: null, value: null, worst: null };
+      watched.set(key, w);
+      for (const sample of samples)
+        (sample.phi ||= {})[key] = advance(w, sample.el);
+    },
+
+    /**
+     * The argument as stored, continuous: time and angle in degrees.
+     * @param {string} key - As given to `watch`
+     * @returns {Array<{t:number, phi:number}>} Oldest first
+     */
+    continuous: key => samples.map(s => ({ t: s.t, phi: s.phi?.[key] })),
+
+    /**
+     * The largest step the watched argument took between two frames, the
+     * measure of whether it can be followed at all.
+     * @param {string} key - As given to `watch`
+     * @returns {number|null} Degrees, or null before two frames were seen
+     */
+    argumentStep: key => watched.get(key)?.worst ?? null,
 
     reset,
   };
