@@ -134,7 +134,7 @@ const BUDGETS = [
   {
     id: 'deferred',
     label: 'Deferred JavaScript (lazy chunks, gzipped)',
-    limit: 3279.0,
+    limit: 3278.9,
     reason:
       'Jumped from 1369 KB to 2105 KB when three.js and Chart.js stopped being ' +
       'CDN requests and became bundled chunks. That is the point of the change ' +
@@ -762,7 +762,7 @@ const BUDGETS = [
       "\n\nSize, scale and transit geometry stated honestly (D-R4-344-06): the lesson's Sizes button, the corrected Spanish and deferred text and the Sizes table's stated real radii; raised from 3265.6 to 3266.2 KB, the measurement of a Node 22.23.4 build of the branch merged with v4 cb43cf134: 3,344,494 bytes gzipped (3266.11 KB), rounded up to 0.1 KB; set to CI's figure before review. Production class (maintainer decision 2026-11-22) under the standing approval of 2026-10-10." +
       '\n\nHonest sizes after merging v4 10088f53c (D-R4-344-07): raised from 3266.1 to 3266.8 KB, the measured overrun rounded up to 0.1 KB (3,345,103 bytes gzipped on a Node 22.23.4 build of the merged branch, 3266.702 KB); this replaces the figures of D-R4-344-06, measured over an older v4. Set again from the CI figure before review. Under the standing approval of 2026-10-10 and the engine and production class exemption (maintainer decision, 2026-11-21).' +
       '\n\nHonest sizes after merging v4 f258bdf29 (D-R4-344-07): restacked on the 3274.5 KB v4 reached: CI measured 3,353,634 bytes gzipped (3275.03 KB) on the merged branch, so 3275.1 KB, a 0.6 KB grant (ea). Under the standing approval of 2026-10-10 and the engine and production class exemption (maintainer decision, 2026-11-21).' +
-      '\n\nHonest sizes after merging v4 0bf376ee9 (D-R4-344-08): restacked on the 3278.4 KB v4 reached with the encounter rules and the inspector readouts: a Node 22.23.4 build of the merged branch measured 3,357,651 bytes gzipped (3278.96 KB), so 3279.0 KB, the same 0.6 KB grant (ea); set again from the CI figure before review. Under the standing approval of 2026-10-10 and the engine and production class exemption (maintainer decision, 2026-11-21).',
+      '\n\nHonest sizes after merging v4 0bf376ee9 (D-R4-344-08): restacked on the 3278.4 KB v4 reached with the encounter rules and the inspector readouts: CI measured 3,357,574 bytes gzipped (3278.88 KB) on the merged branch (a Node 22.23.4 build read 3,357,651), so 3278.9 KB, a 0.5 KB grant (ea). Under the standing approval of 2026-10-10 and the engine and production class exemption (maintainer decision, 2026-11-21).',
   },
 ];
 
