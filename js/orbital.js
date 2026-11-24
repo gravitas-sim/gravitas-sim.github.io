@@ -2,8 +2,9 @@
 // Two-body orbital elements, and Kepler's equation
 // -----------------------------------------------------------------------------
 // What an investigation asks a student to measure comes from here. The
-// inspector's "Orbital Period" assumes a central mass of 1000 whatever the
-// parent is; these solve the real two-body problem. Pure: no DOM, no imports.
+// inspector's orbit rows, the orbit overlay and the planner find a primary
+// here (primaryCandidates, primaryOf) and solve the real two-body problem.
+// Pure: no DOM, no imports.
 //
 // Kepler's equation has one solver, solveKepler below (Prompt 142): M any real,
 // e in [0, 1), E on M's own turn. Its contract and its fixture grid are in
@@ -137,6 +138,105 @@ export function dominantPrimary(body, candidates) {
     }
   }
   return best;
+}
+
+/** The engine lists a primary can come from, strongest kinds first. */
+export const PRIMARY_LISTS = [
+  'bh_list',
+  'stars',
+  'neutron_stars',
+  'white_dwarfs',
+  'galaxies',
+  'gas_giants',
+  'planets',
+];
+
+/**
+ * Every body that could be another's primary: holes, stars, neutron stars,
+ * white dwarfs, galaxies, gas giants and planets, alive and massive, never the
+ * body itself. The one list the inspector, the overlay, the planner, the
+ * stopwatch and the investigations search.
+ *
+ * @param {Object} lists - The engine's lists by name (js/physics.js)
+ * @param {Object} [body] - The body whose primary is wanted, left out
+ * @param {Function} [pulls] - candidate => whether it pulls on the body; the
+ *   engine's relation where the caller states a two-body claim
+ * @returns {Array} Candidates
+ */
+export function primaryCandidates(lists, body, pulls) {
+  const out = [];
+  for (const name of PRIMARY_LISTS)
+    for (const c of lists?.[name] || [])
+      if (
+        c &&
+        c !== body &&
+        c.alive !== false &&
+        c.mass > 0 &&
+        (!pulls || pulls(c))
+      )
+        out.push(c);
+  return out;
+}
+
+/** The kinds those lists hold, for a caller with one mixed list of bodies. */
+export const PRIMARY_KINDS = new Set([
+  'BlackHole',
+  'StarObject',
+  'NeutronStar',
+  'WhiteDwarf',
+  'Galaxy',
+  'GasGiant',
+  'Planet',
+]);
+
+const PLANETARY = new Set(['Planet', 'GasGiant']);
+const isPlanetary = c => PLANETARY.has(c?.kind);
+
+/**
+ * The primary a body orbits: a planet or gas giant only when the body is
+ * inside that planet's Hill radius about the planet's own primary (so a moon
+ * is the planet's), otherwise the strongest of the other sources (so a planet
+ * near a heavier planet still orbits its star).
+ *
+ * The planet must outweigh the body. Its own primary is the strongest
+ * non-planetary candidate; with none, the strongest heavier planet is the
+ * primary.
+ * Ranking is by M / d^2.
+ *
+ * @param {Object} body - The orbiting object
+ * @param {Array} candidates - From primaryCandidates
+ * @returns {Object|null} The primary, or null when there is no candidate
+ */
+export function primaryOf(body, candidates) {
+  if (!body?.pos || !candidates?.length) return null;
+  const others = candidates.filter(c => c && c !== body && c.alive !== false);
+  const stellar = others.filter(c => !isPlanetary(c));
+  let moonOf = null;
+  let moonPull = 0;
+  for (const p of others) {
+    // A moon is lighter than its planet: Earth is not Luna's satellite.
+    if (!isPlanetary(p) || !(p.mass > (body.mass || 0))) continue;
+    const host = dominantPrimary(p, stellar);
+    const d = Math.hypot(body.pos.x - p.pos.x, body.pos.y - p.pos.y);
+    if (!(d > 0)) continue;
+    if (host) {
+      const D = Math.hypot(p.pos.x - host.pos.x, p.pos.y - host.pos.y);
+      const hill = D * Math.cbrt(p.mass / (3 * host.mass));
+      if (!(d < hill)) continue;
+    }
+    const pull = p.mass / (d * d);
+    if (pull > moonPull) {
+      moonPull = pull;
+      moonOf = p;
+    }
+  }
+  if (moonOf) return moonOf;
+  // A lone star is no planet's satellite: without a stellar candidate, only a
+  // heavier planet can be the primary.
+  return dominantPrimary(
+    body,
+    stellar.length ? stellar : others.filter(p => p.mass > (body.mass || 0))
+  );
 }
 
 /**
