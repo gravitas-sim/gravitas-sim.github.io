@@ -1,6 +1,6 @@
 {
   "version": "November 2026",
-  "generated": "2026-11-23",
+  "generated": "2026-11-24",
   "documents": 1222,
   "inventory": {
     "documents": 1222,
@@ -24,7 +24,7 @@
     }
   },
   "sourceFiles": 310,
-  "sourceDigest": "397261ebfbaa4c05c1cc1b1ae677e8468a62d34752869dbb9450abf480ffcef4",
+  "sourceDigest": "d545a01f0e278c98562f0d79e14a7d4dffdaacaf8c197660344f01defffc6887",
   "sources": {
     "js/activities/activities.js": "af9b7e121b9a72c2a5cc18e07331d6ee841934d402b030294d25c442628881ef",
     "js/activities/activityBridge.js": "ddd8015bf88938d98d967942048bc34e30a0099344b1055bd45a0459ec0333fe",
@@ -47,7 +47,7 @@
     "js/data/instructorExpectations.es.js": "5ec751fabe0ed60f692799c260ab8f383ffae25379c4b426efdd4351e0ae00ee",
     "js/data/instructorExpectations.js": "857f9298f0f8a6bfa308e72ff363fcde36947e8e58eb51fb7ac541ce0f278e28",
     "js/data/instructorFlow.es.js": "f1c087e5240114351245f6a7fa7ad9b3efd269ec6d415183fd945ac95534fd86",
-    "js/data/instructorFlow.js": "c1a206938184b966faec2c7ca4cfa8364456d3327340fe27e5e9b7b5693a9601",
+    "js/data/instructorFlow.js": "881c68746f6c51217b2a5d066b59213a06fb29841685ddd8aaa80309e4ccf4a6",
     "js/data/instructorLabels.js": "e43910350dbc39fc464736852d20357a95adf5b633325ebfdfdeabbb6b029fc7",
     "js/data/investigations.js": "7f6a5cc9ff0e558cd409897558206a35bcf117ce83e0ce1f77fb5d8d3ea24b58",
     "js/data/investigations/a-lens-passing-by.js": "acf7fb524e06a6e1c07af26f8b676d366875cb26204a451120ee733651a02056",
@@ -162,7 +162,7 @@
     "js/data/investigations/es/detect-this-planet.js": "5d7d19c269b3ef7e86e5df66eb56327e8115a0339ee1775e919af51787757cae",
     "js/data/investigations/es/einstein-rings-and-arcs.js": "ba125a60a4627e3ca44297ecca218e6f6ec584159bda12f3268583276851fd38",
     "js/data/investigations/es/extending-an-experiment.js": "719c48b039c62ce57eb6606aeb502272cce07b33278ac410fe4986850cf29339",
-    "js/data/investigations/es/goldilocks-question.js": "837297b5eaa5e65498159d5158825e1b45337aef42bb00da2dc6d132dd40dcb9",
+    "js/data/investigations/es/goldilocks-question.js": "bad0445d899d97a9bf38a71fa699619e8c676514589141d3c90791440cb814c6",
     "js/data/investigations/es/gravity-assist.js": "71c1fdf7a43dd926104dc02d15d6e2a2d2297bdee4c60bde20ff6e8921a66671",
     "js/data/investigations/es/hohmann-transfer.js": "3013356d5c40095233f30b445be241c57d8a97bea509f8e3d53589723d25ec1e",
     "js/data/investigations/es/inside-a-star.js": "1bba3479e3339759666a031cb068f1a31afcdd40985ba656dc905d77ff4a36a9",
@@ -206,7 +206,7 @@
     "js/data/investigations/es/what-a-ccd-records.js": "90861281d1f30a1c4de3c0d9505555ce8feeefa501903be59884ddf75cc53896",
     "js/data/investigations/es/what-a-spectrum-is-made-of.js": "a14ca02d6354eaae34e285950ebeedd770667299ce594ab6d46bcc6efa102136",
     "js/data/investigations/es/what-is-a-gravitational-wave.js": "a7fa5d446641f38b135592e9cc0930823d7e9e58c47c1ebdf11c0f22cce7fea2",
-    "js/data/investigations/es/when-orbits-lock.js": "13dd45709895dae527481901457def97d986938ba9cb2efd0c23bcf4e4277fd0",
+    "js/data/investigations/es/when-orbits-lock.js": "63c940c739acc2ac1c803e42716fbcc0f26b56a62215d3c5db24b52a3e1e9d02",
     "js/data/investigations/es/where-galaxies-live.js": "ef80b0ce9c1ebdfde07be007e48a5ba7e87470dc36dd433644c6481ccb490f8d",
     "js/data/investigations/es/which-kind-of-variable.js": "dbde70ce696047343800c127907d06366608224c8d56edbb23b559a1b50a028d",
     "js/data/investigations/es/who-gets-counted.js": "9a8c6eb0edf2c5eeaae0b2cfa448b2784795dd5882f7caf059e3c50cd8b84634",
@@ -215,7 +215,7 @@
     "js/data/investigations/exposure-sequence.js": "50240159e15f6f40bd83a22b86874af131d78bc7549ee46174a0d3813a03ccd6",
     "js/data/investigations/extending-an-experiment.js": "c34d8c4b96b580f153e14e173ba2788049cdf8ce555410282633d45144ab45bb",
     "js/data/investigations/gaia-sequence.js": "5db2311697c0725bd12fa8d12df45ee12d2ade4d36d4879d4a649b4dedc51ae5",
-    "js/data/investigations/goldilocks-question.js": "4d4623a3f437536a134bf75074cba7d4b8f0fea932acbb0cb38bd37b395c11cb",
+    "js/data/investigations/goldilocks-question.js": "b47f23854fe101f20267a132069ae8fec465009d026d83796b2c96235faaf1db",
     "js/data/investigations/gravity-assist.js": "05d22285b1e787a47fa62edfa3a31a34951b85a1d6933b2e3b9d2cd0fc4c8348",
     "js/data/investigations/hohmann-transfer.js": "ec59f45a5d6e404a2f07fe1442847c0cf8dc4f045c7a8ce92c6f78be32c641df",
     "js/data/investigations/i18n.js": "a8b8d2d93ab1170aaffd92df42faceb74cbbf32cb67227ed13e3ea67bc759567",
@@ -280,7 +280,7 @@
     "js/data/investigations/what-a-ccd-records.js": "1d307031eb7234e0bfb1c26ee5a1a0b68c96734d2725e755b6888e329e9504e4",
     "js/data/investigations/what-a-spectrum-is-made-of.js": "44d31535b0251a22531b3ef15b268c7bb26b4c4cae0718b3265c60b891e7644b",
     "js/data/investigations/what-is-a-gravitational-wave.js": "2a033bb96ca91827cb6884914e6eb6e520f8180fe2a53cfce6d812cfb22f9dd2",
-    "js/data/investigations/when-orbits-lock.js": "69297d15916acb606c254959484bb8079b892e3048cfe0b065aacbf81058a86d",
+    "js/data/investigations/when-orbits-lock.js": "6b2a9bf3e4b09059fbb6b0648b9c5bab193e754a9d6581c505841379f4b62da3",
     "js/data/investigations/where-galaxies-live.js": "fd37a8585002ad1eec0b2a7f5daed7639171f25859402bbbfeb7e3a627207d2c",
     "js/data/investigations/which-kind-of-variable.js": "769c86a0540e375186bde4d431aa3c8d2df9f2794c55d49ca0c2fee19d634fce",
     "js/data/investigations/who-gets-counted.js": "90fa3c5a68e0eb8a9b981185cc4696751961234810ebabb4dc02e0de8443ab7b",
@@ -337,5 +337,5 @@
     "tools/instructor-freshness.mjs": "96052b2f27080f0243fdd4d5f7608927bd67f0c50808b6eac3345a65c14d1e28",
     "tools/source-closure.mjs": "961828e4d0d40d8a6f8c029fe9b9435ecaf39a74b62640efc0b4145c35c7650a"
   },
-  "contentDigest": "e5c41c16e9e90e8e8bc7b952293d75ff5df67a8739edaf84983ae450496ebf21"
+  "contentDigest": "ad919cdc84c66a05ed83fffecbefd966ea32f266cc177ea30be05926f8f769a0"
 }
