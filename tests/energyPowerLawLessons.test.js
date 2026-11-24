@@ -196,7 +196,7 @@ describe('Bound, Unbound and Escape: the dividing speed is found, not handed ove
         expect(r.message).toMatch(/a wide uncertainty/);
         expect(r.message).toContain(`give or take ${((b - a) / 2).toFixed(2)}`);
         // It brackets the line without saying where the line is.
-        expect(r.message).not.toMatch(/10\.9/);
+        expect(r.message).not.toMatch(/escape speed/);
       }
     });
 
