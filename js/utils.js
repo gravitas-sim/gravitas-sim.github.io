@@ -155,25 +155,56 @@ export const screenToWorld = (screenPos, state, canvas) => {
   };
 };
 
-/**
- * Check if position is offscreen (original method)
- * @param {Object} pos - World position with x, y properties
- * @param {Object} state - State object with zoom, pan properties
- * @param {Object} canvas - Canvas object with width, height properties
- * @param {number} buffer_factor - Buffer factor for offscreen detection
- * @returns {boolean} True if position is offscreen
- */
-export const isOffscreen = (pos, state, canvas, buffer_factor = 1.5) => {
-  const half_width_world = (canvas.width / (2 * state.zoom)) * buffer_factor;
-  const half_height_world = (canvas.height / (2 * state.zoom)) * buffer_factor;
-  const world_center_x = -state.pan.x / state.zoom;
-  const world_center_y = state.pan.y / state.zoom;
-  return (
-    pos.x < world_center_x - half_width_world ||
-    pos.x > world_center_x + half_width_world ||
-    pos.y < world_center_y - half_height_world ||
-    pos.y > world_center_y + half_height_world
-  );
+// The bodies a "frame the scene" view fits, their centre of mass and reach:
+// all but real outliers (beyond FRAME_OUTLIER median reaches from the median
+// position, holding under a tenth of the mass), debris only when it is all
+// there is. Why, and the scenes it was measured on: js/view3d.js focusScene.
+export const FRAME_OUTLIER = 50;
+const placed = b => b && Number.isFinite(b.pos?.x) && Number.isFinite(b.pos?.y);
+const mid = v => v.sort((p, q) => p - q)[(v.length - 1) >> 1];
+const centreOf = bs => {
+  let m = 0;
+  let x = 0;
+  let y = 0;
+  for (const b of bs) {
+    const w = b.mass > 0 ? b.mass : 0;
+    m += w;
+    x += b.pos.x * w;
+    y += b.pos.y * w;
+  }
+  if (m > 0) return { x: x / m, y: y / m, m };
+  for (const b of bs) ((x += b.pos.x), (y += b.pos.y));
+  return { x: x / bs.length, y: y / bs.length, m };
+};
+export const framedBodies = bodies => {
+  const bs = bodies.filter(placed);
+  if (bs.length < 10) return bs;
+  const cx = mid(bs.map(b => b.pos.x));
+  const cy = mid(bs.map(b => b.pos.y));
+  const reach = b => Math.hypot(b.pos.x - cx, b.pos.y - cy);
+  const reaches = bs.map(reach);
+  // Over half the bodies at the median position would make the median reach
+  // 0: the median of the others' reaches instead (a mean would be pulled out
+  // by the very body it should catch).
+  const typical = mid(reaches.slice()) || mid(reaches.filter(r => r > 0));
+  const limit = typical * FRAME_OUTLIER;
+  if (!(limit > 0)) return bs;
+  const { m } = centreOf(bs);
+  return bs.filter(b => reach(b) <= limit || (m > 0 && b.mass >= m / 10));
+};
+export const sceneFrame = bodies => {
+  const solid = bodies.filter(b => b && b.kind !== 'Debris');
+  const bs = framedBodies(solid.some(placed) ? solid : bodies);
+  if (!bs.length) return null;
+  const center = centreOf(bs);
+  // How far the framed bodies reach from their centre of mass on each axis,
+  // so a view centred on it can be sized to hold them all.
+  const half = { x: 0, y: 0 };
+  for (const b of bs) {
+    half.x = Math.max(half.x, Math.abs(b.pos.x - center.x));
+    half.y = Math.max(half.y, Math.abs(b.pos.y - center.y));
+  }
+  return { bodies: bs, center, half };
 };
 
 /**

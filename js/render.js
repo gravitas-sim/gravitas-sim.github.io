@@ -1001,7 +1001,7 @@ const drawScene = () => {
   // zeroes, which is exactly the old behavior.
   let frameOrigin = resolveFrameOrigin(barycenterBodies());
   if (!frameOrigin && !isWorldFrame()) {
-    // The body the frame was tied to has been absorbed, merged or culled. There
+    // The body the frame was tied to has been absorbed or merged away. There
     // is no origin any more, so say so and fall back rather than leaving the
     // rail claiming a frame that no longer exists.
     resetFrame();

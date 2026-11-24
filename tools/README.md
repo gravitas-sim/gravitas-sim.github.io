@@ -50,6 +50,7 @@ current, and the orchestrator checks it.
 | `build-validation-data.mjs` | npm run validation:data | `npm run validation:data` |
 | `bundle-budget.mjs` | npm run budget  /  npm run budget:check | `npm run budget`, `npm run budget:check` |
 | `bundle-composition.mjs` | What is in the bundle, module by module | `npm run budget:composition` |
+| `camera-independence.mjs` | Two cameras on one world give the same bodies, bit for bit |  |
 | `canvas-acceptance.mjs` | (no header) |  |
 | `capabilities.mjs` | Capability packages at build time | `npm run capabilities` |
 | `capability-registries.mjs` | The lazy registries, generated from what describes them | `npm run registries` |
@@ -238,6 +239,7 @@ current, and the orchestrator checks it.
 | `release-check.mjs` | npm run release:check | `npm run release:check` |
 | `remnants-pin.mjs` | The cooling-table pin of the remnants validation (Prompt 222, REMNANTS.md) |  |
 | `remnants-validate.mjs` | The remnants kernel against its committed thresholds (Prompt 222) | `npm run remnants:validate` |
+| `removal-cost.mjs` | What keeping every body costs the engine |  |
 | `resonances-ii-addendum.mjs` | The Part A addendum of the resonance gate: a ripple-free libration estimator and steps from an error budget (Prompt 273, RESONANCES_II.md section 9) |  |
 | `resonances-ii-validate.mjs` | The validation of the resonance kernel: libration, secular rate, integrator error (Prompt 273, RESONANCES_II.md) |  |
 | `reversibility-probe.mjs` | Does the engine run backwards? | `npm run probe:reversibility` |
