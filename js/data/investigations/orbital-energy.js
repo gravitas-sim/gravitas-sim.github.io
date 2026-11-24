@@ -363,19 +363,19 @@ const ENERGY = {
           };
         }
         const gap = v.gone - v.back;
-        const mid = (v.back + v.gone) / 2;
+        const mid = ((v.back + v.gone) / 2).toFixed(2);
         const half = (gap / 2).toFixed(2);
         // The pair brackets the line. A bracket is a measurement whose
         // uncertainty is its width, so a wide one is valid, and says so.
         if (gap > 0.5 + 1e-9) {
           return {
-            level: 'warn',
-            message: `The line is between your two speeds, but they give an uncertainty of ${half} km/s either way, which is wide. Fire speeds between the two and keep the last that comes back and the first that leaves to close the gap.`,
+            level: 'ok',
+            message: `Your dividing speed is ${mid} km/s, give or take ${half}. The line is inside your gap, but that is a wide uncertainty: fire speeds between the two and keep the last that comes back and the first that leaves to close it.`,
           };
         }
         return {
           level: 'ok',
-          message: `Your dividing speed is ${mid.toFixed(2)} km/s, give or take ${half}. From this height the escape speed is 10.9 km/s, and it sits inside your gap, which is what a measurement with an honest uncertainty looks like.`,
+          message: `Your dividing speed is ${mid} km/s, give or take ${half}. From this height the escape speed is 10.9 km/s, and it sits inside your gap, which is what a measurement with an honest uncertainty looks like.`,
         };
       },
       tip: 'Two numbers and the gap between them is a more honest answer than one number on its own. Nobody finds a threshold exactly; they find the last speed on each side of it.',
