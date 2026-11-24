@@ -294,7 +294,7 @@ opens them still under reduced motion and Step by step, and Run starts them
 resonance instruments and the two exoplanet instruments) advance a phase on
 every frame with no Run control and no check of the setting; giving them one
 changes the instruments, which a content prompt may, and the inventory names
-them with a proposal. The reader's own Settings, Motion choice now reaches every page that carries the
+them with a proposal. (The two exoplanet instruments have since been given one.) The reader's own Settings, Motion choice now reaches every page that carries the
 shell's head: three lines in the script the shell stamps into the head set
 `data-motion` from the stored value before the first paint (`override` in the
 inventory; D-R4-303-01, which closes the first finding of D-R10-279-04).
@@ -681,10 +681,10 @@ Settings has a Motion choice for a reader who wants more: Reduced applies the
 same stop on a device that did not ask for it, and Step by step also starts the
 simulation paused, so nothing moves until the reader steps it or presses play
 (INTERACTION.md, "Reduced motion"). The choice is applied
-on every page, before the first paint. One thing is not yet true of it: two
-lesson instruments (the two exoplanet ones) start moving by themselves with no
-Run control; it is in `tools/motion-inventory.json` with its proposal. The four
-resonance instruments open held under Reduced and Step by step and run on Run.
+on every page, before the first paint. One thing is not yet true of it: four
+lesson instruments (the resonance ones) start
+moving by themselves with no Run control; it is in `tools/motion-inventory.json`
+with its proposal.
 
 **The shape of a curve is described by a template that no blind or low-vision reader has validated.** The light curve, the radial-velocity trace, the
 energy chart and the bench's two charts are one component

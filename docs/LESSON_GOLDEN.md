@@ -85,18 +85,19 @@ The browser half takes about seven minutes on the private port.
 | 3 | `transit-photometry` | 15: `check:numeric/number+tolerance`, `key:explore.lightCurve`, `key:explore.observerAngle`, `key:measure.checklist`, `key:measure.compare`, `key:measure.evidence`, … |
 | 4 | `what-is-a-gravitational-wave` | 8: `audience:beginner`, `key:predict.stage`, `key:predict.tip`, `key:predict.tool`, `key:read.checklist`, `key:read.stage`, … |
 | 5 | `measuring-the-moon` | 4: `key:predict.hints`, `key:question.maxUncertainty`, `key:question.minUncertainty`, `key:question.valueWithin` |
-| 6 | `weighing-stars` | 4: `key:explore.showBarycenter`, `key:measure.showBarycenter`, `key:read.motion`, `key:read.showBarycenter` |
-| 7 | `butterfly-effect` | 3: `key:explore.rubric`, `key:predict.requires`, `lock:null` |
-| 8 | `extending-an-experiment` | 3: `key:measure.canvas`, `key:measure.compute`, `key:read.canvas` |
-| 9 | `binary-star-planets` | 2: `key:explore.requires`, `lock:{"placement":true}` |
-| 10 | `black-holes` | 2: `key:question.checklist`, `key:read.explainView` |
-| 11 | `propose-an-observation` | 2: `key:measure.plan`, `key:question.rubricCriteria` |
-| 12 | `a-night-at-the-telescope` | 1: `key:question.reflect` |
-| 13 | `detect-this-planet` | 1: `key:read.allowInspector` |
-| 14 | `missing-mass` | 1: `key:question.restates` |
-| 15 | `power-law-gravity` | 1: `key:question.explain` |
-| 16 | `retrograde-motion` | 1: `lock:{"placement":true,"inspector":false}` |
-| 17 | `the-saturated-star` | 1: `depth-step:advanced/predict` |
+| 6 | `missing-mass` | 4: `depth-step:advanced/explore`, `key:explore.after`, `key:explore.decides`, `key:explore.depth` |
+| 7 | `tides` | 4: `key:explore.canvas`, `key:predict.misconceptions`, `key:question.canvas`, `key:read.allowInspector` |
+| 8 | `weighing-stars` | 4: `key:explore.showBarycenter`, `key:measure.showBarycenter`, `key:read.motion`, `key:read.showBarycenter` |
+| 9 | `butterfly-effect` | 3: `key:explore.rubric`, `key:predict.requires`, `lock:null` |
+| 10 | `binary-star-planets` | 2: `key:explore.requires`, `lock:{"placement":true}` |
+| 11 | `black-holes` | 2: `key:question.checklist`, `key:read.explainView` |
+| 12 | `extending-an-experiment` | 2: `key:measure.compute`, `key:read.canvas` |
+| 13 | `propose-an-observation` | 2: `key:measure.plan`, `key:question.rubricCriteria` |
+| 14 | `radial-velocity` | 2: `key:explore.compare`, `key:explore.evidence` |
+| 15 | `a-night-at-the-telescope` | 1: `key:question.reflect` |
+| 16 | `power-law-gravity` | 1: `key:question.explain` |
+| 17 | `retrograde-motion` | 1: `lock:{"placement":true,"inspector":false}` |
+| 18 | `the-saturated-star` | 1: `depth-step:advanced/predict` |
 
 | # | Activity cut | Tokens it adds |
 |---|---|---|

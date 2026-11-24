@@ -247,12 +247,6 @@ export const NEVER_PRECACHED = [
   // until it is: a module a page imports is installed, and its bytes are that
   // change's to find.
   /^js\/numeric\/(roots|interp)\.js$/,
-  // The lesson canvas code and its words: fetched by a lesson that declares a
-  // canvas and kept by the service worker after that, not installed (the
-  // first-visit tier is at its data-budget ceiling).
-  /^js\/lessonCanvas\.js$/,
-  /^js\/lesson\/canvasKind\.js$/,
-  /^js\/i18n\/(en|es)\.canvas\.js$/,
   // The lesson plot's glue, the ring a step draws round an object and their
   // words: fetched by the first lesson step that needs them and kept by the
   // service worker after that, not installed (the first-visit tier is at its
@@ -384,12 +378,13 @@ export const NEVER_PRECACHED = [
   // has about 2.5 KB of room, so the cards show no picture until one online
   // visit has kept them. D-R10-72.
   /^images\/investigations\/(measuring-the-moon|how-far-is-that-star|a-binary-stars-orbit|what-is-in-this-field)\.webp$/,
-  // The cards of Refitting a Transit, Two Periodograms and Sampling a Posterior:
-  // these lessons stage no scene, so each has a card file of its own (the picture
-  // the Transit Lab card already shows). Installed, three more copies would take
-  // the idle tier over its ceiling, so the cards show no picture until one online
-  // visit has kept them. D-R4-TRAINB-02.
-  /^images\/investigations\/(refitting-a-transit|two-periodograms|sampling-a-posterior)\.webp$/,
+  // The cards of the five computing lessons (Integrators in Practice, Extending an
+  // Experiment, Refitting a Transit, Two Periodograms, Sampling a Posterior): these
+  // lessons stage no scene, so each has a card file of its own (the picture its
+  // card already showed). Installed, five more copies would take the idle tier over
+  // its ceiling, so the cards show no picture until one online visit has kept them.
+  // D-R4-TRAINB-02, D-R4-362-19.
+  /^images\/investigations\/(integrators-in-practice|extending-an-experiment|refitting-a-transit|two-periodograms|sampling-a-posterior)\.webp$/,
   // Weighing Jupiter (Prompt 193, SATELLITE_EPHEMERIS.md, D-R10-74): the lesson
   // and its instruments, the satellite kernel, the moons' pack and the
   // thumbnail. The first-visit and idle tiers have a few hundred bytes of room
@@ -406,7 +401,7 @@ export const NEVER_PRECACHED = [
   // them. The first-visit and idle tiers are at their data-budget ceilings,
   // which the standing size approval does not cover, so none is installed: the
   // service worker keeps each after its first online use.
-  /^js\/data\/investigations\/(es\/)?(planets-sequence|the-scale-of-the-solar-system|moons-of-the-giants|comets-and-the-sun)\.js$/,
+  /^js\/data\/investigations\/(es\/)?(planets-sequence|planets-guides|the-scale-of-the-solar-system|moons-of-the-giants|comets-and-the-sun)\.js$/,
   /^js\/data\/courses\/solar-system-and-the-sun\.js$/,
   /^js\/data\/courses\/stellar-astrophysics\.js$/,
   /^images\/investigations\/moons-of-the-giants\.webp$/,
@@ -675,12 +670,12 @@ export const NEVER_PRECACHED = [
   // Its addendum's step-budget rule, in the same position: only the validator and the tests import it.
   /^js\/lab3d\/stepBudget\.js$/,
   // The orbit geometry overlay and the Sizes statement (D-R4-447-08): the two lazy modules, the
-  // size facts the canvas description fetches on its first rebuild, the geometry, the two-body
+  // geometry, the two-body
   // model and its settings reader only the overlay imports, and their words. Kept by the service
   // worker after their first online use, not installed: the first-visit tier has almost no room
   // under a data-budget ceiling the standing size approval does not cover.
-  /^js\/(orbitGeometry|orbitGeometryOverlay|sizeStatement|sizeFacts|twoBodyModel|twoBodySettings)\.js$/,
-  /^js\/i18n\/(en|es)\.(orbitGeometry|sizes)\.js$/,
+  /^js\/(orbitGeometry|orbitGeometryOverlay|sizeStatement|twoBodyModel|twoBodySettings)\.js$/,
+  /^js\/i18n\/(en|es)\.orbitGeometry\.js$/,
   // The scene's words and the Tools barycenter marker (D-R4-449-06): fetched by the canvas
   // description's first rebuild, with the source names and their two word files; kept after
   // their first online use, not installed, for the same reason.
@@ -784,6 +779,13 @@ export const IDLE_TIER = [
     // refuses the file in words.
     'composed report',
     /^js\/myWork\/(composedReport|reportView)\.js$/,
+  ],
+  [
+    // The lesson canvas (js/lessonCanvas.js), its words and the size facts its
+    // description fetches on its first rebuild: the tides lesson declares a
+    // quiet canvas, so a lesson nobody opened before the network went needs them.
+    'lesson canvas',
+    /^(js\/lessonCanvas\.js|js\/lesson\/canvasKind\.js|js\/sizeFacts\.js|js\/i18n\/(en|es)\.(canvas|sizes)\.js)$/,
   ],
   [
     'data tables',

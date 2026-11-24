@@ -365,7 +365,7 @@ export function draw(step, vals, { canvas, els, transformed, log, scene }) {
 function inside(st, m, b) {
   const xs = [st.x0, st.x1];
   if (m) xs.push((st.y0 - b) / m, (st.y1 - b) / m);
-  const tol = 1e-9 * (st.y1 - st.y0 || 1);
+  const tol = 1e-9 * (st.y1 - st.y0 || 1) + 1e-12 * Math.abs(st.y1);
   const seen = xs
     .filter(
       x =>

@@ -54,7 +54,12 @@ import {
   writeProgress,
 } from './progressSchema.js';
 import { KEY_ASSIGNMENT_PREFIX, KEY_INVESTIGATION_PREFIX } from '../names.js';
-import { bindSceneContext, isPeek, openSheet } from '../lessonFrame.js';
+import {
+  bindSceneContext,
+  isPeek,
+  noteAltered,
+  openSheet,
+} from '../lessonFrame.js';
 const getAreaSweepWedges = command('getAreaSweepWedges');
 
 /** Escape for use inside a double-quoted attribute. */
@@ -431,6 +436,7 @@ export function stepMarkup(step, c) {
     parts.push(slots.field?.spanGroups(step, c) ?? '');
     parts.push(
       '<div class="inv-check" data-check-slot></div>',
+      '<p class="inv-save-status" data-state="scene" role="status" data-altered hidden></p>',
       slipRow(step, id)
     );
   }
@@ -606,6 +612,15 @@ function judgeReadings(taken) {
   const r = h?.responses();
   const own = (step?.fields || []).filter(f => !f.compute);
   const at = f => `${id}:${f.id}`;
+  // A reading taken from a scene the student changed says so; it is still taken.
+  if (
+    step?.type === 'measure' &&
+    !step.allowPlacement &&
+    own.length &&
+    own.every(f => String(r[at(f)] ?? '').trim()) &&
+    (taken || edited.has(id))
+  )
+    noteAltered(h.els().body.querySelector('[data-altered]'));
   if (
     step?.type !== 'measure' ||
     !(step.validate || own.some(f => f.misconceptions)) ||

@@ -51,6 +51,39 @@
       "e2": {
         "control": "ecc"
       }
+    },
+    "tides/choose-four-distances": {
+      "d1": {
+        "control": "dist"
+      },
+      "d2": {
+        "control": "dist"
+      },
+      "d3": {
+        "control": "dist"
+      },
+      "d4": {
+        "control": "dist"
+      }
+    },
+    "tides/choose-three-masses": {
+      "m1": {
+        "control": "mass"
+      },
+      "m2": {
+        "control": "mass"
+      },
+      "m3": {
+        "control": "mass"
+      }
+    },
+    "tides/hunt-the-crossing": {
+      "ice": {
+        "control": "dist"
+      },
+      "iron": {
+        "control": "dist"
+      }
     }
   }
 }

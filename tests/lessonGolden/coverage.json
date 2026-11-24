@@ -5,15 +5,16 @@
     "transit-photometry",
     "what-is-a-gravitational-wave",
     "measuring-the-moon",
+    "missing-mass",
+    "tides",
     "weighing-stars",
     "butterfly-effect",
-    "extending-an-experiment",
     "binary-star-planets",
     "black-holes",
+    "extending-an-experiment",
     "propose-an-observation",
+    "radial-velocity",
     "a-night-at-the-telescope",
-    "detect-this-planet",
-    "missing-mass",
     "power-law-gravity",
     "retrograde-motion",
     "the-saturated-star"
@@ -182,6 +183,18 @@
       "key:question.minUncertainty",
       "key:question.valueWithin"
     ],
+    "missing-mass": [
+      "depth-step:advanced/explore",
+      "key:explore.after",
+      "key:explore.decides",
+      "key:explore.depth"
+    ],
+    "tides": [
+      "key:explore.canvas",
+      "key:predict.misconceptions",
+      "key:question.canvas",
+      "key:read.allowInspector"
+    ],
     "weighing-stars": [
       "key:explore.showBarycenter",
       "key:measure.showBarycenter",
@@ -193,11 +206,6 @@
       "key:predict.requires",
       "lock:null"
     ],
-    "extending-an-experiment": [
-      "key:measure.canvas",
-      "key:measure.compute",
-      "key:read.canvas"
-    ],
     "binary-star-planets": [
       "key:explore.requires",
       "lock:{\"placement\":true}"
@@ -206,18 +214,20 @@
       "key:question.checklist",
       "key:read.explainView"
     ],
+    "extending-an-experiment": [
+      "key:measure.compute",
+      "key:read.canvas"
+    ],
     "propose-an-observation": [
       "key:measure.plan",
       "key:question.rubricCriteria"
     ],
+    "radial-velocity": [
+      "key:explore.compare",
+      "key:explore.evidence"
+    ],
     "a-night-at-the-telescope": [
       "key:question.reflect"
-    ],
-    "detect-this-planet": [
-      "key:read.allowInspector"
-    ],
-    "missing-mass": [
-      "key:question.restates"
     ],
     "power-law-gravity": [
       "key:question.explain"
@@ -298,16 +308,16 @@
   ],
   "totals": {
     "investigations": 124,
-    "steps": 1995,
+    "steps": 2006,
     "activityCuts": 6,
-    "lessonTokens": 175,
+    "lessonTokens": 182,
     "activityTokens": 29,
     "stepTypes": {
-      "read": 378,
-      "predict": 206,
-      "measure": 519,
+      "read": 379,
+      "predict": 211,
+      "measure": 525,
       "ellipse": 1,
-      "question": 750,
+      "question": 749,
       "explore": 140,
       "wedges": 1
     }

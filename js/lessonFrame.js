@@ -13,7 +13,8 @@ import {
 } from './lesson/stage.js';
 import { getLocale, onLocaleChange, t } from './i18n/index.js';
 import { EV_OBJECT_PLACED } from './names.js';
-import { stagedStars } from './lesson/stageGate.js';
+import { getInterventionEpoch } from './engine/state.js';
+import { stageKey, stagedStars } from './lesson/stageGate.js';
 
 const MAX_FIT_ATTEMPTS = 24;
 
@@ -405,6 +406,8 @@ function railWords() {
  */
 export function railLeavesScene(on) {
   leaving = on;
+  // In memory only: whether the scene was altered when this one was left.
+  if (!on && open) left.set(open, has && changed());
   if (on) {
     lateWords();
     return railWords();
@@ -427,7 +430,16 @@ export const bindSceneContext = fn => (sceneNow = fn);
 // The scene as a step drew it: paused or not, how many bodies, whether the
 // student placed one, and whether they touched anything outside the lesson
 // panel since (a lesson that pauses the run, or bodies that merge, are not theirs).
-let start = { paused: false, count: 0, at: 0, placed: false, acted: false };
+let start = {
+  paused: false,
+  count: 0,
+  mass: new Map(),
+  key: '',
+  epoch: 0,
+  at: 0,
+  placed: false,
+  acted: false,
+};
 /** An instrument settling in puts bodies in the scene for a moment: only later changes are the student's. */
 const SETTLE_MS = 3000;
 const acted = e => {
@@ -435,20 +447,42 @@ const acted = e => {
 };
 let armed = false;
 const bodies = () => allBodies().length;
+const massOf = () => new Map(allBodies().map(b => [b.id, b.mass]));
+/**
+ * Whether the student changed the bodies this step drew (placed, launched,
+ * removed, burned or reweighed one), as opposed to running or pausing the
+ * clock, which a measurement may need. Read when a reading is taken and once a
+ * second by the note below, never per frame. The lesson standing a new stage
+ * itself (an instrument) is not the student's change.
+ * @returns {boolean} Whether a reading would be taken from an altered scene
+ */
+export function sceneAltered() {
+  if (stageKey() !== start.key) rebase();
+  return (
+    start.placed ||
+    getInterventionEpoch() !== start.epoch ||
+    (start.acted &&
+      Date.now() - start.at > SETTLE_MS &&
+      (bodies() !== start.count ||
+        [...massOf()].some(([id, m]) => start.mass.get(id) !== m)))
+  );
+}
 const changed = () =>
-  start.placed ||
-  (start.acted &&
-    (state.paused !== start.paused ||
-      (Date.now() - start.at > SETTLE_MS && bodies() !== start.count)));
+  sceneAltered() || (start.acted && state.paused !== start.paused);
 const rebase = () =>
   (start = {
     paused: state.paused,
     count: bodies(),
+    mass: massOf(),
+    key: stageKey(),
+    epoch: getInterventionEpoch(),
     at: Date.now(),
     placed: false,
     acted: false,
   });
 
+/** Investigations left in this tab, by id: was the scene altered when the student left (never stored). */
+const left = new Map();
 let timer = 0;
 let open = null;
 let at = -1;
@@ -471,11 +505,50 @@ const say = key => {
   el?.setAttribute('data-state', 'scene');
   draw();
 };
+/** The same action as Reset the scene, worded for a student who went exploring. */
+const resetAction = (label, title) =>
+  Object.assign(document.createElement('button'), {
+    type: 'button',
+    className: 'ui-button',
+    textContent: label,
+    title,
+    onclick: () => $('investigationResetScenario')?.click(),
+  });
+
 const draw = () => {
   if (!el) return;
   el.textContent = said && t(said);
   el.hidden = !said;
+  // Offered while the scene is altered: one way back, never done for them.
+  if (said === 'saved.scene.leave')
+    resetWords().then(() => {
+      if (said === 'saved.scene.leave' && el && !el.querySelector('button'))
+        el.append(' ', resetAction(t('scene.back'), t('reset.scene.hint')));
+    });
 };
+
+/**
+ * The line a measure step shows when a reading is taken from a scene the
+ * student changed, with the one action that fixes it. Cleared when the scene is
+ * as the step drew it. A polite live region; it never blocks the reading.
+ * @param {?HTMLElement} slot - The step's live region for it
+ * @returns {Promise<boolean>} Whether the line is showing
+ */
+export async function noteAltered(slot) {
+  if (!slot) return false;
+  const altered = sceneAltered();
+  if (altered) await resetWords();
+  const now = altered && sceneAltered();
+  slot.hidden = !now;
+  if (now)
+    slot.replaceChildren(
+      t('scene.altered'),
+      ' ',
+      resetAction(t('reset.scene'), t('scene.back'))
+    );
+  else slot.replaceChildren();
+  return now;
+}
 
 function tick() {
   if (!sceneNow().id) {
@@ -485,7 +558,8 @@ function tick() {
   } else if (has && !said && changed()) say('saved.scene.leave');
   // The scene is back as it was drawn (a reset): nothing left to warn of.
   else if (said === 'saved.scene.leave' && !changed()) say('');
-  if (Date.now() - start.at <= SETTLE_MS) start.count = bodies();
+  if (Date.now() - start.at <= SETTLE_MS)
+    [start.count, start.mass] = [bodies(), massOf()];
 }
 
 /**
@@ -503,11 +577,15 @@ function noteScene({ scene }) {
   }
   const { id, n, i } = sceneNow();
   const again = id === open && i === at;
-  const back = id !== open && (i > 0 || n > 1);
+  // Said on a return when the scene was altered on the way out, and when that
+  // is unknown (a tab closed since: only the step is kept, never the scene).
+  const back = id !== open && (i > 0 || n > 1) && left.get(id) !== false;
+  if (id !== open) left.delete(id);
   open = id;
   at = i;
   has = scene;
-  if (!again || !said) rebase();
+  // A redraw of the same step keeps what the student has done to the scene.
+  if (!again || (!said && !start.acted && !start.placed)) rebase();
   if (!again) say(scene && back ? 'saved.scene.back' : '');
   timer ||= setInterval(tick, 1000);
 }

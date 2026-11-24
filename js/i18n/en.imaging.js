@@ -124,6 +124,9 @@ export const EN_IMAGING = {
   'imgW.o.row.mass': 'Mass sum',
   'imgW.o.row.mass68': 'Mass sum, 68 percent interval',
   'imgW.o.row.mass95': 'Mass sum, 95 percent interval',
+  'imgW.o.row.draws': 'Intervals computed from',
+  'imgW.o.value.drawsLow':
+    '{used} random draws on this device, at the low tier; the full tier uses {full}. The mass sum itself is unchanged.',
   'imgW.o.row.plx': 'Parallax used',
   'imgW.o.value.plx': '{value} mas ± {sigma}, relative to reference stars',
   'imgW.o.row.frame': 'Reference frame',

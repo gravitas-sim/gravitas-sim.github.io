@@ -655,12 +655,7 @@ test.describe('reduced motion: a page at rest moves nothing', () => {
       .filter(e => ['content', 'gap'].includes(e.treatment))
       .map(e => e.file)
       .sort();
-    expect(named).toEqual([
-      'js/exoplanetWidgets.js',
-      'js/lab3dLab.js',
-      'js/main.js',
-      'js/render.js',
-    ]);
+    expect(named).toEqual(['js/lab3dLab.js', 'js/main.js', 'js/render.js']);
   });
 
   for (const row of pages) {

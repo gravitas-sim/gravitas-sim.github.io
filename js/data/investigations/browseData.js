@@ -46,11 +46,11 @@ export const BROWSE_META = {
   },
   'missing-mass': {
     tags: ['galaxies', 'gravity'],
-    numericCount: 4,
+    numericCount: 3,
   },
   tides: {
     tags: ['gravity', 'solar-system'],
-    numericCount: 2,
+    numericCount: 1,
   },
   'butterfly-effect': {
     tags: ['chaos', 'orbits'],

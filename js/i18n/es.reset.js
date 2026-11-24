@@ -40,5 +40,8 @@ export const ES_RESET = {
     'Has empezado de nuevo. No había nada guardado, así que solo se restableció tu posición. Puedes deshacerlo hasta que cierres esta investigación.',
   'reset.undo': 'Deshacer',
   'reset.undo.done': 'Tus respuestas y lecturas han vuelto.',
+  'scene.altered':
+    'Cambiaste la escena. Restablece la escena para medir desde el inicio de este paso.',
+  'scene.back': 'Volver a la escena de esta investigación',
   'reset.help.title': 'Empezar de nuevo',
 };

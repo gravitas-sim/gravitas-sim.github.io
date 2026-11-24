@@ -336,8 +336,10 @@ test.describe('the central experiment of each investigation', () => {
     const predict = await walkToSid(page, plan, predictSid);
     await commitPredictionHeld(page, predict);
 
+    // Four distances of the reader's own, a factor of six apart, none of them
+    // the lesson's to prescribe.
     await walkToSid(page, plan, measureSid);
-    const d = [2, 1, 0.5, 0.25];
+    const d = [1.8, 0.9, 0.45, 0.3];
     const at = {};
     for (const r of d) {
       const { before, after } = await setControl(page, control, r);
@@ -353,19 +355,31 @@ test.describe('the central experiment of each investigation', () => {
       d.map(r => at[r])
     );
     expect(n, 'the tidal stretch goes as 1/d^3').toBeCloseTo(-3, 1);
-    expect(at[0.25]).toBeGreaterThan(at[2]);
+    expect(at[0.3]).toBeGreaterThan(at[1.8]);
 
     const evidence = {
-      d1: 2,
-      t1: at[2].toFixed(2),
-      d2: 1,
-      t2: at[1].toFixed(2),
-      d3: 0.5,
-      t3: at[0.5].toFixed(2),
-      d4: 0.25,
-      t4: at[0.25].toFixed(2),
+      d1: 1.8,
+      t1: at[1.8].toFixed(2),
+      d2: 0.9,
+      t2: at[0.9].toFixed(2),
+      d3: 0.45,
+      t3: at[0.45].toFixed(2),
+      d4: 0.3,
+      t4: at[0.3].toFixed(2),
     };
     await recordFields(page, id, measureSid, evidence);
+    const check = page.locator('#investigationBody [data-check-slot]');
+    await expect(check).toContainText(
+      /Four distances spread over a factor of four or more/
+    );
+    // A swapped near and far is refused in words; the right readings restore it.
+    await recordFields(page, id, measureSid, {
+      t1: evidence.t4,
+      t4: evidence.t1,
+    });
+    await expect(check).toContainText(/swapped|opposite/);
+    await recordFields(page, id, measureSid, evidence);
+    await expect(check).toContainText(/Four distances spread over/);
     await expectEvidenceRetained(page, id, measureSid, evidence);
 
     await expectVerdictRevealed(page, plan, predict);
@@ -884,13 +898,48 @@ test.describe('the central experiment of each investigation', () => {
       'the outer stars outrun the Keplerian prediction'
     ).toBeGreaterThan(1.2);
 
+    // The ratio is the student's own reading of a star they chose: select the
+    // lesson's outer star on the canvas and take the ratio beside the field.
+    const chosen = await page.evaluate(async () => {
+      const ls = await import('/js/lessonScene.js');
+      const p = await import('/js/physics.js');
+      const ui = await import('/js/ui.js');
+      const body = ls.roleBody('outer');
+      const hit =
+        body && p.findObjectAtPosition({ x: body.pos.x, y: body.pos.y });
+      if (hit) ui.showObjectInspector(hit.object, hit.type);
+      return hit ? body.name : null;
+    });
+    expect(chosen, 'the outer star is on the canvas to be chosen').toBeTruthy();
+    const take = page.locator('#investigationBody [data-take="obs_gap"]');
+    await expect(take).toBeEnabled();
+    await expect
+      .poll(async () => {
+        await take.click();
+        return page
+          .locator('#investigationBody [data-field$=":obs_gap"]')
+          .inputValue();
+      })
+      .not.toBe('');
+    const taken = Number(
+      await page
+        .locator('#investigationBody [data-field$=":obs_gap"]')
+        .inputValue()
+    );
+    expect(
+      taken,
+      'the star outruns what its visible mass predicts'
+    ).toBeGreaterThan(1);
+    expect(taken).toBeLessThan(3);
     const evidence = {
       obs_slope: slope.toFixed(2),
       obs_shape: 'flat',
-      obs_gap: gap.toFixed(1),
     };
     await recordFields(page, id, measureSid, evidence);
-    await expectEvidenceRetained(page, id, measureSid, evidence);
+    await expectEvidenceRetained(page, id, measureSid, {
+      ...evidence,
+      obs_gap: taken.toFixed(2),
+    });
 
     await expectVerdictRevealed(page, plan, predict);
 
@@ -4052,7 +4101,41 @@ test.describe('the central experiment of each investigation', () => {
     return m ? Number(m[1]) : NaN;
   };
 
-  test('the-scale-of-the-solar-system: Neptune is 30 astronomical units out, four hours of light @accepts:ce.the-scale-of-the-solar-system', async ({
+  /** Select a planet or comet the way a click does: by name, on the canvas. */
+  const selectBody = (page, role, name) =>
+    page.evaluate(
+      async ([r, n]) => {
+        const p = await import('/js/physics.js');
+        const ui = await import('/js/ui.js');
+        if (r) {
+          // A planet is chosen from the lesson's object list, as a reader without a pointer does.
+          const chip = [...document.querySelectorAll('button.inv-object')].find(
+            b => b.textContent.toLowerCase().includes(r)
+          );
+          chip?.click();
+          await new Promise(res => setTimeout(res, 300));
+          return ui.state.selectedObject?.object?.name ?? null;
+        }
+        const body = p.comets.find(c => c.name === n) || p.comets[0];
+        const hit =
+          body && p.findObjectAtPosition({ x: body.pos.x, y: body.pos.y });
+        if (hit) ui.showObjectInspector(hit.object, hit.type);
+        return ui.state.selectedObject?.object?.name ?? null;
+      },
+      [role, name]
+    );
+  const field = (page, id, sid, f) =>
+    page.locator(`#investigationBody [data-field="${id}:${sid}:${f}"]`);
+  const numberIn = async box =>
+    Number(String(await box.inputValue()).replace(/[^0-9.eE+-]/g, ''));
+  const take = async (page, f) => {
+    await page.locator(`#investigationBody [data-take="${f}"]`).click();
+    await expect(
+      page.locator(`#investigationBody input[data-field$=":${f}"]`)
+    ).not.toHaveValue('');
+  };
+
+  test('the-scale-of-the-solar-system: Neptune is 30 astronomical units out, four hours of light, and any marble puts it 353,000 Earths away @accepts:ce.the-scale-of-the-solar-system', async ({
     page,
     app,
   }) => {
@@ -4063,27 +4146,62 @@ test.describe('the central experiment of each investigation', () => {
 
     await openInvestigation(page, app, id);
     const plan = await lessonPlan(page, id);
+
+    // The distances are taken from the planets the student selects.
+    await walkToSid(page, plan, 'three-distances');
+    const want = { earth: 1, jupiter: 5.2, neptune: 30.07 };
+    for (const f of Object.keys(want)) {
+      expect(await selectBody(page, f)).toBe(f[0].toUpperCase() + f.slice(1));
+      await expect
+        .poll(async () =>
+          probeNumber(await probeRows(page), /^Distance from the Sun/i)
+        )
+        .not.toBeNaN();
+      await take(page, f);
+      const got = await numberIn(field(page, id, 'three-distances', f));
+      expect(Math.abs(got - want[f])).toBeLessThan(
+        Math.max(0.05, 0.02 * want[f])
+      );
+    }
+    await expect(
+      page.locator('#investigationBody .inv-check.is-ok')
+    ).toBeVisible();
+    const neptune = await field(
+      page,
+      id,
+      'three-distances',
+      'neptune'
+    ).inputValue();
+
+    // The prediction comes before the constant; the light time follows from the distance taken.
     const predict = await walkToSid(page, plan, predictSid);
+    await expect(page.locator('#investigationBody')).not.toContainText(
+      /499|seconds/
+    );
     await commitPredictionHeld(page, predict);
     await walkToSid(page, plan, measureSid);
-
-    await expect
-      .poll(async () =>
-        probeNumber(await probeRows(page), /^Neptune: distance/i)
-      )
-      .not.toBeNaN();
-    const au = probeNumber(await probeRows(page), /^Neptune: distance/i);
-    expect(Math.abs(au - 30.07)).toBeLessThan(0.5);
-
-    await recordFields(page, id, measureSid, { neptune: au.toFixed(2) });
-    await expectDerived(page, id, measureSid, { hours: 4.17 }, 0.03);
-    await expectEvidenceRetained(page, id, measureSid, {
-      neptune: au.toFixed(2),
-    });
+    await expectDerived(page, id, measureSid, { neptune: 30.07 }, 0.02);
+    await recordFields(page, id, measureSid, { hours: '4.17' });
+    await expect(
+      page.locator('#investigationBody .inv-check.is-ok')
+    ).toBeVisible();
+    await expectEvidenceRetained(page, id, measureSid, { hours: '4.17' });
     await expectVerdictRevealed(page, plan, predict);
+
+    // Any marble, with its own distance for Neptune.
+    await walkToSid(page, plan, 'choose-your-marble');
+    const au = (149597870.7 / 12742) * 0.025; // a 2.5 cm marble, in meters per AU
+    await recordFields(page, id, 'choose-your-marble', {
+      marble: '2.5',
+      nep_m: String(Math.round(au * Number(neptune))),
+    });
+    await expectDerived(page, id, 'choose-your-marble', { au_m: au }, 0.01);
+    await expect(
+      page.locator('#investigationBody .inv-check.is-ok')
+    ).toBeVisible();
   });
 
-  test('comets-and-the-sun: the first model comet runs from 5.79 to 17.84 astronomical units and stays below 160 K @accepts:ce.comets-and-the-sun', async ({
+  test('comets-and-the-sun: a chosen comet shows its tail inside 3 AU, its two distances are taken, and the real Halley reaches 360 K @accepts:ce.comets-and-the-sun', async ({
     page,
     app,
   }) => {
@@ -4097,8 +4215,16 @@ test.describe('the central experiment of each investigation', () => {
     const predict = await walkToSid(page, plan, predictSid);
     await commitPredictionHeld(page, predict);
     await walkToSid(page, plan, watchSid);
-    await walkToSid(page, plan, 'orbit-ends');
 
+    // The readout follows the comet the student selects and says whether a tail is drawn.
+    expect(await selectBody(page, null, 'Wild 2')).toBe('Wild 2');
+    await expect
+      .poll(
+        async () => (await probeRows(page)).find(r => /^Tail/i.test(r)) ?? ''
+      )
+      .toMatch(/drawn|not drawn/);
+
+    await walkToSid(page, plan, 'orbit-ends');
     await expect
       .poll(async () =>
         probeNumber(await probeRows(page), /^Closest approach to the Sun/i)
@@ -4107,21 +4233,126 @@ test.describe('the central experiment of each investigation', () => {
     const rows = await probeRows(page);
     const peri = probeNumber(rows, /^Closest approach to the Sun/i);
     const apo = probeNumber(rows, /^Furthest distance from the Sun/i);
-    expect(Math.abs(peri - 5.79)).toBeLessThan(0.1);
-    expect(Math.abs(apo - 17.84)).toBeLessThan(0.2);
-
+    expect(peri).toBeLessThan(3);
+    expect(apo).toBeGreaterThan(peri);
+    await take(page, 'peri');
+    await take(page, 'apo');
     const ends = { peri: peri.toFixed(2), apo: apo.toFixed(2) };
-    await recordFields(page, id, 'orbit-ends', ends);
     await expectEvidenceRetained(page, id, 'orbit-ends', ends);
+    await expect(
+      page.locator('#investigationBody .inv-check.is-ok')
+    ).toBeVisible();
+
+    // The temperatures are worked out from the two distances the student took.
     await walkToSid(page, plan, 'heat-at-the-ends');
-    await recordFields(page, id, 'heat-at-the-ends', ends);
+    await expectDerived(page, id, 'heat-at-the-ends', ends, 0.001);
+    await recordFields(page, id, 'heat-at-the-ends', {
+      t_peri: (275.5 / Math.sqrt(peri)).toFixed(0),
+      t_apo: (275.5 / Math.sqrt(apo)).toFixed(0),
+    });
+    await expect(
+      page.locator('#investigationBody .inv-check.is-ok')
+    ).toContainText(/above it/);
+
+    // The real Halley is predicted, then worked out, then set beside the prediction.
+    const halley = await walkToSid(page, plan, 'halley-heat-predict');
+    await commitPredictionHeld(page, halley);
+    await walkToSid(page, plan, 'the-real-halley');
+    await recordFields(page, id, 'the-real-halley', { t_q: '360' });
+    await expect(
+      page.locator('#investigationBody .inv-check.is-ok')
+    ).toBeVisible();
+    await expectVerdictRevealed(page, plan, halley);
+    await expectVerdictRevealed(page, plan, predict);
+  });
+
+  test('moons-of-the-giants: one frame a night aliases Io, so the combination is only small on the sampling the student chooses well', async ({
+    page,
+    app,
+  }) => {
+    test.slow();
+    const id = 'moons-of-the-giants';
+    await openInvestigation(page, app, id);
+    const plan = await lessonPlan(page, id);
+
+    // The prediction is held, so the readings open only once it is made.
+    const periodsGuess = await walkToSid(page, plan, 'three-periods-predict');
+    await commitPredictionHeld(page, periodsGuess);
+
+    // The three periods are taken from the instrument, one moon at a time.
+    await walkToSid(page, plan, 'three-periods');
+    for (const [moon, f, v] of [
+      [1, 'p1', 1.7682],
+      [2, 'p2', 3.548],
+      [3, 'p3', 7.1413],
+    ]) {
+      await setControl(page, 'moon', moon);
+      await take(page, f);
+      expect(
+        Math.abs((await numberIn(field(page, id, 'three-periods', f))) - v)
+      ).toBeLessThan(0.002);
+    }
+    await expect(
+      page.locator('#investigationBody .inv-check.is-ok')
+    ).toBeVisible();
+
+    // The student divides them.
+    await walkToSid(page, plan, 'the-ratios');
     await expectDerived(
       page,
       id,
-      'heat-at-the-ends',
-      { t_peri: 275.5 / Math.sqrt(peri), t_apo: 275.5 / Math.sqrt(apo) },
-      0.03
+      'the-ratios',
+      { p1: 1.7682, p2: 3.548 },
+      0.001
     );
-    await expectVerdictRevealed(page, plan, predict);
+    await recordFields(page, id, 'the-ratios', { r12: '2.007', r23: '2.013' });
+    await expect(
+      page.locator('#investigationBody .inv-check.is-ok')
+    ).toBeVisible();
+
+    // The sampling is the student's decision: the tool opens on one frame a night.
+    const sum = 'how-sure-is-the-sum';
+    const combinationGuess = await walkToSid(
+      page,
+      plan,
+      'the-laplace-combination'
+    );
+    await commitPredictionHeld(page, combinationGuess);
+    await walkToSid(page, plan, sum);
+    const six = async () => {
+      for (const [moon, q, e] of [
+        [1, 'q1', 'e1'],
+        [2, 'q2', 'e2'],
+        [3, 'q3', 'e3'],
+      ]) {
+        await setControl(page, 'moon', moon);
+        await take(page, q);
+        await take(page, e);
+      }
+    };
+    await six();
+    expect(
+      Math.abs((await numberIn(field(page, id, sum, 'q1'))) - 2.3018)
+    ).toBeLessThan(0.001);
+    await expect(
+      page.locator('#investigationBody .inv-check.is-error')
+    ).toContainText(/alias/);
+    await expectDerived(page, id, sum, { laplace: -47.18 }, 0.01);
+
+    await setControl(page, 'cadence', 1);
+    await six();
+    expect(
+      Math.abs((await numberIn(field(page, id, sum, 'q1'))) - 1.7682)
+    ).toBeLessThan(0.001);
+    await expectDerived(page, id, sum, { laplace: 0.022, sig: 0.025 }, 0.06);
+    await expect(
+      page.locator('#investigationBody .inv-check.is-ok')
+    ).toBeVisible();
+
+    // The question after it quotes the student's own numbers.
+    await walkToSid(page, plan, 'consistent-with-zero');
+    await expect(page.locator('#investigationBody .inv-verdict')).toContainText(
+      /degrees a day/
+    );
   });
 });

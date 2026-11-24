@@ -11,7 +11,7 @@ const MODEL_PAGE = 'https://gravitas-sim.online/model/';
 import { INSTRUCTOR as MEASUREMENT } from './investigations/depth/measurement-sequence.js';
 import { INSTRUCTOR as SATELLITE } from './investigations/depth/satellite-sequence.js';
 import { INSTRUCTOR as ATMOSPHERE } from './investigations/depth/atmosphere-sequence.js';
-import { INSTRUCTOR as PLANETS } from './investigations/planets-sequence.js';
+import { INSTRUCTOR as PLANETS } from './investigations/planets-guides.js';
 import { INSTRUCTOR as EXPOSURE } from './investigations/exposure-sequence.js';
 import { INSTRUCTOR as STRATEGY } from './investigations/strategy-sequence.js';
 import { INSTRUCTOR as BINARIES } from './investigations/binaries-sequence.js';
@@ -2925,7 +2925,7 @@ export const INSTRUCTOR_CONTENT = {
     topic: 'Exoplanet detection and characterization',
     difficulty: 'Introductory, written for non-science majors',
     placement:
-      'The third of the three exoplanet investigations, after Finding Planets by Their Shadows and before or after The Goldilocks Question. It closes the inference chain: Shadows measures a radius, this one measures a mass and combines the two into a density, and Goldilocks asks what that buys. It works standalone, but the payoff at steps 30-33 lands hardest for students who have done the transit investigation.',
+      'The third of the three exoplanet investigations, after Finding Planets by Their Shadows and before or after The Goldilocks Question. It closes the inference chain: Shadows measures a radius, this one measures a mass and combines the two into a density, and Goldilocks asks what that buys. It works standalone, but the payoff at steps 31-34 lands hardest for students who have done the transit investigation.',
     overview: `Students discover that a star and its planet both orbit their common center of
       mass, that the star's share of that motion is measurable through the Doppler shift of
       its spectral lines, and that the size of the wobble gives the planet's mass. They then
@@ -2938,7 +2938,7 @@ export const INSTRUCTOR_CONTENT = {
     priorKnowledge: [
       'That planets orbit stars, and that gravity acts between any two masses',
       'That light can be spread into a spectrum (the investigation explains absorption lines from scratch)',
-      'Helpful but not required: Finding Planets by Their Shadows, for the transit radius reused at step 30',
+      'Helpful but not required: Finding Planets by Their Shadows, for the transit radius reused at step 31',
       'Helpful but not required: Weighing the Stars, for the center-of-mass rule reused at step 4',
     ],
     keyConcepts: [
@@ -2969,47 +2969,47 @@ export const INSTRUCTOR_CONTENT = {
     ],
     features: [
       {
-        name: 'Exoplanet Characterization Lab scenario (steps 1, 3, 10, 14)',
+        name: 'Exoplanet Characterization Lab scenario (steps 1, 3, 11, 15)',
         text: 'HD 209458 with the star free to move. The transit scenarios pin their star so the light curve stays centered; this one initializes both bodies in the center-of-mass frame with zero net momentum, so the wobble the instruments measure is the wobble the simulation is doing. The star circles a point 2.7e-5 AU away at 84 m/s.',
       },
       {
-        name: 'Radial Velocity panel (steps 10-14)',
+        name: 'Radial Velocity panel (steps 11-15)',
         text: 'A live instrument in the Tools list. It projects the observed star’s actual simulated velocity onto the shared line of sight and plots it against time, reporting K once a full cycle is recorded. Velocities are relative to the system barycenter so the curve sits around zero.',
       },
       {
         name: 'Astrometry panel (available from Tools)',
-        text: 'Plots the star’s path on the sky about the barycenter, with the physical reflex orbit in AU and the angle it subtends shown separately. Not used by an investigation step, but worth demonstrating alongside step 24.',
+        text: 'Plots the star’s path on the sky about the barycenter, with the physical reflex orbit in AU and the angle it subtends shown separately. Not used by an investigation step, but worth demonstrating alongside step 25.',
       },
       {
         name: 'Shared observer control',
         text: 'Position angle and inclination live in one module and every observing panel mounts the same control. Changing inclination in one panel changes it everywhere, which is what makes the step-24 comparison honest.',
       },
       {
-        name: 'reflex-motion instrument (steps 4, 6)',
+        name: 'reflex-motion instrument (steps 4, 6, 7)',
         text: 'Star, planet and barycenter with the stellar orbit magnified by a labeled factor. The magnification is cosmetic and stated on the picture; the reported numbers are physical.',
       },
       {
-        name: 'rv-observer instrument (step 9)',
+        name: 'rv-observer instrument (step 10)',
         text: 'Orbit on the left with a line-of-sight arrow, curve on the right with the star’s current position marked. Direction is given in words as well as color.',
       },
       {
-        name: 'rv-mass instrument (step 16)',
+        name: 'rv-mass instrument (step 17)',
         text: 'K against planet mass with everything else held fixed. The straight line is the point.',
       },
       {
-        name: 'rv-inclination instrument (steps 17, 19)',
-        text: 'Two bars: true mass, and the mass radial velocity would report. Used both to weigh the planet at step 17 and to break the reported mass at step 19.',
+        name: 'rv-inclination instrument (steps 18, 20)',
+        text: 'Two bars: true mass, and the mass radial velocity would report. Used both to weigh the planet at step 18 and to break the reported mass at step 20.',
       },
       {
-        name: 'astrometry-signature instrument (steps 24, 28)',
+        name: 'astrometry-signature instrument (steps 25, 29)',
         text: 'The sky path at any inclination, with sliders for planet mass, orbit size and distance. Distance changes the angle and not the orbit, which the readout shows explicitly.',
       },
       {
-        name: 'method-comparison instrument (step 26)',
+        name: 'method-comparison instrument (step 27)',
         text: 'Transit, radial velocity and astrometry side by side as one system tilts. The astrometry bar deliberately stays full: its amplitude does not vanish face-on.',
       },
       {
-        name: 'planet-characterization instrument (steps 31, 34)',
+        name: 'planet-characterization instrument (steps 32, 35)',
         text: 'The inference chain as a table. Calls habitability.js directly for insolation and zone bounds, so its numbers are identical to The Goldilocks Question by construction rather than by coincidence.',
       },
     ],
@@ -3022,7 +3022,7 @@ export const INSTRUCTOR_CONTENT = {
       {
         claim: 'Radial velocity measures the planet’s speed.',
         response:
-          'It measures the star’s. The planet never enters the measurement directly, which is exactly why the method works on planets nobody can see. Worth restating at step 10 when the live panel opens.',
+          'It measures the star’s. The planet never enters the measurement directly, which is exactly why the method works on planets nobody can see. Worth restating at step 11 when the live panel opens.',
       },
       {
         claim: 'A Doppler shift makes the star visibly change color.',
@@ -3032,22 +3032,22 @@ export const INSTRUCTOR_CONTENT = {
       {
         claim: 'Zero radial velocity means the star has stopped.',
         response:
-          'It means all of the star’s motion is across our view at that instant. Step 9 makes this visible; a student who misses it will misread the curve’s zero crossings as pauses.',
+          'It means all of the star’s motion is across our view at that instant. Step 10 makes this visible; a student who misses it will misread the curve’s zero crossings as pauses.',
       },
       {
         claim: 'Radial velocity gives the planet’s true mass.',
         response:
-          'It gives M sin i, a lower limit, unless something else fixes the inclination. Steps 18-21 are built entirely around this, and step 21 is where the transit connection pays off.',
+          'It gives M sin i, a lower limit, unless something else fixes the inclination. Steps 19-22 are built entirely around this, and step 22 is where the transit connection pays off.',
       },
       {
         claim: 'A face-on system cannot be detected by any wobble method.',
         response:
-          'Radial velocity fails; astrometry does not. The astrometric semi-major axis is unchanged face-on, and the projected path is a circle rather than a line. Step 26 asserts this deliberately because the opposite is widely and wrongly assumed.',
+          'Radial velocity fails; astrometry does not. The astrometric semi-major axis is unchanged face-on, and the projected path is a circle rather than a line. Step 27 asserts this deliberately because the opposite is widely and wrongly assumed.',
       },
       {
         claim: 'Astrometry photographs the planet.',
         response:
-          'It measures the star’s position. The planet stays invisible throughout, which is stated at step 23 and worth repeating if anyone describes the sky plot as an image of the planet.',
+          'It measures the star’s position. The planet stays invisible throughout, which is stated at step 24 and worth repeating if anyone describes the sky plot as an image of the planet.',
       },
       {
         claim: 'Density tells you exactly what a planet is made of.',
@@ -3057,18 +3057,18 @@ export const INSTRUCTOR_CONTENT = {
       {
         claim: 'A planet in the habitable zone is habitable, or inhabited.',
         response:
-          'The zone is a statement about the orbit under assumed climate conditions, not a measurement of the planet. Step 36 asks students to name what is still unknown for exactly this reason; answers naming atmosphere, rotation or albedo are the ones to reward.',
+          'The zone is a statement about the orbit under assumed climate conditions, not a measurement of the planet. Step 37 asks students to name what is still unknown for exactly this reason; answers naming atmosphere, rotation or albedo are the ones to reward.',
       },
     ],
     teachingNotes: [
       'Collect the step 3 prediction out loud before anyone runs the simulation. "Only the planet moves" is the majority answer in most classes and the rest of the investigation is built on overturning it.',
-      'At step 10 the live panel takes about thirteen seconds per orbit. Tell students to let it run for two full cycles before moving on; a partial curve gives a K that is too small, and the panel says "so far" while that is true.',
-      'Step 14 asks students to read K off the panel rather than compute it. The panel reports the semi-amplitude, not the full range, which is the definition step 13 just gave them. If a student writes 168 rather than 84 they have taken the peak-to-peak value.',
-      'Step 17 is the quantitative centerpiece. Students match a mass to their measured K rather than rearranging a formula with G in SI units; the arithmetic is the software’s job and the inference is theirs.',
-      'Steps 18-21 work best if you pause between 19 and 20 and ask what a survey would report for a planet it can only see at 30 degrees. The answer, "half its real mass", is the whole of M sin i in one sentence.',
-      'Step 26 is the step to slow down on. The astrometry bar staying full while the radial-velocity bar shrinks is counterintuitive and is the single most valuable idea in the second half.',
-      'For step 35, resist letting students answer from one column. Planet B is in the zone and Planet C is rocky; only A is both, and the point of the exercise is that neither fact alone was sufficient.',
-      'Step 36 is short-answer and deliberately open. Any property beyond the reach of the measurements, tied to liquid water, earns full credit. It is a good exit ticket.',
+      'At step 11 the live panel takes about thirteen seconds per orbit. Tell students to let it run for two full cycles before moving on; a partial curve gives a K that is too small, and the panel says "so far" while that is true.',
+      'Step 15 asks students to read K off the panel rather than compute it. The panel reports the semi-amplitude, not the full range, which is the definition step 14 just gave them. If a student writes 168 rather than 84 they have taken the peak-to-peak value.',
+      'Step 18 is the quantitative centerpiece. Students match a mass to their measured K rather than rearranging a formula with G in SI units; the arithmetic is the software’s job and the inference is theirs.',
+      'Steps 19-22 work best if you pause between 20 and 21 and ask what a survey would report for a planet it can only see at 30 degrees. The answer, "half its real mass", is the whole of M sin i in one sentence.',
+      'Step 27 is the step to slow down on. The astrometry bar staying full while the radial-velocity bar shrinks is counterintuitive and is the single most valuable idea in the second half.',
+      'For step 36, resist letting students answer from one column. Planet B is in the zone and Planet C is rocky; only A is both, and the point of the exercise is that neither fact alone was sufficient.',
+      'Step 37 is short-answer and deliberately open. Any property beyond the reach of the measurements, tied to liquid water, earns full credit. It is a good exit ticket.',
     ],
     discussion: [
       'The first exoplanet surveys found mostly hot Jupiters. What does that tell us about planetary systems, and what does it tell us only about the surveys?',
@@ -3242,7 +3242,7 @@ export const INSTRUCTOR_CONTENT = {
     topic: 'Dark matter',
     difficulty: 'Introductory, with one genuinely open-ended fitting exercise',
     placement:
-      'Anywhere after orbital motion has been covered, and it needs nothing else. It pairs naturally with a unit on galaxies or on cosmology, and it also works as a single-session standalone: thirty-three screens, one argument, and a result students derive rather than receive. If you teach Kepler earlier in the term, this is the investigation that shows what happens when Kepler stops working. The rotation-curve fitting sequence at steps 13-19 is the longest single activity in Gravitas and the closest any of these investigations comes to what research actually feels like; if you are short of time it is the part to protect, and steps 2-3 and 6-8 are the scaffolding that makes it work.',
+      'Anywhere after orbital motion has been covered, and it needs nothing else. It pairs naturally with a unit on galaxies or on cosmology, and it also works as a single-session standalone: thirty-one screens, one argument, and a result students derive rather than receive. If you teach Kepler earlier in the term, this is the investigation that shows what happens when Kepler stops working. The rotation-curve fitting sequence at steps 13-20 is the longest single activity in Gravitas and the closest any of these investigations comes to what research actually feels like; if you are short of time it is the part to protect, and steps 2-3 and 6-8 are the scaffolding that makes it work.',
     overview: `Students weigh systems twice over, once by adding up the mass that is visible and once
       by watching how things move, and discover that the two answers agree for the Solar System and
       disagree badly for anything larger. The investigation opens by making a rotation curve into a tool
@@ -3254,11 +3254,11 @@ export const INSTRUCTOR_CONTENT = {
       \n\nThe center of the investigation is a fitting exercise. Students are handed a rotation curve built
       from NGC 3198's published parameters, labeled as synthetic on the panel, and a model with a
       stellar disc and a dark halo, and asked to reproduce the points. They try the disc alone first,
-      with both of its parameters free, and cannot do it: the best possible stars-only fit misses by
+      from a disc of no mass with both parameters free, and cannot do it: the best possible stars-only fit misses by
       about 15 km/s against error bars of about 5, and it misses worst at
       the outer edge. A choice step draws out why - the shortfall is the wrong shape, not merely the
       wrong size - and then the halo goes in and the fit closes. Students read off how much dark mass
-      per unit of visible mass their own fit implies.
+      per unit of visible mass their fit implies; a deeper step gives it an error bar.
       \n\nThe rest is consequence and context. A single star is launched on a circular orbit and the
       halo is removed underneath it; then the same experiment is run on ninety stars in the live
       simulation and the disc comes apart. Zwicky's 1933 cluster measurement follows, first on the real
@@ -3269,8 +3269,8 @@ export const INSTRUCTOR_CONTENT = {
     priorKnowledge: [
       'That gravity holds orbits together, and that a faster orbit implies more mass inside it',
       'Reading a point off a graph, and the idea that a straight line on a log plot is a power law',
-      'Squaring a number and dividing on a calculator; the arithmetic at steps 25 and 26 is two multiplications',
-      'Comfort with the idea of fitting a model to data with error bars, and that a fit is judged against those errors rather than against zero. Steps 13-19 introduce this from scratch, but a class that has met it before will move faster',
+      'Squaring a number and dividing on a calculator; the arithmetic at steps 27 and 28 is two multiplications',
+      'Comfort with the idea of fitting a model to data with error bars, and that a fit is judged against those errors rather than against zero. Steps 13-20 introduce this from scratch, but a class that has met it before will move faster',
       'Helpful but not required: Kepler’s Laws, for the circular-orbit speed relation the whole investigation leans on',
     ],
     keyConcepts: [
@@ -3313,7 +3313,7 @@ export const INSTRUCTOR_CONTENT = {
     ],
     features: [
       {
-        name: 'The same curve, two explanations (steps 27-30)',
+        name: 'The same curve, two explanations (advanced path)',
         text: 'The MOND comparison. It scores a dark-matter halo and Milgrom\u2019s modified law against the same twelve synthetic measurements, in the same units, and reports both residuals side by side along with how many numbers each explanation had to be given. The halo generated this curve, so it matches exactly with three fitted numbers; MOND has no halo and only the disc mass to adjust, and with one fitted number it lands about 2 km/s from the data, inside the error bars. a\u2080 is displayed and not adjustable, because it is meant to be a constant of nature rather than a property of this galaxy. \n\nThe two want different discs - MOND prefers about two thirds the stellar mass - and that is worth drawing out rather than glossing: a rotation curve does not measure a stellar mass-to-light ratio, so "how heavy is the disc" was never pinned down by the data in either picture. This is the disc-halo degeneracy and it is real. \n\nThe instrument will not declare a winner, and neither should the discussion. What it demonstrates is that this measurement underdetermines the explanation.',
       },
       {
@@ -3329,35 +3329,35 @@ export const INSTRUCTOR_CONTENT = {
         text: 'Two stacked plots — a rotation curve above, the enclosed mass it implies below — joined by one draggable radius marker. The lower plot is the upper one with M = v squared r over G applied to it, and the panel says so. Three curves are selectable: falling, flat, and a real galaxy with the visible contribution drawn as a dashed line. The readout states what happens to the enclosed mass when the radius doubles, which is the sentence step 7 grades.',
       },
       {
-        name: 'Fit a real galaxy (steps 13-19)',
-        text: 'The centerpiece. A synthetic rotation curve with error bars, built from NGC 3198’s published parameters and labeled as synthetic on the canvas, and a four-slider model: disc mass, disc scale length, halo strength and halo core radius. It scores the fit as an RMS residual in km/s and states the mean error bar alongside it, so a student can tell a good fit from a lucky one, and it names the radius of the worst single miss and whether the model is too fast or too slow there. The plot marks FITTED when the residual drops below the errors. Steps 14-16 hide the two halo sliders so the disc has to be tried on its own first.',
+        name: 'Fit a real galaxy (steps 13-20)',
+        text: 'The centerpiece. A synthetic rotation curve with error bars, built from NGC 3198’s published parameters and labeled as synthetic on the canvas, and a four-slider model: disc mass, disc scale length, halo strength and halo core radius. It scores the fit as an RMS residual in km/s and states the mean error bar alongside it, so a student can tell a good fit from a lucky one, and it names the radius of the worst single miss and whether the model is too fast or too slow there. The plot marks FITTED when the residual drops below the errors. Steps 14-16 hide the two halo sliders so the disc has to be tried on its own first, and open with the disc at zero; step 17 holds the disc and leaves the halo to the student.',
       },
       {
-        name: 'What the halo is holding (step 20)',
+        name: 'What the halo is holding (step 21)',
         text: 'A single star launched on a circular orbit at the speed the full model gives it, integrated live, with a halo toggle. Switching the halo off removes the mass without touching the motion, which is precisely the situation a flat rotation curve presents, and the star leaves. The readout shows the launch speed beside the speed the visible disc alone could have held, and the view does not rescale when the star escapes.',
       },
       {
-        name: 'Weigh a cluster by how fast it jitters (step 23)',
+        name: 'Weigh a cluster by how fast it jitters (step 25)',
         text: 'The virial theorem applied to the real Coma Cluster, with sliders for the measured dispersion and the radius, and a third slider that selects how sigma becomes the mean square speed. Two of its three positions are wrong on purpose: sigma without squaring, and sigma squared without the factor of three for the two unobserved directions. The readout warns when a wrong one is selected and says why. Two bars compare the mass the motion demands against the galaxies and the hot gas.',
       },
       {
-        name: 'Where the mass of the universe is (step 28)',
+        name: 'Where the mass of the universe is (step 30)',
         text: 'Planck 2018 fractions revealed one layer at a time: everything, then the matter alone, then the ordinary matter alone, then the stellar share of it. Each layer rescales to the slice above, which is what makes the last number land — every star and nebula ever photographed is about half a per cent of the universe.',
       },
       {
-        name: 'Rotation Curve panel (live, used at steps 4-5, 9-12 and 21-24)',
+        name: 'Rotation Curve panel (live, used at steps 4-5, 9-12 and 22-26)',
         text: 'A live instrument in the Tools list. It plots one point per body from the simulation’s own positions and velocities, over a dashed line showing the speeds the visible mass alone would produce and, when the halo is on, a solid line including it. It reports a power-law fit to the outer curve and names the shape in words. The inner region excluded from the fit is shaded, so the reported slope is visibly the slope of the outer curve.',
       },
       {
-        name: 'Dark-matter halo toggle (step 21)',
+        name: 'Dark-matter halo toggle (step 23)',
         text: 'Inside the Rotation Curve panel. It adds or removes a term in the force law rather than changing the display, which is why the disc physically disperses when it is switched off. The flat-speed and core-radius sliders beside it set the halo’s two parameters.',
       },
       {
-        name: 'Spiral Galaxy and Milky Way Rotation scenarios (steps 9-12 and 21)',
+        name: 'Spiral Galaxy and Milky Way Rotation scenarios (steps 9-12, 22 and 23)',
         text: 'The same disc twice: ninety stars and a central bulge, identical visible mass. In the first, each star is launched at the circular speed the visible mass implies, and the curve falls with an exponent near -0.45. In the second, every star moves at the same speed regardless of radius, and the halo is on because the disc does not survive without it.',
       },
       {
-        name: 'Coma Cluster scenario (steps 22-24)',
+        name: 'Coma Cluster scenario (steps 24 and 26)',
         text: 'Twenty-four galaxies on randomly oriented orbits, named after real members of Coma. Galaxy is a new object type in Gravitas: a point mass with a disc drawn on it, which does not merge or evolve. The scenario is paused and carries a fixed seed, so the numbers a class reads are reproducible.',
       },
       {
@@ -3369,7 +3369,7 @@ export const INSTRUCTOR_CONTENT = {
       {
         claim: 'Dark matter is a theory somebody invented to patch up gravity.',
         response:
-          'The discrepancy is a measurement, made independently in galaxies and in clusters decades apart, and this investigation has students reproduce both. What dark matter names is the explanation, and step 27 exists specifically to separate the two. A student who leaves able to make that distinction has the most valuable thing in the investigation.',
+          'The discrepancy is a measurement, made independently in galaxies and in clusters decades apart, and this investigation has students reproduce both. What dark matter names is the explanation, and step 29 exists specifically to separate the two. A student who leaves able to make that distinction has the most valuable thing in the investigation.',
       },
       {
         claim:
@@ -3381,7 +3381,7 @@ export const INSTRUCTOR_CONTENT = {
         claim:
           'A flat rotation curve means the stars are moving too fast to stay bound.',
         response:
-          'They are moving too fast for the visible mass to hold, which is not the same claim. The galaxies are bound and stable; what the measurement shows is that something is doing the binding that we cannot see. Steps 20 and 21 make the difference concrete: remove the halo and the star, and then the whole disc, really do come apart.',
+          'They are moving too fast for the visible mass to hold, which is not the same claim. The galaxies are bound and stable; what the measurement shows is that something is doing the binding that we cannot see. Steps 21 and 23 make the difference concrete: remove the halo and the star, and then the whole disc, really do come apart.',
       },
       {
         claim:
@@ -3397,7 +3397,7 @@ export const INSTRUCTOR_CONTENT = {
       {
         claim: 'Dark matter has been detected.',
         response:
-          'Its gravitational effects have been measured many times over and in several unrelated ways. The substance itself has never been detected in a laboratory and no candidate particle has been identified, after four decades of searching. Step 29 says this plainly and it is worth saying again out loud.',
+          'Its gravitational effects have been measured many times over and in several unrelated ways. The substance itself has never been detected in a laboratory and no candidate particle has been identified, after four decades of searching. Step 31 says this plainly and it is worth saying again out loud.',
       },
       {
         claim:
@@ -3412,22 +3412,22 @@ export const INSTRUCTOR_CONTENT = {
       },
     ],
     teachingNotes: [
-      'Have the class open the Rotation Curve panel at step 4 and leave it open for the rest of the investigation. The live measurements at steps 4-5, 9-12 and 21-24 all come from that one instrument, and the argument is much clearer when students watch the same plot change under three different systems than when they open and close it. Steps 2-3, 6-8, 13-20, 23 and 28 use their own docked instruments instead and need nothing from the rail.',
+      'Have the class open the Rotation Curve panel at step 4 and leave it open for the rest of the investigation. The live measurements at steps 4-5, 9-12 and 22-26 all come from that one instrument, and the argument is much clearer when students watch the same plot change under three different systems than when they open and close it. Steps 2-3, 6-8, 13-21, 25 and 30 use their own docked instruments instead and need nothing from the rail.',
       'Steps 2 and 3 look like warm-up and are not. Everything after them depends on a student being able to look at a curve and say where the mass is, and this is the only place they get to build that by moving mass around rather than by being told. Ten minutes here saves twenty at step 16.',
       'Collect the step 9 prediction before anyone looks at the panel. Most classes correctly predict a falling curve, which is exactly what you want: the surprise at step 12 only lands for students who had committed to the other answer first.',
-      'Steps 13 to 19 are the investigation. Budget half the session for them and resist the urge to shorten. The intended experience at step 14 is sustained, honest failure: students should push the disc mass to the top of its range, watch the inner curve overshoot, bring it back, try the scale length, and arrive at about 15 km/s of residual convinced there is nothing left to try. Do not rescue them, and do not let a fast student tell the room the answer.',
+      'Steps 13 to 20 are the investigation. Budget half the session for them and resist the urge to shorten. The intended experience at step 14 is sustained, honest failure: students should push the disc mass to the top of its range, watch the inner curve overshoot, bring it back, try the scale length, and arrive at about 15 km/s of residual convinced there is nothing left to try. Do not rescue them, and do not let a fast student tell the room the answer.',
       'Ask for step 15 in writing before anyone touches the halo sliders. The number a student produced themselves, and the fact that their worst miss was at the outer edge, is what makes step 16 an inference rather than a claim.',
       'Step 16 is the pivot of the whole investigation and the one place to run a discussion rather than a click. The distractor about a disc not holding enough mass is the intuitive answer and it is wrong: mass is not the problem, distribution is. If the class can articulate "we need mass where the light is not", they have the argument that settled the question in the literature.',
-      'At step 17, expect a spread of halo parameters that all fit. That is a genuine degeneracy between halo strength and core radius, not a mistake, and it is worth naming out loud: published rotation-curve papers quote these two together with a covariance for exactly this reason. The halo mass, and therefore the ratio at step 19, is far better constrained than either slider on its own.',
-      'Step 20 is the best demonstration in the investigation and takes about thirty seconds. Run it on one screen with the class watching: launch the star, let it complete an orbit, then drag the halo slider to OFF and say nothing. Then ask why the star left, and insist on the answer that nothing was added to the star.',
-      'Step 21 repeats step 20 on ninety stars in the live simulation. It is worth doing both: the single star makes the mechanism clear and the disc makes the consequence visible.',
-      'Let students find both wrong settings at step 23 rather than warning them first. The "forget to square it" case is the valuable one, because the discrepancy vanishes: an answer that shows no missing mass is a signal that the arithmetic went wrong, and recognizing that is a transferable skill.',
-      'At step 24, make sure students actually switch to simulation units before recording anything. In physical units the panel reports a cluster radius in AU, which is a nonsense number for a cluster of galaxies and will produce a mass wrong by many orders of magnitude. The scenario is a scale model and the investigation says so, but the unit switch is the step students skip.',
-      'The commonest arithmetic error at step 25 is using sigma rather than sigma squared, which gives about 86,000 instead of 1.76 million in simulation units. The second commonest is forgetting to divide by 1000 to reach solar masses. Both are worth naming in advance, and both were reachable deliberately at step 23 so that a student may already have met them.',
-      'Steps 25 and 26 can be done on paper in under two minutes, and doing them on paper rather than in the answer box is worth the time: the point is that this calculation is genuinely small, and that Zwicky needed nothing more than this.',
-      'Step 27 is a good exit ticket. Any answer that separates the measured discrepancy from its interpretation earns full credit; naming faint ordinary matter or modified gravity as alternatives earns more, and so does noticing that the rotation-curve result constrains the shape of the missing mass and not only its amount. Students who write only "dark matter exists" have missed the step.',
+      'At step 17, expect a spread of halo parameters that all fit. That is a genuine degeneracy between halo strength and core radius, not a mistake, and it is worth naming out loud: published rotation-curve papers quote these two together with a covariance for exactly this reason. The halo mass, and therefore the ratio at step 20, is far better constrained than either slider on its own.',
+      'Step 21 is the best demonstration in the investigation and takes about thirty seconds. Run it on one screen with the class watching: launch the star, let it complete an orbit, then drag the halo slider to OFF and say nothing. Then ask why the star left, and insist on the answer that nothing was added to the star.',
+      'Steps 22 and 23 repeat step 21 on ninety stars in the live simulation: collect the prediction at step 22 before anyone touches the toggle. It is worth doing both: the single star makes the mechanism clear and the disc makes the consequence visible.',
+      'Let students find both wrong settings at step 25 rather than warning them first. The "forget to square it" case is the valuable one, because the discrepancy vanishes: an answer that shows no missing mass is a signal that the arithmetic went wrong, and recognizing that is a transferable skill.',
+      'At step 26, make sure students actually switch to simulation units before recording anything. In physical units the panel reports a cluster radius in AU, which is a nonsense number for a cluster of galaxies and will produce a mass wrong by many orders of magnitude. The scenario is a scale model and the investigation says so, but the unit switch is the step students skip.',
+      'The commonest arithmetic error at step 27 is using sigma rather than sigma squared, which gives about 86,000 instead of 1.76 million in simulation units. The second commonest is forgetting to divide by 1000 to reach solar masses. Both are worth naming in advance, and both were reachable deliberately at step 25 so that a student may already have met them.',
+      'Steps 27 and 28 can be done on paper in under two minutes, and doing them on paper rather than in the answer box is worth the time: the point is that this calculation is genuinely small, and that Zwicky needed nothing more than this.',
+      'Step 29 is a good exit ticket. Any answer that separates the measured discrepancy from its interpretation earns full credit; naming faint ordinary matter or modified gravity as alternatives earns more, and so does noticing that the rotation-curve result constrains the shape of the missing mass and not only its amount. Students who write only "dark matter exists" have missed the step.',
       'If a student asks whether the halo in this simulation is real physics or a fudge, the honest answer is that it is a fitted model: a pseudo-isothermal profile with two free parameters, chosen because it reproduces real rotation curves. Say so. It is the same status the profile has in the research literature, and the misconceptions section above has a longer answer.',
-      'The rotation curve being fitted at steps 13-19 is synthetic, built from NGC 3198’s published structural parameters rather than transcribed from a data table, and the panel says so. This is deliberate: it means the exercise has an exact right answer, so a student who fits well has genuinely fitted well rather than guessed. If a class asks to see the real thing, the published decomposition of NGC 3198 is in the extensions below.',
+      'The rotation curve being fitted at steps 13-20 is synthetic, built from NGC 3198’s published structural parameters rather than transcribed from a data table, and the panel says so. This is deliberate: it means the exercise has an exact right answer, so a student who fits well has genuinely fitted well rather than guessed. If a class asks to see the real thing, the published decomposition of NGC 3198 is in the extensions below.',
     ],
     discussion: [
       'The Solar System gives an exponent of -0.5 and a galaxy gives roughly zero. Is there a size at which the disagreement starts, and how would you find out?',
@@ -3439,7 +3439,7 @@ export const INSTRUCTOR_CONTENT = {
     ],
     extensions: [
       'Have students look up a published rotation curve for a real galaxy, NGC 3198 and NGC 2403 are the classic cases, and compare its shape with the two Gravitas scenarios. The published figures usually plot the stellar, gas and halo contributions separately, which is exactly the decomposition the panel draws.',
-      'Ask students to quantify the degeneracy they met at step 17. Have them find three different pairs of halo strength and core radius that all fit, record the halo mass inside 30 kpc for each, and compare the spread in the parameters with the spread in the mass. The parameters vary by tens of per cent; the mass barely moves. This is why papers quote the derived mass rather than the fitted parameters.',
+      'Ask students to quantify the degeneracy they met at step 17. A deeper step asks for this as an error bar. Have them find three different pairs of halo strength and core radius that all fit, record the halo mass inside 30 kpc for each, and compare the spread in the parameters with the spread in the mass. The parameters vary by tens of per cent; the mass barely moves. This is why papers quote the derived mass rather than the fitted parameters.',
       'Have students repeat the step 14 sweep systematically rather than by feel: fix the scale length, step the disc mass across its whole range, and tabulate the average miss. The curve of residual against disc mass has a shallow minimum around 8.5, well above the mass the light implies and still three times worse than the errors. Plotting that curve turns "I could not fit it" into "no disc mass fits, and here is the proof".',
       'Have students read about the Bullet Cluster and explain, in a paragraph, why the separation of the lensing mass from the X-ray gas is difficult for modified-gravity explanations to accommodate.',
       'For a mathematically prepared class, derive M(<r) proportional to r from the flat-curve condition, then integrate to show the implied density falls as r to the power -2 and that the total mass diverges. Ask what that divergence means physically, and connect it back to step 8 where students measured that proportionality directly.',
@@ -3828,19 +3828,19 @@ export const INSTRUCTOR_CONTENT = {
         text: 'The centerpiece. At step 3 it draws the three pulls in true proportion, which makes them look identical on purpose; at step 6 it adds a second row showing what is left after the center is subtracted, and states the magnification factor between the rows on the panel. Students who see only the second row learn a diagram; the pairing is what teaches the mechanism.',
       },
       {
-        name: 'Straighten-the-curve transform (step 10)',
-        text: 'The distance plot offers a "Try 1 ÷ distance³" button. Points that curve away sharply drop onto a straight line through the corner. This is where most classes recognize the inverse cube, and it is worth pausing on as a general method for identifying a power law.',
+        name: 'Reading the exponent (steps 10, 11)',
+        text: 'The plot shows the curve the students’ own points make. The halving question asks for the factor from those readings; Log axes will straighten it. Most classes recognize the inverse cube here.',
       },
       {
-        name: 'The two-bar balance (steps 21, 22)',
+        name: 'The two-bar balance (steps 25, 27)',
         text: 'Green is the body’s own surface gravity, red is the tidal stretch. The distance slider moves only the red bar and the density slider only the green one, so the competition is easy to reason about. The crossing point the student finds is the Roche limit, and it is named only after they have measured it.',
       },
       {
-        name: 'The Saturn Roche panel (steps 23, 24)',
+        name: 'The Saturn Roche panel (steps 29, 30)',
         text: 'Two arcs, one for a body with no strength and one for a body that keeps its shape, against Saturn’s real ring geometry. Changing the density moves both arcs a long way, which is the argument that a Roche limit is not one distance. At high density the inner arc falls inside Saturn and the panel says so in words rather than clipping it.',
       },
       {
-        name: 'Tidal radius against horizon (step 28)',
+        name: 'Tidal radius against horizon (step 34)',
         text: 'A logarithmic drawing of the two lengths as the black hole mass runs from ten to a billion solar masses, with presets for a stellar-mass hole, Sagittarius A*, and a giant where the star is swallowed whole. The crossover near 1.6 × 10⁸ solar masses is stated on the panel.',
       },
     ],
