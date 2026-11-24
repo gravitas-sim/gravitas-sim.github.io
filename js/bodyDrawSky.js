@@ -159,9 +159,14 @@ function beginCrowdFrame() {
   if (!isCrowd() || currentTier() === 'low' || CROWD_DETAIL_CAP <= 0) return;
   const z = state.zoom || 1;
   const picked = selectedBody();
+  // The view's middle in world units: the pan, turned back by a rotating
+  // frame, plus the frame's origin.
+  const r = state.frameRotation;
+  const mx = -state.pan.x / z;
+  const my = state.pan.y / z;
   const c = picked?.pos ?? {
-    x: -state.pan.x / z + state.frameOffset.x,
-    y: state.pan.y / z + state.frameOffset.y,
+    x: (r ? r.cos * mx - r.sin * my : mx) + state.frameOffset.x,
+    y: (r ? r.sin * mx + r.cos * my : my) + state.frameOffset.y,
   };
   const big = [];
   for (const [type, list] of FAMILIES)

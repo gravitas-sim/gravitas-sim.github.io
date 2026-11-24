@@ -16,12 +16,14 @@ import {
   WORLD,
   BARYCENTER,
   OBJECT,
+  PAIR,
+  ROTATING,
   setFrame,
   frameState,
   onFrameChange,
 } from './referenceFrame.js';
-import { t } from './i18n/index.js';
-import { loadFailed } from './notify.js';
+import { t, hasMessage } from './i18n/index.js';
+import { loadFailed, announce } from './notify.js';
 import { setBodySelector } from './widgetRuntime.js';
 import { state, SETTINGS, current_scenario_name, command } from './appState.js';
 import { EV_MANEUVER_REQUESTED, EV_SIMULATION_RESET } from './names.js';
@@ -261,6 +263,11 @@ const setOverlayMinimized = (overlay, btn, minimized) => {
 // both are driven from one subscription rather than each trying to keep the
 // other in step.
 
+// A scene word when the scene's catalog has arrived (js/sceneStatement.js
+// registers it on first use), and the English the markup carries until then.
+const sceneWord = (id, vars, english) =>
+  hasMessage(id) ? t(id, vars) : english;
+
 /**
  * The name to show for a frame, and what choosing it does.
  *
@@ -272,6 +279,16 @@ const describeFrame = frame => {
     return {
       value: BARYCENTER,
       note: 'Positions relative to the system\u2019s center of mass. It does not sit inside the largest body.',
+      active: true,
+    };
+  }
+  if (frame.pair) {
+    // A pair frame is offered only once the scene's words are here.
+    return {
+      value: frame.mode,
+      note: t(
+        frame.mode === ROTATING ? 'frame.note.rotating' : 'frame.note.pair'
+      ),
       active: true,
     };
   }
@@ -291,6 +308,34 @@ const describeFrame = frame => {
   };
 };
 
+// The scene's words (js/sceneStatement.js, loaded on first use), through the
+// command bus: other pages reach this module, and a static import of the
+// canvas description would pull the renderer's chunk apart on all of them.
+const scene = (load = false) => {
+  try {
+    return command('sceneWords')(load);
+  } catch {
+    return null;
+  }
+};
+
+/**
+ * The selected body and its primary, heavier first: the pair the pair frames
+ * are built on (the barycenter marker's rule, markerMembers). Null until the
+ * scene's words have arrived, and when there is no such pair.
+ *
+ * @returns {?Array<object>} [A, B], or null
+ */
+export const selectedPair = () => {
+  const sel = state.selectedObject?.object;
+  const members = sel ? scene()?.markerMembers('pair', sel) : null;
+  if (!members || members.length !== 2) return null;
+  const all = barycenterBodies();
+  if (!members.every(b => all.includes(b))) return null;
+  const [s, primary] = members;
+  return primary.mass >= s.mass ? [primary, s] : [s, primary];
+};
+
 /** Bring the rail control and the inspector row in line with the frame. */
 export const paintFrameControls = () => {
   const frame = frameState();
@@ -298,15 +343,35 @@ export const paintFrameControls = () => {
 
   const select = document.getElementById('referenceFrameSelect');
   if (select) {
-    const objectOption = select.querySelector('option[value="object"]');
+    // A body frame and the pair frames are only choices when there is a body
+    // (and a pair) to build them on. Offering them otherwise would set a frame
+    // with no origin.
+    const sel = state.selectedObject?.object;
+    const pair = selectedPair();
+    const option = value => select.querySelector(`option[value="${value}"]`);
+    const objectOption = option(OBJECT);
     if (objectOption) {
-      // "Selected object" is only a choice when there is one. Offering it with
-      // nothing selected would set a frame with no origin.
-      const sel = state.selectedObject?.object;
       objectOption.disabled = !sel;
-      objectOption.textContent = sel
-        ? `Selected: ${sel.name || 'object'}`
-        : 'Selected object';
+      if (sel) {
+        const body = sel.name || 'object';
+        objectOption.textContent = sceneWord(
+          'frame.centred',
+          { body },
+          `Centered on ${body}`
+        );
+      }
+    }
+    for (const [value, id] of [
+      [PAIR, 'frame.pair'],
+      [ROTATING, 'frame.rotating'],
+    ]) {
+      const o = option(value);
+      if (!o) continue;
+      o.disabled = !pair;
+      if (pair) {
+        const [a, b] = pair.map(x => x.name || '');
+        o.textContent = t(id, { a, b });
+      }
     }
     select.value = shown.value;
   }
@@ -339,13 +404,38 @@ export const setupReferenceFrameControl = () => {
       if (value === OBJECT) {
         const sel = state.selectedObject?.object;
         setFrame(sel ? OBJECT : WORLD, sel ? sel.id : null);
+      } else if (value === PAIR || value === ROTATING) {
+        const pair = selectedPair();
+        setFrame(pair ? value : WORLD, pair ? pair.map(b => b.id) : null);
       } else {
         setFrame(value === BARYCENTER ? BARYCENTER : WORLD);
       }
+      sayFrame();
     });
   }
+  // The pair frames are named and built from the scene's words: fetch them
+  // when a reader reaches for the control, then offer the pair.
+  const wake = () => {
+    try {
+      command('loadSceneWords')().then(paintFrameControls, () => {});
+    } catch {
+      /* not on this page */
+    }
+  };
+  select?.addEventListener('focus', wake);
+  select?.addEventListener('pointerdown', wake);
   onFrameChange(paintFrameControls);
   paintFrameControls();
+};
+
+/**
+ * Say the frame chosen, as the canvas names it. A frame changed by a world
+ * being rebuilt is not announced; a reader's choice is (here and from the
+ * inspector's row).
+ */
+export const sayFrame = () => {
+  const words = scene(true);
+  if (words) announce(`${words.frameLine()}.`);
 };
 
 // --- The maneuver planner, loaded on demand ----------------------------------

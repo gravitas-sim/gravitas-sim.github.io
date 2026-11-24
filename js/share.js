@@ -24,6 +24,7 @@ import {
   packInHash,
 } from './investigationsLoader.js';
 import { t } from './i18n/index.js';
+import { frameMode, LINKED_MODES } from './referenceFrame.js';
 import { scenarioTitle } from './i18n/scenario.js';
 import { EV_ESCAPE, EV_SIMULATION_RESET } from './names.js';
 
@@ -31,6 +32,7 @@ const captureShareState = command('captureShareState');
 const applyShareState = command('applyShareState');
 const initialize_simulation = command('initialize_simulation');
 const show_enhanced_scenario_info = command('show_enhanced_scenario_info');
+const sceneWords = command('sceneWords');
 
 /** A scenario as a reader says it: its title, or 'None' for a hand-built world. */
 const said = s => (s && s !== 'None' ? scenarioTitle(s) : s);
@@ -257,6 +259,16 @@ async function refresh() {
   // discover afterwards.
   els.stale.hidden = isFull || getSimClock() < 5;
 
+  // A pair or rotating frame is not carried (js/world.js): say so.
+  if (els.frameNote) {
+    const dropped = !LINKED_MODES.includes(frameMode());
+    els.frameNote.hidden = !dropped;
+    if (dropped) {
+      const name = sceneWords()?.frameName() || '';
+      els.frameNote.textContent = t('share.frameNotCarried', { name });
+    }
+  }
+
   const n = lastUrl.length;
   const bodies = payload.b ? `${payload.b.length} objects · ` : '';
   els.meta.textContent = `${bodies}${n.toLocaleString()} characters`;
@@ -432,6 +444,13 @@ export function initShare() {
     close: document.getElementById('shareCloseBtn'),
     chip: document.getElementById('shareCloseChip'),
   };
+  // Not in index.html, which is at its size ceiling.
+  els.stale?.after(
+    (els.frameNote = Object.assign(document.createElement('p'), {
+      className: 'share-note',
+      hidden: true,
+    }))
+  );
   if (!els.modal || !els.url) return;
 
   const button = document.getElementById('shareBtn');

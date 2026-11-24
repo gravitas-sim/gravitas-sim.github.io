@@ -14,6 +14,18 @@ export const EN_SCENE = {
   'frame.object': 'Selected object',
   'frame.line': 'Frame: {name}',
   'frame.line.trails': 'Frame: {name}. Trails drawn in this frame',
+  'frame.line.gap':
+    'Frame: {name}. Trails drawn in this frame; parts older than its record are not shown',
+  'frame.centred': 'Centered on {body}',
+  'frame.system': 'Barycenter of the system',
+  'frame.pair': 'Barycenter of {a} and {b}',
+  'frame.rotating': 'Rotating with {a} and {b}',
+  'frame.note.pair':
+    'Positions and trails relative to the pair\u2019s center of mass, which now sits still.',
+  'frame.note.rotating':
+    'Positions and trails in a frame that turns with the pair: both bodies stay on one horizontal line, the heavier on the left.',
+  'rail.frame.pair': 'Barycenter of selected body and its primary',
+  'rail.frame.rotating': 'Rotating with selected body and its primary',
   'readout.frame': 'Frame',
   'sources.item': '{kind} ({n})',
   'sources.pulling': 'Pulling on others: {list}.',
@@ -37,4 +49,6 @@ export const EN_SCENE = {
     'Barycenter marker: the mass-weighted mean position of {body} and its primary, {primary}.',
   'summary.barycenter.none':
     'Barycenter marker: nothing to average; select a body that has a primary.',
+  'share.frameNotCarried':
+    'This link opens in the world frame: links do not carry the frame {name}.',
 };

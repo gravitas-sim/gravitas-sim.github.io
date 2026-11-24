@@ -18,6 +18,7 @@ import {
 } from '../js/vectorOverlay.js';
 import { trailSpanTime } from '../js/trailSpan.js';
 import { formatTime } from '../js/units.js';
+import { worldToScreen } from '../js/utils.js';
 
 // An arrow's length is the magnitude it shows, on one scale for the scene, and
 // the legend says what a centimetre of it is. A recording context stands in for
@@ -266,5 +267,40 @@ describe('overlay label size', () => {
     expect(fitFont(hidpi, '600 11px mono')).toBe('600 22px mono');
     expect(fitFont(hidpi, 'bold 13px sans-serif')).toBe('bold 26px sans-serif');
     expect(canvasRatio({ canvas: { width: 300, clientWidth: 0 } })).toBe(1);
+  });
+
+  test('in a rotating frame the arrow turns with the picture', () => {
+    // The frame faces 120 degrees: world directions turn by -120 on screen,
+    // exactly as positions do through the shared mapping.
+    const th = (2 * Math.PI) / 3;
+    const view = {
+      zoom: 1,
+      pan: { x: 0, y: 0 },
+      frameOffset: { x: 3, y: -2 },
+      frameRotation: { cos: Math.cos(th), sin: Math.sin(th) },
+    };
+    const canvas = { width: 800, height: 600 };
+    const mapped = p => worldToScreen(p, view, canvas);
+    const body = new Planet({ x: 10, y: 5 }, { x: 2, y: 1 }, 1);
+    planets.push(body);
+    const tips = [];
+    const { ctx } = recorder();
+    const lineTo = ctx.lineTo;
+    ctx.lineTo = function (x, y) {
+      tips.push([x, y]);
+      return lineTo.call(this, x, y);
+    };
+    drawBodyVectors(ctx, body, mapped, on);
+    const o = mapped(body.pos);
+    const ahead = mapped({ x: body.pos.x + 2, y: body.pos.y + 1 });
+    const want = Math.atan2(ahead.y - o.y, ahead.x - o.x);
+    // The shaft's end is the tip farthest from the body along the arrow.
+    const [x, y] = tips.reduce((a, b) =>
+      Math.hypot(b[0] - o.x, b[1] - o.y) > Math.hypot(a[0] - o.x, a[1] - o.y)
+        ? b
+        : a
+    );
+    const got = Math.atan2(y - o.y, x - o.x);
+    expect(Math.abs(got - want)).toBeLessThan(1e-9);
   });
 });

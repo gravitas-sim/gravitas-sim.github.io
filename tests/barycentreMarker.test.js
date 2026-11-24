@@ -130,7 +130,7 @@ describe.each(TOL.a.scenes)('%s', key => {
         worst = Math.max(worst, Math.hypot(x, y) / m / sep(pair[0], pair[1]));
       });
       expect(frameLine(physics.barycenterBodies())).toBe(
-        'Frame: Barycenter. Trails drawn in this frame'
+        'Frame: Barycenter of the system. Trails drawn in this frame'
       );
     } finally {
       resetFrame();

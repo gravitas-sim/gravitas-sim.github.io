@@ -108,6 +108,7 @@ import {
 } from './engine/collisions.js';
 // The step, the host seam and the viewport hooks (slice S7).
 import {
+  applyFollow,
   barycenterBodies,
   findObjectAtPosition,
   is_offscreen,
@@ -176,6 +177,7 @@ export {
   handle_rocky_collisions,
   check_stellar_collapse,
   findObjectAtPosition,
+  applyFollow,
   DT,
   SOLAR_MASS_UNIT,
   EARTH_MASS_UNIT,

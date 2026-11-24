@@ -234,6 +234,24 @@ function perCentimetre(kind) {
   return kind === 'v' ? formatSpeed(unit) : formatAcceleration(unit);
 }
 
+/**
+ * Where a world direction points on screen, read from the mapping itself: the
+ * screen image of world +x gives the turn, so a rotating frame turns the arrows
+ * by the angle it turns the picture, and the y flip comes with it.
+ *
+ * @param {Function} toScreen - World to screen
+ * @param {{x: number, y: number}} pos - Where the arrows start
+ * @returns {Function} (ux, uy) to a screen direction of the same length
+ */
+function screenDirection(toScreen, pos) {
+  const o = toScreen(pos);
+  const e = toScreen({ x: pos.x + 1, y: pos.y });
+  const n = Math.hypot(e.x - o.x, e.y - o.y);
+  const c = n > 0 ? (e.x - o.x) / n : 1;
+  const s = n > 0 ? -(e.y - o.y) / n : 0;
+  return (ux, uy) => ({ x: c * ux - s * uy, y: -s * ux - c * uy });
+}
+
 /** Draw the vector overlay for one body. */
 export function drawBodyVectors(ctx, body, toScreen, settings) {
   if (!body || body.alive === false) return null;
@@ -242,6 +260,7 @@ export function drawBodyVectors(ctx, body, toScreen, settings) {
   if (!wantV && !wantA) return null;
 
   const origin = toScreen(body.pos);
+  const dir = screenDirection(toScreen, body.pos);
   const ratio = canvasRatio(ctx);
   const drawn = { velocity: null, total: null, sources: [] };
   const maxima = sceneMaxima();
@@ -251,10 +270,8 @@ export function drawBodyVectors(ctx, body, toScreen, settings) {
     const k = followScale('v', Math.max(maxima.v, speed));
     if (speed > 0 && k > 0) {
       const len = arrowLength(speed, k, ratio);
-      const tip = {
-        x: origin.x + (body.vel.x / speed) * len.px,
-        y: origin.y - (body.vel.y / speed) * len.px,
-      };
+      const d = dir(body.vel.x / speed, body.vel.y / speed);
+      const tip = { x: origin.x + d.x * len.px, y: origin.y + d.y * len.px };
       arrow(ctx, origin, tip, {
         color: VELOCITY_COLOR,
         width: 3,
@@ -279,13 +296,11 @@ export function drawBodyVectors(ctx, body, toScreen, settings) {
             const sm = Math.hypot(s.ax, s.ay);
             const px = Math.min(sm * k, ARROW_CEIL_PX) * ratio;
             if (!(px > 6)) continue;
+            const d = dir(s.ax / sm, s.ay / sm);
             arrow(
               ctx,
               origin,
-              {
-                x: origin.x + (s.ax / sm) * px,
-                y: origin.y - (s.ay / sm) * px,
-              },
+              { x: origin.x + d.x * px, y: origin.y + d.y * px },
               {
                 color: sourceColor(s.id),
                 width: 1.8,
@@ -299,13 +314,11 @@ export function drawBodyVectors(ctx, body, toScreen, settings) {
         }
 
         const len = arrowLength(mag, k, ratio);
+        const d = dir(parts.total.ax / mag, parts.total.ay / mag);
         arrow(
           ctx,
           origin,
-          {
-            x: origin.x + (parts.total.ax / mag) * len.px,
-            y: origin.y - (parts.total.ay / mag) * len.px,
-          },
+          { x: origin.x + d.x * len.px, y: origin.y + d.y * len.px },
           { color: ACCEL_COLOR, width: 3, label: 'a' }
         );
         drawn.total = { x: parts.total.ax, y: parts.total.ay };

@@ -3,7 +3,7 @@
 import { screen_to_world, findObjectAtPosition } from './physics.js';
 
 import { worldToScreen } from './utils.js';
-import { transferFrame } from './referenceFrame.js';
+import { transferFrame, transferFollow } from './referenceFrame.js';
 
 import {
   EV_ESCAPE,
@@ -46,7 +46,7 @@ import {
   setupOverlayMinimize,
   setupReferenceFrameControl,
 } from './inspectorGate.js';
-import { loadSceneWords } from './canvasSummary.js';
+import { loadSceneWords, sceneWords } from './canvasSummary.js';
 import {
   initPlacement,
   initObjectPicker,
@@ -454,6 +454,7 @@ if (typeof window !== 'undefined') {
     const gone = [primaryId, secondaryId];
 
     transferFrame(gone, resultId);
+    transferFollow(gone, resultId);
 
     const selected = state.selectedObject;
     if (selected?.object && gone.includes(selected.object.id)) {
@@ -1092,6 +1093,9 @@ canvas.addEventListener(
 
 // What the modules below this one ask of it (the command bus, js/appState.js).
 registerCommands({
+  // The scene's words (frame names), for modules other pages also reach.
+  sceneWords,
+  loadSceneWords,
   captureShareState,
   applyShareState,
   initialize_simulation,

@@ -114,7 +114,7 @@ test('the readout and the summary name the frame and the sources', async ({
   await expect(readout).toContainText('Barycenter');
   await expect
     .poll(() => summary(page))
-    .toContain('Frame: Barycenter. Trails drawn in this frame.');
+    .toContain('Frame: Barycenter of the system. Trails drawn in this frame.');
 
   await app.loadScenario('binary-pair');
   await app.waitForFrames(5);
@@ -164,4 +164,107 @@ test('offline before its first use, the choice goes back to Off', async ({
   );
   expect(other).toEqual([]);
   errors.consoleErrors.length = 0;
+});
+
+// --- Frames and following ----------------------------------------------------
+// The pair and rotating frames offered once a star with a primary is selected,
+// chosen from the keyboard and by touch, named on the canvas; and the
+// inspector's follow toggle keeping the chosen star on the canvas centre.
+
+const selectStar = (page, index) =>
+  page.evaluate(async i => {
+    const physics = await import('/js/physics.js');
+    const gate = await import('/js/inspectorGate.js');
+    const [b] = [...physics.stars].sort((p, q) => p.mass - q.mass).slice(i);
+    gate.showObjectInspector(b, gate.inspectorTypeFor(b));
+    return b.name;
+  }, index);
+
+/** How far the followed body sits from the canvas centre, in canvas pixels. */
+const offCentre = page =>
+  page.evaluate(async () => {
+    const rf = await import('/js/referenceFrame.js');
+    const physics = await import('/js/physics.js');
+    const { state } = await import('/js/appState.js');
+    const { worldToScreen } = await import('/js/utils.js');
+    const id = rf.followedBodyId();
+    const body = physics.barycenterBodies().find(b => b.id === id);
+    const canvas = document.getElementById('simulationCanvas');
+    const s = worldToScreen(body.pos, state, canvas);
+    return Math.hypot(s.x - canvas.width / 2, s.y - canvas.height / 2);
+  });
+
+test('the rotating frame and the follow, from the keyboard', async ({
+  page,
+  app,
+}) => {
+  await app.boot();
+  await app.loadScenario('binary-pair');
+  const star = await selectStar(page, 0);
+  await app.railControl('referenceFrameSelect');
+  const select = page.locator('#referenceFrameSelect');
+  await select.focus();
+  // Focusing the control fetches the words; then the pair is offered.
+  // The pair is named heavier first, by name, never by key.
+  const rotating = select.locator('option[value="rotating"]');
+  await expect(rotating).toBeEnabled();
+  await expect(rotating).toHaveText(/^Rotating with Star [AB] and Star [AB]$/);
+  const named = await rotating.textContent();
+  await page.keyboard.press('r');
+  await expect(select).toHaveValue('rotating');
+  await app.waitForFrames(5);
+  await expect.poll(() => summary(page)).toContain(`Frame: ${named}.`);
+
+  const follow = page.locator('#inspectorFollow');
+  await expect(follow).toHaveAttribute('aria-label', 'Follow this body');
+  await follow.focus();
+  await page.keyboard.press('Enter');
+  await expect(follow).toHaveAttribute('aria-pressed', 'true');
+  await app.waitForFrames(10);
+  expect(await offCentre(page)).toBeLessThan(0.5);
+  await page.keyboard.press('Enter');
+  await expect(follow).toHaveAttribute('aria-pressed', 'false');
+  expect(named).toContain(star);
+});
+
+test.describe('frames by touch on a phone, in Spanish', () => {
+  test.use({ hasTouch: true, viewport: { width: 375, height: 812 } });
+
+  test('one tap follows, and the follow outlasts the inspector', async ({
+    page,
+    app,
+  }) => {
+    await page.addInitScript(() =>
+      localStorage.setItem('gravitas_locale', 'es')
+    );
+    await app.boot();
+    await app.loadScenario('binary-pair');
+    await selectStar(page, 0);
+    const follow = page.locator('#inspectorFollow');
+    await expect(follow).toHaveAttribute('aria-label', 'Seguir este cuerpo');
+    await follow.tap();
+    await expect(follow).toHaveAttribute('aria-pressed', 'true');
+    await app.waitForFrames(10);
+    expect(await offCentre(page)).toBeLessThan(0.5);
+    // On a phone the inspector covers the menu; closing it keeps the follow.
+    await page
+      .locator(
+        '#objectInspector .inspector-close, #objectInspector [aria-label="Cerrar el inspector"]'
+      )
+      .first()
+      .tap();
+    await expect(page.locator('#objectInspector')).toBeHidden();
+    await page.locator('#mobileMenuToggle').tap();
+    await app.railControl('referenceFrameSelect');
+    const select = page.locator('#referenceFrameSelect');
+    await select.tap();
+    // With nothing selected there is no pair to offer.
+    await expect(select.locator('option[value="pair"]')).toBeDisabled();
+    await select.selectOption('barycenter');
+    await app.waitForFrames(10);
+    await expect
+      .poll(() => summary(page))
+      .toContain('Sistema de referencia: Baricentro del sistema.');
+    expect(await offCentre(page)).toBeLessThan(0.5);
+  });
 });

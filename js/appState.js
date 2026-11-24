@@ -300,6 +300,9 @@ export const state = {
   // world-to-screen conversion subtracts it, so choosing a frame moves the
   // picture without touching the user's own pan. Zero is the world frame.
   frameOffset: { x: 0.0, y: 0.0 },
+  // A rotating frame's turn, {cos, sin}, or null: written with frameOffset
+  // once per drawn frame (js/frameView.js), read by the shared mapping.
+  frameRotation: null,
   // Follow mode's bookkeeping. `followOffset` is how far the reader has moved
   // the camera away from the followed body and wants to stay; `followPan` is
   // the pan the follow step last wrote, so anything that differs next step was
@@ -468,6 +471,7 @@ export const SETTINGS_WRITERS = Object.freeze([
   'system-builder',
   'rotation-curve',
   'cr3bp-pair',
+  'follow-body',
   'bench',
   'bench-chaos',
   'bench-hurry',

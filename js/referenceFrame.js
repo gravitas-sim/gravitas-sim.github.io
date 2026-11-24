@@ -20,8 +20,17 @@
 // someone to subtract the right thing. It is also, quite literally, the
 // observation that cost astronomy fourteen centuries of epicycles.
 //
-// The module holds no DOM and imports nothing, so it can be tested directly and
-// used from physics, render and ui without a cycle.
+// Two more frames are built on a chosen pair of bodies: the pair's own
+// barycenter, and a frame that turns with the pair (origin at that barycenter,
+// +x along the line from the heavier body A to the lighter B), the frame the
+// restricted three-body problem is posed in (js/cr3bp.js). Their histories
+// are recorded per trail tick only while one of them is chosen.
+//
+// The body a reader follows by id is held here too, beside the frame it
+// composes with, so the engine can read it without reaching for the view.
+//
+// The module holds no DOM and imports nothing but the message lookup, so it
+// can be tested directly and used from physics, render and ui without a cycle.
 // =============================================================================
 
 import { t } from './i18n/index.js';
@@ -32,11 +41,31 @@ export const WORLD = 'world';
 export const BARYCENTER = 'barycenter';
 /** A single body, named by id. */
 export const OBJECT = 'object';
+/** The mass-weighted center of two bodies, named by id, heavier first. */
+export const PAIR = 'pair';
+/** The pair's barycenter, turned so that +x runs from A to B. */
+export const ROTATING = 'rotating';
+
+/** Frames a link carries (js/world.js writes the world frame for the rest). */
+export const LINKED_MODES = Object.freeze([WORLD, BARYCENTER, OBJECT]);
 
 const DEFAULT_FRAME = { mode: WORLD, objectId: null };
 
-let frame = { ...DEFAULT_FRAME };
+let frame = { ...DEFAULT_FRAME, pair: null };
 const listeners = new Set();
+
+// The pair frames' history, one sample per trail tick while a pair frame is
+// chosen: its center and the unit vector from A to B. Cleared on every change
+// of frame, so a sample always belongs to the pair now chosen.
+let pairHistory = [];
+
+// Whether the last drawn frame had to leave out part of a trail because the
+// frame's origin was not recorded then. Read by the frame line on the canvas.
+let trailGap = false;
+
+// The body followed by id, if any. See followBody().
+let followed = null;
+const followListeners = new Set();
 
 // Recorded barycenter positions, one per trail sample, oldest first. Kept here
 // rather than recomputed from the bodies' trails because masses change when
@@ -66,8 +95,18 @@ function notify() {
  * @returns {{mode: string, objectId: ?number}} Mode and the body it names
  */
 export function frameState() {
-  return { ...frame };
+  const out = { mode: frame.mode, objectId: frame.objectId };
+  if (frame.pair) out.pair = [...frame.pair];
+  return out;
 }
+
+/** @returns {?Array<number>} The ids of a pair frame's bodies, A then B */
+export function framePair() {
+  return frame.pair ? [...frame.pair] : null;
+}
+
+/** @returns {boolean} Whether the frame turns (the rotating pair frame) */
+export const isRotatingFrame = () => frame.mode === ROTATING;
 
 /** @returns {string} The current mode */
 export function frameMode() {
@@ -91,24 +130,38 @@ export function isWorldFrame() {
  * honored, so it falls back to the world frame rather than leaving the view in
  * a state with no origin.
  *
- * @param {string} mode - WORLD, BARYCENTER or OBJECT
- * @param {?number} [objectId] - Required for OBJECT
+ * The pair frames take two different ids, the heavier body first; anything
+ * else falls back to the world frame, as an object frame without a body does.
+ * An unknown mode (a link from a later build) is the world frame too.
+ *
+ * @param {string} mode - WORLD, BARYCENTER, OBJECT, PAIR or ROTATING
+ * @param {?number|Array<number>} [objectId] - A body for OBJECT; [A, B] for
+ *   PAIR and ROTATING
  * @returns {{mode: string, objectId: ?number}} The frame actually set
  */
 export function setFrame(mode, objectId = null) {
-  let next;
-  if (mode === OBJECT && (objectId === null || objectId === undefined)) {
-    next = { mode: WORLD, objectId: null };
-  } else if (mode === OBJECT) {
-    next = { mode: OBJECT, objectId };
+  let next = { mode: WORLD, objectId: null, pair: null };
+  if (mode === OBJECT && objectId !== null && objectId !== undefined) {
+    next = { mode: OBJECT, objectId, pair: null };
   } else if (mode === BARYCENTER) {
-    next = { mode: BARYCENTER, objectId: null };
-  } else {
-    next = { mode: WORLD, objectId: null };
+    next = { mode: BARYCENTER, objectId: null, pair: null };
+  } else if (
+    (mode === PAIR || mode === ROTATING) &&
+    Array.isArray(objectId) &&
+    objectId.length === 2 &&
+    objectId.every(id => id !== null && id !== undefined) &&
+    objectId[0] !== objectId[1]
+  ) {
+    next = { mode, objectId: null, pair: [objectId[0], objectId[1]] };
   }
 
-  if (next.mode === frame.mode && next.objectId === frame.objectId) return;
+  const samePair =
+    String(next.pair) === String(frame.pair) && !next.pair === !frame.pair;
+  if (next.mode === frame.mode && next.objectId === frame.objectId && samePair)
+    return;
   frame = next;
+  pairHistory = [];
+  trailGap = false;
   notify();
 }
 
@@ -140,10 +193,25 @@ export function resetFrame() {
  * @returns {boolean} True if the frame was moved
  */
 export function transferFrame(fromIds, toId) {
-  if (frame.mode !== OBJECT) return false;
-  if (!Array.isArray(fromIds) || !fromIds.includes(frame.objectId))
-    return false;
+  if (!Array.isArray(fromIds)) return false;
   if (toId === null || toId === undefined) return false;
+  if (frame.pair) {
+    // A pair whose member merged. Into the other member: the pair is one body
+    // now, and the honest continuation is a frame centered on it. Into a new
+    // body beside a member that is still there: the new body takes its place.
+    const [a, b] = frame.pair;
+    const goneA = fromIds.includes(a);
+    const goneB = fromIds.includes(b);
+    if (!goneA && !goneB) return false;
+    if ((goneA && goneB) || toId === a || toId === b) {
+      setFrame(OBJECT, toId);
+    } else {
+      setFrame(frame.mode, goneA ? [toId, b] : [a, toId]);
+    }
+    return true;
+  }
+  if (frame.mode !== OBJECT) return false;
+  if (!fromIds.includes(frame.objectId)) return false;
   setFrame(OBJECT, toId);
   return true;
 }
@@ -191,19 +259,86 @@ export function systemBarycenter(bodies) {
  * @param {number} budget - How many samples to keep
  */
 export function recordBarycenter(tick, bodies, budget) {
+  const keep = Math.max(1, Math.floor(budget) || 1);
+  // The pair frames' history, only while one is chosen: nothing is recorded,
+  // and nothing costs, for anyone else.
+  if (frame.pair) {
+    const pose = pairPose(findPair(bodies));
+    if (pose) {
+      pairHistory.push({ tick, x: pose.x, y: pose.y, c: pose.c, s: pose.s });
+      if (pairHistory.length > keep)
+        pairHistory.splice(0, pairHistory.length - keep);
+    }
+  }
   const center = systemBarycenter(bodies);
   if (!center) return;
   barycenterHistory.push({ tick, x: center.x, y: center.y });
-  const keep = Math.max(1, Math.floor(budget) || 1);
   if (barycenterHistory.length > keep) {
     barycenterHistory.splice(0, barycenterHistory.length - keep);
   }
 }
 
-/** Drop the recorded barycenter history. Called when the world is rebuilt. */
+/** Drop the recorded frame histories. Called when the world is rebuilt. */
 export function clearFrameHistory() {
   barycenterHistory = [];
+  pairHistory = [];
+  trailGap = false;
+  // Ids restart with a new world, so a follow by id would pick up a stranger.
+  followBody(null, 'reset');
 }
+
+/** @returns {Array<object>} The pair frames' samples, oldest first */
+export const pairSamples = () => pairHistory;
+
+/**
+ * The chosen pair's two bodies, A then B, both alive and with mass.
+ * @param {Array} bodies - Bodies to look in
+ * @returns {?Array<object>} [A, B], or null when either has gone
+ */
+function findPair(bodies) {
+  if (!frame.pair) return null;
+  let a = null;
+  let b = null;
+  for (const body of bodies) {
+    if (!body || body.alive === false) continue;
+    if (body.id === frame.pair[0]) a = body;
+    else if (body.id === frame.pair[1]) b = body;
+  }
+  return a && b && a.mass > 0 && b.mass > 0 ? [a, b] : null;
+}
+
+/**
+ * Where a pair's frame sits and which way it faces.
+ *
+ * @param {?Array<object>} pair - [A, B]
+ * @returns {?{x: number, y: number, c: number, s: number}} The mass-weighted
+ *   center, and the unit vector from A to B (1, 0 when they coincide)
+ */
+export function pairPose(pair) {
+  if (!pair) return null;
+  const [a, b] = pair;
+  const m = a.mass + b.mass;
+  const dx = b.pos.x - a.pos.x;
+  const dy = b.pos.y - a.pos.y;
+  const d = Math.hypot(dx, dy);
+  return {
+    x: (a.pos.x * a.mass + b.pos.x * b.mass) / m,
+    y: (a.pos.y * a.mass + b.pos.y * b.mass) / m,
+    c: d > 0 ? dx / d : 1,
+    s: d > 0 ? dy / d : 0,
+  };
+}
+
+/**
+ * Note whether the last drawn frame left out part of a trail.
+ * @param {boolean} cut - True when a trail had points older than the origin
+ */
+export function noteTrailGap(cut) {
+  trailGap = !!cut;
+}
+
+/** @returns {boolean} Whether a trail is shown shorter than it is recorded */
+export const hasTrailGap = () => trailGap;
 
 /**
  * The recorded barycenter samples, oldest first.
@@ -268,6 +403,19 @@ export function resolveFrameOrigin(bodies) {
     };
   }
 
+  if (frame.pair) {
+    const pair = findPair(bodies);
+    const pose = pairPose(pair);
+    if (!pose) return null;
+    const rotating = frame.mode === ROTATING;
+    return {
+      now: { x: pose.x, y: pose.y },
+      at: tick => sampleAtTick(pairHistory, tick),
+      ...(rotating && { rotation: { cos: pose.c, sin: pose.s } }),
+      label: `${pair[0].name || ''} / ${pair[1].name || ''}`,
+    };
+  }
+
   const body = bodies.find(b => b && b.id === frame.objectId);
   // The body can be absorbed or culled while its frame is selected. Falling
   // back to the world frame is the only honest answer: there is no origin.
@@ -306,6 +454,17 @@ export function frameOriginVelocity(bodies) {
     return total > 0 ? { x: mx / total, y: my / total } : null;
   }
 
+  if (frame.pair) {
+    const pair = findPair(bodies);
+    if (!pair || !pair[0].vel || !pair[1].vel) return null;
+    const [a, b] = pair;
+    const m = a.mass + b.mass;
+    return {
+      x: (a.vel.x * a.mass + b.vel.x * b.mass) / m,
+      y: (a.vel.y * a.mass + b.vel.y * b.mass) / m,
+    };
+  }
+
   const body = bodies.find(b => b && b.id === frame.objectId);
   if (!body || body.alive === false || !body.vel) return null;
   return { x: body.vel.x, y: body.vel.y };
@@ -323,7 +482,17 @@ export function frameOriginVelocity(bodies) {
  * @param {object} origin - From resolveFrameOrigin
  * @param {number} newestTick - The tick of the most recent sample
  * @param {number} span - How many ticks back to cover
- * @returns {{dx: Float64Array, dy: Float64Array, known: Uint8Array}} Indexed by
+ * The rotating frame adds the turn each point needs: a point recorded when
+ * the pair faced angle th_k is drawn turned by th_now - th_k about the origin
+ * now, so that under the canvas's own turn by -th_now it lands where the
+ * frame saw it then (cos and sin of that difference, from the recorded unit
+ * vectors).
+ *
+ * @param {object} origin - From resolveFrameOrigin
+ * @param {number} newestTick - The tick of the most recent sample
+ * @param {number} span - How many ticks back to cover
+ * @returns {{dx: Float64Array, dy: Float64Array, known: Uint8Array,
+ *   now: object, cos?: Float64Array, sin?: Float64Array}} Indexed by
  *   ticks-ago, with known[k] = 0 where the origin has no sample for that tick
  */
 export function frameShifts(origin, newestTick, span) {
@@ -331,19 +500,84 @@ export function frameShifts(origin, newestTick, span) {
   const dx = new Float64Array(n);
   const dy = new Float64Array(n);
   const known = new Uint8Array(n);
+  const r = origin.rotation;
+  const cos = r ? new Float64Array(n) : null;
+  const sin = r ? new Float64Array(n) : null;
   for (let k = 0; k < n; k++) {
     const sample = origin.at(newestTick - k);
     if (!sample) continue;
     dx[k] = origin.now.x - sample.x;
     dy[k] = origin.now.y - sample.y;
     known[k] = 1;
+    if (r) {
+      cos[k] = r.cos * sample.c + r.sin * sample.s;
+      sin[k] = r.sin * sample.c - r.cos * sample.s;
+    }
   }
-  return { dx, dy, known };
+  return r
+    ? { dx, dy, known, now: origin.now, cos, sin }
+    : { dx, dy, known, now: origin.now };
+}
+
+// --- Following a body by id --------------------------------------------------
+// Follow Mode chooses a body by its type; this names one. The two are
+// exclusive (whoever sets one clears the other: js/inspectorView.js here, the
+// engine there), and both use the same camera (js/followCamera.js).
+
+/** @returns {?number} The id of the body followed by id, if any */
+export const followedBodyId = () => followed;
+
+/**
+ * Follow a body, or stop (null). Listeners hear why: 'set', 'stop', 'merged'
+ * (moved to a merger's product) or 'lost' (the body has gone).
+ *
+ * @param {?number} id - The body's id
+ * @param {string} [why] - Why it changed
+ * @param {object} [detail] - Passed on to listeners (a lost body's name)
+ */
+export function followBody(id, why = id === null ? 'stop' : 'set', detail) {
+  const next = id === null || id === undefined ? null : id;
+  if (next === followed) return;
+  followed = next;
+  for (const fn of followListeners) {
+    try {
+      fn({ id: followed, why, ...detail });
+    } catch (err) {
+      console.warn('Follow listener failed:', err);
+    }
+  }
+}
+
+/**
+ * Move a follow from a merged body to the product, as transferFrame does.
+ * @param {Array<number>} fromIds - The ids that have gone
+ * @param {?number} toId - What replaced them
+ * @returns {boolean} True if the follow moved
+ */
+export function transferFollow(fromIds, toId) {
+  if (followed === null || toId === null || toId === undefined) return false;
+  if (!Array.isArray(fromIds) || !fromIds.includes(followed)) return false;
+  followBody(toId, 'merged');
+  return true;
+}
+
+/**
+ * Subscribe to the follow changing.
+ * @param {Function} fn - Called with {id, why}
+ * @returns {Function} Unsubscribe
+ */
+export function onFollowChange(fn) {
+  followListeners.add(fn);
+  return () => followListeners.delete(fn);
 }
 
 /** Reset frame and history. For tests and for a fresh world. */
 export function resetFrameModule() {
-  frame = { ...DEFAULT_FRAME };
+  frame = { ...DEFAULT_FRAME, pair: null };
   barycenterHistory = [];
+  pairHistory = [];
+  trailGap = false;
+  followed = null;
   listeners.clear();
+  followListeners.clear();
 }

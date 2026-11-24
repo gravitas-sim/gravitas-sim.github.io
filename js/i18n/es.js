@@ -139,7 +139,7 @@ export const ES = {
   'rail.unitToggle.hint':
     'Alternar entre unidades físicas y unidades de simulación (U)',
   'rail.referenceFrameSelect.hint':
-    'Reexpresar todas las posiciones, y todas las trazas, en el sistema de referencia del baricentro o del objeto seleccionado. A diferencia del modo de seguimiento, esto vuelve a dibujar las trayectorias, de modo que el sistema solar visto desde la Tierra muestra a Marte describiendo un bucle hacia atrás.',
+    'Reexpresar todas las posiciones, y todas las trazas, en el sistema de referencia del baricentro, del cuerpo seleccionado, o del cuerpo seleccionado y su primario (quieto o girando con ellos). A diferencia del modo de seguimiento, esto vuelve a dibujar las trayectorias, de modo que el sistema solar visto desde la Tierra muestra a Marte describiendo un bucle hacia atrás.',
   'rail.toggleRuler.hint':
     'Tender una regla sobre la escena. Arrastrar cualquiera de sus extremos hasta aquello cuya distancia se quiera medir; la lectura se da en AU y en kilómetros, y está anclada al mundo, de modo que desplazar y ampliar la vista mueven la regla junto con lo que mide en lugar de cambiar lo que indica.',
   'rail.toggleProtractor.hint':
@@ -213,8 +213,8 @@ export const ES = {
   'rail.unitToggle': 'Unidades físicas',
   'rail.railToolsBody': 'Sistema',
   'rail.referenceFrameSelect': 'Mundo',
-  'rail.referenceFrameSelect.2': 'Baricentro',
-  'rail.referenceFrameSelect.3': 'Objeto seleccionado',
+  'rail.referenceFrameSelect.2': 'Baricentro del sistema',
+  'rail.referenceFrameSelect.3': 'Centrado en el cuerpo seleccionado',
   'rail.toggleRuler': 'Regla',
   'rail.toggleProtractor': 'Transportador',
   'rail.toggleStopwatch': 'Cronómetro',

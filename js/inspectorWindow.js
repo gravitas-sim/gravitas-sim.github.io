@@ -42,6 +42,7 @@ import {
   isObjectStillInSimulation,
 } from './inspectorView.js';
 import { state } from './appState.js';
+import { paintFollow } from './inspectorFollow.js';
 import { EV_MANEUVER_REQUESTED } from './names.js';
 
 /**
@@ -290,8 +291,9 @@ export const showObjectInspector = (object, type) => {
   door.setupOverlayMinimize();
 
   // The rail's "Selected object" option names the current selection, so it
-  // changes whenever the selection does.
+  // changes whenever the selection does; so does the follow toggle.
   door.paintFrameControls();
+  paintFollow();
 };
 
 // One way to select a body, installed rather than imported.

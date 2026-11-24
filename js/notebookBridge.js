@@ -36,7 +36,7 @@ import { ensureDeferredMessages } from './i18n/deferredMessages.js';
 import { getWorldGeneration, getInterventionEpoch } from './physics.js';
 import { getSimClock } from './timeline.js';
 import { qualityReport } from './quality.js';
-import { frameMode, frameObjectId } from './referenceFrame.js';
+import { frameMode, frameObjectId, framePair } from './referenceFrame.js';
 import { observerGeometry } from './observerGeometry.js';
 import { SETTINGS } from './appState.js';
 import { timeUnitSeconds } from './units.js';
@@ -203,7 +203,12 @@ export function liveProvenance(extra = {}) {
     // Mode plus the object it is centered on, because "object" alone does not
     // say which object and two readings taken in different object frames are
     // not comparable.
-    referenceFrame: frameObject ? `${mode}:${frameObject}` : mode,
+    // A pair frame names both of its bodies, A first.
+    referenceFrame: framePair()
+      ? `${mode}:${framePair().join(',')}`
+      : frameObject
+        ? `${mode}:${frameObject}`
+        : mode,
     observer: {
       positionAngleDeg: geometry.positionAngleDeg,
       inclinationDeg: geometry.inclinationDeg,

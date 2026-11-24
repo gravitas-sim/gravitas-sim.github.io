@@ -187,7 +187,7 @@ export const EN = {
   'rail.railTools.hint': 'Show or hide the tools controls',
   'rail.unitToggle.hint': 'Switch between physical and simulation units (U)',
   'rail.referenceFrameSelect.hint':
-    'Re-express every position, and every trail, in the frame of the barycenter or of the selected object. Unlike Follow Mode this redraws the paths themselves, so the Solar System seen from Earth shows Mars looping backwards.',
+    'Re-express every position, and every trail, in the frame of the barycenter, of the selected body, or of the selected body and its primary (still or turning with them). Unlike Follow Mode this redraws the paths themselves, so the Solar System seen from Earth shows Mars looping backwards.',
   'rail.toggleRuler.hint':
     'Lay a ruler across the scene. Drag either end onto whatever you want the distance between; the reading is given in AU and in kilometers, and it is anchored to the world, so panning and zooming move the ruler with the things it is measuring rather than changing what it says.',
   'rail.toggleProtractor.hint':
@@ -255,8 +255,8 @@ export const EN = {
   'rail.unitToggle': 'Physical units',
   'rail.railToolsBody': 'Frame',
   'rail.referenceFrameSelect': 'World',
-  'rail.referenceFrameSelect.2': 'Barycenter',
-  'rail.referenceFrameSelect.3': 'Selected object',
+  'rail.referenceFrameSelect.2': 'Barycenter of the system',
+  'rail.referenceFrameSelect.3': 'Centered on selected body',
   'rail.toggleRuler': 'Ruler',
   'rail.toggleProtractor': 'Protractor',
   'rail.toggleStopwatch': 'Stopwatch',

@@ -1,0 +1,34 @@
+{
+  "schema": "gravitas.frame-tolerances/1",
+  "about": "Frames and following: the reference legs of the pair and rotating frames and the follow criterion, fixed before any code that meets them (SANDBOX_INSTRUMENTS.md, \"Frames and following\"). A criterion that fails is reported with its numbers; no bound here is moved, widened or made conditional after a result. A miss of leg 2 is an integrator finding for the step-policy gate and the physics step, never a reason to widen.",
+  "separation": "the distance between the two bodies of the pair at the moment judged (leg 1: constant by construction; leg 2: at the start)",
+  "rotatingCoordinates": "R(-theta)(r - c): r minus the pair's mass-weighted centre, turned by minus the angle of the line from the heavier body (A) to the lighter (B); +x runs from A to B. Read through the frame module, not computed beside it",
+  "leg1": {
+    "what": "geometry, no engine: an analytic circular pair (masses 1 and 0.03, separation 8, angular rate n, centre drifting at a constant velocity) and a point at its L4 position with the co-rotating state, fed through the frame's per-tick history for 100 ticks; the point's rotating coordinates now, and every point of its 100-sample trail as the frame redraws it, against the analytic L4 coordinates",
+    "ticks": 100,
+    "relativeToSeparation": 1e-9,
+    "why": "the frame adds nothing but rounding: a subtraction, a rotation by a recorded angle and their inverse",
+    "alsoJudged": "the pair frame's origin against an independent mass-weighted mean (plain sums) at every tick, same bound"
+  },
+  "leg2": {
+    "what": "engine: lagrange-point-lab as built (seed 1; primary 1, secondary 0.03 solar masses, so mu = 0.0291 under ROUTH_MU = 0.0385; tracer fraction 1e-9 under MAX_TRACER_FRACTION = 1e-6; the pair placed on a circular orbit, eccentricity within MAX_ECCENTRICITY = 0.01), with the tracer moved to L4 from lagrangePoints(mu) at rest in the rotating frame, stepped as the page steps it (frameAdvance then substepPlan, inside the engine's seeded stream) for five periods of the pair; the tracer's displacement in the rotating frame from its starting rotating position",
+    "scenario": "lagrange-point-lab",
+    "seed": 1,
+    "periods": 5,
+    "rates": ["30", "60", "120"],
+    "relativeToSeparation": 0.02,
+    "why": "0.02 is the panel's own meaning of circular (MAX_ECCENTRICITY = 0.01 allows a separation that swings by 0.02 of its mean); L4 is linearly stable under ROUTH_MU, so a tracer that leaves it by more than that in five periods is the integration, not the frame",
+    "onMiss": "recorded as an integrator finding for the step-policy gate (446) and the physics step (458), with the numbers per rate; the bound is not widened"
+  },
+  "follow": {
+    "what": "a body followed by id, in each frame (world, centred on a body, barycenter of the system, barycenter of a pair, rotating with a pair), binary-pair as built (seed 1), stepped as the page steps it at 60 frames a second for 60 simulated seconds of frames (3600 frames), the camera applied as the page applies it before drawing; the body's screen position against the canvas centre plus the reader's own offset (zero here)",
+    "frames": 3600,
+    "rate": "60",
+    "boundPx": 0.5,
+    "why": "centred to the pixel: under half a pixel the body is drawn on the centre pixel"
+  },
+  "capture": {
+    "what": "445's scene record for solar-system in Earth's frame, captured before and after the change at the recorded state",
+    "bound": "the captures match (the before-and-after harness's own comparison); the frame line's wording is the only change allowed, and none is expected"
+  }
+}

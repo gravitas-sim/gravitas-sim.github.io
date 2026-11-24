@@ -15,6 +15,18 @@ export const ES_SCENE = {
   'frame.line': 'Sistema de referencia: {name}',
   'frame.line.trails':
     'Sistema de referencia: {name}. Estelas dibujadas en este sistema',
+  'frame.line.gap':
+    'Sistema de referencia: {name}. Estelas dibujadas en este sistema; no se muestran las partes anteriores a su registro',
+  'frame.centred': 'Centrado en {body}',
+  'frame.system': 'Baricentro del sistema',
+  'frame.pair': 'Baricentro de {a} y {b}',
+  'frame.rotating': 'Girando con {a} y {b}',
+  'frame.note.pair':
+    'Posiciones y estelas respecto al centro de masas de la pareja, que ahora queda quieto.',
+  'frame.note.rotating':
+    'Posiciones y estelas en un sistema que gira con la pareja: los dos cuerpos quedan sobre una misma línea horizontal, el más pesado a la izquierda.',
+  'rail.frame.pair': 'Baricentro del cuerpo seleccionado y su primario',
+  'rail.frame.rotating': 'Girando con el cuerpo seleccionado y su primario',
   'readout.frame': 'Sistema de referencia',
   'sources.item': '{kind} ({n})',
   'sources.pulling': 'Atraen a los demás: {list}.',
@@ -39,4 +51,6 @@ export const ES_SCENE = {
     'Marcador del baricentro: la posición media de {body} y su primario, {primary}, ponderada por la masa.',
   'summary.barycenter.none':
     'Marcador del baricentro: nada que promediar; selecciona un cuerpo que tenga un primario.',
+  'share.frameNotCarried':
+    'Este enlace se abre en el sistema de referencia del mundo: los enlaces no llevan el sistema {name}.',
 };
