@@ -110,7 +110,6 @@ import {
 import {
   barycenterBodies,
   findObjectAtPosition,
-  is_offscreen,
   screen_to_world,
   setPhysicsWorkerUrl,
   updatePhysics,
@@ -168,7 +167,6 @@ export {
   gravitational_acceleration,
   world_to_screen,
   screen_to_world,
-  is_offscreen,
   updatePhysics,
   handle_collisions,
   handle_star_merging,

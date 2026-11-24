@@ -596,8 +596,8 @@ const captureShareState = ({
             // restored context points at a particular body.
             .map(o =>
               packBody(
-                // Not in get_state(); without it a wide system loses its
-                // outer bodies to the distance cull.
+                // Not in get_state(); a saved system keeps the mark that
+                // once kept its outer bodies from the distance cull.
                 o.persistent === true
                   ? { ...o.get_state(), persistent: true }
                   : o.get_state(),
