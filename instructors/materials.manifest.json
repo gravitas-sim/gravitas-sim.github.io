@@ -1,6 +1,6 @@
 {
   "version": "November 2026",
-  "generated": "2026-11-23",
+  "generated": "2026-11-24",
   "documents": 1222,
   "inventory": {
     "documents": 1222,
@@ -24,7 +24,7 @@
     }
   },
   "sourceFiles": 310,
-  "sourceDigest": "397261ebfbaa4c05c1cc1b1ae677e8468a62d34752869dbb9450abf480ffcef4",
+  "sourceDigest": "9a72d5c9279b3298831b01bdca051569dca6c9d8c5f2d2bdac3e1864cf8530b0",
   "sources": {
     "js/activities/activities.js": "af9b7e121b9a72c2a5cc18e07331d6ee841934d402b030294d25c442628881ef",
     "js/activities/activityBridge.js": "ddd8015bf88938d98d967942048bc34e30a0099344b1055bd45a0459ec0333fe",
@@ -45,9 +45,9 @@
     "js/data/instructorContent.es.js": "471a388f9e2abfbe837cdad387388f52f0a547d2ae5f466e66fa5680866d5d3c",
     "js/data/instructorContent.js": "c5842b170ac1553ea849c33bf4fd90403785f5e97c72223b49eb1a294bd73fb0",
     "js/data/instructorExpectations.es.js": "5ec751fabe0ed60f692799c260ab8f383ffae25379c4b426efdd4351e0ae00ee",
-    "js/data/instructorExpectations.js": "857f9298f0f8a6bfa308e72ff363fcde36947e8e58eb51fb7ac541ce0f278e28",
+    "js/data/instructorExpectations.js": "428d6eac50c8ceaef412381265a05ede68d22271ccb606459a1c39e9a1985fec",
     "js/data/instructorFlow.es.js": "f1c087e5240114351245f6a7fa7ad9b3efd269ec6d415183fd945ac95534fd86",
-    "js/data/instructorFlow.js": "c1a206938184b966faec2c7ca4cfa8364456d3327340fe27e5e9b7b5693a9601",
+    "js/data/instructorFlow.js": "fea5b7c0bcea86542f7fe615f63190a9892f418a391bcbde5a5886714e1e08e0",
     "js/data/instructorLabels.js": "e43910350dbc39fc464736852d20357a95adf5b633325ebfdfdeabbb6b029fc7",
     "js/data/investigations.js": "7f6a5cc9ff0e558cd409897558206a35bcf117ce83e0ce1f77fb5d8d3ea24b58",
     "js/data/investigations/a-lens-passing-by.js": "acf7fb524e06a6e1c07af26f8b676d366875cb26204a451120ee733651a02056",
@@ -58,7 +58,7 @@
     "js/data/investigations/binaries-sequence.js": "c55578a36fdd97af6cc11832cf9b4445dced5cb49abd77ac377d944d060b1e32",
     "js/data/investigations/binary-masses-sequence.js": "47670ac6193214d45ee1e1c8f70c14cf5f55bcdfe2cd6e9dd97c8de8735fd86a",
     "js/data/investigations/binary-star-planets.js": "b305d8ff86d26cc58a46fcaf83ccabd90cf63b9af76a63a3912e82af47044280",
-    "js/data/investigations/black-holes.js": "2edcc87a8f89961762bcc94682abdde3d3d2cc59adc45e020bce7bd4b676d4c1",
+    "js/data/investigations/black-holes.js": "d1cf2b3a1dae21f792dd438084beb6cfeba40124958bd5aa2d0b8f760a4f2173",
     "js/data/investigations/butterfly-effect.js": "c705c1b8f1e5ae6d095c508ca4ccc271463bf77886b2bc7b346a8e6bea099db5",
     "js/data/investigations/catalog.js": "c24c233767ebd28a49066263de0c3db6eca72298a925e62ece364eec38dfc04f",
     "js/data/investigations/cluster-membership.js": "e54dc9191cb2b66f4b55ad3dfd268bceacbc7f7a09e38eb1d2320069fac69617",
@@ -154,7 +154,7 @@
     "js/data/investigations/es/atmosphere-sequence.js": "98d8ccd4105dc82d638b1a0fde2c19804a8aaefb79c8f216adeab9796c349e95",
     "js/data/investigations/es/bending-light.js": "f829d275b78b89ffcbf678ffd4b4f9980cbb531a5bc3ce80b9bbd6b5b31abb65",
     "js/data/investigations/es/binary-star-planets.js": "6d54d1d2ac98e6e41702b1b658c8c498e2353efe068de558279f50bfe24fb058",
-    "js/data/investigations/es/black-holes.js": "7c1a2560b46a8ca54988d403033872fc862d0e0d327071f8fbd253b86b31038e",
+    "js/data/investigations/es/black-holes.js": "420626edc9eb2cc72f8a2d7d84ad8711abca967e3379582d4d9fd09680013e99",
     "js/data/investigations/es/butterfly-effect.js": "f9225fc5affbc1f7aed6eb339e8f02e06443fc17146e57d6fba4625e280752b5",
     "js/data/investigations/es/cluster-membership.js": "ce06fed830d6a0288e50766b8b475d396bd8308ec189d249b78a353c478de426",
     "js/data/investigations/es/color-and-temperature.js": "adf69c99005335493a3ab93da14b23780751b20fd65ab719c4664a2d25f1b88d",
@@ -337,5 +337,5 @@
     "tools/instructor-freshness.mjs": "96052b2f27080f0243fdd4d5f7608927bd67f0c50808b6eac3345a65c14d1e28",
     "tools/source-closure.mjs": "961828e4d0d40d8a6f8c029fe9b9435ecaf39a74b62640efc0b4145c35c7650a"
   },
-  "contentDigest": "e5c41c16e9e90e8e8bc7b952293d75ff5df67a8739edaf84983ae450496ebf21"
+  "contentDigest": "198c2fa7f69e655fbfa768d16995dd95e72392eb20c761ac89e56d043775254b"
 }
