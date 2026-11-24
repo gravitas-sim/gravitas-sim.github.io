@@ -110,6 +110,7 @@ const runRows = ctx => {
 const BINARY_STAR_PLANETS = {
   id: 'binary-star-planets',
   thumbnail: 'images/scenarios/binary-planet-lab.webp',
+  sizes: true,
   title: 'Planets in Binary Stars',
   subtitle: 'What survives around two stars, and how you would know',
   duration: '40-50 min',
