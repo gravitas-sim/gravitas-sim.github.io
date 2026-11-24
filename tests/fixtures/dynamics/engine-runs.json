@@ -2,7 +2,7 @@
   "format": "gravitas.dynamics-engine-runs/1",
   "note": "The engine, not a reference. Chaotic after a few crossing times: compare ensemble means with the reference runs (DYNAMICS_REFERENCE_GATE.md), never one run.",
   "inputs": {
-    "digest": "8ca960488a96176793254029b53d96c1e5fd820bf9d30fe4a4510f47d1a8cf4f",
+    "digest": "94be4c6e755b1ef1cadbd81a751670cd9749822b6b4c91221effde20259518c5",
     "node": "dynamics-runs",
     "paths": [
       "js/engine",
@@ -158,7 +158,7 @@
         "dEvery": 113,
         "initialConditions": "tests/fixtures/dynamics/initial-conditions.json",
         "measurement": "tools/dynamics-measure.mjs",
-        "digest": "8ca960488a96176793254029b53d96c1e5fd820bf9d30fe4a4510f47d1a8cf4f"
+        "digest": "94be4c6e755b1ef1cadbd81a751670cd9749822b6b4c91221effde20259518c5"
       }
     },
     "layout": "dense",
@@ -377,7 +377,7 @@
         "dEvery": 113,
         "initialConditions": "tests/fixtures/dynamics/initial-conditions.json",
         "measurement": "tools/dynamics-measure.mjs",
-        "digest": "8ca960488a96176793254029b53d96c1e5fd820bf9d30fe4a4510f47d1a8cf4f"
+        "digest": "94be4c6e755b1ef1cadbd81a751670cd9749822b6b4c91221effde20259518c5"
       }
     },
     "layout": "dense",
