@@ -962,8 +962,8 @@ export function installSystem(system, kit) {
       if (!obj) continue;
       if (b.radiusGiven) obj.radius = b.radius;
       if (b.name) obj.name = b.name;
-      // A wide system is the point of building one: the distance cull must
-      // not delete its outer bodies when somebody zooms in on the inner ones.
+      // The mark that kept a wide system's outer bodies from the distance
+      // cull, which is gone; saved systems keep it.
       obj.persistent = true;
       count++;
     }

@@ -305,7 +305,7 @@ export function packBody(s, { withId = false } = {}) {
   for (const f of BODY_FIELDS) {
     if (s[f] !== undefined && s[f] !== null) out[f] = trim(s[f]);
   }
-  // Only when set: a body marked permanent survives the distance cull.
+  // Only when set: the mark that once kept a body from the distance cull.
   if (s.persistent === true) out.persistent = true;
   if (withId && Number.isFinite(s.id)) out.id = s.id;
   return out;
