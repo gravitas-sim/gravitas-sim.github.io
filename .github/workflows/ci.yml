@@ -565,6 +565,14 @@ jobs:
     # 24-minute step stop and the 30-minute job limit stay as they are; the
     # planner now has the timings of every listed test (the refresh in the same
     # commit), so the shards are predicted equal.
+    #
+    # 2026-11-23: seventeen goes to twenty (D-R4-CI-06; delegated, awaiting the
+    # maintainer's confirmation). Runner speed varies by about 1.2 times from one
+    # runner to the next, and across pull requests shards 3, 8, 9, 12, 13 and 16
+    # each hit the 24-minute step stop with no failing test. The planned longest
+    # shard drops from 18.7 to about 15.9 minutes; the step stop and the job
+    # limit stay as they are, and the planner and its tests read the count from
+    # the matrix below.
     timeout-minutes: 30
     strategy:
       # One shard failing must not cancel the others. A canceled shard tells
@@ -572,7 +580,7 @@ jobs:
       # splitting the suite is to find out what is broken in one run.
       fail-fast: false
       matrix:
-        shard: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]
+        shard: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
     steps:
       - uses: actions/checkout@v7
 
