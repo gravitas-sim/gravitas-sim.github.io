@@ -429,54 +429,6 @@ test('a black hole still bends the sky around it', async ({ page, app }) => {
   expect(bent).toBeGreaterThan(0);
 });
 
-test('a lens wider than the window draws each star once', async ({
-  page,
-  app,
-}) => {
-  await app.boot();
-  await sky(page, app, { scenario: 'binary-bh', seed: 'lens-wide' });
-
-  // Zoomed in, a hole's disc grows until it is wider than the canvas, and the
-  // wrapped queries for the disc each return every star. A star is one star:
-  // no two rectangles of one repaint may share a position (the twinklers
-  // are the only stars drawn outside a disc, and they are drawn once too).
-  const result = await page.evaluate(async () => {
-    const ui = await import('/js/ui.js');
-    const render = await import('/js/render.js');
-    const canvas = document.getElementById('starfieldCanvas');
-    const ctx = canvas.getContext('2d');
-    const original = ctx.fillRect.bind(ctx);
-    const out = [];
-    for (const zoom of [1, 6, 40]) {
-      ui.state.zoom = zoom;
-      const rects = [];
-      ctx.fillRect = (x, y, w, h) => {
-        rects.push([x, y]);
-        return original(x, y, w, h);
-      };
-      render.drawStarfield();
-      ctx.fillRect = original;
-      // The first rectangle is the background.
-      const seen = new Set();
-      let repeated = 0;
-      for (const [x, y] of rects.slice(1)) {
-        const key = `${x},${y}`;
-        if (seen.has(key)) repeated++;
-        seen.add(key);
-      }
-      out.push({ zoom, painted: rects.length, repeated });
-    }
-    ui.state.zoom = 1;
-    render.drawStarfield();
-    return out;
-  });
-
-  for (const r of result) {
-    expect([r.zoom, r.painted > 10]).toEqual([r.zoom, true]);
-    expect([r.zoom, r.repeated]).toEqual([r.zoom, 0]);
-  }
-});
-
 test('the sky stays dark enough to read overlays against', async ({
   page,
   app,

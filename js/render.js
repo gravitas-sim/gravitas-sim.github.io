@@ -406,8 +406,6 @@ const starCtx = starfieldCanvas.getContext('2d');
 // The sky, and the three canvases it is painted onto once.
 let starField = null;
 let starIndex = null;
-/** Stamps the entries one lensed disc has drawn, so none is drawn twice. */
-let starStamp = 0;
 /** Reused by every index query in drawStarfield. */
 const nearScratch = [];
 const starLayerCanvases = { far: null, mid: null, near: null };
@@ -823,9 +821,6 @@ function drawStarfield() {
     starCtx.fillStyle = background;
     starCtx.fill('evenodd');
 
-    // One stamp per region: a star the wrapped queries below both return is
-    // still one star, drawn once.
-    const stamp = ++starStamp;
     let drawnStyle = '';
     for (const layer of LAYERS) {
       const off = offsets[layer] || { x: 0, y: 0 };
@@ -845,8 +840,6 @@ function drawStarfield() {
           const found = starIndex.near(cx, cy, region.r, layer, nearScratch);
           for (let k = 0; k < found.length; k++) {
             const entry = found[k];
-            if (entry.mark === stamp) continue;
-            entry.mark = stamp;
             const star = entry.star;
             let sx = wrap(star.x - off.x, W);
             let sy = wrap(star.y - off.y, H);

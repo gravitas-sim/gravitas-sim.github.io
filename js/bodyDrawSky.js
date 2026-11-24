@@ -1006,11 +1006,10 @@ export const GRID_CELL = 64;
  * cost 19.6 ms a repaint in the crowded scene; a grid walks only the buckets
  * the disc touches.
  *
- * Each entry is {star, layer, mark, style}. `mark` and `style` are scratch for
- * the caller: a painter that queries one disc at several wrapped centres stamps
- * `mark` with a number of its own, so a star that more than one query returns
- * is drawn once, and keeps the colour string of the star as it is when it is
- * not lensed in `style`.
+ * Each entry is {star, layer, style}. `style` is scratch for the caller: it
+ * keeps the colour string of the star as it is when it is not lensed. A disc
+ * queried at several wrapped centres can return a star more than once, and the
+ * painter draws it each time, as the sky always has.
  *
  * @param {object} field - From generateStarfield
  * @returns {object} An index with a `near` method
@@ -1039,7 +1038,7 @@ export function indexStarfield(field) {
         bucket = [];
         cells.set(key, bucket);
       }
-      bucket.push({ star, layer, mark: 0, style: null });
+      bucket.push({ star, layer, style: null });
     }
   }
 
