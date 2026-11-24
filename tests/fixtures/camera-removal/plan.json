@@ -1,0 +1,106 @@
+{
+  "_note": "Fixed before any code or result. Nothing in this file changes after a measurement: a candidate that fails is recorded as rejected and the scenario stays on branch N. DECISION_REGISTER.md D-R4-496-01 is the record.",
+  "invariant": "Nothing is removed while it is bound to anything that stays, and nothing that decides a removal reads the canvas, the zoom, the pan or the window.",
+  "branches": {
+    "N": "The default. The camera box is deleted and no body is removed for leaving any region. Ships wherever the cost gate passes.",
+    "E": "Escape removal. Built only for a scenario where N fails the cost gate, only in a world of point-mass sources (no dark-matter halo, no MOND), and only with a rule that passes every fixture below and the property test."
+  },
+  "candidateE": {
+    "K": 20,
+    "K_alternative": 5,
+    "C": 60,
+    "C_cheaper": 600,
+    "groupsPerPassCheaper": 64,
+    "extentFloorUnits": 1000,
+    "extent": "the largest initial distance of any body from the barycentre of the bodies that pull on it, at world build, at least the floor; held in engine state and reset where the world is rebuilt",
+    "kinds": "every kind in the old cull block except debris and accretion disk particles",
+    "candidate": "a body farther than K extents from the barycentre of the bodies that pull on it",
+    "bound": "(1/2)|V1 - V2|^2 - G (M1 + M2) / d < 0, from the two groups' barycentres, velocities and total masses, wherever either pulls the other",
+    "groups": "bottom-up rounds: round 0 is every body alone; a round joins two groups when their aggregates are bound or when any earlier group inside one (a single body included) is bound to the other's aggregate or to an earlier group inside it; all joins of a round are made at once from the groups as they stood when it began; rounds repeat until one joins nothing",
+    "removal": "a group is removed whole, and only if every member is a candidate, none is persistent, it recedes from the barycentre of the outside bodies that pull on a member, and (1/2)|Vg - Vs|^2 - G M_out / d_min > 0",
+    "effects": "debris and disk particles are removed beyond 50 extents whatever their energy only after the code and the lesson data show they pull on nothing and nothing counts them after they leave; otherwise they are bodies"
+  },
+  "costGate": {
+    "scenes": [
+      "solar-system",
+      "black-hole-lab",
+      "circumbinary-planet-lab",
+      "galilean-resonance",
+      "kuiper-belt",
+      "star-cluster",
+      "galactic-collision",
+      "tidal-disruption-event"
+    ],
+    "scenesSource": "the six scenarios of 445's scene records (tests/fixtures/scene-records) and the four the prompt names, two of them shared",
+    "frames": 20000,
+    "frameSeconds": 0.016666666666666666,
+    "runs": 3,
+    "statistic": "median of the three runs",
+    "window": "mean engine time per frame over frames 1-500 (start) and 19501-20000 (end)",
+    "liveCountsAt": [0, 5000, 10000, 15000, 20000],
+    "ratioLimit": 1.5,
+    "baseline": "the same harness on the base commit, cull on, with a 375x812 canvas at the scene's own zoom and pan (the narrowest scene-record viewport, which removes the most and so is the cheapest baseline); 1366x800 is recorded beside it",
+    "measures": "engine time (physics.updatePhysics for each frame's substeps) in Node 22 with a stub canvas, machine and load stated; drawing is not timed here, and a browser frame-time reading at the end of the long run is taken for any scene whose live count at the end differs from the baseline's by more than 10 percent"
+  },
+  "fixtures": {
+    "everyBranch": {
+      "camera": "the same seeded world, 600 frames, canvases 800x600, 1366x800 and 3840x2160 plus none, zoom 0.25 and 3, pan 0 and 200 AU: identical live ids and positions and zero removed by the camera",
+      "cameraScenes": ["solar-system", "kuiper-belt", "tidal-disruption-event"],
+      "solarSystemComets": ["Hyakutake", "Comet ISON", "Pan-STARRS"]
+    },
+    "N": "nothing is removed for leaving any region in any fixture; removedByEscape is 0",
+    "E": {
+      "boundComet": "a comet bound to its star with apoapsis at 100 extents is alive after one period",
+      "evolvedPair": {
+        "bodies": {
+          "C": { "mass": 1000, "x": 0, "persistent": true },
+          "A": { "mass": 1000, "x": 500 },
+          "B": { "mass": 10000, "x": 1000 }
+        },
+        "setup": "A and B a circular pair with common vx = 10, G = 1, step 0.05",
+        "at": 4458,
+        "expect": "B is a candidate, A is not, they are bound: B stays"
+      },
+      "hierarchy": {
+        "bodies": {
+          "A": { "mass": 10000, "x": 490, "vy": -0.044499416, "vx": 100 },
+          "B": { "mass": 100, "x": 990, "vy": 4.449941595, "vx": 100 },
+          "C": {
+            "mass": 0.001,
+            "x": 1000,
+            "vy": 7.612235066,
+            "vx": 100,
+            "persistent": true
+          },
+          "D": { "mass": 10000, "x": 0, "persistent": true }
+        },
+        "setup": "all y = 0, G = 1, mutual gravity, no halo, Verlet, step 0.01, no merging",
+        "at": 405.6,
+        "expect": "A and B candidates, C not; C bound to B (-5.007) and not to the aggregate of A and B (+4.309); A, B and C one group; none leaves",
+        "orders": 24
+      },
+      "planetAndMoon": "ejected together under mutual gravity: leave in one pass, counted as two, announced once",
+      "twoLevels": "a planet bound to an ejected pair of stars, and a moon of a planet of an ejected star: the same",
+      "oneWay": "a test body bound to a star that is leaving a second star, under one-way gravity: kept while its star stays",
+      "lone": "a lone unbound body past the limit: removed, counted once",
+      "halo": {
+        "vFlat": 12,
+        "core": 150,
+        "body": "r = 100000 moving outward at speed 1",
+        "expect": "E not offered, nothing removed"
+      },
+      "mond": "E not offered, nothing removed"
+    },
+    "propertyTest": {
+      "worlds": 200,
+      "levels": [1, 3],
+      "separationUnderExtents": 1,
+      "gravity": ["reciprocal", "one-way"],
+      "anchor": "a persistent star the hierarchy drifts past",
+      "continueUntilExtents": 10,
+      "travelledWithinExtents": 2,
+      "timeoutTimesTravelTime": 100,
+      "oracle": "wherever the candidate would remove a group, the world is continued with no removal until the group is 10 initial extents farther from the barycentre; a body that stayed and is then within 2 initial extents of a member travelled with it and fails the case; a group that has not gone that far in 100 times the time its speed needs fails too"
+    }
+  }
+}

@@ -994,7 +994,7 @@
       "value": 0.04667,
       "bound": 0.02,
       "pass": false,
-      "limit": "A fixed-step first-order scheme loses this share of a hard three-body pass's energy at this frame rate; no pair-timescale substep up to 1/80 of the pair's timescale meets 0.02 at all four rates (docs/encounter-rules.md, D-R4-460-02). Stated on the model page; read a close pass's outcome as qualitative."
+      "limit": ""
     },
     {
       "id": "R4x.energy@30",
@@ -1005,7 +1005,7 @@
       "value": 0.1675,
       "bound": 0.02,
       "pass": false,
-      "limit": "A fixed-step first-order scheme loses this share of a hard three-body pass's energy at this frame rate; no pair-timescale substep up to 1/80 of the pair's timescale meets 0.02 at all four rates (docs/encounter-rules.md, D-R4-460-02). Stated on the model page; read a close pass's outcome as qualitative."
+      "limit": ""
     },
     {
       "id": "R4x.energy@60",
@@ -1016,7 +1016,7 @@
       "value": 0.07727,
       "bound": 0.02,
       "pass": false,
-      "limit": "A fixed-step first-order scheme loses this share of a hard three-body pass's energy at this frame rate; no pair-timescale substep up to 1/80 of the pair's timescale meets 0.02 at all four rates (docs/encounter-rules.md, D-R4-460-02). Stated on the model page; read a close pass's outcome as qualitative."
+      "limit": ""
     },
     {
       "id": "R4x.energy@clamp",
@@ -1027,7 +1027,7 @@
       "value": 0.2572,
       "bound": 0.02,
       "pass": false,
-      "limit": "A fixed-step first-order scheme loses this share of a hard three-body pass's energy at this frame rate; no pair-timescale substep up to 1/80 of the pair's timescale meets 0.02 at all four rates (docs/encounter-rules.md, D-R4-460-02). Stated on the model page; read a close pass's outcome as qualitative."
+      "limit": ""
     },
     {
       "id": "R5.fragmentSpread",
@@ -1109,480 +1109,480 @@
       "id": "R6.deleted@120.z0.25.p0",
       "case": "R6",
       "quantity": "deleted",
-      "value": 3,
+      "value": 0,
       "bound": 0,
       "condition": "zoom 0.25, pan 0 AU, 120 frames a second",
-      "liveEqual": false,
+      "liveEqual": true,
       "referenceLive": 35,
       "detail": [
         {
           "canvas": "1366x800",
-          "deleted": 3,
-          "live": 32
+          "deleted": 0,
+          "live": 35
         },
         {
           "canvas": "375x812",
-          "deleted": 3,
-          "live": 32
+          "deleted": 0,
+          "live": 35
         },
         {
           "canvas": "1920x1080",
-          "deleted": 3,
-          "live": 32
+          "deleted": 0,
+          "live": 35
         }
       ],
       "rate": "120",
-      "pass": false,
+      "pass": true,
       "limit": ""
     },
     {
       "id": "R6.deleted@120.z0.25.p200",
       "case": "R6",
       "quantity": "deleted",
-      "value": 35,
+      "value": 0,
       "bound": 0,
       "condition": "zoom 0.25, pan 200 AU, 120 frames a second",
-      "liveEqual": false,
+      "liveEqual": true,
       "referenceLive": 35,
       "detail": [
         {
           "canvas": "1366x800",
-          "deleted": 19,
-          "live": 16
+          "deleted": 0,
+          "live": 35
         },
         {
           "canvas": "375x812",
-          "deleted": 35,
-          "live": 0
+          "deleted": 0,
+          "live": 35
         },
         {
           "canvas": "1920x1080",
-          "deleted": 19,
-          "live": 16
+          "deleted": 0,
+          "live": 35
         }
       ],
       "rate": "120",
-      "pass": false,
+      "pass": true,
       "limit": ""
     },
     {
       "id": "R6.deleted@120.z3.p0",
       "case": "R6",
       "quantity": "deleted",
-      "value": 5,
+      "value": 0,
       "bound": 0,
       "condition": "zoom 3, pan 0 AU, 120 frames a second",
-      "liveEqual": false,
+      "liveEqual": true,
       "referenceLive": 35,
       "detail": [
         {
           "canvas": "1366x800",
-          "deleted": 4,
-          "live": 31
+          "deleted": 0,
+          "live": 35
         },
         {
           "canvas": "375x812",
-          "deleted": 5,
-          "live": 30
+          "deleted": 0,
+          "live": 35
         },
         {
           "canvas": "1920x1080",
-          "deleted": 4,
-          "live": 31
+          "deleted": 0,
+          "live": 35
         }
       ],
       "rate": "120",
-      "pass": false,
+      "pass": true,
       "limit": ""
     },
     {
       "id": "R6.deleted@120.z3.p200",
       "case": "R6",
       "quantity": "deleted",
-      "value": 35,
+      "value": 0,
       "bound": 0,
       "condition": "zoom 3, pan 200 AU, 120 frames a second",
-      "liveEqual": false,
+      "liveEqual": true,
       "referenceLive": 35,
       "detail": [
         {
           "canvas": "1366x800",
-          "deleted": 35,
-          "live": 0
+          "deleted": 0,
+          "live": 35
         },
         {
           "canvas": "375x812",
-          "deleted": 35,
-          "live": 0
+          "deleted": 0,
+          "live": 35
         },
         {
           "canvas": "1920x1080",
-          "deleted": 31,
-          "live": 4
+          "deleted": 0,
+          "live": 35
         }
       ],
       "rate": "120",
-      "pass": false,
+      "pass": true,
       "limit": ""
     },
     {
       "id": "R6.deleted@30.z0.25.p0",
       "case": "R6",
       "quantity": "deleted",
-      "value": 3,
+      "value": 0,
       "bound": 0,
       "condition": "zoom 0.25, pan 0 AU, 30 frames a second",
-      "liveEqual": false,
+      "liveEqual": true,
       "referenceLive": 35,
       "detail": [
         {
           "canvas": "1366x800",
-          "deleted": 3,
-          "live": 32
+          "deleted": 0,
+          "live": 35
         },
         {
           "canvas": "375x812",
-          "deleted": 3,
-          "live": 32
+          "deleted": 0,
+          "live": 35
         },
         {
           "canvas": "1920x1080",
-          "deleted": 3,
-          "live": 32
+          "deleted": 0,
+          "live": 35
         }
       ],
       "rate": "30",
-      "pass": false,
+      "pass": true,
       "limit": ""
     },
     {
       "id": "R6.deleted@30.z0.25.p200",
       "case": "R6",
       "quantity": "deleted",
-      "value": 35,
+      "value": 0,
       "bound": 0,
       "condition": "zoom 0.25, pan 200 AU, 30 frames a second",
-      "liveEqual": false,
+      "liveEqual": true,
       "referenceLive": 35,
       "detail": [
         {
           "canvas": "1366x800",
-          "deleted": 19,
-          "live": 16
+          "deleted": 0,
+          "live": 35
         },
         {
           "canvas": "375x812",
-          "deleted": 35,
-          "live": 0
+          "deleted": 0,
+          "live": 35
         },
         {
           "canvas": "1920x1080",
-          "deleted": 19,
-          "live": 16
+          "deleted": 0,
+          "live": 35
         }
       ],
       "rate": "30",
-      "pass": false,
+      "pass": true,
       "limit": ""
     },
     {
       "id": "R6.deleted@30.z3.p0",
       "case": "R6",
       "quantity": "deleted",
-      "value": 5,
+      "value": 0,
       "bound": 0,
       "condition": "zoom 3, pan 0 AU, 30 frames a second",
-      "liveEqual": false,
+      "liveEqual": true,
       "referenceLive": 35,
       "detail": [
         {
           "canvas": "1366x800",
-          "deleted": 4,
-          "live": 31
+          "deleted": 0,
+          "live": 35
         },
         {
           "canvas": "375x812",
-          "deleted": 5,
-          "live": 30
+          "deleted": 0,
+          "live": 35
         },
         {
           "canvas": "1920x1080",
-          "deleted": 4,
-          "live": 31
+          "deleted": 0,
+          "live": 35
         }
       ],
       "rate": "30",
-      "pass": false,
+      "pass": true,
       "limit": ""
     },
     {
       "id": "R6.deleted@30.z3.p200",
       "case": "R6",
       "quantity": "deleted",
-      "value": 35,
+      "value": 0,
       "bound": 0,
       "condition": "zoom 3, pan 200 AU, 30 frames a second",
-      "liveEqual": false,
+      "liveEqual": true,
       "referenceLive": 35,
       "detail": [
         {
           "canvas": "1366x800",
-          "deleted": 35,
-          "live": 0
+          "deleted": 0,
+          "live": 35
         },
         {
           "canvas": "375x812",
-          "deleted": 35,
-          "live": 0
+          "deleted": 0,
+          "live": 35
         },
         {
           "canvas": "1920x1080",
-          "deleted": 31,
-          "live": 4
+          "deleted": 0,
+          "live": 35
         }
       ],
       "rate": "30",
-      "pass": false,
+      "pass": true,
       "limit": ""
     },
     {
       "id": "R6.deleted@60.z0.25.p0",
       "case": "R6",
       "quantity": "deleted",
-      "value": 3,
+      "value": 0,
       "bound": 0,
       "condition": "zoom 0.25, pan 0 AU, 60 frames a second",
-      "liveEqual": false,
+      "liveEqual": true,
       "referenceLive": 35,
       "detail": [
         {
           "canvas": "1366x800",
-          "deleted": 3,
-          "live": 32
+          "deleted": 0,
+          "live": 35
         },
         {
           "canvas": "375x812",
-          "deleted": 3,
-          "live": 32
+          "deleted": 0,
+          "live": 35
         },
         {
           "canvas": "1920x1080",
-          "deleted": 3,
-          "live": 32
+          "deleted": 0,
+          "live": 35
         }
       ],
       "rate": "60",
-      "pass": false,
+      "pass": true,
       "limit": ""
     },
     {
       "id": "R6.deleted@60.z0.25.p200",
       "case": "R6",
       "quantity": "deleted",
-      "value": 35,
+      "value": 0,
       "bound": 0,
       "condition": "zoom 0.25, pan 200 AU, 60 frames a second",
-      "liveEqual": false,
+      "liveEqual": true,
       "referenceLive": 35,
       "detail": [
         {
           "canvas": "1366x800",
-          "deleted": 19,
-          "live": 16
+          "deleted": 0,
+          "live": 35
         },
         {
           "canvas": "375x812",
-          "deleted": 35,
-          "live": 0
+          "deleted": 0,
+          "live": 35
         },
         {
           "canvas": "1920x1080",
-          "deleted": 19,
-          "live": 16
+          "deleted": 0,
+          "live": 35
         }
       ],
       "rate": "60",
-      "pass": false,
+      "pass": true,
       "limit": ""
     },
     {
       "id": "R6.deleted@60.z3.p0",
       "case": "R6",
       "quantity": "deleted",
-      "value": 5,
+      "value": 0,
       "bound": 0,
       "condition": "zoom 3, pan 0 AU, 60 frames a second",
-      "liveEqual": false,
+      "liveEqual": true,
       "referenceLive": 35,
       "detail": [
         {
           "canvas": "1366x800",
-          "deleted": 4,
-          "live": 31
+          "deleted": 0,
+          "live": 35
         },
         {
           "canvas": "375x812",
-          "deleted": 5,
-          "live": 30
+          "deleted": 0,
+          "live": 35
         },
         {
           "canvas": "1920x1080",
-          "deleted": 4,
-          "live": 31
+          "deleted": 0,
+          "live": 35
         }
       ],
       "rate": "60",
-      "pass": false,
+      "pass": true,
       "limit": ""
     },
     {
       "id": "R6.deleted@60.z3.p200",
       "case": "R6",
       "quantity": "deleted",
-      "value": 35,
+      "value": 0,
       "bound": 0,
       "condition": "zoom 3, pan 200 AU, 60 frames a second",
-      "liveEqual": false,
+      "liveEqual": true,
       "referenceLive": 35,
       "detail": [
         {
           "canvas": "1366x800",
-          "deleted": 35,
-          "live": 0
+          "deleted": 0,
+          "live": 35
         },
         {
           "canvas": "375x812",
-          "deleted": 35,
-          "live": 0
+          "deleted": 0,
+          "live": 35
         },
         {
           "canvas": "1920x1080",
-          "deleted": 31,
-          "live": 4
+          "deleted": 0,
+          "live": 35
         }
       ],
       "rate": "60",
-      "pass": false,
+      "pass": true,
       "limit": ""
     },
     {
       "id": "R6.deleted@clamp.z0.25.p0",
       "case": "R6",
       "quantity": "deleted",
-      "value": 3,
+      "value": 0,
       "bound": 0,
       "condition": "zoom 0.25, pan 0 AU, at the slow-frame clamp",
-      "liveEqual": false,
+      "liveEqual": true,
       "referenceLive": 35,
       "detail": [
         {
           "canvas": "1366x800",
-          "deleted": 3,
-          "live": 32
+          "deleted": 0,
+          "live": 35
         },
         {
           "canvas": "375x812",
-          "deleted": 3,
-          "live": 32
+          "deleted": 0,
+          "live": 35
         },
         {
           "canvas": "1920x1080",
-          "deleted": 3,
-          "live": 32
+          "deleted": 0,
+          "live": 35
         }
       ],
       "rate": "clamp",
-      "pass": false,
+      "pass": true,
       "limit": ""
     },
     {
       "id": "R6.deleted@clamp.z0.25.p200",
       "case": "R6",
       "quantity": "deleted",
-      "value": 35,
+      "value": 0,
       "bound": 0,
       "condition": "zoom 0.25, pan 200 AU, at the slow-frame clamp",
-      "liveEqual": false,
+      "liveEqual": true,
       "referenceLive": 35,
       "detail": [
         {
           "canvas": "1366x800",
-          "deleted": 19,
-          "live": 16
+          "deleted": 0,
+          "live": 35
         },
         {
           "canvas": "375x812",
-          "deleted": 35,
-          "live": 0
+          "deleted": 0,
+          "live": 35
         },
         {
           "canvas": "1920x1080",
-          "deleted": 19,
-          "live": 16
+          "deleted": 0,
+          "live": 35
         }
       ],
       "rate": "clamp",
-      "pass": false,
+      "pass": true,
       "limit": ""
     },
     {
       "id": "R6.deleted@clamp.z3.p0",
       "case": "R6",
       "quantity": "deleted",
-      "value": 5,
+      "value": 0,
       "bound": 0,
       "condition": "zoom 3, pan 0 AU, at the slow-frame clamp",
-      "liveEqual": false,
+      "liveEqual": true,
       "referenceLive": 35,
       "detail": [
         {
           "canvas": "1366x800",
-          "deleted": 4,
-          "live": 31
+          "deleted": 0,
+          "live": 35
         },
         {
           "canvas": "375x812",
-          "deleted": 5,
-          "live": 30
+          "deleted": 0,
+          "live": 35
         },
         {
           "canvas": "1920x1080",
-          "deleted": 4,
-          "live": 31
+          "deleted": 0,
+          "live": 35
         }
       ],
       "rate": "clamp",
-      "pass": false,
+      "pass": true,
       "limit": ""
     },
     {
       "id": "R6.deleted@clamp.z3.p200",
       "case": "R6",
       "quantity": "deleted",
-      "value": 35,
+      "value": 0,
       "bound": 0,
       "condition": "zoom 3, pan 200 AU, at the slow-frame clamp",
-      "liveEqual": false,
+      "liveEqual": true,
       "referenceLive": 35,
       "detail": [
         {
           "canvas": "1366x800",
-          "deleted": 35,
-          "live": 0
+          "deleted": 0,
+          "live": 35
         },
         {
           "canvas": "375x812",
-          "deleted": 35,
-          "live": 0
+          "deleted": 0,
+          "live": 35
         },
         {
           "canvas": "1920x1080",
-          "deleted": 31,
-          "live": 4
+          "deleted": 0,
+          "live": 35
         }
       ],
       "rate": "clamp",
-      "pass": false,
+      "pass": true,
       "limit": ""
     },
     {
@@ -1810,23 +1810,7 @@
     "R5.position@120",
     "R5.position@30",
     "R5.position@60",
-    "R5.position@clamp",
-    "R6.deleted@120.z0.25.p0",
-    "R6.deleted@120.z0.25.p200",
-    "R6.deleted@120.z3.p0",
-    "R6.deleted@120.z3.p200",
-    "R6.deleted@30.z0.25.p0",
-    "R6.deleted@30.z0.25.p200",
-    "R6.deleted@30.z3.p0",
-    "R6.deleted@30.z3.p200",
-    "R6.deleted@60.z0.25.p0",
-    "R6.deleted@60.z0.25.p200",
-    "R6.deleted@60.z3.p0",
-    "R6.deleted@60.z3.p200",
-    "R6.deleted@clamp.z0.25.p0",
-    "R6.deleted@clamp.z0.25.p200",
-    "R6.deleted@clamp.z3.p0",
-    "R6.deleted@clamp.z3.p200"
+    "R5.position@clamp"
   ],
   "reported": {
     "R1@60": {
@@ -1862,13 +1846,6 @@
       "orbitsRun": 50,
       "omegaDt": 0.0008784
     },
-    "R1@120": {
-      "endPositionOverA": 0.0007727,
-      "stepsPerOrbit": 4769,
-      "orbitsRun": 100,
-      "periodsMeasured": 100,
-      "omegaDt": 0.001318
-    },
     "R3@30": {
       "endSeparationOverA": 0.0002473,
       "stepsPerOrbit": 5961,
@@ -1883,6 +1860,13 @@
       "turnAngle": 0.004787,
       "shadowAmplitude": 0.07342
     },
+    "R1@120": {
+      "endPositionOverA": 0.0007727,
+      "stepsPerOrbit": 4769,
+      "orbitsRun": 100,
+      "periodsMeasured": 100,
+      "omegaDt": 0.001318
+    },
     "R2@60": {
       "endPositionOverA": 0.01332,
       "stepsPerOrbit": 7328,
@@ -1891,23 +1875,23 @@
       "turnAngle": 0.005319,
       "shadowAmplitude": 0.07342
     },
-    "R6.control@30": {
-      "deletedAtHundredThousandAU": 35
-    },
-    "R6.control@60": {
-      "deletedAtHundredThousandAU": 35
-    },
     "R3@clamp": {
       "endSeparationOverA": 0.0002838,
       "stepsPerOrbit": 5563,
       "orbitsRun": 50,
       "omegaDt": 0.001129
     },
+    "R6.control@30": {
+      "deletedAtHundredThousandAU": 0
+    },
     "R6.control@120": {
-      "deletedAtHundredThousandAU": 35
+      "deletedAtHundredThousandAU": 0
+    },
+    "R6.control@60": {
+      "deletedAtHundredThousandAU": 0
     },
     "R6.control@clamp": {
-      "deletedAtHundredThousandAU": 35
+      "deletedAtHundredThousandAU": 0
     },
     "R4@120": {
       "closestApproach": 13.06,
@@ -1946,13 +1930,6 @@
       "dvSim": 1.739,
       "dvRef": 1.739
     },
-    "R4@clamp": {
-      "closestApproach": 13.06,
-      "craftPositionError": 0.01356,
-      "endTime": 1200,
-      "dvSim": 1.739,
-      "dvRef": 1.739
-    },
     "R4x@120": {
       "timeOfCloseApproach": 33.63,
       "minimumSeparation": 25.46,
@@ -1971,6 +1948,13 @@
       "minimumSeparation": 25.79,
       "energyErrorThroughTheRun": 0.07727,
       "side": 86.6
+    },
+    "R4@clamp": {
+      "closestApproach": 13.06,
+      "craftPositionError": 0.01356,
+      "endTime": 1200,
+      "dvSim": 1.739,
+      "dvRef": 1.739
     },
     "R5@60": {
       "periapsisTime": 3.217,

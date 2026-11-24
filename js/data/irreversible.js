@@ -19,130 +19,9 @@ export const IRREVERSIBLE = Object.freeze([
     id: 'collapse:star-to-hole',
     kind: 'collapse',
     file: 'js/engine/step.js',
-    line: 822,
+    line: 795,
     detail: Object.freeze({
       what: 'a star past the collapse mass is replaced by a black hole; the star it was is gone, along with its type, temperature and radius',
-    }),
-  }),
-  Object.freeze({
-    id: 'cull:planets',
-    kind: 'cull',
-    file: 'js/engine/step.js',
-    line: 951,
-    detail: Object.freeze({
-      list: 'planets',
-      buffer: 20,
-      what: 'planets more than 20 view-widths out are deleted',
-    }),
-  }),
-  Object.freeze({
-    id: 'cull:stars',
-    kind: 'cull',
-    file: 'js/engine/step.js',
-    line: 958,
-    detail: Object.freeze({
-      list: 'stars',
-      buffer: 20,
-      what: 'stars more than 20 view-widths out are deleted',
-    }),
-  }),
-  Object.freeze({
-    id: 'cull:gas_giants',
-    kind: 'cull',
-    file: 'js/engine/step.js',
-    line: 965,
-    detail: Object.freeze({
-      list: 'gas_giants',
-      buffer: 20,
-      what: 'gas giants more than 20 view-widths out are deleted',
-    }),
-  }),
-  Object.freeze({
-    id: 'cull:neutron_stars',
-    kind: 'cull',
-    file: 'js/engine/step.js',
-    line: 972,
-    detail: Object.freeze({
-      list: 'neutron_stars',
-      buffer: 20,
-      what: 'neutron stars more than 20 view-widths out are deleted',
-    }),
-  }),
-  Object.freeze({
-    id: 'cull:white_dwarfs',
-    kind: 'cull',
-    file: 'js/engine/step.js',
-    line: 979,
-    detail: Object.freeze({
-      list: 'white_dwarfs',
-      buffer: 20,
-      what: 'white dwarfs more than 20 view-widths out are deleted',
-    }),
-  }),
-  Object.freeze({
-    id: 'cull:galaxies',
-    kind: 'cull',
-    file: 'js/engine/step.js',
-    line: 986,
-    detail: Object.freeze({
-      list: 'galaxies',
-      buffer: 20,
-      what: 'galaxies more than 20 view-widths out are deleted',
-    }),
-  }),
-  Object.freeze({
-    id: 'cull:bh_list',
-    kind: 'cull',
-    file: 'js/engine/step.js',
-    line: 993,
-    detail: Object.freeze({
-      list: 'bh_list',
-      buffer: 50,
-      what: 'black holes more than 50 view-widths out are deleted',
-    }),
-  }),
-  Object.freeze({
-    id: 'cull:asteroids',
-    kind: 'cull',
-    file: 'js/engine/step.js',
-    line: 1002,
-    detail: Object.freeze({
-      list: 'asteroids',
-      buffer: 5,
-      what: 'asteroids more than 5 view-widths out are deleted',
-    }),
-  }),
-  Object.freeze({
-    id: 'cull:comets',
-    kind: 'cull',
-    file: 'js/engine/step.js',
-    line: 1006,
-    detail: Object.freeze({
-      list: 'comets',
-      buffer: 20,
-      what: 'comets more than 20 view-widths out are deleted',
-    }),
-  }),
-  Object.freeze({
-    id: 'cull:debris',
-    kind: 'cull',
-    file: 'js/engine/step.js',
-    line: 1010,
-    detail: Object.freeze({
-      list: 'debris',
-      buffer: 3,
-      what: 'debris more than 3 view-widths out are deleted',
-    }),
-  }),
-  Object.freeze({
-    id: 'cull:accretion_disk_particles',
-    kind: 'cull',
-    file: 'js/engine/step.js',
-    line: 1014,
-    detail: Object.freeze({
-      list: 'accretion_disk_particles',
-      buffer: 2,
-      what: 'accretion-disk particles more than 2 view-widths out are deleted',
     }),
   }),
   Object.freeze({
@@ -181,7 +60,6 @@ export const IRREVERSIBLE_SOURCE = 'js/engine/step.js';
 /** How many of each kind, for the documentation counts. */
 export const IRREVERSIBLE_KINDS = Object.freeze({
   collapse: 1,
-  cull: 11,
   merge: 1,
   damping: 1,
   fragment: 1,
