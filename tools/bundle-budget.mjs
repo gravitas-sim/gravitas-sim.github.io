@@ -132,7 +132,7 @@ const BUDGETS = [
   {
     id: 'deferred',
     label: 'Deferred JavaScript (lazy chunks, gzipped)',
-    limit: 3275.2,
+    limit: 3275.1,
     reason:
       'Jumped from 1369 KB to 2105 KB when three.js and Chart.js stopped being ' +
       'CDN requests and became bundled chunks. That is the point of the change ' +
@@ -756,7 +756,7 @@ const BUDGETS = [
       "\n\nThe Mars, orbit locking and habitable zone lessons, merged with v4 10088f53 (D-R4-TRAINC2-03, -04, -06): PROVISIONAL, raised from 3266.1 to 3274.5 KB, v4's limit (3266.1, after the planet, binary star, tides and resuming lessons) plus the 8.4 KB this branch added over v4 e16734ec (CI measured 3,337,403 bytes at 7f6188ca, 3,337,549 bytes at f3ff895c and 3,352,525 bytes, 3273.95 KB, at b8fcabca, the branch merged with v4 cb43cf13). Set to the CI measurement of the merged head under the standing approval of 2026-10-10 when it arrives." +
       "\n\nSize, scale and transit geometry stated honestly (D-R4-344-06): the lesson's Sizes button, the corrected Spanish and deferred text and the Sizes table's stated real radii; raised from 3265.6 to 3266.2 KB, the measurement of a Node 22.23.4 build of the branch merged with v4 cb43cf134: 3,344,494 bytes gzipped (3266.11 KB), rounded up to 0.1 KB; set to CI's figure before review. Production class (maintainer decision 2026-11-22) under the standing approval of 2026-10-10." +
       '\n\nHonest sizes after merging v4 10088f53c (D-R4-344-07): raised from 3266.1 to 3266.8 KB, the measured overrun rounded up to 0.1 KB (3,345,103 bytes gzipped on a Node 22.23.4 build of the merged branch, 3266.702 KB); this replaces the figures of D-R4-344-06, measured over an older v4. Set again from the CI figure before review. Under the standing approval of 2026-10-10 and the engine and production class exemption (maintainer decision, 2026-11-21).' +
-      "\n\nHonest sizes after merging v4 f258bdf29 (D-R4-344-07): restacked on the 3274.5 KB v4 reached, keeping this branch's 0.7 KB grant (ea): 3275.2 KB, set again from the CI figure of the merged branch before review. Under the standing approval of 2026-10-10 and the engine and production class exemption (maintainer decision, 2026-11-21).",
+      '\n\nHonest sizes after merging v4 f258bdf29 (D-R4-344-07): restacked on the 3274.5 KB v4 reached: CI measured 3,353,634 bytes gzipped (3275.03 KB) on the merged branch, so 3275.1 KB, a 0.6 KB grant (ea). Under the standing approval of 2026-10-10 and the engine and production class exemption (maintainer decision, 2026-11-21).',
   },
 ];
 
