@@ -132,7 +132,7 @@ const BUDGETS = [
   {
     id: 'deferred',
     label: 'Deferred JavaScript (lazy chunks, gzipped)',
-    limit: 3275.4,
+    limit: 3275.3,
     reason:
       'Jumped from 1369 KB to 2105 KB when three.js and Chart.js stopped being ' +
       'CDN requests and became bundled chunks. That is the point of the change ' +
@@ -755,7 +755,7 @@ const BUDGETS = [
       '\n\nResuming a lesson at its scene (D-R4-367-11): raised from 3265.6 to 3266.1 KB, the previous limit plus the 0.5 KB the branch adds over v4 (CI measured 3,329,600 bytes gzipped, 3251.5625 KB, against 3,329,004 on v4 before the branch merged with the solar system lessons; set again from the run on the merged branch). Under the standing approval of 2026-10-10 and the engine and production class exemption (maintainer decision, 2026-11-21).' +
       "\n\nThe Mars, orbit locking and habitable zone lessons, merged with v4 10088f53 (D-R4-TRAINC2-03, -04, -06): PROVISIONAL, raised from 3266.1 to 3274.5 KB, v4's limit (3266.1, after the planet, binary star, tides and resuming lessons) plus the 8.4 KB this branch added over v4 e16734ec (CI measured 3,337,403 bytes at 7f6188ca, 3,337,549 bytes at f3ff895c and 3,352,525 bytes, 3273.95 KB, at b8fcabca, the branch merged with v4 cb43cf13). Set to the CI measurement of the merged head under the standing approval of 2026-10-10 when it arrives." +
       '\n\nOne scenario revision authority (D-R4-498-02): raised from 3266.1 to 3267.0 KB, the measured overrun rounded up to 0.1 KB (3,345,341 bytes gzipped on a Node 22.23.4 build of the branch on v4 10088f53c, 3266.93 KB); set again from the CI figure before review. Under the standing approval of 2026-10-10 and the engine and production class exemption (maintainer decision, 2026-11-21).' +
-      "\n\nOne scenario revision authority, after merging v4 f258bdf29 (D-R4-498-02): restacked on the 3274.5 KB v4 reached, keeping this branch's 0.9 KB grant (eh): 3275.4 KB, set again from the CI figure of the merged branch before review. Under the standing approval of 2026-10-10 and the engine and production class exemption (maintainer decision, 2026-11-21).",
+      '\n\nOne scenario revision authority, after merging v4 f258bdf29 (D-R4-498-02): restacked on the 3274.5 KB v4 reached: CI measured 3,353,912 bytes gzipped (3275.30 KB) on the merged branch, so 3275.3 KB, a 0.8 KB grant (eh). Under the standing approval of 2026-10-10 and the engine and production class exemption (maintainer decision, 2026-11-21).',
   },
 ];
 
