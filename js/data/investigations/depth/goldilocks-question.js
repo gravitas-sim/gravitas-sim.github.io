@@ -77,17 +77,37 @@ export default {
       },
     },
     {
-      sid: 'the-same-limit-a-dim-star',
+      sid: 'estimate-the-dim-limit',
       after: 'the-limits-as-starlight',
+      depth: 'quantitative',
+      type: 'predict',
+      kind: 'estimate',
+      unit: 'AU',
+      reveal: 'the-estimate-and-the-limit',
+      decides:
+        'which amount of starlight to carry over to a dimmer star, and how far from the star that puts the limit',
+      title: 'Estimate the limit for a dim star',
+      body: `You have the amount of starlight at the Sun&rsquo;s runaway-greenhouse
+             limit from the last step. Suppose an M dwarf of 3200 K, with about 0.4
+             percent of the Sun&rsquo;s luminosity (0.004 Suns), had its limit at
+             that same amount of starlight.
+             \n\nWithout opening the panel, use what you found about starlight and
+             distance (it falls as the inverse square of distance) and about
+             luminosity (it scales with the star&rsquo;s luminosity) to estimate
+             how far from the star that limit would lie. Commit to a number. It
+             stays unmarked until you have read the panel.`,
+      prompt: 'The limit would lie at about',
+    },
+    {
+      sid: 'the-same-limit-a-dim-star',
+      after: 'estimate-the-dim-limit',
       depth: 'quantitative',
       type: 'measure',
       title: 'The same limit around a dim star',
-      body: `Choose <strong>an M dwarf (3200 K)</strong>, a star with about 0.4 percent of the
-             Sun&rsquo;s luminosity. Read the starlight at its runaway-greenhouse limit and
-             the distance at which a planet receives it.
-             \n\nThe amount of starlight changes only a little from star to star (the fit
-             depends weakly on the star&rsquo;s temperature). The distance changes a great
-             deal, because the luminosity does.`,
+      body: `Choose <strong>an M dwarf (3200 K)</strong>, the star of your estimate.
+             Read the starlight at its runaway-greenhouse limit and the distance at
+             which a planet receives it. Your estimate is set beside the distance on
+             the next screen.`,
       fields: [
         {
           id: 'flux',
@@ -108,7 +128,7 @@ export default {
           return {
             level: 'ok',
             message:
-              '0.87 Earths at 0.068 AU, against 1.04 Earths at 0.98 AU for the Sun. The limit is almost the same amount of starlight and fourteen times closer in, because the star gives off a few hundred times less light. Check it with the inverse-square law: the square root of 0.004 divided by 0.868 is 0.068.',
+              'Those match the panel. Your estimate is set beside them on the next screen.',
           };
         }
         return {
@@ -124,8 +144,29 @@ export default {
       },
     },
     {
-      sid: 'a-star-the-fit-refuses',
+      sid: 'the-estimate-and-the-limit',
       after: 'the-same-limit-a-dim-star',
+      depth: 'quantitative',
+      type: 'read',
+      title: 'Your estimate and the panel',
+      body: `Your estimate and the panel&rsquo;s reading are below.
+             \n\nThe estimate carried the Sun&rsquo;s 1.04 Earths over to the dim star. The
+             panel gives 0.87 Earths: the fit depends weakly on the star&rsquo;s temperature,
+             so the amount of starlight at a limit changes only a little from star to
+             star, and a slightly lower amount puts the limit slightly farther out. The
+             distance changes a great deal, because the luminosity does: against 0.98 AU
+             for the Sun, this limit is fourteen times closer in. Check it with the
+             inverse-square law: the square root of 0.004 divided by 0.868 is 0.068.`,
+      evidence: [
+        { step: 'the-same-limit-a-dim-star', field: 'distance' },
+        { step: 'the-same-limit-a-dim-star', field: 'flux' },
+      ],
+      compare:
+        'Set your estimate beside the distance the panel gave, and say which amount of starlight, the one you assumed or the one the panel gave, put the limit farther out.',
+    },
+    {
+      sid: 'a-star-the-fit-refuses',
+      after: 'the-estimate-and-the-limit',
       depth: 'quantitative',
       type: 'question',
       kind: 'choice',
