@@ -4,11 +4,11 @@
   "routes": {
     "sources": {
       "front-door": {
-        "kb": 1930.9,
+        "kb": 1938.2,
         "requests": 109
       },
       "sandbox": {
-        "kb": 1930.9,
+        "kb": 1938.2,
         "requests": 109
       },
       "kepler": {
@@ -44,11 +44,11 @@
         "requests": 44
       },
       "figure": {
-        "kb": 2208.7,
+        "kb": 2216.0,
         "requests": 129
       },
       "experiments": {
-        "kb": 1090.5,
+        "kb": 1098.8,
         "requests": 61
       },
       "observatory": {
@@ -68,7 +68,7 @@
         "requests": 10
       },
       "studio": {
-        "kb": 956.4,
+        "kb": 965.6,
         "requests": 52
       },
       "composer": {
@@ -76,7 +76,7 @@
         "requests": 31
       },
       "course-builder": {
-        "kb": 1181,
+        "kb": 1181.0,
         "requests": 48
       },
       "course-home": {
@@ -116,7 +116,7 @@
         "requests": 6
       },
       "course-packs": {
-        "kb": 742.5,
+        "kb": 742.4,
         "requests": 46
       },
       "sky": {
@@ -130,31 +130,31 @@
     },
     "build": {
       "front-door": {
-        "kb": 548.3,
+        "kb": 550.5,
         "requests": 59
       },
       "sandbox": {
-        "kb": 548.3,
+        "kb": 550.5,
         "requests": 59
       },
       "kepler": {
-        "kb": 938.4,
+        "kb": 940.5,
         "requests": 77
       },
       "transit": {
-        "kb": 946,
+        "kb": 948.1,
         "requests": 77,
-        "toolKb": 1031.3,
+        "toolKb": 1033.4,
         "toolRequests": 93
       },
       "power-law": {
-        "kb": 914.6,
+        "kb": 916.7,
         "requests": 77,
-        "toolKb": 931.2,
+        "toolKb": 933.3,
         "toolRequests": 80
       },
       "largest-lesson": {
-        "kb": 1045.9,
+        "kb": 1048.0,
         "requests": 82
       },
       "teaching": {
@@ -170,11 +170,11 @@
         "requests": 2
       },
       "figure": {
-        "kb": 685.1,
+        "kb": 687.2,
         "requests": 61
       },
       "experiments": {
-        "kb": 298.8,
+        "kb": 300.3,
         "requests": 4
       },
       "observatory": {
@@ -194,7 +194,7 @@
         "requests": 4
       },
       "studio": {
-        "kb": 222.2,
+        "kb": 222.4,
         "requests": 3
       },
       "composer": {
@@ -202,7 +202,7 @@
         "requests": 16
       },
       "course-builder": {
-        "kb": 724,
+        "kb": 724.0,
         "requests": 13
       },
       "course-home": {

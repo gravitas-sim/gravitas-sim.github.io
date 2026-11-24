@@ -584,9 +584,68 @@ try {
       <p><span class="gs-en"><span class="doc-badge is-approximate">Approximated</span></span><span class="gs-es" lang="es"><span class="doc-badge is-approximate">Aproximado</span></span></p>
       <h3><span class="gs-en">What it computes</span><span class="gs-es" lang="es">Qué calcula</span></h3>
       <p>
-        <span class="gs-en">When two objects come within the sum of their radii, Gravitas replaces
-        them with a single object. The new object's mass is the sum of the two,
-        and its position and velocity are the mass-weighted average of theirs.</span><span class="gs-es" lang="es">Cuando dos objetos se acercan a menos de la suma de sus radios, Gravitas los reemplaza por un solo objeto. La masa del nuevo objeto es la suma de las dos, y su posición y velocidad son el promedio ponderado por masa de las de ellos.</span>
+        <span class="gs-en">What happens when two bodies touch depends on what they are. Contact
+        means the two bodies&rsquo; model radii touch: the radius the engine uses,
+        not the real size of the object (see <a href="#sizes">Displayed sizes</a>).</span><span class="gs-es" lang="es">Lo que ocurre cuando dos cuerpos se tocan depende de lo que son. Contacto significa que se tocan los radios de modelo de los dos cuerpos: el radio que usa el motor, no el tamaño real del objeto (véase <a href="#sizes">Tamaños mostrados</a>).</span>
+      </p>
+      <div class="doc-table-wrap">
+        <table class="doc-table">
+          <thead>
+            <tr>
+              <th scope="col"><span class="gs-en">Pair</span><span class="gs-es" lang="es">Par</span></th>
+              <th scope="col"><span class="gs-en">Outcome</span><span class="gs-es" lang="es">Resultado</span></th>
+              <th scope="col"><span class="gs-en">Threshold</span><span class="gs-es" lang="es">Umbral</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="gs-en">A star, white dwarf or neutron star and a black hole</span><span class="gs-es" lang="es">Una estrella, enana blanca o estrella de neutrones y un agujero negro</span></td>
+              <td><span class="gs-en">The hole absorbs it: the masses add and momentum is kept.</span><span class="gs-es" lang="es">El agujero la absorbe: las masas se suman y el momento se conserva.</span></td>
+              <td><span class="gs-en">Contact, with star merging on.</span><span class="gs-es" lang="es">Contacto, con la fusión de estrellas activada.</span></td>
+            </tr>
+            <tr>
+              <td><span class="gs-en">Two stars or stellar remnants</span><span class="gs-es" lang="es">Dos estrellas o remanentes estelares</span></td>
+              <td><span class="gs-en">They merge into one body at the pair&rsquo;s center of momentum; the pair and the total mass decide what kind of body it is.</span><span class="gs-es" lang="es">Se fusionan en un solo cuerpo en el centro de momento del par; el par y la masa total deciden qué clase de cuerpo es.</span></td>
+              <td><span class="gs-en">Contact, with star merging on.</span><span class="gs-es" lang="es">Contacto, con la fusión de estrellas activada.</span></td>
+            </tr>
+            <tr>
+              <td><span class="gs-en">Two black holes</span><span class="gs-es" lang="es">Dos agujeros negros</span></td>
+              <td><span class="gs-en">Not merged at contact. A close pair spirals together by the rule under <a href="#inspiral">Gravitational-wave inspiral</a>.</span><span class="gs-es" lang="es">No se fusionan al contacto. Un par cercano se acerca en espiral según la regla de <a href="#inspiral">Espiral de ondas gravitacionales</a>.</span></td>
+              <td><span class="gs-en">None at contact.</span><span class="gs-es" lang="es">Ninguno al contacto.</span></td>
+            </tr>
+            <tr>
+              <td><span class="gs-en">Two gas giants</span><span class="gs-es" lang="es">Dos gigantes gaseosos</span></td>
+              <td><span class="gs-en">They merge into one. If either is held by an investigation, the pair is not merged and bounces instead, keeping 0.8 of its approach speed along the line of centers.</span><span class="gs-es" lang="es">Se fusionan en uno. Si una investigación sostiene a alguno de los dos, el par no se fusiona y rebota, conservando 0.8 de su velocidad de acercamiento a lo largo de la línea de centros.</span></td>
+              <td><span class="gs-en">Contact.</span><span class="gs-es" lang="es">Contacto.</span></td>
+            </tr>
+            <tr>
+              <td><span class="gs-en">A star and a planet, gas giant, asteroid or comet</span><span class="gs-es" lang="es">Una estrella y un planeta, gigante gaseoso, asteroide o cometa</span></td>
+              <td><span class="gs-en">The star absorbs the smaller body; mass and momentum are kept.</span><span class="gs-es" lang="es">La estrella absorbe el cuerpo menor; la masa y el momento se conservan.</span></td>
+              <td><span class="gs-en">Contact.</span><span class="gs-es" lang="es">Contacto.</span></td>
+            </tr>
+            <tr>
+              <td><span class="gs-en">A gas giant and a smaller planet, asteroid or comet</span><span class="gs-es" lang="es">Un gigante gaseoso y un planeta menor, asteroide o cometa</span></td>
+              <td><span class="gs-en">The giant accretes it; mass and momentum are kept.</span><span class="gs-es" lang="es">El gigante lo acreta; la masa y el momento se conservan.</span></td>
+              <td><span class="gs-en">Contact.</span><span class="gs-es" lang="es">Contacto.</span></td>
+            </tr>
+            <tr>
+              <td><span class="gs-en">Two rocky bodies (planets, asteroids, comets)</span><span class="gs-es" lang="es">Dos cuerpos rocosos (planetas, asteroides, cometas)</span></td>
+              <td><span class="gs-en">They bounce, keeping 0.3 of their approach speed along the line of centers. Above the threshold each also loses a tenth of its mass and the pair sheds <span class="doc-eq">floor(v/8) + 2</span> fragments, where <span class="doc-eq">v</span> is the relative speed. The tenth is not carried by the fragments, which have a small fixed mass: this is a mass sink, a simplification for the picture.</span><span class="gs-es" lang="es">Rebotan, conservando 0.3 de su velocidad de acercamiento a lo largo de la línea de centros. Por encima del umbral cada uno pierde además una décima parte de su masa y el par desprende <span class="doc-eq">floor(v/8) + 2</span> fragmentos, donde <span class="doc-eq">v</span> es la velocidad relativa. Los fragmentos, que tienen una masa fija pequeña, no llevan esa décima parte: es un sumidero de masa, una simplificación para la imagen.</span></td>
+              <td><span class="gs-en">Shedding above a relative speed of 15 simulation units: 141 km/s at G = 1, 100 km/s at G = 2.</span><span class="gs-es" lang="es">Desprendimiento por encima de una velocidad relativa de 15 unidades de simulación: 141 km/s con G = 1, 100 km/s con G = 2.</span></td>
+            </tr>
+            <tr>
+              <td><span class="gs-en">A planet, gas giant, star or comet near a black hole</span><span class="gs-es" lang="es">Un planeta, gigante gaseoso, estrella o cometa cerca de un agujero negro</span></td>
+              <td><span class="gs-en">Tidal stripping: the body loses mass at a steady rate and sheds fragments. The number of fragments is the same at any frame rate.</span><span class="gs-es" lang="es">Desgarro de marea: el cuerpo pierde masa a un ritmo constante y desprende fragmentos. El número de fragmentos es el mismo a cualquier velocidad de cuadros.</span></td>
+              <td><span class="gs-en">Inside 3, 4, 5 and 2 times the hole&rsquo;s model radius respectively.</span><span class="gs-es" lang="es">Dentro de 3, 4, 5 y 2 veces el radio de modelo del agujero, respectivamente.</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p>
+        <span class="gs-en">Where two bodies merge, the new body&rsquo;s mass is the sum of the two,
+        and its position and velocity are the mass-weighted average of theirs.
+        The directions and speeds of fragments come from an unseeded random
+        draw, so a fragment shower is not the same twice.</span><span class="gs-es" lang="es">Donde dos cuerpos se fusionan, la masa del nuevo cuerpo es la suma de las dos, y su posición y velocidad son el promedio ponderado por masa de las de ellos. Las direcciones y velocidades de los fragmentos salen de un sorteo aleatorio sin semilla, así que una lluvia de fragmentos nunca se repite igual.</span>
       </p>
       <div class="doc-feature">
         <h4><span class="gs-en">What a merger conserves</span><span class="gs-es" lang="es">Qué conserva una fusión</span></h4>
@@ -640,12 +699,25 @@ try {
         radius, so it is small for the usual case of a light body falling into a
         heavy hole.</span><span class="gs-es" lang="es">Lo que todavía no puede arrastrarse es el momento angular del par respecto a su propio centro de masa. Físicamente se convierte en espín del agujero negro, que es como los agujeros reales se aceleran por acreción; Gravitas modela un agujero como una masa puntual sin espín, así que no hay adónde llevarlo. Se registra en lugar de descartarse, y está acotado por el radio de absorción, por lo que es pequeño en el caso habitual de un cuerpo ligero que cae en un agujero pesado.</span>
       </p>
+      <p>
+        <span class="gs-en">A hard close pass of three bodies is where a fixed step hurts most.
+        In a test case of three equal stars falling together, the scheme has
+        lost 5 percent of the energy at 120 frames a second, 8 at 60, 17 at
+        30, and 26 at the slowest rate (a frame of 0.05 s or longer) before any
+        two stars are within 0.3 of their starting separation. Smaller steps
+        through the pass alone do not fix it: even a step one eightieth of the
+        pair&rsquo;s own swing-by time leaves 2.0 to 2.3 percent. Read the
+        outcome of such a pass, which body is flung out and how fast, as
+        qualitative.</span><span class="gs-es" lang="es">Un paso cercano y fuerte de tres cuerpos es donde más daña un paso fijo. En un caso de prueba de tres estrellas iguales que caen juntas, el esquema ha perdido el 5 por ciento de la energía a 120 cuadros por segundo, el 8 a 60, el 17 a 30 y el 26 a la velocidad más lenta (un cuadro de 0.05 s o más) antes de que dos estrellas estén a menos de 0.3 de su separación inicial. Pasos más pequeños solo durante el paso no lo arreglan: incluso un paso de una ochentava parte del tiempo propio de acercamiento del par deja entre el 2.0 y el 2.3 por ciento. El resultado de un paso así, qué cuerpo sale despedido y a qué velocidad, debe leerse como cualitativo.</span>
+      </p>
       <div class="doc-note">
         <p>
-          <span class="gs-en"><strong>Not modeled:</strong> fragmentation, shock heating,
-          hydrodynamics, debris production from impacts, stellar structure, or
-          any radiation from a collision. A merger in Gravitas is an
-          instantaneous bookkeeping operation.</span><span class="gs-es" lang="es"><strong>No se modelan:</strong> la fragmentación, el calentamiento por choque, la hidrodinámica, la producción de escombros por impactos, la estructura estelar ni ninguna radiación de una colisión. Una fusión en Gravitas es una operación contable instantánea.</span>
+          <span class="gs-en"><strong>Not modeled:</strong> shock heating, hydrodynamics,
+          stellar structure, or any radiation from a collision. The fragments of
+          a fast rocky impact and of tidal stripping are a picture, not a
+          calculation: their number follows the rules in the table, their mass
+          is a small fixed amount, and their directions are random. A merger in
+          Gravitas is an instantaneous bookkeeping operation.</span><span class="gs-es" lang="es"><strong>No se modelan:</strong> el calentamiento por choque, la hidrodinámica, la estructura estelar ni ninguna radiación de una colisión. Los fragmentos de un impacto rocoso rápido y del desgarro de marea son una imagen, no un cálculo: su número sigue las reglas de la tabla, su masa es una cantidad fija pequeña y sus direcciones son aleatorias. Una fusión en Gravitas es una operación contable instantánea.</span>
         </p>
       </div>
       <p>
@@ -3292,7 +3364,7 @@ try {
             <tr>
               <td>Replaced</td>
               <td>a star past the collapse mass is replaced by a black hole; the star it was is gone, along with its type, temperature and radius</td>
-              <td><code>js/engine/step.js:795</code></td>
+              <td><code>js/engine/step.js:799</code></td>
             </tr>
             <tr>
               <td>Merged</td>
@@ -3306,8 +3378,8 @@ try {
             </tr>
             <tr>
               <td>Fragmented</td>
-              <td>a rocky collision destroys both bodies and scatters debris whose directions, speeds and offsets come from 4 fresh Math.random draws - unseeded, so the shower cannot be reproduced, let alone reversed</td>
-              <td><code>js/engine/collisions.js:1070</code></td>
+              <td>a fast rocky collision takes a tenth of each body's mass and scatters debris whose directions, speeds and offsets come from 4 fresh Math.random draws - unseeded, so the shower cannot be reproduced, let alone reversed</td>
+              <td><code>js/engine/collisions.js:1073</code></td>
             </tr>
           <!--/fact-block-->
           </tbody>

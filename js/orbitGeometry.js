@@ -12,7 +12,7 @@
 // periapsis is not on a Kepler ellipse.
 // =============================================================================
 
-import { orbitalElements, dominantPrimary } from './orbital.js';
+import { orbitalElements, primaryOf } from './orbital.js';
 import { twoBodyModel } from './twoBodyModel.js';
 
 const { Math } = globalThis;
@@ -76,7 +76,7 @@ export function pullsOn(body, sources, G, softening) {
  */
 export function orbitGeometry(body, sources, settings) {
   if (!body?.pos || !body?.vel) return { ok: false, reason: 'no-primary' };
-  const primary = dominantPrimary(body, sources);
+  const primary = primaryOf(body, sources);
   if (!primary) return { ok: false, reason: 'no-primary' };
   const G = settings.gravitational_constant;
   const softening = settings.softening;
