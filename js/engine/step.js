@@ -56,6 +56,7 @@ import {
   setWorkerFailed,
   isBarnesHutActive,
   sourceLists,
+  noteEngineEvent,
 } from './state.js';
 import {
   ENERGY_SAMPLE_RATE,
@@ -625,7 +626,9 @@ export const updatePhysics = dt => {
   for (const list of tidal_candidates) {
     for (const body of list) {
       if (!body.alive || !body.intact || !body.tidal_mass_loss) continue;
+      const before = body.mass;
       const { debris_count, fraction } = body.tidal_mass_loss(bh_list, dt);
+      if (body.mass !== before) noteEngineEvent('tidal');
       if (debris_count <= 0) continue;
       for (let i = 0; i < debris_count; i++) {
         const eject_speed = (Math.random() * 9 + 1) * (1 + fraction);
@@ -683,6 +686,7 @@ export const updatePhysics = dt => {
   const check_and_absorb = obj_list => {
     return obj_list.filter(obj => {
       if (obj.alive && obj.check_absorption(bh_list)) {
+        noteEngineEvent('absorption');
         // Create absorption particles matching original
         const baseColor =
           (obj && obj.baseColor) ||

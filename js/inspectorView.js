@@ -1214,6 +1214,8 @@ function getStatTooltip(statLabel, _objectType, key) {
   // a tooltip in Spanish at all; the keyed rows are translated properly, and
   // the rest are a pre-existing gap this pass did not widen.
   if (key === 'radius') return t('inspector.tip.radius');
+  if (key === 'radiusPhysical') return t('inspector.tip.radiusPhysical');
+  if (key === 'twoBody') return t('inspector.tip.twoBody');
   if (key === 'rings') return t('inspector.tip.rings');
   const tooltips = {
     Mass: 'Total mass. Determines gravitational strength and orbital dynamics.',

@@ -19,7 +19,7 @@ export const IRREVERSIBLE = Object.freeze([
     id: 'collapse:star-to-hole',
     kind: 'collapse',
     file: 'js/engine/step.js',
-    line: 795,
+    line: 799,
     detail: Object.freeze({
       what: 'a star past the collapse mass is replaced by a black hole; the star it was is gone, along with its type, temperature and radius',
     }),
@@ -46,7 +46,7 @@ export const IRREVERSIBLE = Object.freeze([
     id: 'fragment:rocky-collision',
     kind: 'fragment',
     file: 'js/engine/collisions.js',
-    line: 1070,
+    line: 1073,
     detail: Object.freeze({
       draws: 4,
       what: "a fast rocky collision takes a tenth of each body's mass and scatters debris whose directions, speeds and offsets come from 4 fresh Math.random draws - unseeded, so the shower cannot be reproduced, let alone reversed",

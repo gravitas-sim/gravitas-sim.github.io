@@ -285,12 +285,44 @@ export const getSimulationTime = () => simulationTime;
 /** Advance the simulated clock by one step. Called by updatePhysics only. */
 export const advanceSimulationTime = dt => {
   simulationTime += dt;
+  stepIndex++;
 };
 
 /** Put the simulated clock back to zero. Called when a world is built. */
 export const resetSimulationTime = () => {
   simulationTime = 0;
+  engineEvents.count = 0;
+  engineEvents.last = '';
+  engineEvents.step = -1;
+  engineEvents.streak = 0;
 };
+
+let stepIndex = 0;
+
+/**
+ * Events that change a velocity or a mass outside gravity: every branch of
+ * js/engine/collisions.js that does, a hole's absorption or merger, and tidal
+ * stripping each count one. A readout learns of an event here and never
+ * infers one from a jump in the energy (js/engine/modelEnergy.js). `streak`
+ * is how many consecutive steps have had one: bodies resting in contact.
+ */
+export const engineEvents = { count: 0, last: '', step: -1, streak: 0 };
+
+/**
+ * Count one event of this kind in the current step.
+ * @param {string} kind - collision, merger, absorption, collapse or tidal
+ */
+export const noteEngineEvent = kind => {
+  engineEvents.count++;
+  engineEvents.last = kind;
+  if (engineEvents.step === stepIndex) return;
+  engineEvents.streak =
+    engineEvents.step === stepIndex - 1 ? engineEvents.streak + 1 : 1;
+  engineEvents.step = stepIndex;
+};
+
+/** @returns {number} Steps taken since the program started */
+export const getStepIndex = () => stepIndex;
 
 /**
  * Set the simulated clock, for a restored rather than built state.
