@@ -356,7 +356,7 @@ export default {
     },
     'predict-the-fraction': {
       title: '¿Cuánto tiempo dentro de la zona?',
-      body: 'El planeta que acabas de observar se mantiene a 1,2 UA de su estrella de media, que es el centro de la zona habitable, y oscila hacia dentro y hacia fuera en una órbita de excentricidad 0,45. La pantalla siguiente dibuja la zona sobre esa órbita.\n\nComprométete con una respuesta antes de mirar: a lo largo de un año completo, ¿cuánto del tiempo está el planeta dentro de la zona?',
+      body: 'El planeta que acabas de observar se mantiene a 1,2 UA de su estrella de media, que queda bien dentro de la zona habitable, y oscila hacia dentro y hacia fuera en una órbita de excentricidad 0,45. La pantalla siguiente dibuja la zona sobre esa órbita.\n\nComprométete con una respuesta antes de mirar: a lo largo de un año completo, ¿cuánto del tiempo está el planeta dentro de la zona?',
       prompt: 'A lo largo de un año, este planeta está dentro de la zona…',
       options: [
         'todo el año, porque su distancia media está dentro de la zona',
@@ -365,7 +365,7 @@ export default {
         'menos de una cuarta parte del año',
       ],
       because:
-        'Alrededor de la mitad. La distancia media está en el centro de la zona, y eso es lo que engaña: el planeta no se queda cerca de su media. Se aleja más allá del borde exterior y entra más allá del borde interior, y el tiempo que pasa más allá de cada borde se suma. Estás a punto de poner esto junto a dos ejecuciones tuyas.',
+        'Alrededor de la mitad. La distancia media queda bien dentro de la zona, y eso es lo que engaña: el planeta no se queda cerca de su media. Se aleja más allá del borde exterior y entra más allá del borde interior, y el tiempo que pasa más allá de cada borde se suma. Estás a punto de poner esto junto a dos ejecuciones tuyas.',
     },
     'crossing-the-edges': {
       title: 'Cruzar los bordes',
@@ -384,7 +384,7 @@ export default {
     },
     'two-runs-one-orbit': {
       title: 'Dos ejecuciones a una misma distancia media',
-      body: 'Haz dos ejecuciones del mismo año a la misma distancia media: una en una órbita circular y otra en una órbita excéntrica que elijas tú. Deja el semieje mayor donde está.\n\nPara cada ejecución, pon la excentricidad, pulsa <strong>Tomar la lectura</strong> junto a la fracción del año dentro de la zona y escribe la excentricidad que pusiste. No cambia nada más entre las dos ejecuciones.',
+      body: 'Ejecuta el panel de la órbita dos veces a la misma distancia media: una en una órbita circular y otra en una órbita excéntrica que elijas tú. Deja el semieje mayor en 1,2 UA.\n\nPara cada ejecución, pon la excentricidad, pulsa <strong>Tomar la lectura</strong> junto a la fracción del año dentro de la zona y escribe la excentricidad que pusiste. No cambia nada más entre las dos ejecuciones.\n\nLas fracciones son las del panel: calcula un año entero de la órbita que pones. El planeta del lienzo no sigue el deslizador y se queda en su propia órbita, con excentricidad 0,45.',
       fields: [
         { label: 'Ejecución 1: excentricidad' },
         {
@@ -399,13 +399,13 @@ export default {
       ],
       tool: {
         title: 'Ejecútalo dos veces',
-        note: 'Pon la excentricidad con el deslizador, o con las flechas del teclado un paso cada vez. La fracción del año dentro de la zona está en la lectura bajo la imagen.',
+        note: 'Pon la excentricidad con el deslizador, o con las flechas del teclado un paso cada vez. La fracción del año dentro de la zona está en la lectura bajo la imagen, y es este panel quien la calcula.',
       },
       tip: 'Sirve cualquier órbita excéntrica que salga de la zona en algún momento de su año. Toma cada lectura con la excentricidad donde dices que está.',
     },
     'fraction-of-your-run': {
       title: 'Qué dice tu fracción',
-      body: 'Tu predicción y tus dos ejecuciones están debajo. Los dos planetas conservan la misma distancia media a la estrella, en el centro de la zona.',
+      body: 'Tu predicción y tus dos ejecuciones están debajo. Los dos planetas conservan la misma distancia media a la estrella, bien dentro de la zona.',
       compare:
         'Pon tus dos fracciones junto a lo que predijiste. La distancia media era la misma en las dos ejecuciones, así que di qué cambia y qué no.',
       prompt:
@@ -440,7 +440,7 @@ export default {
     },
     'all-seven-planets': {
       title: 'Los siete planetas',
-      body: 'Aquí está el sistema real, con la zona habitable del mismo modelo, a partir de la luminosidad de TRAPPIST-1.\n\nLee los dos bordes como una estimación. La calculadora de la zona solo admite estrellas de 2600 a 7200 K, y TRAPPIST-1 está a 2566 K, por debajo de ese rango. Un panel que da los límites de una estrella (la versión cuantitativa tiene uno) la rechaza. Este panel no: mantiene el ajuste en 2600 K, la temperatura más baja que cubre, y dibuja lo que eso da. Para cualquier estrella fuera del rango, da la zona como una estimación y dilo, o di que la calculadora no la cubre.\n\nEl eje de distancias está comprimido. Lee los números, no los píxeles.\n\nEl segundo panel pone el Sistema Solar en el mismo eje. Todo el sistema de siete planetas cabría cómodamente dentro de la órbita de Mercurio.',
+      body: 'Aquí está el sistema real, con la zona habitable del mismo modelo, a partir de la luminosidad de TRAPPIST-1.\n\nLee los dos bordes como una estimación. La calculadora de la zona solo admite estrellas de 2600 a 7200 K, y TRAPPIST-1 está a 2566 K, por debajo de ese rango. Un panel que da los límites de una estrella (la versión cuantitativa tiene uno) la rechaza. Este panel no: mantiene el ajuste en 2600 K, la temperatura más baja que cubre, y dibuja lo que eso da. Para cualquier estrella fuera del rango, da la zona como una estimación y dilo, o di que la calculadora no la cubre.\n\nLa estimación es más laxa que ese único ajuste. La luminosidad de la estrella tiene su propia incertidumbre, y la zona descansa además en supuestos sobre el albedo y la atmósfera del planeta. Los bordes se imprimen con tres cifras significativas porque es lo que calcula la calculadora, no porque se conozca la estrella con esa precisión.\n\nEl eje de distancias está comprimido. Lee los números, no los píxeles.\n\nEl segundo panel pone el Sistema Solar en el mismo eje. Todo el sistema de siete planetas cabría cómodamente dentro de la órbita de Mercurio.',
       tool: {
         title: 'TRAPPIST-1',
         note: 'Cada planeta está listado debajo con la luz estelar que recibe y dónde cae respecto a la zona modelada.',
@@ -467,7 +467,7 @@ export default {
     },
     'take-the-readings-yourself': {
       title: 'Toma tú mismo las lecturas',
-      body: 'En lugar de que te digan qué planetas caen dónde, léelo en el instrumento. El panel se abre con la definición optimista de la zona. Ponlo en la conservadora, la definición que han significado los bordes hasta ahora, antes de leer nada.\n\nRecorre la lista de debajo de la imagen y anota la luz estelar que recibe cada uno de los tres planetas centrales, en Tierras. Después anota dónde empieza y dónde acaba la zona. Esos dos son una estimación, porque el ajuste se mantiene en 2600 K, la estrella más fría que cubre.',
+      body: 'En lugar de que te digan qué planetas caen dónde, léelo en el instrumento. El panel se abre con la definición optimista de la zona. Ponlo en la conservadora, la definición que han significado los bordes hasta ahora, antes de leer nada.\n\nRecorre la lista de debajo de la imagen y anota la luz estelar que recibe cada uno de los tres planetas centrales, en Tierras. Después anota dónde empieza y dónde acaba la zona. Esos dos son una estimación, porque el ajuste se mantiene en 2600 K, la estrella más fría que cubre, y porque la luminosidad y los supuestos climáticos que hay detrás son inciertos.',
       fields: [
         { label: 'TRAPPIST-1e recibe', unit: 'Tierras' },
         { label: 'TRAPPIST-1f recibe', unit: 'Tierras' },

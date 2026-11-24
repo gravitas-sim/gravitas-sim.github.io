@@ -93,6 +93,9 @@ const TRAPPIST_WORLDS = {
  * live to point at, so it stands one up: same star, one world, eccentricity
  * 0.45, which is enough to carry it out of the zone and back in every year.
  */
+/** The average distance both orbit-panel runs are taken at, in AU. */
+const RUN_AXIS_AU = 1.2;
+
 const ECCENTRIC_WORLD = {
   system: {
     starName: 'Sun',
@@ -909,7 +912,7 @@ const GOLDILOCKS = {
       reveal: 'fraction-of-your-run',
       title: 'How long inside the zone?',
       body: `The planet you have just watched keeps 1.2 AU from its star on
-             average, which is the middle of the habitable zone, and it swings
+             average, which is well inside the habitable zone, and it swings
              in and out on an orbit with an eccentricity of 0.45. The next
              screen draws the zone on that orbit.
              \n\nCommit to an answer before you look: over one whole year, how
@@ -923,7 +926,7 @@ const GOLDILOCKS = {
       ],
       answer: 2,
       because:
-        'About half. The average distance sits in the middle of the zone, and that is what misleads: the planet does not stay near its average. It swings out past the outer edge and in past the inner edge, and the time it spends beyond each edge adds up. You are about to set this beside two runs of your own.',
+        'About half. The average distance sits well inside the zone, and that is what misleads: the planet does not stay near its average. It swings out past the outer edge and in past the inner edge, and the time it spends beyond each edge adds up. You are about to set this beside two runs of your own.',
     },
     {
       sid: 'crossing-the-edges',
@@ -974,13 +977,16 @@ const GOLDILOCKS = {
       probe: zoneRows,
       type: 'measure',
       title: 'Two runs at one average distance',
-      body: `Make two runs of the same year at the same average distance: one
-             on a circular orbit, and one on an eccentric orbit that you
-             choose. Leave the semi-major axis where it is.
+      body: `Run the orbit panel twice at the same average distance: once on a
+             circular orbit, and once on an eccentric orbit that you choose.
+             Leave the semi-major axis at 1.2 AU.
              \n\nFor each run, set the eccentricity, press <strong>Take
              reading</strong> beside the fraction of the year inside the zone,
              and type the eccentricity you set. Nothing else changes between
-             the two runs.`,
+             the two runs.
+             \n\nThe fractions are the panel's: it works out one whole year
+             of the orbit you set. The planet on the canvas does not follow the
+             slider and stays on its own orbit, with eccentricity 0.45.`,
       fields: [
         { id: 'e1', label: 'Run 1: eccentricity' },
         {
@@ -1010,6 +1016,13 @@ const GOLDILOCKS = {
               'An eccentricity is a number from 0 to 0.6 here, and a fraction of the year is between 0 and 100 percent.',
           };
         }
+        const untaken = runs.find(([, , i]) => !got[`f${i}`]?.s);
+        if (untaken) {
+          return {
+            level: 'warn',
+            message: `Run ${untaken[2]}'s fraction was typed, not taken from the panel. Set the eccentricity, press Take reading beside the fraction, and keep the value it gives, so that the eccentricity and axis it was read at are on record.`,
+          };
+        }
         const moved = runs.find(([e, , i]) => {
           const at = got[`f${i}`]?.s?.ecc;
           return Number.isFinite(at) && Math.abs(at - e) > 0.005;
@@ -1029,6 +1042,16 @@ const GOLDILOCKS = {
             level: 'warn',
             message:
               'The two readings were taken at different semi-major axes. Set the same axis for both runs and take them again, so that only the stretch of the orbit differs.',
+          };
+        }
+        const off = [1, 2].find(i => {
+          const at = got[`f${i}`]?.s?.semi;
+          return Number.isFinite(at) && Math.abs(at - RUN_AXIS_AU) > 0.05;
+        });
+        if (off) {
+          return {
+            level: 'warn',
+            message: `Take both readings at a semi-major axis of ${RUN_AXIS_AU} AU, the planet’s average distance. Run ${off} was taken at ${got[`f${off}`].s.semi} AU: set the axis back to ${RUN_AXIS_AU} and take the reading again.`,
           };
         }
         const round = runs.find(([e]) => e <= 0.005);
@@ -1062,10 +1085,10 @@ const GOLDILOCKS = {
       },
       tool: {
         id: 'hz-orbit',
-        values: { ecc: 0.2, semi: 1.2 },
+        values: { ecc: 0.2, semi: RUN_AXIS_AU },
         showZone: true,
         title: 'Run it twice',
-        note: 'Set the eccentricity with the slider, or with the arrow keys one step at a time. The fraction of the year inside the zone is in the readout under the picture.',
+        note: 'Set the eccentricity with the slider, or with the arrow keys one step at a time. The fraction of the year inside the zone is in the readout under the picture, and it is this panel that works it out.',
       },
       tip: 'Any eccentric orbit that leaves the zone at some point in its year will do. Take each reading with the eccentricity where you say it is.',
     },
@@ -1081,7 +1104,7 @@ const GOLDILOCKS = {
       compare:
         'Set your two fractions beside what you predicted. The average distance was the same in both runs, so say what differs and what does not.',
       body: `Your prediction and your two runs are below. Both planets keep the
-             same average distance from the star, in the middle of the zone.`,
+             same average distance from the star, well inside the zone.`,
       prompt:
         'What does the fraction of the year your eccentric run spent inside the zone tell you about the planet’s surface?',
       options: [
@@ -1146,6 +1169,12 @@ const GOLDILOCKS = {
              at 2600 K, the lowest temperature it covers, and draws what that
              gives. For any star outside the range, give the zone as an
              estimate and say so, or say that the calculator does not cover it.
+             \n\nThe estimate is looser than that one clamp. The star's
+             luminosity has its own uncertainty, and the zone also rests on
+             assumptions about the albedo and the atmosphere of the planet. The
+             edges are printed to three significant figures because that is
+             what the calculator computes, not because the star is known that
+             well.
              \n\nThe distance axis is compressed. Read the numbers, not the
              pixels.
              \n\nThe second panel puts the Solar System on the same axis. The
@@ -1215,7 +1244,9 @@ const GOLDILOCKS = {
              \n\nWork down the list under the picture and record the starlight
              each of the three middle planets receives, in Earths. Then record
              where the zone begins and ends. Those two are an estimate, because
-             the fit is held at 2600 K, the coolest star it covers.`,
+             the fit is held at 2600 K, the coolest star it covers, and because
+             the luminosity and the climate assumptions behind it are
+             uncertain.`,
       fields: [
         { id: 'e', label: 'TRAPPIST-1e receives', unit: 'Earths' },
         { id: 'f', label: 'TRAPPIST-1f receives', unit: 'Earths' },
@@ -1247,7 +1278,7 @@ const GOLDILOCKS = {
         return {
           level: 'ok',
           message:
-            'Those match. The two edges are an estimate for this star, held at the coolest temperature the fit covers. Now say it in words, and say it carefully: e, f and g lie within the modeled habitable zone. That is a statement about their orbits and their star, and it is the correct thing to say. It is not a statement that any of them has water, an atmosphere, or a surface anyone would recognize.',
+            'Your readings agree with the panel’s list. The two edges are only an estimate for this star: the fit is held at the coolest temperature it covers, the star’s luminosity is uncertain, and the zone rests on albedo and atmosphere assumptions. Now say it in words, and say it carefully: e, f and g lie within the modeled habitable zone. That is a statement about their orbits and their star, and it is the correct thing to say. It is not a statement that any of them has water, an atmosphere, or a surface anyone would recognize.',
         };
       },
       tool: {

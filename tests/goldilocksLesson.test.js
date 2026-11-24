@@ -454,6 +454,46 @@ describe('two runs at one average distance', () => {
     expect(run(0, 0.45, {}, axes).message).toMatch(/semi-major/);
   });
 
+  test('readings taken away from 1.2 AU are refused and name the axis, even when the two agree', () => {
+    for (const semi of [0.6, 1.1, 1.3, 1.8]) {
+      const r = run(0, 0.45, {}, took(0, 0.45, semi));
+      expect(r.level).toBe('warn');
+      expect(r.message).toMatch(/1\.2 AU/);
+      expect(r.message).toMatch(new RegExp(`${semi} AU`));
+    }
+    // within 0.05 AU of the average distance is accepted
+    expect(run(0, 0.45, {}, took(0, 0.45, 1.23)).level).toBe('ok');
+    expect(step('two-runs-one-orbit').tool.values.semi).toBe(1.2);
+  });
+
+  test('a fraction that was typed, or typed over, is not accepted in place of the panel’s reading', () => {
+    // typed from nothing, with the eccentricities and fractions of a plausible pair
+    const typedOnly = s().validate(
+      { e1: 0, f1: 90, e2: 0.3, f2: 50 },
+      null,
+      {}
+    );
+    expect(typedOnly.level).toBe('warn');
+    expect(typedOnly.message).toMatch(/Run 1.*typed/);
+    // one reading captured, the other typed over after capture
+    const over = run(
+      0,
+      0.45,
+      {},
+      {
+        f1: { s: { ecc: 0, semi: 1.2 } },
+        f2: { k: 't', r: 56 },
+      }
+    );
+    expect(over.level).toBe('warn');
+    expect(over.message).toMatch(/Run 2.*typed/);
+  });
+
+  test('the step says the fractions are the orbit panel’s and that the canvas planet does not follow the slider', () => {
+    expect(s().body).toMatch(/orbit panel/);
+    expect(s().body).toMatch(/does not follow the\s+slider/);
+  });
+
   test('impossible numbers are errors', () => {
     expect(run(0, 0.45, { f2: 140 }).level).toBe('error');
     expect(run(0, 0.45, { e2: 0.9 }).level).toBe('error');
