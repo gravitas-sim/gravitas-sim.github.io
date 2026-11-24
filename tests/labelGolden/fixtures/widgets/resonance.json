@@ -6,35 +6,35 @@
     "note": "Periods are measured from the orbits themselves and averaged over the whole run, not read from a table. The nearest small-integer ratio is found by continued fractions, which will find one for any number at all — so the last figure on each row, how much closer than chance the ratio is, matters more than the ratio.",
     "controls": [],
     "presets": [],
-    "actions": [],
+    "actions": [{"id":"run","label":"Pause"}],
     "defaults": {}
    },
    "precision": [],
    "specs": 3,
-   "frames": 12,
+   "frames": 24,
    "readout": {
-    "calls": 12,
+    "calls": 24,
     "distinct": 2,
     "digest": "392a9c039fb8c479",
     "samples": [[{"label":"Status","value":"no system loaded"}],[{"label":"Status","value":"watching — let the simulation run"}]]
    },
    "canvas": {
-    "calls": 12,
+    "calls": 24,
     "distinct": 2,
     "digest": "f6aa9c5d96741109",
     "samples": [["no system loaded"],["watching — let the simulation run"]]
    },
    "controls": {
-    "calls": 12,
+    "calls": 24,
     "distinct": 1,
     "digest": "cf1cbb66a638b486",
     "samples": [[]]
    },
    "phases": {
-    "calls": 0,
-    "distinct": 0,
-    "digest": "4f53cda18c2baa0c",
-    "samples": []
+    "calls": 12,
+    "distinct": 3,
+    "digest": "643973915dfcd08d",
+    "samples": [{"action":"run","after":"press","button":"Run"},{"action":"run","after":"step","button":"Run"},{"action":"run","after":"press again","button":"Pause"}]
    }
   },
   "es": {
@@ -43,35 +43,35 @@
     "note": "Los periodos se miden de las propias órbitas y se promedian sobre toda la ejecución; no se leen de una tabla. La razón de enteros pequeños más cercana se halla por fracciones continuas, que encuentran una para cualquier número: por eso importa más la última cifra de cada fila —cuánto más cerca está la razón de lo que daría el azar— que la razón misma.",
     "controls": [],
     "presets": [],
-    "actions": [],
+    "actions": [{"id":"run","label":"Pausar"}],
     "defaults": {}
    },
    "precision": [],
    "specs": 3,
-   "frames": 12,
+   "frames": 24,
    "readout": {
-    "calls": 12,
+    "calls": 24,
     "distinct": 2,
     "digest": "e2a9108b37f740eb",
     "samples": [[{"label":"Estado","value":"no hay ningún sistema cargado"}],[{"label":"Estado","value":"observando: deja correr la simulación"}]]
    },
    "canvas": {
-    "calls": 12,
+    "calls": 24,
     "distinct": 2,
     "digest": "5204e44b9a83d4b4",
     "samples": [["no hay ningún sistema cargado"],["observando: deja correr la simulación"]]
    },
    "controls": {
-    "calls": 12,
+    "calls": 24,
     "distinct": 1,
     "digest": "cf1cbb66a638b486",
     "samples": [[]]
    },
    "phases": {
-    "calls": 0,
-    "distinct": 0,
-    "digest": "4f53cda18c2baa0c",
-    "samples": []
+    "calls": 12,
+    "distinct": 3,
+    "digest": "01610abafcb525d3",
+    "samples": [{"action":"run","after":"press","button":"Ejecutar"},{"action":"run","after":"step","button":"Ejecutar"},{"action":"run","after":"press again","button":"Pausar"}]
    }
   }
  },
@@ -82,35 +82,35 @@
     "note": "Top: the angle wrapped into one turn. If it visits every value the bodies take up every relative geometry in turn and there is no resonance. Bottom: the same angle unwrapped, where a circulation is a ramp and a libration is a wave. The verdict is made from the lower plot, and it is allowed to be \"cannot tell yet\".",
     "controls": [],
     "presets": [],
-    "actions": [],
+    "actions": [{"id":"run","label":"Pause"}],
     "defaults": {}
    },
    "precision": [],
    "specs": 6,
-   "frames": 24,
+   "frames": 36,
    "readout": {
-    "calls": 24,
+    "calls": 36,
     "distinct": 2,
-    "digest": "392a9c039fb8c479",
-    "samples": [[{"label":"Status","value":"no system loaded"}],[{"label":"Status","value":"watching — let the simulation run"}]]
+    "digest": "e566b0ee6b360199",
+    "samples": [[{"label":"Status","value":"no system loaded"},{"label":"Libration center","value":"—"},{"label":"Amplitude","value":"—"},{"label":"Libration period","value":"—"}],[{"label":"Status","value":"watching — let the simulation run"},{"label":"Libration center","value":"—"},{"label":"Amplitude","value":"—"},{"label":"Libration period","value":"—"}]]
    },
    "canvas": {
-    "calls": 24,
+    "calls": 36,
     "distinct": 2,
     "digest": "f6aa9c5d96741109",
     "samples": [["no system loaded"],["watching — let the simulation run"]]
    },
    "controls": {
-    "calls": 24,
+    "calls": 36,
     "distinct": 1,
     "digest": "cf1cbb66a638b486",
     "samples": [[]]
    },
    "phases": {
-    "calls": 0,
-    "distinct": 0,
-    "digest": "4f53cda18c2baa0c",
-    "samples": []
+    "calls": 12,
+    "distinct": 3,
+    "digest": "643973915dfcd08d",
+    "samples": [{"action":"run","after":"press","button":"Run"},{"action":"run","after":"step","button":"Run"},{"action":"run","after":"press again","button":"Pause"}]
    }
   },
   "es": {
@@ -119,35 +119,35 @@
     "note": "Arriba: el ángulo plegado en una vuelta. Si recorre todos los valores, los cuerpos adoptan sucesivamente todas las geometrías relativas y no hay resonancia. Abajo: el mismo ángulo desplegado, donde una circulación es una rampa y una libración es una onda. El veredicto sale del gráfico inferior, y puede legítimamente ser «aún no se puede saber».",
     "controls": [],
     "presets": [],
-    "actions": [],
+    "actions": [{"id":"run","label":"Pausar"}],
     "defaults": {}
    },
    "precision": [],
    "specs": 6,
-   "frames": 24,
+   "frames": 36,
    "readout": {
-    "calls": 24,
+    "calls": 36,
     "distinct": 2,
-    "digest": "e2a9108b37f740eb",
-    "samples": [[{"label":"Estado","value":"no hay ningún sistema cargado"}],[{"label":"Estado","value":"observando: deja correr la simulación"}]]
+    "digest": "56ef0aa19ff65ad8",
+    "samples": [[{"label":"Estado","value":"no hay ningún sistema cargado"},{"label":"Centro de libración","value":"—"},{"label":"Amplitud","value":"—"},{"label":"Periodo de libración","value":"—"}],[{"label":"Estado","value":"observando: deja correr la simulación"},{"label":"Centro de libración","value":"—"},{"label":"Amplitud","value":"—"},{"label":"Periodo de libración","value":"—"}]]
    },
    "canvas": {
-    "calls": 24,
+    "calls": 36,
     "distinct": 2,
     "digest": "5204e44b9a83d4b4",
     "samples": [["no hay ningún sistema cargado"],["observando: deja correr la simulación"]]
    },
    "controls": {
-    "calls": 24,
+    "calls": 36,
     "distinct": 1,
     "digest": "cf1cbb66a638b486",
     "samples": [[]]
    },
    "phases": {
-    "calls": 0,
-    "distinct": 0,
-    "digest": "4f53cda18c2baa0c",
-    "samples": []
+    "calls": 12,
+    "distinct": 3,
+    "digest": "01610abafcb525d3",
+    "samples": [{"action":"run","after":"press","button":"Ejecutar"},{"action":"run","after":"step","button":"Ejecutar"},{"action":"run","after":"press again","button":"Pausar"}]
    }
   }
  },
@@ -158,35 +158,35 @@
     "note": "Every conjunction in the run, plotted twice: where it happened in the sky, and where the outer body was on its own orbit at the time. A resonance shows up as a clump in the second dial — and if that clump sits at 180°, every line-up happens at the outer body’s aphelion.",
     "controls": [],
     "presets": [],
-    "actions": [],
+    "actions": [{"id":"run","label":"Pause"}],
     "defaults": {}
    },
    "precision": [],
    "specs": 4,
-   "frames": 16,
+   "frames": 28,
    "readout": {
-    "calls": 16,
+    "calls": 28,
     "distinct": 2,
     "digest": "392a9c039fb8c479",
     "samples": [[{"label":"Status","value":"no system loaded"}],[{"label":"Status","value":"watching — let the simulation run"}]]
    },
    "canvas": {
-    "calls": 16,
+    "calls": 28,
     "distinct": 2,
     "digest": "f6aa9c5d96741109",
     "samples": [["no system loaded"],["watching — let the simulation run"]]
    },
    "controls": {
-    "calls": 16,
+    "calls": 28,
     "distinct": 1,
     "digest": "cf1cbb66a638b486",
     "samples": [[]]
    },
    "phases": {
-    "calls": 0,
-    "distinct": 0,
-    "digest": "4f53cda18c2baa0c",
-    "samples": []
+    "calls": 12,
+    "distinct": 3,
+    "digest": "643973915dfcd08d",
+    "samples": [{"action":"run","after":"press","button":"Run"},{"action":"run","after":"step","button":"Run"},{"action":"run","after":"press again","button":"Pause"}]
    }
   },
   "es": {
@@ -195,35 +195,35 @@
     "note": "Cada conjunción de la ejecución, trazada dos veces: dónde ocurrió en el cielo y dónde estaba el cuerpo exterior en su propia órbita en ese momento. Una resonancia aparece como un cúmulo en el segundo disco; y si ese cúmulo está en 180°, toda alineación ocurre en el afelio del cuerpo exterior.",
     "controls": [],
     "presets": [],
-    "actions": [],
+    "actions": [{"id":"run","label":"Pausar"}],
     "defaults": {}
    },
    "precision": [],
    "specs": 4,
-   "frames": 16,
+   "frames": 28,
    "readout": {
-    "calls": 16,
+    "calls": 28,
     "distinct": 2,
     "digest": "e2a9108b37f740eb",
     "samples": [[{"label":"Estado","value":"no hay ningún sistema cargado"}],[{"label":"Estado","value":"observando: deja correr la simulación"}]]
    },
    "canvas": {
-    "calls": 16,
+    "calls": 28,
     "distinct": 2,
     "digest": "5204e44b9a83d4b4",
     "samples": [["no hay ningún sistema cargado"],["observando: deja correr la simulación"]]
    },
    "controls": {
-    "calls": 16,
+    "calls": 28,
     "distinct": 1,
     "digest": "cf1cbb66a638b486",
     "samples": [[]]
    },
    "phases": {
-    "calls": 0,
-    "distinct": 0,
-    "digest": "4f53cda18c2baa0c",
-    "samples": []
+    "calls": 12,
+    "distinct": 3,
+    "digest": "01610abafcb525d3",
+    "samples": [{"action":"run","after":"press","button":"Ejecutar"},{"action":"run","after":"step","button":"Ejecutar"},{"action":"run","after":"press again","button":"Pausar"}]
    }
   }
  },
@@ -234,35 +234,35 @@
     "note": "The same system seen from a frame turning with the secondary, which is fixed at the right and one unit out. L4 and L5 are the two triangular equilibrium points. In this frame a co-orbital body draws a closed loop around one of them; a body that is not co-orbital goes right round.",
     "controls": [],
     "presets": [],
-    "actions": [],
+    "actions": [{"id":"run","label":"Pause"}],
     "defaults": {}
    },
    "precision": [],
-   "specs": 3,
-   "frames": 12,
+   "specs": 4,
+   "frames": 28,
    "readout": {
-    "calls": 12,
-    "distinct": 2,
-    "digest": "392a9c039fb8c479",
-    "samples": [[{"label":"Status","value":"no system loaded"}],[{"label":"Status","value":"watching — let the simulation run"}]]
+    "calls": 28,
+    "distinct": 4,
+    "digest": "d39652f922b21c5d",
+    "samples": [[{"label":"Status","value":"no system loaded"}],[{"label":"Status","value":"watching — let the simulation run"}],[{"label":"Status","value":"no system loaded"},{"label":"Patroclus: Libration center","value":"—"},{"label":"Patroclus: Amplitude","value":"—"},{"label":"Patroclus: Libration period","value":"—"}],[{"label":"Status","value":"watching — let the simulation run"},{"label":"Patroclus: Libration center","value":"—"},{"label":"Patroclus: Amplitude","value":"—"},{"label":"Patroclus: Libration period","value":"—"}]]
    },
    "canvas": {
-    "calls": 12,
+    "calls": 28,
     "distinct": 2,
     "digest": "f6aa9c5d96741109",
     "samples": [["no system loaded"],["watching — let the simulation run"]]
    },
    "controls": {
-    "calls": 12,
+    "calls": 28,
     "distinct": 1,
     "digest": "cf1cbb66a638b486",
     "samples": [[]]
    },
    "phases": {
-    "calls": 0,
-    "distinct": 0,
-    "digest": "4f53cda18c2baa0c",
-    "samples": []
+    "calls": 12,
+    "distinct": 3,
+    "digest": "643973915dfcd08d",
+    "samples": [{"action":"run","after":"press","button":"Run"},{"action":"run","after":"step","button":"Run"},{"action":"run","after":"press again","button":"Pause"}]
    }
   },
   "es": {
@@ -271,35 +271,35 @@
     "note": "El mismo sistema visto desde un marco que gira con el secundario, fijo a la derecha y a una unidad de distancia. L4 y L5 son los dos puntos triangulares de equilibrio. En este marco un cuerpo coorbital dibuja un lazo cerrado alrededor de uno de ellos; uno que no lo sea da la vuelta entera.",
     "controls": [],
     "presets": [],
-    "actions": [],
+    "actions": [{"id":"run","label":"Pausar"}],
     "defaults": {}
    },
    "precision": [],
-   "specs": 3,
-   "frames": 12,
+   "specs": 4,
+   "frames": 28,
    "readout": {
-    "calls": 12,
-    "distinct": 2,
-    "digest": "e2a9108b37f740eb",
-    "samples": [[{"label":"Estado","value":"no hay ningún sistema cargado"}],[{"label":"Estado","value":"observando: deja correr la simulación"}]]
+    "calls": 28,
+    "distinct": 4,
+    "digest": "be11eb05a50b388f",
+    "samples": [[{"label":"Estado","value":"no hay ningún sistema cargado"}],[{"label":"Estado","value":"observando: deja correr la simulación"}],[{"label":"Estado","value":"no hay ningún sistema cargado"},{"label":"Patroclus: Centro de libración","value":"—"},{"label":"Patroclus: Amplitud","value":"—"},{"label":"Patroclus: Periodo de libración","value":"—"}],[{"label":"Estado","value":"observando: deja correr la simulación"},{"label":"Patroclus: Centro de libración","value":"—"},{"label":"Patroclus: Amplitud","value":"—"},{"label":"Patroclus: Periodo de libración","value":"—"}]]
    },
    "canvas": {
-    "calls": 12,
+    "calls": 28,
     "distinct": 2,
     "digest": "5204e44b9a83d4b4",
     "samples": [["no hay ningún sistema cargado"],["observando: deja correr la simulación"]]
    },
    "controls": {
-    "calls": 12,
+    "calls": 28,
     "distinct": 1,
     "digest": "cf1cbb66a638b486",
     "samples": [[]]
    },
    "phases": {
-    "calls": 0,
-    "distinct": 0,
-    "digest": "4f53cda18c2baa0c",
-    "samples": []
+    "calls": 12,
+    "distinct": 3,
+    "digest": "01610abafcb525d3",
+    "samples": [{"action":"run","after":"press","button":"Ejecutar"},{"action":"run","after":"step","button":"Ejecutar"},{"action":"run","after":"press again","button":"Pausar"}]
    }
   }
  }

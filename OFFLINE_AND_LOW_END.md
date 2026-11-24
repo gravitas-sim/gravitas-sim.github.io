@@ -52,14 +52,14 @@ Measured from the committed `sw-manifest.js` and the files it lists, by
 <!--fact-block:precache-->
 | | Files | Raw |
 | --- | ---: | ---: |
-| JavaScript | 1030 | 16.4 MB |
+| JavaScript | 1022 | 16.4 MB |
 | Images | 121 | 830 KB |
 | Stylesheets | 10 | 500 KB |
 | Fonts | 9 | 140 KB |
 | Panel markup | 11 | 80 KB |
 | Pages | 12 | 330 KB |
 | Other | 16 | 900 KB |
-| **Total** | **1209** | **19.1 MB** |
+| **Total** | **1201** | **19.1 MB** |
 
 Of those, 863 are core (the install fails without them), 129 optional (installed with them; a missing one is reported and costs nothing) and 217 idle (installed after activation, when the browser is idle; a missing one costs that page its offline copy and is fetched again on the next open). The first-visit install is the core and the optional files: 992 files.
 

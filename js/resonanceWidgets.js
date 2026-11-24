@@ -47,6 +47,10 @@ import {
   TYPE,
 } from './widgetCanvas.js';
 import { recorder, partition } from './resonance/recorder.js';
+import { state } from './appState.js';
+import { fixed } from './format.js';
+import { announce } from './notify.js';
+import { setParkedPause } from './timeline.js';
 import {
   ANGLE_STATE,
   classifyAngle,
@@ -181,6 +185,11 @@ export function argumentFor(spec, series) {
       // tell" is measured in.
       reference: (a, b) => 1 / (1 / a - 1 / b),
       referencePair: ['Io', 'Europa'],
+      terms: [
+        { name: 'Io', key: 'lambda', c: 1 },
+        { name: 'Europa', key: 'lambda', c: -3 },
+        { name: 'Ganymede', key: 'lambda', c: 2 },
+      ],
       evaluate: s =>
         laplaceArgument(
           s.el.Io?.lambda,
@@ -196,6 +205,11 @@ export function argumentFor(spec, series) {
       label: '3λ(Pluto) − 2λ(Neptune) − ϖ(Pluto)',
       names: ['Neptune', 'Pluto'],
       referencePair: ['Neptune', 'Pluto'],
+      terms: [
+        { name: 'Pluto', key: 'lambda', c: 3 },
+        { name: 'Neptune', key: 'lambda', c: -2 },
+        { name: 'Pluto', key: 'varpi', c: -1 },
+      ],
       evaluate: s =>
         plutoArgument(
           s.el.Pluto?.lambda,
@@ -250,6 +264,10 @@ export function argumentFor(spec, series) {
       names: [inner, outer],
       referencePair: [inner, outer],
       coorbital: { inner, outer },
+      terms: [
+        { name: outer, key: 'lambda', c: 1 },
+        { name: inner, key: 'lambda', c: -1 },
+      ],
       ratio,
       evaluate: s => wrap360(s.el[outer]?.lambda - s.el[inner]?.lambda),
     };
@@ -260,6 +278,11 @@ export function argumentFor(spec, series) {
     label: `${ratio.p}λ(${outer}) − ${ratio.q}λ(${inner}) − ${ratio.p - ratio.q}ϖ(${outer})`,
     names: [inner, outer],
     referencePair: [inner, outer],
+    terms: [
+      { name: outer, key: 'lambda', c: ratio.p },
+      { name: inner, key: 'lambda', c: -ratio.q },
+      { name: outer, key: 'varpi', c: -(ratio.p - ratio.q) },
+    ],
     ratio,
     evaluate: s =>
       twoBodyArgument(
@@ -269,6 +292,20 @@ export function argumentFor(spec, series) {
         s.el[inner]?.lambda,
         s.el[outer]?.varpi
       ),
+  };
+}
+
+/**
+ * Make the recorder carry an argument continuously and hand back what it holds.
+ * @param {Array<{name:string, key:string, c:number}>} terms - Integer terms
+ * @returns {{samples: Array<{t:number, phi:number}>, frameStepDeg: number|null}}
+ */
+function followed(terms) {
+  const key = JSON.stringify(terms);
+  recorder.watch(key, terms);
+  return {
+    samples: recorder.continuous(key),
+    frameStepDeg: recorder.argumentStep(key),
   };
 }
 
@@ -310,7 +347,12 @@ export function measureAngle(ctx, spec) {
       ? pOut || pIn
       : Math.min(rawSynodic, 50 * Math.max(pIn, pOut));
 
-  const verdict = classifyAngle(samples, { referencePeriod: synodic });
+  const held = followed(arg.terms);
+  const verdict = classifyAngle(held.samples, {
+    referencePeriod: synodic,
+    unwrapped: true,
+    frameStepDeg: held.frameStepDeg,
+  });
   return { ...base, arg, samples, verdict, synodic, pIn, pOut };
 }
 
@@ -352,12 +394,65 @@ function message(g, w, h, colors, text) {
   );
 }
 
+// --- Run and Pause -------------------------------------------------------------
+
+/**
+ * The instruments draw the live world, so Run and Pause set the world's clock.
+ * A step opens it with `autorun` from the Motion choice (js/widgets.js,
+ * autoruns): under Reduced and Step by step the world is held until Run; else
+ * it runs as the step's scene set it.
+ */
+const RUN = {
+  // No icon: the button's word changes with the clock, and a glyph that did
+  // not would say "play" beside "Pause".
+  actions: [
+    {
+      id: 'run',
+      get label() {
+        return t(state.paused ? 'energyW.run' : 'stelE.action.pause');
+      },
+    },
+  ],
+  reset(_v, { autorun = true } = {}) {
+    if (autorun) return;
+    const hold = () => setParkedPause((state.paused = true));
+    hold();
+    // A step that declares its time starts the world just after this: hold it again.
+    setTimeout(hold, 0);
+  },
+  act() {
+    setParkedPause((state.paused = !state.paused));
+    // The world's clock changed with no other sign for a screen reader.
+    announce(
+      t(state.paused ? 'readout.status.paused' : 'readout.status.running')
+    );
+  },
+};
+
+/**
+ * Rows a reading step can name before there is anything to read (K1 takes a
+ * row by id; a step is checked against the readout of an empty world). A dash
+ * cannot be captured, so a reading taken too soon is refused in words.
+ */
+const blanks = (who, ids) =>
+  ids.map(([id, label]) => ({
+    id,
+    label: who ? `${who}: ${label}` : label,
+    value: '\u2014',
+  }));
+const LIBRATION_ROWS = () => [
+  ['center', t('resW.row.center')],
+  ['amplitude', t('resW.row.amplitude')],
+  ['period', t('resW.row.libration')],
+];
+
 // --- 1. Periods and ratios ----------------------------------------------------
 
 const PERIODS = {
   id: 'resonance-periods',
   live: true,
   animated: true,
+  ...RUN,
   get title() {
     return t('resW.periods.title');
   },
@@ -494,6 +589,7 @@ const ANGLE = {
   id: 'resonance-angle',
   live: true,
   animated: true,
+  ...RUN,
   get title() {
     return t('resW.angle.title');
   },
@@ -551,6 +647,7 @@ export function angleRows(m) {
         label: t('resW.row.status'),
         value: t(`resW.empty.${m?.reason || 'no-world'}`),
       },
+      ...blanks('', LIBRATION_ROWS()),
     ];
   }
   const scale = scaleOf(m.primary);
@@ -591,12 +688,16 @@ export function angleRows(m) {
 
   if (v.center != null) {
     rows.push({
+      id: 'center',
       label: t('resW.row.center'),
       value: `${v.center.toFixed(1)}\u00b0`,
     });
   }
   if (v.amplitude != null) {
     rows.push({
+      id: 'amplitude',
+      // A bound is not an amplitude: there is nothing for Capture to take.
+      text: v.amplitudeIsBound ? '' : fixed(v.amplitude, 1),
       label: t('resW.row.amplitude'),
       value: v.amplitudeIsBound
         ? t('resW.value.amplitudeBound', { amp: v.amplitude.toFixed(1) })
@@ -611,6 +712,10 @@ export function angleRows(m) {
 
   if (v.state === ANGLE_STATE.LIBRATION) {
     rows.push({
+      id: 'period',
+      text: v.period
+        ? fixed(simSecondsToDays(v.period, scale.time), 0)
+        : undefined,
       label: t('resW.row.libration'),
       value: v.period
         ? t('resW.value.librationPeriod', {
@@ -834,6 +939,7 @@ const CONJUNCTIONS = {
   id: 'resonance-conjunctions',
   live: true,
   animated: true,
+  ...RUN,
   get title() {
     return t('resW.conj.title');
   },
@@ -1066,6 +1172,7 @@ const FRAME = {
   id: 'resonance-frame',
   live: true,
   animated: true,
+  ...RUN,
   get title() {
     return t('resW.frame.title');
   },
@@ -1162,27 +1269,35 @@ const FRAME = {
 
   readout(_v, ctx, spec) {
     const m = measureFrame(ctx, spec);
+    // A step names the one body whose libration it captures (`read`).
+    const asked = spec?.read;
+    const own = () => [
+      ['center', t('resW.row.center')],
+      ['amplitude', t('resW.row.amplitude')],
+      ['period', t('resW.row.libration')],
+    ];
     if (!m.ready) {
       return [
         {
           label: t('resW.row.status'),
           value: t(`resW.empty.${m.reason || 'no-world'}`),
         },
+        ...(asked ? blanks(asked, own()) : []),
       ];
     }
     const rows = [{ label: t('resW.row.frame'), value: m.secondary.name }];
     for (const body of m.others) {
-      const samples = m.series
-        .map(s => {
-          const e = s.el[body.name];
-          const sec = s.el[m.secondary.name];
-          return e && sec
-            ? { t: s.t, phi: wrap360(e.trueLongitude - sec.trueLongitude) }
-            : null;
-        })
-        .filter(Boolean);
+      const terms = [
+        { name: body.name, key: 'trueLongitude', c: 1 },
+        { name: m.secondary.name, key: 'trueLongitude', c: -1 },
+      ];
       const period = meanPeriod(m.series, m.secondary.name);
-      const v = classifyAngle(samples, { referencePeriod: period });
+      const held = followed(terms);
+      const v = classifyAngle(held.samples, {
+        referencePeriod: period,
+        unwrapped: true,
+        frameStepDeg: held.frameStepDeg,
+      });
       // A body sitting on its Lagrange point is not a zero-amplitude tadpole,
       // it is the equilibrium the tadpoles go round, and saying "tadpole about
       // 60 degrees, amplitude 0" of it would bury the most striking thing in
@@ -1204,6 +1319,29 @@ const FRAME = {
             })
           : verdictText(v),
       });
+      if (librating && body.name === asked) {
+        const years = simSecondsToYears(v.period, scaleOf(m.primary).time);
+        const own3 = [
+          [v.center, '\u00b0'],
+          [v.amplitude, '\u00b0'],
+          [years, ''],
+        ];
+        rows.push(
+          ...blanks(asked, own()).map((r, i) => {
+            const [n, u] = own3[i];
+            return Number.isFinite(n)
+              ? {
+                  ...r,
+                  text: fixed(n, 0),
+                  value:
+                    i === 2
+                      ? t('resW.value.periodYears', { years: fixed(n, 0) })
+                      : `${fixed(n, 0)}${u}`,
+                }
+              : r;
+          })
+        );
+      }
     }
     return rows;
   },

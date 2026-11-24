@@ -28,7 +28,7 @@ the week they are teaching.
 
 **<!--fact:libraryInvestigations-->146<!--/fact--> guided
 investigations**: <!--fact:investigations-->124<!--/fact--> that run in the
-simulation, <!--fact:investigationSteps-->1536<!--/fact--> steps between them
+simulation, <!--fact:investigationSteps-->1535<!--/fact--> steps between them
 (the table below), and <!--fact:guidedInvestigations-->22<!--/fact--> in the
 Observatory, the 3-D lab and the mission lab (the Library lists all of them):
 
@@ -341,7 +341,7 @@ run directly, so debugging never requires a build step.
 ### Everything else
 
 ```bash
-npm test                  # <!--fact:jestTests-->22925<!--/fact--> tests across <!--fact:jestSuites-->700<!--/fact--> suites
+npm test                  # <!--fact:jestTests-->23034<!--/fact--> tests across <!--fact:jestSuites-->703<!--/fact--> suites
 npm run validate:physics  # the physics validation table
 npm run e2e               # browser smoke tests, against the sources
 npm run lint              # eslint
@@ -366,9 +366,9 @@ reports what the browser downloads at start-up separately from what is deferred:
 | What                   | Size                                                   | Files / chunks                                |
 | ---------------------- | ------------------------------------------------------ | --------------------------------------------- |
 | CSS                    | <!--fact:buildCss-->211<!--/fact--> KB                 | 1                                             |
-| JavaScript at start-up | <!--fact:buildStartupJs-->536<!--/fact--> KB           | <!--fact:buildStartupFiles-->55<!--/fact-->   |
-| JavaScript on demand   | <!--fact:buildDeferredJs-->9088<!--/fact--> KB         | <!--fact:buildDeferredChunks-->862<!--/fact--> |
-| **Initial download**   | **<!--fact:buildInitialDownload-->747<!--/fact--> KB** |                                               |
+| JavaScript at start-up | <!--fact:buildStartupJs-->534<!--/fact--> KB           | <!--fact:buildStartupFiles-->55<!--/fact-->   |
+| JavaScript on demand   | <!--fact:buildDeferredJs-->9108<!--/fact--> KB         | <!--fact:buildDeferredChunks-->857<!--/fact--> |
+| **Initial download**   | **<!--fact:buildInitialDownload-->745<!--/fact--> KB** |                                               |
 
 Those figures are the last build's, to the nearest kilobyte, and are written
 into the page by `npm run docs:sync` from `dist/build-summary.json` rather than
@@ -489,8 +489,8 @@ npm run e2e:ui                    # the Playwright inspector
 npm run e2e:report                # open the last HTML report
 ```
 
-The suite is <!--fact:e2eTests-->4434<!--/fact--> tests
-in <!--fact:e2eFiles-->272<!--/fact--> files and takes several minutes in
+The suite is <!--fact:e2eTests-->4440<!--/fact--> tests
+in <!--fact:e2eFiles-->273<!--/fact--> files and takes several minutes in
 Chromium.
 
 Some notes on how it is put together, because two of the choices are not
