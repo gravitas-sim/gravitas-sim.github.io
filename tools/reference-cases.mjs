@@ -785,7 +785,9 @@ async function cameraLeg(E, rate) {
       });
     }
   }
-  // The control: a view panned far away must delete, or this harness cannot see a cull.
+  // The control: a view panned far away. It deleted every body while the cull
+  // existed, which showed this harness could see one; since Prompt 496 it
+  // deletes none.
   const far = one(1366, 800, 0.25, 100000);
   const ref0 = one(0, 0, 0.25, 0);
   control.deletedAtHundredThousandAU = [...ref0].filter(

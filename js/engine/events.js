@@ -3,7 +3,7 @@
 // one; the worker notice goes to globalThis.
 
 import { clearObjectEnergyHistory } from './conservation.js';
-import { getSimulationTime } from './state.js';
+import { getSimulationTime, noteEngineEvent } from './state.js';
 import { EV_COLLISION, EV_MERGE, EV_WORKER_FAILED } from '../names.js';
 
 export const dispatchSimulationEvent = (name, detail = {}) => {
@@ -218,6 +218,7 @@ export const mergeAllowed = (a, b) => !a?.model_owned && !b?.model_owned;
  */
 export const completeMerger = (a, b, result, { remove } = {}) => {
   if (!a || !b) return null;
+  noteEngineEvent('merger');
 
   // Both are gone whatever happened, and their energy history goes with them.
   // `purgeDead` clears history for anything it filters out, so the default

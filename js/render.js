@@ -1031,7 +1031,7 @@ const drawScene = () => {
   // zeroes, which is exactly the old behavior.
   let frameOrigin = resolveFrameOrigin(barycenterBodies());
   if (!frameOrigin && !isWorldFrame()) {
-    // The body the frame was tied to has been absorbed, merged or culled. There
+    // The body the frame was tied to has been absorbed or merged away. There
     // is no origin any more, so say so and fall back rather than leaving the
     // rail claiming a frame that no longer exists.
     resetFrame();
@@ -1965,85 +1965,22 @@ function readoutHtml(drawn) {
   // --- Conservation check ---------------------------------------------------
   if (SETTINGS.show_conservation_diagnostics && !isEmbed()) {
     const drift = conservationDrift();
-    if (drift) {
-      const pct = v =>
-        !Number.isFinite(v)
-          ? '\u2014'
-          : `${v >= 0 ? '+' : ''}${v.toPrecision(3)}%`;
-      // An absolute change, for the case where a relative one cannot be
-      // formed. Two significant figures: it is an order-of-magnitude fact.
-      const abs = v =>
-        !Number.isFinite(v)
-          ? '\u2014'
-          : `${v >= 0 ? '+' : ''}${v.toPrecision(2)}`;
-
-      const rows = [
-        [
-          t('readout.integrator'),
-          t(
-            `settings.option.integrator.${drift.integrator
-              .toLowerCase()
-              .replace(/[^a-z0-9]+/g, '-')}`
-          ),
-        ],
-      ];
-
-      // Energy and angular momentum, each either as a percentage of the
-      // reference or - when the reference was itself the near-cancellation of
-      // much larger terms - as the change itself, said plainly.
-      rows.push(
-        drift.energyConditioned
-          ? [t('readout.drift.energy'), pct(drift.energyDrift)]
-          : [t('readout.drift.energyChange'), abs(drift.energyChange)]
+    // The check's markup and words load the first time it is switched on, so
+    // a launch that never asks for it does not download them.
+    if (drift && readoutView)
+      sections.push(readoutView.conservationReadoutHtml(drift, formatTime));
+    else if (drift)
+      readoutViewLoading ??= import('./conservationReadoutView.js').then(
+        m => (readoutView = m)
       );
-      rows.push(
-        drift.angularConditioned
-          ? [t('readout.drift.angular'), pct(drift.angularDrift)]
-          : [t('readout.drift.angularChange'), abs(drift.angularChange)]
-      );
-
-      // When the reference was taken. A drift figure with no interval attached
-      // is not a measurement, and a reader who rebaselines has to be able to
-      // see that they did.
-      rows.push([t('readout.drift.since'), formatTime(drift.baselineTime)]);
-
-      const illConditioned =
-        !drift.energyConditioned || !drift.angularConditioned;
-
-      sections.push(
-        // <details> rather than a title attribute: an explanation reachable
-        // only by hovering is unreachable by keyboard and unreachable on a
-        // touch screen, and this one is the difference between a number and a
-        // number somebody can act on.
-        `<div class="readout-conservation">
-           <h3 class="readout-conservation-title">${escapeHtml(t('readout.conservation.title'))}</h3>
-           <dl class="readout-metrics is-diagnostics">${rows
-             .map(
-               ([k, v]) =>
-                 `<div class="readout-metric"><dt>${escapeHtml(k)}</dt><dd>${escapeHtml(v)}</dd></div>`
-             )
-             .join('')}</dl>${
-             illConditioned
-               ? `<p class="readout-caveat">${escapeHtml(t('readout.conservation.illConditioned'))}</p>`
-               : ''
-           }${
-             // Every reason, not the first one. A scene can have a static hole
-             // and imposed decay and merging at once, and naming one of the
-             // three invites the reader to blame the integrator for the other
-             // two.
-             drift.caveats.length
-               ? `<ul class="readout-caveats">${drift.caveats
-                   .map(c => `<li>${escapeHtml(t(c))}</li>`)
-                   .join('')}</ul>`
-               : `<p class="readout-caveat">${escapeHtml(t('readout.conservation.closed'))}</p>`
-           }
-         </div>`
-      );
-    }
   }
 
   return sections.join('');
 }
+
+/** The conservation check's module, once loaded (js/conservationReadoutView.js). */
+let readoutView = null;
+let readoutViewLoading = null;
 
 /**
  * Whether the reader has opened the conservation explanation.

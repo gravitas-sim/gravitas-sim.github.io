@@ -44,6 +44,7 @@ import {
   world_to_screen,
   screen_to_world,
   getSimulationTime,
+  physicsSettings,
   bh_list,
   stars,
   neutron_stars,
@@ -61,7 +62,23 @@ import {
   INSTRUMENT_MONO,
 } from './instruments.js';
 import { formatNumber } from './format.js';
-import { t } from './i18n/index.js';
+import { primaryCandidates, primaryOf } from './orbital.js';
+import { t, registerMessages } from './i18n/index.js';
+
+// The step statement's words load with the first stopwatch reading, not at
+// start-up (js/i18n/en.stepStatement.js).
+let stepWords = null;
+const stepWordsReady = () => {
+  stepWords ??= Promise.all([
+    import('./i18n/en.stepStatement.js'),
+    import('./i18n/es.stepStatement.js'),
+  ]).then(([en, es]) => {
+    registerMessages('en', en.EN_STEPSTATEMENT, true);
+    registerMessages('es', es.ES_STEPSTATEMENT, true);
+    stepWords = true;
+  });
+  return stepWords === true;
+};
 import { sceneWords } from './canvasSummary.js';
 
 /** Meters in one simulation length unit. */
@@ -232,39 +249,35 @@ export function toolsPointerUp() {
  * The bodies the stopwatch can be latched to, and the primary each one orbits.
  * @returns {Array} Massive bodies that could serve as a primary
  */
-const primaries = () =>
-  [...bh_list, ...stars, ...neutron_stars, ...white_dwarfs, ...galaxies].filter(
-    b => b && b.alive !== false
-  );
-
 /**
- * The body a given orbiter is treated as going around: the one whose pull on it
- * is strongest right now.
+ * The body a given orbiter is treated as going around: the shared rule
+ * (js/orbital.js, primaryOf): a planet's moon about the planet inside its Hill
+ * radius, otherwise the strongest pull.
  *
- * The same rule the orbit helper and the area-sweep overlay use, so a student
- * who latches the stopwatch to a planet times it about the body the rest of the
- * application also says it is orbiting.
+ * The same rule the inspector, the orbit overlay and the planner use, so a
+ * student who latches the stopwatch to a planet times it about the body the
+ * rest of the application also says it is orbiting.
  *
  * @param {object} body - The orbiter
- * @returns {?object} The dominant attractor, or null
+ * @returns {?object} The primary, or null
  */
 export function dominantPrimary(body) {
   if (!body) return null;
-  let best = null;
-  let bestPull = 0;
-  for (const p of primaries()) {
-    if (p === body) continue;
-    const r2 = Math.max(
-      1e-6,
-      (p.pos.x - body.pos.x) ** 2 + (p.pos.y - body.pos.y) ** 2
-    );
-    const pull = p.mass / r2;
-    if (pull > bestPull) {
-      bestPull = pull;
-      best = p;
-    }
-  }
-  return best;
+  return primaryOf(
+    body,
+    primaryCandidates(
+      {
+        bh_list,
+        stars,
+        neutron_stars,
+        white_dwarfs,
+        galaxies,
+        gas_giants,
+        planets,
+      },
+      body
+    )
+  );
 }
 
 /** Find a live body by id across every list the stopwatch may latch to. */
@@ -830,6 +843,17 @@ export function stopwatchRows() {
       value: formatTime(mean),
     });
   }
+  // The step-policy gate's verdict C (STEP_POLICY_GATE.md): where a scene does
+  // not cap its step, a timed reading depends on the frame rate, and says so.
+  if (
+    elapsed !== null &&
+    !(physicsSettings.max_timestep > 0) &&
+    stepWordsReady()
+  )
+    rows.push({
+      label: t('instrument.stopwatch.step'),
+      value: t('instrument.stopwatch.stepFollowsFrame'),
+    });
   return rows;
 }
 

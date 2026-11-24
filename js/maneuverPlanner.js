@@ -38,8 +38,9 @@ import {
   bh_list,
   neutron_stars,
   white_dwarfs,
+  galaxies,
 } from './physics.js';
-import { dominantPrimary } from './orbital.js';
+import { primaryCandidates as candidatesIn, primaryOf } from './orbital.js';
 import { burnRecord, previewBurn } from './maneuver.js';
 import { t, onLocaleChange } from './i18n/index.js';
 import { formatNumber } from './format.js';
@@ -88,15 +89,17 @@ export function maneuverableBodies() {
   );
 }
 
-/** Everything massive enough to be a primary. @returns {Array} Bodies */
+/** The shared candidates (js/orbital.js), from the live lists. @returns {Array} Bodies */
 function primaryCandidates() {
-  return [
-    ...bh_list,
-    ...stars,
-    ...neutron_stars,
-    ...white_dwarfs,
-    ...gas_giants,
-  ].filter(b => b && b.alive !== false);
+  return candidatesIn({
+    bh_list,
+    stars,
+    neutron_stars,
+    white_dwarfs,
+    galaxies,
+    gas_giants,
+    planets,
+  });
 }
 
 /** @returns {?object} The body the planner is aimed at */
@@ -225,7 +228,7 @@ function renderPreview() {
   if (!out) return;
   out.innerHTML = '';
   const body = currentBody();
-  const primary = body ? dominantPrimary(body, primaryCandidates()) : null;
+  const primary = body ? primaryOf(body, primaryCandidates()) : null;
   $('maneuverPrimary').textContent = primary
     ? t('burn.about', { name: primary.name || `#${primary.id}` })
     : t('burn.noPrimary');
@@ -313,7 +316,7 @@ function digitsFor(v) {
 /** Commit the burn, after taking a snapshot to come back to. */
 function applyBurn() {
   const body = currentBody();
-  const primary = body ? dominantPrimary(body, primaryCandidates()) : null;
+  const primary = body ? primaryOf(body, primaryCandidates()) : null;
   if (!body || !primary || !host) return;
 
   const G = host.getSettings().gravitational_constant;

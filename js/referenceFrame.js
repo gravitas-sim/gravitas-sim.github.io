@@ -269,7 +269,7 @@ export function resolveFrameOrigin(bodies) {
   }
 
   const body = bodies.find(b => b && b.id === frame.objectId);
-  // The body can be absorbed or culled while its frame is selected. Falling
+  // The body can be absorbed or merged while its frame is selected. Falling
   // back to the world frame is the only honest answer: there is no origin.
   if (!body || body.alive === false) return null;
   return {
