@@ -1297,9 +1297,10 @@ export const INSTRUCTOR_CONTENT = {
       \n\nIts spine is a distinction, not a calculation. Energetically accessible, actually
       reachable, and stable are three different statements about the same diagram, and students
       reliably collapse them into one. The investigation meets them one at a time and separated by
-      screens: energy through screen 9, then a deliberately inconclusive experiment at screen 11
-      where the neck is open and the tracer may simply not go through, then stability introduced
-      at screen 13 as an explicitly third thing.
+      screens: energy through screen 10, then a controlled experiment at screen 12 where the
+      neck is open and one of two tracers with the same accessible region does not go through,
+      then stability introduced at screen 13 as an explicitly third thing and tested at screen 15,
+      where students nudge a tracer at L1 and at L4 and watch.
       \n\nThe sign convention is the other hazard and is stated three times. C rises as the
       tracer slows, so every mental graph is upside down relative to the rest of the course.`,
     priorKnowledge: [
@@ -1324,7 +1325,7 @@ export const INSTRUCTOR_CONTENT = {
       },
       {
         heading: 'Accessible, reachable and stable are three claims',
-        body: 'The zero-velocity curve makes only the first. Screen 11 is built so the tracer may visibly fail to use an open neck, which is the only honest way to teach it - asserting the distinction while the tracer sails through would teach the opposite.',
+        body: 'The zero-velocity curve makes only the first. Screen 12 is built so a tracer visibly fails to use an open neck, which is the only honest way to teach it - asserting the distinction while the tracer sails through would teach the opposite.',
       },
       {
         heading: 'L4 and L5 are stable at maxima, which sounds impossible',
@@ -1341,6 +1342,10 @@ export const INSTRUCTOR_CONTENT = {
         text: 'The shaded region is where this tracer\u2019s energy forbids it to be. It is recomputed as the tracer\u2019s speed changes and is drawn from a grid cached against the mass ratio, so it costs nothing to watch it move.',
       },
       {
+        name: 'The nudge test',
+        text: 'A section of the panel that rebuilds the system with the tracer at rest beside a chosen Lagrange point, moved away from the barycenter by a nudge the student sets, and then reports its distance from the point now, the furthest it has been and when, in binary periods. Students choose the point, the nudge and how long to watch.',
+      },
+      {
         name: 'The maneuver planner',
         text: 'Used at screen 10 to change the tracer\u2019s speed deliberately rather than by dragging. Its Undo restores the whole world, so a class can try several burns and compare.',
       },
@@ -1354,7 +1359,7 @@ export const INSTRUCTOR_CONTENT = {
       {
         claim: 'The neck at L1 is open, so the tracer will go through it.',
         response:
-          'An open neck is a gap in a wall, not a route through it. Screen 11 exists to be inconclusive: let students run it and see the tracer loiter. If it does cross on their first attempt, have them undo and try a different burn - it will not always.',
+          'An open neck is a gap in a wall, not a route through it. Screen 12 runs the same tracer in two directions with the same Jacobi constant: one crosses and one does not. Screen 11 asks them to predict that first, and a student who chose "both cross" has the misconception named back to them after the runs.',
       },
       {
         claim: 'The Lagrange points are where gravity cancels.',
@@ -1369,14 +1374,15 @@ export const INSTRUCTOR_CONTENT = {
       {
         claim: 'This all applies to any three bodies.',
         response:
-          'Two of them must be on a circular orbit and the third must be negligible. Screen 16 has students break it on purpose. The elliptic restricted problem exists and has no conserved Jacobi constant, which is exactly why the panel refuses rather than approximating.',
+          'Two of them must be on a circular orbit and the third must be negligible. Screen 17 has students break it on purpose. The elliptic restricted problem exists and has no conserved Jacobi constant, which is exactly why the panel refuses rather than approximating.',
       },
     ],
     teachingNotes: [
-      'This system has mu = 0.0291 against Routh\u2019s 0.03852 - close enough that raising the small star\u2019s mass a little makes L4 and L5 unstable, which is a good live demonstration if a class has time. The panel says which side of the line the system is on.',
+      'This system has mu = 0.0291 against Routh\u2019s 0.03852 - close enough that raising the small star\u2019s mass a little makes L4 and L5 unstable, which is a good live demonstration if a class has time. Outside a lesson the panel says which side of the line the system is on and marks L4 and L5 stable; while a lesson is open it leaves stability out, so the nudge test at screen 15 is the students\u2019 evidence rather than a label they read.',
+      'The nudge test (screen 15), measured through the engine in this system: a tracer nudged 0.001 to 0.005 separations from L4 swings out to forty to fifty times the nudge within two binary periods and gets no further in twelve; from 0.006 it escapes, after one to a dozen periods, because mu is near Routh\u2019s limit and the region that holds a tracer is small. The panel opens at a nudge of 0.01, which escapes. From L1 the tracer leaves whatever the nudge, its distance growing about sevenfold every tenth of a binary period. The useful argument is the one about nudge size: stable means a small enough nudge stays small, so a group that calls L4 unstable from the 0.01 it started with should try 0.002 before deciding.',
       'The critical values here are C1 = 3.313, C2 = 3.274, C3 = 3.029 and C4 = C5 = 2.971. A student comparing them against a textbook may find the last differs: this application omits the mu(1-mu)/2 term some texts add to Omega, so C4 is 3 - mu + mu^2 rather than 3. The panel states this and it is worth pre-empting.',
       'Screen 5 asks students to read C twice and see it unchanged. It holds to about four parts in a hundred thousand over several orbits, which is the Velocity Verlet integrator rather than the physics; the scenario chooses that integrator for this reason. If a class asks, that is a good moment to talk about what a numerical result can and cannot establish.',
-      'Screen 11 is the one that decides whether the investigation worked. Do not tell students what will happen. If several groups get different outcomes from different burns, that is the best possible result and worth collecting on a board.',
+      'Screen 12 is the one that decides whether the investigation worked. Do not tell students what will happen. If several groups get different outcomes from different burns, that is the best possible result and worth collecting on a board.',
       'The overlay disables itself if a class adds a third body while exploring. That is intended, and the message names the assumption that failed - it is not a fault to work around.',
     ],
     discussion: [
@@ -1386,8 +1392,8 @@ export const INSTRUCTOR_CONTENT = {
       'The frame is doing half the work. What is a Lagrange point in an inertial frame?',
     ],
     extensions: [
-      'Raise the small star\u2019s mass past a thirtieth of the large one and watch L4 and L5 stop being marked as stable. Ask students to predict the threshold before they cross it.',
-      'Place the tracer near L4 with a small velocity and let it run for many orbits: it librates about the point rather than sitting at it, which is what the Trojans actually do.',
+      'In the sandbox, raise the small star\u2019s mass past a twenty-fifth of the large one and watch L4 and L5 stop being marked as stable, then run the nudge test at L4 again. Ask students to predict the threshold before they cross it.',
+      'Run the nudge test at L4 with a small nudge for many orbits and watch the trail: the tracer librates about the point rather than sitting at it, which is what the Trojans actually do.',
       'Compute the Sun-Earth mass ratio and work out where L1 and L2 are, then compare against the real distances to SOHO and JWST.',
       'Use the A/B experiment bench to record the same tracer at two timesteps and check that the Jacobi constant\u2019s drift is the integrator rather than the system.',
     ],

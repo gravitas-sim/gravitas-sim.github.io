@@ -64,6 +64,7 @@ import { formatNumber } from './format.js';
 import {
   LAGRANGE_NAMES,
   ROUTH_MU,
+  VIOLATION,
   assumptionsHold,
   jacobiConstant,
   lagrangePoints,
@@ -85,6 +86,9 @@ let cache = null;
 let maskCanvas = null;
 let maskImage = null;
 let lastKey = '';
+/** The Jacobi constant the readout last printed, and frames since a check. */
+let shownC = null;
+let sinceShown = 0;
 
 const esc = text =>
   String(text ?? '').replace(
@@ -428,7 +432,7 @@ function mount() {
         <summary>${esc(t('cr3bp.claims.title'))}</summary>
         <p class="experiment-hint">${esc(t('cr3bp.claims.accessible'))}</p>
         <p class="experiment-hint">${esc(t('cr3bp.claims.reachable'))}</p>
-        <p class="experiment-hint">${esc(t('cr3bp.claims.stable'))}</p>
+        <p id="cr3bpClaimStable" class="experiment-hint">${esc(t('cr3bp.claims.stable'))}</p>
       </details>
 
       <details id="cr3bpPairSection" class="assist-experiment" hidden>
@@ -443,6 +447,24 @@ function mount() {
         <div id="cr3bpPairTable"></div>
         <p id="cr3bpPairCaveat" class="obs-panel-hint"></p>
       </details>
+
+      <details id="cr3bpNudgeSection" class="assist-experiment" hidden>
+        <summary>${esc(t('cr3bp.nudge.title'))}</summary>
+        <p class="obs-panel-hint">${esc(t('cr3bp.nudge.hint'))}</p>
+        <label class="maneuver-field">
+          <span>${esc(t('cr3bp.point'))}</span>
+          <select id="cr3bpNudgePoint" class="experiment-input">${LAGRANGE_NAMES.map(n => `<option>${n}</option>`).join('')}</select>
+        </label>
+        <label class="maneuver-field">
+          <span>${esc(t('cr3bp.nudge.size'))}</span>
+          <input id="cr3bpNudgeSize" class="experiment-input" type="number" min="0.0001" max="0.1" step="any" value="0.01" />
+        </label>
+        <div class="pause-event-actions">
+          <button id="cr3bpNudgePlace" class="obs-panel-btn" type="button">${esc(t('cr3bp.nudge.place'))}</button>
+        </div>
+        <p id="cr3bpNudgeStatus" class="obs-panel-hint" role="status"></p>
+        <div id="cr3bpNudgeTable"></div>
+      </details>
     </div>`;
   document.body.appendChild(root);
   $('cr3bpClose').onclick = () => setCr3bpEnabled(false);
@@ -450,6 +472,7 @@ function mount() {
     runNeckPair().catch(() => {});
   };
   $('cr3bpPairCancel').onclick = () => cancelNeckPair();
+  $('cr3bpNudgePlace').onclick = () => placeNudged();
   $('cr3bpPairKeep').onclick = async () => {
     // Copied before anything is awaited, for the same reason as everywhere
     // else: the pair can be re-run while the notebook is loading.
@@ -461,8 +484,9 @@ function mount() {
   };
   onLocaleChange(() => {
     render();
-    // The pair's table is built from strings too.
+    // The pair's and the nudge test's tables are built from strings too.
     renderPair();
+    renderNudge();
   });
 }
 
@@ -480,6 +504,11 @@ function render() {
   // Which world is loaded decides whether the controlled pair is offered, and
   // that is true whether or not the rest of the readout can be drawn.
   renderPairVisibility(system);
+  const nudgeSection = $('cr3bpNudgeSection');
+  if (nudgeSection) nudgeSection.hidden = !(nudge || pairHolds(system));
+  const conceal = inLesson();
+  const claimStable = $('cr3bpClaimStable');
+  if (claimStable) claimStable.hidden = conceal;
 
   if (!system?.verdict.ok) {
     // The claims are switched off rather than qualified into meaninglessness.
@@ -510,6 +539,7 @@ function render() {
     out.appendChild(el);
   };
 
+  shownC = C;
   if (C === null) {
     line(t('cr3bp.noTracer'));
   } else {
@@ -548,7 +578,8 @@ function render() {
   for (const p of points) {
     const tr = document.createElement('tr');
     const cells = [
-      p.name + (p.linearlyStable ? ` ${t('cr3bp.stableMark')}` : ''),
+      p.name +
+        (p.linearlyStable && !conceal ? ` ${t('cr3bp.stableMark')}` : ''),
       formatNumber(p.x, { sig: 5 }),
       formatNumber(p.C, { sig: 6 }),
       C === null ? '—' : C <= p.C ? t('cr3bp.yes') : t('cr3bp.no'),
@@ -561,6 +592,7 @@ function render() {
     table.appendChild(tr);
   }
   out.appendChild(table);
+  if (conceal) return;
   line(
     system.mu < ROUTH_MU
       ? t('cr3bp.routh.below', { mu: formatNumber(ROUTH_MU, { sig: 4 }) })
@@ -887,6 +919,187 @@ async function runNeckPair() {
   render();
 }
 
+// =============================================================================
+// The nudge test
+// -----------------------------------------------------------------------------
+// The third of the lesson's three questions, asked the way it is defined: put
+// a tracer at rest a small distance from an equilibrium and watch whether it
+// stays near. The reader chooses the point, the size of the nudge and how long
+// to watch; the section reports the distance now, the furthest it has been and
+// when, in binary periods, so "it stopped getting further" and "it kept going"
+// are things read off the screen.
+//
+// The tracer is placed through the scenario's own laboratory variables, the
+// same four the controlled pair uses, so the world is rebuilt with the tracer
+// at rest in the rotating frame rather than moved in a running one. The nudge
+// is away from the barycenter, along the line from it to the point. The
+// scenario's pair goes round counter-clockwise, which is the frame
+// js/cr3bp.js works in, so the point's coordinates carry over unchanged.
+//
+// Nothing here says which points are stable. That is what the reader is
+// finding out, and in a lesson the rest of the panel says nothing about it
+// either (inLesson below).
+// =============================================================================
+
+/** What the nudge test is following, or null. */
+let nudge = null;
+/** Whether its sampling loop is running. */
+let nudgeLooping = false;
+
+/**
+ * Whether a lesson is open. A lesson asks for the stability prediction before
+ * it shows the evidence, so the table's stability mark, the Routh sentence,
+ * the stable claim and the green points are left out while one is.
+ * @returns {boolean}
+ */
+const inLesson = () =>
+  typeof document !== 'undefined' &&
+  Boolean(document.querySelector('#investigationPanel:not([hidden])'));
+
+/**
+ * Whether the pair is a restricted problem, with or without a tracer. A tracer
+ * that left the view is removed by the engine, and the nudge test is how a
+ * reader puts one back.
+ * @param {?object} system - From readSystem()
+ * @returns {boolean}
+ */
+const pairHolds = system =>
+  Boolean(
+    system?.mu &&
+    (system.verdict.violations || []).every(v => v === VIOLATION.NO_TRACER)
+  );
+
+/** The pair's mean motion, per simulated time unit. */
+const meanMotion = system =>
+  Math.sqrt(
+    (SETTINGS.gravitational_constant *
+      (system.primary.mass + system.secondary.mass)) /
+      system.separation ** 3
+  );
+
+/**
+ * Rebuild the world with the tracer at rest beside the chosen point.
+ * @returns {void}
+ */
+function placeNudged() {
+  const status = $('cr3bpNudgeStatus');
+  const name = $('cr3bpNudgePoint')?.value;
+  const size = Number($('cr3bpNudgeSize')?.value);
+  if (!(size >= 1e-4 && size <= 0.1)) {
+    if (status) status.textContent = t('cr3bp.nudge.badSize');
+    return;
+  }
+  const system = readSystem();
+  const point = pairHolds(system)
+    ? lagrangePoints(system.mu)?.find(p => p.name === name)
+    : null;
+  if (!point || isNeckPairRunning()) {
+    if (status) status.textContent = t('cr3bp.pair.invalid');
+    return;
+  }
+  const r = Math.hypot(point.x, point.y) || 1;
+  SETTINGS.lagrange_tracer_x = point.x + (size * point.x) / r;
+  SETTINGS.lagrange_tracer_y = point.y + (size * point.y) / r;
+  SETTINGS.lagrange_tracer_vx = 0;
+  SETTINGS.lagrange_tracer_vy = 0;
+  window.dispatchEvent(new CustomEvent(EV_REQUEST_REBUILD));
+
+  nudge = {
+    point: name,
+    size,
+    t0: getSimClock(),
+    now: null,
+    furthest: 0,
+    furthestAt: 0,
+    watched: 0,
+  };
+  sampleNudge();
+  if (status) {
+    status.textContent = t('cr3bp.nudge.placed', {
+      d: formatNumber(size, { sig: 3 }),
+      point: name,
+    });
+  }
+  render();
+  renderNudge();
+  if (!nudgeLooping) {
+    nudgeLooping = true;
+    let frame = 0;
+    const tick = () => {
+      if (!nudge || !enabled) {
+        nudgeLooping = false;
+        return;
+      }
+      // Every sixth frame: readSystem() re-derives the pair's elements, which
+      // is not a sixty-times-a-second job, and the distance moves slowly
+      // against a binary period of several hundred frames.
+      if (++frame % 6 === 0) {
+        sampleNudge();
+        renderNudge();
+      }
+      requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  }
+}
+
+/** Read the tracer's distance from the point into the nudge record. */
+function sampleNudge() {
+  if (!nudge) return;
+  const system = readSystem();
+  const state = system?.verdict.ok ? tracerState(system) : null;
+  const point = state
+    ? lagrangePoints(system.mu)?.find(p => p.name === nudge.point)
+    : null;
+  if (!point) {
+    nudge.now = null;
+    return;
+  }
+  const d = Math.hypot(state.x - point.x, state.y - point.y);
+  const watched =
+    ((getSimClock() - nudge.t0) * meanMotion(system)) / (2 * Math.PI);
+  nudge.now = d;
+  nudge.watched = watched;
+  if (d > nudge.furthest) {
+    nudge.furthest = d;
+    nudge.furthestAt = watched;
+  }
+}
+
+/** Draw the nudge test's rows. */
+function renderNudge() {
+  const wrap = $('cr3bpNudgeTable');
+  if (!wrap) return;
+  wrap.innerHTML = '';
+  if (!nudge) return;
+  const table = document.createElement('table');
+  table.className = 'experiment-table';
+  const periods = v => t('cr3bp.nudge.periods', { t: fmtPair(v, 2) });
+  const rows = [
+    [
+      t('cr3bp.nudge.row.now', { point: nudge.point }),
+      nudge.now === null ? t('cr3bp.nudge.gone') : fmtPair(nudge.now, 3),
+    ],
+    [t('cr3bp.nudge.row.furthest'), fmtPair(nudge.furthest, 3)],
+    [t('cr3bp.nudge.row.when'), periods(nudge.furthestAt)],
+    [t('cr3bp.pair.row.watched'), periods(nudge.watched)],
+  ];
+  for (const [label, value] of rows) {
+    const tr = document.createElement('tr');
+    const th = document.createElement('th');
+    th.scope = 'row';
+    th.textContent = label;
+    const td = document.createElement('td');
+    td.textContent = value;
+    tr.append(th, td);
+    table.appendChild(tr);
+  }
+  wrap.appendChild(table);
+}
+
+/** What the nudge test is holding, for tests. @returns {?object} */
+export const nudgeReport = () => (nudge ? { ...nudge } : null);
+
 /**
  * Show the section only where its premise holds.
  *
@@ -1084,6 +1297,20 @@ function drawOverlay(ctx) {
   ensureField(system.mu);
   if (cache && C !== null) paintForbidden(ctx, system, C);
   paintPoints(ctx, system, C);
+
+  // The readout follows the tracer. It was written only when the world was
+  // rebuilt, so a burn moved the shading and left the printed C, the open
+  // necks and the table where they were: a lesson that says "watch C fall in
+  // the panel" got a number that never moved. Four times a second at most,
+  // and only when the printed figure would change.
+  if (++sinceShown >= 15) {
+    sinceShown = 0;
+    const moved =
+      C === null || shownC === null
+        ? C !== shownC
+        : Math.abs(C - shownC) > 5e-6 * Math.abs(shownC);
+    if (moved) render();
+  }
 }
 
 /**
@@ -1190,6 +1417,7 @@ export function lagrangePointsInWorld(system) {
 function paintPoints(ctx, system, C) {
   const points = lagrangePointsInWorld(system);
   if (!points) return;
+  const conceal = inLesson();
   ctx.save();
   ctx.font = '11px system-ui, sans-serif';
   ctx.textAlign = 'center';
@@ -1203,10 +1431,11 @@ function paintPoints(ctx, system, C) {
     const open = C !== null && C <= p.C;
     ctx.beginPath();
     ctx.arc(s.x, s.y, 4, 0, Math.PI * 2);
-    ctx.strokeStyle = p.linearlyStable ? '#7fe3a0' : '#ffd27f';
+    const color = p.linearlyStable && !conceal ? '#7fe3a0' : '#ffd27f';
+    ctx.strokeStyle = color;
     ctx.lineWidth = 1.5;
     if (open) {
-      ctx.fillStyle = p.linearlyStable ? '#7fe3a0' : '#ffd27f';
+      ctx.fillStyle = color;
       ctx.fill();
     }
     ctx.stroke();
@@ -1234,6 +1463,10 @@ export function initCr3bp() {
     // stops the overlay describing a system that is no longer on screen.
     cache = null;
     lastKey = '';
+    // A rebuild puts the tracer somewhere else; whatever the nudge test was
+    // following has gone. placeNudged() starts a new one after its own.
+    nudge = null;
+    renderNudge();
     render();
   });
 }

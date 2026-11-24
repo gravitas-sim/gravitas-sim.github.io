@@ -501,11 +501,11 @@ is not pinned. Closing the lesson lifts the pin.
 | lagrange-points | 8 | l4-distance | question | Lagrange Point Lab | inherited | 1/60 s |
 | lagrange-points | 9 | critical-order | read | Lagrange Point Lab | inherited | none (holds the clock) |
 | lagrange-points | 10 | open-the-neck | explore | Lagrange Point Lab | inherited | 1/60 s |
-| lagrange-points | 11 | accessible-not-reachable | predict | Lagrange Point Lab | inherited | 1/60 s |
-| lagrange-points | 12 | predict-same-region-same-path | predict | Lagrange Point Lab | yes | 1/60 s |
-| lagrange-points | 13 | watch-it-not-cross | explore | Lagrange Point Lab | yes | 1/60 s |
-| lagrange-points | 14 | stability-is-different | read | Lagrange Point Lab | inherited | none (holds the clock) |
-| lagrange-points | 15 | predict-stability | predict | Lagrange Point Lab | inherited | 1/60 s |
+| lagrange-points | 11 | one-region-two-directions | predict | Lagrange Point Lab | yes | 1/60 s |
+| lagrange-points | 12 | watch-it-not-cross | explore | Lagrange Point Lab | yes | 1/60 s |
+| lagrange-points | 13 | stability-is-different | read | Lagrange Point Lab | inherited | none (holds the clock) |
+| lagrange-points | 14 | predict-stability | predict | Lagrange Point Lab | inherited | 1/60 s |
+| lagrange-points | 15 | nudge-l1-and-l4 | explore | Lagrange Point Lab | inherited | 1/60 s |
 | lagrange-points | 16 | trojans | read | Lagrange Point Lab | inherited | none (holds the clock) |
 | lagrange-points | 17 | break-it | explore | Lagrange Point Lab | inherited | 1/60 s |
 | lagrange-points | 18 | which-assumption | question | Lagrange Point Lab | inherited | 1/60 s |

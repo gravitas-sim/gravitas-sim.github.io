@@ -6,18 +6,22 @@
 // going, where is it forbidden to be?
 //
 // The lesson is arranged so that the three claims that look alike are met one
-// at a time and never together. Screens 1-9 are entirely about energy: the
-// forbidden region, the Jacobi constant, the necks opening. Screens 10-13 put
+// at a time and never together. Screens 1-10 are entirely about energy: the
+// forbidden region, the Jacobi constant, the necks opening. Screens 11-12 put
 // a tracer in an open neck and let it not go through, which is the only honest
-// way to teach that accessible is not reachable. Screens 14-16 are stability,
-// introduced last and explicitly as a third thing.
+// way to teach that accessible is not reachable. Screens 13-16 are stability,
+// introduced last and explicitly as a third thing, and tested the way it is
+// defined: a tracer nudged at L1 and at L4, watched for as long as the reader
+// decides. Until that test the lesson says nothing about which points are
+// stable, and while a lesson is open the three-body panel does not either
+// (js/cr3bpPanel.js, inLesson).
 //
-// Why screens 12 and 13 are a controlled pair
+// Why screens 11 and 12 are a controlled pair
 // -----------------------------------------------------------------------------
 // Screen 10 has the reader push the tracer around until the neck opens, which
 // is the right way to meet the idea and a bad way to establish it: everyone
 // ends up somewhere different, so what they see is an anecdote and no two
-// anecdotes are comparable. Screens 12 and 13 are the same claim as an
+// anecdotes are comparable. Screens 11 and 12 are the same claim as an
 // experiment. One tracer, one place, one speed, two directions - which fixes
 // the Jacobi constant and therefore the whole accessible region, and leaves
 // the trajectory as the only thing that can differ. At 30 degrees it crosses
@@ -25,7 +29,7 @@
 // two full periods. Both are allowed everywhere the other is.
 //
 // The activity is scoped to accessibility against trajectory and says nothing
-// about stability, which is screens 14-16 and a different kind of evidence.
+// about stability, which is screens 13-16 and a different kind of evidence.
 //
 // The sign convention is the other pedagogical hazard. C rises as the tracer
 // slows, so every graph in a student's head is upside down, and the lesson
@@ -94,6 +98,8 @@ const neckRows = ctx => {
   ];
 };
 
+const WAS = (to, en, es) => ({ to, release: '3.1', was: { en, es } });
+
 const LAGRANGE_POINTS = {
   id: 'lagrange-points',
   thumbnail: 'images/scenarios/lagrange-point-lab.webp',
@@ -113,6 +119,20 @@ const LAGRANGE_POINTS = {
   // the whole set without a second list to keep in step.
   tags: ['orbits', 'gravity', 'spaceflight'],
   lock: { placement: true },
+  // Two near-identical predictions, both revealed by the same two runs, are
+  // now one.
+  retired: {
+    'accessible-not-reachable': WAS(
+      'one-region-two-directions',
+      'Predict what a tracer does once the L1 neck is open: cross, cross eventually, not necessarily ever cross, or settle at L1.',
+      'Predecir qué hace un trazador una vez abierto el cuello de L1: cruzar, cruzar con el tiempo, no cruzar necesariamente nunca o quedarse en L1.'
+    ),
+    'predict-same-region-same-path': WAS(
+      'one-region-two-directions',
+      'Predict whether two starts with the same accessible region follow the same path, and whether either uses the neck.',
+      'Predecir si dos salidas con la misma región accesible siguen el mismo camino, y si alguna usa el cuello.'
+    ),
+  },
   objectives: [
     'State the normalization and sign convention of the Jacobi constant',
     'Predict how the forbidden region changes as the tracer speeds up',
@@ -230,6 +250,23 @@ const LAGRANGE_POINTS = {
         'determine whether the tracer’s orbit is stable',
       ],
       answer: 1,
+      misconceptions: [
+        {
+          id: 'conservedMeansSolved',
+          option: 0,
+          say: 'A conserved number is one equation, and the tracer has more than one thing to find. Ask what a single number that never changes can rule out, rather than what it can locate.',
+        },
+        {
+          id: 'conservedGivesTiming',
+          option: 2,
+          say: 'C says nothing about the order the tracer visits places in, so it cannot give a time. Look at what it says about places the tracer can never be.',
+        },
+        {
+          id: 'conservedMeansStable',
+          option: 3,
+          say: 'Stability is about what happens after a nudge, and C is the same before and after a tiny one. What does C let you draw on the map?',
+        },
+      ],
       because:
         'This is what makes the Jacobi constant worth having. You cannot solve the motion, but you can draw a wall: any point where 2Ω is less than C would require v² to be negative, so the tracer can never be there. A conserved quantity buys you a boundary even when it buys you no solution.',
     },
@@ -290,15 +327,13 @@ const LAGRANGE_POINTS = {
       type: 'read',
       title: 'The walls open in a fixed order',
       body: `Each of the five points has its own Jacobi constant — the value a
-             tracer sitting there would have. Read them off the panel:
-             \n\n<strong>C₁ = 3.313, C₂ = 3.274, C₃ = 3.029, C₄ = C₅ =
-             2.971</strong>
-             \n\nThey are in descending order, and that ordering is the plot of
-             the whole subject. Start with a very slow tracer — large C — and
-             it is walled into whichever region it started in. Speed it up and
-             C falls, and as it passes each of those values a wall opens: first
-             the neck at L1 between the two stars, then L2 to the outside
-             world, then L3, and finally nothing is forbidden anywhere.`,
+             tracer sitting there at rest would have. The panel's table lists
+             them in its C column, L1 to L5.
+             \n\nThat ordering is the plot of the whole subject. Start with a
+             very slow tracer — large C — and it is walled into whichever
+             region it started in. Speed it up and C falls, and each time it
+             passes one of those values a wall opens. On the next screen you
+             find out which one goes first, and at what C.`,
     },
     {
       sid: 'open-the-neck',
@@ -323,56 +358,54 @@ const LAGRANGE_POINTS = {
       tip: 'The panel tells you how much further C has to fall before the next gate opens. Everybody in the room will have opened the neck from a slightly different push, which is exactly why the next screen but one runs a controlled version.',
     },
     {
-      sid: 'accessible-not-reachable',
+      sid: 'one-region-two-directions',
       bind: RESTRICTED,
       type: 'predict',
       reveal: 'watch-it-not-cross',
-      title: 'The neck is open. Now what?',
-      body: `The wall between the two stars has gone. The tracer is
-             energetically permitted to be anywhere in the other star's region.
-             \n\nOn the next screen you will send the same tracer out from the
-             same place at the same speed, twice, in two different directions.
-             Both will have exactly the same Jacobi constant, so both will be
-             allowed in exactly the same places.`,
-      prompt: 'With the L1 neck open, the tracer will…',
-      options: [
-        'cross to the other star’s region, since nothing forbids it',
-        'cross eventually, though it may take many orbits',
-        'not necessarily ever cross — an open neck says only that it is not forbidden',
-        'settle at L1, since that is the balance point',
-      ],
-      answer: 2,
-      because:
-        'This is the distinction the whole diagram exists to be misread about. An open neck is a gap in a wall, not a route through it. The zero-velocity curve says where the tracer cannot be; it says nothing at all about where it goes. A tracer can orbit for ever on one side of an opening it never happens to use, and the only way to find out is to integrate the trajectory and look.',
-    },
-    {
-      sid: 'predict-same-region-same-path',
-      bind: RESTRICTED,
-      type: 'predict',
-      reveal: 'watch-it-not-cross',
-      title: 'Same permission, same route?',
+      title: 'The neck is open. Same region, two directions',
       time: { speed: 30, paused: false },
       setup: LAB,
-      body: `Two tracers, from the same point, at the same speed in the rotating
-             frame, sent out in two different directions. Their Jacobi constants
-             are identical — C depends on where you are and how fast you are
-             going, and neither of those differs — so the shaded forbidden
-             region is the same picture for both, with the same open neck in it.`,
-      prompt: 'Two starts with the same accessible region will…',
+      body: `The wall between the two stars has gone, and the tracer is
+             energetically permitted to be anywhere in the other star's region.
+             \n\nOn the next screen the same tracer goes out from the same
+             place at the same speed, twice, in two different directions. C
+             depends only on where it is and how fast it is going, and neither
+             differs, so both starts have the same Jacobi constant and the
+             shaded region is the same picture for both, with the same open
+             neck in it.`,
+      prompt:
+        'Same accessible region, two directions. Over two binary periods…',
       options: [
-        'follow the same path, since the same region is available to both',
-        'follow different paths, but both use the neck sooner or later',
-        'follow different paths, and there is no guarantee either uses the neck at all',
-        'follow different paths only if their speeds differ',
+        'both cross the neck, since nothing forbids it',
+        'neither crosses, since an open neck is not enough to get through',
+        'both, one or neither could cross: the region cannot say, only the runs can',
+        'they follow the same path, since they share one region',
       ],
       answer: 2,
-      because: `Different paths, with no guarantee about the neck. The forbidden
-                region is a statement about where the tracer <em>cannot</em> be,
-                and two states with the same C have the same one — but the
-                trajectory is decided by the direction of travel, which the
-                diagram does not contain. Commit to that before you run it: the
-                next screen is the two runs, and one of them behaves very
-                differently from the other.`,
+      misconceptions: [
+        {
+          id: 'openMeansTaken',
+          option: 0,
+          say: 'Nothing forbidding a route is not the same as the tracer taking it. The shading says where the tracer cannot be, not where it goes.',
+        },
+        {
+          id: 'openIsNotEnough',
+          option: 1,
+          say: 'An open neck does let a tracer through: whether this one goes through depends on its path, which the shading does not contain. Neither, one and both are all allowed.',
+        },
+        {
+          id: 'sameRegionSamePath',
+          option: 3,
+          say: 'The same region is not the same path. The direction of travel decides the path, and the diagram does not contain it.',
+        },
+      ],
+      because: `This is the distinction the whole diagram exists to be misread
+                about. An open neck is a gap in a wall, not a route through it.
+                The zero-velocity curve says where the tracer <em>cannot</em>
+                be, and two states with the same C have the same one; it says
+                nothing about where the tracer goes, which is decided by the
+                direction of travel. Both, one or neither may cross, and the
+                only way to find out is to integrate the two paths and look.`,
       tip: 'Whatever you predicted is kept, right or wrong. What the next screen asks you to do is read what actually happened and say whether it supports your answer.',
     },
     {
@@ -385,7 +418,7 @@ const LAGRANGE_POINTS = {
       time: { speed: 30, paused: false },
       setup: LAB,
       // Reads the prediction's own claim back against evidence.
-      requires: ['predict-same-region-same-path'],
+      requires: ['one-region-two-directions'],
       body: `In the three-body panel, open <strong>Two directions, one
              accessible region</strong> and press <strong>Run both
              directions</strong>. It takes about a minute.
@@ -440,11 +473,10 @@ const LAGRANGE_POINTS = {
       sid: 'predict-stability',
       bind: RESTRICTED,
       type: 'predict',
-      reveal: 'break-it',
+      reveal: 'nudge-l1-and-l4',
       title: 'Which ones survive a nudge?',
-      body: `L1, L2 and L3 sit on the line between the stars, at what are
-             effectively saddle points of the effective potential. L4 and L5 sit
-             at what are, oddly, maxima of it.`,
+      body: `Commit before you test it. On the next screen you put a tracer
+             beside L1 and beside L4, give it a small nudge, and watch.`,
       prompt: 'Nudged slightly, a tracer at these points would stay put at…',
       options: [
         'all five, since they are all equilibria',
@@ -455,6 +487,44 @@ const LAGRANGE_POINTS = {
       answer: 2,
       because:
         'The three collinear points are saddles: nudge a tracer and it leaves, at any mass ratio. L4 and L5 are the counter-intuitive case. They sit at maxima of the effective potential, which sounds like the worst place to balance, and the Coriolis force in the rotating frame turns a departing tracer back into a small orbit around the point. That works only when the mass ratio is below Routh’s value of 0.03852 — which this system, at 0.0291, just satisfies.',
+    },
+    {
+      sid: 'nudge-l1-and-l4',
+      bind: RESTRICTED,
+      allowInspector: true,
+      type: 'explore',
+      title: 'Nudge it and watch',
+      time: { speed: 30, paused: false },
+      body: `In the three-body panel, open <strong>Nudge test</strong>. It
+             rebuilds the system with the tracer at rest beside the point you
+             choose, moved away from the barycenter by the nudge you set, in
+             separations. Then the simulation runs and the panel follows the
+             tracer: how far it is from the point now, the furthest it has
+             been, and when.
+             \n\nTry <strong>L1</strong> and <strong>L4</strong>. How small a
+             nudge, and how long to watch, are yours to decide. A point that
+             holds its tracer should hold it for a smaller nudge too; one that
+             loses it loses it however small the nudge.`,
+      checklist: [
+        'Place the tracer at L1 with a nudge you choose, run it, and read the furthest it gets and when',
+        'Do the same at L4',
+        'Try a smaller nudge at whichever point lost its tracer, and at L4 if its tracer wandered far',
+        'Decide how long you watched before you trusted that the furthest distance had stopped growing',
+        'Say whether that supports what you predicted on the last screen',
+      ],
+      rubric: `Measured through the engine in this system (μ = 0.0291): a tracer
+               nudged 0.001 to 0.005 separations from L4 swings out to forty to
+               fifty times the nudge within two binary periods and gets no
+               further in twelve; from 0.006 it escapes, after one to a dozen
+               periods, because μ is close to Routh's limit and the region that
+               holds a tracer is small. A tracer nudged from L1 leaves whatever
+               the nudge: its distance grows about sevenfold every tenth of a
+               binary period, so even 0.0001 is a fifth of a separation away
+               within about half a period. Full credit for testing both
+               points, for trying a smaller nudge before calling L4 unstable,
+               and for watching long enough that the furthest distance had
+               stopped changing.`,
+      tip: 'The tracer is placed at rest in the rotating frame, the frame the panel works in. A nudge that is too large asks a different question: whether a tracer far from the point stays near it.',
     },
     {
       sid: 'trojans',
@@ -470,7 +540,7 @@ const LAGRANGE_POINTS = {
              though nothing stays by itself: JWST at Sun–Earth L2 spends a few
              meters per second a year on station-keeping. Left alone it would
              drift away in months.`,
-      tip: 'This system has μ = 0.0291, close to Routh’s 0.0385. Push the small star’s mass past about a thirtieth of the large one and L4 and L5 stop being stable — the panel says which side of the line you are on.',
+      tip: 'This system has μ = 0.0291, close to Routh’s 0.0385, which is why your L4 tracer swung so far from a small nudge. Push the small star’s mass past about a twenty-fifth of the large one and L4 and L5 stop being stable.',
     },
 
     // --- Part 4: what it all rests on -----------------------------------------
@@ -524,7 +594,8 @@ const LAGRANGE_POINTS = {
       title: 'Permitted, reached, and stable',
       body: `You read a Jacobi constant off the scene, opened the neck, watched
              two tracers with the same accessible region take different routes,
-             and predicted which of the five points survive a nudge.`,
+             predicted which of the five points survive a nudge, and nudged a
+             tracer at L1 and at L4 to find out.`,
       prompt:
         'In two or three sentences, distinguish what the Jacobi constant tells you from what it does not, and say which of the five Lagrange points survive a nudge and under what condition.',
       rubric:

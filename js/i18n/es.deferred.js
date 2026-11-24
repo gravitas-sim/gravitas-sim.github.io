@@ -248,6 +248,19 @@ export const ES_DEFERRED = {
     'Misma region accesible, caminos distintos: que es justo la cuestion. Donde tenia PERMITIDO ir el trazador era identico en los dos brazos por construccion, y a donde FUE no lo era.',
   'cr3bp.pair.conclusion.sameRegionSimilarPaths':
     'Estos dos salieron parecidos, y eso vale: el diagrama no prohibe que dos direcciones se comporten igual, ni tampoco lo exige. Nada de aqui dice que los caminos tuvieran que coincidir.',
+  'cr3bp.nudge.title': 'Prueba del empujón: ¿se queda?',
+  'cr3bp.nudge.hint':
+    'Reconstruye el sistema con el trazador en reposo en el sistema que gira, junto al punto que elijas y apartado del baricentro por el empujón que indiques. Después ponlo en marcha y mira hasta dónde llega el trazador. Tú decides lo pequeño que es el empujón y cuánto tiempo mirar.',
+  'cr3bp.nudge.size': 'Empujón, en separaciones',
+  'cr3bp.nudge.place': 'Colocar el trazador',
+  'cr3bp.nudge.badSize': 'Indica un empujón entre 0,0001 y 0,1 separaciones.',
+  'cr3bp.nudge.placed':
+    'El trazador está en reposo a {d} separaciones de {point}. Pon en marcha la simulación y mira las filas de abajo.',
+  'cr3bp.nudge.row.now': 'Distancia a {point} ahora',
+  'cr3bp.nudge.row.furthest': 'Lo más lejos que ha llegado',
+  'cr3bp.nudge.row.when': 'Lo más lejos, alcanzado tras',
+  'cr3bp.nudge.periods': '{t} periodos de la binaria',
+  'cr3bp.nudge.gone': 'no hay trazador que medir',
   'binaryRun.planetA': 'Inicio del planeta (a / a_binaria)',
   'binaryRun.periods': 'Periodos binarios a integrar',
   'binaryRun.timestep': 'Paso de integración',
