@@ -132,7 +132,7 @@ const BUDGETS = [
   {
     id: 'deferred',
     label: 'Deferred JavaScript (lazy chunks, gzipped)',
-    limit: 3278.5,
+    limit: 3278.4,
     reason:
       'Jumped from 1369 KB to 2105 KB when three.js and Chart.js stopped being ' +
       'CDN requests and became bundled chunks. That is the point of the change ' +
@@ -756,7 +756,7 @@ const BUDGETS = [
       "\n\nThe Mars, orbit locking and habitable zone lessons, merged with v4 10088f53 (D-R4-TRAINC2-03, -04, -06): PROVISIONAL, raised from 3266.1 to 3274.5 KB, v4's limit (3266.1, after the planet, binary star, tides and resuming lessons) plus the 8.4 KB this branch added over v4 e16734ec (CI measured 3,337,403 bytes at 7f6188ca, 3,337,549 bytes at f3ff895c and 3,352,525 bytes, 3273.95 KB, at b8fcabca, the branch merged with v4 cb43cf13). Set to the CI measurement of the merged head under the standing approval of 2026-10-10 when it arrives." +
       "\n\nThe inspector and conservation readouts (D-R4-461-03): the shared primary rule, the orbit and radius rows and the energy readout, carried into every bundle that builds the engine; raised from 3265.6 to 3269.4 KB, the measurement of a Node 22.23.4 build of the branch merged with v4 cb43cf134: 3,347,815 bytes gzipped (3269.35 KB), rounded up to 0.1 KB; set to CI's figure before review. Engine and production class (maintainer decision 2026-11-22) under the standing approval of 2026-10-10." +
       "\n\nInspector readouts after merging v4 10088f53c (D-R4-461-04): raised from 3266.1 to 3270.1 KB, CI's figure rounded up to 0.1 KB (3,348,491 bytes gzipped, 3270.01 KB; a Node 22.23.4 build of the merged branch read 3,348,437); this replaces the 3269.4 of D-R4-461-03, measured over an older v4. Set again from the CI figure before review. Under the standing approval of 2026-10-10 and the engine and production class exemption (maintainer decision, 2026-11-21)." +
-      "\n\nReadouts that agree with the state, after merging v4 f258bdf29 (D-R4-461-04): restacked on the 3274.5 KB that v4 reached, keeping this branch's 4.0 KB grant (eb): 3278.5 KB, set again from the CI figure of the merged branch before review. Under the standing approval of 2026-10-10 and the engine and production class exemption (maintainer decision, 2026-11-21).",
+      "\n\nReadouts that agree with the state, after merging v4 f258bdf29 (D-R4-461-04): restacked on the 3274.5 KB that v4 reached: CI measured 3,357,032 bytes gzipped (3278.35 KB) on the merged branch, so 3278.4 KB, a 3.9 KB grant (eb). Under the standing approval of 2026-10-10 and the engine and production class exemption (maintainer decision, 2026-11-21).",
   },
 ];
 
