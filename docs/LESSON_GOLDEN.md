@@ -81,23 +81,23 @@ The browser half takes about seven minutes on the private port.
 | # | Investigation | Tokens it adds |
 |---|---|---|
 | 1 | `keplers-laws` | 103: `audience:intro`, `check:choice/number`, `check:numeric/number+tolerance+unit`, `check:short/undefined`, `depth-step:advanced/question`, `depth-step:quantitative/measure`, … |
-| 2 | `transit-photometry` | 20: `check:numeric/number+tolerance`, `key:explore.lightCurve`, `key:explore.observerAngle`, `key:explore.pauseAt`, `key:explore.tip`, `key:explore.tool`, … |
-| 3 | `the-saturated-star` | 15: `depth-step:advanced/measure`, `depth-step:advanced/predict`, `depth-step:advanced/read`, `depth-step:quantitative/read`, `key:measure.stage`, `key:measure.tool`, … |
-| 4 | `binary-star-planets` | 8: `key:explore.requires`, `key:explore.setup`, `key:predict.tip`, `key:question.requires`, `key:question.tip`, `key:read.motion`, … |
-| 5 | `missing-mass` | 6: `depth-step:advanced/explore`, `key:explore.after`, `key:explore.decides`, `key:explore.depth`, `key:predict.setup`, `lock:{"placement":true,"inspector":false,"areaSweep":false}` |
-| 6 | `power-law-gravity` | 5: `key:measure.canvas`, `key:predict.canvas`, `key:question.explain`, `key:read.canvas`, `lock:null` |
-| 7 | `weighing-stars` | 5: `key:explore.showBarycenter`, `key:explore.stage`, `key:measure.showBarycenter`, `key:read.showBarycenter`, `math:arithmetic` |
-| 8 | `tides` | 4: `key:explore.canvas`, `key:predict.misconceptions`, `key:question.canvas`, `key:read.allowInspector` |
-| 9 | `measuring-the-moon` | 3: `key:question.maxUncertainty`, `key:question.minUncertainty`, `key:question.valueWithin` |
-| 10 | `orbital-energy` | 3: `key:explore.compare`, `key:explore.evidence`, `key:question.rubricCriteria` |
-| 11 | `black-holes` | 2: `key:question.checklist`, `key:read.explainView` |
-| 12 | `butterfly-effect` | 2: `key:explore.rubric`, `key:predict.requires` |
-| 13 | `what-is-a-gravitational-wave` | 2: `audience:beginner`, `key:read.checklist` |
-| 14 | `a-night-at-the-telescope` | 1: `key:question.reflect` |
-| 15 | `counts-to-magnitudes` | 1: `depth-step:quantitative/predict` |
-| 16 | `extending-an-experiment` | 1: `key:measure.compute` |
-| 17 | `propose-an-observation` | 1: `key:measure.plan` |
-| 18 | `retrograde-motion` | 1: `lock:{"placement":true,"inspector":false}` |
+| 2 | `goldilocks-question` | 22: `depth-step:advanced/measure`, `depth-step:advanced/read`, `depth-step:quantitative/predict`, `depth-step:quantitative/read`, `key:explore.pauseAt`, `key:explore.setup`, … |
+| 3 | `transit-photometry` | 15: `check:numeric/number+tolerance`, `key:explore.lightCurve`, `key:explore.observerAngle`, `key:measure.checklist`, `key:measure.compare`, `key:measure.evidence`, … |
+| 4 | `what-is-a-gravitational-wave` | 9: `audience:beginner`, `key:measure.stage`, `key:predict.stage`, `key:predict.tip`, `key:predict.tool`, `key:read.checklist`, … |
+| 5 | `power-law-gravity` | 5: `key:measure.canvas`, `key:predict.canvas`, `key:question.explain`, `key:read.canvas`, `lock:null` |
+| 6 | `measuring-the-moon` | 4: `key:predict.hints`, `key:question.maxUncertainty`, `key:question.minUncertainty`, `key:question.valueWithin` |
+| 7 | `missing-mass` | 4: `depth-step:advanced/explore`, `key:explore.after`, `key:explore.decides`, `key:explore.depth` |
+| 8 | `orbital-energy` | 4: `key:explore.compare`, `key:explore.evidence`, `key:question.rubricCriteria`, `key:read.motion` |
+| 9 | `tides` | 4: `key:explore.canvas`, `key:predict.misconceptions`, `key:question.canvas`, `key:read.allowInspector` |
+| 10 | `lagrange-points` | 3: `key:explore.requires`, `key:explore.rubric`, `lock:{"placement":true}` |
+| 11 | `weighing-stars` | 3: `key:explore.showBarycenter`, `key:measure.showBarycenter`, `key:read.showBarycenter` |
+| 12 | `black-holes` | 2: `key:question.checklist`, `key:read.explainView` |
+| 13 | `a-night-at-the-telescope` | 1: `key:question.reflect` |
+| 14 | `butterfly-effect` | 1: `key:predict.requires` |
+| 15 | `extending-an-experiment` | 1: `key:measure.compute` |
+| 16 | `propose-an-observation` | 1: `key:measure.plan` |
+| 17 | `retrograde-motion` | 1: `lock:{"placement":true,"inspector":false}` |
+| 18 | `the-saturated-star` | 1: `depth-step:advanced/predict` |
 
 | # | Activity cut | Tokens it adds |
 |---|---|---|

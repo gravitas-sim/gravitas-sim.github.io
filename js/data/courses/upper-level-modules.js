@@ -184,8 +184,8 @@ export const UPPER_LEVEL_MODULES = {
           lesson: 'when-orbits-lock',
           objectives: ['mechanics'],
           pin: {
-            fp: '0bb82c4c',
-            n: 34,
+            fp: 'f6c7a752',
+            n: 35,
           },
         },
         {

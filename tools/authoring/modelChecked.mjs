@@ -249,6 +249,10 @@ export const MODELS = {
     value: () =>
       1 / (1 / periodAboutSun(1) - 1 / periodAboutSun(1.5237)) / DAY_S,
   },
+  'retrograde-motion/jupiters-loops': {
+    via: 'js/tidalPhysics.js: the Keplerian periods about the Sun at 1 and 5.2 AU, then 1/S = 1/P1 - 1/P2',
+    value: () => 1 / (1 / periodAboutSun(1) - 1 / periodAboutSun(5.2)) / DAY_S,
+  },
   'transit-photometry/how-lucky-do-you-have': {
     via: 'js/tidalPhysics.js: solar radius over the astronomical unit',
     value: () => AU_METERS / SOLAR_RADIUS_M,
@@ -389,8 +393,6 @@ export const UNCHECKED_CEILING = 34;
  * step's tolerance, so no student is marked wrongly), not edits to make here.
  */
 export const UNCHECKED = {
-  'retrograde-motion/a-lap-gained':
-    "The literal 783 is 360 / 0.46, with the 0.46 deg/day the step quotes rounded; the model's own rate (Keplerian periods of the Earth and Mars) is 0.4616 deg/day, a lap of 779.8 days. Inside the tolerance of 60, but not the same value at the literal's digits, so it is not claimed as checked. STOP finding.",
   'retrograde-motion/counting-the-machinery':
     'A count of four devices per planet, five planets, stated in the step body; no model computes it. Its source would be a history of the Almagest, which no entry in the data modules carries yet.',
   'goldilocks-question/venus-by-the-rule-you':

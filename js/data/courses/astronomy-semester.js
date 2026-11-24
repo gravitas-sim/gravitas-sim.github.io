@@ -268,8 +268,8 @@ export const ASTRONOMY_SEMESTER = {
             esOf: '74113130',
           },
           pin: {
-            fp: 'db2663fb',
-            n: 33,
+            fp: 'c2da053b',
+            n: 32,
           },
         },
         {
@@ -556,8 +556,8 @@ export const ASTRONOMY_SEMESTER = {
           objectives: ['worlds'],
           needs: ['transit-photometry'],
           pin: {
-            fp: '93cf260b',
-            n: 37,
+            fp: '669c9664',
+            n: 36,
           },
         },
         {

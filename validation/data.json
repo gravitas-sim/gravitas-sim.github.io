@@ -2785,7 +2785,7 @@
    "name": "The wide probe is not co-orbital and circulates",
    "measured": true,
    "expected": true,
-   "why": "A body on an ordinary circular orbit a quarter again as wide. Its period ratio with Jupiter is 1.4036, which is a quarter of a percent from 7:5 - closer to a small-integer ratio than Pluto is to 3:2 - and it is in no resonance at all. It is the investigation's sharpest example of why the ratio is not the evidence.",
+   "why": "A body on an ordinary circular orbit a quarter again as wide. The instrument settles on a period ratio with Jupiter near 1.406, about 0.3 to 0.5 percent from 7:5 and two to five times closer than chance - as good as the moons' own ratios - and it is in no resonance at all. It is the investigation's sharpest example of why the ratio is not the evidence.",
    "toleranceKind": "exact",
    "error": 0,
    "pass": true

@@ -184,8 +184,8 @@ export const INTRO_ASTRONOMY = {
             esOf: '74113130',
           },
           pin: {
-            fp: 'db2663fb',
-            n: 33,
+            fp: 'c2da053b',
+            n: 32,
           },
         },
       ],
@@ -350,8 +350,8 @@ export const INTRO_ASTRONOMY = {
           objectives: ['exoplanets'],
           needs: ['a-first-transit'],
           pin: {
-            fp: '93cf260b',
-            n: 37,
+            fp: '669c9664',
+            n: 36,
           },
         },
       ],
