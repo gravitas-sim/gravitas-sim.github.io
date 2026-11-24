@@ -1796,7 +1796,7 @@
     {
       "file": "SCENARIO_REVISIONS.md",
       "kind": "record",
-      "purpose": "What an old world link, saved lesson setup, capture or imported declaration means after a scenario is corrected: the producer table, the revision registry, the origin rule, the retained and migrated paths and the form each enclosing record takes.",
+      "purpose": "What an old link, saved setup, capture or imported declaration means after a scenario is corrected: producers, the revision registry and the origin rule.",
       "owner": 498,
       "added": "2026-11-23",
       "student": false

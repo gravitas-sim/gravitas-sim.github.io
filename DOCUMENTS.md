@@ -234,7 +234,7 @@ catalogue refers to it, so a change to it can reach a student.
 | [INFERENCE_CLOSEOUT.md](INFERENCE_CLOSEOUT.md) | The inference closeout (Prompt 266): what 261 to 265 landed, the methods sequence as it exists, each closeout item done or held, the package change, the cohesion record. | record | P266 | 2026-11-07 | written | no |
 | [ADVANCED_CLOSEOUT.md](ADVANCED_CLOSEOUT.md) | The advanced closeout (Prompt 274): what 268 to 273 landed, the 3-D and mission guide sequence, the sequence not created, the package's reading steps, the acceptance audit, the cohesion record. | record | P274 | 2026-11-10 | written | no |
 | [COHESION_II.md](COHESION_II.md) | The second cohesion pass (Prompt 287): before and after inventory, the folded sequence, divided topic pages, tuned search, the ledger of additions since 2.0.0 and the internal review. | record | P287 | 2026-11-11 | written | no |
-| [SCENARIO_REVISIONS.md](SCENARIO_REVISIONS.md) | What an old world link, saved lesson setup, capture or imported declaration means after a scenario is corrected: the producer table, the revision registry, the origin rule, the retained and migrated paths and the form each enclosing record takes. | record | P498 | 2026-11-23 | written | no |
+| [SCENARIO_REVISIONS.md](SCENARIO_REVISIONS.md) | What an old link, saved setup, capture or imported declaration means after a scenario is corrected: producers, the revision registry and the origin rule. | record | P498 | 2026-11-23 | written | no |
 
 ## Archived documents
 
