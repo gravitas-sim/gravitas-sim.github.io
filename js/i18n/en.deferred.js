@@ -248,19 +248,6 @@ export const EN_DEFERRED = {
     'Same accessible region, different paths: which is the whole point. Where the tracer is ALLOWED to go was identical between the two arms by construction, and where it WENT was not.',
   'cr3bp.pair.conclusion.sameRegionSimilarPaths':
     'These two came out similar, which is allowed: the diagram does not forbid two directions from behaving alike any more than it requires it. Nothing here says the paths had to match.',
-  'cr3bp.nudge.title': 'Nudge test: does it stay?',
-  'cr3bp.nudge.hint':
-    'Rebuilds the system with the tracer at rest in the rotating frame beside the point you choose, moved away from the barycenter by the nudge you set. Then run it and watch how far the tracer gets. How small a nudge, and how long to watch, are yours to decide.',
-  'cr3bp.nudge.size': 'Nudge, in separations',
-  'cr3bp.nudge.place': 'Place the tracer',
-  'cr3bp.nudge.badSize': 'Give a nudge between 0.0001 and 0.1 separations.',
-  'cr3bp.nudge.placed':
-    'The tracer is at rest {d} separations from {point}. Run the simulation and watch the rows below.',
-  'cr3bp.nudge.row.now': 'Distance from {point} now',
-  'cr3bp.nudge.row.furthest': 'Furthest it has been',
-  'cr3bp.nudge.row.when': 'Furthest reached after',
-  'cr3bp.nudge.periods': '{t} binary periods',
-  'cr3bp.nudge.gone': 'no tracer to measure',
   'binaryRun.planetA': 'Planet start (a / a_binary)',
   'binaryRun.periods': 'Binary periods to run',
   'binaryRun.timestep': 'Integration step',

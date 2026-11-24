@@ -58,7 +58,9 @@ import { a0InSimUnits } from './mond.js';
 import { orbitalElements } from './orbital.js';
 import { SETTINGS, current_scenario_name, commitSettings } from './appState.js';
 import { registerOverlay } from './overlays.js';
-import { t, onLocaleChange } from './i18n/index.js';
+import { t, onLocaleChange, registerMessages } from './i18n/index.js';
+import { EN_CR3BP } from './i18n/en.cr3bp.js';
+import { ES_CR3BP } from './i18n/es.cr3bp.js';
 import { ensureDeferredMessages } from './i18n/deferredMessages.js';
 import { formatNumber } from './format.js';
 import {
@@ -73,6 +75,11 @@ import {
   regimeFor,
 } from './cr3bp.js';
 import { EV_REQUEST_REBUILD, EV_SIMULATION_RESET } from './names.js';
+
+// The nudge test's words travel with this chunk rather than in the catalogs
+// every lesson loads.
+registerMessages('en', EN_CR3BP, true);
+registerMessages('es', ES_CR3BP, true);
 
 /** Grid resolution of the forbidden-region mask, in cells across. */
 const GRID = 220;
@@ -922,23 +929,13 @@ async function runNeckPair() {
 // =============================================================================
 // The nudge test
 // -----------------------------------------------------------------------------
-// The third of the lesson's three questions, asked the way it is defined: put
-// a tracer at rest a small distance from an equilibrium and watch whether it
-// stays near. The reader chooses the point, the size of the nudge and how long
-// to watch; the section reports the distance now, the furthest it has been and
-// when, in binary periods, so "it stopped getting further" and "it kept going"
-// are things read off the screen.
-//
-// The tracer is placed through the scenario's own laboratory variables, the
-// same four the controlled pair uses, so the world is rebuilt with the tracer
-// at rest in the rotating frame rather than moved in a running one. The nudge
-// is away from the barycenter, along the line from it to the point. The
-// scenario's pair goes round counter-clockwise, which is the frame
-// js/cr3bp.js works in, so the point's coordinates carry over unchanged.
-//
-// Nothing here says which points are stable. That is what the reader is
-// finding out, and in a lesson the rest of the panel says nothing about it
-// either (inLesson below).
+// Stability asked the way it is defined: a tracer at rest a small distance
+// from an equilibrium, watched. The reader picks the point, the nudge (away
+// from the barycenter) and how long to watch; the rows give the distance now,
+// the furthest and when, in binary periods. The tracer is placed through the
+// scenario's laboratory variables (as the controlled pair is), whose pair
+// turns counter-clockwise, the frame js/cr3bp.js uses. Nothing here, and in a
+// lesson nothing in the panel (inLesson), says which points are stable.
 // =============================================================================
 
 /** What the nudge test is following, or null. */
@@ -956,13 +953,7 @@ const inLesson = () =>
   typeof document !== 'undefined' &&
   Boolean(document.querySelector('#investigationPanel:not([hidden])'));
 
-/**
- * Whether the pair is a restricted problem, with or without a tracer. A tracer
- * that left the view is removed by the engine, and the nudge test is how a
- * reader puts one back.
- * @param {?object} system - From readSystem()
- * @returns {boolean}
- */
+/** The pair is a restricted problem, tracer or not (the test puts one back). */
 const pairHolds = system =>
   Boolean(
     system?.mu &&
@@ -1298,11 +1289,8 @@ function drawOverlay(ctx) {
   if (cache && C !== null) paintForbidden(ctx, system, C);
   paintPoints(ctx, system, C);
 
-  // The readout follows the tracer. It was written only when the world was
-  // rebuilt, so a burn moved the shading and left the printed C, the open
-  // necks and the table where they were: a lesson that says "watch C fall in
-  // the panel" got a number that never moved. Four times a second at most,
-  // and only when the printed figure would change.
+  // The readout follows the tracer (it was written only on a rebuild, so a
+  // burn left the printed C where it was): at most four times a second.
   if (++sinceShown >= 15) {
     sinceShown = 0;
     const moved =
