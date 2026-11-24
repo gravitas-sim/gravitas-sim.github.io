@@ -1118,7 +1118,7 @@
       ],
       "walk": "NOT RUN",
       "pr": null,
-      "hash": "01d84baf69ed5442239ee1d570faa1c4e6d7b1816c7d64e0ba48c682e51f195e"
+      "hash": "2c60c0e1a35b4ae1d9ce54f2c3da8e5dfbbdd7fadde9b682fd97413395d91437"
     },
     {
       "id": "investigation:black-holes",
@@ -2810,7 +2810,7 @@
       ],
       "walk": "VERIFIED",
       "pr": 676,
-      "hash": "11092e597b552a39a5fb55ad9a1d1060ee920abe5300c758c7b3bf6d7380b14a"
+      "hash": "538d500ebb916f2f56ca1fc95cd9f84c78c37b2f4052dc136fe84baec171301b"
     },
     {
       "id": "investigation:keplers-laws",
@@ -6250,7 +6250,7 @@
       ],
       "walk": "VERIFIED",
       "pr": 676,
-      "hash": "88fc62b3ffa5892d0294b59a5f6e850bc3a1e4a8d90355d95a5ca71a48c0d6ac"
+      "hash": "8b9082ca7fe85fb5f3d77957725a03d11ee38b29e3707d847271da1576bebe11"
     },
     {
       "id": "investigation:transit-photometry",

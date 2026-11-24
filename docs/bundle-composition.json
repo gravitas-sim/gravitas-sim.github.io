@@ -1,9 +1,9 @@
 {
- "total": 540448,
+ "total": 542888,
  "modules": [
   {
    "module": "js/i18n/en.js",
-   "bytes": 87632
+   "bytes": 87882
   },
   {
    "module": "js/world/build.js",
@@ -11,7 +11,7 @@
   },
   {
    "module": "js/render.js",
-   "bytes": 28291
+   "bytes": 27235
   },
   {
    "module": "js/scenarios.js",
@@ -31,19 +31,19 @@
   },
   {
    "module": "js/engine/bodies.js",
-   "bytes": 13999
+   "bytes": 14165
   },
   {
    "module": "js/bodyDraw.js",
-   "bytes": 12249
+   "bytes": 12243
   },
   {
    "module": "js/engine/collisions.js",
-   "bytes": 12122
+   "bytes": 12237
   },
   {
    "module": "js/bodyDrawSky.js",
-   "bytes": 10672
+   "bytes": 10671
   },
   {
    "module": "js/controls.js",
@@ -51,23 +51,23 @@
   },
   {
    "module": "js/captureMeasure.js",
-   "bytes": 9333
-  },
-  {
-   "module": "js/engine/step.js",
-   "bytes": 9229
+   "bytes": 9145
   },
   {
    "module": "js/world.js",
    "bytes": 9045
   },
   {
-   "module": "js/lightCurve.js",
-   "bytes": 8552
+   "module": "js/engine/step.js",
+   "bytes": 8790
   },
   {
    "module": "js/sandboxTools.js",
-   "bytes": 8419
+   "bytes": 8642
+  },
+  {
+   "module": "js/lightCurve.js",
+   "bytes": 8552
   },
   {
    "module": "js/settingsSchema.js",
@@ -76,6 +76,10 @@
   {
    "module": "js/audio.js",
    "bytes": 7448
+  },
+  {
+   "module": "js/engine/conservation.js",
+   "bytes": 7359
   },
   {
    "module": "js/scenarioBrowser.js",
@@ -91,15 +95,11 @@
   },
   {
    "module": "js/vectorOverlay.js",
-   "bytes": 6056
+   "bytes": 6053
   },
   {
    "module": "js/astrometry.js",
    "bytes": 5705
-  },
-  {
-   "module": "js/engine/conservation.js",
-   "bytes": 5671
   },
   {
    "module": "js/bodyVisuals.js",
@@ -146,16 +146,16 @@
    "bytes": 4364
   },
   {
+   "module": "js/engine/state.js",
+   "bytes": 4201
+  },
+  {
    "module": "js/inspectorGate.js",
    "bytes": 4170
   },
   {
    "module": "js/darkMatter.js",
    "bytes": 4019
-  },
-  {
-   "module": "js/engine/state.js",
-   "bytes": 4012
   },
   {
    "module": "js/bodyEffects.js",
@@ -174,6 +174,10 @@
    "bytes": 3408
   },
   {
+   "module": "js/utils.js",
+   "bytes": 3358
+  },
+  {
    "module": "js/i18n/index.js",
    "bytes": 3349
   },
@@ -184,10 +188,6 @@
   {
    "module": "js/bodyLabels.js",
    "bytes": 3095
-  },
-  {
-   "module": "js/utils.js",
-   "bytes": 2691
   },
   {
    "module": "js/exoplanetObservables.js",
@@ -223,11 +223,15 @@
   },
   {
    "module": "js/engine/events.js",
-   "bytes": 2194
+   "bytes": 2207
   },
   {
    "module": "js/notebookBridge.js",
    "bytes": 2183
+  },
+  {
+   "module": "js/orbital.js",
+   "bytes": 2159
   },
   {
    "module": "js/investigationsLoader.js",
@@ -272,10 +276,6 @@
   {
    "module": "js/gravityAssist.js",
    "bytes": 1422
-  },
-  {
-   "module": "js/orbital.js",
-   "bytes": 1337
   },
   {
    "module": "js/observingSession.js",
