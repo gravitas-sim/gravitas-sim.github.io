@@ -74,8 +74,8 @@ export const bankDiscardedMomentum = (px, py) => {
 // leave nobody able to say which was right.
 //
 // Debris, particles and disk fragments are left out, on the same grounds the
-// barycenter leaves them out: they are culled aggressively once they leave the
-// visible world, and a body vanishing from the sum is a step change in the
+// barycenter leaves them out: they come and go in numbers (a collision's
+// shower, a disk particle's lifetime), and a body vanishing from the sum is a step change in the
 // total that has nothing to do with the integrator.
 // =============================================================================
 

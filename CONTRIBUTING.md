@@ -258,13 +258,14 @@ never imports the facade. Where each piece lives so far:
 | `js/engine/bodies.js` | the size and mass constants, the bursts, the absorption rule, and every body class from `PhysicsObject` to `Comet` with the accretion-disk tracer and the galaxy helpers, and `syncReportedMass` | S5, S6 |
 | `js/engine/blackHole.js` | the black hole class and its default appearance | S5 |
 | `js/engine/collisions.js` | the broad-phase grid, the collision handlers for each kind of pair, stellar collapse, gas-giant accretion and merging, and the kilonova and white-dwarf explosion builders | S6 |
-| `js/engine/step.js` | the coordinate transforms and the off-screen test, the Barnes-Hut Worker's state and failure path, the cached body arrays, `updatePhysics` (the step and its ordering) and the click hit test | S7 |
+| `js/engine/step.js` | the coordinate transforms, the Barnes-Hut Worker's state and failure path, the cached body arrays, `updatePhysics` (the step and its ordering) and the click hit test | S7 |
 
 `js/physics.js` now holds no model code: it imports the eight engine modules and says
 what the engine exports. Order, risks and the test that proves each slice are
-in the register rows. Two decisions are still open: what replaces the canvas
-size that culls off-screen bodies, and the wall clock a new black hole's grace
-period reads; both moved into `js/engine/step.js` unchanged.
+in the register rows. One decision is still open: the wall clock a new black
+hole's grace period reads, moved into `js/engine/step.js` unchanged. The other,
+what replaced the canvas size that culled off-screen bodies, was settled by
+D-R4-496-01: nothing, because no body is removed for leaving the view.
 
 **Settings reach the engine through one door.** The page writes
 `SETTINGS` (`js/appState.js`) and pushes it with `commitSettings(<writer>)`;
