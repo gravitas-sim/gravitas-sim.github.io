@@ -438,12 +438,12 @@ export default {
       {
         from: 'the-two-orbits',
         to: 'how-fast-each-one-goes',
-        text: 'The two orbits are measured off the inspector and converted to angular speeds. The multiple-choice step in the middle is there to make students say out loud that the inner planet is the faster one, which is the entire mechanism and is easy to skate past.',
+        text: 'The two orbits are read off the inspector and converted to angular speeds. The multiple-choice step in the middle is there to make students say out loud that the inner planet is the faster one, which is the entire mechanism and is easy to skate past.',
       },
       {
         from: 'the-synodic-period',
-        to: 'a-lap-gained',
-        text: 'The synodic period, computed twice. Step 9 uses the reciprocal formula, step 10 the rate of degrees gained. Students who get two different answers have usually put the longer period first in the subtraction.',
+        to: 'share-of-the-cycle',
+        text: 'The synodic period from the two periods they took, then a prediction of the share of each cycle Mars spends going backwards, held until they have timed the loop. A wrong synodic period usually means the longer period went first.',
       },
       {
         from: 'before-you-look',
@@ -453,7 +453,7 @@ export default {
       {
         from: 'put-yourself-on-earth',
         to: 'nearest-and-furthest',
-        text: 'The frame is switched and the loop appears. Students then put numbers on it: the direction from Earth running backwards, and the distance to Mars reaching a clear minimum and maximum. The direction readout is the observable the whole investigation rests on.',
+        text: 'The frame is switched and the loop appears. Students then time it: each turn of the direction is bracketed between two readings of their own, giving the length with an uncertainty, set beside the predicted share; then the distance to Mars reaching a clear minimum and maximum.',
       },
       {
         from: 'bright-and-backwards-together',
@@ -476,9 +476,9 @@ export default {
         text: 'What actually settles the question: the fictitious forces a geocentric frame requires, and stellar parallax. Tycho’s null result is treated as sound reasoning with an inadequate instrument, which gives a transferable investigation about what a non-detection constrains.',
       },
       {
-        from: 'how-long-does-a-loop',
+        from: 'jupiters-loops',
         to: 'what-you-did',
-        text: 'A final measurement of the length of the retrograde episode, a prediction about Jupiter that students can check against the formula, and a closing screen that names the transferable question: measured against what?',
+        text: 'Jupiter’s synodic period by the same arithmetic, and a closing screen that names the transferable question: measured against what?',
       },
     ],
     'transit-photometry': [
@@ -660,12 +660,12 @@ export default {
       {
         from: 'what-does-earth-get-from',
         to: 'what-the-graph-says',
-        text: 'Insolation is introduced with Earth as the unit. Students predict what doubling the distance does, measure three distances with the instrument and the graph on the same screen, and read the curve their own points make.',
+        text: 'Insolation is introduced with Earth as the unit. Students predict what doubling the distance does, take readings at three distances of their own, one twice another, and read the curve their own points make.',
       },
       {
         from: 'the-star-is-not-running',
         to: 'writing-it-down-then-using',
-        text: 'Only now the explanation. Students step a shell outward one astronomical unit at a time and read off the areas 1, 4, 9, 16 before the inverse-square relation is written down, then apply it at an unfamiliar distance.',
+        text: 'Only now the explanation. Students step a shell outward one astronomical unit at a time and read off the areas before the inverse-square relation is written down, then apply it at an unfamiliar distance.',
       },
       {
         from: 'leave-the-planet-change-the',
