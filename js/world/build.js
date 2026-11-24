@@ -191,9 +191,9 @@ export const ENGINE_GEOMETRY = /* @__PURE__ */ Object.freeze({
   // exoplanetSystems.js, which the exoplanet instruments read too.
   // prettier-ignore
   'exoplanet-characterization-lab': { recenter: true, steps: [{ rule: { name: 'published-system', params: { system: 'hd209458' } } }] },
-  // HD 209458 at true relative scale (the radii are the published ones, so the
-  // silhouette, the dip and the arithmetic in the investigation are one set of
-  // numbers). The star is the generator's first star, made if it drew none, kept
+  // HD 209458 at true relative scale in the model (the radii are the published
+  // ones, so the dip, its timing and the arithmetic are one set of numbers; the
+  // drawn planet is smaller). The star is the generator's first star, made if it drew none, kept
   // with its id; the planet starts a quarter of an orbit before the first
   // transit. Worked in the primary's rest frame: the companion (Blended Binary
   // only: 300 AU out, half a magnitude fainter, 1.0 solar mass) circles it
@@ -339,8 +339,8 @@ const laboratoryRules = {
     const mu = m2 / total;
     const n = Math.sqrt((G * total) / (separation * separation * separation));
     // Drawn well above life size so both are visible at a zoom that holds the
-    // whole L4/L5 triangle. Nothing here comes within twenty times the drawn
-    // radius, and js/physics.js collides on the drawn radius.
+    // whole L4/L5 triangle. Contact is the sum of the two model radii
+    // (obj.radius, js/engine/collisions.js), not the drawn size.
     const place = (fraction, mass, name, baseColor, radiusInSuns) => {
       const x = fraction * separation;
       return {
