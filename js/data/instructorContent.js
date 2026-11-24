@@ -3123,10 +3123,10 @@ export const INSTRUCTOR_CONTENT = {
       'Any time after circular orbits have been introduced; it pairs naturally with Kepler’s Laws and works well immediately after it, since students arrive already able to read a period off the inspector. It also stands alone as a single-session investigation, and it is the one investigation in the set that is as much history and philosophy of science as it is physics. If you teach a unit on the Copernican revolution, this is the investigation that lets students perform the observation the revolution was about rather than being told it.',
     overview: `Students meet retrograde motion as an observation first, stated in terms of the one
       quantity a pre-telescopic astronomer could actually measure: the direction to a planet against
-      the fixed stars. They measure the orbital periods of Earth and Mars, convert them to angular
-      speeds, and compute the 780-day synodic period twice by two different routes. They then predict
-      what Mars's path will look like from Earth, switch the reference frame, and watch the loop draw
-      itself out of positions that never reversed. The rest of the investigation is about what that does and
+      the fixed stars. They take the orbital periods of Earth and Mars, convert them to angular
+      speeds, compute the 780-day synodic period and predict what share of it Mars spends going
+      backwards. They then predict what Mars's path will look like from Earth, switch the reference frame, watch the loop draw
+      itself out of positions that never reversed, and time the reversal themselves. The rest of the investigation is about what that does and
       does not establish: they locate the reversal at opposition, find that Mars is brightest exactly
       when it is moving backwards, discover that every outer planet's Ptolemaic epicycle has a period
       of one year, and are then asked directly whether the loop proves heliocentrism. It does not, and
@@ -3135,7 +3135,7 @@ export const INSTRUCTOR_CONTENT = {
     priorKnowledge: [
       'That planets orbit the Sun, and that an orbit has a period',
       'Reading a number off a live readout and writing it down',
-      'Dividing and subtracting reciprocals on a calculator; the arithmetic at steps 9 and 10 is two divisions',
+      'Dividing and subtracting reciprocals on a calculator; the arithmetic at step 9 is a subtraction and a division',
       'Helpful but not required: Kepler’s Laws, for the period-distance relation students meet again at step 6',
     ],
     keyConcepts: [
@@ -3145,7 +3145,7 @@ export const INSTRUCTOR_CONTENT = {
       },
       {
         heading: 'The synodic period',
-        body: 'The interval between successive alignments of Sun, Earth and planet, given by 1/S = 1/P1 - 1/P2 with P1 the shorter period. It counts laps gained rather than laps run, which is why it is longer than either planet’s year. For Earth and Mars it is 780 days. The investigation has students reach the same number twice, once from reciprocals and once from a rate of degrees gained per day, because the formula is easy to apply and hard to feel.',
+        body: 'The interval between successive alignments of Sun, Earth and planet, given by 1/S = 1/P1 - 1/P2 with P1 the shorter period. It counts laps gained rather than laps run, which is why it is longer than either planet’s year. For Earth and Mars it is 780 days.',
       },
       {
         heading: 'Reference frames',
@@ -3175,7 +3175,7 @@ export const INSTRUCTOR_CONTENT = {
       },
       {
         name: 'Frame-relative readouts',
-        text: 'Frame-relative readouts in the inspector: Distance from Earth and Direction from Earth appear whenever a frame is active, alongside the unchanged world-frame Velocity row. The direction in degrees is the number steps 16 and 31 are read from.',
+        text: 'Frame-relative readouts in the inspector: Distance from Earth and Direction from Earth appear whenever a frame is active, alongside the unchanged world-frame Velocity row. The direction in degrees is the number step 16 is read from.',
       },
       {
         name: 'A trail long enough to close the loop',
@@ -3186,7 +3186,7 @@ export const INSTRUCTOR_CONTENT = {
       {
         claim: 'Mars actually slows down and reverses in its orbit.',
         response:
-          'It does not, and the investigation is built so students see this before they see the loop: step 4 has them watch from outside and confirm that neither planet ever turns back. If a student still writes this at step 21, send them back to step 4 rather than re-explaining. The whole point is that the reversal is a fact about the observer.',
+          'It does not, and the investigation is built so students see this before they see the loop: step 4 has them watch from outside and confirm that neither planet ever turns back. If a student still writes this at step 22, send them back to step 4 rather than re-explaining. The whole point is that the reversal is a fact about the observer.',
       },
       {
         claim:
@@ -3197,12 +3197,12 @@ export const INSTRUCTOR_CONTENT = {
       {
         claim: 'The retrograde loop proves the Earth moves.',
         response:
-          'It does not, and step 27 asks this directly. Both models reproduce it; that is why the dispute lasted so long. The loop shows relative motion between Earth and Mars, and attributing that motion to one body rather than the other needs a separate argument. Students who find this unsatisfying have understood it correctly.',
+          'It does not, and step 28 asks this directly. Both models reproduce it; that is why the dispute lasted so long. The loop shows relative motion between Earth and Mars, and attributing that motion to one body rather than the other needs a separate argument. Students who find this unsatisfying have understood it correctly.',
       },
       {
         claim: 'Ptolemy was simply wrong, and epicycles were a silly idea.',
         response:
-          'Epicycles reproduced planetary positions to about naked-eye accuracy and were used for fourteen hundred years, which is a longer run than most theories get. Step 22 presents them as a working model. The weakness worth naming is not inaccuracy but the unexplained coincidence of step 23: five devices tuned separately, three of which turn out to share one period for no reason the model supplies.',
+          'Epicycles reproduced planetary positions to about naked-eye accuracy and were used for fourteen hundred years, which is a longer run than most theories get. Step 23 presents them as a working model. The weakness worth naming is not inaccuracy but the unexplained coincidence of step 24: five devices tuned separately, three of which turn out to share one period for no reason the model supplies.',
       },
       {
         claim: 'Tycho failed to find parallax because he was a poor observer.',
@@ -3213,21 +3213,21 @@ export const INSTRUCTOR_CONTENT = {
         claim:
           'Every frame is equally good, so physics has nothing to say about which to use.',
         response:
-          'Step 28 addresses this. Frames are equally valid as descriptions and not equally useful as physics: in Earth’s frame you must add fictitious forces that no mass exerts to explain why the Sun circles us. The frame in which every force can be traced to a body is the one worth building mechanics in, and that argument is Newton’s rather than Copernicus’s.',
+          'Step 29 addresses this. Frames are equally valid as descriptions and not equally useful as physics: in Earth’s frame you must add fictitious forces that no mass exerts to explain why the Sun circles us. The frame in which every force can be traced to a body is the one worth building mechanics in, and that argument is Newton’s rather than Copernicus’s.',
       },
     ],
     teachingNotes: [
       'Steps 3 and 4 are the setup for everything else and are worth not rushing. A class that has personally confirmed at step 4 that neither planet reverses will accept the loop at step 14 as a puzzle to solve rather than as an animation to watch.',
       'At step 14 the loop does not appear instantly. The trail has to grow, and Earth has to reach opposition, which can take half a minute of running. Tell students this in advance or several will conclude the control is broken and switch it off again.',
-      'Step 21 is the assessment center. The discriminating feature of a good answer is that it explains the reversal without attributing anything unusual to Mars. Answers that invoke gravity pulling Mars back, or Mars slowing at the far point of its orbit, are the common failure and are worth collecting and discussing as a group.',
-      'Step 27 is where the room usually divides, and it is the most valuable minute in the investigation. Some students will insist the loop settles it. Ask them to state what a geocentric astronomer would say when shown the same screen, and the argument becomes about criteria for choosing between models rather than about which is true.',
-      'If you are short on time, steps 22 to 24 can be assigned as reading rather than done in class; the physics survives without them. Steps 28 to 30 are harder to cut, because without them the investigation has raised the question of what settles the matter and left it unanswered.',
+      'Step 22 is the assessment center. The discriminating feature of a good answer is that it explains the reversal without attributing anything unusual to Mars. Answers that invoke gravity pulling Mars back, or Mars slowing at the far point of its orbit, are the common failure and are worth collecting and discussing as a group.',
+      'Step 28 is where the room usually divides, and it is the most valuable minute in the investigation. Some students will insist the loop settles it. Ask them to state what a geocentric astronomer would say when shown the same screen, and the argument becomes about criteria for choosing between models rather than about which is true.',
+      'If you are short on time, steps 23 to 25 can be assigned as reading rather than done in class; the physics survives without them. Steps 29 and 30 are harder to cut, because without them the investigation has raised the question of what settles the matter and left it unanswered.',
       'Students who have done Kepler’s Laws will notice at step 6 that the inner planet being faster is the third law again. Naming that connection out loud costs nothing and does a lot for the coherence of the unit.',
     ],
     discussion: [
       'A geocentric astronomer and a heliocentric one are shown the same screen at step 14. What exactly do they disagree about, and what observation could settle it? What would each accept as evidence against their own view?',
       'Ptolemy’s model made accurate predictions for fourteen centuries. If a model predicts correctly, in what sense can it be wrong? Is a model that predicts well but explains nothing worse than one that explains well but predicts poorly, which is what Copernicus originally offered?',
-      'Step 23 turns on a coincidence: three planets, one period. How much weight should an unexplained coincidence carry when choosing between two models that fit the data equally well? Can students name a modern example of the same kind of argument?',
+      'Step 24 turns on a coincidence: three planets, one period. How much weight should an unexplained coincidence carry when choosing between two models that fit the data equally well? Can students name a modern example of the same kind of argument?',
       'Tycho concluded from a null result that the Earth does not move. His logic was sound and his conclusion was wrong. What was missing, and how would you avoid making the same error with a modern non-detection?',
     ],
     extensions: [
@@ -4135,7 +4135,7 @@ export const INSTRUCTOR_CONTENT = {
     ],
     teachingNotes: [
       'Steps 5 and 21 are the investigation. If time is short, cut the Trojans before cutting Callisto: the Trojan section is the most enjoyable and the Callisto section is the argument.',
-      'The Laplace argument takes about three and a half minutes of running before the instrument will call it a libration, and the investigation deliberately tells students to start it and read on. Start it on the projector at the beginning of the Galilean section and leave it running; by the time the class reaches step 16 it will have got there.',
+      'The Laplace argument takes about ten minutes of running before the instrument will call it a libration, and the investigation deliberately tells students to start it and read on. Start it on the projector at the beginning of the Galilean section and leave it running; by the time the class reaches step 16 it will be most of the way there.',
       'Pluto and the Trojans both reach a verdict in about ninety seconds, so they are the better choices for a short demonstration. If you only have time to show one resonance being established, show Pluto.',
       'The scenarios run at speeds between 150 and 7,500 times the usual. That is deliberate - a single Pluto libration is twenty thousand years - but a student who drags the speed slider will not get it back to the right value by eye. Reloading the step restores it.',
       'The Galilean scenario is a scale model and the app’s own distance and time readouts are wrong for it by factors of 100 and 1,000. The resonance instrument converts correctly and the investigation never asks for a reading from anywhere else, but a student exploring with the object inspector will notice, and it is worth pre-empting.',
