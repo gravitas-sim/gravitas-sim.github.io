@@ -259,14 +259,11 @@ async function refresh() {
   // discover afterwards.
   els.stale.hidden = isFull || getSimClock() < 5;
 
-  // A pair or rotating frame is not carried (js/world.js writes the world
-  // frame for it), so the link would open on another picture: say so.
+  // A pair or rotating frame is not carried (js/world.js): say so.
   if (els.frameNote) {
     const dropped = !LINKED_MODES.includes(frameMode());
     els.frameNote.hidden = !dropped;
     if (dropped) {
-      // Only a pair frame is dropped, and one is chosen only once the
-      // scene's words are here.
       const name = sceneWords()?.frameName() || '';
       els.frameNote.textContent = t('share.frameNotCarried', { name });
     }
@@ -437,7 +434,6 @@ export function initShare() {
     meta: document.getElementById('shareMeta'),
     warning: document.getElementById('shareWarning'),
     stale: document.getElementById('shareStale'),
-    frameNote: document.getElementById('shareFrameNote'),
     seed: document.getElementById('shareSeed'),
     seedRow: document.getElementById('shareSeedRow'),
     reroll: document.getElementById('shareRerollBtn'),
@@ -448,6 +444,13 @@ export function initShare() {
     close: document.getElementById('shareCloseBtn'),
     chip: document.getElementById('shareCloseChip'),
   };
+  // Not in index.html, which is at its size ceiling.
+  els.stale?.after(
+    (els.frameNote = Object.assign(document.createElement('p'), {
+      className: 'share-note',
+      hidden: true,
+    }))
+  );
   if (!els.modal || !els.url) return;
 
   const button = document.getElementById('shareBtn');

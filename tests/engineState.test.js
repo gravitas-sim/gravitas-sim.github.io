@@ -57,6 +57,7 @@ const FACADE_EXPORTS = [
   'accelerationBreakdown',
   'accretion_disk_particles',
   'activeIntegrator',
+  'applyFollow',
   'asteroids',
   'barycenterBodies',
   'bh_list',
