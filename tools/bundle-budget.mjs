@@ -53,7 +53,7 @@ const BUDGETS = [
   {
     id: 'initial',
     label: 'Initial download (CSS + eager JS)',
-    limit: 747.4,
+    limit: 748.3,
     reason:
       'Was 743 KB when this budget was first asked for. The application had ' +
       'already grown to 771 KB on its own - the extracted state module, the ' +
@@ -129,7 +129,9 @@ const BUDGETS = [
       '\n\nThe quiet lesson canvas keeps Settings and precise placement beside its More (D-R4-TRAINC1-05): raised from 744.7 to 744.8 KB, the measurement of a Node 22 build of the combined branch, 762,590 bytes gzipped (744.72 KB), rounded up to 0.1 KB; the CSS that lays the dock out is the growth. Under the standing approval of 2026-10-10.' +
       "\n\nTidal fragments carried between steps (D-R4-460-05): the carry is start-up engine code in js/engine/bodies.js; raised from 744.8 to 744.9 KB, the measurement of a Node 22.23.4 build of the branch merged with v4 cb43cf134: 762,749 bytes (744.87 KB), rounded up to 0.1 KB; set to CI's figure before review. Under the standing approval of 2026-10-10." +
       "\n\nThe inspector and conservation readouts (D-R4-461-03): the model energy, its event counters and the stopwatch's step test are start-up engine code; raised from 744.9 to 746.9 KB, the measurement of a Node 22.23.4 build of the branch merged with v4 aa84c7549: 764,783 bytes (746.86 KB), rounded up to 0.1 KB; set to CI's figure before review. Engine and production class (maintainer decision 2026-11-22) under the standing approval of 2026-10-10." +
-      "\n\nSize, scale and transit geometry stated honestly (D-R4-344-06): the corrected sentences about which radius is used are longer, in the start-up English catalog, and the lesson's size line has its style; raised from 746.9 to 747.4 KB, the measurement of a Node 22.23.4 build of the branch merged with v4 0bf376ee9: 765,286 bytes (747.35 KB), rounded up to 0.1 KB; set to CI's figure before review. Production class (maintainer decision 2026-11-22) under the standing approval of 2026-10-10.",
+      "\n\nSize, scale and transit geometry stated honestly (D-R4-344-06): the corrected sentences about which radius is used are longer, in the start-up English catalog, and the lesson's size line has its style; raised from 746.9 to 747.4 KB, the measurement of a Node 22.23.4 build of the branch merged with v4 0bf376ee9: 765,286 bytes (747.35 KB), rounded up to 0.1 KB; set to CI's figure before review. Production class (maintainer decision 2026-11-22) under the standing approval of 2026-10-10." +
+      "\n\nThe sky repaint stops painting what a later disc erases (D-R4-PERF-STARFIELD-01): the covering-disc test, one index per layer, the colour cache and the per-region ripple constants are start-up render code, and the mutual-gravity sum skips a body's own entry in start-up engine code; raised from 744.8 to 745.7 KB, the measurement of a Node 22.23.4 build of the branch over v4 f258bdf29, 763,571 bytes gzipped (745.67 KB), rounded up to 0.1 KB. Under the standing approval of 2026-10-10." +
+      "\n\nThe sky repaint, after merging v4 07f80351f (D-R4-PERF-STARFIELD-02): restacked on the 747.4 KB v4 reached; raised from 747.4 to 748.3 KB, the measurement of a Node 22.23.4 build of the merged branch: 766,191 bytes (748.23 KB), rounded up to 0.1 KB; set to CI's figure before review. Under the standing approval of 2026-10-10 and the engine and production class exemption (maintainer decision, 2026-11-21).",
   },
   {
     id: 'deferred',
