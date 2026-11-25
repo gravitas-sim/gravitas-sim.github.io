@@ -1106,7 +1106,7 @@ export const EN = {
     'Four black holes at the corners of a square, pulling stars from a shared central cluster.',
   'scenario.slingshot-gauntlet.title': 'Slingshot Gauntlet',
   'scenario.slingshot-gauntlet.summary':
-    'A fast star fired through a field of five fixed black holes. Each hole bends its path, but because the holes stay still the star leaves at the speed it arrived with: it is deflected, not sped up. Taking speed from a body takes a body that moves, as in the Gravity Assist Lab.',
+    'A fast star fired past five fixed black holes: each bends its path, none speeds it up.',
   'scenario.black-hole-billiards.title': 'Black Hole Billiards',
   'scenario.black-hole-billiards.summary':
     'A few small black holes orbiting a supermassive one, perturbing each other and creating chaotic motion.',

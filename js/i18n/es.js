@@ -1133,7 +1133,7 @@ export const ES = {
     'Cuatro agujeros negros en los vértices de un cuadrado, tirando de las estrellas de un cúmulo central compartido.',
   'scenario.slingshot-gauntlet.title': 'Circuito de asistencias gravitatorias',
   'scenario.slingshot-gauntlet.summary':
-    'Una estrella veloz disparada a través de un campo de cinco agujeros negros fijos. Cada agujero curva su trayectoria, pero como los agujeros están quietos la estrella sale con la misma velocidad con la que entró: se desvía, no se acelera. Para ganar velocidad de un cuerpo hace falta un cuerpo que se mueva, como en el Laboratorio de asistencia gravitatoria.',
+    'Una estrella veloz disparada entre cinco agujeros negros fijos: cada uno curva su trayectoria, ninguno la acelera.',
   'scenario.black-hole-billiards.title': 'Billar de agujeros negros',
   'scenario.black-hole-billiards.summary':
     'Unos cuantos agujeros negros pequeños orbitando uno supermasivo, perturbándose entre sí y generando un movimiento caótico.',
