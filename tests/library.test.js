@@ -73,9 +73,13 @@ describe('library/library.json', () => {
   test('writes world links uncompressed, so every Node writes the same bytes', async () => {
     const scenarios = library.entries.filter(e => e.format === 'sandbox');
     expect(scenarios.length).toBeGreaterThan(0);
-    const { decodePayload } = await import('../js/shareState.js');
+    const { decodePayload, currentRevision } =
+      await import('../js/shareState.js');
     for (const e of scenarios) {
-      expect([e.id, e.route.startsWith('/#1r')]).toEqual([e.id, true]);
+      // Prefix 1, or 3 with the revision for a corrected scenario.
+      const prefix =
+        currentRevision(e.id.replace(/^scenario:/, '')) >= 2 ? '3r' : '1r';
+      expect([e.id, e.route.startsWith(`/#${prefix}`)]).toEqual([e.id, true]);
       // The app reads it back as the world the entry names.
       const payload = await decodePayload(e.route.slice(2));
       expect([e.id, payload.s in SCENARIO_INFO]).toEqual([e.id, true]);

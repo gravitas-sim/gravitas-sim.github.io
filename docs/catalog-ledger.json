@@ -8738,8 +8738,8 @@
       "family": "flybys and assists",
       "planning": "REVIEW",
       "owner": 463,
-      "disposition": "OPEN",
-      "reason": "",
+      "disposition": "REVISED",
+      "reason": "REFRAME (one card sentence, both languages) and the panel: 'slowed by exactly the momentum it gained' cannot hold around a star, where the planet's orbital turning dominates and the star takes a share. The card now says the planet's orbit loses the energy the spacecraft gained, which a superseding claim committed before its run measures at 0.17%; the panel's momentum ledger line is left empty in this scene. D-R4-463-08.",
       "pr": null
     },
     {
@@ -8749,8 +8749,8 @@
       "family": "binaries, circumbinary, three-body",
       "planning": "KEEP",
       "owner": 463,
-      "disposition": "OPEN",
-      "reason": "",
+      "disposition": "REVISED",
+      "reason": "CORRECT (row and card, both languages): RK4 at the same step holds the tracer's Jacobi constant to 2.4e-8 of itself over five periods (Velocity Verlet drifted 3.4e-4 against 1e-6), and the tracer at 1e-12 of the pair's mass moves the stars' paths by 2.2e-10 of their separation. The mass ratio stays 0.03, which the lesson uses; the card says three hundredths. The tracer's start is unchanged, because the lesson describes it. Revision 1 is retained. D-R4-463-06.",
       "pr": null
     },
     {
@@ -8925,8 +8925,8 @@
       "family": "binaries, circumbinary, three-body",
       "planning": "REVIEW",
       "owner": 463,
-      "disposition": "OPEN",
-      "reason": "",
+      "disposition": "REVISED",
+      "reason": "CORRECT (world and card, both languages): the planets started 1.25 to 2.25 binary separations from the pair, inside Holman and Wiegert's critical distance (2.43 for these masses), and one was lost under a second seed. Revision 2 starts them at 2.75 separations and beyond and lets only the stars pull; no body is lost at 30, 60 and 120 frames a second under either seed. Revision 1 is retained for links made before. D-R4-463-04.",
       "pr": null
     },
     {

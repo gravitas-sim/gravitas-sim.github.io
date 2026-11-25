@@ -998,7 +998,7 @@ export const ES = {
   'scenario.lagrange-point-lab.title':
     'Laboratorio de puntos de Lagrange: dos estrellas, una orbita circular, una particula de prueba',
   'scenario.lagrange-point-lab.summary':
-    'Una estrella de tipo solar y una companera de una treintava parte de su masa, en una orbita exactamente circular de ocho unidades astronomicas, con un trazador tan ligero que ninguna de las dos lo nota. Este es el problema restringido circular de los tres cuerpos: el sistema mas simple con puntos de Lagrange, regiones prohibidas y una constante de Jacobi conservada, y la unica disposicion en la que todo eso es exactamente cierto.',
+    'Una estrella de tipo solar y una compañera de tres centésimas de su masa, en una órbita exactamente circular de ocho unidades astronómicas, con un trazador tan ligero que ninguna de las dos lo nota. Este es el problema restringido circular de los tres cuerpos: el sistema más simple con puntos de Lagrange, regiones prohibidas y una constante de Jacobi conservada, y la única disposición en la que todo eso es exactamente cierto.',
   'scenario.orbital-transfer-lab.title':
     'Laboratorio de transferencia orbital: una estrella, una nave, un destino',
   'scenario.orbital-transfer-lab.summary':
@@ -1010,7 +1010,7 @@ export const ES = {
   'scenario.gravity-assist-heliocentric.title':
     'Asistencia gravitatoria: el mismo sobrevuelo, con un Sol al que robarle',
   'scenario.gravity-assist-heliocentric.summary':
-    'El mismo planeta, ahora en órbita circular a cinco AU de una estrella, y una nave que se encuentra con él. De aquí sale la energía: la nave se marcha más rápido alrededor de la estrella de lo que llegó, y el planeta se frena exactamente en el momento lineal que ella ganó. Aquí todo es aproximado -el planeta acelera, así que su sistema no es inercial y el encuentro solo es localmente de dos cuerpos- y el panel informa de cuánto lo es en vez de ocultarlo.',
+    'El mismo planeta, ahora en órbita circular a cinco AU de una estrella, y una nave que se encuentra con él. De aquí sale la energía: la nave se marcha más rápido alrededor de la estrella de lo que llegó, y la órbita del planeta pierde, sin que se note, la energía que ganó la nave. Aquí todo es aproximado -el planeta acelera, así que su sistema no es inercial y el encuentro solo es localmente de dos cuerpos- y el panel informa de cuánto lo es en vez de ocultarlo.',
   'scenario.binary-planet-lab.title':
     'Laboratorio de planeta en binaria: un planeta alrededor de una de las estrellas',
   'scenario.binary-planet-lab.summary':
@@ -1061,7 +1061,7 @@ export const ES = {
     'El agujero negro supermasivo central de la Vía Láctea (4000 M☉, reducido para la simulación) con estrellas S de movimiento rápido, objetos compactos y restos en órbitas extremas. Permite presenciar las increíbles fuerzas gravitatorias y los efectos relativistas cerca del agujero negro supermasivo de nuestra galaxia.',
   'scenario.binary-star-system.title': 'Estrellas binarias',
   'scenario.binary-star-system.summary':
-    'Un par de soles en órbita mutua con 5 planetas orbitando el sistema binario. El complejo entorno gravitatorio da lugar a una dinámica orbital interesante y a posibles zonas habitables. Parecido a sistemas binarios reales como Alfa Centauri.',
+    'Dos soles de 1,2 y 0,8 masas solares que se orbitan a 1,2 UA, con cinco planetas, dos gigantes gaseosos y 20 asteroides en órbita alrededor del par. Aquí solo atraen los soles. Los planetas empiezan más allá de 2,4 veces la separación de las estrellas, lo más cerca que un planeta puede girar en torno a un par así y quedarse (Holman y Wiegert, 1999); más adentro, la atracción cambiante del par expulsa a los planetas. Alfa Centauri A y B forman un par de este tipo, unas 20 veces más separado.',
   'scenario.slingshot.title': 'Asistencia gravitatoria',
   'scenario.slingshot.summary':
     'Un agujero negro masivo (60 M☉) acompañado de una compañera menor (3 M☉) produce espectaculares asistencias gravitatorias a los planetas y gigantes gaseosos cercanos. Los objetos ganan una velocidad enorme en los encuentros próximos, igual que las sondas espaciales en sus maniobras de asistencia.',
