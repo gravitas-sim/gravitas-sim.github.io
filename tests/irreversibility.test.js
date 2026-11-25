@@ -158,7 +158,8 @@ describe('the audit is generated, not remembered', () => {
   });
 
   test('every operation names a real line of the file it came from', () => {
-    expect(IRREVERSIBLE.length).toBeGreaterThan(10);
+    // Four since the eleven distance-cull rows went (D-R4-496-01).
+    expect(IRREVERSIBLE.length).toBeGreaterThanOrEqual(4);
     for (const op of IRREVERSIBLE) {
       const source = read(op.file).split('\n');
       expect(op.line).toBeGreaterThan(0);
@@ -167,22 +168,17 @@ describe('the audit is generated, not remembered', () => {
     }
   });
 
-  test('the cull family is there with its own buffer each', () => {
-    const culls = IRREVERSIBLE.filter(o => o.kind === 'cull');
-    expect(culls.length).toBeGreaterThanOrEqual(10);
-    const buffers = Object.fromEntries(
-      culls.map(c => [c.detail.list, c.detail.buffer])
-    );
-    // The three the model page calls out, plus the one that keeps holes.
-    expect(buffers.asteroids).toBe(5);
-    expect(buffers.debris).toBe(3);
-    expect(buffers.planets).toBe(20);
-    expect(buffers.bh_list).toBe(50);
+  test('nothing is removed for leaving the view (D-R4-496-01)', () => {
+    // The eleven cull rows went with the box test in js/engine/step.js; a
+    // removal that reads the canvas, the zoom or the pan must not return.
+    expect(IRREVERSIBLE.filter(o => o.kind === 'cull')).toEqual([]);
+    const step = read('js/engine/step.js');
+    expect(step).not.toMatch(/is_offscreen|isOffscreen/);
   });
 
   test('merging, collapse, damping and fragmentation are all named', () => {
     const kinds = new Set(IRREVERSIBLE.map(o => o.kind));
-    for (const kind of ['merge', 'collapse', 'damping', 'fragment', 'cull']) {
+    for (const kind of ['merge', 'collapse', 'damping', 'fragment']) {
       expect([...kinds]).toContain(kind);
     }
   });

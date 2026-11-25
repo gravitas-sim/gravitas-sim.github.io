@@ -1006,15 +1006,23 @@ export const GRID_CELL = 64;
  * cost 19.6 ms a repaint in the crowded scene; a grid walks only the buckets
  * the disc touches.
  *
+ * Each entry is {star, layer, style}. `style` is scratch for the caller: it
+ * keeps the colour string of the star as it is when it is not lensed. A disc
+ * queried at several wrapped centres can return a star more than once, and the
+ * painter draws it each time, as the sky always has.
+ *
  * @param {object} field - From generateStarfield
  * @returns {object} An index with a `near` method
  */
 export function indexStarfield(field) {
   const cols = Math.max(1, Math.ceil(field.width / GRID_CELL));
   const rows = Math.max(1, Math.ceil(field.height / GRID_CELL));
-  const cells = new Map();
+  // One grid per layer, so a painter that wants one layer does not walk (and
+  // discard) the other two.
+  const grids = {};
 
   for (const layer of LAYERS) {
+    const cells = (grids[layer] = new Map());
     for (const star of field.layers[layer]) {
       const cx = Math.min(
         cols - 1,
@@ -1030,41 +1038,158 @@ export function indexStarfield(field) {
         bucket = [];
         cells.set(key, bucket);
       }
-      bucket.push({ star, layer });
+      bucket.push({ star, layer, style: null });
     }
   }
 
   return {
     cols,
     rows,
-    cells,
     /**
      * Every star whose position is within `radius` of (x, y).
      *
      * @param {number} x - Center, pixels
      * @param {number} y - Center, pixels
      * @param {number} radius - Pixels
+     * @param {string} [layer] - Only this layer's stars (default: all, a layer
+     *   at a time)
+     * @param {Array} [out] - Emptied and filled instead of a new array
      * @returns {Array<{star: object, layer: string}>} Matches
      */
-    near(x, y, radius) {
-      const out = [];
+    near(x, y, radius, layer, out) {
+      if (out) out.length = 0;
+      else out = [];
       const minX = Math.max(0, Math.floor((x - radius) / GRID_CELL));
       const maxX = Math.min(cols - 1, Math.floor((x + radius) / GRID_CELL));
       const minY = Math.max(0, Math.floor((y - radius) / GRID_CELL));
       const maxY = Math.min(rows - 1, Math.floor((y + radius) / GRID_CELL));
       const r2 = radius * radius;
-      for (let cy = minY; cy <= maxY; cy++) {
-        for (let cx = minX; cx <= maxX; cx++) {
-          const bucket = cells.get(cy * cols + cx);
-          if (!bucket) continue;
-          for (const entry of bucket) {
-            const dx = entry.star.x - x;
-            const dy = entry.star.y - y;
-            if (dx * dx + dy * dy <= r2) out.push(entry);
+      for (const name of layer ? [layer] : LAYERS) {
+        const cells = grids[name];
+        for (let cy = minY; cy <= maxY; cy++) {
+          for (let cx = minX; cx <= maxX; cx++) {
+            const bucket = cells.get(cy * cols + cx);
+            if (!bucket) continue;
+            for (let k = 0; k < bucket.length; k++) {
+              const entry = bucket[k];
+              const dx = entry.star.x - x;
+              const dy = entry.star.y - y;
+              if (dx * dx + dy * dy <= r2) out.push(entry);
+            }
           }
         }
       }
       return out;
     },
   };
+}
+
+/**
+ * Does a disc cover every pixel of a w x h canvas? Conservatively: the farthest
+ * corner has to be inside by `margin` pixels, so no covered pixel is one the
+ * disc's antialiased edge only partly reaches.
+ *
+ * @param {number} x - Disc centre, pixels
+ * @param {number} y - Disc centre, pixels
+ * @param {number} r - Disc radius, pixels
+ * @param {number} w - Canvas width
+ * @param {number} h - Canvas height
+ * @param {number} [margin] - Pixels of slack at the farthest corner
+ * @returns {boolean} True when the whole canvas is inside the disc
+ */
+export function discCoversRect(x, y, r, w, h, margin = 2) {
+  const fx = Math.max(Math.abs(x), Math.abs(x - w));
+  const fy = Math.max(Math.abs(y), Math.abs(y - h));
+  return Math.sqrt(fx * fx + fy * fy) + margin <= r;
+}
+
+/**
+ * What a ripple looks like right now, independent of which star is asked.
+ *
+ * @param {object} ripple - A gravity ripple
+ * @param {number} zoom - The camera zoom
+ * @returns {{amplitude: number, wavelength: number, radius: number, progress: number}}
+ */
+function rippleWave(ripple, zoom) {
+  const now = performance.now();
+  const age = now - ripple.created;
+  const mass = ripple.mass || 1.0;
+  const gw = ripple.gw_strength !== undefined ? ripple.gw_strength : 1.0;
+  const fade = ripple._fade !== undefined ? ripple._fade : 1.0;
+  let amplitude = (8 + 10 * Math.log10(mass + 1)) * fade * gw;
+  let wavelength = 80 + 40 * Math.log10(mass + 1);
+  if (ripple.kilonova) {
+    amplitude = (10 + 12 * Math.log10(mass + 1)) * fade * gw * 1.2;
+  } else if (ripple.nswd_merger) {
+    amplitude = (12 + 15 * Math.log10(mass + 1)) * fade * gw * 1.5;
+    wavelength = 100 + 50 * Math.log10(mass + 1);
+  } else if (ripple.wdwd_merger) {
+    amplitude = (6 + 8 * Math.log10(mass + 1)) * fade * gw * 1.2;
+    wavelength = 60 + 30 * Math.log10(mass + 1);
+  }
+  const c = 0.18;
+  return {
+    amplitude,
+    wavelength,
+    radius: c * age * zoom,
+    progress: age / ripple.duration,
+  };
+}
+
+/**
+ * How far one region displaces a star at a screen position.
+ *
+ * The profiles are unchanged from what they were when every star was tested
+ * against every object: a 1/b Einstein-angle falloff for a lens, tapered to
+ * zero at the edge so the patch has no seam, and the same sine envelope for a
+ * ripple. Only which stars are asked has changed.
+ *
+ * @param {object} region - From distortionRegions
+ * @param {number} sx - Star position, screen pixels
+ * @param {number} sy - Star position, screen pixels
+ * @param {number} zoom - The camera zoom, which sets how far a ripple has run
+ * @returns {?{dx: number, dy: number, blur: number, color: string}} Displacement,
+ *   in an object that is reused by the next call: read it before asking again
+ */
+const pushScratch = { dx: 0, dy: 0, blur: 0, color: '#fff' };
+export function displacementFrom(region, sx, sy, zoom) {
+  const dx = sx - region.x;
+  const dy = sy - region.y;
+  const dist = Math.sqrt(dx * dx + dy * dy);
+
+  if (region.kind === 'lens') {
+    if (dist >= region.r) return null;
+    const core = Math.max(region.r * 0.12, 1e-6);
+    const b = Math.max(dist, core);
+    const deflection = (region.strength * region.r * core) / b;
+    const edge = 1 - dist / region.r;
+    const lens = deflection * edge * edge;
+    if (!(lens > 0)) return null;
+    pushScratch.dx = (dx / (dist + 1e-6)) * lens;
+    pushScratch.dy = (dy / (dist + 1e-6)) * lens;
+    pushScratch.blur = region.blur * edge;
+    pushScratch.color = region.color;
+    return pushScratch;
+  }
+
+  // A ripple. Its amplitude, wavelength and the wavefront are the same for
+  // every star in the region, so they are worked out once per region, at one
+  // instant, instead of once per star (each with a clock read and a handful of
+  // logarithms).
+  if (dist >= region.r || dist <= 8) return null;
+  const ripple = region.source;
+  const w = region.wave || (region.wave = rippleWave(ripple, zoom));
+  const phase = (dist - w.radius) / w.wavelength;
+  const local = w.amplitude * Math.exp(-Math.abs(phase));
+  const progress = w.progress;
+  let factor = local * Math.sin(phase * Math.PI * 2 - progress * Math.PI * 2);
+  if (ripple.kilonova) factor *= 1 + Math.sin(progress * Math.PI * 3) * 0.15;
+  else if (ripple.nswd_merger) {
+    factor *= 1 + Math.sin(progress * Math.PI * 3) * 0.2;
+  }
+  pushScratch.dx = (dx / dist) * factor;
+  pushScratch.dy = (dy / dist) * factor;
+  pushScratch.blur = 0;
+  pushScratch.color = '#fff';
+  return pushScratch;
 }

@@ -101,7 +101,6 @@ const FACADE_EXPORTS = [
   'handle_rocky_collisions',
   'handle_star_merging',
   'handle_star_object_collisions',
-  'is_offscreen',
   'liveBodyCount',
   'minInteractionDistance',
   'neutron_stars',

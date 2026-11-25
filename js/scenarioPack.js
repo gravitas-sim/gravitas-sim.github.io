@@ -28,6 +28,7 @@ import {
   linkNumber,
   pristineSettingsFor,
   settingsDelta,
+  withRevision,
 } from './shareState.js';
 import {
   SCENARIO_IDS,
@@ -395,11 +396,15 @@ export function describeCaution(pack, c) {
  * @returns {object} A payload for encodePayload()
  */
 export function compileScenarioPack(pack) {
-  const payload = {
-    v: LINK_VERSION,
-    s: pack.scenario ?? 'None',
-    seed: formatSeed(pack.seed),
-  };
+  // A declaration: the revision it states, else 1 (SCENARIO_REVISIONS.md).
+  const payload = withRevision(
+    {
+      v: LINK_VERSION,
+      s: pack.scenario ?? 'None',
+      seed: formatSeed(pack.seed),
+    },
+    pack.scenarioRevision
+  );
   const d = { ...(pack.settings || {}) };
   if (Object.keys(d).length) payload.d = d;
   if (pack.camera) {

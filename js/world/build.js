@@ -191,9 +191,9 @@ export const ENGINE_GEOMETRY = /* @__PURE__ */ Object.freeze({
   // exoplanetSystems.js, which the exoplanet instruments read too.
   // prettier-ignore
   'exoplanet-characterization-lab': { recenter: true, steps: [{ rule: { name: 'published-system', params: { system: 'hd209458' } } }] },
-  // HD 209458 at true relative scale (the radii are the published ones, so the
-  // silhouette, the dip and the arithmetic in the investigation are one set of
-  // numbers). The star is the generator's first star, made if it drew none, kept
+  // HD 209458 at true relative scale in the model (the radii are the published
+  // ones, so the dip, its timing and the arithmetic are one set of numbers; the
+  // drawn planet is smaller). The star is the generator's first star, made if it drew none, kept
   // with its id; the planet starts a quarter of an orbit before the first
   // transit. Worked in the primary's rest frame: the companion (Blended Binary
   // only: 300 AU out, half a magnitude fainter, 1.0 solar mass) circles it
@@ -339,8 +339,8 @@ const laboratoryRules = {
     const mu = m2 / total;
     const n = Math.sqrt((G * total) / (separation * separation * separation));
     // Drawn well above life size so both are visible at a zoom that holds the
-    // whole L4/L5 triangle. Nothing here comes within twenty times the drawn
-    // radius, and js/physics.js collides on the drawn radius.
+    // whole L4/L5 triangle. Contact is the sum of the two model radii
+    // (obj.radius, js/engine/collisions.js), not the drawn size.
     const place = (fraction, mass, name, baseColor, radiusInSuns) => {
       const x = fraction * separation;
       return {
@@ -983,8 +983,8 @@ const populationRules = {
  * @property {object} state - The shared UI state object
  * @property {() => void} applyPreset - Reset settings to the scenario's own
  * @property {() => (object|null)} takePendingSettings - Share-link settings, once
- * @property {(name: string) => void} setScenarioName - Record what was built:
- *   a scenario id, or 'None'
+ * @property {(name: string, revision?: number) => void} setScenarioName - What was built
+ * @property {number} [revision] - The revision to build (SCENARIO_REVISIONS.md); absent: the latest
  * @property {() => void} hideObjectInspector - Close the inspector before rebuild
  * @property {(key: string) => void} showScenarioInfo - Repaint the scenario card
  * @property {() => void} updateObjectTypeButton - Sync the insertion-type button
@@ -1654,7 +1654,7 @@ export const buildWorld = ctx => {
     Object.assign(SETTINGS, pendingSettingsOverride);
   }
 
-  setScenarioName(starting_preset);
+  setScenarioName(starting_preset, ctx.revision);
 
   // The low tier's population caps (populationCaps in js/quality.js), read
   // once. The whole population is made and placed and what is past a cap is

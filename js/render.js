@@ -47,6 +47,8 @@ import {
   STAR_PALETTE,
   generateStarfield as buildStarfield,
   indexStarfield,
+  displacementFrom,
+  discCoversRect,
   beginCrowdFrame,
   crowdNotes,
   crowdTrails,
@@ -404,6 +406,8 @@ const starCtx = starfieldCanvas.getContext('2d');
 // The sky, and the three canvases it is painted onto once.
 let starField = null;
 let starIndex = null;
+/** Reused by every index query in drawStarfield. */
+const nearScratch = [];
 const starLayerCanvases = { far: null, mid: null, near: null };
 /** True when the offscreen layers no longer match the field. */
 let starLayersStale = true;
@@ -487,6 +491,18 @@ const createAmbientGradient = () => {
   grad.addColorStop(0, readToken('--space-near') || '#141833');
   grad.addColorStop(1, readToken('--space-far') || '#05060d');
   return grad;
+};
+
+/** Is the sky's background opaque, so that painting it hides what is under it? */
+const skyIsOpaque = () => {
+  const opaque = c => {
+    starCtx.fillStyle = c;
+    return /^#/.test(starCtx.fillStyle);
+  };
+  const far = readToken('--space-far') || '#05060d';
+  return SETTINGS.show_ambient_lighting
+    ? opaque(readToken('--space-near') || '#141833') && opaque(far)
+    : opaque(far);
 };
 
 /**
@@ -720,77 +736,6 @@ function distortionRegions() {
   return regions;
 }
 
-/**
- * How far one region displaces a star at a screen position.
- *
- * The profiles are unchanged from what they were when every star was tested
- * against every object: a 1/b Einstein-angle falloff for a lens, tapered to
- * zero at the edge so the patch has no seam, and the same sine envelope for a
- * ripple. Only which stars are asked has changed.
- *
- * @param {object} region - From distortionRegions
- * @param {number} sx - Star position, screen pixels
- * @param {number} sy - Star position, screen pixels
- * @returns {?{dx: number, dy: number, blur: number, color: string}} Displacement
- */
-function displacementFrom(region, sx, sy) {
-  const dx = sx - region.x;
-  const dy = sy - region.y;
-  const dist = Math.sqrt(dx * dx + dy * dy);
-
-  if (region.kind === 'lens') {
-    if (dist >= region.r) return null;
-    const core = Math.max(region.r * 0.12, 1e-6);
-    const b = Math.max(dist, core);
-    const deflection = (region.strength * region.r * core) / b;
-    const edge = 1 - dist / region.r;
-    const lens = deflection * edge * edge;
-    if (!(lens > 0)) return null;
-    return {
-      dx: (dx / (dist + 1e-6)) * lens,
-      dy: (dy / (dist + 1e-6)) * lens,
-      blur: region.blur * edge,
-      color: region.color,
-    };
-  }
-
-  // A ripple.
-  const ripple = region.source;
-  const now = performance.now();
-  const age = now - ripple.created;
-  const mass = ripple.mass || 1.0;
-  const gw = ripple.gw_strength !== undefined ? ripple.gw_strength : 1.0;
-  const fade = ripple._fade !== undefined ? ripple._fade : 1.0;
-  let amplitude = (8 + 10 * Math.log10(mass + 1)) * fade * gw;
-  let wavelength = 80 + 40 * Math.log10(mass + 1);
-  if (ripple.kilonova) {
-    amplitude = (10 + 12 * Math.log10(mass + 1)) * fade * gw * 1.2;
-  } else if (ripple.nswd_merger) {
-    amplitude = (12 + 15 * Math.log10(mass + 1)) * fade * gw * 1.5;
-    wavelength = 100 + 50 * Math.log10(mass + 1);
-  } else if (ripple.wdwd_merger) {
-    amplitude = (6 + 8 * Math.log10(mass + 1)) * fade * gw * 1.2;
-    wavelength = 60 + 30 * Math.log10(mass + 1);
-  }
-  const c = 0.18;
-  const radius = c * age * state.zoom;
-  const progress = age / ripple.duration;
-  if (dist >= region.r || dist <= 8) return null;
-  const phase = (dist - radius) / wavelength;
-  const local = amplitude * Math.exp(-Math.abs(phase));
-  let factor = local * Math.sin(phase * Math.PI * 2 - progress * Math.PI * 2);
-  if (ripple.kilonova) factor *= 1 + Math.sin(progress * Math.PI * 3) * 0.15;
-  else if (ripple.nswd_merger) {
-    factor *= 1 + Math.sin(progress * Math.PI * 3) * 0.2;
-  }
-  return {
-    dx: (dx / dist) * factor,
-    dy: (dy / dist) * factor,
-    blur: 0,
-    color: '#fff',
-  };
-}
-
 function drawStarfield() {
   const W = starfieldCanvas.width;
   const H = starfieldCanvas.height;
@@ -850,7 +795,19 @@ function drawStarfield() {
 
   // --- and only the sky that something is bending -----------------------------
   const regions = distortionRegions();
-  for (const region of regions) {
+  // A disc that covers the canvas is filled with the background, so whatever
+  // an earlier region painted is gone: only the last such disc, and the regions
+  // after it, can be seen. (Not when the background lets what is under it show.)
+  let firstSeen = 0;
+  for (let i = regions.length - 1; i > 0; i--) {
+    const r = regions[i];
+    if (!(r.inner > 0) && discCoversRect(r.x, r.y, r.r, W, H)) {
+      if (skyIsOpaque()) firstSeen = i;
+      break;
+    }
+  }
+  for (let ri = firstSeen; ri < regions.length; ri++) {
+    const region = regions[ri];
     if (!(region.r > 0)) continue;
     // Redraw the patch from scratch: background over the disc, then the stars
     // that belong in it, displaced.
@@ -864,6 +821,7 @@ function drawStarfield() {
     starCtx.fillStyle = background;
     starCtx.fill('evenodd');
 
+    let drawnStyle = '';
     for (const layer of LAYERS) {
       const off = offsets[layer] || { x: 0, y: 0 };
       // The index is in unpanned coordinates, so the disc is asked for where
@@ -871,17 +829,18 @@ function drawStarfield() {
       // Only the wrapped positions that can actually intersect the field. The
       // offsets are a fiftieth of the pan, so in almost every frame this is
       // one query rather than four.
-      const xs = [region.x + off.x];
-      const ys = [region.y + off.y];
-      if (xs[0] - region.r > W) xs.push(xs[0] - W);
-      else if (xs[0] + region.r > W) xs.push(xs[0] - W);
-      if (ys[0] - region.r > H) ys.push(ys[0] - H);
-      else if (ys[0] + region.r > H) ys.push(ys[0] - H);
-      for (const cx of xs) {
-        for (const cy of ys) {
-          for (const found of starIndex.near(cx, cy, region.r)) {
-            if (found.layer !== layer) continue;
-            const star = found.star;
+      const x0 = region.x + off.x;
+      const y0 = region.y + off.y;
+      const nx = x0 + region.r > W ? 2 : 1;
+      const ny = y0 + region.r > H ? 2 : 1;
+      for (let ix = 0; ix < nx; ix++) {
+        const cx = ix ? x0 - W : x0;
+        for (let iy = 0; iy < ny; iy++) {
+          const cy = iy ? y0 - H : y0;
+          const found = starIndex.near(cx, cy, region.r, layer, nearScratch);
+          for (let k = 0; k < found.length; k++) {
+            const entry = found[k];
+            const star = entry.star;
             let sx = wrap(star.x - off.x, W);
             let sy = wrap(star.y - off.y, H);
             if (inner > 0) {
@@ -889,7 +848,7 @@ function drawStarfield() {
               const ddy = sy - region.y;
               if (ddx * ddx + ddy * ddy < inner * inner) continue;
             }
-            const push = displacementFrom(region, sx, sy);
+            const push = displacementFrom(region, sx, sy, state.zoom);
             if (!push) continue;
             sx += push.dx;
             sy += push.dy;
@@ -897,8 +856,19 @@ function drawStarfield() {
             // with a canvas shadow.
             const glow = push.blur > 0 ? Math.min(1, push.blur / 2.5) : 0;
             const size = star.size * (1 + glow * 0.9);
+            // Pushed off the canvas, nothing of it would be painted.
+            if (sx + size <= 0 || sx >= W || sy + size <= 0 || sy >= H)
+              continue;
             const alpha = Math.min(1, star.alpha * (1 + glow * 0.6));
-            starCtx.fillStyle = starRgba(star.color, alpha);
+            // Unlensed, a star is the colour it always is: say it once.
+            const style =
+              alpha === star.alpha
+                ? entry.style || (entry.style = starRgba(star.color, alpha))
+                : starRgba(star.color, alpha);
+            if (style !== drawnStyle) {
+              starCtx.fillStyle = style;
+              drawnStyle = style;
+            }
             starCtx.fillRect(sx, sy, size, size);
           }
         }
@@ -1031,7 +1001,7 @@ const drawScene = () => {
   // zeroes, which is exactly the old behavior.
   let frameOrigin = resolveFrameOrigin(barycenterBodies());
   if (!frameOrigin && !isWorldFrame()) {
-    // The body the frame was tied to has been absorbed, merged or culled. There
+    // The body the frame was tied to has been absorbed or merged away. There
     // is no origin any more, so say so and fall back rather than leaving the
     // rail claiming a frame that no longer exists.
     resetFrame();
@@ -1965,85 +1935,22 @@ function readoutHtml(drawn) {
   // --- Conservation check ---------------------------------------------------
   if (SETTINGS.show_conservation_diagnostics && !isEmbed()) {
     const drift = conservationDrift();
-    if (drift) {
-      const pct = v =>
-        !Number.isFinite(v)
-          ? '\u2014'
-          : `${v >= 0 ? '+' : ''}${v.toPrecision(3)}%`;
-      // An absolute change, for the case where a relative one cannot be
-      // formed. Two significant figures: it is an order-of-magnitude fact.
-      const abs = v =>
-        !Number.isFinite(v)
-          ? '\u2014'
-          : `${v >= 0 ? '+' : ''}${v.toPrecision(2)}`;
-
-      const rows = [
-        [
-          t('readout.integrator'),
-          t(
-            `settings.option.integrator.${drift.integrator
-              .toLowerCase()
-              .replace(/[^a-z0-9]+/g, '-')}`
-          ),
-        ],
-      ];
-
-      // Energy and angular momentum, each either as a percentage of the
-      // reference or - when the reference was itself the near-cancellation of
-      // much larger terms - as the change itself, said plainly.
-      rows.push(
-        drift.energyConditioned
-          ? [t('readout.drift.energy'), pct(drift.energyDrift)]
-          : [t('readout.drift.energyChange'), abs(drift.energyChange)]
+    // The check's markup and words load the first time it is switched on, so
+    // a launch that never asks for it does not download them.
+    if (drift && readoutView)
+      sections.push(readoutView.conservationReadoutHtml(drift, formatTime));
+    else if (drift)
+      readoutViewLoading ??= import('./conservationReadoutView.js').then(
+        m => (readoutView = m)
       );
-      rows.push(
-        drift.angularConditioned
-          ? [t('readout.drift.angular'), pct(drift.angularDrift)]
-          : [t('readout.drift.angularChange'), abs(drift.angularChange)]
-      );
-
-      // When the reference was taken. A drift figure with no interval attached
-      // is not a measurement, and a reader who rebaselines has to be able to
-      // see that they did.
-      rows.push([t('readout.drift.since'), formatTime(drift.baselineTime)]);
-
-      const illConditioned =
-        !drift.energyConditioned || !drift.angularConditioned;
-
-      sections.push(
-        // <details> rather than a title attribute: an explanation reachable
-        // only by hovering is unreachable by keyboard and unreachable on a
-        // touch screen, and this one is the difference between a number and a
-        // number somebody can act on.
-        `<div class="readout-conservation">
-           <h3 class="readout-conservation-title">${escapeHtml(t('readout.conservation.title'))}</h3>
-           <dl class="readout-metrics is-diagnostics">${rows
-             .map(
-               ([k, v]) =>
-                 `<div class="readout-metric"><dt>${escapeHtml(k)}</dt><dd>${escapeHtml(v)}</dd></div>`
-             )
-             .join('')}</dl>${
-             illConditioned
-               ? `<p class="readout-caveat">${escapeHtml(t('readout.conservation.illConditioned'))}</p>`
-               : ''
-           }${
-             // Every reason, not the first one. A scene can have a static hole
-             // and imposed decay and merging at once, and naming one of the
-             // three invites the reader to blame the integrator for the other
-             // two.
-             drift.caveats.length
-               ? `<ul class="readout-caveats">${drift.caveats
-                   .map(c => `<li>${escapeHtml(t(c))}</li>`)
-                   .join('')}</ul>`
-               : `<p class="readout-caveat">${escapeHtml(t('readout.conservation.closed'))}</p>`
-           }
-         </div>`
-      );
-    }
   }
 
   return sections.join('');
 }
+
+/** The conservation check's module, once loaded (js/conservationReadoutView.js). */
+let readoutView = null;
+let readoutViewLoading = null;
 
 /**
  * Whether the reader has opened the conservation explanation.

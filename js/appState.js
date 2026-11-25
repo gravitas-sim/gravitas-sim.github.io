@@ -530,13 +530,18 @@ export function commitSettings(source, patch) {
 /** The scenario currently loaded, or null for a hand-built world. */
 export let current_scenario_name = null;
 
+/** The revision of that scenario the world was built at (SCENARIO_REVISIONS.md). */
+export let current_scenario_revision = 1;
+
 /**
- * Record which scenario is loaded.
+ * Record which scenario is loaded, and the revision it was built at.
  *
  * @param {?string} name - Scenario name, or null
+ * @param {number} [revision] - The revision built; 1 when not said
  */
-export function setScenarioName(name) {
+export function setScenarioName(name, revision = 1) {
   current_scenario_name = name;
+  current_scenario_revision = revision;
 }
 
 // The command bus (Prompt 107, step 2d): the engine, share dialog, welcome

@@ -45,6 +45,7 @@ export const SEARCH_OUT = 'library/search-index.json';
 export const DOC = 'LIBRARY.md';
 export { FORMAT, FORMAT_VERSION } from '../js/library/format.js';
 import { FORMAT, FORMAT_VERSION } from '../js/library/format.js';
+import { currentRevision, withRevision } from '../js/shareState.js';
 import {
   BAND_LENGTH,
   bandOfMinutes,
@@ -142,8 +143,12 @@ export const SCENARIO_SEED = 'library';
  * is fresh on one and stale on the other. These payloads are a scenario key
  * and a seed, where deflate saves a few characters at most.
  */
-export const rawWorldLink = payload =>
-  `1r${Buffer.from(JSON.stringify(payload)).toString('base64url')}`;
+export const rawWorldLink = payload => {
+  // A card is a setup: it means the scenario's current revision, so a corrected
+  // id's link is "3r" with `r`, and every other id's is "1r" as it always was.
+  const stamped = withRevision(payload, currentRevision(payload.s));
+  return `${stamped.r >= 2 ? 3 : 1}r${Buffer.from(JSON.stringify(stamped)).toString('base64url')}`;
+};
 
 const sorted = list => [...new Set(list)].sort();
 const both = (en, es) => ({ en, es: es ?? en });
