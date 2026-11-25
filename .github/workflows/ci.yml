@@ -123,8 +123,14 @@ on:
 # to completion and can finish out of order. That is handled where it matters -
 # in the deploy job, which refuses to publish a commit that is no longer the tip
 # of main - rather than by canceling runs whose results somebody may want.
+#
+# A draft pull request's own runs go in their own group (D-R4-CI-07). A push to
+# a draft starts a run that only fails the gate on purpose, and marking the
+# pull request ready starts the real run a moment later; in one group the later
+# of the two cancelled the other, so a push-then-ready sequence could leave only
+# the draft run standing and the pull request never tested.
 concurrency:
-  group: ci-${{ github.ref }}
+  group: ci-${{ github.ref }}-${{ github.event.pull_request.draft == true && 'draft' || 'ready' }}
   cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
 # Read-only by default. The deploy job widens this for itself alone, so no
