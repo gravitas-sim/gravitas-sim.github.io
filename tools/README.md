@@ -248,6 +248,7 @@ current, and the orchestrator checks it.
 | `route-harness.mjs` | Student-route harness | `npm run perf:routes` |
 | `route-overlay.mjs` | Publish named routes from the build, over the committed tree |  |
 | `route-walks.mjs` | The walk from a lesson link to its first accepted reading | `npm run perf:walks` |
+| `scenario-review.mjs` | The binary, three-body, flyby and slingshot scenarios, measured |  |
 | `scenario-stability.mjs` | Scenario stability probe | `npm run validate:scenarios` |
 | `scene-capture.mjs` | Capture a scene record at its exact simulated time | `npm run scene:capture` |
 | `scene-record.mjs` | The scene record: one sandbox view, pinned so that it can be photographed |  |
