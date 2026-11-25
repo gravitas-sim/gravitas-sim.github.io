@@ -321,6 +321,9 @@ test.describe('the panel', () => {
     expect(caveat).toMatch(/patched-conic/i);
     expect(caveat).toMatch(/Hill radius/i);
     expect(caveat).toMatch(/%/);
+    // Around a star the two momentum changes cannot balance (the planet's
+    // orbital turning dominates), so the ledger line is left empty there.
+    expect(await page.locator('#assistLedger').innerText()).toBe('');
   });
 
   test('hides itself outside its own scenarios, in both languages', async ({
