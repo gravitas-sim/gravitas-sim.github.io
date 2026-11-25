@@ -422,9 +422,9 @@ test.describe('the integrator setting', () => {
     // The transfer time is checked against the closed form to a per cent,
     // which symplectic Euler's first-order period error cannot support.
     'orbital-transfer-lab': 'Velocity Verlet',
-    // The lesson watches the Jacobi constant hold; first-order drift would
-    // make that a claim about the integrator.
-    'lagrange-point-lab': 'Velocity Verlet',
+    // The lesson watches the Jacobi constant hold; Verlet drifted it by 3e-4
+    // on the tracer's close pass, RK4 at the same step by 2e-8 (D-R4-463-06).
+    'lagrange-point-lab': 'RK4',
     // The ring scale model holds a resonance for twenty moon orbits, and the Roche pass
     // a clump's close pass: first-order phase error would heat the one and smear the other.
     'ring-gap': 'Velocity Verlet',
