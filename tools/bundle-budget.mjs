@@ -139,7 +139,7 @@ const BUDGETS = [
   {
     id: 'deferred',
     label: 'Deferred JavaScript (lazy chunks, gzipped)',
-    limit: 3279.8,
+    limit: 3283.1,
     reason:
       'Jumped from 1369 KB to 2105 KB when three.js and Chart.js stopped being ' +
       'CDN requests and became bundled chunks. That is the point of the change ' +
@@ -771,7 +771,9 @@ const BUDGETS = [
       '\n\nOne scenario revision authority (D-R4-498-02): raised from 3266.1 to 3267.0 KB, the measured overrun rounded up to 0.1 KB (3,345,341 bytes gzipped on a Node 22.23.4 build of the branch on v4 10088f53c, 3266.93 KB); set again from the CI figure before review. Under the standing approval of 2026-10-10 and the engine and production class exemption (maintainer decision, 2026-11-21).' +
       '\n\nOne scenario revision authority, after merging v4 f258bdf29 (D-R4-498-02): restacked on the 3274.5 KB v4 reached: CI measured 3,353,912 bytes gzipped (3275.305 KB) on the merged branch, so 3275.4 KB rounded up, a 0.9 KB grant (eh). Under the standing approval of 2026-10-10 and the engine and production class exemption (maintainer decision, 2026-11-21).' +
       '\n\nOne scenario revision authority, after merging v4 0bf376ee9 (D-R4-498-03): restacked on the 3278.4 KB v4 reached with the inspector readouts: a Node 22.23.4 build of the merged branch measured 3,357,890 bytes gzipped (3279.19 KB), so 3279.2 KB rounded up, and grant eh becomes 0.8 KB; set again from the CI figure before review. Under the standing approval of 2026-10-10 and the engine and production class exemption (maintainer decision, 2026-11-21).' +
-      '\n\nOne scenario revision authority, after merging v4 07f80351f (D-R4-498-04): restacked on the 3278.9 KB v4 reached with honest sizes: a Node 22.23.4 build of the merged branch measured 3,358,473 bytes gzipped (3279.76 KB), so 3279.8 KB rounded up, and grant eh becomes 0.9 KB; set again from the CI figure before review. Under the standing approval of 2026-10-10 and the engine and production class exemption (maintainer decision, 2026-11-21).',
+      '\n\nOne scenario revision authority, after merging v4 07f80351f (D-R4-498-04): restacked on the 3278.9 KB v4 reached with honest sizes: a Node 22.23.4 build of the merged branch measured 3,358,473 bytes gzipped (3279.76 KB), so 3279.8 KB rounded up, and grant eh becomes 0.9 KB; set again from the CI figure before review. Under the standing approval of 2026-10-10 and the engine and production class exemption (maintainer decision, 2026-11-21).' +
+      '\n\nThe nudge test, its strings in both languages (in their own catalogs, loaded with the panel) and the three-body readout that follows the tracer (register D-R4-350-05): 3,356,481 bytes gzipped on Node 22, raised by the measured overrun under the standing approval of 2026-10-10.' +
+      '\n\nThe nudge test, after merging v4 017a153af (D-R4-350-06): restacked on the 3279.8 KB v4 reached with the scenario revisions: a Node 22.23.4 build of the merged branch measured 3,361,720 bytes gzipped (3282.93 KB); CI run 45540056951 on the rebuilt instructor bundle measured 3,361,818 bytes (3283.03 KB), so 3283.1 KB rounded up, and grant ei becomes 3.3 KB. Under the standing approval of 2026-10-10 and the engine and production class exemption (maintainer decision, 2026-11-21).',
   },
 ];
 

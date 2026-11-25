@@ -598,3 +598,101 @@ test.describe('which way round the pair goes', () => {
     expect(check.forward.spin).toBe(-check.reversed.spin);
   });
 });
+
+test.describe('the nudge test', () => {
+  /**
+   * Place the tracer through the panel's own controls, then integrate with the
+   * application's engine and follow its distance from the point in the
+   * rotating frame, as the panel does.
+   */
+  const nudged = async (page, point, size, periods) => {
+    await page.selectOption('#cr3bpNudgePoint', point);
+    await page.fill('#cr3bpNudgeSize', String(size));
+    await page.click('#cr3bpNudgePlace');
+    return page.evaluate(
+      async ({ point, periods }) => {
+        const physics = await import('/js/physics.js');
+        const ui = await import('/js/ui.js');
+        const panel = await import('/js/cr3bpPanel.js');
+        const cr = await import('/js/cr3bp.js');
+        ui.state.paused = true;
+        const placed = panel.nudgeReport();
+        const system = panel.readSystem();
+        const at = cr.lagrangePoints(system.mu).find(p => p.name === point);
+        const n = Math.sqrt(
+          (ui.SETTINGS.gravitational_constant *
+            (system.primary.mass + system.secondary.mass)) /
+            system.separation ** 3
+        );
+        const distance = () => {
+          const s = panel.readSystem();
+          const st = s?.verdict.ok ? panel.tracerState(s) : null;
+          return st ? Math.hypot(st.x - at.x, st.y - at.y) : null;
+        };
+        const start = distance();
+        const dt = 0.05;
+        const perPeriod = (2 * Math.PI) / n / dt;
+        const marks = [];
+        let furthest = 0;
+        for (let i = 1; i <= periods * perPeriod; i++) {
+          physics.updatePhysics(dt);
+          if (i % 20) continue;
+          const d = distance();
+          if (d === null) break;
+          furthest = Math.max(furthest, d);
+          if (i % Math.round(perPeriod / 10) < 20)
+            marks.push([+(i / perPeriod).toFixed(2), +furthest.toFixed(4)]);
+        }
+        ui.state.paused = false;
+        return { placed, start, furthest, marks };
+      },
+      { point, periods }
+    );
+  };
+
+  test('a tracer nudged from L4 stays near it and one nudged from L1 leaves', async ({
+    page,
+    app,
+  }, testInfo) => {
+    testInfo.setTimeout(240_000);
+    await openLab(page, app);
+    await page.locator('#cr3bpNudgeSection > summary').click();
+
+    const l4 = await nudged(page, 'L4', 0.002, 6);
+    console.log('L4 0.002', JSON.stringify(l4.marks));
+    expect(l4.placed?.point).toBe('L4');
+    expect(l4.start).toBeCloseTo(0.002, 3);
+    const at2 = l4.marks.find(([t]) => t >= 2)[1];
+    // Bounded: out to some tens of times the nudge within two binary periods,
+    // and no further after that.
+    expect(l4.furthest).toBeLessThan(0.1);
+    expect(l4.furthest).toBeLessThan(at2 * 1.25);
+
+    const l1 = await nudged(page, 'L1', 0.001, 0.5);
+    console.log('L1 0.001', JSON.stringify(l1.marks));
+    expect(l1.start).toBeCloseTo(0.001, 3);
+    expect(l1.furthest).toBeGreaterThan(0.05);
+
+    // The panel's own rows follow the run it started.
+    await expect(page.locator('#cr3bpNudgeTable')).toContainText('L1');
+  });
+
+  test('in a lesson the panel leaves stability to the student', async ({
+    page,
+    app,
+  }) => {
+    await openLab(page, app);
+    await expect(page.locator('#cr3bpReadout')).toContainText('(stable)');
+    // Any open lesson panel counts: the mark, the Routh sentence and the stable
+    // claim are left out, and come back when it closes.
+    await page.evaluate(async () => {
+      const el = document.createElement('div');
+      el.id = 'investigationPanel';
+      document.body.appendChild(el);
+      (await import('/js/cr3bpPanel.js')).refreshCr3bp();
+    });
+    await expect(page.locator('#cr3bpReadout')).not.toContainText('(stable)');
+    await expect(page.locator('#cr3bpReadout')).not.toContainText('Routh');
+    await expect(page.locator('#cr3bpClaimStable')).toBeHidden();
+  });
+});
