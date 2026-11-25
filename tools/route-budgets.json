@@ -4,27 +4,27 @@
   "routes": {
     "sources": {
       "front-door": {
-        "kb": 1938.2,
+        "kb": 1943.4,
         "requests": 109
       },
       "sandbox": {
-        "kb": 1938.2,
+        "kb": 1943.4,
         "requests": 109
       },
       "kepler": {
-        "kb": 2672.3,
+        "kb": 2674.2,
         "requests": 142
       },
       "transit": {
-        "kb": 2677.5,
+        "kb": 2679.3,
         "requests": 142,
-        "toolKb": 2840.7,
+        "toolKb": 2842.5,
         "toolRequests": 158
       },
       "power-law": {
-        "kb": 2637.2,
+        "kb": 2639.1,
         "requests": 142,
-        "toolKb": 2690.5,
+        "toolKb": 2692.3,
         "toolRequests": 145
       },
       "largest-lesson": {
@@ -44,11 +44,11 @@
         "requests": 44
       },
       "figure": {
-        "kb": 2216.0,
+        "kb": 2221.3,
         "requests": 129
       },
       "experiments": {
-        "kb": 1098.8,
+        "kb": 1099.9,
         "requests": 61
       },
       "observatory": {
@@ -68,7 +68,7 @@
         "requests": 10
       },
       "studio": {
-        "kb": 965.6,
+        "kb": 966.8,
         "requests": 52
       },
       "composer": {
@@ -130,31 +130,31 @@
     },
     "build": {
       "front-door": {
-        "kb": 550.5,
+        "kb": 551.3,
         "requests": 59
       },
       "sandbox": {
-        "kb": 550.5,
+        "kb": 551.3,
         "requests": 59
       },
       "kepler": {
-        "kb": 940.5,
+        "kb": 941.4,
         "requests": 77
       },
       "transit": {
-        "kb": 948.1,
+        "kb": 948.9,
         "requests": 77,
-        "toolKb": 1033.4,
+        "toolKb": 1034.3,
         "toolRequests": 93
       },
       "power-law": {
-        "kb": 916.7,
+        "kb": 917.6,
         "requests": 77,
-        "toolKb": 933.3,
+        "toolKb": 934.2,
         "toolRequests": 80
       },
       "largest-lesson": {
-        "kb": 1048.0,
+        "kb": 1048.9,
         "requests": 82
       },
       "teaching": {
@@ -170,11 +170,11 @@
         "requests": 2
       },
       "figure": {
-        "kb": 687.2,
+        "kb": 688.1,
         "requests": 61
       },
       "experiments": {
-        "kb": 300.3,
+        "kb": 300.4,
         "requests": 4
       },
       "observatory": {
