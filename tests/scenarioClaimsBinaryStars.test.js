@@ -53,11 +53,11 @@ describe('Binary Stars: the corrected world', () => {
     expect(SCENARIO_REVISIONS[ID].earlier).toEqual({ 1: 'retained' });
   });
 
-  test('the row: only the stars pull, at the zoom that frames the giants', () => {
+  test('the row: only the stars pull, at the zoom that frames the planets', () => {
     const row = SCENARIO_PRESETS[ID];
     expect(row.star_only_gravity).toBe(true);
     expect(row.mutual_gravity).toBe(false);
-    expect(row.preset_zoom).toBe(0.75);
+    expect(row.preset_zoom).toBe(0.55);
   });
 
   test.each(SEEDS)(

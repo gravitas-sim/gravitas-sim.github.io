@@ -859,7 +859,7 @@
     "momentumResidual": "cancels into rounding error",
     "scenarioName": "binary-star-system",
     "presetSentinel": "None",
-    "zoom": 0.75,
+    "zoom": 0.55,
     "pan": {
       "x": 0,
       "y": 0

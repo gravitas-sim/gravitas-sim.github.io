@@ -223,4 +223,4 @@ that adds the constant it names.
 
 | Id | Revision | Earlier | What changed | Register |
 |---|---|---|---|---|
-| `binary-star-system` | 2 | 1 retained (`rows[1]`, `geometry[1]`) | Planets, giants and asteroids start past Holman and Wiegert's critical distance (2.43 separations); only the stars pull; zoom 1.5 to 0.75 | D-R4-463-04 |
+| `binary-star-system` | 2 | 1 retained (`rows[1]`, `geometry[1]`) | Planets, giants and asteroids start past Holman and Wiegert's critical distance (2.43 separations); only the stars pull; zoom 1.5 to 0.55 | D-R4-463-04 |
