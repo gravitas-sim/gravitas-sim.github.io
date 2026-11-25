@@ -852,9 +852,8 @@ export const SCENARIO_PRESETS = /* @__PURE__ */ Object.freeze({
     sim_speed: 0.8,
     enable_star_merging: true,
     show_trails: true,
-    // Trail length is a frame count, so 30 held about half a second of
-    // motion: a stub the width of the star itself. This is roughly a
-    // quarter of the binary's period, which is enough to read as an orbit.
+    // Trail length is a frame count: 30 held half a second, a stub the width
+    // of the star; 240 is about a quarter period, enough to read as an orbit.
     trail_length: 240,
     preset_zoom: 0.55,
     // A 120-unit binary needs a bounded step. The dramatic version of this -
