@@ -1,0 +1,3281 @@
+{
+  "format": "gravitas.scenario-record/1",
+  "claims": "tests/fixtures/scenario-review/claims.json",
+  "note": "Measured by tools/scenario-review.mjs against the claims and tolerances committed in claims.json; no bound here was chosen after a run. verdictSuggested is mechanical (KEEP when every row of every claim passes; otherwise the failing and NOT RUN claims are listed and a person decides REFRAME or CORRECT). Scene checks in a browser are NOT RUN here.",
+  "members": {
+    "binary-pair": {
+      "seeds": [
+        1
+      ],
+      "rates": [
+        30,
+        60,
+        120
+      ],
+      "stepsPerPeriod": {
+        "watched": "the two stars (their mutual orbit)",
+        "period": 794.767,
+        "step": 0.111111,
+        "stepsPerPeriod": 7152.9,
+        "minimum": 200,
+        "finding": false
+      },
+      "rows": [
+        {
+          "rate": 30,
+          "seed": 1,
+          "claim": "masses",
+          "value": [
+            2,
+            2
+          ],
+          "bound": {
+            "value": 2,
+            "unit": "Msun",
+            "tolerance": 0.02
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "both stars"
+        },
+        {
+          "rate": 30,
+          "seed": 1,
+          "claim": "separation",
+          "value": 4,
+          "bound": {
+            "value": 4,
+            "unit": "AU",
+            "tolerance": 0.02
+          },
+          "pass": true,
+          "status": "pass",
+          "note": ""
+        },
+        {
+          "rate": 30,
+          "seed": 1,
+          "claim": "stars",
+          "value": 2,
+          "bound": {
+            "value": 2,
+            "what": "stars"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": ""
+        },
+        {
+          "rate": 30,
+          "seed": 1,
+          "claim": "period",
+          "value": 4,
+          "bound": {
+            "value": 4,
+            "unit": "yr",
+            "tolerance": 0.02,
+            "measure": "time between successive returns of the separation vector's angle, averaged over the run"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "10 returns of the separation angle in 7960 t"
+        },
+        {
+          "rate": 30,
+          "seed": 1,
+          "claim": "balance-point",
+          "value": 0,
+          "bound": {
+            "bound": 0.01,
+            "measure": "the mass-weighted centre of the two stars drifts by less than 1% of their separation over the run"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "largest drift of the stars' mass-weighted centre, over the initial separation"
+        },
+        {
+          "rate": 30,
+          "seed": 1,
+          "claim": "stable",
+          "value": 0,
+          "bound": {
+            "measure": "no body lost, merged or ejected"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "bodies lost, merged or ever unbound (count of failures)"
+        },
+        {
+          "rate": 60,
+          "seed": 1,
+          "claim": "masses",
+          "value": [
+            2,
+            2
+          ],
+          "bound": {
+            "value": 2,
+            "unit": "Msun",
+            "tolerance": 0.02
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "both stars"
+        },
+        {
+          "rate": 60,
+          "seed": 1,
+          "claim": "separation",
+          "value": 4,
+          "bound": {
+            "value": 4,
+            "unit": "AU",
+            "tolerance": 0.02
+          },
+          "pass": true,
+          "status": "pass",
+          "note": ""
+        },
+        {
+          "rate": 60,
+          "seed": 1,
+          "claim": "stars",
+          "value": 2,
+          "bound": {
+            "value": 2,
+            "what": "stars"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": ""
+        },
+        {
+          "rate": 60,
+          "seed": 1,
+          "claim": "period",
+          "value": 4,
+          "bound": {
+            "value": 4,
+            "unit": "yr",
+            "tolerance": 0.02,
+            "measure": "time between successive returns of the separation vector's angle, averaged over the run"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "10 returns of the separation angle in 7960 t"
+        },
+        {
+          "rate": 60,
+          "seed": 1,
+          "claim": "balance-point",
+          "value": 0,
+          "bound": {
+            "bound": 0.01,
+            "measure": "the mass-weighted centre of the two stars drifts by less than 1% of their separation over the run"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "largest drift of the stars' mass-weighted centre, over the initial separation"
+        },
+        {
+          "rate": 60,
+          "seed": 1,
+          "claim": "stable",
+          "value": 0,
+          "bound": {
+            "measure": "no body lost, merged or ejected"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "bodies lost, merged or ever unbound (count of failures)"
+        },
+        {
+          "rate": 120,
+          "seed": 1,
+          "claim": "masses",
+          "value": [
+            2,
+            2
+          ],
+          "bound": {
+            "value": 2,
+            "unit": "Msun",
+            "tolerance": 0.02
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "both stars"
+        },
+        {
+          "rate": 120,
+          "seed": 1,
+          "claim": "separation",
+          "value": 4,
+          "bound": {
+            "value": 4,
+            "unit": "AU",
+            "tolerance": 0.02
+          },
+          "pass": true,
+          "status": "pass",
+          "note": ""
+        },
+        {
+          "rate": 120,
+          "seed": 1,
+          "claim": "stars",
+          "value": 2,
+          "bound": {
+            "value": 2,
+            "what": "stars"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": ""
+        },
+        {
+          "rate": 120,
+          "seed": 1,
+          "claim": "period",
+          "value": 4,
+          "bound": {
+            "value": 4,
+            "unit": "yr",
+            "tolerance": 0.02,
+            "measure": "time between successive returns of the separation vector's angle, averaged over the run"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "10 returns of the separation angle in 7960 t"
+        },
+        {
+          "rate": 120,
+          "seed": 1,
+          "claim": "balance-point",
+          "value": 0,
+          "bound": {
+            "bound": 0.01,
+            "measure": "the mass-weighted centre of the two stars drifts by less than 1% of their separation over the run"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "largest drift of the stars' mass-weighted centre, over the initial separation"
+        },
+        {
+          "rate": 120,
+          "seed": 1,
+          "claim": "stable",
+          "value": 0,
+          "bound": {
+            "measure": "no body lost, merged or ejected"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "bodies lost, merged or ever unbound (count of failures)"
+        }
+      ],
+      "verdictSuggested": {
+        "verdict": "KEEP",
+        "failing": [],
+        "notRun": [],
+        "leans": {}
+      }
+    },
+    "binary-star-system": {
+      "seeds": [
+        "audit",
+        "audit-2"
+      ],
+      "rates": [
+        30,
+        60,
+        120
+      ],
+      "stepsPerPeriod": {
+        "watched": "the stars' mutual orbit and the planets and giants about the pair (shortest period)",
+        "period": 168.596,
+        "step": 0.0666667,
+        "stepsPerPeriod": 2528.93,
+        "minimum": 200,
+        "finding": false
+      },
+      "rows": [
+        {
+          "rate": 30,
+          "seed": "audit",
+          "claim": "planets",
+          "value": 5,
+          "bound": {
+            "value": 5,
+            "what": "planets"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": ""
+        },
+        {
+          "rate": 30,
+          "seed": "audit",
+          "claim": "stars",
+          "value": 2,
+          "bound": {
+            "value": 2,
+            "what": "stars"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": ""
+        },
+        {
+          "rate": 30,
+          "seed": "audit",
+          "claim": "built-population",
+          "value": "2 gas giants, 20 asteroids",
+          "bound": {
+            "measure": "count of giants and asteroids at t = 0, recorded for the card"
+          },
+          "pass": null,
+          "status": "recorded",
+          "note": "also 0 comets, 0 black holes at t = 0; recorded for the card"
+        },
+        {
+          "rate": 30,
+          "seed": "audit",
+          "claim": "planets-kept",
+          "value": 5,
+          "bound": {
+            "radiusAU": 10,
+            "measure": "each planet and giant that stays within 10 AU of the barycentre over the whole run is kept; the claim holds when all five planets are kept"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "of 5 planets (2 of 2 giants) stayed within 10 AU of the stars' barycentre and present for 3400 t; the 5 is the card's count"
+        },
+        {
+          "rate": 30,
+          "seed": "audit",
+          "claim": "alpha-centauri",
+          "value": 1.2,
+          "bound": {
+            "measure": "the built separation in AU beside Alpha Centauri A-B's mean separation (about 23 AU); the claim holds when the built separation is within a factor of two"
+          },
+          "pass": false,
+          "status": "fail",
+          "note": "built separation in AU against 23 AU, within a factor of two (11.5 to 46 AU)"
+        },
+        {
+          "rate": 60,
+          "seed": "audit",
+          "claim": "planets",
+          "value": 5,
+          "bound": {
+            "value": 5,
+            "what": "planets"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": ""
+        },
+        {
+          "rate": 60,
+          "seed": "audit",
+          "claim": "stars",
+          "value": 2,
+          "bound": {
+            "value": 2,
+            "what": "stars"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": ""
+        },
+        {
+          "rate": 60,
+          "seed": "audit",
+          "claim": "built-population",
+          "value": "2 gas giants, 20 asteroids",
+          "bound": {
+            "measure": "count of giants and asteroids at t = 0, recorded for the card"
+          },
+          "pass": null,
+          "status": "recorded",
+          "note": "also 0 comets, 0 black holes at t = 0; recorded for the card"
+        },
+        {
+          "rate": 60,
+          "seed": "audit",
+          "claim": "planets-kept",
+          "value": 5,
+          "bound": {
+            "radiusAU": 10,
+            "measure": "each planet and giant that stays within 10 AU of the barycentre over the whole run is kept; the claim holds when all five planets are kept"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "of 5 planets (2 of 2 giants) stayed within 10 AU of the stars' barycentre and present for 3400 t; the 5 is the card's count"
+        },
+        {
+          "rate": 60,
+          "seed": "audit",
+          "claim": "alpha-centauri",
+          "value": 1.2,
+          "bound": {
+            "measure": "the built separation in AU beside Alpha Centauri A-B's mean separation (about 23 AU); the claim holds when the built separation is within a factor of two"
+          },
+          "pass": false,
+          "status": "fail",
+          "note": "built separation in AU against 23 AU, within a factor of two (11.5 to 46 AU)"
+        },
+        {
+          "rate": 120,
+          "seed": "audit",
+          "claim": "planets",
+          "value": 5,
+          "bound": {
+            "value": 5,
+            "what": "planets"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": ""
+        },
+        {
+          "rate": 120,
+          "seed": "audit",
+          "claim": "stars",
+          "value": 2,
+          "bound": {
+            "value": 2,
+            "what": "stars"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": ""
+        },
+        {
+          "rate": 120,
+          "seed": "audit",
+          "claim": "built-population",
+          "value": "2 gas giants, 20 asteroids",
+          "bound": {
+            "measure": "count of giants and asteroids at t = 0, recorded for the card"
+          },
+          "pass": null,
+          "status": "recorded",
+          "note": "also 0 comets, 0 black holes at t = 0; recorded for the card"
+        },
+        {
+          "rate": 120,
+          "seed": "audit",
+          "claim": "planets-kept",
+          "value": 5,
+          "bound": {
+            "radiusAU": 10,
+            "measure": "each planet and giant that stays within 10 AU of the barycentre over the whole run is kept; the claim holds when all five planets are kept"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "of 5 planets (0 of 2 giants) stayed within 10 AU of the stars' barycentre and present for 3400 t; the 5 is the card's count"
+        },
+        {
+          "rate": 120,
+          "seed": "audit",
+          "claim": "alpha-centauri",
+          "value": 1.2,
+          "bound": {
+            "measure": "the built separation in AU beside Alpha Centauri A-B's mean separation (about 23 AU); the claim holds when the built separation is within a factor of two"
+          },
+          "pass": false,
+          "status": "fail",
+          "note": "built separation in AU against 23 AU, within a factor of two (11.5 to 46 AU)"
+        },
+        {
+          "rate": 30,
+          "seed": "audit-2",
+          "claim": "planets",
+          "value": 5,
+          "bound": {
+            "value": 5,
+            "what": "planets"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": ""
+        },
+        {
+          "rate": 30,
+          "seed": "audit-2",
+          "claim": "stars",
+          "value": 2,
+          "bound": {
+            "value": 2,
+            "what": "stars"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": ""
+        },
+        {
+          "rate": 30,
+          "seed": "audit-2",
+          "claim": "built-population",
+          "value": "2 gas giants, 20 asteroids",
+          "bound": {
+            "measure": "count of giants and asteroids at t = 0, recorded for the card"
+          },
+          "pass": null,
+          "status": "recorded",
+          "note": "also 0 comets, 0 black holes at t = 0; recorded for the card"
+        },
+        {
+          "rate": 30,
+          "seed": "audit-2",
+          "claim": "planets-kept",
+          "value": 5,
+          "bound": {
+            "radiusAU": 10,
+            "measure": "each planet and giant that stays within 10 AU of the barycentre over the whole run is kept; the claim holds when all five planets are kept"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "of 5 planets (2 of 2 giants) stayed within 10 AU of the stars' barycentre and present for 3400 t; the 5 is the card's count"
+        },
+        {
+          "rate": 30,
+          "seed": "audit-2",
+          "claim": "alpha-centauri",
+          "value": 1.2,
+          "bound": {
+            "measure": "the built separation in AU beside Alpha Centauri A-B's mean separation (about 23 AU); the claim holds when the built separation is within a factor of two"
+          },
+          "pass": false,
+          "status": "fail",
+          "note": "built separation in AU against 23 AU, within a factor of two (11.5 to 46 AU)"
+        },
+        {
+          "rate": 60,
+          "seed": "audit-2",
+          "claim": "planets",
+          "value": 5,
+          "bound": {
+            "value": 5,
+            "what": "planets"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": ""
+        },
+        {
+          "rate": 60,
+          "seed": "audit-2",
+          "claim": "stars",
+          "value": 2,
+          "bound": {
+            "value": 2,
+            "what": "stars"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": ""
+        },
+        {
+          "rate": 60,
+          "seed": "audit-2",
+          "claim": "built-population",
+          "value": "2 gas giants, 20 asteroids",
+          "bound": {
+            "measure": "count of giants and asteroids at t = 0, recorded for the card"
+          },
+          "pass": null,
+          "status": "recorded",
+          "note": "also 0 comets, 0 black holes at t = 0; recorded for the card"
+        },
+        {
+          "rate": 60,
+          "seed": "audit-2",
+          "claim": "planets-kept",
+          "value": 4,
+          "bound": {
+            "radiusAU": 10,
+            "measure": "each planet and giant that stays within 10 AU of the barycentre over the whole run is kept; the claim holds when all five planets are kept"
+          },
+          "pass": false,
+          "status": "fail",
+          "note": "of 5 planets (2 of 2 giants) stayed within 10 AU of the stars' barycentre and present for 3400 t; the 5 is the card's count"
+        },
+        {
+          "rate": 60,
+          "seed": "audit-2",
+          "claim": "alpha-centauri",
+          "value": 1.2,
+          "bound": {
+            "measure": "the built separation in AU beside Alpha Centauri A-B's mean separation (about 23 AU); the claim holds when the built separation is within a factor of two"
+          },
+          "pass": false,
+          "status": "fail",
+          "note": "built separation in AU against 23 AU, within a factor of two (11.5 to 46 AU)"
+        },
+        {
+          "rate": 120,
+          "seed": "audit-2",
+          "claim": "planets",
+          "value": 5,
+          "bound": {
+            "value": 5,
+            "what": "planets"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": ""
+        },
+        {
+          "rate": 120,
+          "seed": "audit-2",
+          "claim": "stars",
+          "value": 2,
+          "bound": {
+            "value": 2,
+            "what": "stars"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": ""
+        },
+        {
+          "rate": 120,
+          "seed": "audit-2",
+          "claim": "built-population",
+          "value": "2 gas giants, 20 asteroids",
+          "bound": {
+            "measure": "count of giants and asteroids at t = 0, recorded for the card"
+          },
+          "pass": null,
+          "status": "recorded",
+          "note": "also 0 comets, 0 black holes at t = 0; recorded for the card"
+        },
+        {
+          "rate": 120,
+          "seed": "audit-2",
+          "claim": "planets-kept",
+          "value": 4,
+          "bound": {
+            "radiusAU": 10,
+            "measure": "each planet and giant that stays within 10 AU of the barycentre over the whole run is kept; the claim holds when all five planets are kept"
+          },
+          "pass": false,
+          "status": "fail",
+          "note": "of 5 planets (2 of 2 giants) stayed within 10 AU of the stars' barycentre and present for 3400 t; the 5 is the card's count"
+        },
+        {
+          "rate": 120,
+          "seed": "audit-2",
+          "claim": "alpha-centauri",
+          "value": 1.2,
+          "bound": {
+            "measure": "the built separation in AU beside Alpha Centauri A-B's mean separation (about 23 AU); the claim holds when the built separation is within a factor of two"
+          },
+          "pass": false,
+          "status": "fail",
+          "note": "built separation in AU against 23 AU, within a factor of two (11.5 to 46 AU)"
+        }
+      ],
+      "verdictSuggested": {
+        "verdict": "REFRAME or CORRECT",
+        "failing": [
+          "planets-kept",
+          "alpha-centauri"
+        ],
+        "notRun": [],
+        "leans": {
+          "planets-kept": "CORRECT",
+          "alpha-centauri": "REFRAME"
+        }
+      }
+    },
+    "binary-planet-lab": {
+      "seeds": [
+        1
+      ],
+      "rates": [
+        30,
+        60,
+        120
+      ],
+      "stepsPerPeriod": {
+        "watched": "the planet about the heavier star",
+        "period": 365.02,
+        "step": 0.992063,
+        "stepsPerPeriod": 367.94,
+        "minimum": 200,
+        "finding": false
+      },
+      "rows": [
+        {
+          "rate": 30,
+          "seed": 1,
+          "claim": "masses",
+          "value": [
+            1,
+            0.5
+          ],
+          "bound": {
+            "values": [
+              1,
+              0.5
+            ],
+            "unit": "Msun",
+            "tolerance": 0.02
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "heavier first"
+        },
+        {
+          "rate": 30,
+          "seed": 1,
+          "claim": "separation",
+          "value": 10,
+          "bound": {
+            "value": 10,
+            "unit": "AU",
+            "tolerance": 0.02,
+            "measure": "semi-major axis of the binary"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "semi-major axis of the stars' relative orbit"
+        },
+        {
+          "rate": 30,
+          "seed": 1,
+          "claim": "eccentricity",
+          "value": 0.4,
+          "bound": {
+            "value": 0.4,
+            "tolerance": 0.02
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "from the stars' relative state"
+        },
+        {
+          "rate": 30,
+          "seed": 1,
+          "claim": "planet-mass",
+          "value": 1,
+          "bound": {
+            "value": 1,
+            "unit": "Mearth",
+            "tolerance": 0.02
+          },
+          "pass": true,
+          "status": "pass",
+          "note": ""
+        },
+        {
+          "rate": 30,
+          "seed": 1,
+          "claim": "planet-distance",
+          "value": 1.5,
+          "bound": {
+            "value": 1.5,
+            "unit": "AU",
+            "tolerance": 0.02
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "distance from the heavier star at t = 0; its osculating semi-major axis is 1.5 AU"
+        },
+        {
+          "rate": 30,
+          "seed": 1,
+          "claim": "stable",
+          "value": 0,
+          "bound": {
+            "measure": "at the row's own start no body is lost, merged or ejected over 20 periods"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "planet lost false, a star lost false, planet ended unbound from the pair false; farthest 1.72213 AU from the heavier star over 102604 t"
+        },
+        {
+          "rate": 30,
+          "seed": 1,
+          "claim": "boundary",
+          "value": 0.25,
+          "bound": {
+            "step": 0.05,
+            "limitSeparations": 0.6,
+            "measure": "starting at the row's planet distance and moving outward in steps of 0.05 separations, the first start at which the planet ends unbound from the heavier star or leaves 0.62 separations of it within 20 periods exists below 0.6 separations; the distance is recorded, none assumed"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "starts (separations): 0.15:stays, 0.2:stays, 0.25:leaves; \"leaves\" is past 0.62 separations of the heavier star at any time, or unbound from it at the end; a lost planet is not counted"
+        },
+        {
+          "rate": 60,
+          "seed": 1,
+          "claim": "masses",
+          "value": [
+            1,
+            0.5
+          ],
+          "bound": {
+            "values": [
+              1,
+              0.5
+            ],
+            "unit": "Msun",
+            "tolerance": 0.02
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "heavier first"
+        },
+        {
+          "rate": 60,
+          "seed": 1,
+          "claim": "separation",
+          "value": 10,
+          "bound": {
+            "value": 10,
+            "unit": "AU",
+            "tolerance": 0.02,
+            "measure": "semi-major axis of the binary"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "semi-major axis of the stars' relative orbit"
+        },
+        {
+          "rate": 60,
+          "seed": 1,
+          "claim": "eccentricity",
+          "value": 0.4,
+          "bound": {
+            "value": 0.4,
+            "tolerance": 0.02
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "from the stars' relative state"
+        },
+        {
+          "rate": 60,
+          "seed": 1,
+          "claim": "planet-mass",
+          "value": 1,
+          "bound": {
+            "value": 1,
+            "unit": "Mearth",
+            "tolerance": 0.02
+          },
+          "pass": true,
+          "status": "pass",
+          "note": ""
+        },
+        {
+          "rate": 60,
+          "seed": 1,
+          "claim": "planet-distance",
+          "value": 1.5,
+          "bound": {
+            "value": 1.5,
+            "unit": "AU",
+            "tolerance": 0.02
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "distance from the heavier star at t = 0; its osculating semi-major axis is 1.5 AU"
+        },
+        {
+          "rate": 60,
+          "seed": 1,
+          "claim": "stable",
+          "value": 0,
+          "bound": {
+            "measure": "at the row's own start no body is lost, merged or ejected over 20 periods"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "planet lost false, a star lost false, planet ended unbound from the pair false; farthest 1.70081 AU from the heavier star over 102604 t"
+        },
+        {
+          "rate": 60,
+          "seed": 1,
+          "claim": "boundary",
+          "value": 0.3,
+          "bound": {
+            "step": 0.05,
+            "limitSeparations": 0.6,
+            "measure": "starting at the row's planet distance and moving outward in steps of 0.05 separations, the first start at which the planet ends unbound from the heavier star or leaves 0.62 separations of it within 20 periods exists below 0.6 separations; the distance is recorded, none assumed"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "starts (separations): 0.15:stays, 0.2:stays, 0.25:lost, 0.3:leaves; \"leaves\" is past 0.62 separations of the heavier star at any time, or unbound from it at the end; a lost planet is not counted"
+        },
+        {
+          "rate": 120,
+          "seed": 1,
+          "claim": "masses",
+          "value": [
+            1,
+            0.5
+          ],
+          "bound": {
+            "values": [
+              1,
+              0.5
+            ],
+            "unit": "Msun",
+            "tolerance": 0.02
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "heavier first"
+        },
+        {
+          "rate": 120,
+          "seed": 1,
+          "claim": "separation",
+          "value": 10,
+          "bound": {
+            "value": 10,
+            "unit": "AU",
+            "tolerance": 0.02,
+            "measure": "semi-major axis of the binary"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "semi-major axis of the stars' relative orbit"
+        },
+        {
+          "rate": 120,
+          "seed": 1,
+          "claim": "eccentricity",
+          "value": 0.4,
+          "bound": {
+            "value": 0.4,
+            "tolerance": 0.02
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "from the stars' relative state"
+        },
+        {
+          "rate": 120,
+          "seed": 1,
+          "claim": "planet-mass",
+          "value": 1,
+          "bound": {
+            "value": 1,
+            "unit": "Mearth",
+            "tolerance": 0.02
+          },
+          "pass": true,
+          "status": "pass",
+          "note": ""
+        },
+        {
+          "rate": 120,
+          "seed": 1,
+          "claim": "planet-distance",
+          "value": 1.5,
+          "bound": {
+            "value": 1.5,
+            "unit": "AU",
+            "tolerance": 0.02
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "distance from the heavier star at t = 0; its osculating semi-major axis is 1.5 AU"
+        },
+        {
+          "rate": 120,
+          "seed": 1,
+          "claim": "stable",
+          "value": 0,
+          "bound": {
+            "measure": "at the row's own start no body is lost, merged or ejected over 20 periods"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "planet lost false, a star lost false, planet ended unbound from the pair false; farthest 1.70059 AU from the heavier star over 102604 t"
+        },
+        {
+          "rate": 120,
+          "seed": 1,
+          "claim": "boundary",
+          "value": 0.3,
+          "bound": {
+            "step": 0.05,
+            "limitSeparations": 0.6,
+            "measure": "starting at the row's planet distance and moving outward in steps of 0.05 separations, the first start at which the planet ends unbound from the heavier star or leaves 0.62 separations of it within 20 periods exists below 0.6 separations; the distance is recorded, none assumed"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "starts (separations): 0.15:stays, 0.2:stays, 0.25:lost, 0.3:leaves; \"leaves\" is past 0.62 separations of the heavier star at any time, or unbound from it at the end; a lost planet is not counted"
+        }
+      ],
+      "verdictSuggested": {
+        "verdict": "KEEP",
+        "failing": [],
+        "notRun": [],
+        "leans": {}
+      }
+    },
+    "circumbinary-planet-lab": {
+      "seeds": [
+        1
+      ],
+      "rates": [
+        30,
+        60,
+        120
+      ],
+      "stepsPerPeriod": {
+        "watched": "the binary's own orbit (the planet is far slower)",
+        "period": 5130.2,
+        "step": 1.98413,
+        "stepsPerPeriod": 2585.62,
+        "minimum": 200,
+        "finding": false
+      },
+      "rows": [
+        {
+          "rate": 30,
+          "seed": 1,
+          "claim": "planet-distance",
+          "value": 40,
+          "bound": {
+            "value": 40,
+            "unit": "AU",
+            "tolerance": 0.02
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "distance from the stars' barycentre at t = 0"
+        },
+        {
+          "rate": 30,
+          "seed": 1,
+          "claim": "stable",
+          "value": "37.6 to 40.37 AU",
+          "bound": {
+            "measure": "at 40 AU no body is lost, merged or ejected over 50 binary periods, and the planet's distance from the barycentre stays between 30 and 50 AU"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "over 50 binary periods (256510 t); planet lost false, a star lost false, planet ejected false; must stay between 30 and 50 AU of the barycentre"
+        },
+        {
+          "rate": 30,
+          "seed": 1,
+          "claim": "walks-out",
+          "value": "1.5: leaves at 2.294 T, distance ratio 1.05; 2: leaves at 3.42 T, distance ratio 2.72; 2.5: leaves at 5.251 T, distance ratio 2.91; 3: leaves at 31.5 T, distance ratio 1.86",
+          "bound": {
+            "grid": [
+              1.5,
+              2,
+              2.5,
+              3
+            ],
+            "measure": "on the grid of starts 1.5, 2.0, 2.5 and 3.0 separations, at least one start leaves (ends unbound from the barycentre or beyond 10 separations) within 50 binary periods, and its distance from the barycentre rises before it leaves"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "leaves: beyond 10 separations at any time, or unbound from the barycentre at the end; rises: mean distance in the window before the leave (a tenth of the run) above the mean in the first window of the run"
+        },
+        {
+          "rate": 60,
+          "seed": 1,
+          "claim": "planet-distance",
+          "value": 40,
+          "bound": {
+            "value": 40,
+            "unit": "AU",
+            "tolerance": 0.02
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "distance from the stars' barycentre at t = 0"
+        },
+        {
+          "rate": 60,
+          "seed": 1,
+          "claim": "stable",
+          "value": "37.6 to 40.37 AU",
+          "bound": {
+            "measure": "at 40 AU no body is lost, merged or ejected over 50 binary periods, and the planet's distance from the barycentre stays between 30 and 50 AU"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "over 50 binary periods (256510 t); planet lost false, a star lost false, planet ejected false; must stay between 30 and 50 AU of the barycentre"
+        },
+        {
+          "rate": 60,
+          "seed": 1,
+          "claim": "walks-out",
+          "value": "1.5: leaves at 2.226 T, distance ratio 0.977; 2: leaves at 3.427 T, distance ratio 2.73; 2.5: leaves at 5.253 T, distance ratio 2.91; 3: leaves at 31.95 T, distance ratio 2.04",
+          "bound": {
+            "grid": [
+              1.5,
+              2,
+              2.5,
+              3
+            ],
+            "measure": "on the grid of starts 1.5, 2.0, 2.5 and 3.0 separations, at least one start leaves (ends unbound from the barycentre or beyond 10 separations) within 50 binary periods, and its distance from the barycentre rises before it leaves"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "leaves: beyond 10 separations at any time, or unbound from the barycentre at the end; rises: mean distance in the window before the leave (a tenth of the run) above the mean in the first window of the run"
+        },
+        {
+          "rate": 120,
+          "seed": 1,
+          "claim": "planet-distance",
+          "value": 40,
+          "bound": {
+            "value": 40,
+            "unit": "AU",
+            "tolerance": 0.02
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "distance from the stars' barycentre at t = 0"
+        },
+        {
+          "rate": 120,
+          "seed": 1,
+          "claim": "stable",
+          "value": "37.6 to 40.37 AU",
+          "bound": {
+            "measure": "at 40 AU no body is lost, merged or ejected over 50 binary periods, and the planet's distance from the barycentre stays between 30 and 50 AU"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "over 50 binary periods (256510 t); planet lost false, a star lost false, planet ejected false; must stay between 30 and 50 AU of the barycentre"
+        },
+        {
+          "rate": 120,
+          "seed": 1,
+          "claim": "walks-out",
+          "value": "1.5: leaves at 2.277 T, distance ratio 1.04; 2: leaves at 3.427 T, distance ratio 2.73; 2.5: leaves at 5.253 T, distance ratio 2.91; 3: leaves at 32.02 T, distance ratio 2.06",
+          "bound": {
+            "grid": [
+              1.5,
+              2,
+              2.5,
+              3
+            ],
+            "measure": "on the grid of starts 1.5, 2.0, 2.5 and 3.0 separations, at least one start leaves (ends unbound from the barycentre or beyond 10 separations) within 50 binary periods, and its distance from the barycentre rises before it leaves"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "leaves: beyond 10 separations at any time, or unbound from the barycentre at the end; rises: mean distance in the window before the leave (a tenth of the run) above the mean in the first window of the run"
+        }
+      ],
+      "verdictSuggested": {
+        "verdict": "KEEP",
+        "failing": [],
+        "notRun": [],
+        "leans": {}
+      }
+    },
+    "lagrange-point-lab": {
+      "seeds": [
+        1
+      ],
+      "rates": [
+        30,
+        60,
+        120
+      ],
+      "stepsPerPeriod": {
+        "watched": "the binary (the tracer is slower or comparable)",
+        "period": 3132.43,
+        "step": 0.277778,
+        "stepsPerPeriod": 11276.7,
+        "minimum": 200,
+        "finding": false
+      },
+      "rows": [
+        {
+          "rate": 30,
+          "seed": 1,
+          "claim": "mass-ratio",
+          "value": 0.03,
+          "bound": {
+            "value": 0.033333,
+            "tolerance": 0.02
+          },
+          "pass": false,
+          "status": "fail",
+          "note": "secondary over primary"
+        },
+        {
+          "rate": 30,
+          "seed": 1,
+          "claim": "separation",
+          "value": 8,
+          "bound": {
+            "value": 8,
+            "unit": "AU",
+            "tolerance": 0.02
+          },
+          "pass": true,
+          "status": "pass",
+          "note": ""
+        },
+        {
+          "rate": 30,
+          "seed": 1,
+          "claim": "circular",
+          "value": 1.72462e-16,
+          "bound": {
+            "bound": 0.001,
+            "measure": "the binary's eccentricity at t = 0 is below 0.001"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "eccentricity of the pair at t = 0"
+        },
+        {
+          "rate": 30,
+          "seed": 1,
+          "claim": "jacobi",
+          "value": 0.000337515,
+          "bound": {
+            "bound": 0.000001,
+            "measure": "the tracer's Jacobi constant changes by less than 1e-6 of its value over the run"
+          },
+          "pass": false,
+          "status": "fail",
+          "note": "largest change of the tracer's Jacobi constant (C = 3.6035 at t = 0) over 5 revolutions (15662.1 t), as a fraction of C"
+        },
+        {
+          "rate": 30,
+          "seed": 1,
+          "claim": "tracer-stays",
+          "value": "tracer excursion 1.244 separations; star paths differ by 2.22e-7 separations",
+          "bound": {
+            "bound": 0.1,
+            "measure": "the tracer stays within 0.1 separations of its start in the rotating frame over the run, and neither star's path changes by more than 1e-9 separations with the tracer removed"
+          },
+          "pass": false,
+          "status": "fail",
+          "note": "excursion is the largest rotating-frame distance from the start, in separations (limit 0.1); the star paths are compared with the tracer deleted (limit 1e-9); both must hold"
+        },
+        {
+          "rate": 60,
+          "seed": 1,
+          "claim": "mass-ratio",
+          "value": 0.03,
+          "bound": {
+            "value": 0.033333,
+            "tolerance": 0.02
+          },
+          "pass": false,
+          "status": "fail",
+          "note": "secondary over primary"
+        },
+        {
+          "rate": 60,
+          "seed": 1,
+          "claim": "separation",
+          "value": 8,
+          "bound": {
+            "value": 8,
+            "unit": "AU",
+            "tolerance": 0.02
+          },
+          "pass": true,
+          "status": "pass",
+          "note": ""
+        },
+        {
+          "rate": 60,
+          "seed": 1,
+          "claim": "circular",
+          "value": 1.72462e-16,
+          "bound": {
+            "bound": 0.001,
+            "measure": "the binary's eccentricity at t = 0 is below 0.001"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "eccentricity of the pair at t = 0"
+        },
+        {
+          "rate": 60,
+          "seed": 1,
+          "claim": "jacobi",
+          "value": 0.000301043,
+          "bound": {
+            "bound": 0.000001,
+            "measure": "the tracer's Jacobi constant changes by less than 1e-6 of its value over the run"
+          },
+          "pass": false,
+          "status": "fail",
+          "note": "largest change of the tracer's Jacobi constant (C = 3.6035 at t = 0) over 5 revolutions (15662.1 t), as a fraction of C"
+        },
+        {
+          "rate": 60,
+          "seed": 1,
+          "claim": "tracer-stays",
+          "value": "tracer excursion 1.244 separations; star paths differ by 2.22e-7 separations",
+          "bound": {
+            "bound": 0.1,
+            "measure": "the tracer stays within 0.1 separations of its start in the rotating frame over the run, and neither star's path changes by more than 1e-9 separations with the tracer removed"
+          },
+          "pass": false,
+          "status": "fail",
+          "note": "excursion is the largest rotating-frame distance from the start, in separations (limit 0.1); the star paths are compared with the tracer deleted (limit 1e-9); both must hold"
+        },
+        {
+          "rate": 120,
+          "seed": 1,
+          "claim": "mass-ratio",
+          "value": 0.03,
+          "bound": {
+            "value": 0.033333,
+            "tolerance": 0.02
+          },
+          "pass": false,
+          "status": "fail",
+          "note": "secondary over primary"
+        },
+        {
+          "rate": 120,
+          "seed": 1,
+          "claim": "separation",
+          "value": 8,
+          "bound": {
+            "value": 8,
+            "unit": "AU",
+            "tolerance": 0.02
+          },
+          "pass": true,
+          "status": "pass",
+          "note": ""
+        },
+        {
+          "rate": 120,
+          "seed": 1,
+          "claim": "circular",
+          "value": 1.72462e-16,
+          "bound": {
+            "bound": 0.001,
+            "measure": "the binary's eccentricity at t = 0 is below 0.001"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "eccentricity of the pair at t = 0"
+        },
+        {
+          "rate": 120,
+          "seed": 1,
+          "claim": "jacobi",
+          "value": 0.000243827,
+          "bound": {
+            "bound": 0.000001,
+            "measure": "the tracer's Jacobi constant changes by less than 1e-6 of its value over the run"
+          },
+          "pass": false,
+          "status": "fail",
+          "note": "largest change of the tracer's Jacobi constant (C = 3.6035 at t = 0) over 5 revolutions (15662.1 t), as a fraction of C"
+        },
+        {
+          "rate": 120,
+          "seed": 1,
+          "claim": "tracer-stays",
+          "value": "tracer excursion 1.244 separations; star paths differ by 2.22e-7 separations",
+          "bound": {
+            "bound": 0.1,
+            "measure": "the tracer stays within 0.1 separations of its start in the rotating frame over the run, and neither star's path changes by more than 1e-9 separations with the tracer removed"
+          },
+          "pass": false,
+          "status": "fail",
+          "note": "excursion is the largest rotating-frame distance from the start, in separations (limit 0.1); the star paths are compared with the tracer deleted (limit 1e-9); both must hold"
+        }
+      ],
+      "verdictSuggested": {
+        "verdict": "REFRAME or CORRECT",
+        "failing": [
+          "mass-ratio",
+          "jacobi",
+          "tracer-stays"
+        ],
+        "notRun": [],
+        "leans": {
+          "mass-ratio": "REFRAME",
+          "jacobi": "CORRECT",
+          "tracer-stays": "CORRECT"
+        }
+      }
+    },
+    "three-body-sensitivity-lab": {
+      "seeds": [
+        1
+      ],
+      "rates": [
+        30,
+        60,
+        120
+      ],
+      "stepsPerPeriod": {
+        "watched": "the triangle's rigid rotation",
+        "period": 26.6885,
+        "step": 0.0833333,
+        "stepsPerPeriod": 320.262,
+        "minimum": 200,
+        "finding": false
+      },
+      "rows": [
+        {
+          "rate": 30,
+          "seed": 1,
+          "claim": "masses",
+          "value": [
+            6,
+            6,
+            6
+          ],
+          "bound": {
+            "value": 6,
+            "unit": "Msun",
+            "tolerance": 0.02
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "each of the three"
+        },
+        {
+          "rate": 30,
+          "seed": 1,
+          "claim": "stars",
+          "value": 3,
+          "bound": {
+            "value": 3,
+            "what": "stars"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": ""
+        },
+        {
+          "rate": 30,
+          "seed": 1,
+          "claim": "size",
+          "value": 129557000,
+          "bound": {
+            "value": 130000000,
+            "unit": "km",
+            "tolerance": 0.02,
+            "measure": "the side of the triangle at t = 0"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "side of the triangle at t = 0, mean of 129600000, 129600000, 129600000 km"
+        },
+        {
+          "rate": 30,
+          "seed": 1,
+          "claim": "offset",
+          "value": 1500.02,
+          "bound": {
+            "value": 1500,
+            "unit": "km",
+            "tolerance": 0.02
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "the two starts' Alpha positions differ by 1500 km / 1495978.707 km per unit, read back through the constants' 1496000 km per unit"
+        },
+        {
+          "rate": 30,
+          "seed": 1,
+          "claim": "comes-apart",
+          "value": 7.80145,
+          "bound": {
+            "range": [
+              2,
+              9
+            ],
+            "measure": "the number of rigid rotations before any side departs from its start by 10% is between 2 and 9 at every rate"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "rigid rotations before a side departs by 10% (at t = 208.2); rotation period 26.689 t"
+        },
+        {
+          "rate": 30,
+          "seed": 1,
+          "claim": "divergence",
+          "value": 48.7252,
+          "bound": {
+            "tolerance": 0.02,
+            "measure": "the time at which the two runs differ by 1 u, at 30, 60 and 120 frames a second; KEEP if the spread of the three times is within 2% of their mean, else CORRECT the integrator and cap as the labs do"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "time the two runs differ by 1 u (configuration distance over all three stars); the three rates' times are 48.725, 48.817, 48.873 t, spread 0.00303 of their mean, limit 0.02; the same verdict stands at each rate"
+        },
+        {
+          "rate": 60,
+          "seed": 1,
+          "claim": "masses",
+          "value": [
+            6,
+            6,
+            6
+          ],
+          "bound": {
+            "value": 6,
+            "unit": "Msun",
+            "tolerance": 0.02
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "each of the three"
+        },
+        {
+          "rate": 60,
+          "seed": 1,
+          "claim": "stars",
+          "value": 3,
+          "bound": {
+            "value": 3,
+            "what": "stars"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": ""
+        },
+        {
+          "rate": 60,
+          "seed": 1,
+          "claim": "size",
+          "value": 129557000,
+          "bound": {
+            "value": 130000000,
+            "unit": "km",
+            "tolerance": 0.02,
+            "measure": "the side of the triangle at t = 0"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "side of the triangle at t = 0, mean of 129600000, 129600000, 129600000 km"
+        },
+        {
+          "rate": 60,
+          "seed": 1,
+          "claim": "offset",
+          "value": 1500.02,
+          "bound": {
+            "value": 1500,
+            "unit": "km",
+            "tolerance": 0.02
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "the two starts' Alpha positions differ by 1500 km / 1495978.707 km per unit, read back through the constants' 1496000 km per unit"
+        },
+        {
+          "rate": 60,
+          "seed": 1,
+          "claim": "comes-apart",
+          "value": 7.68043,
+          "bound": {
+            "range": [
+              2,
+              9
+            ],
+            "measure": "the number of rigid rotations before any side departs from its start by 10% is between 2 and 9 at every rate"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "rigid rotations before a side departs by 10% (at t = 205); rotation period 26.689 t"
+        },
+        {
+          "rate": 60,
+          "seed": 1,
+          "claim": "divergence",
+          "value": 48.8174,
+          "bound": {
+            "tolerance": 0.02,
+            "measure": "the time at which the two runs differ by 1 u, at 30, 60 and 120 frames a second; KEEP if the spread of the three times is within 2% of their mean, else CORRECT the integrator and cap as the labs do"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "time the two runs differ by 1 u (configuration distance over all three stars); the three rates' times are 48.725, 48.817, 48.873 t, spread 0.00303 of their mean, limit 0.02; the same verdict stands at each rate"
+        },
+        {
+          "rate": 120,
+          "seed": 1,
+          "claim": "masses",
+          "value": [
+            6,
+            6,
+            6
+          ],
+          "bound": {
+            "value": 6,
+            "unit": "Msun",
+            "tolerance": 0.02
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "each of the three"
+        },
+        {
+          "rate": 120,
+          "seed": 1,
+          "claim": "stars",
+          "value": 3,
+          "bound": {
+            "value": 3,
+            "what": "stars"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": ""
+        },
+        {
+          "rate": 120,
+          "seed": 1,
+          "claim": "size",
+          "value": 129557000,
+          "bound": {
+            "value": 130000000,
+            "unit": "km",
+            "tolerance": 0.02,
+            "measure": "the side of the triangle at t = 0"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "side of the triangle at t = 0, mean of 129600000, 129600000, 129600000 km"
+        },
+        {
+          "rate": 120,
+          "seed": 1,
+          "claim": "offset",
+          "value": 1500.02,
+          "bound": {
+            "value": 1500,
+            "unit": "km",
+            "tolerance": 0.02
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "the two starts' Alpha positions differ by 1500 km / 1495978.707 km per unit, read back through the constants' 1496000 km per unit"
+        },
+        {
+          "rate": 120,
+          "seed": 1,
+          "claim": "comes-apart",
+          "value": 7.77572,
+          "bound": {
+            "range": [
+              2,
+              9
+            ],
+            "measure": "the number of rigid rotations before any side departs from its start by 10% is between 2 and 9 at every rate"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "rigid rotations before a side departs by 10% (at t = 207.5); rotation period 26.689 t"
+        },
+        {
+          "rate": 120,
+          "seed": 1,
+          "claim": "divergence",
+          "value": 48.873,
+          "bound": {
+            "tolerance": 0.02,
+            "measure": "the time at which the two runs differ by 1 u, at 30, 60 and 120 frames a second; KEEP if the spread of the three times is within 2% of their mean, else CORRECT the integrator and cap as the labs do"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "time the two runs differ by 1 u (configuration distance over all three stars); the three rates' times are 48.725, 48.817, 48.873 t, spread 0.00303 of their mean, limit 0.02; the same verdict stands at each rate"
+        }
+      ],
+      "verdictSuggested": {
+        "verdict": "KEEP",
+        "failing": [],
+        "notRun": [],
+        "leans": {}
+      }
+    },
+    "gravity-assist-lab": {
+      "seeds": [
+        1
+      ],
+      "rates": [
+        30,
+        60,
+        120
+      ],
+      "stepsPerPeriod": {
+        "watched": "the spacecraft at closest approach (2 pi r / v)",
+        "period": 186.784,
+        "step": 0.520833,
+        "stepsPerPeriod": 358.624,
+        "minimum": 200,
+        "finding": false
+      },
+      "rows": [
+        {
+          "rate": 30,
+          "seed": 1,
+          "claim": "planet-mass",
+          "value": 5,
+          "bound": {
+            "value": 5,
+            "unit": "Mjup",
+            "tolerance": 0.02
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "Jupiter masses"
+        },
+        {
+          "rate": 30,
+          "seed": 1,
+          "claim": "spacecraft-mass",
+          "value": 0.00158947,
+          "bound": {
+            "value": 1,
+            "unit": "Mearth",
+            "tolerance": 0.02
+          },
+          "pass": false,
+          "status": "fail",
+          "note": "Earth masses; the row gives it 0.000001 of the planet's mass"
+        },
+        {
+          "rate": 30,
+          "seed": 1,
+          "claim": "no-star",
+          "value": 0,
+          "bound": {
+            "value": 0,
+            "what": "stars"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "stars in the world"
+        },
+        {
+          "rate": 30,
+          "seed": 1,
+          "claim": "relative-speed",
+          "value": 2.01923e-11,
+          "bound": {
+            "bound": 0.000001,
+            "measure": "the spacecraft's speed relative to the planet, read where it is farthest before and after the flyby, agrees to 1e-6 of its value"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "relative speed 0.463581686 in at the gate (4000 u), 0.463581686 out at the same distance; the page's own corrected-to-infinity residual is 3.12e-13 (the row comment says 1e-8)"
+        },
+        {
+          "rate": 30,
+          "seed": 1,
+          "claim": "deflection",
+          "value": "58.6303 deg measured at the gate, 58.636 deg two-body",
+          "bound": {
+            "tolerance": 0.02,
+            "measure": "the deflection of the spacecraft's relative velocity against the two-body hyperbola value from its incoming speed and impact parameter, within 2%; and the row comment's planet deflection checked"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "relative difference 0.0000981 (limit 0.02); the row comment says better than 0.01 deg and the difference is 0.00575 deg (holds); the planet's own velocity turns 0.000017 deg (the comment's 0.01 deg); impact parameter 40 u, speed at infinity 0.461"
+        },
+        {
+          "rate": 60,
+          "seed": 1,
+          "claim": "planet-mass",
+          "value": 5,
+          "bound": {
+            "value": 5,
+            "unit": "Mjup",
+            "tolerance": 0.02
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "Jupiter masses"
+        },
+        {
+          "rate": 60,
+          "seed": 1,
+          "claim": "spacecraft-mass",
+          "value": 0.00158947,
+          "bound": {
+            "value": 1,
+            "unit": "Mearth",
+            "tolerance": 0.02
+          },
+          "pass": false,
+          "status": "fail",
+          "note": "Earth masses; the row gives it 0.000001 of the planet's mass"
+        },
+        {
+          "rate": 60,
+          "seed": 1,
+          "claim": "no-star",
+          "value": 0,
+          "bound": {
+            "value": 0,
+            "what": "stars"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "stars in the world"
+        },
+        {
+          "rate": 60,
+          "seed": 1,
+          "claim": "relative-speed",
+          "value": 4.66643e-13,
+          "bound": {
+            "bound": 0.000001,
+            "measure": "the spacecraft's speed relative to the planet, read where it is farthest before and after the flyby, agrees to 1e-6 of its value"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "relative speed 0.463581686 in at the gate (4000 u), 0.463581686 out at the same distance; the page's own corrected-to-infinity residual is 2.51e-13 (the row comment says 1e-8)"
+        },
+        {
+          "rate": 60,
+          "seed": 1,
+          "claim": "deflection",
+          "value": "58.6322 deg measured at the gate, 58.636 deg two-body",
+          "bound": {
+            "tolerance": 0.02,
+            "measure": "the deflection of the spacecraft's relative velocity against the two-body hyperbola value from its incoming speed and impact parameter, within 2%; and the row comment's planet deflection checked"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "relative difference 0.0000652 (limit 0.02); the row comment says better than 0.01 deg and the difference is 0.00382 deg (holds); the planet's own velocity turns 0.000017 deg (the comment's 0.01 deg); impact parameter 40 u, speed at infinity 0.461"
+        },
+        {
+          "rate": 120,
+          "seed": 1,
+          "claim": "planet-mass",
+          "value": 5,
+          "bound": {
+            "value": 5,
+            "unit": "Mjup",
+            "tolerance": 0.02
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "Jupiter masses"
+        },
+        {
+          "rate": 120,
+          "seed": 1,
+          "claim": "spacecraft-mass",
+          "value": 0.00158947,
+          "bound": {
+            "value": 1,
+            "unit": "Mearth",
+            "tolerance": 0.02
+          },
+          "pass": false,
+          "status": "fail",
+          "note": "Earth masses; the row gives it 0.000001 of the planet's mass"
+        },
+        {
+          "rate": 120,
+          "seed": 1,
+          "claim": "no-star",
+          "value": 0,
+          "bound": {
+            "value": 0,
+            "what": "stars"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "stars in the world"
+        },
+        {
+          "rate": 120,
+          "seed": 1,
+          "claim": "relative-speed",
+          "value": 4.35593e-12,
+          "bound": {
+            "bound": 0.000001,
+            "measure": "the spacecraft's speed relative to the planet, read where it is farthest before and after the flyby, agrees to 1e-6 of its value"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "relative speed 0.463581686 in at the gate (4000 u), 0.463581686 out at the same distance; the page's own corrected-to-infinity residual is 1.21e-13 (the row comment says 1e-8)"
+        },
+        {
+          "rate": 120,
+          "seed": 1,
+          "claim": "deflection",
+          "value": "58.6323 deg measured at the gate, 58.636 deg two-body",
+          "bound": {
+            "tolerance": 0.02,
+            "measure": "the deflection of the spacecraft's relative velocity against the two-body hyperbola value from its incoming speed and impact parameter, within 2%; and the row comment's planet deflection checked"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "relative difference 0.000064 (limit 0.02); the row comment says better than 0.01 deg and the difference is 0.00375 deg (holds); the planet's own velocity turns 0.000017 deg (the comment's 0.01 deg); impact parameter 40 u, speed at infinity 0.461"
+        }
+      ],
+      "verdictSuggested": {
+        "verdict": "REFRAME or CORRECT",
+        "failing": [
+          "spacecraft-mass"
+        ],
+        "notRun": [],
+        "leans": {
+          "spacecraft-mass": "REFRAME"
+        }
+      }
+    },
+    "gravity-assist-heliocentric": {
+      "seeds": [
+        1
+      ],
+      "rates": [
+        30,
+        60,
+        120
+      ],
+      "stepsPerPeriod": {
+        "watched": "the spacecraft at closest approach (2 pi r / v) and the planet's orbit (shorter)",
+        "period": 66.7422,
+        "step": 0.25,
+        "stepsPerPeriod": 266.969,
+        "minimum": 200,
+        "finding": false
+      },
+      "rows": [
+        {
+          "rate": 30,
+          "seed": 1,
+          "claim": "planet-orbit",
+          "value": 5,
+          "bound": {
+            "value": 5,
+            "unit": "AU",
+            "tolerance": 0.02
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "planet to star at t = 0"
+        },
+        {
+          "rate": 30,
+          "seed": 1,
+          "claim": "gains",
+          "value": "1.4523 before, 2.10541 after",
+          "bound": {
+            "measure": "the spacecraft's speed about the star after the flyby, where it is farthest from the planet, exceeds its speed before"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "spacecraft speed about the star at the gate going in, and at the first step past the gate going out (change 0.4497)"
+        },
+        {
+          "rate": 30,
+          "seed": 1,
+          "claim": "momentum",
+          "value": 513255,
+          "bound": {
+            "tolerance": 0.02,
+            "measure": "the change of the planet's momentum about the star equals minus the spacecraft's change within 2%"
+          },
+          "pass": false,
+          "status": "fail",
+          "note": "|planet change + spacecraft change| / |spacecraft change|, both about the star between the two instants; the planet's own orbital turning over the flyby is in the planet's change (planet 1.613, spacecraft 0.000003142), which is also what the page's own ledger line compares (its mismatch 511400). Not the claim: against a control run without the spacecraft the planet's recoil leaves a mismatch of 0.5147"
+        },
+        {
+          "rate": 30,
+          "seed": 1,
+          "claim": "panel",
+          "value": "0.3361 % panel, 0.3361 % recomputed",
+          "bound": {
+            "tolerance": 0.02,
+            "measure": "the panel's approximation figure equals an independent computation from the same bodies within 2%"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "the panel figure is |vInfAfter - vInfBefore| / vInfBefore from the watcher; the recomputation reads the same two instants from the logged body states with the same vis-viva correction; the shown value is rounded to two figures in the page"
+        },
+        {
+          "rate": 60,
+          "seed": 1,
+          "claim": "planet-orbit",
+          "value": 5,
+          "bound": {
+            "value": 5,
+            "unit": "AU",
+            "tolerance": 0.02
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "planet to star at t = 0"
+        },
+        {
+          "rate": 60,
+          "seed": 1,
+          "claim": "gains",
+          "value": "1.4523 before, 2.10541 after",
+          "bound": {
+            "measure": "the spacecraft's speed about the star after the flyby, where it is farthest from the planet, exceeds its speed before"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "spacecraft speed about the star at the gate going in, and at the first step past the gate going out (change 0.4497)"
+        },
+        {
+          "rate": 60,
+          "seed": 1,
+          "claim": "momentum",
+          "value": 513255,
+          "bound": {
+            "tolerance": 0.02,
+            "measure": "the change of the planet's momentum about the star equals minus the spacecraft's change within 2%"
+          },
+          "pass": false,
+          "status": "fail",
+          "note": "|planet change + spacecraft change| / |spacecraft change|, both about the star between the two instants; the planet's own orbital turning over the flyby is in the planet's change (planet 1.613, spacecraft 0.000003142), which is also what the page's own ledger line compares (its mismatch 511400). Not the claim: against a control run without the spacecraft the planet's recoil leaves a mismatch of 0.5147"
+        },
+        {
+          "rate": 60,
+          "seed": 1,
+          "claim": "panel",
+          "value": "0.3361 % panel, 0.3361 % recomputed",
+          "bound": {
+            "tolerance": 0.02,
+            "measure": "the panel's approximation figure equals an independent computation from the same bodies within 2%"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "the panel figure is |vInfAfter - vInfBefore| / vInfBefore from the watcher; the recomputation reads the same two instants from the logged body states with the same vis-viva correction; the shown value is rounded to two figures in the page"
+        },
+        {
+          "rate": 120,
+          "seed": 1,
+          "claim": "planet-orbit",
+          "value": 5,
+          "bound": {
+            "value": 5,
+            "unit": "AU",
+            "tolerance": 0.02
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "planet to star at t = 0"
+        },
+        {
+          "rate": 120,
+          "seed": 1,
+          "claim": "gains",
+          "value": "1.4523 before, 2.10542 after",
+          "bound": {
+            "measure": "the spacecraft's speed about the star after the flyby, where it is farthest from the planet, exceeds its speed before"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "spacecraft speed about the star at the gate going in, and at the first step past the gate going out (change 0.4497)"
+        },
+        {
+          "rate": 120,
+          "seed": 1,
+          "claim": "momentum",
+          "value": 513251,
+          "bound": {
+            "tolerance": 0.02,
+            "measure": "the change of the planet's momentum about the star equals minus the spacecraft's change within 2%"
+          },
+          "pass": false,
+          "status": "fail",
+          "note": "|planet change + spacecraft change| / |spacecraft change|, both about the star between the two instants; the planet's own orbital turning over the flyby is in the planet's change (planet 1.613, spacecraft 0.000003142), which is also what the page's own ledger line compares (its mismatch 511400). Not the claim: against a control run without the spacecraft the planet's recoil leaves a mismatch of 0.5147"
+        },
+        {
+          "rate": 120,
+          "seed": 1,
+          "claim": "panel",
+          "value": "0.336 % panel, 0.336 % recomputed",
+          "bound": {
+            "tolerance": 0.02,
+            "measure": "the panel's approximation figure equals an independent computation from the same bodies within 2%"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "the panel figure is |vInfAfter - vInfBefore| / vInfBefore from the watcher; the recomputation reads the same two instants from the logged body states with the same vis-viva correction; the shown value is rounded to two figures in the page"
+        }
+      ],
+      "verdictSuggested": {
+        "verdict": "REFRAME or CORRECT",
+        "failing": [
+          "momentum"
+        ],
+        "notRun": [],
+        "leans": {
+          "momentum": "CORRECT"
+        }
+      }
+    },
+    "rogue-encounter": {
+      "seeds": [
+        "audit",
+        "audit-2"
+      ],
+      "rates": [
+        30,
+        60,
+        120
+      ],
+      "stepsPerPeriod": {
+        "watched": "the planets and giants about the star",
+        "period": 57.357,
+        "step": 0.0583333,
+        "stepsPerPeriod": 983.263,
+        "minimum": 200,
+        "finding": false
+      },
+      "rows": [
+        {
+          "rate": 30,
+          "seed": "audit",
+          "claim": "hole-mass",
+          "value": 30,
+          "bound": {
+            "value": 30,
+            "unit": "Msun",
+            "tolerance": 0.02
+          },
+          "pass": true,
+          "status": "pass",
+          "note": ""
+        },
+        {
+          "rate": 30,
+          "seed": "audit",
+          "claim": "planets",
+          "value": 12,
+          "bound": {
+            "value": 12,
+            "what": "planets"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": ""
+        },
+        {
+          "rate": 30,
+          "seed": "audit",
+          "claim": "giants",
+          "value": 4,
+          "bound": {
+            "value": 4,
+            "what": "giants"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": ""
+        },
+        {
+          "rate": 30,
+          "seed": "audit",
+          "claim": "asteroids",
+          "value": 80,
+          "bound": {
+            "measure": "at least one asteroid at t = 0"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "asteroids at t = 0"
+        },
+        {
+          "rate": 30,
+          "seed": "audit",
+          "claim": "start-overlap",
+          "value": 1,
+          "bound": {
+            "measure": "no two bodies start closer than the sum of their collision radii"
+          },
+          "pass": false,
+          "status": "fail",
+          "note": "pairs closer than the sum of their radii; closest gap -0.4416 u (Cosmic Chunk and Cosmic Dust)"
+        },
+        {
+          "rate": 30,
+          "seed": "audit",
+          "claim": "ejection",
+          "value": 11,
+          "bound": {
+            "measure": "a planet or giant ends unbound from the star and hole together (energy about their joint centre, with their joint mass), under both seeds"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "planets and giants unbound from the star and hole together (their joint centre and joint mass) at t = 3000; by the same test 16 were already unbound at t = 0; 0 are unbound from the star alone at the end"
+        },
+        {
+          "rate": 30,
+          "seed": "audit",
+          "claim": "capture",
+          "value": 0,
+          "bound": {
+            "measure": "a planet or giant ends bound to the hole rather than the star, under both seeds"
+          },
+          "pass": false,
+          "status": "fail",
+          "note": "bound to the hole, and more tightly than to the star"
+        },
+        {
+          "rate": 30,
+          "seed": "audit",
+          "claim": "disruption",
+          "value": 3,
+          "bound": {
+            "measure": "a planet or giant is merged into or disrupted by the hole, or its orbit about the star changes semi-major axis by more than 50%, under both seeds"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "3 lost nearer the hole than the star (merged into it), 0 bound-or-not about the star with a changed by more than 50% or unbound from the star (2 more lost elsewhere); hole mass at the end 30.924902 Msun"
+        },
+        {
+          "rate": 60,
+          "seed": "audit",
+          "claim": "hole-mass",
+          "value": 30,
+          "bound": {
+            "value": 30,
+            "unit": "Msun",
+            "tolerance": 0.02
+          },
+          "pass": true,
+          "status": "pass",
+          "note": ""
+        },
+        {
+          "rate": 60,
+          "seed": "audit",
+          "claim": "planets",
+          "value": 12,
+          "bound": {
+            "value": 12,
+            "what": "planets"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": ""
+        },
+        {
+          "rate": 60,
+          "seed": "audit",
+          "claim": "giants",
+          "value": 4,
+          "bound": {
+            "value": 4,
+            "what": "giants"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": ""
+        },
+        {
+          "rate": 60,
+          "seed": "audit",
+          "claim": "asteroids",
+          "value": 80,
+          "bound": {
+            "measure": "at least one asteroid at t = 0"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "asteroids at t = 0"
+        },
+        {
+          "rate": 60,
+          "seed": "audit",
+          "claim": "start-overlap",
+          "value": 1,
+          "bound": {
+            "measure": "no two bodies start closer than the sum of their collision radii"
+          },
+          "pass": false,
+          "status": "fail",
+          "note": "pairs closer than the sum of their radii; closest gap -0.4416 u (Cosmic Chunk and Cosmic Dust)"
+        },
+        {
+          "rate": 60,
+          "seed": "audit",
+          "claim": "ejection",
+          "value": 11,
+          "bound": {
+            "measure": "a planet or giant ends unbound from the star and hole together (energy about their joint centre, with their joint mass), under both seeds"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "planets and giants unbound from the star and hole together (their joint centre and joint mass) at t = 3000; by the same test 16 were already unbound at t = 0; 0 are unbound from the star alone at the end"
+        },
+        {
+          "rate": 60,
+          "seed": "audit",
+          "claim": "capture",
+          "value": 0,
+          "bound": {
+            "measure": "a planet or giant ends bound to the hole rather than the star, under both seeds"
+          },
+          "pass": false,
+          "status": "fail",
+          "note": "bound to the hole, and more tightly than to the star"
+        },
+        {
+          "rate": 60,
+          "seed": "audit",
+          "claim": "disruption",
+          "value": 3,
+          "bound": {
+            "measure": "a planet or giant is merged into or disrupted by the hole, or its orbit about the star changes semi-major axis by more than 50%, under both seeds"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "3 lost nearer the hole than the star (merged into it), 0 bound-or-not about the star with a changed by more than 50% or unbound from the star (2 more lost elsewhere); hole mass at the end 30.931087 Msun"
+        },
+        {
+          "rate": 120,
+          "seed": "audit",
+          "claim": "hole-mass",
+          "value": 30,
+          "bound": {
+            "value": 30,
+            "unit": "Msun",
+            "tolerance": 0.02
+          },
+          "pass": true,
+          "status": "pass",
+          "note": ""
+        },
+        {
+          "rate": 120,
+          "seed": "audit",
+          "claim": "planets",
+          "value": 12,
+          "bound": {
+            "value": 12,
+            "what": "planets"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": ""
+        },
+        {
+          "rate": 120,
+          "seed": "audit",
+          "claim": "giants",
+          "value": 4,
+          "bound": {
+            "value": 4,
+            "what": "giants"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": ""
+        },
+        {
+          "rate": 120,
+          "seed": "audit",
+          "claim": "asteroids",
+          "value": 80,
+          "bound": {
+            "measure": "at least one asteroid at t = 0"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "asteroids at t = 0"
+        },
+        {
+          "rate": 120,
+          "seed": "audit",
+          "claim": "start-overlap",
+          "value": 1,
+          "bound": {
+            "measure": "no two bodies start closer than the sum of their collision radii"
+          },
+          "pass": false,
+          "status": "fail",
+          "note": "pairs closer than the sum of their radii; closest gap -0.4416 u (Cosmic Chunk and Cosmic Dust)"
+        },
+        {
+          "rate": 120,
+          "seed": "audit",
+          "claim": "ejection",
+          "value": 11,
+          "bound": {
+            "measure": "a planet or giant ends unbound from the star and hole together (energy about their joint centre, with their joint mass), under both seeds"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "planets and giants unbound from the star and hole together (their joint centre and joint mass) at t = 3000; by the same test 16 were already unbound at t = 0; 0 are unbound from the star alone at the end"
+        },
+        {
+          "rate": 120,
+          "seed": "audit",
+          "claim": "capture",
+          "value": 0,
+          "bound": {
+            "measure": "a planet or giant ends bound to the hole rather than the star, under both seeds"
+          },
+          "pass": false,
+          "status": "fail",
+          "note": "bound to the hole, and more tightly than to the star"
+        },
+        {
+          "rate": 120,
+          "seed": "audit",
+          "claim": "disruption",
+          "value": 3,
+          "bound": {
+            "measure": "a planet or giant is merged into or disrupted by the hole, or its orbit about the star changes semi-major axis by more than 50%, under both seeds"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "3 lost nearer the hole than the star (merged into it), 0 bound-or-not about the star with a changed by more than 50% or unbound from the star (2 more lost elsewhere); hole mass at the end 30.934058 Msun"
+        },
+        {
+          "rate": 30,
+          "seed": "audit-2",
+          "claim": "hole-mass",
+          "value": 30,
+          "bound": {
+            "value": 30,
+            "unit": "Msun",
+            "tolerance": 0.02
+          },
+          "pass": true,
+          "status": "pass",
+          "note": ""
+        },
+        {
+          "rate": 30,
+          "seed": "audit-2",
+          "claim": "planets",
+          "value": 12,
+          "bound": {
+            "value": 12,
+            "what": "planets"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": ""
+        },
+        {
+          "rate": 30,
+          "seed": "audit-2",
+          "claim": "giants",
+          "value": 4,
+          "bound": {
+            "value": 4,
+            "what": "giants"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": ""
+        },
+        {
+          "rate": 30,
+          "seed": "audit-2",
+          "claim": "asteroids",
+          "value": 80,
+          "bound": {
+            "measure": "at least one asteroid at t = 0"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "asteroids at t = 0"
+        },
+        {
+          "rate": 30,
+          "seed": "audit-2",
+          "claim": "start-overlap",
+          "value": 3,
+          "bound": {
+            "measure": "no two bodies start closer than the sum of their collision radii"
+          },
+          "pass": false,
+          "status": "fail",
+          "note": "pairs closer than the sum of their radii; closest gap -1.209 u (Rock Hopper and Stellar Bit)"
+        },
+        {
+          "rate": 30,
+          "seed": "audit-2",
+          "claim": "ejection",
+          "value": 8,
+          "bound": {
+            "measure": "a planet or giant ends unbound from the star and hole together (energy about their joint centre, with their joint mass), under both seeds"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "planets and giants unbound from the star and hole together (their joint centre and joint mass) at t = 3000; by the same test 16 were already unbound at t = 0; 0 are unbound from the star alone at the end"
+        },
+        {
+          "rate": 30,
+          "seed": "audit-2",
+          "claim": "capture",
+          "value": 0,
+          "bound": {
+            "measure": "a planet or giant ends bound to the hole rather than the star, under both seeds"
+          },
+          "pass": false,
+          "status": "fail",
+          "note": "bound to the hole, and more tightly than to the star"
+        },
+        {
+          "rate": 30,
+          "seed": "audit-2",
+          "claim": "disruption",
+          "value": 2,
+          "bound": {
+            "measure": "a planet or giant is merged into or disrupted by the hole, or its orbit about the star changes semi-major axis by more than 50%, under both seeds"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "2 lost nearer the hole than the star (merged into it), 0 bound-or-not about the star with a changed by more than 50% or unbound from the star (6 more lost elsewhere); hole mass at the end 30.927132 Msun"
+        },
+        {
+          "rate": 60,
+          "seed": "audit-2",
+          "claim": "hole-mass",
+          "value": 30,
+          "bound": {
+            "value": 30,
+            "unit": "Msun",
+            "tolerance": 0.02
+          },
+          "pass": true,
+          "status": "pass",
+          "note": ""
+        },
+        {
+          "rate": 60,
+          "seed": "audit-2",
+          "claim": "planets",
+          "value": 12,
+          "bound": {
+            "value": 12,
+            "what": "planets"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": ""
+        },
+        {
+          "rate": 60,
+          "seed": "audit-2",
+          "claim": "giants",
+          "value": 4,
+          "bound": {
+            "value": 4,
+            "what": "giants"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": ""
+        },
+        {
+          "rate": 60,
+          "seed": "audit-2",
+          "claim": "asteroids",
+          "value": 80,
+          "bound": {
+            "measure": "at least one asteroid at t = 0"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "asteroids at t = 0"
+        },
+        {
+          "rate": 60,
+          "seed": "audit-2",
+          "claim": "start-overlap",
+          "value": 3,
+          "bound": {
+            "measure": "no two bodies start closer than the sum of their collision radii"
+          },
+          "pass": false,
+          "status": "fail",
+          "note": "pairs closer than the sum of their radii; closest gap -1.209 u (Rock Hopper and Stellar Bit)"
+        },
+        {
+          "rate": 60,
+          "seed": "audit-2",
+          "claim": "ejection",
+          "value": 8,
+          "bound": {
+            "measure": "a planet or giant ends unbound from the star and hole together (energy about their joint centre, with their joint mass), under both seeds"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "planets and giants unbound from the star and hole together (their joint centre and joint mass) at t = 3000; by the same test 16 were already unbound at t = 0; 0 are unbound from the star alone at the end"
+        },
+        {
+          "rate": 60,
+          "seed": "audit-2",
+          "claim": "capture",
+          "value": 0,
+          "bound": {
+            "measure": "a planet or giant ends bound to the hole rather than the star, under both seeds"
+          },
+          "pass": false,
+          "status": "fail",
+          "note": "bound to the hole, and more tightly than to the star"
+        },
+        {
+          "rate": 60,
+          "seed": "audit-2",
+          "claim": "disruption",
+          "value": 2,
+          "bound": {
+            "measure": "a planet or giant is merged into or disrupted by the hole, or its orbit about the star changes semi-major axis by more than 50%, under both seeds"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "2 lost nearer the hole than the star (merged into it), 0 bound-or-not about the star with a changed by more than 50% or unbound from the star (6 more lost elsewhere); hole mass at the end 30.933338 Msun"
+        },
+        {
+          "rate": 120,
+          "seed": "audit-2",
+          "claim": "hole-mass",
+          "value": 30,
+          "bound": {
+            "value": 30,
+            "unit": "Msun",
+            "tolerance": 0.02
+          },
+          "pass": true,
+          "status": "pass",
+          "note": ""
+        },
+        {
+          "rate": 120,
+          "seed": "audit-2",
+          "claim": "planets",
+          "value": 12,
+          "bound": {
+            "value": 12,
+            "what": "planets"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": ""
+        },
+        {
+          "rate": 120,
+          "seed": "audit-2",
+          "claim": "giants",
+          "value": 4,
+          "bound": {
+            "value": 4,
+            "what": "giants"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": ""
+        },
+        {
+          "rate": 120,
+          "seed": "audit-2",
+          "claim": "asteroids",
+          "value": 80,
+          "bound": {
+            "measure": "at least one asteroid at t = 0"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "asteroids at t = 0"
+        },
+        {
+          "rate": 120,
+          "seed": "audit-2",
+          "claim": "start-overlap",
+          "value": 3,
+          "bound": {
+            "measure": "no two bodies start closer than the sum of their collision radii"
+          },
+          "pass": false,
+          "status": "fail",
+          "note": "pairs closer than the sum of their radii; closest gap -1.209 u (Rock Hopper and Stellar Bit)"
+        },
+        {
+          "rate": 120,
+          "seed": "audit-2",
+          "claim": "ejection",
+          "value": 8,
+          "bound": {
+            "measure": "a planet or giant ends unbound from the star and hole together (energy about their joint centre, with their joint mass), under both seeds"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "planets and giants unbound from the star and hole together (their joint centre and joint mass) at t = 3000; by the same test 16 were already unbound at t = 0; 0 are unbound from the star alone at the end"
+        },
+        {
+          "rate": 120,
+          "seed": "audit-2",
+          "claim": "capture",
+          "value": 0,
+          "bound": {
+            "measure": "a planet or giant ends bound to the hole rather than the star, under both seeds"
+          },
+          "pass": false,
+          "status": "fail",
+          "note": "bound to the hole, and more tightly than to the star"
+        },
+        {
+          "rate": 120,
+          "seed": "audit-2",
+          "claim": "disruption",
+          "value": 2,
+          "bound": {
+            "measure": "a planet or giant is merged into or disrupted by the hole, or its orbit about the star changes semi-major axis by more than 50%, under both seeds"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "2 lost nearer the hole than the star (merged into it), 0 bound-or-not about the star with a changed by more than 50% or unbound from the star (6 more lost elsewhere); hole mass at the end 30.936318 Msun"
+        }
+      ],
+      "verdictSuggested": {
+        "verdict": "REFRAME or CORRECT",
+        "failing": [
+          "start-overlap",
+          "capture"
+        ],
+        "notRun": [],
+        "leans": {
+          "start-overlap": "CORRECT",
+          "capture": "CORRECT"
+        }
+      }
+    },
+    "slingshot": {
+      "seeds": [
+        "audit",
+        "audit-2"
+      ],
+      "rates": [
+        30,
+        60,
+        120
+      ],
+      "stepsPerPeriod": {
+        "watched": "the bound planets and giants about the hole pair (shortest period)",
+        "period": 11.6048,
+        "step": 0.0666667,
+        "stepsPerPeriod": 174.073,
+        "minimum": 200,
+        "finding": true
+      },
+      "rows": [
+        {
+          "rate": 30,
+          "seed": "audit",
+          "claim": "masses",
+          "value": [
+            60,
+            3
+          ],
+          "bound": {
+            "values": [
+              60,
+              3
+            ],
+            "unit": "Msun",
+            "tolerance": 0.02
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "larger first"
+        },
+        {
+          "rate": 30,
+          "seed": "audit",
+          "claim": "start-overlap",
+          "value": 2,
+          "bound": {
+            "measure": "no two bodies start closer than the sum of their collision radii"
+          },
+          "pass": false,
+          "status": "fail",
+          "note": "pairs closer than the sum of their radii; closest gap -2.994 u (Gaia Crystal and New Horizon)"
+        },
+        {
+          "rate": 30,
+          "seed": "audit",
+          "claim": "gain",
+          "value": [
+            0,
+            0
+          ],
+          "bound": {
+            "threshold": 0.2,
+            "measure": "under both seeds at least one planet or giant's speed about the pair's centre rises by more than 20% of its start, and more bodies do so than in a control run with the companion removed"
+          },
+          "pass": false,
+          "status": "fail",
+          "note": "bodies whose speed about the hole centre at t = 2000 exceeds 1.2 times their start speed: with the companion 0 of 30, without 0 of 30 (by peak speed during the run, the other way to read \"rises\": 2 and 2, which would fail here); bodies lost: 21 and 21"
+        },
+        {
+          "rate": 30,
+          "seed": "audit",
+          "claim": "escape",
+          "value": [
+            0,
+            0
+          ],
+          "bound": {
+            "measure": "bodies that end unbound from the pair, counted with and without the companion"
+          },
+          "pass": null,
+          "status": "recorded",
+          "note": "bodies unbound from the hole centre at the end, with and without the companion (no bound set by the claim)"
+        },
+        {
+          "rate": 60,
+          "seed": "audit",
+          "claim": "masses",
+          "value": [
+            60,
+            3
+          ],
+          "bound": {
+            "values": [
+              60,
+              3
+            ],
+            "unit": "Msun",
+            "tolerance": 0.02
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "larger first"
+        },
+        {
+          "rate": 60,
+          "seed": "audit",
+          "claim": "start-overlap",
+          "value": 2,
+          "bound": {
+            "measure": "no two bodies start closer than the sum of their collision radii"
+          },
+          "pass": false,
+          "status": "fail",
+          "note": "pairs closer than the sum of their radii; closest gap -2.994 u (Gaia Crystal and New Horizon)"
+        },
+        {
+          "rate": 60,
+          "seed": "audit",
+          "claim": "gain",
+          "value": [
+            0,
+            0
+          ],
+          "bound": {
+            "threshold": 0.2,
+            "measure": "under both seeds at least one planet or giant's speed about the pair's centre rises by more than 20% of its start, and more bodies do so than in a control run with the companion removed"
+          },
+          "pass": false,
+          "status": "fail",
+          "note": "bodies whose speed about the hole centre at t = 2000 exceeds 1.2 times their start speed: with the companion 0 of 30, without 0 of 30 (by peak speed during the run, the other way to read \"rises\": 2 and 2, which would fail here); bodies lost: 23 and 22"
+        },
+        {
+          "rate": 60,
+          "seed": "audit",
+          "claim": "escape",
+          "value": [
+            0,
+            0
+          ],
+          "bound": {
+            "measure": "bodies that end unbound from the pair, counted with and without the companion"
+          },
+          "pass": null,
+          "status": "recorded",
+          "note": "bodies unbound from the hole centre at the end, with and without the companion (no bound set by the claim)"
+        },
+        {
+          "rate": 120,
+          "seed": "audit",
+          "claim": "masses",
+          "value": [
+            60,
+            3
+          ],
+          "bound": {
+            "values": [
+              60,
+              3
+            ],
+            "unit": "Msun",
+            "tolerance": 0.02
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "larger first"
+        },
+        {
+          "rate": 120,
+          "seed": "audit",
+          "claim": "start-overlap",
+          "value": 2,
+          "bound": {
+            "measure": "no two bodies start closer than the sum of their collision radii"
+          },
+          "pass": false,
+          "status": "fail",
+          "note": "pairs closer than the sum of their radii; closest gap -2.994 u (Gaia Crystal and New Horizon)"
+        },
+        {
+          "rate": 120,
+          "seed": "audit",
+          "claim": "gain",
+          "value": [
+            0,
+            2
+          ],
+          "bound": {
+            "threshold": 0.2,
+            "measure": "under both seeds at least one planet or giant's speed about the pair's centre rises by more than 20% of its start, and more bodies do so than in a control run with the companion removed"
+          },
+          "pass": false,
+          "status": "fail",
+          "note": "bodies whose speed about the hole centre at t = 2000 exceeds 1.2 times their start speed: with the companion 0 of 30, without 2 of 30 (by peak speed during the run, the other way to read \"rises\": 2 and 4, which would fail here); bodies lost: 24 and 23"
+        },
+        {
+          "rate": 120,
+          "seed": "audit",
+          "claim": "escape",
+          "value": [
+            0,
+            0
+          ],
+          "bound": {
+            "measure": "bodies that end unbound from the pair, counted with and without the companion"
+          },
+          "pass": null,
+          "status": "recorded",
+          "note": "bodies unbound from the hole centre at the end, with and without the companion (no bound set by the claim)"
+        },
+        {
+          "rate": 30,
+          "seed": "audit-2",
+          "claim": "masses",
+          "value": [
+            60,
+            3
+          ],
+          "bound": {
+            "values": [
+              60,
+              3
+            ],
+            "unit": "Msun",
+            "tolerance": 0.02
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "larger first"
+        },
+        {
+          "rate": 30,
+          "seed": "audit-2",
+          "claim": "start-overlap",
+          "value": 0,
+          "bound": {
+            "measure": "no two bodies start closer than the sum of their collision radii"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "pairs closer than the sum of their radii; closest gap 0.5299 u (Void Phantom and Orbit Traveler)"
+        },
+        {
+          "rate": 30,
+          "seed": "audit-2",
+          "claim": "gain",
+          "value": [
+            0,
+            0
+          ],
+          "bound": {
+            "threshold": 0.2,
+            "measure": "under both seeds at least one planet or giant's speed about the pair's centre rises by more than 20% of its start, and more bodies do so than in a control run with the companion removed"
+          },
+          "pass": false,
+          "status": "fail",
+          "note": "bodies whose speed about the hole centre at t = 2000 exceeds 1.2 times their start speed: with the companion 0 of 30, without 0 of 30 (by peak speed during the run, the other way to read \"rises\": 3 and 1, which would pass here); bodies lost: 22 and 20"
+        },
+        {
+          "rate": 30,
+          "seed": "audit-2",
+          "claim": "escape",
+          "value": [
+            0,
+            0
+          ],
+          "bound": {
+            "measure": "bodies that end unbound from the pair, counted with and without the companion"
+          },
+          "pass": null,
+          "status": "recorded",
+          "note": "bodies unbound from the hole centre at the end, with and without the companion (no bound set by the claim)"
+        },
+        {
+          "rate": 60,
+          "seed": "audit-2",
+          "claim": "masses",
+          "value": [
+            60,
+            3
+          ],
+          "bound": {
+            "values": [
+              60,
+              3
+            ],
+            "unit": "Msun",
+            "tolerance": 0.02
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "larger first"
+        },
+        {
+          "rate": 60,
+          "seed": "audit-2",
+          "claim": "start-overlap",
+          "value": 0,
+          "bound": {
+            "measure": "no two bodies start closer than the sum of their collision radii"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "pairs closer than the sum of their radii; closest gap 0.5299 u (Void Phantom and Orbit Traveler)"
+        },
+        {
+          "rate": 60,
+          "seed": "audit-2",
+          "claim": "gain",
+          "value": [
+            0,
+            2
+          ],
+          "bound": {
+            "threshold": 0.2,
+            "measure": "under both seeds at least one planet or giant's speed about the pair's centre rises by more than 20% of its start, and more bodies do so than in a control run with the companion removed"
+          },
+          "pass": false,
+          "status": "fail",
+          "note": "bodies whose speed about the hole centre at t = 2000 exceeds 1.2 times their start speed: with the companion 0 of 30, without 2 of 30 (by peak speed during the run, the other way to read \"rises\": 3 and 3, which would fail here); bodies lost: 21 and 18"
+        },
+        {
+          "rate": 60,
+          "seed": "audit-2",
+          "claim": "escape",
+          "value": [
+            0,
+            0
+          ],
+          "bound": {
+            "measure": "bodies that end unbound from the pair, counted with and without the companion"
+          },
+          "pass": null,
+          "status": "recorded",
+          "note": "bodies unbound from the hole centre at the end, with and without the companion (no bound set by the claim)"
+        },
+        {
+          "rate": 120,
+          "seed": "audit-2",
+          "claim": "masses",
+          "value": [
+            60,
+            3
+          ],
+          "bound": {
+            "values": [
+              60,
+              3
+            ],
+            "unit": "Msun",
+            "tolerance": 0.02
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "larger first"
+        },
+        {
+          "rate": 120,
+          "seed": "audit-2",
+          "claim": "start-overlap",
+          "value": 0,
+          "bound": {
+            "measure": "no two bodies start closer than the sum of their collision radii"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "pairs closer than the sum of their radii; closest gap 0.5299 u (Void Phantom and Orbit Traveler)"
+        },
+        {
+          "rate": 120,
+          "seed": "audit-2",
+          "claim": "gain",
+          "value": [
+            0,
+            3
+          ],
+          "bound": {
+            "threshold": 0.2,
+            "measure": "under both seeds at least one planet or giant's speed about the pair's centre rises by more than 20% of its start, and more bodies do so than in a control run with the companion removed"
+          },
+          "pass": false,
+          "status": "fail",
+          "note": "bodies whose speed about the hole centre at t = 2000 exceeds 1.2 times their start speed: with the companion 0 of 30, without 3 of 30 (by peak speed during the run, the other way to read \"rises\": 3 and 3, which would fail here); bodies lost: 22 and 19"
+        },
+        {
+          "rate": 120,
+          "seed": "audit-2",
+          "claim": "escape",
+          "value": [
+            0,
+            0
+          ],
+          "bound": {
+            "measure": "bodies that end unbound from the pair, counted with and without the companion"
+          },
+          "pass": null,
+          "status": "recorded",
+          "note": "bodies unbound from the hole centre at the end, with and without the companion (no bound set by the claim)"
+        }
+      ],
+      "verdictSuggested": {
+        "verdict": "REFRAME or CORRECT",
+        "failing": [
+          "start-overlap",
+          "gain"
+        ],
+        "notRun": [],
+        "leans": {
+          "start-overlap": "CORRECT",
+          "gain": "CORRECT"
+        }
+      }
+    },
+    "slingshot-gauntlet": {
+      "seeds": [
+        "audit",
+        "audit-2"
+      ],
+      "rates": [
+        30,
+        60,
+        120
+      ],
+      "stepsPerPeriod": {
+        "watched": "the fast star at its closest pass to a hole (2 pi r / v)",
+        "period": 3.88581,
+        "step": 0.0916667,
+        "stepsPerPeriod": 42.3906,
+        "minimum": 200,
+        "finding": true
+      },
+      "rows": [
+        {
+          "rate": 30,
+          "seed": "audit",
+          "claim": "slingshot",
+          "value": 0.00370788,
+          "bound": {
+            "tolerance": 0.01,
+            "measure": "the fast star's speed on exit against its speed on entry, each read far from every hole; if equal within 1%, the encounter is a deflection, not a slingshot, under Static holes"
+          },
+          "pass": false,
+          "status": "fail",
+          "note": "speed at infinity (speed corrected for the holes' potential, the page's convention for a far reading) 29.494 in at t = 0, 29.604 out at t = 40.7; raw speeds 42.549 and 38.305 (change -0.09975); holes Static; closest pass 46.91 u; the claim holds only if the change exceeds 0.01"
+        },
+        {
+          "rate": 60,
+          "seed": "audit",
+          "claim": "slingshot",
+          "value": 0.00187408,
+          "bound": {
+            "tolerance": 0.01,
+            "measure": "the fast star's speed on exit against its speed on entry, each read far from every hole; if equal within 1%, the encounter is a deflection, not a slingshot, under Static holes"
+          },
+          "pass": false,
+          "status": "fail",
+          "note": "speed at infinity (speed corrected for the holes' potential, the page's convention for a far reading) 29.494 in at t = 0, 29.549 out at t = 40.61; raw speeds 42.549 and 38.296 (change -0.09996); holes Static; closest pass 46.98 u; the claim holds only if the change exceeds 0.01"
+        },
+        {
+          "rate": 120,
+          "seed": "audit",
+          "claim": "slingshot",
+          "value": 0.000951387,
+          "bound": {
+            "tolerance": 0.01,
+            "measure": "the fast star's speed on exit against its speed on entry, each read far from every hole; if equal within 1%, the encounter is a deflection, not a slingshot, under Static holes"
+          },
+          "pass": false,
+          "status": "fail",
+          "note": "speed at infinity (speed corrected for the holes' potential, the page's convention for a far reading) 29.494 in at t = 0, 29.522 out at t = 40.61; raw speeds 42.549 and 38.278 (change -0.1004); holes Static; closest pass 46.98 u; the claim holds only if the change exceeds 0.01"
+        },
+        {
+          "rate": 30,
+          "seed": "audit-2",
+          "claim": "slingshot",
+          "value": 0.00408842,
+          "bound": {
+            "tolerance": 0.01,
+            "measure": "the fast star's speed on exit against its speed on entry, each read far from every hole; if equal within 1%, the encounter is a deflection, not a slingshot, under Static holes"
+          },
+          "pass": false,
+          "status": "fail",
+          "note": "speed at infinity (speed corrected for the holes' potential, the page's convention for a far reading) 28.08 in at t = 0, 28.194 out at t = 41.25; raw speeds 41.581 and 37.424 (change -0.09998); holes Static; closest pass 43.29 u; the claim holds only if the change exceeds 0.01"
+        },
+        {
+          "rate": 60,
+          "seed": "audit-2",
+          "claim": "slingshot",
+          "value": 0.00207534,
+          "bound": {
+            "tolerance": 0.01,
+            "measure": "the fast star's speed on exit against its speed on entry, each read far from every hole; if equal within 1%, the encounter is a deflection, not a slingshot, under Static holes"
+          },
+          "pass": false,
+          "status": "fail",
+          "note": "speed at infinity (speed corrected for the holes' potential, the page's convention for a far reading) 28.08 in at t = 0, 28.138 out at t = 41.34; raw speeds 41.581 and 37.365 (change -0.1014); holes Static; closest pass 43.37 u; the claim holds only if the change exceeds 0.01"
+        },
+        {
+          "rate": 120,
+          "seed": "audit-2",
+          "claim": "slingshot",
+          "value": 0.00107081,
+          "bound": {
+            "tolerance": 0.01,
+            "measure": "the fast star's speed on exit against its speed on entry, each read far from every hole; if equal within 1%, the encounter is a deflection, not a slingshot, under Static holes"
+          },
+          "pass": false,
+          "status": "fail",
+          "note": "speed at infinity (speed corrected for the holes' potential, the page's convention for a far reading) 28.08 in at t = 0, 28.11 out at t = 41.3; raw speeds 41.581 and 37.36 (change -0.1015); holes Static; closest pass 43.44 u; the claim holds only if the change exceeds 0.01"
+        }
+      ],
+      "verdictSuggested": {
+        "verdict": "REFRAME or CORRECT",
+        "failing": [
+          "slingshot"
+        ],
+        "notRun": [],
+        "leans": {
+          "slingshot": "CORRECT"
+        }
+      }
+    }
+  }
+}
