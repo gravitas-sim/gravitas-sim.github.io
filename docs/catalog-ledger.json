@@ -8727,9 +8727,9 @@
       "family": "flybys and assists",
       "planning": "REVIEW",
       "owner": 463,
-      "disposition": "OPEN",
-      "reason": "",
-      "pr": null
+      "disposition": "REVISED",
+      "reason": "REFRAME (card, both languages): the row gives the spacecraft a millionth of the planet's mass (0.0016 Earth masses), not one Earth mass; the world is unchanged. The run keeps the relative speed to 2e-11 and the deflection within 0.01% of the two-body value (tests/fixtures/scenario-review/record.json). D-R4-463-03.",
+      "pr": 757
     },
     {
       "id": "scenario:gravity-assist-heliocentric",
@@ -9178,9 +9178,9 @@
       "family": "flybys and assists",
       "planning": "REVIEW",
       "owner": 463,
-      "disposition": "OPEN",
-      "reason": "",
-      "pr": null
+      "disposition": "REVISED",
+      "reason": "REFRAME (card, both languages): under Static holes the star's speed at infinity leaves within 0.4% of the speed it entered with, so it is deflected, not slung. Orbiting holes were tried first, as the review allows: the five holes, released at rest, merge into one before the star leaves (closest pass about 250 u), so no field survives to sling it. D-R4-463-03.",
+      "pr": 757
     },
     {
       "id": "scenario:black-hole-billiards",

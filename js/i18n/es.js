@@ -1006,7 +1006,7 @@ export const ES = {
   'scenario.gravity-assist-lab.title':
     'Laboratorio de asistencia gravitatoria: un planeta, una nave y nada más',
   'scenario.gravity-assist-lab.summary':
-    'Un planeta errante de cinco masas de Júpiter a la deriva por el espacio vacío, y una nave de una masa terrestre que cruza su camino. Sin estrella, y eso es lo importante: sin nada más el planeta se mueve en línea recta y su sistema de referencia es exactamente inercial, así que el hecho más raro de una asistencia gravitatoria puede enunciarse de forma exacta. La nave se marcha a la misma velocidad respecto del planeta con la que llegó, y a otra completamente distinta respecto de todo lo demás.',
+    'Un planeta errante de cinco masas de Júpiter a la deriva por el espacio vacío, y una nave de una millonésima de su masa que cruza su camino. Sin estrella, y eso es lo importante: sin nada más el planeta se mueve en línea recta y su sistema de referencia es exactamente inercial, así que el hecho más raro de una asistencia gravitatoria puede enunciarse de forma exacta. La nave se marcha a la misma velocidad respecto del planeta con la que llegó, y a otra muy distinta respecto de todo lo demás.',
   'scenario.gravity-assist-heliocentric.title':
     'Asistencia gravitatoria: el mismo sobrevuelo, con un Sol al que robarle',
   'scenario.gravity-assist-heliocentric.summary':
@@ -1133,7 +1133,7 @@ export const ES = {
     'Cuatro agujeros negros en los vértices de un cuadrado, tirando de las estrellas de un cúmulo central compartido.',
   'scenario.slingshot-gauntlet.title': 'Circuito de asistencias gravitatorias',
   'scenario.slingshot-gauntlet.summary':
-    'Una estrella veloz disparada a través de una carrera de obstáculos de agujeros negros. Para observar asistencias gravitatorias.',
+    'Una estrella veloz disparada entre cinco agujeros negros fijos: cada uno curva su trayectoria, ninguno la acelera.',
   'scenario.black-hole-billiards.title': 'Billar de agujeros negros',
   'scenario.black-hole-billiards.summary':
     'Unos cuantos agujeros negros pequeños orbitando uno supermasivo, perturbándose entre sí y generando un movimiento caótico.',
