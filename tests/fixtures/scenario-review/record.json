@@ -475,7 +475,7 @@
           },
           "pass": true,
           "status": "pass",
-          "note": "of 5 planets (0 of 2 giants) stayed within 10 AU of the stars' barycentre and present for 3400 t; the 5 is the card's count"
+          "note": "of 5 planets (2 of 2 giants) stayed within 10 AU of the stars' barycentre and present for 3400 t; the 5 is the card's count"
         },
         {
           "rate": 120,
@@ -594,13 +594,13 @@
           "rate": 60,
           "seed": "audit-2",
           "claim": "planets-kept",
-          "value": 4,
+          "value": 5,
           "bound": {
             "radiusAU": 10,
             "measure": "each planet and giant that stays within 10 AU of the barycentre over the whole run is kept; the claim holds when all five planets are kept"
           },
-          "pass": false,
-          "status": "fail",
+          "pass": true,
+          "status": "pass",
           "note": "of 5 planets (2 of 2 giants) stayed within 10 AU of the stars' barycentre and present for 3400 t; the 5 is the card's count"
         },
         {
@@ -657,13 +657,13 @@
           "rate": 120,
           "seed": "audit-2",
           "claim": "planets-kept",
-          "value": 4,
+          "value": 5,
           "bound": {
             "radiusAU": 10,
             "measure": "each planet and giant that stays within 10 AU of the barycentre over the whole run is kept; the claim holds when all five planets are kept"
           },
-          "pass": false,
-          "status": "fail",
+          "pass": true,
+          "status": "pass",
           "note": "of 5 planets (2 of 2 giants) stayed within 10 AU of the stars' barycentre and present for 3400 t; the 5 is the card's count"
         },
         {
@@ -682,12 +682,10 @@
       "verdictSuggested": {
         "verdict": "REFRAME or CORRECT",
         "failing": [
-          "planets-kept",
           "alpha-centauri"
         ],
         "notRun": [],
         "leans": {
-          "planets-kept": "CORRECT",
           "alpha-centauri": "REFRAME"
         }
       }
@@ -1244,20 +1242,20 @@
           "rate": 30,
           "seed": 1,
           "claim": "jacobi",
-          "value": 0.000337515,
+          "value": 2.35155e-8,
           "bound": {
             "bound": 0.000001,
             "measure": "the tracer's Jacobi constant changes by less than 1e-6 of its value over the run"
           },
-          "pass": false,
-          "status": "fail",
+          "pass": true,
+          "status": "pass",
           "note": "largest change of the tracer's Jacobi constant (C = 3.6035 at t = 0) over 5 revolutions (15662.1 t), as a fraction of C"
         },
         {
           "rate": 30,
           "seed": 1,
           "claim": "tracer-stays",
-          "value": "tracer excursion 1.244 separations; star paths differ by 2.22e-7 separations",
+          "value": "tracer excursion 1.244 separations; star paths differ by 2.22e-10 separations",
           "bound": {
             "bound": 0.1,
             "measure": "the tracer stays within 0.1 separations of its start in the rotating frame over the run, and neither star's path changes by more than 1e-9 separations with the tracer removed"
@@ -1310,20 +1308,20 @@
           "rate": 60,
           "seed": 1,
           "claim": "jacobi",
-          "value": 0.000301043,
+          "value": 1.76709e-8,
           "bound": {
             "bound": 0.000001,
             "measure": "the tracer's Jacobi constant changes by less than 1e-6 of its value over the run"
           },
-          "pass": false,
-          "status": "fail",
+          "pass": true,
+          "status": "pass",
           "note": "largest change of the tracer's Jacobi constant (C = 3.6035 at t = 0) over 5 revolutions (15662.1 t), as a fraction of C"
         },
         {
           "rate": 60,
           "seed": 1,
           "claim": "tracer-stays",
-          "value": "tracer excursion 1.244 separations; star paths differ by 2.22e-7 separations",
+          "value": "tracer excursion 1.244 separations; star paths differ by 2.2e-10 separations",
           "bound": {
             "bound": 0.1,
             "measure": "the tracer stays within 0.1 separations of its start in the rotating frame over the run, and neither star's path changes by more than 1e-9 separations with the tracer removed"
@@ -1376,20 +1374,20 @@
           "rate": 120,
           "seed": 1,
           "claim": "jacobi",
-          "value": 0.000243827,
+          "value": 1.04356e-8,
           "bound": {
             "bound": 0.000001,
             "measure": "the tracer's Jacobi constant changes by less than 1e-6 of its value over the run"
           },
-          "pass": false,
-          "status": "fail",
+          "pass": true,
+          "status": "pass",
           "note": "largest change of the tracer's Jacobi constant (C = 3.6035 at t = 0) over 5 revolutions (15662.1 t), as a fraction of C"
         },
         {
           "rate": 120,
           "seed": 1,
           "claim": "tracer-stays",
-          "value": "tracer excursion 1.244 separations; star paths differ by 2.22e-7 separations",
+          "value": "tracer excursion 1.244 separations; star paths differ by 2.23e-10 separations",
           "bound": {
             "bound": 0.1,
             "measure": "the tracer stays within 0.1 separations of its start in the rotating frame over the run, and neither star's path changes by more than 1e-9 separations with the tracer removed"
@@ -1403,13 +1401,11 @@
         "verdict": "REFRAME or CORRECT",
         "failing": [
           "mass-ratio",
-          "jacobi",
           "tracer-stays"
         ],
         "notRun": [],
         "leans": {
           "mass-ratio": "REFRAME",
-          "jacobi": "CORRECT",
           "tracer-stays": "CORRECT"
         }
       }

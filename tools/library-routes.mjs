@@ -87,10 +87,12 @@ export async function routeProblem(route, tables, root = REPO) {
       return tables.lessons.has(lesson[1])
         ? null
         : `no investigation "${lesson[1]}"`;
-    if (/^1[zr]/.test(fragment)) {
-      const { decodeTagged } = await load('js/shareState.js');
+    // 1 as the Library has always written; 3 for a corrected scenario's card.
+    if (/^[13][zr]/.test(fragment)) {
+      const { decodeTagged, LINK_VERSION_READ } =
+        await load('js/shareState.js');
       try {
-        const { payload } = await decodeTagged('', fragment, 1);
+        const { payload } = await decodeTagged('', fragment, LINK_VERSION_READ);
         return tables.scenarios.has(payload.s)
           ? null
           : `the world names no scenario "${payload.s}"`;

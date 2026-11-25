@@ -53,7 +53,7 @@ const BUDGETS = [
   {
     id: 'initial',
     label: 'Initial download (CSS + eager JS)',
-    limit: 750.0,
+    limit: 750.9,
     reason:
       'Was 743 KB when this budget was first asked for. The application had ' +
       'already grown to 771 KB on its own - the extracted state module, the ' +
@@ -134,12 +134,14 @@ const BUDGETS = [
       "\n\nThe sky repaint, after merging v4 07f80351f (D-R4-PERF-STARFIELD-02): restacked on the 747.4 KB v4 reached; raised from 747.4 to 748.3 KB, the measurement of a Node 22.23.4 build of the merged branch: 766,191 bytes (748.23 KB), rounded up to 0.1 KB; set to CI's figure before review. Under the standing approval of 2026-10-10 and the engine and production class exemption (maintainer decision, 2026-11-21)." +
       "\n\nOne scenario revision authority (D-R4-498-02): the revision registry and the notice an old link raises reach the start-up modules; raised from 746.9 to 748.6 KB, the measurement of a Node 22.23.4 build of the branch merged with v4 0bf376ee9: 766,500 bytes (748.54 KB), rounded up to 0.1 KB; set to CI's figure before review. Under the standing approval of 2026-10-10 and the engine and production class exemption (maintainer decision, 2026-11-21)." +
       "\n\nOne scenario revision authority, after merging v4 07f80351f (D-R4-498-04): restacked on the 747.4 KB v4 reached with honest sizes; raised from 747.4 to 749.1 KB, the measurement of a Node 22.23.4 build of the merged branch: 767,003 bytes (749.03 KB), rounded up to 0.1 KB; set to CI's figure before review. Under the standing approval of 2026-10-10 and the engine and production class exemption (maintainer decision, 2026-11-21)." +
-      '\n\nOne scenario revision authority, after merging v4 b35125179 (D-R4-498-06): restacked on the 748.3 KB v4 reached with the sky repaint; raised from 748.3 to 750.0 KB, the measurement of a Node 22.23.4 build of the merged branch: 767,908 bytes (749.91 KB), rounded up to 0.1 KB; CI run 45522504811 measured the same 767,908 bytes. Under the standing approval of 2026-10-10 and the engine and production class exemption (maintainer decision, 2026-11-21).',
+      '\n\nOne scenario revision authority, after merging v4 b35125179 (D-R4-498-06): restacked on the 748.3 KB v4 reached with the sky repaint; raised from 748.3 to 750.0 KB, the measurement of a Node 22.23.4 build of the merged branch: 767,908 bytes (749.91 KB), rounded up to 0.1 KB; CI run 45522504811 measured the same 767,908 bytes. Under the standing approval of 2026-10-10 and the engine and production class exemption (maintainer decision, 2026-11-21).' +
+      "\n\nThe binary star system's planets moved past the stable distance (D-R4-463-05): the corrected scenario keeps its earlier world as revision 1, so the retained row, its geometry and the geometry lookup reach the start-up modules; raised from 750.0 to 750.8 KB, the measurement of a Node 22.23.4 build of the branch over v4 1b28b7a54: 768,736 bytes (750.72 KB), rounded up to 0.1 KB; CI run 45696780876 measured the same 768,736 bytes. Maintainer decision, 2026-11-25, under the standing approval of 2026-10-10." +
+      "\n\nThe Lagrange lab's retained revision (D-R4-463-07): the corrected scenario keeps its earlier row as revision 1 and its card says three hundredths; raised from 750.8 to 750.9 KB, the measurement of a Node 22.23.4 build of the branch over the binary star correction: 768,887 bytes (750.87 KB), rounded up to 0.1 KB; set to CI's figure before review. Maintainer decision, 2026-11-25, under the standing approval of 2026-10-10.",
   },
   {
     id: 'deferred',
     label: 'Deferred JavaScript (lazy chunks, gzipped)',
-    limit: 3283.2,
+    limit: 3283.3,
     reason:
       'Jumped from 1369 KB to 2105 KB when three.js and Chart.js stopped being ' +
       'CDN requests and became bundled chunks. That is the point of the change ' +
@@ -774,7 +776,8 @@ const BUDGETS = [
       '\n\nOne scenario revision authority, after merging v4 07f80351f (D-R4-498-04): restacked on the 3278.9 KB v4 reached with honest sizes: a Node 22.23.4 build of the merged branch measured 3,358,473 bytes gzipped (3279.76 KB), so 3279.8 KB rounded up, and grant eh becomes 0.9 KB; set again from the CI figure before review. Under the standing approval of 2026-10-10 and the engine and production class exemption (maintainer decision, 2026-11-21).' +
       '\n\nThe nudge test, its strings in both languages (in their own catalogs, loaded with the panel) and the three-body readout that follows the tracer (register D-R4-350-05): 3,356,481 bytes gzipped on Node 22, raised by the measured overrun under the standing approval of 2026-10-10.' +
       '\n\nThe nudge test, after merging v4 017a153af (D-R4-350-06): restacked on the 3279.8 KB v4 reached with the scenario revisions: a Node 22.23.4 build of the merged branch measured 3,361,720 bytes gzipped (3282.93 KB); CI run 45540056951 on the rebuilt instructor bundle measured 3,361,818 bytes (3283.03 KB), so 3283.1 KB rounded up, and grant ei becomes 3.3 KB. Under the standing approval of 2026-10-10 and the engine and production class exemption (maintainer decision, 2026-11-21).' +
-      '\n\nThe seven corrections to the orbit locking and habitable zone lessons (D-R4-ORBITFIX-01): raised from 3283.1 to 3283.2 KB, the measurement by CI of the branch (head 8430ec23a): 3,361,953 bytes gzipped (3283.157 KB), rounded up to 0.1 KB. Under the standing approval of 2026-10-10.',
+      '\n\nThe seven corrections to the orbit locking and habitable zone lessons (D-R4-ORBITFIX-01): raised from 3283.1 to 3283.2 KB, the measurement by CI of the branch (head 8430ec23a): 3,361,953 bytes gzipped (3283.157 KB), rounded up to 0.1 KB. Under the standing approval of 2026-10-10.' +
+      "\n\nThe binary star system's planets moved past the stable distance (D-R4-463-05): the experiment and validation workers build worlds too, so they carry the same retained revision; raised from 3283.2 to 3283.3 KB, the measurement of a Node 22.23.4 build of the branch over v4 1b28b7a54: 3,362,090 bytes gzipped (3283.29 KB); CI run 45696780876 measured 3,362,000 bytes (3283.20 KB), rounded up to 0.1 KB. Under the standing approval of 2026-10-10, for the correction the maintainer accepted the start-up cost of on 2026-11-25.",
   },
 ];
 

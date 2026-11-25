@@ -245,13 +245,11 @@ export const ENGINE_GEOMETRY = /* @__PURE__ */ Object.freeze({
   // and the halo together set.
   // prettier-ignore
   'coma-cluster': { steps: [{ rule: { name: 'bound-cluster', params: { members: 24, radius: 2600, memberMassSuns: 4, ellipticals: 6, concentration: 0.55, speedFloor: 0.55, speedSpread: 0.5 } } }] },
-  // Two stars (1.2 and 0.8 solar masses, 120 units apart) about a stationary
-  // center, and the generated planets, gas giants and asteroids circling both;
-  // the whole system is recentered. The generated stars are replaced.
+  // Revision 2 (1 is in js/shareState.js): stars 1.2 AU apart, planets past Holman and Wiegert's 2.43 separations.
   // prettier-ignore
   'binary-star-system': { keep: ['Planet', 'GasGiant', 'BlackHole', 'Asteroid', 'Comet', 'NeutronStar', 'WhiteDwarf', 'Debris'], recenter: true, steps: [
     { rule: { name: 'circular-binary-stars', params: { massesSuns: [1.2, 0.8], separation: 120 } } },
-    { rule: { name: 'orbital-population', params: { centralStars: 2, planetInner: 150, planetStep: 30, giantInner: 300, giantStep: 50, asteroidInner: 400, asteroidSpan: 100 } } },
+    { rule: { name: 'orbital-population', params: { centralStars: 2, planetInner: 330, planetStep: 30, giantInner: 500, giantStep: 50, asteroidInner: 600, asteroidSpan: 100 } } },
   ] },
   // The generated star's planets, gas giants and asteroids on circular orbits,
   // and a black hole that keeps the name it was drawn with, far off and
@@ -985,6 +983,7 @@ const populationRules = {
  * @property {() => (object|null)} takePendingSettings - Share-link settings, once
  * @property {(name: string, revision?: number) => void} setScenarioName - What was built
  * @property {number} [revision] - The revision to build (SCENARIO_REVISIONS.md); absent: the latest
+ * @property {(id: string, revision?: number) => object|undefined} [geometryFor] - A retained revision's declaration
  * @property {() => void} hideObjectInspector - Close the inspector before rebuild
  * @property {(key: string) => void} showScenarioInfo - Repaint the scenario card
  * @property {() => void} updateObjectTypeButton - Sync the insertion-type button
@@ -2058,16 +2057,17 @@ export const buildWorld = ctx => {
   }
 
   // --- Scenarios whose bodies are declared as data ------------------------------
-  // SCENARIO_GEOMETRY (js/scenarios.js) says what they are and expandGeometry
-  // builds them through what only this module can supply: a live engine object
-  // and the named rules. The generated population has already been drawn (the
-  // seeded generator keeps its sequence); a geometry replaces it, emptying every
-  // list but the galaxies as the hand-built blocks did. Bodies are made in the
-  // declaration's order because each constructor draws from the generator, and
-  // a body the declaration takes from the generated population (`from`) keeps
-  // its id and everything else the generator gave it.
+  // SCENARIO_GEOMETRY (js/scenarios.js), or a retained earlier revision's, says
+  // what they are; expandGeometry builds them with a live engine object and the
+  // named rules. The generated population is already drawn (the seeded generator
+  // keeps its sequence); a geometry replaces it, emptying every list but the
+  // galaxies. Bodies are made in the declaration's order because constructors
+  // draw from the generator; a body taken from the generated population
+  // (`from`) keeps its id and everything else the generator gave it.
   const declared =
-    SCENARIO_GEOMETRY[starting_preset] ?? ENGINE_GEOMETRY[starting_preset];
+    ctx.geometryFor?.(starting_preset, ctx.revision) ??
+    SCENARIO_GEOMETRY[starting_preset] ??
+    ENGINE_GEOMETRY[starting_preset];
   // A declaration with only `place` steps has nothing to build here.
   if (declared?.steps) {
     const generated = generatedBodies();

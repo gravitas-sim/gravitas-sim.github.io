@@ -840,7 +840,8 @@ export const SCENARIO_PRESETS = /* @__PURE__ */ Object.freeze({
   'binary-star-system': {
     num_black_holes: 0,
     num_stars: 2, // Add 2 stars for binary system
-    mutual_gravity: true,
+    mutual_gravity: false,
+    star_only_gravity: true,
     placement: 'Empty',
     num_planets: 5,
     num_gas_giants: 2,
@@ -851,11 +852,10 @@ export const SCENARIO_PRESETS = /* @__PURE__ */ Object.freeze({
     sim_speed: 0.8,
     enable_star_merging: true,
     show_trails: true,
-    // Trail length is a frame count, so 30 held about half a second of
-    // motion: a stub the width of the star itself. This is roughly a
-    // quarter of the binary's period, which is enough to read as an orbit.
+    // Trail length is a frame count: 30 held half a second, a stub the width
+    // of the star; 240 is about a quarter period, enough to read as an orbit.
     trail_length: 240,
-    preset_zoom: 1.5,
+    preset_zoom: 0.55,
     // A 120-unit binary needs a bounded step. The dramatic version of this -
     // the separation falling from 120 to 85 in twenty seconds at six times
     // speed, ending in a merger - was a genuine bug in the integrator, since
@@ -1574,9 +1574,9 @@ export const SCENARIO_PRESETS = /* @__PURE__ */ Object.freeze({
     trail_length: 900,
     show_conservation_diagnostics: true,
     // The Jacobi constant is conserved by the dynamics, and the lesson asks
-    // students to watch it hold. Symplectic Euler's first-order drift would
-    // make that a claim about the integrator.
-    integrator: 'Velocity Verlet',
+    // students to watch it hold. Verlet drifted 3e-4 of it on the tracer's
+    // close pass; RK4 at the same step holds it to 2e-8 over five orbits.
+    integrator: 'RK4',
     max_timestep: 0.3,
     sim_speed: 30,
     min_interaction_distance: 0.01,
@@ -1586,7 +1586,7 @@ export const SCENARIO_PRESETS = /* @__PURE__ */ Object.freeze({
     lagrange_primary_mass: 1,
     lagrange_secondary_mass: 0.03,
     lagrange_separation: 8,
-    lagrange_tracer_fraction: 1e-9,
+    lagrange_tracer_fraction: 1e-12,
     lagrange_tracer_x: 0.6,
     lagrange_tracer_y: 0,
     lagrange_tracer_vx: 0,
