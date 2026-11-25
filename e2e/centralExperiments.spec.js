@@ -1702,7 +1702,21 @@ test.describe('the central experiment of each investigation', () => {
       widths[0],
       'a bracket of a few days, not the whole loop'
     ).toBeLessThan(16);
-    expect(spread).toBeCloseTo((widths[0] + widths[1]) / 2, 1);
+    // The uncertainty is half of the two widths added, shown to 0.1 day. Each
+    // width is a difference of two readings taken to 0.1 day, so the mean of
+    // the two shown widths often lands on a half of the last digit (12.25) and
+    // the page shows it rounded (12.3). The shown value is within half a
+    // display step of the exact figure, and the 1e-9 is only floating point
+    // noise: toBeCloseTo(x, 1) fails when the two sit exactly 0.05 apart.
+    const exactSpread =
+      ((await v('a2_day')) -
+        (await v('a1_day')) +
+        ((await v('b2_day')) - (await v('b1_day')))) /
+      2;
+    expect(Math.abs(spread - exactSpread)).toBeLessThanOrEqual(0.05 + 1e-9);
+    expect(Math.abs(spread - (widths[0] + widths[1]) / 2)).toBeLessThanOrEqual(
+      0.05 + 1e-9
+    );
     // The loop is 72.7 days in the circular model the scene is built from;
     // the reading is that to within its own uncertainty, and a day of drift.
     expect(Math.abs(length - 72.7)).toBeLessThanOrEqual(spread + 1);
