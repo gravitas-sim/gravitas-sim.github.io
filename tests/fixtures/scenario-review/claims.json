@@ -125,7 +125,8 @@
         { "id": "start-overlap", "kind": "pattern", "card": "(a stable planetary system before the hole arrives)", "measure": "no two bodies start closer than the sum of their collision radii" },
         { "id": "ejection", "kind": "event", "card": "planet ejection", "measure": "a planet or giant ends unbound from the star and hole together (energy about their joint centre, with their joint mass), under both seeds" },
         { "id": "capture", "kind": "event", "card": "tidal capture", "measure": "a planet or giant ends bound to the hole rather than the star, under both seeds" },
-        { "id": "disruption", "kind": "event", "card": "dramatic orbital disruption", "measure": "a planet or giant is merged into or disrupted by the hole, or its orbit about the star changes semi-major axis by more than 50%, under both seeds" }
+        { "id": "disruption", "kind": "event", "card": "dramatic orbital disruption", "measure": "a planet or giant is merged into or disrupted by the hole, or its orbit about the star changes semi-major axis by more than 50%, under both seeds" },
+        { "id": "ejection-bound", "kind": "event", "supersedes": "ejection", "committed": "2026-11-25, before its first run: the ejection claim's joint-centre test counts 16 planets and giants unbound at t = 0 (D-R4-463-02), so its pass is not evidence; it stays on the record", "card": "planet ejection", "measure": "a planet or giant that starts bound to the star (negative two-body energy about the star at t = 0) ends with positive two-body energy about the star and about the hole, each with that body's own mass, under both seeds" }
       ],
       "expected": "CORRECT (the start overlap, this row only) and REFRAME where an event does not occur under both seeds",
       "discovery": "Run it twice with different seeds and count which planets are ejected and which are captured."
