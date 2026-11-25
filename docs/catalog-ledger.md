@@ -18,7 +18,7 @@ Rows by kind: activity 6, course 6, experiment 4, investigation 146, sequence 11
 
 Baseline (measured at f9277ff8): 146 investigations (124 lessons, 10 Observatory, 9 3-D, 3 mission), 6 activity entries, 4 bench labs, 7 courses (6 rows and 1 out of scope), 11 sequences, 69 scenarios (61 sandbox, 8 3-D lab), 16 datasets.
 
-Editorial: OPEN 156, REVISED 17. Redesign: OPEN 157, REVIEWED CLEAR 5, REVISED 11. Scenario dispositions: OPEN 69.
+Editorial: OPEN 156, REVISED 17. Redesign: OPEN 157, REVIEWED CLEAR 5, REVISED 11. Scenario dispositions: OPEN 67, REVISED 2.
 
 Scene class of the lessons: portrait or backdrop 94, setup scenario 26, engine-integrated stage 2, model-owned stage 2.
 
@@ -231,7 +231,7 @@ Scene class of the lessons: portrait or backdrop 94, setup scenario 26, engine-i
 | `scenario:coma-cluster`                   | Coma Cluster: Zwicky, 1933                                           | galaxies, clusters, star swarms                       | REVIEW   |   466 | OPEN        |
 | `scenario:exoplanet-characterization-lab` | Exoplanet Characterization Lab                                       | exoplanet detection                                   | KEEP     |   462 | OPEN        |
 | `scenario:blended-binary`                 | Blended Binary: a hidden companion                                   | exoplanet detection                                   | REVIEW   |   462 | OPEN        |
-| `scenario:gravity-assist-lab`             | Gravity Assist Lab: one planet, one spacecraft, nothing else         | flybys and assists                                    | REVIEW   |   463 | OPEN        |
+| `scenario:gravity-assist-lab`             | Gravity Assist Lab: one planet, one spacecraft, nothing else         | flybys and assists                                    | REVIEW   |   463 | REVISED     |
 | `scenario:gravity-assist-heliocentric`    | Gravity Assist: the same flyby, with a Sun to steal from             | flybys and assists                                    | REVIEW   |   463 | OPEN        |
 | `scenario:lagrange-point-lab`             | Lagrange Point Lab: two stars, one circular orbit, one test particle | binaries, circumbinary, three-body                    | KEEP     |   463 | OPEN        |
 | `scenario:orbital-transfer-lab`           | Orbital Transfer Lab: one star, one spacecraft, one destination      | hand-placed single-star systems                       | REVIEW   |   462 | OPEN        |
@@ -272,7 +272,7 @@ Scene class of the lessons: portrait or backdrop 94, setup scenario 26, engine-i
 | `scenario:alien-dyson-swarm-collapse`     | Alien Dyson Swarm Collapse                                           | galaxies, clusters, star swarms                       | CORRECT  |   466 | OPEN        |
 | `scenario:tidal-arm-tango`                | Tidal Arm Tango                                                      | galaxies, clusters, star swarms                       | CORRECT  |   466 | OPEN        |
 | `scenario:hungry-hungry-holes`            | Hungry Hungry Holes                                                  | generated populations around one dominant mass        | CORRECT  |   482 | OPEN        |
-| `scenario:slingshot-gauntlet`             | Slingshot Gauntlet                                                   | flybys and assists                                    | REVIEW   |   463 | OPEN        |
+| `scenario:slingshot-gauntlet`             | Slingshot Gauntlet                                                   | flybys and assists                                    | REVIEW   |   463 | REVISED     |
 | `scenario:black-hole-billiards`           | Black Hole Billiards                                                 | generated populations around one dominant mass        | CORRECT  |   482 | OPEN        |
 | `scenario:stellar-nursery`                | Stellar Nursery                                                      | galaxies, clusters, star swarms                       | CORRECT  |   466 | OPEN        |
 | `scenario:3d-r1`                          | An inclined Kepler orbit                                             | 3-D lab reference systems (separate engine, js/lab3d) | REVIEW   |   494 | OPEN        |

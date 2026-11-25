@@ -140,7 +140,12 @@ describe('the baseline the ledger reproduces', () => {
       482: 12,
       494: 8,
     });
-    for (const s of ledger.scenarios) expect(s.disposition).toBe('OPEN');
+    // Rows close as each owner's review lands; a closed row says why.
+    for (const s of ledger.scenarios)
+      expect([
+        s.id,
+        s.disposition === 'OPEN' || s.reason.trim() !== '',
+      ]).toEqual([s.id, true]);
   });
 });
 
