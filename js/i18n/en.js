@@ -984,7 +984,7 @@ export const EN = {
   'scenario.gravity-assist-lab.title':
     'Gravity Assist Lab: one planet, one spacecraft, nothing else',
   'scenario.gravity-assist-lab.summary':
-    'A rogue planet of five Jupiter masses drifting through empty space, and an Earth-mass spacecraft crossing its path. No star, which is the point: with nothing else in the universe the planet moves in a straight line and its frame is exactly inertial, so the strangest fact about a gravity assist can be stated exactly rather than approximately. The spacecraft leaves at the same speed relative to the planet that it arrived with, and at a completely different speed relative to everything else.',
+    'A rogue planet of five Jupiter masses drifting through empty space, and a spacecraft of a millionth of its mass crossing its path. No star, which is the point: with nothing else in the universe the planet moves in a straight line and its frame is exactly inertial, so the strangest fact about a gravity assist can be stated exactly. The spacecraft leaves at the same speed relative to the planet that it arrived with, and at a completely different speed relative to everything else.',
   'scenario.gravity-assist-heliocentric.title':
     'Gravity Assist: the same flyby, with a Sun to steal from',
   'scenario.gravity-assist-heliocentric.summary':
@@ -1106,7 +1106,7 @@ export const EN = {
     'Four black holes at the corners of a square, pulling stars from a shared central cluster.',
   'scenario.slingshot-gauntlet.title': 'Slingshot Gauntlet',
   'scenario.slingshot-gauntlet.summary':
-    'A fast-moving star fired through a black hole obstacle course. Watch gravitational slingshots.',
+    'A fast star fired through a field of five fixed black holes. Each hole bends its path, but because the holes stay still the star leaves at the speed it arrived with: it is deflected, not sped up. Taking speed from a body takes a body that moves, as in the Gravity Assist Lab.',
   'scenario.black-hole-billiards.title': 'Black Hole Billiards',
   'scenario.black-hole-billiards.summary':
     'A few small black holes orbiting a supermassive one, perturbing each other and creating chaotic motion.',
