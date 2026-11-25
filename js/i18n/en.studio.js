@@ -220,4 +220,6 @@ export const EN_STUDIO = {
     'Set this to 0: a scenario with its own bodies does not also generate them.',
   'studio.error.scenario':
     'A built-in scenario by its id, such as solar-system, and then no bodies of its own.',
+  'studio.error.scenarioRevision':
+    'A revision of 2 or more, beside the built-in scenario it is a revision of.',
 };

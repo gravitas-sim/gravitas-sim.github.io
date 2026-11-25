@@ -21,6 +21,7 @@
 export const FIXTURES = {
   'setup-v0': { cadenceDays: 10, sigmaMs: 2, baselineDays: 300 },
   'share-link-v1': { v: 1, s: 'Solar System', seed: 'abc' },
+  'share-link-v2': { v: 2, s: 'solar-system', seed: 'abc' },
   'scenario-name': 'Solar System',
   'store-v1': {
     id: 'old-1',
@@ -118,6 +119,11 @@ export const PREVIOUS = [
     row: 'world share link',
     previous: 'link version 1 (the scenario by its English name)',
     inline: 'share-link-v1',
+  },
+  {
+    row: 'world share link (with a scenario revision)',
+    previous: 'link versions 1 and 2 (revision 1)',
+    inline: ['share-link-v1', 'share-link-v2'],
   },
   {
     row: 'built-in scenario id',
