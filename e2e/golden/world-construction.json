@@ -456,8 +456,8 @@
       "StarObject": 2,
       "Planet": 1
     },
-    "totalMass": 1030.00000103,
-    "momentumResidual": "about 1e-8 of the momentum summed",
+    "totalMass": 1030,
+    "momentumResidual": "about 1e-11 of the momentum summed",
     "scenarioName": "lagrange-point-lab",
     "presetSentinel": "None",
     "zoom": 0.42,
@@ -465,12 +465,12 @@
       "x": 0,
       "y": 0
     },
-    "bodies": "07e449b0631f0a1a",
-    "settings": "1949d6b39e9dcfbb",
+    "bodies": "29a15973e29d7efb",
+    "settings": "419fd5317e50949f",
     "head": [
       "stars|0|StarObject|2|Primary|1000|13.95141|-23.3009708738|0|0|-0.0467382714637|P|",
       "stars|1|StarObject|3|Secondary|30|9.83197540035|776.699029126|0|0|1.55794238212|P|",
-      "planets|0|Planet|4|Tracer|0.00000103|0.8|480|0|0|0.962808392153|P|"
+      "planets|0|Planet|4|Tracer|1.03e-9|0.8|480|0|0|0.962808392153|P|"
     ]
   },
   "orbital-transfer-lab": {
@@ -859,17 +859,17 @@
     "momentumResidual": "cancels into rounding error",
     "scenarioName": "binary-star-system",
     "presetSentinel": "None",
-    "zoom": 1.5,
+    "zoom": 0.55,
     "pan": {
       "x": 0,
       "y": 0
     },
-    "bodies": "0649d3cc489a47c0",
-    "settings": "9d1bd0c9ca921ead",
+    "bodies": "62421f81e9be61c3",
+    "settings": "fd77775b46560e47",
     "head": [
-      "stars|0|StarObject|29|Solar Majesty|1200|11.6762681223|-48|0|-0.00312629577623|1.77614077073||",
-      "stars|1|StarObject|30|Stellar Dynamo|800|8.27230405627|72|0|-0.00312629577623|-2.69599518427||",
-      "planets|0|Planet|2|Eden Alpha|0.00044874658439|2.826718171|-147.076285327|-29.4714488013|0.78277900559|-3.93474788666||"
+      "stars|0|StarObject|29|Solar Majesty|1200|11.6762681223|-48|0|-0.00251858737844|1.77873862684||",
+      "stars|1|StarObject|30|Stellar Dynamo|800|8.27230405627|72|0|-0.00251858737844|-2.69339732816||",
+      "planets|0|Planet|2|Eden Alpha|0.00044874658439|2.826718171|-323.567827719|-64.8371873628|0.527338658712|-2.6543507242||"
     ]
   },
   "slingshot": {
@@ -900,15 +900,15 @@
   },
   "rogue-encounter": {
     "error": null,
-    "count": 98,
+    "count": 58,
     "byType": {
       "BlackHole": 1,
       "StarObject": 1,
       "Planet": 12,
       "GasGiant": 4,
-      "Asteroid": 80
+      "Asteroid": 40
     },
-    "totalMass": 31026.9415694,
+    "totalMass": 31026.9415506,
     "momentumResidual": "about 1e0 of the momentum summed",
     "scenarioName": "rogue-encounter",
     "presetSentinel": "None",
@@ -917,12 +917,12 @@
       "x": 0,
       "y": 0
     },
-    "bodies": "c5991483ee74bf11",
-    "settings": "083274cf3ec80ca9",
+    "bodies": "58e31c176a3f6387",
+    "settings": "55e6ed4bfd1860e5",
     "head": [
       "bh_list|0|BlackHole|1|Stellar Grave|30000|22.1935289174|-800|200|20|-5||",
       "stars|0|StarObject|0|Stellar Dynamo|1000|10|0|0|0|0||",
-      "planets|0|Planet|2|Eden Glorious|0.004035964989|5.46344255337|5.33327726008|49.7147478488|-5.44597776749|0.584231252155||"
+      "planets|0|Planet|2|Eden Glorious|0.004035964989|5.46344255337|1.0764960056|-49.9884102203|5.47595597829|0.117924229066||"
     ]
   },
   "neutron-star-collision": {

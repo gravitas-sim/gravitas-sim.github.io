@@ -17,7 +17,7 @@ import { applyPreset } from '../js/scenarios.js';
 import { buildWorld } from '../js/world/build.js';
 import { DEFAULT_SETTINGS, setScenarioName } from '../js/appState.js';
 import { withSeed } from '../js/rng.js';
-import { currentRevision, rowFor } from '../js/shareState.js';
+import { currentRevision, geometryFor, rowFor } from '../js/shareState.js';
 
 export const LISTS = [
   'bh_list',
@@ -96,6 +96,7 @@ export function digest(key, seed, pending = null, revision) {
   withSeed(seed, () => {
     buildWorld({
       revision: rev,
+      geometryFor,
       settings,
       state,
       applyPreset: () =>

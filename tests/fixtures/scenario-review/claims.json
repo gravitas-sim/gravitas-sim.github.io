@@ -108,7 +108,8 @@
         { "id": "planet-orbit", "kind": "cardNumber", "card": "on a circular orbit five AU from a star", "value": 5, "unit": "AU", "tolerance": 0.02 },
         { "id": "gains", "kind": "pattern", "card": "the spacecraft leaves faster around the star than it arrived", "measure": "the spacecraft's speed about the star after the flyby, where it is farthest from the planet, exceeds its speed before" },
         { "id": "momentum", "kind": "pattern", "card": "the planet is slowed by exactly the momentum it gained", "measure": "the change of the planet's momentum about the star equals minus the spacecraft's change within 2%", "tolerance": 0.02 },
-        { "id": "panel", "kind": "pattern", "card": "the panel reports how approximate", "measure": "the panel's approximation figure equals an independent computation from the same bodies within 2%", "tolerance": 0.02 }
+        { "id": "panel", "kind": "pattern", "card": "the panel reports how approximate", "measure": "the panel's approximation figure equals an independent computation from the same bodies within 2%", "tolerance": 0.02 },
+        { "id": "energy", "kind": "pattern", "supersedes": "momentum", "committed": "2026-11-25, maintainer decision, before its first run; the momentum claim stays on the record as it failed", "card": "the planet's orbit loses the energy the spacecraft gained, far too little to notice", "measure": "between the two instants the gains claim reads, the spacecraft's two-body energy about the star (its kinetic energy relative to the star plus its potential energy from the star) rises by some E; the planet's two-body energy about the star, less the same quantity at the same step of a control run without the spacecraft, falls by E within 2%; and the planet's speed about the star differs from the control run's by less than 1e-6 of that speed", "tolerance": 0.02, "unnoticed": 0.000001 }
       ],
       "expected": "KEEP",
       "discovery": "Change which side of the planet the spacecraft passes; it leaves slower instead of faster."
@@ -124,7 +125,8 @@
         { "id": "start-overlap", "kind": "pattern", "card": "(a stable planetary system before the hole arrives)", "measure": "no two bodies start closer than the sum of their collision radii" },
         { "id": "ejection", "kind": "event", "card": "planet ejection", "measure": "a planet or giant ends unbound from the star and hole together (energy about their joint centre, with their joint mass), under both seeds" },
         { "id": "capture", "kind": "event", "card": "tidal capture", "measure": "a planet or giant ends bound to the hole rather than the star, under both seeds" },
-        { "id": "disruption", "kind": "event", "card": "dramatic orbital disruption", "measure": "a planet or giant is merged into or disrupted by the hole, or its orbit about the star changes semi-major axis by more than 50%, under both seeds" }
+        { "id": "disruption", "kind": "event", "card": "dramatic orbital disruption", "measure": "a planet or giant is merged into or disrupted by the hole, or its orbit about the star changes semi-major axis by more than 50%, under both seeds" },
+        { "id": "ejection-bound", "kind": "event", "supersedes": "ejection", "committed": "2026-11-25, before its first run: the ejection claim's joint-centre test counts 16 planets and giants unbound at t = 0 (D-R4-463-02), so its pass is not evidence; it stays on the record", "card": "planet ejection", "measure": "a planet or giant that starts bound to the star (negative two-body energy about the star at t = 0) ends with positive two-body energy about the star and about the hole, each with that body's own mass, under both seeds" }
       ],
       "expected": "CORRECT (the start overlap, this row only) and REFRAME where an event does not occur under both seeds",
       "discovery": "Run it twice with different seeds and count which planets are ejected and which are captured."

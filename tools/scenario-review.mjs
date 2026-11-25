@@ -105,6 +105,8 @@ const BOUND_KEYS = [
   'threshold',
   'radiusAU',
   'what',
+  'unnoticed',
+  'supersedes',
 ];
 
 /**
@@ -1329,7 +1331,7 @@ function gravityAssistHeliocentric({ rate, seed }) {
     "the spacecraft at closest approach (2 pi r / v) and the planet's orbit (shorter)";
   if (!rec || !rec.complete) {
     const why = `the flyby did not complete (lost ${rec?.lost}, after ${r.out.steps} steps)`;
-    for (const id of ['gains', 'momentum', 'panel'])
+    for (const id of ['gains', 'momentum', 'panel', 'energy'])
       rows.push(notRun(c[id], why));
     return { rows, steps: r.out, spp, watched };
   }
@@ -1390,6 +1392,35 @@ function gravityAssistHeliocentric({ rate, seed }) {
       mismatch,
       mismatch < c.momentum.tolerance,
       `|planet change + spacecraft change| / |spacecraft change|, both about the star between the two instants; the planet's own orbital turning over the flyby is in the planet's change (planet ${sig(mag(dPl), 4)}, spacecraft ${sig(mag(dPr), 4)}), which is also what the page's own ledger line compares (its mismatch ${sig(rec.ledgerMismatch, 4)}). Not the claim: against a control run without the spacecraft the planet's recoil leaves a mismatch of ${sig(alt, 4)}`
+    )
+  );
+  // Energy about the star, the claim that supersedes the momentum line (see
+  // claims.json): each body's two-body energy about the star - kinetic
+  // relative to the star plus potential from the star alone - at the same two
+  // instants, the planet's taken against the control run at the same step.
+  const twoBody = (m, b, q) =>
+    0.5 * m * ((b[2] - q[2]) ** 2 + (b[3] - q[3]) ** 2) -
+    (G * r.star.mass * m) / Math.hypot(b[0] - q[0], b[1] - q[1]);
+  const at0 = o => [o.x, o.y, o.vx, o.vy];
+  const s0 = at0(r.t0.star);
+  const gainProbe =
+    twoBody(probe.mass, r.log.probe[n - 1], r.log.star[n - 1]) -
+    twoBody(probe.mass, at0(r.t0.probe), s0);
+  const lossPlanet =
+    twoBody(planet.mass, ctlEnd, ctlStar) -
+    twoBody(planet.mass, r.log.planet[n - 1], r.log.star[n - 1]);
+  const energyMismatch = Math.abs(lossPlanet - gainProbe) / Math.abs(gainProbe);
+  const vPl = Math.hypot(pa.vx, pa.vy);
+  const vCtl = Math.hypot(ctlEnd[2] - ctlStar[2], ctlEnd[3] - ctlStar[3]);
+  const speedShift = Math.abs(vPl - vCtl) / vCtl;
+  rows.push(
+    row(
+      c.energy,
+      energyMismatch,
+      gainProbe > 0 &&
+        energyMismatch < c.energy.tolerance &&
+        speedShift < c.energy.unnoticed,
+      `|planet loss - spacecraft gain| / spacecraft gain, two-body energies about the star between the two instants, the planet's against the control run (spacecraft gain ${sig(gainProbe, 4)}, planet loss ${sig(lossPlanet, 4)}); the planet's speed about the star differs from the control run's by ${sig(speedShift, 3)} of it (limit ${c.energy.unnoticed})`
     )
   );
   // The panel's approximation figure (js/assistPanel.js caveatText): the
@@ -1464,8 +1495,12 @@ function rogueEncounter({ rate, seed }) {
     vx: star.vel.x,
     vy: star.vel.y,
   });
-  for (const t of mob)
-    as0.set(t.body, elementsAbout(t.body, centreStar(), G).a);
+  const boundAtStart = new Set();
+  for (const t of mob) {
+    const e0 = elementsAbout(t.body, centreStar(), G);
+    as0.set(t.body, e0.a);
+    if (e0.bound) boundAtStart.add(t.body);
+  }
   // The same test at t = 0, so a reader can see how much of the end count is
   // the frame: the hole's own motion makes most of the system unbound from the
   // joint centre before anything has happened.
@@ -1493,6 +1528,10 @@ function rogueEncounter({ rate, seed }) {
   let toHole = 0;
   let reshaped = 0;
   let lostOther = 0;
+  // The claim that supersedes `ejection` (claims.json): bound to the star at
+  // t = 0, and at the end unbound from the star and from the hole, each by
+  // its own two-body energy with its own mass.
+  let ejectedBound = 0;
   const reshapedA = [];
   let reshapedBoundA = 0;
   for (const t of mob) {
@@ -1519,6 +1558,10 @@ function rogueEncounter({ rate, seed }) {
       );
       const es = starAlive ? elementsAbout(t.body, centreStar(), G) : null;
       if (eh.bound && (!es || eh.energy < es.energy)) captured++;
+      if (boundAtStart.has(t.body) && !eh.bound && (!es || !es.bound))
+        ejectedBound++;
+    } else if (boundAtStart.has(t.body) && starAlive) {
+      if (!elementsAbout(t.body, centreStar(), G).bound) ejectedBound++;
     }
     if (starAlive) {
       const es = elementsAbout(t.body, centreStar(), G);
@@ -1538,6 +1581,14 @@ function rogueEncounter({ rate, seed }) {
       ejected,
       ejected >= 1,
       `planets and giants unbound from the star and hole together (their joint centre and joint mass) at t = ${sig(until)}; by the same test ${ejectedAtStart} were already unbound at t = 0; ${reshaped - reshapedBoundA} are unbound from the star alone at the end`
+    )
+  );
+  rows.push(
+    row(
+      c['ejection-bound'],
+      ejectedBound,
+      ejectedBound >= 1,
+      `planets and giants bound to the star at t = 0 (${boundAtStart.size} of ${mob.length}) that end unbound from the star and from the hole, each by its own two-body energy, at t = ${sig(until)}`
     )
   );
   rows.push(
@@ -1932,8 +1983,12 @@ export function measureMember(
 export function verdictFrom(rows, claims) {
   const failing = [];
   const notRunIds = [];
+  // A claim a later committed claim supersedes keeps its rows on the record,
+  // failing as measured, but no longer decides the verdict: the later one does.
+  const superseded = claims.filter(c => c.supersedes).map(c => c.supersedes);
   for (const claim of claims) {
     const mine = rows.filter(r => r.claim === claim.id);
+    if (superseded.includes(claim.id)) continue;
     if (mine.some(r => r.pass === false)) failing.push(claim.id);
     else if (mine.some(r => r.status === 'NOT RUN')) notRunIds.push(claim.id);
   }
@@ -1952,6 +2007,7 @@ export function verdictFrom(rows, claims) {
     failing,
     notRun: notRunIds,
     leans,
+    ...(superseded.length ? { superseded } : {}),
   };
 }
 
