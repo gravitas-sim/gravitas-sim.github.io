@@ -28,7 +28,7 @@
         "toolRequests": 145
       },
       "largest-lesson": {
-        "kb": 2970.8,
+        "kb": 2959.7,
         "requests": 150
       },
       "teaching": {
@@ -154,8 +154,8 @@
         "toolRequests": 80
       },
       "largest-lesson": {
-        "kb": 1056.1,
-        "requests": 83
+        "kb": 1050.3,
+        "requests": 82
       },
       "teaching": {
         "kb": 110.8,

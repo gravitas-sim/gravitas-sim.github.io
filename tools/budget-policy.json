@@ -36,7 +36,7 @@
         "requests": 142
       },
       "largest-lesson": {
-        "kb": 2970.8,
+        "kb": 2959.7,
         "requests": 150
       },
       "observatory": "the Observatory with one observation open: read from tools/route-budgets.json"
