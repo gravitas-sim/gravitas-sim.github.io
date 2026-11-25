@@ -89,6 +89,20 @@ export const SCENARIO_REVISIONS = {
       },
     },
   },
+  // Revision 2 spreads 40 asteroids over 350 to 600 units instead of 80 over
+  // 350 to 450, where two could start overlapping under either review seed.
+  'rogue-encounter': {
+    revision: 2,
+    earlier: { 1: 'retained' },
+    rows: { 1: { ...SCENARIO_PRESETS['rogue-encounter'], num_asteroids: 80 } },
+    geometry: {
+      // prettier-ignore
+      1: { keep: ['Star', 'Planet', 'GasGiant', 'BlackHole', 'Asteroid', 'Comet', 'NeutronStar', 'WhiteDwarf', 'Debris'], steps: [
+        { rule: { name: 'orbital-population', params: { centralStars: 1, planetInner: 50, planetStep: 25, giantInner: 200, giantStep: 50, asteroidInner: 350, asteroidSpan: 100 } } },
+        { body: { type: 'BlackHole', name: 'Rogue', from: { generated: 0, keepName: true }, at: { x: -800, y: 200 }, velocity: { x: 20, y: -5 } } },
+      ] },
+    },
+  },
 };
 const REVISED = id => Object.hasOwn(SCENARIO_REVISIONS, id);
 export const currentRevision = id =>

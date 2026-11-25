@@ -1067,7 +1067,7 @@ export const ES = {
     'Un agujero negro masivo (60 M☉) acompañado de una compañera menor (3 M☉) produce espectaculares asistencias gravitatorias a los planetas y gigantes gaseosos cercanos. Los objetos ganan una velocidad enorme en los encuentros próximos, igual que las sondas espaciales en sus maniobras de asistencia.',
   'scenario.rogue-encounter.title': 'Encuentro con un intruso',
   'scenario.rogue-encounter.summary':
-    'Un agujero negro errante (30 M☉) atraviesa un sistema planetario estable con 12 planetas, 4 gigantes gaseosos y asteroides. Se observa la drástica alteración de las órbitas, la expulsión de planetas y las capturas por marea mientras el intruso siembra el caos.',
+    'Un agujero negro errante (30 M☉) atraviesa un sistema planetario estable con 12 planetas, 4 gigantes gaseosos y asteroides. Se ve cómo engulle algunos planetas y expulsa otros del sistema mientras el intruso siembra el caos.',
   'scenario.neutron-star-collision.title': 'Fusión de estrellas de neutrones',
   'scenario.neutron-star-collision.summary':
     'Dos estrellas de neutrones (1,4 M☉ cada una) caen en espiral la una hacia la otra en una danza mortal. Este suceso poco frecuente produce ondas gravitatorias, estallidos de rayos gamma y elementos pesados mediante nucleosíntesis por proceso r. Inspirado en el suceso GW170817 detectado por LIGO.',

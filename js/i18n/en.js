@@ -1043,7 +1043,7 @@ export const EN = {
     'A massive black hole (60 M☉) paired with a smaller companion (3 M☉) create dramatic gravitational assists for nearby planets and gas giants. Watch objects gain tremendous velocity through close encounters, mimicking spacecraft gravity assists.',
   'scenario.rogue-encounter.title': 'Rogue Encounter',
   'scenario.rogue-encounter.summary':
-    'A wandering black hole (30 M☉) passes through a stable planetary system with 12 planets, 4 gas giants, and asteroids. Watch the dramatic orbital disruption, planet ejection, and tidal capture events as the rogue intruder wreaks havoc.',
+    'A wandering black hole (30 M☉) passes through a stable planetary system with 12 planets, 4 gas giants, and asteroids. Watch it swallow some planets and fling others out of the system as the rogue intruder wreaks havoc.',
   'scenario.neutron-star-collision.title': 'Neutron Star Merger',
   'scenario.neutron-star-collision.summary':
     'Two neutron stars (1.4 M☉ each) spiral toward each other in a death dance. This rare event produces gravitational waves, gamma-ray bursts, and creates heavy elements through r-process nucleosynthesis. Based on the LIGO-detected GW170817 event.',

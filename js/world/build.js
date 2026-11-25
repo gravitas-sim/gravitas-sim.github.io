@@ -256,7 +256,7 @@ export const ENGINE_GEOMETRY = /* @__PURE__ */ Object.freeze({
   // approaching. Nothing is recentered: the visitor is meant to be moving.
   // prettier-ignore
   'rogue-encounter': { keep: ['Star', 'Planet', 'GasGiant', 'BlackHole', 'Asteroid', 'Comet', 'NeutronStar', 'WhiteDwarf', 'Debris'], steps: [
-    { rule: { name: 'orbital-population', params: { centralStars: 1, planetInner: 50, planetStep: 25, giantInner: 200, giantStep: 50, asteroidInner: 350, asteroidSpan: 100 } } },
+    { rule: { name: 'orbital-population', params: { centralStars: 1, planetInner: 50, planetStep: 25, giantInner: 200, giantStep: 50, asteroidInner: 350, asteroidSpan: 250 } } },
     { body: { type: 'BlackHole', name: 'Rogue', from: { generated: 0, keepName: true }, at: { x: -800, y: 200 }, velocity: { x: 20, y: -5 } } },
   ] },
   // The generated star is named Sol, the eight named objects (a published

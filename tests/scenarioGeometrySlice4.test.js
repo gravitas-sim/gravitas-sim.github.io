@@ -376,28 +376,38 @@ describe('slice 4: the worlds against their closed forms', () => {
     }
   );
 
-  test('Rogue Encounter: circular orbits about the star, and a hole that is not recentered', () => {
-    const w = world('rogue-encounter');
-    const star = w.stars[0];
-    const g = G('rogue-encounter');
-    w.planets.forEach((x, i) => {
-      const r = 50 + i * 25;
-      expect(radius(x)).toBeCloseTo(r, 9);
-      expect(speed(x)).toBeCloseTo(Math.sqrt((g * star.mass) / r), 9);
-    });
-    w.gas_giants.forEach((x, i) =>
-      expect(radius(x)).toBeCloseTo(200 + i * 50, 9)
-    );
-    for (const x of w.asteroids) {
-      expect(radius(x)).toBeGreaterThanOrEqual(350);
-      expect(radius(x)).toBeLessThanOrEqual(450);
+  // Both revisions: revision 2 spreads 40 asteroids over 350 to 600 units,
+  // revision 1 (kept for links made before) put 80 in 350 to 450.
+  test.each([
+    ['current', undefined, 40, 600],
+    ['revision 1', 1, 80, 450],
+  ])(
+    'Rogue Encounter (%s): circular orbits about the star, and a hole that is not recentered',
+    (_, rev, count, outer) => {
+      digest('rogue-encounter', 1, null, rev);
+      const w = physics;
+      const star = w.stars[0];
+      const g = G('rogue-encounter');
+      w.planets.forEach((x, i) => {
+        const r = 50 + i * 25;
+        expect(radius(x)).toBeCloseTo(r, 9);
+        expect(speed(x)).toBeCloseTo(Math.sqrt((g * star.mass) / r), 9);
+      });
+      w.gas_giants.forEach((x, i) =>
+        expect(radius(x)).toBeCloseTo(200 + i * 50, 9)
+      );
+      expect(w.asteroids).toHaveLength(count);
+      for (const x of w.asteroids) {
+        expect(radius(x)).toBeGreaterThanOrEqual(350);
+        expect(radius(x)).toBeLessThanOrEqual(outer);
+      }
+      const [hole] = w.bh_list;
+      expect(hole.pos).toEqual({ x: -800, y: 200 });
+      expect(hole.vel).toEqual({ x: 20, y: -5 });
+      // It keeps the name the generator drew; the step's own is only a handle.
+      expect(hole.name).not.toBe('Rogue');
     }
-    const [hole] = w.bh_list;
-    expect(hole.pos).toEqual({ x: -800, y: 200 });
-    expect(hole.vel).toEqual({ x: 20, y: -5 });
-    // It keeps the name the generator drew; the step's own is only a handle.
-    expect(hole.name).not.toBe('Rogue');
-  });
+  );
 
   test('Kuiper Belt: eight named objects on the ladder, twelve named small bodies in the band', () => {
     const w = world('kuiper-belt');

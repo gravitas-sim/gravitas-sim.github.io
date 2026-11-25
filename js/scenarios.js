@@ -958,7 +958,7 @@ export const SCENARIO_PRESETS = /* @__PURE__ */ Object.freeze({
     mutual_gravity: true,
     num_planets: 12,
     num_gas_giants: 4,
-    num_asteroids: 80,
+    num_asteroids: 40,
     init_velocity: 40,
     velocity_stddev: 15,
     show_accretion_disk: true,

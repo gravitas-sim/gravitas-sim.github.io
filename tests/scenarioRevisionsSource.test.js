@@ -108,6 +108,7 @@ describe('what ships', () => {
     expect(Object.keys(SCENARIO_REVISIONS)).toEqual([
       'binary-star-system',
       'lagrange-point-lab',
+      'rogue-encounter',
     ]);
     for (const [id, entry] of Object.entries(SCENARIO_REVISIONS)) {
       expect(SCENARIO_IDS).toContain(id);
