@@ -1,0 +1,153 @@
+{
+  "format": "gravitas.scenario-claims/1",
+  "prompt": "463",
+  "family": "binaries, three-body systems, flybys and slingshots (families 3 and 5 of the scenario inventory)",
+  "committed": "2026-11-24, in a documentation commit that precedes tools/scenario-review.mjs, its record and its test. No run of these eleven scenarios by that runner existed when these claims and tolerances were written; the only numbers known beforehand are the planning leads quoted in the roadmap's inventory (another harness), which chose what to measure, not what passes. A claim that fails is recorded as failing with its numbers; no tolerance is widened, made conditional or made non-fatal after a run. A later change that corrects a member flips its own row in its own change.",
+  "rules": {
+    "cardNumber": "A number the card states is confirmed when the built world matches it within 2% of the card's value, read at t = 0 from the built bodies (masses in solar masses, distances in AU, periods in years, at the row's G).",
+    "count": "A count the card states is confirmed by equality at t = 0.",
+    "stable": "'Stable' (or a card that promises an orbit is kept) means no body is lost, merged or ejected over the run unless the card says so.",
+    "pattern": "A pattern claim (gains speed, walks outward, comes apart) is judged by the measure written in its own line, never by eye.",
+    "rates": "Each member runs from its own row (its sim_speed and max_timestep, its integrator) for the time in its line, once at 30, 60 and 120 frames a second, stepped the way the page steps it (js/timestep.js frameAdvance, then substepPlan, one updatePhysics per piece). A claim holds only when it holds at all three.",
+    "seeds": "A member whose world is generated (a random population) runs under seed 'audit' and under seed 'audit-2'; a claim about an event holds only when the event occurs under both. A member whose world is fully written down runs under seed 1.",
+    "stepsPerPeriod": "The fastest body watched completes at most one period per 200 steps of the row's step at 60 frames a second (the step the page takes at the row's speed and cap); fewer than 200 steps per period is recorded as a finding for the member's speed and cap, not as a pass.",
+    "verdicts": "KEEP (every claim within tolerance; ledger REVIEWED CLEAR), REFRAME (the claim is the wrong thing: card text in both languages, zoom, speed or cap; ledger REVISED in its own change), CORRECT (the world is the wrong thing: initial conditions, population, generator rule or settings for this row only; ledger REVISED in its own change). The strongest members stay unless a run contradicts a claim.",
+    "notRun": "A check this runner cannot make (the scene at 1366x800 and 375x812, the event within 60 s of play in a browser) is recorded NOT RUN with the reason, never inferred."
+  },
+  "members": {
+    "binary-pair": {
+      "duration": { "periods": 10, "t": 7960 },
+      "claims": [
+        { "id": "masses", "kind": "cardNumber", "card": "Two stars of two solar masses each", "value": 2, "unit": "Msun", "tolerance": 0.02 },
+        { "id": "separation", "kind": "cardNumber", "card": "four AU apart", "value": 4, "unit": "AU", "tolerance": 0.02 },
+        { "id": "period", "kind": "cardNumber", "card": "once every four years", "value": 4, "unit": "yr", "tolerance": 0.02, "measure": "time between successive returns of the separation vector's angle, averaged over the run" },
+        { "id": "stars", "kind": "count", "card": "Two stars", "value": 2, "what": "stars" },
+        { "id": "balance-point", "kind": "pattern", "card": "both go round the same point in between them", "measure": "the mass-weighted centre of the two stars drifts by less than 1% of their separation over the run", "bound": 0.01 },
+        { "id": "stable", "kind": "stable", "card": "circling their common center of mass", "measure": "no body lost, merged or ejected" }
+      ],
+      "expected": "KEEP",
+      "discovery": "Change one star's mass; the balance point moves toward the heavier star."
+    },
+    "binary-star-system": {
+      "duration": { "periods": 20, "t": 3400 },
+      "claims": [
+        { "id": "planets", "kind": "count", "card": "with 5 planets orbiting the binary system", "value": 5, "what": "planets" },
+        { "id": "stars", "kind": "count", "card": "A pair of suns", "value": 2, "what": "stars" },
+        { "id": "built-population", "kind": "inventory", "card": "(not stated: what the world builds besides the five planets)", "measure": "count of giants and asteroids at t = 0, recorded for the card" },
+        { "id": "planets-kept", "kind": "pattern", "card": "5 planets orbiting the binary system", "measure": "each planet and giant that stays within 10 AU of the barycentre over the whole run is kept; the claim holds when all five planets are kept", "radiusAU": 10 },
+        { "id": "alpha-centauri", "kind": "comparison", "card": "Similar to real binary star systems like Alpha Centauri", "measure": "the built separation in AU beside Alpha Centauri A-B's mean separation (about 23 AU); the claim holds when the built separation is within a factor of two" }
+      ],
+      "expected": "CORRECT (planets inside the circumbinary instability zone) and REFRAME (population and the Alpha Centauri sentence)",
+      "discovery": "Move a planet outward past the critical radius for these masses (Holman and Wiegert 1999) and it stays."
+    },
+    "binary-planet-lab": {
+      "duration": { "periods": 20 },
+      "claims": [
+        { "id": "masses", "kind": "cardNumber", "card": "Two stars of one and half a solar mass", "values": [1, 0.5], "unit": "Msun", "tolerance": 0.02 },
+        { "id": "separation", "kind": "cardNumber", "card": "ten AU apart", "value": 10, "unit": "AU", "tolerance": 0.02, "measure": "semi-major axis of the binary" },
+        { "id": "eccentricity", "kind": "cardNumber", "card": "an orbit of eccentricity 0.4", "value": 0.4, "tolerance": 0.02 },
+        { "id": "planet-mass", "kind": "cardNumber", "card": "an Earth-mass planet", "value": 1, "unit": "Mearth", "tolerance": 0.02 },
+        { "id": "planet-distance", "kind": "cardNumber", "card": "circling the heavier one at 1.5 AU", "value": 1.5, "unit": "AU", "tolerance": 0.02 },
+        { "id": "stable", "kind": "stable", "card": "an Earth-mass planet circling the heavier one", "measure": "at the row's own start no body is lost, merged or ejected over 20 periods" },
+        { "id": "boundary", "kind": "pattern", "card": "Move the planet outward and there is a distance past which it stops coming back", "measure": "starting at the row's planet distance and moving outward in steps of 0.05 separations, the first start at which the planet ends unbound from the heavier star or leaves 0.62 separations of it within 20 periods exists below 0.6 separations; the distance is recorded, none assumed", "step": 0.05, "limitSeparations": 0.6 }
+      ],
+      "expected": "KEEP",
+      "discovery": "Move the planet outward in 0.05-separation steps; past some distance it stops coming back."
+    },
+    "circumbinary-planet-lab": {
+      "duration": { "periods": 50 },
+      "claims": [
+        { "id": "planet-distance", "kind": "cardNumber", "card": "the planet outside them both at 40 AU", "value": 40, "unit": "AU", "tolerance": 0.02 },
+        { "id": "stable", "kind": "stable", "card": "orbiting the pair as though it were one object", "measure": "at 40 AU no body is lost, merged or ejected over 50 binary periods, and the planet's distance from the barycentre stays between 30 and 50 AU" },
+        { "id": "walks-out", "kind": "pattern", "card": "Bring it inward and the approximation fails: ... walks its orbit outward over a few dozen binary periods until it leaves", "measure": "on the grid of starts 1.5, 2.0, 2.5 and 3.0 separations, at least one start leaves (ends unbound from the barycentre or beyond 10 separations) within 50 binary periods, and its distance from the barycentre rises before it leaves", "grid": [1.5, 2.0, 2.5, 3.0] }
+      ],
+      "expected": "KEEP",
+      "discovery": "Bring the planet inward; inside some start it walks outward and leaves."
+    },
+    "lagrange-point-lab": {
+      "duration": { "revolutions": 5, "note": "about 15,600 t from 8 AU at G = 2 (INFERRED); the runner reads the period from the built binary" },
+      "claims": [
+        { "id": "mass-ratio", "kind": "cardNumber", "card": "a companion a thirtieth its mass", "value": 0.033333, "tolerance": 0.02 },
+        { "id": "separation", "kind": "cardNumber", "card": "eight astronomical units across", "value": 8, "unit": "AU", "tolerance": 0.02 },
+        { "id": "circular", "kind": "pattern", "card": "on an exactly circular orbit", "measure": "the binary's eccentricity at t = 0 is below 0.001", "bound": 0.001 },
+        { "id": "jacobi", "kind": "pattern", "card": "a conserved Jacobi constant", "measure": "the tracer's Jacobi constant changes by less than 1e-6 of its value over the run", "bound": 1e-6 },
+        { "id": "tracer-stays", "kind": "pattern", "card": "a tracer light enough that neither notices it", "measure": "the tracer stays within 0.1 separations of its start in the rotating frame over the run, and neither star's path changes by more than 1e-9 separations with the tracer removed", "bound": 0.1 }
+      ],
+      "expected": "KEEP",
+      "discovery": "Nudge the tracer from L4 and from L1 and compare how far each gets."
+    },
+    "three-body-sensitivity-lab": {
+      "duration": { "t": 300 },
+      "claims": [
+        { "id": "masses", "kind": "cardNumber", "card": "Three six-solar-mass stars", "value": 6, "unit": "Msun", "tolerance": 0.02 },
+        { "id": "stars", "kind": "count", "card": "Three ... stars", "value": 3, "what": "stars" },
+        { "id": "size", "kind": "cardNumber", "card": "a system a hundred and thirty million kilometers across", "value": 130000000, "unit": "km", "tolerance": 0.02, "measure": "the side of the triangle at t = 0" },
+        { "id": "offset", "kind": "cardNumber", "card": "starts that differ by fifteen hundred kilometers", "value": 1500, "unit": "km", "tolerance": 0.02 },
+        { "id": "comes-apart", "kind": "pattern", "card": "the triangle holds for a few turns and then comes apart", "measure": "the number of rigid rotations before any side departs from its start by 10% is between 2 and 9 at every rate", "range": [2, 9] },
+        { "id": "divergence", "kind": "pattern", "card": "watch how long the two runs stay together", "measure": "the time at which the two runs differ by 1 u, at 30, 60 and 120 frames a second; KEEP if the spread of the three times is within 2% of their mean, else CORRECT the integrator and cap as the labs do", "tolerance": 0.02 }
+      ],
+      "expected": "KEEP or CORRECT (no integrator or cap set)",
+      "readBy": ["butterfly-effect"],
+      "discovery": "Run it twice from starts 1,500 km apart and time how long the two runs stay within 1 u."
+    },
+    "gravity-assist-lab": {
+      "duration": { "flybys": 1 },
+      "claims": [
+        { "id": "planet-mass", "kind": "cardNumber", "card": "A rogue planet of five Jupiter masses", "value": 5, "unit": "Mjup", "tolerance": 0.02 },
+        { "id": "spacecraft-mass", "kind": "cardNumber", "card": "an Earth-mass spacecraft", "value": 1, "unit": "Mearth", "tolerance": 0.02 },
+        { "id": "no-star", "kind": "count", "card": "No star", "value": 0, "what": "stars" },
+        { "id": "relative-speed", "kind": "pattern", "card": "The spacecraft leaves at the same speed relative to the planet that it arrived with", "measure": "the spacecraft's speed relative to the planet, read where it is farthest before and after the flyby, agrees to 1e-6 of its value", "bound": 1e-6 },
+        { "id": "deflection", "kind": "pattern", "card": "(the row's comment: the planet's deflection is 0.01 degree)", "measure": "the deflection of the spacecraft's relative velocity against the two-body hyperbola value from its incoming speed and impact parameter, within 2%; and the row comment's planet deflection checked", "tolerance": 0.02 }
+      ],
+      "expected": "REFRAME (the card's 'Earth-mass spacecraft': the row gives it a millionth of the planet's mass)",
+      "discovery": "Move the spacecraft's closest approach; its exit speed about the planet stays the same while its turn changes."
+    },
+    "gravity-assist-heliocentric": {
+      "duration": { "flybys": 1 },
+      "claims": [
+        { "id": "planet-orbit", "kind": "cardNumber", "card": "on a circular orbit five AU from a star", "value": 5, "unit": "AU", "tolerance": 0.02 },
+        { "id": "gains", "kind": "pattern", "card": "the spacecraft leaves faster around the star than it arrived", "measure": "the spacecraft's speed about the star after the flyby, where it is farthest from the planet, exceeds its speed before" },
+        { "id": "momentum", "kind": "pattern", "card": "the planet is slowed by exactly the momentum it gained", "measure": "the change of the planet's momentum about the star equals minus the spacecraft's change within 2%", "tolerance": 0.02 },
+        { "id": "panel", "kind": "pattern", "card": "the panel reports how approximate", "measure": "the panel's approximation figure equals an independent computation from the same bodies within 2%", "tolerance": 0.02 }
+      ],
+      "expected": "KEEP",
+      "discovery": "Change which side of the planet the spacecraft passes; it leaves slower instead of faster."
+    },
+    "rogue-encounter": {
+      "duration": { "t": 3000 },
+      "seeds": ["audit", "audit-2"],
+      "claims": [
+        { "id": "hole-mass", "kind": "cardNumber", "card": "A wandering black hole (30 M☉)", "value": 30, "unit": "Msun", "tolerance": 0.02 },
+        { "id": "planets", "kind": "count", "card": "12 planets", "value": 12, "what": "planets" },
+        { "id": "giants", "kind": "count", "card": "4 gas giants", "value": 4, "what": "giants" },
+        { "id": "asteroids", "kind": "pattern", "card": "and asteroids", "measure": "at least one asteroid at t = 0" },
+        { "id": "start-overlap", "kind": "pattern", "card": "(a stable planetary system before the hole arrives)", "measure": "no two bodies start closer than the sum of their collision radii" },
+        { "id": "ejection", "kind": "event", "card": "planet ejection", "measure": "a planet or giant ends unbound from the star and hole together (energy about their joint centre, with their joint mass), under both seeds" },
+        { "id": "capture", "kind": "event", "card": "tidal capture", "measure": "a planet or giant ends bound to the hole rather than the star, under both seeds" },
+        { "id": "disruption", "kind": "event", "card": "dramatic orbital disruption", "measure": "a planet or giant is merged into or disrupted by the hole, or its orbit about the star changes semi-major axis by more than 50%, under both seeds" }
+      ],
+      "expected": "CORRECT (the start overlap, this row only) and REFRAME where an event does not occur under both seeds",
+      "discovery": "Run it twice with different seeds and count which planets are ejected and which are captured."
+    },
+    "slingshot": {
+      "duration": { "t": 2000 },
+      "seeds": ["audit", "audit-2"],
+      "claims": [
+        { "id": "masses", "kind": "cardNumber", "card": "A massive black hole (60 M☉) paired with a smaller companion (3 M☉)", "values": [60, 3], "unit": "Msun", "tolerance": 0.02 },
+        { "id": "start-overlap", "kind": "pattern", "card": "(nearby planets and gas giants)", "measure": "no two bodies start closer than the sum of their collision radii" },
+        { "id": "gain", "kind": "event", "card": "Watch objects gain tremendous velocity through close encounters", "measure": "under both seeds at least one planet or giant's speed about the pair's centre rises by more than 20% of its start, and more bodies do so than in a control run with the companion removed", "threshold": 0.2 },
+        { "id": "escape", "kind": "event", "card": "(gain velocity ... mimicking spacecraft gravity assists)", "measure": "bodies that end unbound from the pair, counted with and without the companion" }
+      ],
+      "expected": "CORRECT (the two start overlaps)",
+      "discovery": "Remove the small hole and count how many bodies still speed up."
+    },
+    "slingshot-gauntlet": {
+      "duration": { "until": "the fast star leaves the field (farther from the field's centre than every hole by twice the field's radius) or t = 20000, whichever comes first" },
+      "claims": [
+        { "id": "slingshot", "kind": "pattern", "card": "Watch gravitational slingshots", "measure": "the fast star's speed on exit against its speed on entry, each read far from every hole; if equal within 1%, the encounter is a deflection, not a slingshot, under Static holes", "tolerance": 0.01 }
+      ],
+      "expected": "REFRAME to 'deflect', unless Orbiting holes are allowed by the stated source rule and the star then gains speed while the field survives (CORRECT)",
+      "discovery": "Switch the holes to orbiting and see whether the star leaves faster."
+    }
+  }
+}
