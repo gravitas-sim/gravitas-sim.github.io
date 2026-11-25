@@ -5,11 +5,11 @@
     "transit-photometry",
     "what-is-a-gravitational-wave",
     "power-law-gravity",
+    "lagrange-points",
     "measuring-the-moon",
     "missing-mass",
     "orbital-energy",
     "tides",
-    "lagrange-points",
     "weighing-stars",
     "black-holes",
     "a-night-at-the-telescope",
@@ -184,6 +184,12 @@
       "key:read.canvas",
       "lock:null"
     ],
+    "lagrange-points": [
+      "key:explore.requires",
+      "key:explore.rubric",
+      "key:predict.misconceptions",
+      "lock:{\"placement\":true}"
+    ],
     "measuring-the-moon": [
       "key:predict.hints",
       "key:question.maxUncertainty",
@@ -204,14 +210,8 @@
     ],
     "tides": [
       "key:explore.canvas",
-      "key:predict.misconceptions",
       "key:question.canvas",
       "key:read.allowInspector"
-    ],
-    "lagrange-points": [
-      "key:explore.requires",
-      "key:explore.rubric",
-      "lock:{\"placement\":true}"
     ],
     "weighing-stars": [
       "key:explore.showBarycenter",
@@ -316,11 +316,11 @@
     "activityTokens": 29,
     "stepTypes": {
       "read": 379,
-      "predict": 210,
+      "predict": 209,
       "measure": 525,
       "ellipse": 1,
       "question": 749,
-      "explore": 140,
+      "explore": 141,
       "wedges": 1
     }
   }

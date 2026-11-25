@@ -64,10 +64,6 @@ import {
 import * as timeline from './timeline.js';
 
 import {
-  bh_list,
-  stars,
-  neutron_stars,
-  white_dwarfs,
   DT,
   getSimulationTime,
   setSimulationTime,
@@ -88,7 +84,12 @@ import {
   measuredHalfRange,
   observedStar,
 } from './radialVelocity.js';
-import { orbitalElements, dominantPrimary, pairEnergy } from './orbital.js';
+import {
+  orbitalElements,
+  pairEnergy,
+  primaryOf,
+  PRIMARY_KINDS,
+} from './orbital.js';
 import {
   formatDistance,
   formatSpeed,
@@ -132,6 +133,7 @@ import {
   transitGeometry,
 } from './lightCurve.js';
 import { encodePayload, parseDocument, shareUrl } from './shareState.js';
+import { payloadFromSetup } from './shareState.js';
 // From js/notify.js rather than through js/controls.js, which only re-exports
 // them: going through controls put this module in a cycle (controls
 // dynamic-imports the loader, the loader this) that a convenience re-export alone made.
@@ -174,7 +176,6 @@ import {
   stageContext,
   stageLoaded,
   stageMemo,
-  payloadFromSetup,
   pinLessonStep,
   stageOf,
   stageScale,
@@ -319,13 +320,12 @@ bindPersistence({
 function probeContext() {
   const G = SETTINGS.gravitational_constant;
   const selected = state.selectedObject?.object || null;
-  const primaries = [...bh_list, ...stars, ...neutron_stars, ...white_dwarfs];
-
-  const primaryOf = body =>
-    dominantPrimary(
-      body,
-      primaries.filter(p => p !== body)
-    );
+  // The inspector's primary rule (js/orbital.js); mu stays G(M + m), as the
+  // probes have always read it, so no two-body module loads with a lesson.
+  const candidate = c => c.mass > 0 && PRIMARY_KINDS.has(c.kind);
+  const primaryFor = body => primaryOf(body, allBodies().filter(candidate));
+  const elementsFor = (body, primary) =>
+    primary ? orbitalElements(body, primary, G) : null;
 
   return {
     selected,
@@ -334,13 +334,12 @@ function probeContext() {
     elements: body => {
       const b = body || selected;
       if (!b) return null;
-      const primary = primaryOf(b);
-      return primary ? orbitalElements(b, primary, G) : null;
+      return elementsFor(b, primaryFor(b));
     },
     energy: body => {
       const b = body || selected;
       if (!b) return null;
-      const primary = primaryOf(b);
+      const primary = primaryFor(b);
       return primary ? pairEnergy(b, primary, G) : null;
     },
     distance: formatDistance,
@@ -459,8 +458,8 @@ function probeContext() {
       const star = observedStar();
       if (!star) return null;
       const velocity = currentRadialVelocity();
-      const primary = primaryOf(star);
-      const el = primary ? orbitalElements(star, primary, G) : null;
+      const primary = primaryFor(star);
+      const el = elementsFor(star, primary);
       const angle = Math.atan2(star.pos.y, star.pos.x);
       return {
         star,
@@ -485,7 +484,7 @@ function probeContext() {
     habitability: body => {
       const planet = body || selected;
       if (!planet) return null;
-      const star = primaryOf(planet);
+      const star = primaryFor(planet);
       if (!star) return null;
       const props = stellarPropertiesFor(star);
       if (!props) return null;

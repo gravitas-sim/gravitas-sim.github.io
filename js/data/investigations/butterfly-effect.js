@@ -474,14 +474,20 @@ const BUTTERFLY_EFFECT = {
       type: 'measure',
       title: 'Write down what you measured',
       tool: { id: 'chaos-divergence' },
-      body: `Read these off the instrument and record them. They go into your
-             report.`,
+      body: `Take the e-folding time and the growth factor from the instrument
+             with the button beside each box, and type the fit quality r²,
+             which the Behavior row prints after the e-folding time. They go
+             into your report.`,
+      // `want` is the author's expected value for the answer key; the boxes
+      // open empty, and two of the three are taken from the instrument's rows
+      // (K1). r² shares its row with τ, so it is typed.
       fields: [
         {
           id: 'tau',
           label: 'e-folding time',
           unit: 'simulated seconds',
           want: '8.3',
+          source: { tool: 'tau' },
         },
         { id: 'r2', label: 'fit quality r²', unit: '', want: '0.99' },
         {
@@ -489,6 +495,7 @@ const BUTTERFLY_EFFECT = {
           label: 'total growth factor',
           unit: '× the starting separation',
           want: '220',
+          source: { tool: 'growth' },
         },
       ],
       validate: v => {

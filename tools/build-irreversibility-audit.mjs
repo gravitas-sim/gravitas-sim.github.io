@@ -49,7 +49,7 @@ const check = process.argv.includes('--check');
 const SOURCE = 'js/engine/step.js';
 // Where an operation lives is the engine slice that holds it: the absorption
 // moved to the bodies module and the damping to the black hole module with
-// slice S5, and the rocky collision to the collisions module with slice S6, and the distance culls and the collapse site
+// slice S5, and the rocky collision to the collisions module with slice S6, and the collapse site
 // to the step module with slice S7 (D-DECOMP-18).
 const BODIES = 'js/engine/bodies.js';
 const BLACK_HOLE = 'js/engine/blackHole.js';
@@ -100,50 +100,12 @@ function scan({ id, kind, pattern, describe, atLeast = 1, file = SOURCE }) {
   }
 }
 
-/**
- * What to call an array when a student reads the row.
- *
- * Underscores-to-spaces gets most of these right and produces "bh list" for
- * the one that matters most, which is how the black hole row reached the model
- * page reading like a variable someone forgot to rename. Anything not named
- * here falls through to the mechanical version, so a list added later gets a
- * readable-but-imperfect name rather than no row at all.
- *
- * @param {string} identifier - The array's name in js/physics.js
- * @returns {string} A plural noun phrase
- */
-function plainName(identifier) {
-  const named = {
-    bh_list: 'black holes',
-    accretion_disk_particles: 'accretion-disk particles',
-    gas_giants: 'gas giants',
-    neutron_stars: 'neutron stars',
-    white_dwarfs: 'white dwarfs',
-  };
-  return named[identifier] || identifier.replace(/_/g, ' ');
-}
-
-// --- The distance cull -------------------------------------------------------
+// --- The distance cull, removed ---------------------------------------------
 //
-// The family the model page has to name one row at a time, because the buffer
-// differs per kind and that difference is the whole behaviour: an asteroid is
-// discarded five view-widths out and a black hole is kept for fifty.
-scan({
-  kind: 'cull',
-  // [\s\S]*? rather than [^)]*?: half of these guard with `kept(p) ||`, and a
-  // character class that excludes ')' cannot reach past the call inside the
-  // predicate. The first version matched five of eleven and the scanner
-  // refused to write a short list, which is what it is for.
-  pattern:
-    /setBodyList\(\s*'(\w+)',\s*filterAndClearEnergy\(\s*\w+,\s*[\s\S]*?is_offscreen\(\w+\.pos, ([\d.]+)\)/gs,
-  id: m => `cull:${m[1]}`,
-  describe: m => ({
-    list: m[1],
-    buffer: Number(m[2]),
-    what: `${plainName(m[1])} more than ${Number(m[2])} view-widths out are deleted`,
-  }),
-  atLeast: 10,
-});
+// Eleven rows stood here, one per list, each deleting bodies more than 2 to 50
+// view-widths from the view centre. Prompt 496 (D-R4-496-01) removed the box:
+// the camera is not physics, and no body leaves the world for leaving the
+// view. tests/irreversibility.test.js holds that no such operation returns.
 
 // --- Velocity damping --------------------------------------------------------
 scan({
@@ -203,7 +165,7 @@ if (rocky < 0) {
     line: lineIn(collisionsText, rocky),
     detail: {
       draws: rockyDraws,
-      what: `a rocky collision destroys both bodies and scatters debris whose directions, speeds and offsets come from ${rockyDraws} fresh Math.random draws - unseeded, so the shower cannot be reproduced, let alone reversed`,
+      what: `a fast rocky collision takes a tenth of each body's mass and scatters debris whose directions, speeds and offsets come from ${rockyDraws} fresh Math.random draws - unseeded, so the shower cannot be reproduced, let alone reversed`,
     },
   });
 }

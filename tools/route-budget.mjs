@@ -21,7 +21,12 @@
 // for on the way to usable - not a background precache. For a lesson, "usable"
 // is its first step on screen; for a lesson with a lazily loaded instrument,
 // the instrument step is measured too. Bytes and request counts only: they are
-// the same on every run, and a check has to be.
+// the same on every run, and a check has to be. Three fetches that the page
+// makes on its own used to land inside the measurement on some runs and outside
+// it on others (a slow machine, a busy one), reading the largest lesson 5.8 KB
+// and a request over its ceiling; each is now settled the same way every time
+// (BOOT_WORLD_MODULES, the interface reveal and the end of the instrument step,
+// in measure()), and --repeat with --throttle is how that is checked.
 //
 // The ceilings are in tools/route-budgets.json, pinned to the commit they were
 // measured at. This tool never raises one. A ceiling that is too tight is
@@ -32,6 +37,9 @@
 //   node tools/route-budget.mjs --config=sources        one configuration
 //   node tools/route-budget.mjs --lessons               every lesson, reported
 //   node tools/route-budget.mjs --lessons --json=out.json --repeat=3
+//   node tools/route-budget.mjs --repeat=2 --throttle=4  the stability check:
+//       each route twice, on a CPU four times slower than this one; two reads
+//       of one route that differ in bytes or requests fail the run
 //
 // --lessons measures every lesson in the registry, not the sample above, and
 // says which instrument families each one fetched before its first step was
@@ -48,7 +56,7 @@ import { existsSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { setTimeout as sleep } from 'node:timers/promises';
-import { familiesInScript } from './instrument-families.mjs';
+import { familiesInScript, modulesInScript } from './instrument-families.mjs';
 
 const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const BUDGETS_FILE = path.join(REPO, 'tools', 'route-budgets.json');
@@ -121,6 +129,53 @@ const CONFIGS = {
     : {}),
 };
 
+/**
+ * The black-hole renderer, fetched the first time a black hole is drawn
+ * (js/bodyDraw.js, ensureBlackHoleRenderer).
+ *
+ * The application starts in its default scenario, which has two black holes,
+ * and a lesson's stage replaces that world a moment later. Whether a frame of
+ * the starting world is painted before the stage arrives depends on how fast
+ * the machine is: the largest lesson, whose stage takes longest to build, paid
+ * for this file on a slow run and not on a fast one. It is not a cost of the
+ * lesson (none of the measured lessons draws a black hole), so a lesson route
+ * does not count it; the sandbox and front-door routes, which stay in the
+ * starting world, count it on every run and still do.
+ */
+export const BOOT_WORLD_MODULES = new Set([
+  'js/blackHole/render.js',
+  'js/blackHole/geometry.js',
+]);
+
+/**
+ * Whether a fetched script holds nothing but the starting world's renderer.
+ * @param {string} url - The script's URL as the page fetched it
+ * @param {Object} opts
+ * @param {'sources'|'build'} opts.config - Which configuration served it
+ * @param {string} [opts.root] - The served directory, for a build's maps
+ */
+export function isBootWorldScript(url, { config, root }) {
+  const modules = modulesInScript(url, { config, root });
+  return modules.length > 0 && modules.every(m => BOOT_WORLD_MODULES.has(m));
+}
+
+/**
+ * The scripts a route is charged for.
+ * @param {Array<{url: string, bytes: number}>} scripts - Every script fetched
+ * @param {{lesson?: boolean}} route
+ * @param {{config: string, root: string}} where
+ */
+export function countedScripts(scripts, route, where) {
+  if (!route.lesson) return scripts;
+  return scripts.filter(s => !isBootWorldScript(s.url, where));
+}
+
+/** The quiet that ends a lesson's first read: longer than the pauses between the fetches that follow its first step. */
+const USABLE_QUIET_MS = 1000;
+
+/** Longer than the 1.5 s a chart waits after drawing before it fetches its description (js/plot/chart.js). */
+const QUIET_AFTER_INSTRUMENT_MS = 2500;
+
 /** Serve a directory with the repository's own static server. */
 /** Whether a server already answers on a port. */
 const portTaken = port =>
@@ -185,10 +240,12 @@ const estimateBox = page =>
 
 /**
  * Load one route fresh and count its JavaScript.
+ * @param {Object} where - {config, root}: which configuration, served from where
+ * @param {number} [throttle] - CPU slowdown factor, for the stability check
  * @returns {Promise<{kb: number, requests: number, toolKb: ?number,
  *   toolRequests: ?number}>} What the page fetched
  */
-async function measure(browser, base, route) {
+async function measure(browser, base, route, where, throttle = 1) {
   const context = await browser.newContext({ serviceWorkers: 'block' });
   await context.addInitScript(() => {
     try {
@@ -198,24 +255,58 @@ async function measure(browser, base, route) {
     }
   });
   const page = await context.newPage();
+  // A slower CPU, for the stability check: the races this tool has had were
+  // all a fast machine against a slow one.
+  if (throttle > 1) {
+    const cdp = await context.newCDPSession(page);
+    await cdp.send('Emulation.setCPUThrottlingRate', { rate: throttle });
+  }
   const js = [];
   // Every body read still in flight. The response event fires before the body
   // has arrived, so a total taken the moment the network goes quiet would
   // leave out whatever was still being read - which is how a first version of
   // this reported the same page 40 KB apart on two runs.
   const reading = new Set();
+  // The page's own idle-time fetch of the words that describe the scene
+  // (js/sceneStatement.js), which it makes 3 s after the splash ends. See the
+  // end of the instrument step, below.
+  let sceneWordsRead;
+  const sceneWords = new Promise(done => (sceneWordsRead = done));
   page.on('response', res => {
     const url = res.url();
     if (!url.startsWith(base) || !/\.m?js(\?|$)/.test(url)) return;
     const read = res
       .body()
-      .then(body => js.push(body.length))
+      .then(body => {
+        js.push({ url, bytes: body.length });
+        if (modulesInScript(url, where).includes('js/sceneStatement.js'))
+          sceneWordsRead();
+      })
       .catch(() => {
         /* navigated away mid-body; not counted */
       })
       .finally(() => reading.delete(read));
     reading.add(read);
   });
+  // Playwright's 'networkidle' is a state a page reaches once and keeps, so a
+  // wait for it returns at once on a page that was quiet earlier and has
+  // started again since. A quiet that is measured now is the other thing.
+  let inFlight = 0;
+  let lastActivity = Date.now();
+  const touch = () => (lastActivity = Date.now());
+  page.on('request', () => (inFlight++, touch()));
+  for (const done of ['requestfinished', 'requestfailed'])
+    page.on(done, () => (inFlight--, touch()));
+  const quiet = async ms => {
+    const deadline = Date.now() + 60_000;
+    for (;;) {
+      if (Date.now() > deadline)
+        throw new Error(`${route.id}: the network never went quiet`);
+      while (reading.size) await Promise.allSettled([...reading]);
+      if (inFlight <= 0 && Date.now() - lastActivity >= ms) return;
+      await sleep(50);
+    }
+  };
   const settled = async () => {
     await page.waitForLoadState('networkidle').catch(() => {});
     while (reading.size) await Promise.allSettled([...reading]);
@@ -231,6 +322,26 @@ async function measure(browser, base, route) {
       null,
       { timeout: 60_000 }
     );
+    // The interface reveal. The lesson is usable behind the splash, long
+    // before the splash ends; when it ends, two modules (ui.js and
+    // controls.js) are fetched 200 ms later to raise the interface. A total
+    // read while the splash was still up left them out, and one read after it
+    // counted them, so the same route read 2.2 KB and a request apart on a
+    // slow run and a fast one, and an instrument step reached before the
+    // splash ended differed the same way. Waiting for the interface makes
+    // them part of every read.
+    await page.waitForFunction(
+      () =>
+        document.querySelector('.ui-container')?.classList.contains('showUI'),
+      null,
+      { timeout: 60_000 }
+    );
+    // And then a quiet measured now. A machine slow enough, or busy enough,
+    // that the lesson is usable after the splash has ended had already been
+    // quiet once while it worked, so 'networkidle' (a state, reached once)
+    // answered at once, before the fetches that follow the first step reached
+    // the network; three requests and 8 KB went missing from that read.
+    await quiet(USABLE_QUIET_MS);
   } else if (route.page) {
     await page.waitForLoadState('load');
   } else {
@@ -238,9 +349,10 @@ async function measure(browser, base, route) {
       timeout: 60_000,
     });
   }
-  await settled();
-  const sum = xs => xs.reduce((a, b) => a + b, 0);
-  const atUsable = [...js];
+  if (!route.lesson) await settled();
+  const sum = xs => xs.reduce((a, s) => a + s.bytes, 0);
+  const counted = () => countedScripts(js, route, where);
+  const atUsable = counted();
   let tool = null;
   if (route.toolStep !== undefined) {
     for (let s = 0; s < route.toolStep; s++) {
@@ -258,8 +370,19 @@ async function measure(browser, base, route) {
       null,
       { timeout: 60_000 }
     );
-    await settled();
-    tool = [...js];
+    // What a visitor has downloaded by the instrument step includes what the
+    // page fetches on its own timers once the instrument is up: the words that
+    // describe the scene, 3 s after the splash ends, and a chart's description
+    // and sound, 1.5 s after its first draw. A read taken the moment the
+    // instrument appeared counted each of them or not according to how long
+    // the walk took (a machine four times slower than this one read 9 KB and
+    // three requests more), so the read waits for the scene words and then for
+    // a quiet longer than that chart timer. (If the scene words never come -
+    // the page offline, the fetch gone - it does not wait for ever, and the
+    // read is then the same every time too.)
+    await Promise.race([sceneWords, sleep(20_000)]);
+    await quiet(QUIET_AFTER_INSTRUMENT_MS);
+    tool = counted();
   }
   await context.close();
   const kb = n => Math.round(n / 102.4) / 10;
@@ -527,6 +650,17 @@ async function main() {
   }
   const report = argv.includes('--report');
   const only = argv.find(a => a.startsWith('--config='))?.slice(9);
+  const onlyRoutes = argv
+    .find(a => a.startsWith('--route='))
+    ?.slice(8)
+    .split(',');
+  const repeat = Math.max(
+    1,
+    Number(argv.find(a => a.startsWith('--repeat='))?.slice(9) || 1)
+  );
+  const throttle = Number(
+    argv.find(a => a.startsWith('--throttle='))?.slice(11) || 1
+  );
   // A report needs no ceilings - it is how the first ones are measured.
   const budgets = existsSync(BUDGETS_FILE)
     ? JSON.parse(readFileSync(BUDGETS_FILE, 'utf8'))
@@ -539,6 +673,7 @@ async function main() {
   }
   const configs = Object.keys(CONFIGS).filter(c => !only || c === only);
   const problems = [];
+  const unstable = [];
   const browser = await chromium.launch();
   try {
     let port = 4460;
@@ -553,8 +688,32 @@ async function main() {
       const server = await serve(root, ++port);
       port = server.port;
       try {
-        for (const route of ROUTES) {
-          const got = await measure(browser, `http://127.0.0.1:${port}`, route);
+        for (const route of ROUTES.filter(
+          r => !onlyRoutes || onlyRoutes.includes(r.id)
+        )) {
+          // More than one read is the stability check: a route's bytes and
+          // requests are the same on every read or it is a finding, and the
+          // largest read is the one judged against the ceiling.
+          const reads = [];
+          for (let r = 0; r < repeat; r++) {
+            reads.push(
+              await measure(
+                browser,
+                `http://127.0.0.1:${port}`,
+                route,
+                { config: name, root },
+                throttle
+              )
+            );
+          }
+          const figure = r =>
+            `${r.kb} KB ${r.requests} requests ${r.toolKb} KB ${r.toolRequests} requests`;
+          if (new Set(reads.map(figure)).size > 1) {
+            unstable.push(
+              `${name} ${route.id}: ${repeat} reads differ (${[...new Set(reads.map(figure))].join(' | ')})`
+            );
+          }
+          const got = reads.reduce((a, b) => (b.kb > a.kb ? b : a));
           const limit = budgets.routes?.[name]?.[route.id];
           const line = `${name.padEnd(8)} ${route.id.padEnd(15)} ${String(got.kb).padStart(8)} KB ${String(got.requests).padStart(4)} requests${
             got.toolKb !== null
@@ -589,6 +748,13 @@ async function main() {
     }
   } finally {
     await browser.close();
+  }
+  // A report judges nothing, but a measurement that is not the same twice is
+  // not a measurement.
+  if (unstable.length) {
+    console.error(`\n${unstable.length} route(s) not measured stably:`);
+    for (const u of unstable) console.error(`  ${u}`);
+    return 1;
   }
   if (report) return 0;
   if (problems.length) {

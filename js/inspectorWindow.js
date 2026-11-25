@@ -106,7 +106,7 @@ export const showObjectInspector = (object, type) => {
   const updateInspector = () => {
     if (!state.inspector_open || !state.selectedObject) return;
 
-    // The selected object can be absorbed, merged away or culled while the
+    // The selected object can be absorbed or merged away while the
     // inspector is open. Without this the panel keeps polling a detached
     // object and shows a frozen ghost, and the mass slider still acts on it.
     if (!isObjectStillInSimulation(state.selectedObject.object)) {

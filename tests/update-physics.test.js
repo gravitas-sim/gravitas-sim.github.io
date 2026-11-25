@@ -233,18 +233,13 @@ describe('updatePhysics', () => {
     expect(bh_list[0].mass).toBe(200); // Combined mass
   });
 
-  test('should clean up offscreen objects', () => {
-    // Create a planet at a very far position
+  test('keeps a body far outside the view (the camera removes nothing)', () => {
     const planet = new Planet({ x: 10000, y: 10000 }, { x: 0, y: 0 }, 1);
     planets.push(planet);
 
     updatePhysics(0.1);
 
-    // The offscreen cleanup depends on the canvas size and zoom level
-    // With our mock canvas (800x600) and zoom=1, objects at (10000,10000) should be considered offscreen
-    // But the is_offscreen function might not work as expected in test environment
-    // So we'll just check that the function doesn't crash
-    expect(planets.length).toBeGreaterThanOrEqual(0);
+    expect(planets).toContain(planet);
   });
 
   test('should handle follow mode for black holes', () => {

@@ -29,6 +29,7 @@ import {
   setBodyList,
   particlePool,
   physicsSettings,
+  noteEngineEvent,
 } from './state.js';
 import { clearObjectEnergyHistory } from './conservation.js';
 import {
@@ -227,6 +228,7 @@ export const handle_collisions = objects_list => {
         obj2.pos.y += move2 * ny;
 
         // Handle collision response
+        noteEngineEvent('collision');
         const rvx = obj2.vel.x - obj1.vel.x;
         const rvy = obj2.vel.y - obj1.vel.y;
         const vel_normal = rvx * nx + rvy * ny;
@@ -964,6 +966,7 @@ export const handle_star_merging = stars_list => {
  *   impact speed, not the merged object's), and its mass after, as it always was
  */
 const starAbsorbs = (star, body) => {
+  noteEngineEvent('absorption');
   const impact = {
     obj_type: star.obj_type,
     kind: star.kind,
@@ -1088,6 +1091,7 @@ export const handle_rocky_collisions = objects_list => {
         const ny = dy / dist;
 
         // Calculate relative velocity
+        noteEngineEvent('collision');
         const rvx = obj2.vel.x - obj1.vel.x;
         const rvy = obj2.vel.y - obj1.vel.y;
         const rel_speed = Math.sqrt(rvx * rvx + rvy * rvy);
@@ -1180,6 +1184,7 @@ export const check_stellar_collapse = () => {
       bh_list.push(new_bh);
 
       // Create collapse particles
+      noteEngineEvent('collapse');
       burst('collapseStar', star.pos);
 
       // Remove the star
@@ -1202,6 +1207,7 @@ export const check_stellar_collapse = () => {
       bh_list.push(new_bh);
 
       // Create collapse particles
+      noteEngineEvent('collapse');
       burst('collapseNS', ns.pos);
 
       // Remove the neutron star
@@ -1224,6 +1230,7 @@ export const check_stellar_collapse = () => {
       neutron_stars.push(new_ns);
 
       // Create collapse particles
+      noteEngineEvent('collapse');
       burst('collapseWD', wd.pos);
 
       // Remove the white dwarf
@@ -1259,6 +1266,7 @@ export const handle_gas_giant_accretion = () => {
         const distSq = dx * dx + dy * dy;
         const contact = gasGiant.radius + body.radius;
         if (distSq >= contact * contact) continue;
+        noteEngineEvent('absorption');
 
         // Momentum is conserved through the accretion
         const total = gasGiant.mass + body.mass;

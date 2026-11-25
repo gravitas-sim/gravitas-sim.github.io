@@ -17,6 +17,7 @@ import { applyPreset } from '../js/scenarios.js';
 import { buildWorld } from '../js/world/build.js';
 import { DEFAULT_SETTINGS, setScenarioName } from '../js/appState.js';
 import { withSeed } from '../js/rng.js';
+import { currentRevision, rowFor } from '../js/shareState.js';
 
 export const LISTS = [
   'bh_list',
@@ -82,18 +83,23 @@ export function bodyRecord(list, i, b) {
  * @param {number} seed
  * @param {?object} [pending] - Settings a share link carries, laid over the
  *   scenario's own after its preset runs
+ * @param {number} [revision] - The revision to build (SCENARIO_REVISIONS.md);
+ *   the current one when not said
  * @returns {{rows: string[], settings: string, zoom: *, pan: *[], tail: number}}
  */
-export function digest(key, seed, pending = null) {
+export function digest(key, seed, pending = null, revision) {
   const settings = clone(DEFAULT_SETTINGS);
   settings.preset_scenario = key;
   const state = { zoom: 1, pan: { x: 0, y: 0 }, paused: true, frame_count: 0 };
   let tail;
+  const rev = revision ?? currentRevision(key);
   withSeed(seed, () => {
     buildWorld({
+      revision: rev,
       settings,
       state,
-      applyPreset: () => applyPreset(settings, DEFAULT_SETTINGS, state),
+      applyPreset: () =>
+        applyPreset(settings, DEFAULT_SETTINGS, state, rowFor(key, rev)),
       takePendingSettings: () => pending,
       setScenarioName,
       hideObjectInspector: noop,

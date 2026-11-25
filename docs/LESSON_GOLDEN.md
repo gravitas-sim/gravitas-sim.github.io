@@ -85,11 +85,11 @@ The browser half takes about seven minutes on the private port.
 | 3 | `transit-photometry` | 15: `check:numeric/number+tolerance`, `key:explore.lightCurve`, `key:explore.observerAngle`, `key:measure.checklist`, `key:measure.compare`, `key:measure.evidence`, … |
 | 4 | `what-is-a-gravitational-wave` | 9: `audience:beginner`, `key:measure.stage`, `key:predict.stage`, `key:predict.tip`, `key:predict.tool`, `key:read.checklist`, … |
 | 5 | `power-law-gravity` | 5: `key:measure.canvas`, `key:predict.canvas`, `key:question.explain`, `key:read.canvas`, `lock:null` |
-| 6 | `measuring-the-moon` | 4: `key:predict.hints`, `key:question.maxUncertainty`, `key:question.minUncertainty`, `key:question.valueWithin` |
-| 7 | `missing-mass` | 4: `depth-step:advanced/explore`, `key:explore.after`, `key:explore.decides`, `key:explore.depth` |
-| 8 | `orbital-energy` | 4: `key:explore.compare`, `key:explore.evidence`, `key:question.rubricCriteria`, `key:read.motion` |
-| 9 | `tides` | 4: `key:explore.canvas`, `key:predict.misconceptions`, `key:question.canvas`, `key:read.allowInspector` |
-| 10 | `lagrange-points` | 3: `key:explore.requires`, `key:explore.rubric`, `lock:{"placement":true}` |
+| 6 | `lagrange-points` | 4: `key:explore.requires`, `key:explore.rubric`, `key:predict.misconceptions`, `lock:{"placement":true}` |
+| 7 | `measuring-the-moon` | 4: `key:predict.hints`, `key:question.maxUncertainty`, `key:question.minUncertainty`, `key:question.valueWithin` |
+| 8 | `missing-mass` | 4: `depth-step:advanced/explore`, `key:explore.after`, `key:explore.decides`, `key:explore.depth` |
+| 9 | `orbital-energy` | 4: `key:explore.compare`, `key:explore.evidence`, `key:question.rubricCriteria`, `key:read.motion` |
+| 10 | `tides` | 3: `key:explore.canvas`, `key:question.canvas`, `key:read.allowInspector` |
 | 11 | `weighing-stars` | 3: `key:explore.showBarycenter`, `key:measure.showBarycenter`, `key:read.showBarycenter` |
 | 12 | `black-holes` | 2: `key:question.checklist`, `key:read.explainView` |
 | 13 | `a-night-at-the-telescope` | 1: `key:question.reflect` |

@@ -127,34 +127,7 @@
    ]
   },
   {
-   "sid": "accessible-not-reachable",
-   "type": "predict",
-   "kind": null,
-   "grades": [
-    [
-     0,
-     false,
-     "incorrect"
-    ],
-    [
-     1,
-     false,
-     "incorrect"
-    ],
-    [
-     2,
-     true,
-     "correct"
-    ],
-    [
-     3,
-     false,
-     "incorrect"
-    ]
-   ]
-  },
-  {
-   "sid": "predict-same-region-same-path",
+   "sid": "one-region-two-directions",
    "type": "predict",
    "kind": null,
    "grades": [
@@ -256,8 +229,7 @@
     "lagrange-points:why-conserved-matters": 1,
     "lagrange-points:l4-distance": "1",
     "lagrange-points:l4-distance:locale": "en",
-    "lagrange-points:accessible-not-reachable": 2,
-    "lagrange-points:predict-same-region-same-path": 2,
+    "lagrange-points:one-region-two-directions": 2,
     "lagrange-points:predict-stability": 2,
     "lagrange-points:which-assumption": 1,
     "lagrange-points:say-what-jacobi-cannot-tell-you": "A fixed sentence for the golden."
@@ -266,8 +238,7 @@
     "lagrange-points:predict-forbidden": 1,
     "lagrange-points:why-conserved-matters": 1,
     "lagrange-points:l4-distance": 1,
-    "lagrange-points:accessible-not-reachable": 1,
-    "lagrange-points:predict-same-region-same-path": 1,
+    "lagrange-points:one-region-two-directions": 1,
     "lagrange-points:predict-stability": 1,
     "lagrange-points:which-assumption": 1
    },
@@ -282,11 +253,11 @@
     "l4-distance",
     "critical-order",
     "open-the-neck",
-    "accessible-not-reachable",
-    "predict-same-region-same-path",
+    "one-region-two-directions",
     "watch-it-not-cross",
     "stability-is-different",
     "predict-stability",
+    "nudge-l1-and-l4",
     "trojans",
     "break-it",
     "which-assumption",
@@ -303,8 +274,7 @@
     "lagrange-points:why-conserved-matters": 1,
     "lagrange-points:l4-distance": "1",
     "lagrange-points:l4-distance:locale": "en",
-    "lagrange-points:accessible-not-reachable": 2,
-    "lagrange-points:predict-same-region-same-path": 2,
+    "lagrange-points:one-region-two-directions": 2,
     "lagrange-points:predict-stability": 2,
     "lagrange-points:which-assumption": 1,
     "lagrange-points:say-what-jacobi-cannot-tell-you": "A fixed sentence for the golden."
@@ -313,20 +283,19 @@
     "lagrange-points:predict-forbidden": 1,
     "lagrange-points:why-conserved-matters": 1,
     "lagrange-points:l4-distance": 1,
-    "lagrange-points:accessible-not-reachable": 1,
-    "lagrange-points:predict-same-region-same-path": 1,
+    "lagrange-points:one-region-two-directions": 1,
     "lagrange-points:predict-stability": 1,
     "lagrange-points:which-assumption": 1
    },
    "visited": [
-    "accessible-not-reachable",
     "break-it",
     "critical-order",
     "five-places",
     "l4-distance",
+    "nudge-l1-and-l4",
+    "one-region-two-directions",
     "open-the-neck",
     "predict-forbidden",
-    "predict-same-region-same-path",
     "predict-stability",
     "read-the-constant",
     "say-what-jacobi-cannot-tell-you",
@@ -375,11 +344,11 @@
      "l4-distance",
      "critical-order",
      "open-the-neck",
-     "accessible-not-reachable",
-     "predict-same-region-same-path",
+     "one-region-two-directions",
      "watch-it-not-cross",
      "stability-is-different",
      "predict-stability",
+     "nudge-l1-and-l4",
      "trojans",
      "break-it",
      "which-assumption",
@@ -391,8 +360,7 @@
      "lagrange-points:why-conserved-matters": 1,
      "lagrange-points:l4-distance": "1",
      "lagrange-points:l4-distance:locale": "en",
-     "lagrange-points:accessible-not-reachable": 2,
-     "lagrange-points:predict-same-region-same-path": 2,
+     "lagrange-points:one-region-two-directions": 2,
      "lagrange-points:predict-stability": 2,
      "lagrange-points:which-assumption": 1,
      "lagrange-points:say-what-jacobi-cannot-tell-you": "A fixed sentence for the golden."
@@ -401,8 +369,7 @@
      "lagrange-points:predict-forbidden": 1,
      "lagrange-points:why-conserved-matters": 1,
      "lagrange-points:l4-distance": 1,
-     "lagrange-points:accessible-not-reachable": 1,
-     "lagrange-points:predict-same-region-same-path": 1,
+     "lagrange-points:one-region-two-directions": 1,
      "lagrange-points:predict-stability": 1,
      "lagrange-points:which-assumption": 1
     }
@@ -470,33 +437,33 @@
     },
     {
      "index": 10,
-     "sid": "accessible-not-reachable",
-     "fingerprint": "predict|-|-|-|-|4|a=2;c=2",
-     "optionCount": 4
-    },
-    {
-     "index": 11,
-     "sid": "predict-same-region-same-path",
+     "sid": "one-region-two-directions",
      "fingerprint": "predict|-|-|Lagrange Point Lab|-|4|a=2;c=2",
      "optionCount": 4
     },
     {
-     "index": 12,
+     "index": 11,
      "sid": "watch-it-not-cross",
      "fingerprint": "explore|-|-|Lagrange Point Lab|-|-|-",
      "optionCount": null
     },
     {
-     "index": 13,
+     "index": 12,
      "sid": "stability-is-different",
      "fingerprint": "read|-|-|-|-|-|-",
      "optionCount": null
     },
     {
-     "index": 14,
+     "index": 13,
      "sid": "predict-stability",
      "fingerprint": "predict|-|-|-|-|4|a=2;c=2",
      "optionCount": 4
+    },
+    {
+     "index": 14,
+     "sid": "nudge-l1-and-l4",
+     "fingerprint": "explore|-|-|-|-|-|-",
+     "optionCount": null
     },
     {
      "index": 15,
@@ -539,8 +506,7 @@
     "lagrange-points:why-conserved-matters": 1,
     "lagrange-points:l4-distance": "1",
     "lagrange-points:l4-distance:locale": "en",
-    "lagrange-points:accessible-not-reachable": 2,
-    "lagrange-points:predict-same-region-same-path": 2,
+    "lagrange-points:one-region-two-directions": 2,
     "lagrange-points:predict-stability": 2,
     "lagrange-points:which-assumption": 1,
     "lagrange-points:say-what-jacobi-cannot-tell-you": "A fixed sentence for the golden."
@@ -549,20 +515,19 @@
     "lagrange-points:predict-forbidden": 1,
     "lagrange-points:why-conserved-matters": 1,
     "lagrange-points:l4-distance": 1,
-    "lagrange-points:accessible-not-reachable": 1,
-    "lagrange-points:predict-same-region-same-path": 1,
+    "lagrange-points:one-region-two-directions": 1,
     "lagrange-points:predict-stability": 1,
     "lagrange-points:which-assumption": 1
    },
    "visited": [
-    "accessible-not-reachable",
     "break-it",
     "critical-order",
     "five-places",
     "l4-distance",
+    "nudge-l1-and-l4",
+    "one-region-two-directions",
     "open-the-neck",
     "predict-forbidden",
-    "predict-same-region-same-path",
     "predict-stability",
     "read-the-constant",
     "say-what-jacobi-cannot-tell-you",
@@ -646,12 +611,7 @@
      "locale": "en"
     },
     {
-     "sid": "accessible-not-reachable",
-     "value": 2,
-     "locale": "en"
-    },
-    {
-     "sid": "predict-same-region-same-path",
+     "sid": "one-region-two-directions",
      "value": 2,
      "locale": "en"
     },
@@ -700,12 +660,7 @@
      "locale": "en"
     },
     {
-     "sid": "accessible-not-reachable",
-     "value": 2,
-     "locale": "en"
-    },
-    {
-     "sid": "predict-same-region-same-path",
+     "sid": "one-region-two-directions",
      "value": 2,
      "locale": "en"
     },
@@ -778,12 +733,7 @@
      "locale": "en"
     },
     {
-     "sid": "accessible-not-reachable",
-     "value": 2,
-     "locale": "en"
-    },
-    {
-     "sid": "predict-same-region-same-path",
+     "sid": "one-region-two-directions",
      "value": 2,
      "locale": "en"
     },
@@ -833,12 +783,7 @@
      "locale": "en"
     },
     {
-     "sid": "accessible-not-reachable",
-     "value": 2,
-     "locale": "en"
-    },
-    {
-     "sid": "predict-same-region-same-path",
+     "sid": "one-region-two-directions",
      "value": 2,
      "locale": "en"
     },

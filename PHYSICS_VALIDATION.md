@@ -973,7 +973,7 @@ second order.
 | R4 | `gravity-assist-heliocentric`, to t = 1200, against RK4 at h = 1e-3 | energy `<= 1e-6`; craft velocity change within 1 percent; momentum and `L <= 1e-11` |
 | R4x | `three-body-sensitivity-lab`, Beta moved 1 unit | energy `<= 2` percent before any pair is closer than 0.3 of the side |
 | R5 | `tidal-disruption-event` | position at first periapsis within 1 percent of the periapsis distance (exact Kepler); star mass fraction after leaving the threshold: spread `<= 5` percent over rates; fragments created: spread `<= 20` percent |
-| R6 | `solar-system`, 600 frames, three canvas sizes, zoom 0.25 and 3, pan 0 and 200 AU | bodies deleted against the cull switched off: zero |
+| R6 | `solar-system`, 600 frames, three canvas sizes, zoom 0.25 and 3, pan 0 and 200 AU | bodies deleted against the same run with no canvas: zero (passes since D-R4-496-01 removed the cull) |
 
 Quality tiers (`low`, `full`, `ultra`) are built for every case's scenario: a
 hand-placed world is exempt from the population caps, so the body counts and the

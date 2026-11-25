@@ -236,10 +236,13 @@ describe('the instructor expectations record', () => {
     // 556 over v4's 552: the new steps of Weighing the Stars, Transit Photometry and Kepler's Laws, net of the ones they retire.
     // 557 over that: the new steps of Integrators in Practice and Extending an Experiment, net of the ones they retire.
     // 555 over that: Lives of Stars replaces three read-a-number steps with one comparison step (3 retired, 1 new).
-    // 559: v4's 558 (560 at v4 before Why Mars Goes Backwards and the Goldilocks Question's
-    // distance steps took one each) plus the slope-rate step of What If Gravity Were Not
-    // Inverse Square?, net of the dividing-speed step's rewording.
-    expect(total).toBe(559);
+    // 558: 560 at v4 (Missing Mass's compare-your-two-fits expectation, Tides' three and the
+    // half-range step of Radial Velocity), less one each for Why Mars Goes Backwards
+    // (Prompt 346) and the Goldilocks Question's distance steps (three-distances-yours).
+    // 559: one more for the Lagrange investigation's nudge test (nudge-l1-and-l4).
+    // 560: the slope-rate step of What If Gravity Were Not Inverse Square?, net of the
+    // dividing-speed step's rewording, over v4's 559.
+    expect(total).toBe(560);
     // 542 after How Many Earths? (Prompt 229): 3 more over 539.
     // 547 after the four exoplanet closeout investigations (Prompt 231): 5 more over 542.
   });

@@ -307,8 +307,8 @@ export function makeLab(P) {
  * the 0.98 v_esc orbit below has an apoapsis at 2425 units, well outside the
  * cull box, and with an Asteroid it froze at the boundary and reported an
  * apoapsis of 2033 - the same wrong answer at every timestep, which is exactly
- * what a discretization error does not look like. A Planet marked persistent
- * survives the cull, so the check measures the orbit rather than the housekeeping.
+ * what a discretization error does not look like. The Planet is marked
+ * persistent, which kept it from the cull while there was one.
  *
  * @param {object} P - The physics module namespace
  * @param {{x: number, y: number}} pos - Initial position

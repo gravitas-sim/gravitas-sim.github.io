@@ -202,7 +202,7 @@ test.describe('names follow the step, the zoom and the setting', () => {
     const { r } = await names(page, async () => {
       (await import('/js/ui.js')).SETTINGS.show_scale_bar = false;
     });
-    const note = r.otherText.find(b => /enlarged/i.test(b.text));
+    const note = r.otherText.find(b => /not to scale/i.test(b.text));
     expect(note, 'the disclosure').toBeTruthy();
     expect(note.size).toBeGreaterThanOrEqual(12 - 0.1);
   });
