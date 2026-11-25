@@ -983,8 +983,8 @@ const populationRules = {
  * @property {object} state - The shared UI state object
  * @property {() => void} applyPreset - Reset settings to the scenario's own
  * @property {() => (object|null)} takePendingSettings - Share-link settings, once
- * @property {(name: string) => void} setScenarioName - Record what was built:
- *   a scenario id, or 'None'
+ * @property {(name: string, revision?: number) => void} setScenarioName - What was built
+ * @property {number} [revision] - The revision to build (SCENARIO_REVISIONS.md); absent: the latest
  * @property {() => void} hideObjectInspector - Close the inspector before rebuild
  * @property {(key: string) => void} showScenarioInfo - Repaint the scenario card
  * @property {() => void} updateObjectTypeButton - Sync the insertion-type button
@@ -1654,7 +1654,7 @@ export const buildWorld = ctx => {
     Object.assign(SETTINGS, pendingSettingsOverride);
   }
 
-  setScenarioName(starting_preset);
+  setScenarioName(starting_preset, ctx.revision);
 
   // The low tier's population caps (populationCaps in js/quality.js), read
   // once. The whole population is made and placed and what is past a cap is

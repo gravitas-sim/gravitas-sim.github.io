@@ -13,6 +13,15 @@
 // =============================================================================
 
 import { itemsOf } from './pack.js';
+import { setupFor } from '../shareState.js';
+
+/** Choose a scenario item's world: its title, and its revision from 2 on. */
+export function setWorld(item, id, title) {
+  delete item.revision;
+  return Object.assign(item, setupFor(id, item), {
+    title: { en: title || id },
+  });
+}
 import {
   auditCourse,
   dependencyGraph,
@@ -153,7 +162,7 @@ export function newCourseItem(kind, d) {
         ...base,
         id: freshId('solar-system'),
         minutes: 10,
-        scenario,
+        ...setupFor(scenario),
         seed: 'orbit-1',
         title: { en: scenarioTitle(scenario) },
       };
