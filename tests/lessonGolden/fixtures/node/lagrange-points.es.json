@@ -1,0 +1,808 @@
+{
+ "id": "lagrange-points",
+ "locale": "es",
+ "title": "¿Hasta dónde puede llegar?",
+ "steps": 20,
+ "depths": [
+  [
+   "core",
+   20
+  ]
+ ],
+ "grading": [
+  {
+   "sid": "predict-forbidden",
+   "type": "predict",
+   "kind": null,
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "why-conserved-matters",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "l4-distance",
+   "type": "question",
+   "kind": "numeric",
+   "tolerance": 0.02,
+   "grades": [
+    [
+     "1",
+     true,
+     "correct",
+     1,
+     null,
+     false,
+     null
+    ],
+    [
+     "1,01",
+     true,
+     "correct",
+     1.01,
+     null,
+     false,
+     null
+    ],
+    [
+     "1,06",
+     false,
+     "incorrect",
+     1.06,
+     null,
+     false,
+     null
+    ],
+    [
+     "1",
+     true,
+     "correct",
+     1,
+     null,
+     false,
+     null
+    ],
+    [
+     "not a number",
+     false,
+     "unreadable",
+     null,
+     null,
+     false,
+     "notANumber"
+    ],
+    [
+     "",
+     false,
+     "unreadable",
+     null,
+     null,
+     false,
+     "blank"
+    ]
+   ]
+  },
+  {
+   "sid": "one-region-two-directions",
+   "type": "predict",
+   "kind": null,
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     true,
+     "correct"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "predict-stability",
+   "type": "predict",
+   "kind": null,
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     true,
+     "correct"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "which-assumption",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "say-what-jacobi-cannot-tell-you",
+   "type": "question",
+   "kind": "short",
+   "grades": [
+    [
+     "ungraded",
+     null
+    ]
+   ]
+  }
+ ],
+ "progress": {
+  "record": {
+   "schema": 2,
+   "lesson": "lagrange-points",
+   "stepSid": "three-claims",
+   "responses": {
+    "lagrange-points:predict-forbidden": 1,
+    "lagrange-points:why-conserved-matters": 1,
+    "lagrange-points:l4-distance": "1",
+    "lagrange-points:l4-distance:locale": "es",
+    "lagrange-points:one-region-two-directions": 2,
+    "lagrange-points:predict-stability": 2,
+    "lagrange-points:which-assumption": 1,
+    "lagrange-points:say-what-jacobi-cannot-tell-you": "A fixed sentence for the golden."
+   },
+   "attempts": {
+    "lagrange-points:predict-forbidden": 1,
+    "lagrange-points:why-conserved-matters": 1,
+    "lagrange-points:l4-distance": 1,
+    "lagrange-points:one-region-two-directions": 1,
+    "lagrange-points:predict-stability": 1,
+    "lagrange-points:which-assumption": 1
+   },
+   "visited": [
+    "two-stars-and-a-speck",
+    "the-rotating-frame",
+    "predict-forbidden",
+    "the-jacobi-constant",
+    "read-the-constant",
+    "why-conserved-matters",
+    "five-places",
+    "l4-distance",
+    "critical-order",
+    "open-the-neck",
+    "one-region-two-directions",
+    "watch-it-not-cross",
+    "stability-is-different",
+    "predict-stability",
+    "nudge-l1-and-l4",
+    "trojans",
+    "break-it",
+    "which-assumption",
+    "say-what-jacobi-cannot-tell-you",
+    "three-claims"
+   ],
+   "startedAt": "2026-01-02T03:04:05.000Z",
+   "depth": "core",
+   "spent": 600
+  },
+  "read": {
+   "responses": {
+    "lagrange-points:predict-forbidden": 1,
+    "lagrange-points:why-conserved-matters": 1,
+    "lagrange-points:l4-distance": "1",
+    "lagrange-points:l4-distance:locale": "es",
+    "lagrange-points:one-region-two-directions": 2,
+    "lagrange-points:predict-stability": 2,
+    "lagrange-points:which-assumption": 1,
+    "lagrange-points:say-what-jacobi-cannot-tell-you": "A fixed sentence for the golden."
+   },
+   "attempts": {
+    "lagrange-points:predict-forbidden": 1,
+    "lagrange-points:why-conserved-matters": 1,
+    "lagrange-points:l4-distance": 1,
+    "lagrange-points:one-region-two-directions": 1,
+    "lagrange-points:predict-stability": 1,
+    "lagrange-points:which-assumption": 1
+   },
+   "visited": [
+    "break-it",
+    "critical-order",
+    "five-places",
+    "l4-distance",
+    "nudge-l1-and-l4",
+    "one-region-two-directions",
+    "open-the-neck",
+    "predict-forbidden",
+    "predict-stability",
+    "read-the-constant",
+    "say-what-jacobi-cannot-tell-you",
+    "stability-is-different",
+    "the-jacobi-constant",
+    "the-rotating-frame",
+    "three-claims",
+    "trojans",
+    "two-stars-and-a-speck",
+    "watch-it-not-cross",
+    "which-assumption",
+    "why-conserved-matters"
+   ],
+   "stepSid": "three-claims",
+   "startedAt": "2026-01-02T03:04:05.000Z",
+   "depth": "core",
+   "deepest": null,
+   "spent": 600,
+   "schema": 2,
+   "migrated": false,
+   "notes": []
+  }
+ },
+ "backup": {
+  "backup": {
+   "kind": "gravitas.investigation.progress",
+   "version": 2,
+   "savedAt": "2026-01-02T04:05:06.000Z",
+   "lesson": {
+    "id": "lagrange-points",
+    "title": "¿Hasta dónde puede llegar?",
+    "stepCount": 20
+   },
+   "student": null,
+   "progress": {
+    "stepSid": "three-claims",
+    "startedAt": "2026-01-02T03:04:05.000Z",
+    "visited": [
+     "two-stars-and-a-speck",
+     "the-rotating-frame",
+     "predict-forbidden",
+     "the-jacobi-constant",
+     "read-the-constant",
+     "why-conserved-matters",
+     "five-places",
+     "l4-distance",
+     "critical-order",
+     "open-the-neck",
+     "one-region-two-directions",
+     "watch-it-not-cross",
+     "stability-is-different",
+     "predict-stability",
+     "nudge-l1-and-l4",
+     "trojans",
+     "break-it",
+     "which-assumption",
+     "say-what-jacobi-cannot-tell-you",
+     "three-claims"
+    ],
+    "responses": {
+     "lagrange-points:predict-forbidden": 1,
+     "lagrange-points:why-conserved-matters": 1,
+     "lagrange-points:l4-distance": "1",
+     "lagrange-points:l4-distance:locale": "es",
+     "lagrange-points:one-region-two-directions": 2,
+     "lagrange-points:predict-stability": 2,
+     "lagrange-points:which-assumption": 1,
+     "lagrange-points:say-what-jacobi-cannot-tell-you": "A fixed sentence for the golden."
+    },
+    "attempts": {
+     "lagrange-points:predict-forbidden": 1,
+     "lagrange-points:why-conserved-matters": 1,
+     "lagrange-points:l4-distance": 1,
+     "lagrange-points:one-region-two-directions": 1,
+     "lagrange-points:predict-stability": 1,
+     "lagrange-points:which-assumption": 1
+    }
+   },
+   "steps": [
+    {
+     "index": 0,
+     "sid": "two-stars-and-a-speck",
+     "fingerprint": "read|-|-|Lagrange Point Lab|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 1,
+     "sid": "the-rotating-frame",
+     "fingerprint": "read|-|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 2,
+     "sid": "predict-forbidden",
+     "fingerprint": "predict|-|-|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 3,
+     "sid": "the-jacobi-constant",
+     "fingerprint": "read|-|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 4,
+     "sid": "read-the-constant",
+     "fingerprint": "measure|-|-|-|c_start+c_later|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 5,
+     "sid": "why-conserved-matters",
+     "fingerprint": "question|choice|-|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 6,
+     "sid": "five-places",
+     "fingerprint": "read|-|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 7,
+     "sid": "l4-distance",
+     "fingerprint": "question|numeric|-|-|-|-|a=1;t=0.02",
+     "optionCount": null
+    },
+    {
+     "index": 8,
+     "sid": "critical-order",
+     "fingerprint": "read|-|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 9,
+     "sid": "open-the-neck",
+     "fingerprint": "explore|-|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 10,
+     "sid": "one-region-two-directions",
+     "fingerprint": "predict|-|-|Lagrange Point Lab|-|4|a=2;c=2",
+     "optionCount": 4
+    },
+    {
+     "index": 11,
+     "sid": "watch-it-not-cross",
+     "fingerprint": "explore|-|-|Lagrange Point Lab|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 12,
+     "sid": "stability-is-different",
+     "fingerprint": "read|-|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 13,
+     "sid": "predict-stability",
+     "fingerprint": "predict|-|-|-|-|4|a=2;c=2",
+     "optionCount": 4
+    },
+    {
+     "index": 14,
+     "sid": "nudge-l1-and-l4",
+     "fingerprint": "explore|-|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 15,
+     "sid": "trojans",
+     "fingerprint": "read|-|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 16,
+     "sid": "break-it",
+     "fingerprint": "explore|-|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 17,
+     "sid": "which-assumption",
+     "fingerprint": "question|choice|-|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 18,
+     "sid": "say-what-jacobi-cannot-tell-you",
+     "fingerprint": "question|short|-|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 19,
+     "sid": "three-claims",
+     "fingerprint": "read|-|-|-|-|-|-",
+     "optionCount": null
+    }
+   ]
+  },
+  "verdict": {
+   "ok": true
+  },
+  "restored": {
+   "responses": {
+    "lagrange-points:predict-forbidden": 1,
+    "lagrange-points:why-conserved-matters": 1,
+    "lagrange-points:l4-distance": "1",
+    "lagrange-points:l4-distance:locale": "es",
+    "lagrange-points:one-region-two-directions": 2,
+    "lagrange-points:predict-stability": 2,
+    "lagrange-points:which-assumption": 1,
+    "lagrange-points:say-what-jacobi-cannot-tell-you": "A fixed sentence for the golden."
+   },
+   "attempts": {
+    "lagrange-points:predict-forbidden": 1,
+    "lagrange-points:why-conserved-matters": 1,
+    "lagrange-points:l4-distance": 1,
+    "lagrange-points:one-region-two-directions": 1,
+    "lagrange-points:predict-stability": 1,
+    "lagrange-points:which-assumption": 1
+   },
+   "visited": [
+    "break-it",
+    "critical-order",
+    "five-places",
+    "l4-distance",
+    "nudge-l1-and-l4",
+    "one-region-two-directions",
+    "open-the-neck",
+    "predict-forbidden",
+    "predict-stability",
+    "read-the-constant",
+    "say-what-jacobi-cannot-tell-you",
+    "stability-is-different",
+    "the-jacobi-constant",
+    "the-rotating-frame",
+    "three-claims",
+    "trojans",
+    "two-stars-and-a-speck",
+    "watch-it-not-cross",
+    "which-assumption",
+    "why-conserved-matters"
+   ],
+   "stepIndex": 19,
+   "startedAt": "2026-01-02T03:04:05.000Z",
+   "moved": [],
+   "dropped": [],
+   "quarantined": {},
+   "earlier": {
+    "responses": {},
+    "attempts": {}
+   },
+   "uncertain": 0,
+   "discardedKeys": 0,
+   "byPosition": false
+  }
+ },
+ "ledger": {
+  "entry": "golden-lagrange-points",
+  "record": {
+   "ids": [
+    "golden-lagrange-points"
+   ],
+   "rows": [
+    [
+     "golden-lagrange-points",
+     "q1",
+     3.5247,
+     "d",
+     0.0012,
+     "measured",
+     "simulation",
+     "rv-fit",
+     null,
+     [
+      "s",
+      "d"
+     ]
+    ]
+   ],
+   "total": 1
+  },
+  "digest": "95f45e87e663dc1491893932c5899a5271ca7c6aa903c11c5b54acf428768e41"
+ },
+ "tokens": {
+  "plain": {
+   "comfortable": true,
+   "ok": true,
+   "reason": null,
+   "backupIntact": true,
+   "payload": {
+    "v": 2,
+    "a": null,
+    "r": null,
+    "fl": "es"
+   },
+   "answers": [
+    {
+     "sid": "predict-forbidden",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "why-conserved-matters",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "l4-distance",
+     "value": "1",
+     "locale": "es"
+    },
+    {
+     "sid": "one-region-two-directions",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "predict-stability",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "which-assumption",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "say-what-jacobi-cannot-tell-you",
+     "value": "A fixed sentence for the golden.",
+     "locale": "es"
+    }
+   ]
+  },
+  "assignment": {
+   "comfortable": true,
+   "ok": true,
+   "reason": null,
+   "backupIntact": true,
+   "payload": {
+    "v": 2,
+    "a": "golden-assignment",
+    "r": "roster-1",
+    "fl": "es"
+   },
+   "answers": [
+    {
+     "sid": "predict-forbidden",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "why-conserved-matters",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "l4-distance",
+     "value": "1",
+     "locale": "es"
+    },
+    {
+     "sid": "one-region-two-directions",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "predict-stability",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "which-assumption",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "say-what-jacobi-cannot-tell-you",
+     "value": "A fixed sentence for the golden.",
+     "locale": "es"
+    }
+   ]
+  },
+  "evidence": {
+   "comfortable": true,
+   "ok": true,
+   "reason": null,
+   "backupIntact": true,
+   "payload": {
+    "v": 2,
+    "ev": {
+     "d": "95f45e87e663dc1491893932c5899a5271ca7c6aa903c11c5b54acf428768e41",
+     "i": [
+      "golden-lagrange-points"
+     ],
+     "n": 1,
+     "r": [
+      [
+       "golden-lagrange-points",
+       "q1",
+       3.5247,
+       "d",
+       0.0012,
+       "measured",
+       "simulation",
+       "rv-fit",
+       null,
+       [
+        "s",
+        "d"
+       ]
+      ]
+     ]
+    },
+    "a": null,
+    "r": null,
+    "fl": "es"
+   },
+   "answers": [
+    {
+     "sid": "predict-forbidden",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "why-conserved-matters",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "l4-distance",
+     "value": "1",
+     "locale": "es"
+    },
+    {
+     "sid": "one-region-two-directions",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "predict-stability",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "which-assumption",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "say-what-jacobi-cannot-tell-you",
+     "value": "A fixed sentence for the golden.",
+     "locale": "es"
+    }
+   ]
+  },
+  "depth": {
+   "comfortable": true,
+   "ok": true,
+   "reason": null,
+   "backupIntact": true,
+   "payload": {
+    "v": 2,
+    "dp": "core",
+    "a": null,
+    "r": null,
+    "fl": "es"
+   },
+   "answers": [
+    {
+     "sid": "predict-forbidden",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "why-conserved-matters",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "l4-distance",
+     "value": "1",
+     "locale": "es"
+    },
+    {
+     "sid": "one-region-two-directions",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "predict-stability",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "which-assumption",
+     "value": 1,
+     "locale": "es"
+    },
+    {
+     "sid": "say-what-jacobi-cannot-tell-you",
+     "value": "A fixed sentence for the golden.",
+     "locale": "es"
+    }
+   ]
+  }
+ }
+}

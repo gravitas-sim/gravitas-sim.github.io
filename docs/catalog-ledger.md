@@ -18,7 +18,7 @@ Rows by kind: activity 6, course 6, experiment 4, investigation 146, sequence 11
 
 Baseline (measured at f9277ff8): 146 investigations (124 lessons, 10 Observatory, 9 3-D, 3 mission), 6 activity entries, 4 bench labs, 7 courses (6 rows and 1 out of scope), 11 sequences, 69 scenarios (61 sandbox, 8 3-D lab), 16 datasets.
 
-Editorial: OPEN 158, REVISED 15. Redesign: OPEN 159, REVIEWED CLEAR 4, REVISED 10. Scenario dispositions: OPEN 69.
+Editorial: OPEN 156, REVISED 17. Redesign: OPEN 157, REVIEWED CLEAR 5, REVISED 11. Scenario dispositions: OPEN 69.
 
 Scene class of the lessons: portrait or backdrop 94, setup scenario 26, engine-integrated stage 2, model-owned stage 2.
 
@@ -41,7 +41,7 @@ Scene class of the lessons: portrait or backdrop 94, setup scenario 26, engine-i
 | `investigation:bending-light`                        | lesson      |   400 | FOCUSED  | portrait or backdrop    | OPEN      | OPEN           | NOT RUN      | -                                     |          0 |
 | `investigation:binary-star-planets`                  | lesson      |   357 | STRONG   | setup scenario          | REVISED   | REVIEWED CLEAR | NOT RUN      | -                                     |          2 |
 | `investigation:black-holes`                          | lesson      |   352 | FOCUSED  | engine-integrated stage | OPEN      | OPEN           | NOT RUN      | -                                     |          0 |
-| `investigation:butterfly-effect`                     | lesson      |   350 | STRONG   | setup scenario          | OPEN      | OPEN           | NOT RUN      | -                                     |          0 |
+| `investigation:butterfly-effect`                     | lesson      |   350 | STRONG   | setup scenario          | REVISED   | REVIEWED CLEAR | NOT RUN      | -                                     |          0 |
 | `investigation:cluster-membership`                   | lesson      |   381 | STRONG   | portrait or backdrop    | OPEN      | OPEN           | NOT RUN      | leg E1 NOT RUN (+1)                   |          0 |
 | `investigation:color-and-temperature`                | lesson      |   378 | FOCUSED  | portrait or backdrop    | OPEN      | OPEN           | NOT RUN      | -                                     |          1 |
 | `investigation:comets-and-the-sun`                   | lesson      |   361 | REDESIGN | setup scenario          | OPEN      | OPEN           | NOT RUN      | -                                     |          0 |
@@ -84,7 +84,7 @@ Scene class of the lessons: portrait or backdrop 94, setup scenario 26, engine-i
 | `investigation:l3-resonant`                          | lab3d       |   419 | STRONG   | -                       | OPEN      | OPEN           | NOT RUN      | -                                     |          1 |
 | `investigation:l3-seen`                              | lab3d       |   418 | FOCUSED  | -                       | OPEN      | OPEN           | NOT RUN      | -                                     |          1 |
 | `investigation:l3-tilts`                             | lab3d       |   419 | FOCUSED  | -                       | OPEN      | OPEN           | NOT RUN      | -                                     |          1 |
-| `investigation:lagrange-points`                      | lesson      |   350 | FOCUSED  | setup scenario          | OPEN      | OPEN           | NOT RUN      | -                                     |          0 |
+| `investigation:lagrange-points`                      | lesson      |   350 | FOCUSED  | setup scenario          | REVISED   | REVISED        | VERIFIED     | -                                     |          0 |
 | `investigation:leavitts-law`                         | lesson      |   385 | FOCUSED  | portrait or backdrop    | OPEN      | OPEN           | NOT RUN      | -                                     |          0 |
 | `investigation:lines-and-motion`                     | lesson      |   378 | STRONG   | portrait or backdrop    | OPEN      | OPEN           | NOT RUN      | -                                     |          0 |
 | `investigation:listening-to-spacetime`               | lesson      |   353 | STRONG   | model-owned stage       | OPEN      | OPEN           | NOT RUN      | -                                     |          0 |
