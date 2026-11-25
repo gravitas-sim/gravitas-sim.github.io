@@ -1,54 +1,34 @@
 // =============================================================================
 // What If Gravity Were Not Inverse Square?
 // -----------------------------------------------------------------------------
-// One exponent moves and everything else is held fixed, so that a student can
-// see which orbital results were consequences of the inverse square and which
-// were consequences of the force merely being central.
+// One exponent moves and everything else is held fixed, so a student sees which
+// orbital results came from the inverse square and which from the force merely
+// being central. Three are separable:
 //
-// The lesson exists because "gravity falls off as one over r squared" is
-// learned as a fact rather than as a claim with consequences, and the
-// consequences are where the physics is. Three of them are separable and this
-// lesson separates them:
-//
-//   the closed ellipse       Kepler's first law is not a property of central
-//                            forces. It is a property of THIS central force.
-//                            Change the exponent and the ellipse turns.
-//   the 3/2 power            P against a is a statement about the exponent,
-//                            and - unlike almost everything else - one that
-//                            changing G cannot fake.
-//   the conservation laws    These do NOT break. Momentum and angular momentum
-//                            survive any central pairwise law, and the lesson
-//                            is arranged so that a student notices them sitting
-//                            at 1e-15 while everything else moves.
+//   the closed ellipse       a property of THIS central force, not of central
+//                            forces: change the exponent and the ellipse turns.
+//   the 3/2 power            P against a states the exponent; changing G cannot
+//                            fake it.
+//   the conservation laws    These do NOT break: momentum and angular momentum
+//                            survive any central pairwise law, and sit at 1e-15
+//                            while everything else moves.
 //
 // Why there is a reference radius
 // -----------------------------------------------------------------------------
-// The obvious model is a = GM/r^n and it is wrong in a way that would quietly
-// wreck the lesson. The ratio to Newton is r^(2-n), which depends on the unit
-// distance is measured in, and most of its effect on an orbit is a change of
-// strength rather than of shape - reproducible by changing G and leaving the
-// inverse square alone. A student running that would conclude "gravity got
-// weaker", which is not the lesson and is not even true.
-//
-// So the law is pinned at a reference radius r0 = 1 AU, where it is Newtonian
-// for every n. The full reasoning, and the checks, are in js/powerLawGravity.js
+// a = GM/r^n alone is wrong: its ratio to Newton, r^(2-n), depends on the unit
+// distance is measured in and mostly changes strength, not shape, so a student
+// would conclude "gravity got weaker". The law is therefore pinned at a
+// reference radius r0 = 1 AU, Newtonian for every n; see js/powerLawGravity.js
 // and tests/powerLawGravity.test.js.
 //
-// What this is not
-// -----------------------------------------------------------------------------
-// Not a theory of gravity, not modified-gravity phenomenology, not MOND - which
-// is a different model on a different parameter and lives in js/mond.js - and
-// not relativity. Mercury's perihelion is mentioned once, as a historical
-// example of a real precession, and explicitly not as something this model
-// explains.
+// What this is not: a theory of gravity, MOND (js/mond.js) or relativity.
+// Mercury's perihelion is mentioned once, as a historical precession the model
+// does not explain.
 // =============================================================================
 
-// No role bindings. The instruments in this lesson are a contained model that
-// integrates its own two-body problem and reports numbers; nothing on the
-// canvas is driven by the exponent, and binding a role to a body the model does
-// not move would claim otherwise. The scenario is context - a familiar
-// inverse-square system to have in view while the question is asked - and the
-// lesson says so rather than implying the Solar System on screen is precessing.
+// No role bindings: the instruments integrate their own two-body problem, and
+// nothing on the canvas is driven by the exponent. The Solar System is context,
+// and the lesson says so.
 
 const POWER_LAW_GRAVITY = {
   id: 'power-law-gravity',
@@ -198,12 +178,9 @@ const POWER_LAW_GRAVITY = {
     },
     {
       sid: 'record-the-precession',
-      // The instruments run their own contained orbits, so the Solar System on
-      // the canvas would only be something else to look at behind the precession
-      // and the timestep runs and the conservation check. Declared here, not on
-      // the first look, so the canvas code is fetched after the first instrument
-      // is open and not on the way to it. The scene is back for the slope runs
-      // and the closing steps.
+      // The instruments run their own orbits, so the scene stays quiet here;
+      // declared here so the canvas code is fetched after the first instrument
+      // opens. The scene is back for the slope runs and the closing steps.
       canvas: 'quiet',
       type: 'measure',
       title: 'Record what the axis does',
