@@ -64,6 +64,11 @@ import { migrateScenarioPack } from '../js/platform/scenario.js';
 import * as physics from '../js/physics.js';
 import { LISTS, bodyRecord, digest, fnv } from './scenarioDigest.js';
 import { LAB_EDGE_IDS, LAB_SCENARIOS } from './scenarioLabCases.js';
+import { SCENARIO_REVISIONS } from '../js/shareState.js';
+
+// These goldens record the code-built worlds, which a corrected scenario keeps
+// as its retained revision 1 (SCENARIO_REVISIONS.md): built at 1 here.
+const asBuilt = key => (SCENARIO_REVISIONS[key] ? 1 : undefined);
 import { SLICE4_SCENARIOS } from './scenarioSlice4Cases.js';
 import { SLICE5_SCENARIOS } from './scenarioSlice5Cases.js';
 import { SLICE6_SCENARIOS } from './scenarioSlice6Cases.js';
@@ -126,7 +131,7 @@ describe('the declared scenarios build the world the code built', () => {
     '%s: every field of every body, the settings, the camera and the generator',
     id => {
       const [key, seed] = id.split('@');
-      expect(digest(key, Number(seed))).toEqual(GOLDEN[id]);
+      expect(digest(key, Number(seed), null, asBuilt(key))).toEqual(GOLDEN[id]);
     }
   );
 });
@@ -1072,7 +1077,8 @@ describe('slice 2: a share link that changes a population count', () => {
 
   test.each(Object.keys(EDGE))('%s is the world the code made', id => {
     const at = id.indexOf('@');
-    const d = digest(id.slice(0, at), 1, JSON.parse(id.slice(at + 1)));
+    const key = id.slice(0, at);
+    const d = digest(key, 1, JSON.parse(id.slice(at + 1)), asBuilt(key));
     expect({ ...d, rows: d.rows.map(fnv) }).toEqual(EDGE[id]);
   });
 
@@ -1532,7 +1538,8 @@ describe('slice 3: the laboratories under a share link', () => {
 
   test.each(LAB_EDGE_IDS)('%s is the world the code made', id => {
     const at = id.indexOf('@');
-    const d = digest(id.slice(0, at), 1, JSON.parse(id.slice(at + 1)));
+    const key = id.slice(0, at);
+    const d = digest(key, 1, JSON.parse(id.slice(at + 1)), asBuilt(key));
     expect({ ...d, rows: d.rows.map(fnv) }).toEqual(EDGE[id]);
   });
 

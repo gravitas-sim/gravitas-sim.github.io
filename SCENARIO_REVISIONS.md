@@ -224,3 +224,4 @@ that adds the constant it names.
 | Id | Revision | Earlier | What changed | Register |
 |---|---|---|---|---|
 | `binary-star-system` | 2 | 1 retained (`rows[1]`, `geometry[1]`) | Planets, giants and asteroids start past Holman and Wiegert's critical distance (2.43 separations); only the stars pull; zoom 1.5 to 0.55 | D-R4-463-04 |
+| `lagrange-point-lab` | 2 | 1 retained (`rows[1]`) | RK4 instead of Velocity Verlet at the same step, so the tracer's Jacobi constant holds to 1e-6; tracer 1e-12 of the pair's mass instead of 1e-9; the tracer's start is unchanged | D-R4-463-06 |

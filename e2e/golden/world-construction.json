@@ -456,8 +456,8 @@
       "StarObject": 2,
       "Planet": 1
     },
-    "totalMass": 1030.00000103,
-    "momentumResidual": "about 1e-8 of the momentum summed",
+    "totalMass": 1030,
+    "momentumResidual": "about 1e-11 of the momentum summed",
     "scenarioName": "lagrange-point-lab",
     "presetSentinel": "None",
     "zoom": 0.42,
@@ -465,12 +465,12 @@
       "x": 0,
       "y": 0
     },
-    "bodies": "07e449b0631f0a1a",
-    "settings": "1949d6b39e9dcfbb",
+    "bodies": "29a15973e29d7efb",
+    "settings": "419fd5317e50949f",
     "head": [
       "stars|0|StarObject|2|Primary|1000|13.95141|-23.3009708738|0|0|-0.0467382714637|P|",
       "stars|1|StarObject|3|Secondary|30|9.83197540035|776.699029126|0|0|1.55794238212|P|",
-      "planets|0|Planet|4|Tracer|0.00000103|0.8|480|0|0|0.962808392153|P|"
+      "planets|0|Planet|4|Tracer|1.03e-9|0.8|480|0|0|0.962808392153|P|"
     ]
   },
   "orbital-transfer-lab": {
@@ -865,7 +865,7 @@
       "y": 0
     },
     "bodies": "62421f81e9be61c3",
-    "settings": "5c1e2a29d1dbc8ed",
+    "settings": "fd77775b46560e47",
     "head": [
       "stars|0|StarObject|29|Solar Majesty|1200|11.6762681223|-48|0|-0.00251858737844|1.77873862684||",
       "stars|1|StarObject|30|Stellar Dynamo|800|8.27230405627|72|0|-0.00251858737844|-2.69339732816||",

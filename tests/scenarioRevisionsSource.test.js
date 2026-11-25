@@ -105,7 +105,10 @@ describe('the producer table', () => {
 describe('what ships', () => {
   // Each correction adds its id here (DECISION_REGISTER D-R4-463-04 for the first).
   test('the registry ships the corrected ids, each listing every earlier revision', () => {
-    expect(Object.keys(SCENARIO_REVISIONS)).toEqual(['binary-star-system']);
+    expect(Object.keys(SCENARIO_REVISIONS)).toEqual([
+      'binary-star-system',
+      'lagrange-point-lab',
+    ]);
     for (const [id, entry] of Object.entries(SCENARIO_REVISIONS)) {
       expect(SCENARIO_IDS).toContain(id);
       expect(entry.revision).toBeGreaterThanOrEqual(2);

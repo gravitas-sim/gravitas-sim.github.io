@@ -74,6 +74,21 @@ export const SCENARIO_REVISIONS = {
       ] },
     },
   },
+  // Revision 2 integrates with RK4 (Velocity Verlet drifted the tracer's Jacobi
+  // constant by 3e-4 on its close pass) and lightens the tracer from 1e-9 to
+  // 1e-12 of the pair's mass, so the stars' paths move by under 1e-9 of their
+  // separation. The tracer still starts 0.6 separations out, at rest.
+  'lagrange-point-lab': {
+    revision: 2,
+    earlier: { 1: 'retained' },
+    rows: {
+      1: {
+        ...SCENARIO_PRESETS['lagrange-point-lab'],
+        integrator: 'Velocity Verlet',
+        lagrange_tracer_fraction: 1e-9,
+      },
+    },
+  },
 };
 const REVISED = id => Object.hasOwn(SCENARIO_REVISIONS, id);
 export const currentRevision = id =>

@@ -998,7 +998,7 @@ export const ES = {
   'scenario.lagrange-point-lab.title':
     'Laboratorio de puntos de Lagrange: dos estrellas, una orbita circular, una particula de prueba',
   'scenario.lagrange-point-lab.summary':
-    'Una estrella de tipo solar y una companera de una treintava parte de su masa, en una orbita exactamente circular de ocho unidades astronomicas, con un trazador tan ligero que ninguna de las dos lo nota. Este es el problema restringido circular de los tres cuerpos: el sistema mas simple con puntos de Lagrange, regiones prohibidas y una constante de Jacobi conservada, y la unica disposicion en la que todo eso es exactamente cierto.',
+    'Una estrella de tipo solar y una compañera de tres centésimas de su masa, en una órbita exactamente circular de ocho unidades astronómicas, con un trazador tan ligero que ninguna de las dos lo nota. Este es el problema restringido circular de los tres cuerpos: el sistema más simple con puntos de Lagrange, regiones prohibidas y una constante de Jacobi conservada, y la única disposición en la que todo eso es exactamente cierto.',
   'scenario.orbital-transfer-lab.title':
     'Laboratorio de transferencia orbital: una estrella, una nave, un destino',
   'scenario.orbital-transfer-lab.summary':

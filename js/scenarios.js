@@ -1574,9 +1574,9 @@ export const SCENARIO_PRESETS = /* @__PURE__ */ Object.freeze({
     trail_length: 900,
     show_conservation_diagnostics: true,
     // The Jacobi constant is conserved by the dynamics, and the lesson asks
-    // students to watch it hold. Symplectic Euler's first-order drift would
-    // make that a claim about the integrator.
-    integrator: 'Velocity Verlet',
+    // students to watch it hold. Verlet drifted 3e-4 of it on the tracer's
+    // close pass; RK4 at the same step holds it to 2e-8 over five orbits.
+    integrator: 'RK4',
     max_timestep: 0.3,
     sim_speed: 30,
     min_interaction_distance: 0.01,
@@ -1586,7 +1586,7 @@ export const SCENARIO_PRESETS = /* @__PURE__ */ Object.freeze({
     lagrange_primary_mass: 1,
     lagrange_secondary_mass: 0.03,
     lagrange_separation: 8,
-    lagrange_tracer_fraction: 1e-9,
+    lagrange_tracer_fraction: 1e-12,
     lagrange_tracer_x: 0.6,
     lagrange_tracer_y: 0,
     lagrange_tracer_vx: 0,

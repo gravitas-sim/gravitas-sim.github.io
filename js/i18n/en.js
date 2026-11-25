@@ -976,7 +976,7 @@ export const EN = {
   'scenario.lagrange-point-lab.title':
     'Lagrange Point Lab: two stars, one circular orbit, one test particle',
   'scenario.lagrange-point-lab.summary':
-    'A sunlike star and a companion a thirtieth its mass, on an exactly circular orbit eight astronomical units across, with a tracer light enough that neither notices it. This is the circular restricted three-body problem: the simplest system with Lagrange points, forbidden regions and a conserved Jacobi constant, and the only arrangement in which any of those are exactly true.',
+    'A sunlike star and a companion three hundredths of its mass, on an exactly circular orbit eight astronomical units across, with a tracer light enough that neither notices it. This is the circular restricted three-body problem: the simplest system with Lagrange points, forbidden regions and a conserved Jacobi constant, and the only arrangement in which any of those are exactly true.',
   'scenario.orbital-transfer-lab.title':
     'Orbital Transfer Lab: one star, one spacecraft, one destination',
   'scenario.orbital-transfer-lab.summary':
