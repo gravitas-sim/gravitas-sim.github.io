@@ -1118,7 +1118,7 @@
       ],
       "walk": "NOT RUN",
       "pr": null,
-      "hash": "01d84baf69ed5442239ee1d570faa1c4e6d7b1816c7d64e0ba48c682e51f195e"
+      "hash": "2c60c0e1a35b4ae1d9ce54f2c3da8e5dfbbdd7fadde9b682fd97413395d91437"
     },
     {
       "id": "investigation:black-holes",
@@ -1259,22 +1259,37 @@
       "scene_class": "setup scenario",
       "limits": null,
       "open_items": [],
-      "questions": { "Q1": "", "Q2": "", "Q3": "", "Q4": "", "Q5": "" },
+      "questions": {
+        "Q1": "Two runs of the same three-body system a 1,500 km nudge apart, compared live on the separation instrument: a zero-difference control, a binary whose linear growth the instrument refuses to call chaos, an exponential triple, then step and integrator controls whose agreement is itself checked. A paragraph could only assert what the runs show.",
+        "Q2": "Each run is one named action ('Set up and run both') with the interval and step it used reported beside the result; the measurement step names the two Take buttons and the row r² is printed on.",
+        "Q3": "Scene, instrument and prose name the same stars (Alpha, Beta), the same perturbation and the same simulated seconds; the instrument quotes τ with its fitted interval and r².",
+        "Q4": "The student decides what the controls show, takes τ and the growth from the instrument (K1), types r², and designs the horizon in move-the-horizon; a wrong run is answered in words by the step's validator.",
+        "Q5": "Not applicable: core only; no deeper steps exist and none was added (350 is leak fixes and polish)."
+      },
       "leak": {
         "L1": "HOLDS: no field cue or step placeholder holds a numeral at any depth, in either language, and the panel renders none that does (tests/fieldCue.test.js); the expected value is the field's `want`, which no page reads.",
-        "L2": "",
-        "L3": "",
+        "L2": "HOLDS: the instrument opens empty ('nothing measured yet') and the measured rows carry nothing to take before a measurement.",
+        "L3": "HOLDS (350): the predictions come before the runs that settle them; the steps between them are unchanged, and measure-the-triple's rubric, which lists the numbers, is instructor-only (an explore step's rubric is never drawn).",
         "L4": "",
         "L5": ""
       },
-      "task_rule_items": [],
-      "editorial": "OPEN",
-      "redesign": "OPEN",
-      "reason": "Corrections I reworded steps for factual consistency (register D-R4-300-01); editorial pass still OPEN.",
-      "step_revisions": [],
+      "task_rule_items": [
+        "T1: τ and the growth factor are taken from the instrument (K1); r² shares τ's row and is typed.",
+        "T2: the predictions are kept and the A/B runs unchanged.",
+        "T4: move-the-horizon stays the student's design."
+      ],
+      "editorial": "REVISED",
+      "redesign": "REVIEWED CLEAR",
+      "reason": "STRONG: leak fixes and polish only; the measurement step takes two readings from the instrument (register D-R4-350-01). Pattern: zero-difference control, a binary the instrument will not call chaos, an exponential triple, then step and integrator controls whose agreement is checked.",
+      "step_revisions": [
+        {
+          "sid": "write-down-what-you-measured",
+          "change": "Reworded: τ and the growth factor are taken from the instrument with Take (K1); r² is typed from the Behavior row."
+        }
+      ],
       "walk": "NOT RUN",
       "pr": null,
-      "hash": null
+      "hash": "4e828717b036b2f283a6be95bafadae79ebb6e83e0d55b395c580608bf9c2c37"
     },
     {
       "id": "investigation:cluster-membership",
@@ -2896,7 +2911,7 @@
       ],
       "walk": "VERIFIED",
       "pr": 676,
-      "hash": "11092e597b552a39a5fb55ad9a1d1060ee920abe5300c758c7b3bf6d7380b14a"
+      "hash": "538d500ebb916f2f56ca1fc95cd9f84c78c37b2f4052dc136fe84baec171301b"
     },
     {
       "id": "investigation:keplers-laws",
@@ -3399,22 +3414,57 @@
       "scene_class": "setup scenario",
       "limits": null,
       "open_items": [],
-      "questions": { "Q1": "", "Q2": "", "Q3": "", "Q4": "", "Q5": "" },
+      "questions": {
+        "Q1": "The student opens the L1 neck with a burn and watches the panel's C fall, runs one tracer in two directions with an identical Jacobi constant and sees one cross and one not, and places a tracer beside L1 and L4 at a nudge of their choosing and watches whether it stays: evidence the zero-velocity picture cannot give.",
+        "Q2": "Each step names the control (the maneuver planner's transverse burn, 'Run both directions', the Nudge test's point, nudge and 'Place the tracer') and what to read (C, the open necks, the pair's table, the distance now, the furthest and when).",
+        "Q3": "Scene, panel and prose share the rotating frame and its units (separations, binary periods); the shading, the points and the nudge distances are drawn and quoted in the same frame.",
+        "Q4": "The student chooses the burn, the point, the size of the nudge and how long to watch, and must decide when the furthest distance has stopped growing; calling L4 unstable from one large nudge is the mistake the step is built to expose.",
+        "Q5": "Not applicable: core only; no deeper steps exist and none was added."
+      },
       "leak": {
         "L1": "HOLDS: no field cue or step placeholder holds a numeral at any depth, in either language, and the panel renders none that does (tests/fieldCue.test.js); the expected value is the field's `want`, which no page reads.",
-        "L2": "",
-        "L3": "",
+        "L2": "HOLDS (350): while a lesson is open the panel shows no stability mark, Routh sentence or stable claim, and L4 and L5 are drawn in the same colour as the others; its C column is the instrument the student reads.",
+        "L3": "HOLDS (350): critical-order no longer prints the critical values before the neck is opened; predict-stability's body states no verdict, and trojans, which did, now follows the nudge test that reveals it; the two predictions revealed by the same runs are one.",
         "L4": "",
         "L5": ""
       },
-      "task_rule_items": [],
-      "editorial": "OPEN",
-      "redesign": "OPEN",
-      "reason": "Corrections I reworded steps for factual consistency (register D-R4-300-03); editorial pass still OPEN.",
-      "step_revisions": [],
-      "walk": "NOT RUN",
+      "task_rule_items": [
+        "T1: the nudge test's point, nudge and watching time are the student's.",
+        "T2: one prediction about the two directions, revealed by the runs; the stability prediction revealed by the nudge test.",
+        "T5: authored feedback on why-conserved-matters and the merged prediction."
+      ],
+      "editorial": "REVISED",
+      "redesign": "REVISED",
+      "reason": "FOCUSED: two predictions merged, the critical values and the stability verdict withheld until their steps, and a nudge test at L1 and L4 built in the three-body panel (register D-R4-350-02 to 04).",
+      "step_revisions": [
+        {
+          "sid": "one-region-two-directions",
+          "change": "REVISED: replaces accessible-not-reachable and predict-same-region-same-path (both retired); one prediction, both, one or neither cross, revealed at watch-it-not-cross."
+        },
+        {
+          "sid": "critical-order",
+          "change": "Reworded: no critical values; the student reads them in the panel."
+        },
+        {
+          "sid": "predict-stability",
+          "change": "Reworded: no saddle or maximum in the body; revealed at the nudge test."
+        },
+        {
+          "sid": "nudge-l1-and-l4",
+          "change": "New: the panel's Nudge test at L1 and L4, nudge and watching time chosen by the student."
+        },
+        {
+          "sid": "trojans",
+          "change": "Moved after the nudge test; tip corrected to a twenty-fifth (Routh's ratio)."
+        },
+        {
+          "sid": "say-what-jacobi-cannot-tell-you",
+          "change": "Reworded: names the nudge the student made."
+        }
+      ],
+      "walk": "VERIFIED",
       "pr": null,
-      "hash": null
+      "hash": "59ad3def8e0060271d480c85a5e19373de2b36a5756f105b4e0043f6c5ee6891"
     },
     {
       "id": "investigation:leavitts-law",
@@ -6336,7 +6386,7 @@
       ],
       "walk": "VERIFIED",
       "pr": 676,
-      "hash": "88fc62b3ffa5892d0294b59a5f6e850bc3a1e4a8d90355d95a5ca71a48c0d6ac"
+      "hash": "8b9082ca7fe85fb5f3d77957725a03d11ee38b29e3707d847271da1576bebe11"
     },
     {
       "id": "investigation:transit-photometry",
@@ -7608,7 +7658,7 @@
       ],
       "walk": "NOT RUN",
       "pr": null,
-      "hash": "5a28d9966af64033a74fb6689e1f4896a9de80b92882aad2c90eb3de255e0d59"
+      "hash": "42d1a077754044ad3f59f72ee97a3bcd11e5508929a30640462f11fa68411586"
     },
     {
       "id": "investigation:when-the-method-must-refuse",
@@ -8763,9 +8813,9 @@
       "family": "flybys and assists",
       "planning": "REVIEW",
       "owner": 463,
-      "disposition": "OPEN",
-      "reason": "",
-      "pr": null
+      "disposition": "REVISED",
+      "reason": "REFRAME (card, both languages): the row gives the spacecraft a millionth of the planet's mass (0.0016 Earth masses), not one Earth mass; the world is unchanged. The run keeps the relative speed to 2e-11 and the deflection within 0.01% of the two-body value (tests/fixtures/scenario-review/record.json). D-R4-463-03.",
+      "pr": 757
     },
     {
       "id": "scenario:gravity-assist-heliocentric",
@@ -8907,7 +8957,7 @@
       "planning": "REVIEW",
       "owner": 466,
       "disposition": "OPEN",
-      "reason": "",
+      "reason": "Prompt 496 (D-R4-496-02): stays on branch N (no body removed for leaving the view); it fails 496's cost gate at the end of the run and no escape rule can pass it, so the case is the maintainer's. Engine time a frame (Node 22, median of three, quiet machine): 1.7 ms at the start and 0.14 ms at the end of 20,000 frames against 1.7 and 0.055 ms with the old box at 375x812; live bodies 255, 198, 189, 187, 189 by quarter against 255 to 156.",
       "pr": null
     },
     {
@@ -9105,7 +9155,7 @@
       "planning": "REVIEW",
       "owner": 466,
       "disposition": "OPEN",
-      "reason": "",
+      "reason": "Prompt 496 (D-R4-496-02): stays on branch N (no body removed for leaving the view); it fails 496's cost gate and no escape rule can pass it, so the case is the maintainer's. Engine time a frame (Node 22, median of three): 103 ms at the start and 143 ms at the end of 20,000 frames against 23.7 and 5.7 ms with the old box at 375x812; live bodies 972, 3446, 3739, 3991, 4165 by quarter (3396 debris and 349 asteroids at the end) against 972 to 855.",
       "pr": null
     },
     {
@@ -9214,9 +9264,9 @@
       "family": "flybys and assists",
       "planning": "REVIEW",
       "owner": 463,
-      "disposition": "OPEN",
-      "reason": "",
-      "pr": null
+      "disposition": "REVISED",
+      "reason": "REFRAME (card, both languages): under Static holes the star's speed at infinity leaves within 0.4% of the speed it entered with, so it is deflected, not slung. Orbiting holes were tried first, as the review allows: the five holes, released at rest, merge into one before the star leaves (closest pass about 250 u), so no field survives to sling it. D-R4-463-03.",
+      "pr": 757
     },
     {
       "id": "scenario:black-hole-billiards",

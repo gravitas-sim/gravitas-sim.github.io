@@ -291,6 +291,7 @@ const TH = (values = {}, hide = [], start) => ({
 export const WHY_RINGS = {
   id: 'why-rings',
   thumbnail: 'images/investigations/why-rings.webp',
+  sizes: true,
   title: 'Why Rings?',
   subtitle:
     'Where a moon falls apart, and where a moon’s pull leaves a mark in a ring',

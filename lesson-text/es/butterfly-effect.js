@@ -339,7 +339,10 @@ export default {
     },
     'write-down-what-you-measured': {
       title: 'Anota lo que mediste',
-      body: `Lee estos valores en el instrumento y anótalos. Van a tu informe.`,
+      body: `Toma el tiempo de crecimiento y el factor de crecimiento del
+             instrumento con el botón que hay junto a cada casilla, y escribe la
+             calidad del ajuste r², que la fila Comportamiento muestra después
+             del tiempo de crecimiento. Van a tu informe.`,
       fields: [
         {
           label: 'tiempo de crecimiento',

@@ -7,10 +7,13 @@
 // to recover a planet radius from a depth and then checks their answer. A body
 // that carries an explicit physical radius (radiusInSuns, radiusInEarths,
 // radiusInJupiters) is measured with it; everything else falls back to a
-// mass-radius relation, which is all a sandbox scenario can offer. Scenarios
-// built for the lesson set the explicit values *and* draw their bodies at the
-// matching relative size, so the depth a student measures, the radius ratio it
-// implies and the silhouette on screen are all the same number.
+// mass-radius relation, which is all a sandbox scenario can offer. The depth
+// uses those physical radii (k); where a transit starts, how long it lasts and
+// its shape use the model radii (obj.radius, k_sim). Scenarios built for the
+// lesson set model radii at the physical ratio, so k_sim is k there; elsewhere
+// model radii are compressed and the two differ by design. Neither is the drawn
+// size, which js/bodyVisuals.js scales by family (a planet at 0.375 of its
+// model radius); tests/sizeConsistency.test.js holds all three apart.
 //
 // Multi-star systems are summed with luminosity weights, so a companion star
 // dilutes a transit by exactly the factor real blended photometry suffers from.
@@ -394,11 +397,12 @@ function circleOverlapArea(R, r, d) {
 // ── Primary transit depth (limb-darkened, realistic k) ──────────────
 
 function transitDip(k, b, Rs_sim, Rp_sim, sep) {
-  // k: physical Rp/Rs  |  b: sep/Rs_sim (visual impact param)
+  // k: physical Rp/Rs (sets the depth)  |  b: sep/Rs_sim (impact parameter
+  // on the model disc, which sets the timing and shape)
   const k_sim = Rp_sim / Rs_sim;
   if (b >= 1 + k_sim) return 0;
 
-  // Fraction of visual planet disk that overlaps the visual star disk
+  // Fraction of the model planet disc that overlaps the model star disc
   let onDiskFrac;
   if (b + k_sim <= 1) {
     onDiskFrac = 1;
@@ -501,7 +505,7 @@ function calculateBrightness() {
       const skyX = -dx * sinA + dy * cosA;
       const skyY = -cosI * along;
       const sep = Math.hypot(skyX, skyY);
-      const b = sep / Rs_sim; // normalized impact parameter on visual disk
+      const b = sep / Rs_sim; // normalized impact parameter on the model disc
 
       // Phase angle at planet: 0 = full (behind star), π = transit
       const cosAlpha = Math.max(-1, Math.min(1, -losDepth / dist));
@@ -518,7 +522,7 @@ function calculateBrightness() {
 
       // Where this body is against the star's disc, right now, recorded for
       // whoever asks. Computed here rather than re-derived by a caller because
-      // the observer's line of sight, the foreshortening and the two visual
+      // the observer's line of sight, the foreshortening and the two model
       // radii all live in this function - a second copy of that arithmetic
       // would be a second thing that could disagree with the curve.
       lastGeometry.set(obj, {

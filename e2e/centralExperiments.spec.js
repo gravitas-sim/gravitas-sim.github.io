@@ -1729,7 +1729,21 @@ test.describe('the central experiment of each investigation', () => {
       widths[0],
       'a bracket of a few days, not the whole loop'
     ).toBeLessThan(16);
-    expect(spread).toBeCloseTo((widths[0] + widths[1]) / 2, 1);
+    // The uncertainty is half of the two widths added, shown to 0.1 day. Each
+    // width is a difference of two readings taken to 0.1 day, so the mean of
+    // the two shown widths often lands on a half of the last digit (12.25) and
+    // the page shows it rounded (12.3). The shown value is within half a
+    // display step of the exact figure, and the 1e-9 is only floating point
+    // noise: toBeCloseTo(x, 1) fails when the two sit exactly 0.05 apart.
+    const exactSpread =
+      ((await v('a2_day')) -
+        (await v('a1_day')) +
+        ((await v('b2_day')) - (await v('b1_day')))) /
+      2;
+    expect(Math.abs(spread - exactSpread)).toBeLessThanOrEqual(0.05 + 1e-9);
+    expect(Math.abs(spread - (widths[0] + widths[1]) / 2)).toBeLessThanOrEqual(
+      0.05 + 1e-9
+    );
     // The loop is 72.7 days in the circular model the scene is built from;
     // the reading is that to within its own uncertainty, and a day of drift.
     expect(Math.abs(length - 72.7)).toBeLessThanOrEqual(spread + 1);
@@ -1962,6 +1976,81 @@ test.describe('the central experiment of each investigation', () => {
     await expectEvidenceRetained(page, id, measureSid, evidence);
 
     await expectVerdictRevealed(page, plan, predict);
+  });
+
+  test('lagrange-points: one prediction about two directions, and a nudge test at L1 and L4', async ({
+    page,
+    app,
+  }) => {
+    test.slow();
+    const id = 'lagrange-points';
+    await openInvestigation(page, app, id);
+    const plan = await lessonPlan(page, id);
+
+    // The two near-identical predictions are one now, settled by the two runs.
+    const region = await walkToSid(page, plan, 'one-region-two-directions');
+    expect(region.reveal).toBe('watch-it-not-cross');
+    await commitPredictionHeld(page, region);
+
+    // Nothing on the screens before the stability prediction says which points
+    // are stable, and the panel leaves it out while the lesson is open.
+    const stability = await walkToSid(page, plan, 'predict-stability');
+    expect(stability.reveal).toBe('nudge-l1-and-l4');
+    await expect(page.locator('#investigationBody')).not.toContainText(
+      /saddle|maxim/i
+    );
+    await expect(page.locator('#cr3bpReadout')).not.toContainText('(stable)');
+    await expect(page.locator('#cr3bpReadout')).not.toContainText('Routh');
+    await commitPredictionHeld(page, stability);
+
+    await walkToSid(page, plan, 'nudge-l1-and-l4');
+    await expect(
+      page.locator('#investigationBody .inv-verdict').first()
+    ).toBeVisible();
+
+    // The test itself, through the panel's controls and the engine.
+    const section = page.locator('#cr3bpNudgeSection');
+    await expect(section).toBeVisible();
+    await section.locator('summary').click();
+    const run = async (point, size, periods) => {
+      await page.selectOption('#cr3bpNudgePoint', point);
+      await page.fill('#cr3bpNudgeSize', String(size));
+      await page.locator('#cr3bpNudgePlace').press('Enter');
+      return page.evaluate(
+        async ({ point, periods }) => {
+          const physics = await import('/js/physics.js');
+          const ui = await import('/js/ui.js');
+          const panel = await import('/js/cr3bpPanel.js');
+          const cr = await import('/js/cr3bp.js');
+          ui.state.paused = true;
+          const system = panel.readSystem();
+          const at = cr.lagrangePoints(system.mu).find(q => q.name === point);
+          const n = Math.sqrt(
+            (ui.SETTINGS.gravitational_constant *
+              (system.primary.mass + system.secondary.mass)) /
+              system.separation ** 3
+          );
+          const dt = 0.1;
+          let furthest = 0;
+          for (let i = 1; i <= (periods * 2 * Math.PI) / n / dt; i++) {
+            physics.updatePhysics(dt);
+            if (i % 10) continue;
+            const s = panel.readSystem();
+            const st = s?.verdict.ok ? panel.tracerState(s) : null;
+            if (!st) break;
+            furthest = Math.max(furthest, Math.hypot(st.x - at.x, st.y - at.y));
+          }
+          ui.state.paused = false;
+          return { placed: panel.nudgeReport(), furthest };
+        },
+        { point, periods }
+      );
+    };
+    const l4 = await run('L4', 0.003, 4);
+    expect(l4.placed.point).toBe('L4');
+    expect(l4.furthest, 'a small nudge at L4 stays small').toBeLessThan(0.2);
+    const l1 = await run('L1', 0.003, 0.4);
+    expect(l1.furthest, 'the same nudge at L1 does not').toBeGreaterThan(0.1);
   });
 
   test('butterfly-effect: two runs a nudge apart come apart exponentially @accepts:ce.butterfly-effect', async ({

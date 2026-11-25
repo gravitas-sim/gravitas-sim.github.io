@@ -19,23 +19,23 @@ export function fitSlope(pts) {
 }
 
 let plotView = null;
+let newest; // the newest drawPlot call's values: a call held for the component draws only while they are still the newest
 
-/** Fetch the plot component and its glue; a plot step needs it, no other does. */
-export const loadPlot = () =>
-  plotView
-    ? Promise.resolve(plotView)
-    : import('./plotView.js').then(m => (plotView = m));
+/** Fetch the plot component and its glue; a plot step needs it, no other does. The module is cached, so a second call costs nothing. */
+export const loadPlot = () => import('./plotView.js').then(m => (plotView = m));
 
 /**
  * Draw the step's scatter plot, fetching the plot component the first time.
- * Calls made while it loads are drawn in order once it has.
+ * Only the newest call draws once it lands: a held call used to draw its own,
+ * older values, and one landing late left the plot empty beside a full form.
  */
 export function drawPlot(step, vals, ctx) {
+  newest = vals;
   if (!ctx.canvas || !step.plot?.points) return plotView?.clear();
   if (plotView) return plotView.draw(step, vals, ctx);
   // Offline before its first use the plot stays empty; nothing else breaks.
   loadPlot()
-    .then(m => m.draw(step, vals, ctx))
+    .then(m => newest === vals && m.draw(step, vals, ctx))
     .catch(() => {});
 }
 

@@ -231,7 +231,7 @@ export function classifyRun(run) {
 
   if (!run?.alive) {
     // Removed from the simulation without a recorded merge - absorbed at a
-    // boundary, or culled. Not something to draw a physical conclusion from.
+    // boundary. Not something to draw a physical conclusion from.
     return {
       outcome: OUTCOME.UNRELIABLE,
       trustworthy: false,

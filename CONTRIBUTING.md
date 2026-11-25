@@ -170,14 +170,14 @@ their ceilings:
 <!--fact-block:moduleSizes-->
 | Module | Lines | Ceiling |
 | --- | ---: | ---: |
-| `js/data/instructorContent.js` | 6,761 | 6,761 |
-| `js/i18n/es.deferred.js` | 4,276 | 4,276 |
+| `js/data/instructorContent.js` | 6,767 | 6,767 |
+| `js/i18n/es.deferred.js` | 4,277 | 4,277 |
 | `js/i18n/en.deferred.js` | 3,997 | 3,997 |
 | `js/data/investigations/observing-sequence.js` | 3,341 | 3,341 |
 | `js/data/investigations/measurement-sequence.js` | 3,041 | 3,041 |
-| `js/investigations.js` | 2,972 | 2,972 |
-| `js/render.js` | 2,779 | 2,779 |
+| `js/investigations.js` | 2,971 | 2,971 |
 | `js/data/investigations/stellar-sequence.js` | 2,733 | 2,733 |
+| `js/data/investigations/depth/measurement-sequence.js` | 2,714 | 2,714 |
 <!--/fact-block-->
 
 | Layer | What lives there | Examples |
@@ -258,13 +258,14 @@ never imports the facade. Where each piece lives so far:
 | `js/engine/bodies.js` | the size and mass constants, the bursts, the absorption rule, and every body class from `PhysicsObject` to `Comet` with the accretion-disk tracer and the galaxy helpers, and `syncReportedMass` | S5, S6 |
 | `js/engine/blackHole.js` | the black hole class and its default appearance | S5 |
 | `js/engine/collisions.js` | the broad-phase grid, the collision handlers for each kind of pair, stellar collapse, gas-giant accretion and merging, and the kilonova and white-dwarf explosion builders | S6 |
-| `js/engine/step.js` | the coordinate transforms and the off-screen test, the Barnes-Hut Worker's state and failure path, the cached body arrays, `updatePhysics` (the step and its ordering) and the click hit test | S7 |
+| `js/engine/step.js` | the coordinate transforms, the Barnes-Hut Worker's state and failure path, the cached body arrays, `updatePhysics` (the step and its ordering) and the click hit test | S7 |
 
 `js/physics.js` now holds no model code: it imports the eight engine modules and says
 what the engine exports. Order, risks and the test that proves each slice are
-in the register rows. Two decisions are still open: what replaces the canvas
-size that culls off-screen bodies, and the wall clock a new black hole's grace
-period reads; both moved into `js/engine/step.js` unchanged.
+in the register rows. One decision is still open: the wall clock a new black
+hole's grace period reads, moved into `js/engine/step.js` unchanged. The other,
+what replaced the canvas size that culled off-screen bodies, was settled by
+D-R4-496-01: nothing, because no body is removed for leaving the view.
 
 **Settings reach the engine through one door.** The page writes
 `SETTINGS` (`js/appState.js`) and pushes it with `commitSettings(<writer>)`;
@@ -509,7 +510,7 @@ npm run author:check -- --json            # for an editor
 that a step names a widget and that the widget has a control called `mass`; it
 cannot see that the widget painted, that the scenario built, that a probe
 produced rows against a live world, or that Next moved. The walker opens all <!--fact:investigations-->124<!--/fact--> investigations in
-a browser and takes all <!--fact:investigationSteps-->1537<!--/fact--> steps,
+a browser and takes all <!--fact:investigationSteps-->1535<!--/fact--> steps,
 sharded one lesson per test so contexts are reused and a failure names its lesson. It takes about two
 minutes and runs as part of `npm run e2e`.
 

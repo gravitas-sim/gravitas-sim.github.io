@@ -281,11 +281,15 @@ const DIVERGENCE = {
   readout(_v, ctx) {
     const m = measure(ctx);
     if (!m.ready) {
+      // The two rows a lesson takes from (K1) are listed with nothing to take,
+      // so a Take button says there is no reading yet rather than no such row.
       return [
         {
           label: t('chaosW.row.status'),
           value: t(`chaosW.empty.${m.reason || 'no-runs'}`),
         },
+        { id: 'growth', text: '', label: t('chaosW.row.growth'), value: '—' },
+        { id: 'tau', text: '', label: t('chaosW.row.behavior'), value: '—' },
       ];
     }
     const v = m.verdict;
@@ -311,11 +315,18 @@ const DIVERGENCE = {
       label: t('chaosW.row.end'),
       value: units(m.series[m.series.length - 1].d),
     });
+    // `id` and `text` are what a lesson's Take button reads (K1): the number
+    // alone, and nothing where there is no number to take.
+    const finite = Number.isFinite(v.growth);
     rows.push({
+      id: 'growth',
+      text: finite ? formatBig(v.growth) : '',
       label: t('chaosW.row.growth'),
-      value: v.growth === Infinity ? '—' : `×${formatBig(v.growth)}`,
+      value: finite ? `×${formatBig(v.growth)}` : '—',
     });
     rows.push({
+      id: 'tau',
+      text: v.behavior === BEHAVIOR.EXPONENTIAL ? fixed(v.tau, 1) : '',
       label: t('chaosW.row.behavior'),
       value: verdictText(v),
       emphasis: true,

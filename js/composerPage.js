@@ -14,10 +14,9 @@
 // writes is run, a numeric variant's answer is computed by a vetted relation
 // (js/platform/relations.js), and a pack cannot name a function. Every
 // committed edit is an undo step and a draft in this browser, as in the
-// Scenario Studio, whose model (js/studio/model.js) this shares. The preview
-// is the real lesson engine opening the compiled draft from this browser
-// (js/authoring/preview.js installDraft); the answer key and the sample lab
-// report are what an instructor and a student would see.
+// Scenario Studio (js/studio/model.js). The preview is the real lesson engine
+// opening the compiled draft (js/authoring/preview.js installDraft); the answer
+// key and the sample report are what an instructor and a student would see.
 // =============================================================================
 
 import {
@@ -1200,13 +1199,12 @@ function fillStep(card, s, i, d) {
         [['', t('composer.setup.keep')], ...scenarios],
         setup?.scenario,
         v =>
-          commit(x =>
-            v
-              ? (x.steps[i].setup = {
-                  ...(x.steps[i].setup || {}),
-                  scenario: v,
-                })
-              : delete x.steps[i].setup
+          panel().then(({ setupFor }) =>
+            commit(x =>
+              v
+                ? (x.steps[i].setup = setupFor(v, x.steps[i].setup))
+                : delete x.steps[i].setup
+            )
           )
       )
     )
@@ -2218,7 +2216,7 @@ async function sampleReport() {
 
 // --- Files ------------------------------------------------------------------
 
-function blankInvestigation(seed) {
+function blankInvestigation(seed, setup) {
   return {
     format: FORMAT,
     formatVersion: BASE_VERSION,
@@ -2242,7 +2240,7 @@ function blankInvestigation(seed) {
         type: 'read',
         title: { en: '' },
         body: { en: '' },
-        setup: { scenario: 'solar-system' },
+        setup,
       },
       { sid: 'close', type: 'read', title: { en: '' }, body: { en: '' } },
     ],
@@ -2425,9 +2423,11 @@ function applyRaw() {
 // --- Start-up ---------------------------------------------------------------
 
 function wire() {
-  $('cp-new').addEventListener('click', () =>
-    start(blankInvestigation(randomSeed()), t('composer.status.new'))
-  );
+  $('cp-new').addEventListener('click', async () => {
+    const { setupFor: f } = await panel();
+    const pack = blankInvestigation(randomSeed(), f('solar-system'));
+    start(pack, t('composer.status.new'));
+  });
   $('cp-open').addEventListener('click', () => $('cp-file').click());
   $('cp-file').addEventListener('change', () => {
     const file = $('cp-file').files?.[0];
