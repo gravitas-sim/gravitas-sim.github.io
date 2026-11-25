@@ -53,7 +53,7 @@ const BUDGETS = [
   {
     id: 'initial',
     label: 'Initial download (CSS + eager JS)',
-    limit: 750.8,
+    limit: 750.9,
     reason:
       'Was 743 KB when this budget was first asked for. The application had ' +
       'already grown to 771 KB on its own - the extracted state module, the ' +
@@ -135,7 +135,8 @@ const BUDGETS = [
       "\n\nOne scenario revision authority (D-R4-498-02): the revision registry and the notice an old link raises reach the start-up modules; raised from 746.9 to 748.6 KB, the measurement of a Node 22.23.4 build of the branch merged with v4 0bf376ee9: 766,500 bytes (748.54 KB), rounded up to 0.1 KB; set to CI's figure before review. Under the standing approval of 2026-10-10 and the engine and production class exemption (maintainer decision, 2026-11-21)." +
       "\n\nOne scenario revision authority, after merging v4 07f80351f (D-R4-498-04): restacked on the 747.4 KB v4 reached with honest sizes; raised from 747.4 to 749.1 KB, the measurement of a Node 22.23.4 build of the merged branch: 767,003 bytes (749.03 KB), rounded up to 0.1 KB; set to CI's figure before review. Under the standing approval of 2026-10-10 and the engine and production class exemption (maintainer decision, 2026-11-21)." +
       '\n\nOne scenario revision authority, after merging v4 b35125179 (D-R4-498-06): restacked on the 748.3 KB v4 reached with the sky repaint; raised from 748.3 to 750.0 KB, the measurement of a Node 22.23.4 build of the merged branch: 767,908 bytes (749.91 KB), rounded up to 0.1 KB; CI run 45522504811 measured the same 767,908 bytes. Under the standing approval of 2026-10-10 and the engine and production class exemption (maintainer decision, 2026-11-21).' +
-      "\n\nThe binary star system's planets moved past the stable distance (D-R4-463-05): the corrected scenario keeps its earlier world as revision 1, so the retained row, its geometry and the geometry lookup reach the start-up modules; raised from 750.0 to 750.8 KB, the measurement of a Node 22.23.4 build of the branch over v4 1b28b7a54: 768,736 bytes (750.72 KB), rounded up to 0.1 KB; CI run 45696780876 measured the same 768,736 bytes. Maintainer decision, 2026-11-25, under the standing approval of 2026-10-10.",
+      "\n\nThe binary star system's planets moved past the stable distance (D-R4-463-05): the corrected scenario keeps its earlier world as revision 1, so the retained row, its geometry and the geometry lookup reach the start-up modules; raised from 750.0 to 750.8 KB, the measurement of a Node 22.23.4 build of the branch over v4 1b28b7a54: 768,736 bytes (750.72 KB), rounded up to 0.1 KB; CI run 45696780876 measured the same 768,736 bytes. Maintainer decision, 2026-11-25, under the standing approval of 2026-10-10." +
+      "\n\nThe Lagrange lab's retained revision (D-R4-463-07): the corrected scenario keeps its earlier row as revision 1 and its card says three hundredths; raised from 750.8 to 750.9 KB, the measurement of a Node 22.23.4 build of the branch over the binary star correction: 768,887 bytes (750.87 KB), rounded up to 0.1 KB; set to CI's figure before review. Maintainer decision, 2026-11-25, under the standing approval of 2026-10-10.",
   },
   {
     id: 'deferred',
