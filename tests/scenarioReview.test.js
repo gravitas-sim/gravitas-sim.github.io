@@ -113,13 +113,20 @@ describe('the record follows the committed claims', () => {
       });
 
       test('the verdict follows from the rows', () => {
+        // A claim a later committed claim supersedes keeps its failing rows
+        // but no longer decides the verdict (claims.json, `supersedes`).
+        const superseded = spec.claims
+          .filter(c => c.supersedes)
+          .map(c => c.supersedes);
         const failing = spec.claims
+          .filter(c => !superseded.includes(c.id))
           .filter(c => rec.rows.some(r => r.claim === c.id && r.pass === false))
           .map(c => c.id);
         const notRun = spec.claims
           .filter(
             c =>
               !failing.includes(c.id) &&
+              !superseded.includes(c.id) &&
               rec.rows.some(r => r.claim === c.id && r.status === 'NOT RUN')
           )
           .map(c => c.id);

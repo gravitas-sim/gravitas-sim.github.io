@@ -1010,7 +1010,7 @@ export const ES = {
   'scenario.gravity-assist-heliocentric.title':
     'Asistencia gravitatoria: el mismo sobrevuelo, con un Sol al que robarle',
   'scenario.gravity-assist-heliocentric.summary':
-    'El mismo planeta, ahora en órbita circular a cinco AU de una estrella, y una nave que se encuentra con él. De aquí sale la energía: la nave se marcha más rápido alrededor de la estrella de lo que llegó, y la órbita del planeta pierde la energía que ganó la nave, demasiado poco para notarlo. Aquí todo es aproximado -el planeta acelera, así que su sistema no es inercial y el encuentro solo es localmente de dos cuerpos- y el panel informa de cuánto lo es en vez de ocultarlo.',
+    'El mismo planeta, ahora en órbita circular a cinco AU de una estrella, y una nave que se encuentra con él. De aquí sale la energía: la nave se marcha más rápido alrededor de la estrella de lo que llegó, y la órbita del planeta pierde, sin que se note, la energía que ganó la nave. Aquí todo es aproximado -el planeta acelera, así que su sistema no es inercial y el encuentro solo es localmente de dos cuerpos- y el panel informa de cuánto lo es en vez de ocultarlo.',
   'scenario.binary-planet-lab.title':
     'Laboratorio de planeta en binaria: un planeta alrededor de una de las estrellas',
   'scenario.binary-planet-lab.summary':
