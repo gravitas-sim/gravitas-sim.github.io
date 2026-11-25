@@ -317,7 +317,7 @@ export default {
                 da la vuelta entera. Dónde está ese valor, cuánto se abre la
                 oscilación y cuánto dura es cosa tuya leerlo en el instrumento
                 unos pasos más adelante. El instrumento se negará a confirmarlo
-                durante los cuatro primeros minutos y medio, y el motivo de esa negativa es
+                hasta unos diez minutos (su primer cambio llega hacia los cuatro), y el motivo de esa negativa es
                 lo siguiente que merece la pena entender.`,
     },
     'watch-the-laplace-argument': {
@@ -458,7 +458,7 @@ export default {
         'circulará: dará la vuelta entera, una y otra vez',
         'no cambiará, porque un uno por ciento es un cambio pequeño',
       ],
-      because: `Circula, y deprisa: una vuelta completa cada cuarenta y siete
+      because: `Circula, y deprisa: una vuelta completa cada cuarenta o cincuenta
                 órbitas de Ío aproximadamente. La resonancia sujeta el semieje
                 mayor de Europa a una parte en mil; una parte en cien queda diez
                 veces fuera, y fuera no hay nada.`,
@@ -813,7 +813,7 @@ export default {
 
                 \n\nEn L3 un pequeño desplazamiento crece exponencialmente, con un
                 tiempo de crecimiento de unos tres años jovianos, así que un grado
-                se convierte en ciento ochenta en unos veinticinco, que es lo que
+                se convierte en ciento ochenta en unos veinte, que es lo que
                 acabas de ver. No escapa del sistema: se instala en una
                 <em>herradura</em>, una órbita coorbital mucho más ancha que la
                 lleva más allá de ambos puntos triangulares y de vuelta. Sigue
@@ -852,7 +852,7 @@ export default {
       tip: 'Con Movimiento en Reducido o en Paso a paso el mundo empieza en pausa: pulsa Ejecutar para ponerlo en marcha.',
       body: `El cuarto cuerpo de esta escena va en una órbita circular corriente
              un cuarto más ancha que la de Júpiter. Su razón de periodos con
-             Júpiter sale cerca de 1,406.
+             Júpiter sale cerca de 1,406 (el valor kepleriano es 1,3975; la atracción de Júpiter eleva el medido en un 0,6 % aproximadamente).
 
              \n\nEl instrumento ha hallado la razón pequeña más cercana a eso y
              ha construido el argumento correspondiente. Mira qué ha encontrado y
@@ -923,11 +923,11 @@ export default {
       options: [
         'Que el par está en resonancia 2:1, apoyándose en una razón doce veces más cerca que el azar y en un ángulo confinado',
         'Que el par no está en resonancia, puesto que el ángulo derivó',
-        'Que el ángulo está confinado a menos de 30° a lo largo de cuarenta ciclos de conjunción, lo que acota cualquier circulación en unos 480 ciclos, y que hace falta una integración más larga para distinguir libración de circulación lenta',
+        'Que el ángulo está confinado a una amplitud total de 30° a lo largo de cuarenta ciclos de conjunción, lo que acota cualquier circulación en unos 480 ciclos, y que hace falta una integración más larga para distinguir libración de circulación lenta',
         'Que no puede decirse nada hasta medir la razón con más precisión',
       ],
       because: `La tercera, y la aritmética que contiene es lo importante.
-                Treinta grados en cuarenta ciclos son 0,75° por ciclo, así que
+                Una amplitud total de treinta grados en cuarenta ciclos son 0,75° por ciclo, así que
                 los 360° completos tardarían unos 480 ciclos: doce veces más que
                 la integración. Ese es un resultado real y citable, y no es una
                 resonancia.

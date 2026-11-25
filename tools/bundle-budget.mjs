@@ -139,7 +139,7 @@ const BUDGETS = [
   {
     id: 'deferred',
     label: 'Deferred JavaScript (lazy chunks, gzipped)',
-    limit: 3283.1,
+    limit: 3284.3,
     reason:
       'Jumped from 1369 KB to 2105 KB when three.js and Chart.js stopped being ' +
       'CDN requests and became bundled chunks. That is the point of the change ' +
@@ -773,7 +773,9 @@ const BUDGETS = [
       '\n\nOne scenario revision authority, after merging v4 0bf376ee9 (D-R4-498-03): restacked on the 3278.4 KB v4 reached with the inspector readouts: a Node 22.23.4 build of the merged branch measured 3,357,890 bytes gzipped (3279.19 KB), so 3279.2 KB rounded up, and grant eh becomes 0.8 KB; set again from the CI figure before review. Under the standing approval of 2026-10-10 and the engine and production class exemption (maintainer decision, 2026-11-21).' +
       '\n\nOne scenario revision authority, after merging v4 07f80351f (D-R4-498-04): restacked on the 3278.9 KB v4 reached with honest sizes: a Node 22.23.4 build of the merged branch measured 3,358,473 bytes gzipped (3279.76 KB), so 3279.8 KB rounded up, and grant eh becomes 0.9 KB; set again from the CI figure before review. Under the standing approval of 2026-10-10 and the engine and production class exemption (maintainer decision, 2026-11-21).' +
       '\n\nThe nudge test, its strings in both languages (in their own catalogs, loaded with the panel) and the three-body readout that follows the tracer (register D-R4-350-05): 3,356,481 bytes gzipped on Node 22, raised by the measured overrun under the standing approval of 2026-10-10.' +
-      '\n\nThe nudge test, after merging v4 017a153af (D-R4-350-06): restacked on the 3279.8 KB v4 reached with the scenario revisions: a Node 22.23.4 build of the merged branch measured 3,361,720 bytes gzipped (3282.93 KB); CI run 45540056951 on the rebuilt instructor bundle measured 3,361,818 bytes (3283.03 KB), so 3283.1 KB rounded up, and grant ei becomes 3.3 KB. Under the standing approval of 2026-10-10 and the engine and production class exemption (maintainer decision, 2026-11-21).',
+      '\n\nThe nudge test, after merging v4 017a153af (D-R4-350-06): restacked on the 3279.8 KB v4 reached with the scenario revisions: a Node 22.23.4 build of the merged branch measured 3,361,720 bytes gzipped (3282.93 KB); CI run 45540056951 on the rebuilt instructor bundle measured 3,361,818 bytes (3283.03 KB), so 3283.1 KB rounded up, and grant ei becomes 3.3 KB. Under the standing approval of 2026-10-10 and the engine and production class exemption (maintainer decision, 2026-11-21).' +
+      '\n\nThe seven corrections to the orbit locking and habitable zone lessons (D-R4-ORBITFIX-01): raised from 3283.1 to 3283.2 KB, the measurement by CI of the branch (head 8430ec23a): 3,361,953 bytes gzipped (3283.157 KB), rounded up to 0.1 KB. Under the standing approval of 2026-10-10.' +
+      '\n\nThe energy and power-law lessons (D-R4-347-14): raised from 3283.2 to 3284.3 KB, the measurement by CI of the branch (head a297deb64): 3,363,119 bytes gzipped (3284.296 KB), rounded up to 0.1 KB. Under the standing approval of 2026-10-10.',
   },
 ];
 
