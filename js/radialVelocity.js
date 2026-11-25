@@ -32,7 +32,7 @@ import {
   getWorldGeneration,
 } from './physics.js';
 import { velocityUnitToMs, timeUnitSeconds } from './units.js';
-import { gravityRoles, physicsSettings } from './engine/state.js';
+import { gravityRoles, physicsSettings, presentKinds } from './engine/state.js';
 import {
   projectVelocityLOS,
   observerGeometry,
@@ -471,17 +471,17 @@ const surveyConfigLabel = cfg =>
 export const observedStarId = () => observedStar()?.id ?? null;
 
 /**
- * The mass-weighted mean velocity of the whole system.
- *
- * Subtracted from the star's velocity so the plotted curve is centered on zero.
- * Measured rather than assumed: the scenarios are built with zero net momentum,
- * but absorption and integration error can leave a slow drift, and a baseline
- * that wanders is indistinguishable to a student from a real signal.
- *
+ * The mass-weighted mean velocity of what pulls the star, subtracted so the
+ * curve is centered on zero. Measured rather than assumed: absorption and
+ * integration error leave a slow drift a student cannot tell from a signal,
+ * and under star-only gravity a planet's momentum is not balanced by the star.
  * @returns {{x: number, y: number}} Barycentric velocity in simulation units
  */
 function barycenterVelocity() {
-  const bodies = [...stars, ...gas_giants, ...planets].filter(b => b.alive);
+  const { pulls } = gravityRoles(physicsSettings);
+  const bodies = [...stars, ...gas_giants, ...planets].filter(
+    b => b.alive && pulls(b.obj_type, 'StarObject')
+  );
   let m = 0;
   let px = 0;
   let py = 0;
@@ -797,19 +797,19 @@ function renderReadout() {
 }
 
 /**
- * Is this scenario one whose star is deliberately held still?
- *
- * Several teaching scenarios set star_only_gravity so the star stays put and
- * the camera stays pointed at it. That is harmless for photometry and actively
- * misleading here: the panel would read a flat zero, and a student would
- * reasonably conclude that planets do not move their stars.
- *
- * So the panel says so instead of quietly drawing a flat line.
- *
+ * Is the observed star held still? Several teaching scenarios set
+ * star_only_gravity so the star stays put, and a flat zero would teach that
+ * planets do not move stars; a star a companion or a hole pulls is not held.
  * @returns {boolean} Whether the observed star is pinned
  */
-export const starIsHeldFixed = () =>
-  !gravityRoles(physicsSettings).pulls('Planet', 'StarObject');
+export const starIsHeldFixed = () => {
+  const { pulls } = gravityRoles(physicsSettings);
+  if (pulls('Planet', 'StarObject')) return false;
+  const two = stars.filter(s => s.alive !== false).length > 1;
+  return !presentKinds().some(
+    k => pulls(k, 'StarObject') && (k !== 'StarObject' || two)
+  );
+};
 
 /**
  * Sample the star, once per cadence. Called from the render loop.
