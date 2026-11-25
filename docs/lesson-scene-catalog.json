@@ -39036,75 +39036,10 @@
      ]
     },
     {
-     "sid": "accessible-not-reachable",
+     "sid": "one-region-two-directions",
      "index": 11,
      "type": "predict",
-     "title": "The neck is open. Now what?",
-     "declares": {
-      "stage": null,
-      "bound": [
-       "primary",
-       "secondary",
-       "tracer"
-      ],
-      "roles": [
-       "primary",
-       "secondary",
-       "tracer"
-      ]
-     },
-     "kinds": [
-      "scene-declared"
-     ],
-     "actions": [
-      "commit-a-prediction"
-     ],
-     "requires": [],
-     "reveal": "watch-it-not-cross",
-     "asks": {
-      "choice": true,
-      "numeric": false,
-      "short": false,
-      "rubric": false,
-      "validated": false
-     },
-     "worldRunning": true,
-     "affordances": {
-      "inspector": "locked",
-      "placement": "locked",
-      "areaSweep": "locked"
-     },
-     "loop": {
-      "declared": "predict",
-      "actual": [
-       "predict",
-       "interpret"
-      ],
-      "handTranscribed": false,
-      "mismatch": null
-     },
-     "scene": {
-      "nameMatches": [],
-      "readsSelection": false,
-      "importsFromSelection": false,
-      "engineReads": [],
-      "mutates": [],
-      "eventWatch": null
-     },
-     "instrument": null,
-     "evidence": [],
-     "reset": [
-      "lesson locks: placement"
-     ],
-     "recovery": [
-      "wrong body: the step binds the object by name, so there is none"
-     ]
-    },
-    {
-     "sid": "predict-same-region-same-path",
-     "index": 12,
-     "type": "predict",
-     "title": "Same permission, same route?",
+     "title": "The neck is open. Same region, two directions",
      "declares": {
       "stage": null,
       "bound": [
@@ -39169,7 +39104,7 @@
     },
     {
      "sid": "watch-it-not-cross",
-     "index": 13,
+     "index": 12,
      "type": "explore",
      "title": "Watch one cross and one not",
      "declares": {
@@ -39197,7 +39132,7 @@
       "tick-a-checklist"
      ],
      "requires": [
-      "predict-same-region-same-path"
+      "one-region-two-directions"
      ],
      "reveal": null,
      "asks": {
@@ -39247,7 +39182,7 @@
     },
     {
      "sid": "stability-is-different",
-     "index": 14,
+     "index": 13,
      "type": "read",
      "title": "A third question",
      "declares": {
@@ -39311,7 +39246,7 @@
     },
     {
      "sid": "predict-stability",
-     "index": 15,
+     "index": 14,
      "type": "predict",
      "title": "Which ones survive a nudge?",
      "declares": {
@@ -39334,7 +39269,7 @@
       "commit-a-prediction"
      ],
      "requires": [],
-     "reveal": "break-it",
+     "reveal": "nudge-l1-and-l4",
      "asks": {
       "choice": true,
       "numeric": false,
@@ -39352,6 +39287,75 @@
       "declared": "predict",
       "actual": [
        "predict",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [
+      "lesson locks: placement"
+     ],
+     "recovery": [
+      "wrong body: the step binds the object by name, so there is none"
+     ]
+    },
+    {
+     "sid": "nudge-l1-and-l4",
+     "index": 15,
+     "type": "explore",
+     "title": "Nudge it and watch",
+     "declares": {
+      "stage": null,
+      "bound": [
+       "primary",
+       "secondary",
+       "tracer"
+      ],
+      "roles": [
+       "primary",
+       "secondary",
+       "tracer"
+      ]
+     },
+     "kinds": [
+      "scene-declared",
+      "student-changes-scene"
+     ],
+     "actions": [
+      "answer-in-words",
+      "open-a-body-inspector",
+      "run-the-simulation",
+      "tick-a-checklist"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": true,
+      "validated": false
+     },
+     "worldRunning": true,
+     "affordances": {
+      "inspector": "this step",
+      "placement": "locked",
+      "areaSweep": "locked"
+     },
+     "loop": {
+      "declared": "experiment",
+      "actual": [
+       "experiment",
        "interpret"
       ],
       "handTranscribed": false,
@@ -39729,21 +39733,7 @@
      "complete": true
     },
     {
-     "predict": "accessible-not-reachable",
-     "predictCollects": true,
-     "heldUntil": "watch-it-not-cross",
-     "experiment": [],
-     "measure": [],
-     "evidence": [],
-     "interpret": "watch-it-not-cross",
-     "measuredBeforeAnswering": true,
-     "explained": false,
-     "answeredByTheExperiment": true,
-     "closed": true,
-     "complete": true
-    },
-    {
-     "predict": "predict-same-region-same-path",
+     "predict": "one-region-two-directions",
      "predictCollects": true,
      "heldUntil": "watch-it-not-cross",
      "experiment": [
@@ -39763,33 +39753,34 @@
     {
      "predict": "predict-stability",
      "predictCollects": true,
-     "heldUntil": "break-it",
+     "heldUntil": "nudge-l1-and-l4",
      "experiment": [
+      "nudge-l1-and-l4",
       "break-it"
      ],
      "measure": [
       "break-it"
      ],
      "evidence": [],
-     "interpret": "break-it",
-     "measuredBeforeAnswering": true,
+     "interpret": "nudge-l1-and-l4",
+     "measuredBeforeAnswering": false,
      "explained": false,
      "answeredByTheExperiment": true,
      "closed": true,
-     "complete": true
+     "complete": false
     }
    ],
    "totals": {
     "steps": 20,
     "declared": 20,
-    "student": 3,
+    "student": 4,
     "engine": 3,
     "model": 0,
     "data": 0,
     "diagram": 0,
     "evidence": 1,
     "computation": 0,
-    "declaredButInert": 17,
+    "declaredButInert": 16,
     "prose": 0,
     "mismatched": 0,
     "rebuilds": 3
@@ -120743,14 +120734,14 @@
  "totals": {
   "steps": 1535,
   "declared": 1392,
-  "student": 165,
+  "student": 166,
   "engine": 177,
   "model": 1002,
   "data": 159,
   "diagram": 873,
   "evidence": 398,
   "computation": 14,
-  "declaredButInert": 1227,
+  "declaredButInert": 1226,
   "prose": 79,
   "mismatched": 9,
   "rebuilds": 77,
@@ -120761,10 +120752,10 @@
    "unstated": 1428
   },
   "lessons": 124,
-  "loops": 206,
-  "closedLoops": 206,
+  "loops": 205,
+  "closedLoops": 205,
   "explainedLoops": 2,
-  "heldLoops": 204,
-  "completeLoops": 205
+  "heldLoops": 203,
+  "completeLoops": 203
  }
 }
