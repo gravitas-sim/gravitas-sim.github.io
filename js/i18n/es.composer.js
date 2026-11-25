@@ -344,6 +344,8 @@ export const ES_COMPOSER = {
     'Ese es el identificador de una investigación que Gravitas ya tiene.',
   'composer.error.duration': 'Un intervalo como 20-25 min.',
   'composer.error.scenario': 'Elige un escenario que Gravitas tenga.',
+  'composer.error.revision':
+    'Una revisión del escenario: un número entero, 2 o más.',
   'composer.error.objectives': 'De uno a ocho objetivos.',
   'composer.error.prerequisite': 'O una investigación o un texto.',
   'composer.error.lesson': 'Elige una investigación que Gravitas tenga.',

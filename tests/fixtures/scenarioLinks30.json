@@ -1,0 +1,10 @@
+{
+  "note": "World links as the 3.0 writers made them (base adca3e716), for pulsar-system: version 1 names the scenario by its English name, version 2 by id with a settings delta (sim_speed 7), seed orbit-1, paused.",
+  "scenario": "pulsar-system",
+  "seed": "orbit-1",
+  "v1": "1reyJ2IjoxLCJzIjoiUHVsc2FyIFN5c3RlbSIsInNlZWQiOiJhYmMifQ",
+  "v2": "2zHcnhBoAwFAbQd_l-f2WLxH2VJFOXojHdFpm9e-rvOQU3pCMMgpQPC2djj10aQZjq-rHm4DcQK6TA9jhb-meoxAIZfdvT0U1Egvj6Ag",
+  "v2Delta": {
+    "sim_speed": 7
+  }
+}

@@ -874,6 +874,11 @@
             "Stellar Nursery"
           ]
         },
+        "revision": {
+          "description": "The scenario's revision (SCENARIO_REVISIONS.md): written only for a built-in scenario that has been corrected, and then 2 or more. Absent means revision 1. A build that predates revisions refuses the key, in words.",
+          "type": "integer",
+          "minimum": 2
+        },
         "seed": {
           "type": "string",
           "pattern": "^[A-Za-z0-9][A-Za-z0-9-]{0,39}$"

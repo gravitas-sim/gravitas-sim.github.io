@@ -335,6 +335,7 @@ export const EN_COMPOSER = {
     'That is the id of an investigation Gravitas already has.',
   'composer.error.duration': 'A range such as 20-25 min.',
   'composer.error.scenario': 'Choose a scenario Gravitas has.',
+  'composer.error.revision': 'A scenario revision: a whole number, 2 or more.',
   'composer.error.objectives': 'From one to eight objectives.',
   'composer.error.prerequisite': 'Either an investigation or a text.',
   'composer.error.lesson': 'Choose an investigation Gravitas has.',

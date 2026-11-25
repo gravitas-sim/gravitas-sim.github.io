@@ -38,6 +38,10 @@ These are the student's own work, and what an "export everything" would carry:
 
 It is a sidecar key and not a field of a progress record, on purpose. The compatibility corpus says a 2.0.0 reader accepts a progress record with an unknown field and silently drops it (the boundary row `resume-in-progress-record`, kept as the record of the design not built), and does not know a key of its own at all, so a rolled-back build neither misreads nor loses anything. `tests/compat/kinds/resume-record.mjs` is the corpus row: a progress record beside the sidecar reads exactly as before in both builds. A record that is not version 1, or is damaged, reads as empty and the next write replaces it. Nothing in it is a progress record: how many steps of a lesson were seen is still that lesson's own record.
 
+## Saved worlds and scenario revisions
+
+A saved world (`gravitas_simulation_save`, the Save and Load buttons) holds settings and bodies and no scenario id (`js/world.js`), so a correction to a scenario cannot change what it opens: nothing in it names a scenario revision, and nothing in it is read against a preset row. The scenario revision registry (`SCENARIO_REVISIONS.md`) is therefore not consulted when a saved world loads. A record that does carry a capture of a world (an experiment's `initialState`, in the experiment store and in the experiment manifest) carries the world's revision with it, and writes the capture so that an older build rebuilds the same settings and bodies (`SCENARIO_REVISIONS.md`, form (i)); no stored record's version is raised.
+
 ## What an investigation keeps, and what it says about it
 
 One write does it all: `save()` in `js/investigations/stepView.js` writes the investigation's progress record (`gravitas_investigation_<id>`, or the activity's `gravitas_assignment_<hash>`) and, beside it, the resume record (`gravitas_resume`, through `noteWork`); it never runs on a timer. A reading taken from the screen also writes one entry to the evidence notebook's store. `e2e/savedAndSaid.spec.js` is this list: it changes each kept thing, reloads and finds it, and finds the scene rebuilt.

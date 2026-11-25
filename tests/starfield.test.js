@@ -14,7 +14,7 @@
 // restrained, and the count follows the viewport.
 // =============================================================================
 
-import { describe, test, expect } from '@jest/globals';
+import { describe, test, expect, jest, afterEach } from '@jest/globals';
 import {
   LAYERS,
   LAYER_DEPTH,
@@ -29,6 +29,8 @@ import {
   starCountFor,
   generateStarfield,
   indexStarfield,
+  displacementFrom,
+  discCoversRect,
   DEFAULT_STAR_DENSITY,
 } from '../js/bodyDrawSky.js';
 
@@ -358,11 +360,235 @@ describe('finding the stars a distortion touches', () => {
     expect(found.length).toBe(f.count);
   });
 
+  test('asking for one layer returns that layer in the order the mixed query had it', () => {
+    const f = field({ count: 3000 });
+    const index = indexStarfield(f);
+    for (const layer of LAYERS) {
+      const mixed = index
+        .near(700, 400, 300)
+        .filter(e => e.layer === layer)
+        .map(e => e.star);
+      const own = index.near(700, 400, 300, layer).map(e => e.star);
+      expect(own.length).toBeGreaterThan(0);
+      expect(own).toEqual(mixed);
+    }
+  });
+
+  test('a reused output array is emptied first and gets the same answer', () => {
+    const index = indexStarfield(field({ count: 1500 }));
+    const out = [{ stale: true }];
+    const returned = index.near(500, 300, 150, 'mid', out);
+    expect(returned).toBe(out);
+    expect(out).toEqual(index.near(500, 300, 150, 'mid'));
+    expect(out.some(e => e.stale)).toBe(false);
+  });
+
+  test('stamping entries lets a painter draw a star once across wrapped queries', () => {
+    // A disc wider than the sky is asked for at the wrapped centres too, and
+    // every query returns every star; the stamp is what makes it one each.
+    const f = field({ count: 800 });
+    const index = indexStarfield(f);
+    const r = 2000;
+    const centres = [
+      [f.width / 2, f.height / 2],
+      [f.width / 2 - f.width, f.height / 2],
+      [f.width / 2, f.height / 2 - f.height],
+      [f.width / 2 - f.width, f.height / 2 - f.height],
+    ];
+    const stamp = 1;
+    const drawn = [];
+    let returned = 0;
+    for (const layer of LAYERS) {
+      for (const [cx, cy] of centres) {
+        for (const entry of index.near(cx, cy, r, layer)) {
+          returned++;
+          if (entry.mark === stamp) continue;
+          entry.mark = stamp;
+          drawn.push(entry.star);
+        }
+      }
+    }
+    expect(returned).toBeGreaterThan(f.count);
+    expect(drawn.length).toBe(f.count);
+    expect(new Set(drawn).size).toBe(f.count);
+  });
+
   test('the grid is fine enough that a small query is cheap', () => {
     // Not a timing assertion - a structural one. A distortion patch is tens of
     // pixels across, so a cell has to be of that order or the index degenerates
     // into a scan of the whole sky.
     expect(GRID_CELL).toBeLessThanOrEqual(128);
     expect(GRID_CELL).toBeGreaterThanOrEqual(16);
+  });
+});
+
+// --- How far a distortion moves a star ----------------------------------------
+
+/**
+ * The profile as it was written before the per-region constants were hoisted
+ * out of the per-star call: every number worked out again for every star, with
+ * a clock read each time. A copy, so that the optimised one is held to it.
+ */
+function referenceDisplacement(region, sx, sy, zoom) {
+  const dx = sx - region.x;
+  const dy = sy - region.y;
+  const dist = Math.sqrt(dx * dx + dy * dy);
+  if (region.kind === 'lens') {
+    if (dist >= region.r) return null;
+    const core = Math.max(region.r * 0.12, 1e-6);
+    const b = Math.max(dist, core);
+    const deflection = (region.strength * region.r * core) / b;
+    const edge = 1 - dist / region.r;
+    const lens = deflection * edge * edge;
+    if (!(lens > 0)) return null;
+    return {
+      dx: (dx / (dist + 1e-6)) * lens,
+      dy: (dy / (dist + 1e-6)) * lens,
+      blur: region.blur * edge,
+      color: region.color,
+    };
+  }
+  const ripple = region.source;
+  const now = globalThis.performance.now();
+  const age = now - ripple.created;
+  const mass = ripple.mass || 1.0;
+  const gw = ripple.gw_strength !== undefined ? ripple.gw_strength : 1.0;
+  const fade = ripple._fade !== undefined ? ripple._fade : 1.0;
+  let amplitude = (8 + 10 * Math.log10(mass + 1)) * fade * gw;
+  let wavelength = 80 + 40 * Math.log10(mass + 1);
+  if (ripple.kilonova) {
+    amplitude = (10 + 12 * Math.log10(mass + 1)) * fade * gw * 1.2;
+  } else if (ripple.nswd_merger) {
+    amplitude = (12 + 15 * Math.log10(mass + 1)) * fade * gw * 1.5;
+    wavelength = 100 + 50 * Math.log10(mass + 1);
+  } else if (ripple.wdwd_merger) {
+    amplitude = (6 + 8 * Math.log10(mass + 1)) * fade * gw * 1.2;
+    wavelength = 60 + 30 * Math.log10(mass + 1);
+  }
+  const c = 0.18;
+  const radius = c * age * zoom;
+  const progress = age / ripple.duration;
+  if (dist >= region.r || dist <= 8) return null;
+  const phase = (dist - radius) / wavelength;
+  const local = amplitude * Math.exp(-Math.abs(phase));
+  let factor = local * Math.sin(phase * Math.PI * 2 - progress * Math.PI * 2);
+  if (ripple.kilonova) factor *= 1 + Math.sin(progress * Math.PI * 3) * 0.15;
+  else if (ripple.nswd_merger) {
+    factor *= 1 + Math.sin(progress * Math.PI * 3) * 0.2;
+  }
+  return {
+    dx: (dx / dist) * factor,
+    dy: (dy / dist) * factor,
+    blur: 0,
+    color: '#fff',
+  };
+}
+
+describe('displacementFrom', () => {
+  afterEach(() => jest.restoreAllMocks());
+
+  const lens = {
+    x: 700,
+    y: 420,
+    r: 310,
+    kind: 'lens',
+    strength: 3.0,
+    blur: 2.5,
+    color: '#fff',
+  };
+  const ripple = extra => ({
+    x: 640,
+    y: 380,
+    r: 900,
+    inner: 0,
+    kind: 'ripple',
+    source: {
+      created: 12_000,
+      duration: 4000,
+      mass: 35,
+      _fade: 0.8,
+      ...extra,
+    },
+  });
+  const probes = [];
+  for (let i = 0; i < 400; i++) {
+    probes.push([(i * 37.3) % 1440, (i * 91.7) % 900]);
+  }
+
+  const sameAsReference = (region, zoom) => {
+    jest.spyOn(globalThis.performance, 'now').mockReturnValue(15_300.25);
+    let compared = 0;
+    for (const [sx, sy] of probes) {
+      const want = referenceDisplacement(region, sx, sy, zoom);
+      const got = displacementFrom(region, sx, sy, zoom);
+      if (want === null) {
+        expect(got).toBeNull();
+        continue;
+      }
+      expect(Object.is(got.dx, want.dx)).toBe(true);
+      expect(Object.is(got.dy, want.dy)).toBe(true);
+      expect(got.blur).toBe(want.blur);
+      expect(got.color).toBe(want.color);
+      compared++;
+    }
+    expect(compared).toBeGreaterThan(20);
+  };
+
+  test('a lens moves each star exactly as it always did', () => {
+    sameAsReference({ ...lens }, 1);
+  });
+
+  test.each([
+    ['a plain ripple', {}],
+    ['a kilonova', { kilonova: true }],
+    ['a neutron star and white dwarf merger', { nswd_merger: true }],
+    ['a white dwarf pair', { wdwd_merger: true }],
+    ['a ripple with its own strength', { gw_strength: 0.4, mass: 0 }],
+  ])('%s moves each star exactly as it always did', (_name, extra) => {
+    sameAsReference(ripple(extra), 1.7);
+  });
+
+  test('a ripple reads the clock once per region, not once per star', () => {
+    const now = jest
+      .spyOn(globalThis.performance, 'now')
+      .mockReturnValue(15_300.25);
+    const region = ripple({});
+    for (const [sx, sy] of probes) displacementFrom(region, sx, sy, 1);
+    expect(now.mock.calls.length).toBe(1);
+  });
+
+  test('the answer is read before the next call and not kept', () => {
+    jest.spyOn(globalThis.performance, 'now').mockReturnValue(15_300.25);
+    const a = displacementFrom({ ...lens }, 650, 400, 1);
+    const first = { dx: a.dx, dy: a.dy };
+    const b = displacementFrom({ ...lens }, 760, 470, 1);
+    expect(b).toBe(a);
+    expect([b.dx, b.dy]).not.toEqual([first.dx, first.dy]);
+  });
+});
+
+describe('a disc that covers the canvas', () => {
+  test('covers it when the farthest corner is inside with room to spare', () => {
+    expect(discCoversRect(720, 450, 900, 1440, 900)).toBe(true);
+    // 720 across and 450 down to the corner is 849.1; 2 pixels of margin.
+    expect(discCoversRect(720, 450, 851.2, 1440, 900)).toBe(true);
+    expect(discCoversRect(720, 450, 851, 1440, 900)).toBe(false);
+  });
+
+  test('a centre off the canvas still has to reach the far side', () => {
+    expect(discCoversRect(-300, 450, 1900, 1440, 900)).toBe(true);
+    expect(discCoversRect(-300, 450, 1500, 1440, 900)).toBe(false);
+    expect(discCoversRect(5000, -4000, 153000, 1440, 900)).toBe(true);
+  });
+
+  test('a disc that misses a corner does not', () => {
+    expect(discCoversRect(100, 100, 1500, 1440, 900)).toBe(false);
+    expect(discCoversRect(0, 0, 1701, 1440, 900)).toBe(true);
+  });
+
+  test('nothing is covered by an empty or undefined radius', () => {
+    expect(discCoversRect(720, 450, 0, 1440, 900)).toBe(false);
+    expect(discCoversRect(720, 450, NaN, 1440, 900)).toBe(false);
+    expect(discCoversRect(720, 450, undefined, 1440, 900)).toBe(false);
   });
 });

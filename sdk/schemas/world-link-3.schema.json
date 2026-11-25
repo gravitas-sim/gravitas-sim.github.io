@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gravitas-sim.online/sdk/schemas/world-link-3.schema.json",
+  "title": "world share link/3",
+  "description": "The payload a world share link carries when its scenario is at revision 2 or more (SCENARIO_REVISIONS.md), after js/shareState.js decodePayload() has read the fragment (#3z or #3r, then base64url of the, deflated or raw, JSON). It is world-link/2 and one more key: `r`, the scenario's revision, an integer of 2 or more, required at version 3 and written only for a scenario in the registry. A link of version 1 or 2 means revision 1. The reader refuses a version 3 link whose `r` is missing, not an integer or below 2, and one whose `r` is above the revision this build holds, with the message it has for a link from a newer version; an older build refuses every version 3 fragment with that message and never rebuilds another world. A scenario is checked against the built-in ids by the reader, not here. The same payload, stamped, is what a capture of a loaded world carries inside a stored record: for a world at revision 2 or more a capture written for a record is full (`b`) and `d` holds every setting, so a build that ignores `r` still rebuilds the same settings and bodies. FORMATS.md lists it.",
+  "type": "object",
+  "required": [
+    "v",
+    "s",
+    "r"
+  ],
+  "properties": {
+    "v": {
+      "const": 3
+    },
+    "s": {
+      "type": "string",
+      "minLength": 1
+    },
+    "r": {
+      "type": "integer",
+      "minimum": 2
+    },
+    "seed": {
+      "type": "string"
+    },
+    "d": {
+      "type": "object"
+    },
+    "a": {
+      "type": "object"
+    },
+    "c": {
+      "type": "array",
+      "items": {
+        "type": "number"
+      },
+      "minItems": 3,
+      "maxItems": 3
+    },
+    "b": {
+      "type": "array",
+      "items": {}
+    },
+    "p": {
+      "const": 1
+    },
+    "x": {
+      "type": "object"
+    },
+    "xp": {
+      "type": "object"
+    }
+  }
+}

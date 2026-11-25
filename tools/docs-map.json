@@ -1792,6 +1792,14 @@
       "owner": 287,
       "added": "2026-11-11",
       "student": false
+    },
+    {
+      "file": "SCENARIO_REVISIONS.md",
+      "kind": "record",
+      "purpose": "What an old link, saved setup, capture or imported declaration means after a scenario is corrected: producers, the revision registry and the origin rule.",
+      "owner": 498,
+      "added": "2026-11-23",
+      "student": false
     }
   ],
   "archive": [

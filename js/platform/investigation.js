@@ -725,10 +725,18 @@ function checkSetup(setup, path, { need, api }) {
   knownKeys(
     need,
     setup,
-    ['scenario', 'seed', 'paused', 'zoom'],
+    ['scenario', 'seed', 'paused', 'zoom', 'revision'],
     path,
     'a setup field'
   );
+  // The scenario's revision, written only from 2 (SCENARIO_REVISIONS.md).
+  if (setup.revision !== undefined)
+    need(
+      Number.isInteger(setup.revision) && setup.revision >= 2,
+      `${path}.revision`,
+      'revision',
+      'a scenario revision, 2 or more'
+    );
   need(
     isScenario(api, setup.scenario),
     `${path}.scenario`,

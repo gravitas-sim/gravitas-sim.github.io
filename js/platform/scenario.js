@@ -185,6 +185,8 @@ const FIELDS = new Set([
   'tags',
   'seed',
   'scenario',
+  // The built-in's revision, written only from 2 (SCENARIO_REVISIONS.md).
+  'scenarioRevision',
   'settings',
   'camera',
   'paused',
@@ -621,6 +623,16 @@ export function validateScenarioPack(s, api) {
       'scenario',
       'a built-in scenario id, such as "solar-system", and then no bodies of its own',
       { scenario: String(s.scenario) }
+    );
+  }
+  if (s.scenarioRevision !== undefined) {
+    need(
+      Number.isInteger(s.scenarioRevision) &&
+        s.scenarioRevision >= 2 &&
+        s.scenario !== undefined,
+      'scenarioRevision',
+      'scenarioRevision',
+      'a revision of 2 or more, beside the built-in scenario it is a revision of'
     );
   }
   if (hasSystem || hasBodies || hasGeometry) {
