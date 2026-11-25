@@ -106,6 +106,17 @@ export default {
         'calcular cuánto tardará el trazador en llegar a un punto dado',
         'determinar si la órbita del trazador es estable',
       ],
+      misconceptions: [
+        {
+          say: 'Un número conservado es una sola ecuación, y el trazador tiene más de una cosa que averiguar. Pregúntate qué puede descartar un único número que nunca cambia, en lugar de qué puede localizar.',
+        },
+        {
+          say: 'C no dice nada del orden en que el trazador visita los sitios, así que no puede dar un tiempo. Fíjate en lo que dice sobre los sitios donde el trazador no puede estar nunca.',
+        },
+        {
+          say: 'La estabilidad trata de lo que pasa tras un empujón, y C es la misma antes y después de uno diminuto. ¿Qué te deja dibujar C en el mapa?',
+        },
+      ],
       because:
         'Esto es lo que hace que valga la pena tener la constante de Jacobi. No puedes resolver el movimiento, pero puedes dibujar un muro: en cualquier punto donde 2Ω sea menor que C haría falta que v² fuera negativa, así que el trazador no puede estar nunca ahí. Una cantidad conservada te compra una frontera aunque no te compre una solución.',
     },
@@ -149,15 +160,13 @@ export default {
     'critical-order': {
       title: 'Los muros se abren en un orden fijo',
       body: `Cada uno de los cinco puntos tiene su propia constante de Jacobi: el
-             valor que tendría un trazador sentado allí. Léelos en el panel:
-             \n\n<strong>C₁ = 3,313; C₂ = 3,274; C₃ = 3,029; C₄ = C₅ =
-             2,971</strong>
-             \n\nEstán en orden decreciente, y ese orden es el argumento de toda
-             la materia. Empieza con un trazador muy lento —C grande— y estará
-             amurallado en la región donde empezó. Acelera y C baja, y al pasar
-             cada uno de esos valores se abre un muro: primero el cuello de L1
-             entre las dos estrellas, luego L2 hacia el mundo exterior, luego L3,
-             y al final no hay nada prohibido en ninguna parte.`,
+             valor que tendría un trazador en reposo allí. La tabla del panel
+             los lista en su columna C, de L1 a L5.
+             \n\nEse orden es el argumento de toda la materia. Empieza con un
+             trazador muy lento —C grande— y estará amurallado en la región
+             donde empezó. Acelera y C baja, y cada vez que pasa uno de esos
+             valores se abre un muro. En la pantalla siguiente averiguas cuál
+             se abre primero, y con qué C.`,
     },
     'open-the-neck': {
       title: 'Abre el cuello',
@@ -177,48 +186,43 @@ export default {
       ],
       tip: 'El panel te dice cuánto más tiene que bajar C para que se abra la siguiente puerta.',
     },
-    'accessible-not-reachable': {
-      title: 'El cuello está abierto. ¿Y ahora?',
-      body: `El muro entre las dos estrellas ha desaparecido. Al trazador se le
+    'one-region-two-directions': {
+      title: 'El cuello está abierto. Misma región, dos direcciones',
+      body: `El muro entre las dos estrellas ha desaparecido, y al trazador se le
              permite energéticamente estar en cualquier punto de la región de la
              otra estrella.
-             \n\nEn la pantalla siguiente lanzarás el mismo trazador desde el
-             mismo sitio a la misma rapidez, dos veces, en dos direcciones
-             distintas. Los dos tendrán exactamente la misma constante de
-             Jacobi, asi que a los dos se les permitirá estar exactamente en los
-             mismos sitios.`,
-      prompt: 'Con el cuello de L1 abierto, el trazador…',
+             \n\nEn la pantalla siguiente el mismo trazador sale desde el mismo
+             sitio a la misma rapidez, dos veces, en dos direcciones distintas.
+             C solo depende de dónde está y de lo rápido que va, y ninguna de
+             las dos cosas difiere, así que las dos salidas tienen la misma
+             constante de Jacobi y la región sombreada es la misma imagen para
+             las dos, con el mismo cuello abierto dentro.`,
+      prompt:
+        'Misma región accesible, dos direcciones. En dos periodos binarios…',
       options: [
-        'cruzará a la región de la otra estrella, ya que nada se lo impide',
-        'cruzará tarde o temprano, aunque le lleve muchas órbitas',
-        'puede que no cruce nunca: un cuello abierto solo dice que no está prohibido',
-        'se quedará en L1, ya que es el punto de equilibrio',
+        'las dos cruzan el cuello, ya que nada lo impide',
+        'ninguna cruza, ya que un cuello abierto no basta para pasar',
+        'podrían cruzar las dos, una o ninguna: la región no lo dice, solo las ejecuciones',
+        'siguen el mismo camino, ya que comparten una región',
       ],
-      because:
-        'Esta es la distinción para cuya mala lectura existe todo el diagrama. Un cuello abierto es un hueco en un muro, no una ruta a través de él. La curva de velocidad cero dice dónde no puede estar el trazador; no dice absolutamente nada sobre adónde va. Un trazador puede orbitar para siempre a un lado de una abertura que nunca usa, y la única forma de averiguarlo es integrar la trayectoria y mirar.',
-    },
-    'predict-same-region-same-path': {
-      title: '¿Mismo permiso, misma ruta?',
-      body: `Dos trazadores, desde el mismo punto, a la misma rapidez en el
-             sistema rotante, lanzados en dos direcciones distintas. Sus
-             constantes de Jacobi son idénticas -C depende de dónde estás y a
-             qué rapidez vas, y ninguna de las dos cosas difiere-, asi que la
-             región prohibida sombreada es la misma imagen para los dos, con el
-             mismo cuello abierto dentro.`,
-      prompt: 'Dos inicios con la misma región accesible…',
-      options: [
-        'seguirán el mismo camino, ya que los dos disponen de la misma región',
-        'seguirán caminos distintos, pero los dos usarán el cuello antes o después',
-        'seguirán caminos distintos, y no hay garantía de que ninguno use el cuello',
-        'seguirán caminos distintos solo si sus rapideces difieren',
+      misconceptions: [
+        {
+          say: 'Que nada prohíba una ruta no es lo mismo que que el trazador la tome. El sombreado dice dónde no puede estar el trazador, no adónde va.',
+        },
+        {
+          say: 'Un cuello abierto sí deja pasar a un trazador: que este pase depende de su camino, que el sombreado no contiene. Ninguna, una y las dos están permitidas.',
+        },
+        {
+          say: 'La misma región no es el mismo camino. La dirección de marcha decide el camino, y el diagrama no la contiene.',
+        },
       ],
-      because: `Caminos distintos, y sin garantía sobre el cuello. La región
-                prohibida es una afirmación sobre dónde <em>no puede</em> estar
-                el trazador, y dos estados con la misma C tienen la misma, pero
-                la trayectoria la decide la dirección de marcha, que el diagrama
-                no contiene. Comprométete antes de ejecutarlo: la pantalla
-                siguiente son las dos ejecuciones, y una de ellas se comporta de
-                forma muy distinta de la otra.`,
+      because: `Esta es la distinción para cuya mala lectura existe todo el
+                diagrama. Un cuello abierto es un hueco en un muro, no una ruta a
+                través de él. La curva de velocidad cero dice dónde <em>no
+                puede</em> estar el trazador, y dos estados con la misma C tienen
+                la misma; no dice nada sobre adónde va, que lo decide la
+                dirección de marcha. Pueden cruzar las dos, una o ninguna, y la
+                única forma de saberlo es integrar los dos caminos y mirar.`,
       tip: 'Lo que hayas predicho se guarda, acertado o no. Lo que te pide la pantalla siguiente es leer lo que pasó de verdad y decir si apoya tu respuesta.',
     },
     'watch-it-not-cross': {
@@ -271,9 +275,9 @@ export default {
     },
     'predict-stability': {
       title: '¿Cuáles sobreviven a un empujón?',
-      body: `L1, L2 y L3 están en la recta entre las estrellas, en lo que son de
-             hecho puntos de silla del potencial efectivo. L4 y L5 están, por
-             raro que parezca, en máximos de dicho potencial.`,
+      body: `Comprométete antes de probarlo. En la pantalla siguiente pones un
+             trazador junto a L1 y junto a L4, le das un empujón pequeño y
+             miras.`,
       prompt: 'Tras un pequeño empujón, un trazador se quedaría en…',
       options: [
         'los cinco, ya que todos son equilibrios',
@@ -283,6 +287,40 @@ export default {
       ],
       because:
         'Los tres puntos colineales son sillas: da un empujón al trazador y se va, con cualquier razón de masas. L4 y L5 son el caso contraintuitivo. Están en máximos del potencial efectivo, que suena al peor sitio para hacer equilibrio, y la fuerza de Coriolis del sistema giratorio hace volver al trazador que se marcha, metiéndolo en una pequeña órbita alrededor del punto. Eso solo funciona cuando la razón de masas está por debajo del valor de Routh, 0,03852, que este sistema, con 0,0291, cumple por poco.',
+    },
+    'nudge-l1-and-l4': {
+      title: 'Empújalo y mira',
+      body: `En el panel de tres cuerpos, abre <strong>Prueba del
+             empujón</strong>. Reconstruye el sistema con el trazador en reposo
+             junto al punto que elijas, apartado del baricentro por el empujón
+             que indiques, en separaciones. Después la simulación corre y el
+             panel sigue al trazador: a qué distancia está ahora del punto, lo
+             más lejos que ha llegado y cuándo.
+             \n\nPrueba <strong>L1</strong> y <strong>L4</strong>. Lo pequeño
+             que sea el empujón y cuánto tiempo mirar lo decides tú. Un punto
+             que retiene a su trazador debería retenerlo también con un empujón
+             menor; uno que lo pierde lo pierde por pequeño que sea el empujón.`,
+      checklist: [
+        'Coloca el trazador en L1 con un empujón que elijas, ponlo en marcha y lee lo más lejos que llega y cuándo',
+        'Haz lo mismo en L4',
+        'Prueba un empujón menor en el punto que perdió su trazador, y en L4 si su trazador se alejó mucho',
+        'Decide cuánto tiempo miraste antes de fiarte de que la distancia máxima había dejado de crecer',
+        'Di si eso apoya lo que predijiste en la pantalla anterior',
+      ],
+      rubric: `Medido con el motor en este sistema (μ = 0,0291): un trazador
+               apartado de L4 entre 0,001 y 0,005 separaciones se aleja hasta
+               entre cuarenta y cincuenta veces el empujón en dos periodos
+               binarios y después no llega más lejos en doce; desde 0,006
+               escapa, al cabo de uno a una docena de periodos, porque μ está
+               cerca del límite de Routh y la región que retiene al trazador es
+               pequeña. Un trazador apartado de L1 se va sea cual sea el
+               empujón: su distancia crece unas siete veces cada décima de
+               periodo binario, así que incluso 0,0001 está a una quinta parte
+               de la separación en medio periodo, más o menos. Puntuación completa
+               por probar los dos puntos, por probar un empujón menor antes de
+               llamar inestable a L4 y por mirar el tiempo suficiente para que
+               la distancia máxima hubiera dejado de cambiar.`,
+      tip: 'El trazador se coloca en reposo en el sistema que gira, el mismo con el que trabaja el panel. Un empujón demasiado grande hace otra pregunta: si un trazador lejos del punto se queda cerca de él.',
     },
     trojans: {
       title: 'Y por eso existen los troyanos',
@@ -295,7 +333,7 @@ export default {
              nada se quede solo: el JWST, en el L2 Sol–Tierra, gasta unos pocos
              metros por segundo al año en mantenimiento de posición. Si lo dejaran
              en paz se iría a la deriva en unos meses.`,
-      tip: 'Este sistema tiene μ = 0,0291, cerca del 0,0385 de Routh. Sube la masa de la estrella pequeña por encima de una treintava parte de la grande y L4 y L5 dejan de ser estables; el panel te dice de qué lado de la raya estás.',
+      tip: 'Este sistema tiene μ = 0,0291, cerca del 0,0385 de Routh, y por eso tu trazador de L4 se alejó tanto con un empujón pequeño. Sube la masa de la estrella pequeña por encima de una veinticincoava parte de la grande y L4 y L5 dejan de ser estables.',
     },
     'break-it': {
       title: 'Rómpelo a propósito',
@@ -330,8 +368,8 @@ export default {
       title: 'Permitido, alcanzado y estable',
       body: `Leiste una constante de Jacobi en la escena, abriste el cuello,
              viste dos trazadores con la misma regi\u00f3n accesible tomar rutas
-             distintas y predijiste cuáles de los cinco puntos resisten un
-             empujón.`,
+             distintas, predijiste cuáles de los cinco puntos resisten un
+             empujón y empujaste un trazador en L1 y en L4 para averiguarlo.`,
       prompt:
         'En dos o tres frases, distingue lo que te dice la constante de Jacobi de lo que no, y di cu\u00e1les de los cinco puntos de Lagrange sobreviven a un empuj\u00f3n y bajo qu\u00e9 condici\u00f3n.',
       rubric:
