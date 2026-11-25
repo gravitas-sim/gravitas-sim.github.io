@@ -1495,8 +1495,12 @@ function rogueEncounter({ rate, seed }) {
     vx: star.vel.x,
     vy: star.vel.y,
   });
-  for (const t of mob)
-    as0.set(t.body, elementsAbout(t.body, centreStar(), G).a);
+  const boundAtStart = new Set();
+  for (const t of mob) {
+    const e0 = elementsAbout(t.body, centreStar(), G);
+    as0.set(t.body, e0.a);
+    if (e0.bound) boundAtStart.add(t.body);
+  }
   // The same test at t = 0, so a reader can see how much of the end count is
   // the frame: the hole's own motion makes most of the system unbound from the
   // joint centre before anything has happened.
@@ -1524,6 +1528,10 @@ function rogueEncounter({ rate, seed }) {
   let toHole = 0;
   let reshaped = 0;
   let lostOther = 0;
+  // The claim that supersedes `ejection` (claims.json): bound to the star at
+  // t = 0, and at the end unbound from the star and from the hole, each by
+  // its own two-body energy with its own mass.
+  let ejectedBound = 0;
   const reshapedA = [];
   let reshapedBoundA = 0;
   for (const t of mob) {
@@ -1550,6 +1558,10 @@ function rogueEncounter({ rate, seed }) {
       );
       const es = starAlive ? elementsAbout(t.body, centreStar(), G) : null;
       if (eh.bound && (!es || eh.energy < es.energy)) captured++;
+      if (boundAtStart.has(t.body) && !eh.bound && (!es || !es.bound))
+        ejectedBound++;
+    } else if (boundAtStart.has(t.body) && starAlive) {
+      if (!elementsAbout(t.body, centreStar(), G).bound) ejectedBound++;
     }
     if (starAlive) {
       const es = elementsAbout(t.body, centreStar(), G);
@@ -1569,6 +1581,14 @@ function rogueEncounter({ rate, seed }) {
       ejected,
       ejected >= 1,
       `planets and giants unbound from the star and hole together (their joint centre and joint mass) at t = ${sig(until)}; by the same test ${ejectedAtStart} were already unbound at t = 0; ${reshaped - reshapedBoundA} are unbound from the star alone at the end`
+    )
+  );
+  rows.push(
+    row(
+      c['ejection-bound'],
+      ejectedBound,
+      ejectedBound >= 1,
+      `planets and giants bound to the star at t = 0 (${boundAtStart.size} of ${mob.length}) that end unbound from the star and from the hole, each by its own two-body energy, at t = ${sig(until)}`
     )
   );
   rows.push(
