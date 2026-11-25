@@ -1994,6 +1994,21 @@
         {
           "rate": 30,
           "seed": 1,
+          "claim": "energy",
+          "value": 0.00172948,
+          "bound": {
+            "tolerance": 0.02,
+            "unnoticed": 0.000001,
+            "supersedes": "momentum",
+            "measure": "between the two instants the gains claim reads, the spacecraft's two-body energy about the star (its kinetic energy relative to the star plus its potential energy from the star) rises by some E; the planet's two-body energy about the star, less the same quantity at the same step of a control run without the spacecraft, falls by E within 2%; and the planet's speed about the star differs from the control run's by less than 1e-6 of that speed"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "|planet loss - spacecraft gain| / spacecraft gain, two-body energies about the star between the two instants, the planet's against the control run (spacecraft gain 0.000003824, planet loss 0.000003818); the planet's speed about the star differs from the control run's by 4.06e-7 of it (limit 0.000001)"
+        },
+        {
+          "rate": 30,
+          "seed": 1,
           "claim": "panel",
           "value": "0.3361 % panel, 0.3361 % recomputed",
           "bound": {
@@ -2042,6 +2057,21 @@
           "pass": false,
           "status": "fail",
           "note": "|planet change + spacecraft change| / |spacecraft change|, both about the star between the two instants; the planet's own orbital turning over the flyby is in the planet's change (planet 1.613, spacecraft 0.000003142), which is also what the page's own ledger line compares (its mismatch 511400). Not the claim: against a control run without the spacecraft the planet's recoil leaves a mismatch of 0.5147"
+        },
+        {
+          "rate": 60,
+          "seed": 1,
+          "claim": "energy",
+          "value": 0.00172948,
+          "bound": {
+            "tolerance": 0.02,
+            "unnoticed": 0.000001,
+            "supersedes": "momentum",
+            "measure": "between the two instants the gains claim reads, the spacecraft's two-body energy about the star (its kinetic energy relative to the star plus its potential energy from the star) rises by some E; the planet's two-body energy about the star, less the same quantity at the same step of a control run without the spacecraft, falls by E within 2%; and the planet's speed about the star differs from the control run's by less than 1e-6 of that speed"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "|planet loss - spacecraft gain| / spacecraft gain, two-body energies about the star between the two instants, the planet's against the control run (spacecraft gain 0.000003824, planet loss 0.000003818); the planet's speed about the star differs from the control run's by 4.06e-7 of it (limit 0.000001)"
         },
         {
           "rate": 60,
@@ -2098,6 +2128,21 @@
         {
           "rate": 120,
           "seed": 1,
+          "claim": "energy",
+          "value": 0.00172957,
+          "bound": {
+            "tolerance": 0.02,
+            "unnoticed": 0.000001,
+            "supersedes": "momentum",
+            "measure": "between the two instants the gains claim reads, the spacecraft's two-body energy about the star (its kinetic energy relative to the star plus its potential energy from the star) rises by some E; the planet's two-body energy about the star, less the same quantity at the same step of a control run without the spacecraft, falls by E within 2%; and the planet's speed about the star differs from the control run's by less than 1e-6 of that speed"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "|planet loss - spacecraft gain| / spacecraft gain, two-body energies about the star between the two instants, the planet's against the control run (spacecraft gain 0.000003824, planet loss 0.000003818); the planet's speed about the star differs from the control run's by 4.06e-7 of it (limit 0.000001)"
+        },
+        {
+          "rate": 120,
+          "seed": 1,
           "claim": "panel",
           "value": "0.336 % panel, 0.336 % recomputed",
           "bound": {
@@ -2110,14 +2155,13 @@
         }
       ],
       "verdictSuggested": {
-        "verdict": "REFRAME or CORRECT",
-        "failing": [
-          "momentum"
-        ],
+        "verdict": "KEEP",
+        "failing": [],
         "notRun": [],
-        "leans": {
-          "momentum": "CORRECT"
-        }
+        "leans": {},
+        "superseded": [
+          "momentum"
+        ]
       }
     },
     "rogue-encounter": {

@@ -988,7 +988,7 @@ export const EN = {
   'scenario.gravity-assist-heliocentric.title':
     'Gravity Assist: the same flyby, with a Sun to steal from',
   'scenario.gravity-assist-heliocentric.summary':
-    'The same planet, now on a circular orbit five AU from a star, and a spacecraft that meets it. This is where the energy comes from: the spacecraft leaves faster around the star than it arrived, and the planet is slowed by exactly the momentum it gained. Everything here is approximate - the planet is accelerating, so its frame is not inertial and the encounter is only locally two-body - and the panel reports how approximate rather than hiding it.',
+    'The same planet, now on a circular orbit five AU from a star, and a spacecraft that meets it. This is where the energy comes from: the spacecraft leaves faster around the star than it arrived, and the planet’s orbit loses the energy the spacecraft gained, far too little to notice. Everything here is approximate - the planet is accelerating, so its frame is not inertial and the encounter is only locally two-body - and the panel reports how approximate rather than hiding it.',
   'scenario.binary-planet-lab.title':
     'Binary Planet Lab: a planet around one star of a pair',
   'scenario.binary-planet-lab.summary':

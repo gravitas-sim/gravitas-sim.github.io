@@ -373,9 +373,16 @@ function render() {
   }
 
   // The books, balanced. Not decoration: an assist looks like free energy
-  // until somebody shows that the planet paid, and this is that line.
+  // until somebody shows that the planet paid, and this is that line. Not
+  // around a star: there the planet's own orbital turning is a million times
+  // the spacecraft's push, and the star takes a share, so the two momentum
+  // changes cannot balance (D-R4-463-08).
   if (e.ledger) {
-    if (!run.probeDeltaP || !run.planetDeltaP) {
+    if (
+      !run.probeDeltaP ||
+      !run.planetDeltaP ||
+      activeMode() === 'heliocentric'
+    ) {
       e.ledger.textContent = '';
     } else {
       // The mismatch comes from the watcher rather than from here. It is the
