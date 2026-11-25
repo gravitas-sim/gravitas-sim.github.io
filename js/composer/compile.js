@@ -268,7 +268,12 @@ export function compileInvestigation(pack, api) {
       w.tip = es(s.tip);
     }
     if (s.setup) {
-      out.setup = { scenario: s.setup.scenario };
+      // A declaration from a file: the revision it states, else 1. Stating it
+      // (even as 1) is what tells applySetup this is not the build's own setup.
+      out.setup = {
+        scenario: s.setup.scenario,
+        revision: s.setup.revision ?? 1,
+      };
       if (s.setup.seed !== undefined) out.setup.seed = s.setup.seed;
       if (s.setup.paused !== undefined) out.setup.paused = s.setup.paused;
       if (s.setup.zoom !== undefined) out.setup.camera = { zoom: s.setup.zoom };

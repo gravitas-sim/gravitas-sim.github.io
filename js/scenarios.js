@@ -387,12 +387,12 @@ const gravityAssist = ps => {
 };
 
 // HD 209458: the first planet ever caught transiting, in 1999, and still
-// the best-studied. Everything here is at true relative scale, which is
-// what makes it usable as a measuring instrument: the star is drawn at
-// 1.155 solar radii and the planet at 1.38 Jupiter radii, so the silhouette
-// on screen, the depth of the dip and the radius ratio a student works out
-// from it are all the same number. The view has to zoom a long way in for
-// that to be visible, which is the honest price of not exaggerating.
+// the best-studied. The model is at true relative scale, which is what
+// makes it usable as a measuring instrument: the star's model radius is
+// 1.155 solar radii and the planet's 1.38 Jupiter radii, so the depth of the
+// dip, its duration and the radius ratio a student works out are one set of
+// numbers. The drawing is not: a planet is drawn at 0.375 of its model
+// radius (js/bodyVisuals.js), so the silhouette is smaller than the ratio.
 const transitLab = ps => {
   return {
     num_black_holes: 0,
@@ -1761,10 +1761,10 @@ export const scenarioId = key => {
  *
  * @param {Object} SETTINGS - Live settings object, mutated
  * @param {Object} DEFAULT_SETTINGS - Baseline the preset builds on
- * @param {Object} _state - View state. Unused: a scenario's opening zoom is its
- *   preset_zoom setting, which the world builder applies after this runs
+ * @param {Object} _state - Unused: the opening zoom is preset_zoom, set by the build
+ * @param {Object} [row] - The row of an earlier revision (SCENARIO_REVISIONS.md)
  */
-const applyPreset = (SETTINGS, DEFAULT_SETTINGS, _state) => {
+const applyPreset = (SETTINGS, DEFAULT_SETTINGS, _state, row) => {
   const ps = SETTINGS.preset_scenario;
   if (ps === 'None') return;
   const id = scenarioId(ps);
@@ -1793,8 +1793,8 @@ const applyPreset = (SETTINGS, DEFAULT_SETTINGS, _state) => {
   });
   // A copy: rows hold arrays (bh_masses, ns_masses), and a panel that edits
   // the live settings in place must not edit the table.
-  if (id)
-    Object.assign(SETTINGS, JSON.parse(JSON.stringify(SCENARIO_PRESETS[id])));
+  const preset = row ?? SCENARIO_PRESETS[id];
+  if (id) Object.assign(SETTINGS, JSON.parse(JSON.stringify(preset)));
 
   Object.assign(SETTINGS, carried);
 

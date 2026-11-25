@@ -103,6 +103,7 @@ const WAS = (to, en, es) => ({ to, release: '3.1', was: { en, es } });
 const LAGRANGE_POINTS = {
   id: 'lagrange-points',
   thumbnail: 'images/scenarios/lagrange-point-lab.webp',
+  sizes: true,
   title: 'Where Can It Get To?',
   subtitle: 'Forbidden regions, five balance points, and one conserved number',
   // Two screens longer than it was, and one of them runs for about a minute

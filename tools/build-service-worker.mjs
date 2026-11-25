@@ -693,6 +693,11 @@ export const NEVER_PRECACHED = [
   /^js\/observatory\/guides\/exoplanet\.js$/,
   /^js\/i18n\/(en|es)\.exoplanet\.js$/,
   /^js\/data\/exoplanetAnswerKey\.js$/,
+  // The notice a migrated scenario revision opens under, and its words: js/world.js imports them only
+  // when a link made for an earlier revision is opened (SCENARIO_REVISIONS.md), so no first visit needs
+  // them. Kept by the service worker after that first use (the first-visit tier is at its ceiling).
+  /^js\/scenarioNotice\.js$/,
+  /^js\/i18n\/(en|es)\.revision\.js$/,
 ];
 
 const ON_DEMAND_ONLY = new Set([

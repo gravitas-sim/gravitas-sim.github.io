@@ -171,13 +171,13 @@ their ceilings:
 | Module | Lines | Ceiling |
 | --- | ---: | ---: |
 | `js/data/instructorContent.js` | 6,767 | 6,767 |
-| `js/i18n/es.deferred.js` | 4,247 | 4,247 |
+| `js/i18n/es.deferred.js` | 4,248 | 4,248 |
 | `js/i18n/en.deferred.js` | 3,997 | 3,997 |
 | `js/data/investigations/observing-sequence.js` | 3,341 | 3,341 |
 | `js/data/investigations/measurement-sequence.js` | 3,041 | 3,041 |
-| `js/investigations.js` | 2,972 | 2,972 |
-| `js/render.js` | 2,779 | 2,779 |
+| `js/investigations.js` | 2,971 | 2,971 |
 | `js/data/investigations/stellar-sequence.js` | 2,733 | 2,733 |
+| `js/data/investigations/depth/measurement-sequence.js` | 2,714 | 2,714 |
 <!--/fact-block-->
 
 | Layer | What lives there | Examples |
