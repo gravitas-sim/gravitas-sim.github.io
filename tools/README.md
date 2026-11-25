@@ -251,6 +251,7 @@ current, and the orchestrator checks it.
 | `scenario-stability.mjs` | Scenario stability probe | `npm run validate:scenarios` |
 | `scene-capture.mjs` | Capture a scene record at its exact simulated time | `npm run scene:capture` |
 | `scene-record.mjs` | The scene record: one sandbox view, pinned so that it can be photographed |  |
+| `scenario-review.mjs` | The binary, three-body, flyby and slingshot scenarios measured against their committed claims at 30, 60 and 120 frames a second | `node tools/scenario-review.mjs --jobs 2` |
 | `sed-followup-validate.mjs` | The SED kernel's follow-up legs against their committed thresholds (Prompt 245, follow-up) | `npm run sed:followup` |
 | `sed-scenes.mjs` | The committed scenes of the SED kernel's validation (Prompt 245) |  |
 | `sed-validate.mjs` | The SED kernel against its committed thresholds (Prompt 245) | `npm run sed:validate` |
