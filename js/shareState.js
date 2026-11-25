@@ -27,7 +27,12 @@
 // scenarios.js takes its settings object as a parameter.
 // =============================================================================
 
-import { applyPreset, resetPresetMemory, scenarioId } from './scenarios.js';
+import {
+  SCENARIO_PRESETS,
+  applyPreset,
+  resetPresetMemory,
+  scenarioId,
+} from './scenarios.js';
 import { formatSeed, normalizeSeed, parseSeed } from './rng.js';
 
 /** 2 names a scenario by id, 1 by its English name; both are read. */
@@ -39,15 +44,46 @@ const INCOMPLETE = 'That link is incomplete or was cut short in transit.';
 const NEWER =
   'This link was made by a newer version of Gravitas. Reload the page and try again.';
 
-// Scenario revisions (SCENARIO_REVISIONS.md). Ships empty: an id not here has
-// revision 1. Per id: `revision`, and per earlier one `retained` or `{ migrated }`.
-export const SCENARIO_REVISIONS = {};
+// Scenario revisions (SCENARIO_REVISIONS.md). An id not here has revision 1.
+// Per id: `revision`, and per earlier one `retained` or `{ migrated }`; a
+// retained revision keeps its row (`rows`) and declaration (`geometry`) here.
+export const SCENARIO_REVISIONS = {
+  // Revision 2 moves the planets, giants and asteroids out past the distance at
+  // which a planet can circle this pair for long (Holman and Wiegert 1999,
+  // AJ 117, 621: 2.43 separations for masses 1.2 and 0.8 on a circular orbit),
+  // and lets only the stars pull, as in their test-particle integrations: a
+  // generated giant of up to 20 Jupiter masses no longer swallows a planet.
+  // Revision 1 started the planets at 1.25 to 2.25 separations, inside it.
+  'binary-star-system': {
+    revision: 2,
+    earlier: { 1: 'retained' },
+    // Revision 1's row: mutual gravity on, and the zoom that framed its orbits.
+    rows: {
+      1: {
+        ...SCENARIO_PRESETS['binary-star-system'],
+        mutual_gravity: true,
+        star_only_gravity: false,
+        preset_zoom: 1.5,
+      },
+    },
+    geometry: {
+      // prettier-ignore
+      1: { keep: ['Planet', 'GasGiant', 'BlackHole', 'Asteroid', 'Comet', 'NeutronStar', 'WhiteDwarf', 'Debris'], recenter: true, steps: [
+        { rule: { name: 'circular-binary-stars', params: { massesSuns: [1.2, 0.8], separation: 120 } } },
+        { rule: { name: 'orbital-population', params: { centralStars: 2, planetInner: 150, planetStep: 30, giantInner: 300, giantStep: 50, asteroidInner: 400, asteroidSpan: 100 } } },
+      ] },
+    },
+  },
+};
 const REVISED = id => Object.hasOwn(SCENARIO_REVISIONS, id);
 export const currentRevision = id =>
   REVISED(id) ? SCENARIO_REVISIONS[id].revision : 1;
 /** The preset row an earlier revision keeps (undefined: the table's row). */
 export const rowFor = (id, revision) =>
   REVISED(id) ? SCENARIO_REVISIONS[id].rows?.[revision] : undefined;
+/** The declaration an earlier revision keeps (undefined: the current one). */
+export const geometryFor = (id, revision) =>
+  REVISED(id) ? SCENARIO_REVISIONS[id].geometry?.[revision] : undefined;
 export const linkVersionOf = payload => (payload.r >= 2 ? 3 : VERSION);
 /** Version 3 and `r` from revision 2 on, else as it is. */
 export const withRevision = (payload, revision) =>

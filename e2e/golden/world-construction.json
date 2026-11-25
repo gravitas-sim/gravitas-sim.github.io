@@ -859,17 +859,17 @@
     "momentumResidual": "cancels into rounding error",
     "scenarioName": "binary-star-system",
     "presetSentinel": "None",
-    "zoom": 1.5,
+    "zoom": 0.75,
     "pan": {
       "x": 0,
       "y": 0
     },
-    "bodies": "0649d3cc489a47c0",
-    "settings": "9d1bd0c9ca921ead",
+    "bodies": "62421f81e9be61c3",
+    "settings": "5c1e2a29d1dbc8ed",
     "head": [
-      "stars|0|StarObject|29|Solar Majesty|1200|11.6762681223|-48|0|-0.00312629577623|1.77614077073||",
-      "stars|1|StarObject|30|Stellar Dynamo|800|8.27230405627|72|0|-0.00312629577623|-2.69599518427||",
-      "planets|0|Planet|2|Eden Alpha|0.00044874658439|2.826718171|-147.076285327|-29.4714488013|0.78277900559|-3.93474788666||"
+      "stars|0|StarObject|29|Solar Majesty|1200|11.6762681223|-48|0|-0.00251858737844|1.77873862684||",
+      "stars|1|StarObject|30|Stellar Dynamo|800|8.27230405627|72|0|-0.00251858737844|-2.69339732816||",
+      "planets|0|Planet|2|Eden Alpha|0.00044874658439|2.826718171|-323.567827719|-64.8371873628|0.527338658712|-2.6543507242||"
     ]
   },
   "slingshot": {

@@ -1037,7 +1037,7 @@ export const EN = {
     "The Milky Way's central supermassive black hole (4000 M☉, scaled down for simulation) with fast-moving S-stars, compact objects, and debris in extreme orbits. Witness the incredible gravitational forces and relativistic effects near our galaxy's supermassive black hole.",
   'scenario.binary-star-system.title': 'Binary Stars',
   'scenario.binary-star-system.summary':
-    'A pair of suns in mutual orbit with 5 planets orbiting the binary system. The complex gravitational environment creates interesting orbital dynamics and potential habitable zones. Similar to real binary star systems like Alpha Centauri.',
+    'Two suns of 1.2 and 0.8 solar masses circling each other 1.2 AU apart, with five planets, two gas giants and 20 asteroids orbiting the pair. Only the suns pull here. The planets start beyond 2.4 times the stars’ separation, the closest a planet can circle a pair like this and stay (Holman and Wiegert, 1999); closer in, the pair’s shifting pull throws planets out. Alpha Centauri A and B are a pair of this kind, about 20 times farther apart.',
   'scenario.slingshot.title': 'Gravity Slingshot',
   'scenario.slingshot.summary':
     'A massive black hole (60 M☉) paired with a smaller companion (3 M☉) create dramatic gravitational assists for nearby planets and gas giants. Watch objects gain tremendous velocity through close encounters, mimicking spacecraft gravity assists.',

@@ -840,7 +840,8 @@ export const SCENARIO_PRESETS = /* @__PURE__ */ Object.freeze({
   'binary-star-system': {
     num_black_holes: 0,
     num_stars: 2, // Add 2 stars for binary system
-    mutual_gravity: true,
+    mutual_gravity: false,
+    star_only_gravity: true,
     placement: 'Empty',
     num_planets: 5,
     num_gas_giants: 2,
@@ -855,7 +856,7 @@ export const SCENARIO_PRESETS = /* @__PURE__ */ Object.freeze({
     // motion: a stub the width of the star itself. This is roughly a
     // quarter of the binary's period, which is enough to read as an orbit.
     trail_length: 240,
-    preset_zoom: 1.5,
+    preset_zoom: 0.75,
     // A 120-unit binary needs a bounded step. The dramatic version of this -
     // the separation falling from 120 to 85 in twenty seconds at six times
     // speed, ending in a merger - was a genuine bug in the integrator, since

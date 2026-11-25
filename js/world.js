@@ -105,6 +105,7 @@ import {
   currentRevision,
   resolveRevision,
   rowFor,
+  geometryFor,
 } from './shareState.js';
 import { generateStarfield } from './render.js';
 import { stopSignalAudio } from './soundPanel.js';
@@ -330,6 +331,7 @@ registerSettingsReceiver(updatePhysicsSettings);
 const build_simulation = () =>
   buildWorld({
     revision: buildRevision,
+    geometryFor,
     settings: SETTINGS,
     pushSettings: () => commitSettings('world-build'),
     state,
