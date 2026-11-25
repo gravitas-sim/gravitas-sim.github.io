@@ -18,7 +18,7 @@ Rows by kind: activity 6, course 6, experiment 4, investigation 146, sequence 11
 
 Baseline (measured at f9277ff8): 146 investigations (124 lessons, 10 Observatory, 9 3-D, 3 mission), 6 activity entries, 4 bench labs, 7 courses (6 rows and 1 out of scope), 11 sequences, 69 scenarios (61 sandbox, 8 3-D lab), 16 datasets.
 
-Editorial: OPEN 156, REVISED 17. Redesign: OPEN 157, REVIEWED CLEAR 5, REVISED 11. Scenario dispositions: OPEN 64, REVISED 5.
+Editorial: OPEN 156, REVISED 17. Redesign: OPEN 157, REVIEWED CLEAR 5, REVISED 11. Scenario dispositions: OPEN 63, REVISED 6.
 
 Scene class of the lessons: portrait or backdrop 94, setup scenario 26, engine-integrated stage 2, model-owned stage 2.
 
@@ -251,7 +251,7 @@ Scene class of the lessons: portrait or backdrop 94, setup scenario 26, engine-i
 | `scenario:sagittarius-a`                  | Sagittarius A*                                                       | generated populations around one dominant mass        | CORRECT  |   482 | OPEN        |
 | `scenario:binary-star-system`             | Binary Stars                                                         | binaries, circumbinary, three-body                    | REVIEW   |   463 | REVISED     |
 | `scenario:slingshot`                      | Gravity Slingshot                                                    | flybys and assists                                    | REVIEW   |   463 | OPEN        |
-| `scenario:rogue-encounter`                | Rogue Encounter                                                      | flybys and assists                                    | REVIEW   |   463 | OPEN        |
+| `scenario:rogue-encounter`                | Rogue Encounter                                                      | flybys and assists                                    | REVIEW   |   463 | REVISED     |
 | `scenario:neutron-star-collision`         | Neutron Star Merger                                                  | compact-object pairs and systems                      | CORRECT  |   465 | OPEN        |
 | `scenario:pulsar-system`                  | Pulsar with Planets                                                  | compact-object pairs and systems                      | CORRECT  |   465 | OPEN        |
 | `scenario:white-dwarf-binary`             | White Dwarf Binary                                                   | compact-object pairs and systems                      | CORRECT  |   465 | OPEN        |

@@ -2227,7 +2227,7 @@
           "rate": 30,
           "seed": "audit",
           "claim": "asteroids",
-          "value": 80,
+          "value": 40,
           "bound": {
             "measure": "at least one asteroid at t = 0"
           },
@@ -2239,25 +2239,38 @@
           "rate": 30,
           "seed": "audit",
           "claim": "start-overlap",
-          "value": 1,
+          "value": 0,
           "bound": {
             "measure": "no two bodies start closer than the sum of their collision radii"
           },
-          "pass": false,
-          "status": "fail",
-          "note": "pairs closer than the sum of their radii; closest gap -0.4416 u (Cosmic Chunk and Cosmic Dust)"
+          "pass": true,
+          "status": "pass",
+          "note": "pairs closer than the sum of their radii; closest gap 15.68 u (Space Debris and Orbit Roamer)"
         },
         {
           "rate": 30,
           "seed": "audit",
           "claim": "ejection",
-          "value": 11,
+          "value": 4,
           "bound": {
             "measure": "a planet or giant ends unbound from the star and hole together (energy about their joint centre, with their joint mass), under both seeds"
           },
           "pass": true,
           "status": "pass",
           "note": "planets and giants unbound from the star and hole together (their joint centre and joint mass) at t = 3000; by the same test 16 were already unbound at t = 0; 0 are unbound from the star alone at the end"
+        },
+        {
+          "rate": 30,
+          "seed": "audit",
+          "claim": "ejection-bound",
+          "value": 4,
+          "bound": {
+            "supersedes": "ejection",
+            "measure": "a planet or giant that starts bound to the star (negative two-body energy about the star at t = 0) ends with positive two-body energy about the star and about the hole, each with that body's own mass, under both seeds"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "planets and giants bound to the star at t = 0 (16 of 16) that end unbound from the star and from the hole, each by its own two-body energy, at t = 3000"
         },
         {
           "rate": 30,
@@ -2275,13 +2288,13 @@
           "rate": 30,
           "seed": "audit",
           "claim": "disruption",
-          "value": 3,
+          "value": 4,
           "bound": {
             "measure": "a planet or giant is merged into or disrupted by the hole, or its orbit about the star changes semi-major axis by more than 50%, under both seeds"
           },
           "pass": true,
           "status": "pass",
-          "note": "3 lost nearer the hole than the star (merged into it), 0 bound-or-not about the star with a changed by more than 50% or unbound from the star (2 more lost elsewhere); hole mass at the end 30.924902 Msun"
+          "note": "4 lost nearer the hole than the star (merged into it), 0 bound-or-not about the star with a changed by more than 50% or unbound from the star (8 more lost elsewhere); hole mass at the end 30.926582 Msun"
         },
         {
           "rate": 60,
@@ -2327,7 +2340,7 @@
           "rate": 60,
           "seed": "audit",
           "claim": "asteroids",
-          "value": 80,
+          "value": 40,
           "bound": {
             "measure": "at least one asteroid at t = 0"
           },
@@ -2339,25 +2352,38 @@
           "rate": 60,
           "seed": "audit",
           "claim": "start-overlap",
-          "value": 1,
+          "value": 0,
           "bound": {
             "measure": "no two bodies start closer than the sum of their collision radii"
           },
-          "pass": false,
-          "status": "fail",
-          "note": "pairs closer than the sum of their radii; closest gap -0.4416 u (Cosmic Chunk and Cosmic Dust)"
+          "pass": true,
+          "status": "pass",
+          "note": "pairs closer than the sum of their radii; closest gap 15.68 u (Space Debris and Orbit Roamer)"
         },
         {
           "rate": 60,
           "seed": "audit",
           "claim": "ejection",
-          "value": 11,
+          "value": 4,
           "bound": {
             "measure": "a planet or giant ends unbound from the star and hole together (energy about their joint centre, with their joint mass), under both seeds"
           },
           "pass": true,
           "status": "pass",
           "note": "planets and giants unbound from the star and hole together (their joint centre and joint mass) at t = 3000; by the same test 16 were already unbound at t = 0; 0 are unbound from the star alone at the end"
+        },
+        {
+          "rate": 60,
+          "seed": "audit",
+          "claim": "ejection-bound",
+          "value": 4,
+          "bound": {
+            "supersedes": "ejection",
+            "measure": "a planet or giant that starts bound to the star (negative two-body energy about the star at t = 0) ends with positive two-body energy about the star and about the hole, each with that body's own mass, under both seeds"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "planets and giants bound to the star at t = 0 (16 of 16) that end unbound from the star and from the hole, each by its own two-body energy, at t = 3000"
         },
         {
           "rate": 60,
@@ -2375,13 +2401,13 @@
           "rate": 60,
           "seed": "audit",
           "claim": "disruption",
-          "value": 3,
+          "value": 4,
           "bound": {
             "measure": "a planet or giant is merged into or disrupted by the hole, or its orbit about the star changes semi-major axis by more than 50%, under both seeds"
           },
           "pass": true,
           "status": "pass",
-          "note": "3 lost nearer the hole than the star (merged into it), 0 bound-or-not about the star with a changed by more than 50% or unbound from the star (2 more lost elsewhere); hole mass at the end 30.931087 Msun"
+          "note": "4 lost nearer the hole than the star (merged into it), 0 bound-or-not about the star with a changed by more than 50% or unbound from the star (8 more lost elsewhere); hole mass at the end 30.932785 Msun"
         },
         {
           "rate": 120,
@@ -2427,7 +2453,7 @@
           "rate": 120,
           "seed": "audit",
           "claim": "asteroids",
-          "value": 80,
+          "value": 40,
           "bound": {
             "measure": "at least one asteroid at t = 0"
           },
@@ -2439,25 +2465,38 @@
           "rate": 120,
           "seed": "audit",
           "claim": "start-overlap",
-          "value": 1,
+          "value": 0,
           "bound": {
             "measure": "no two bodies start closer than the sum of their collision radii"
           },
-          "pass": false,
-          "status": "fail",
-          "note": "pairs closer than the sum of their radii; closest gap -0.4416 u (Cosmic Chunk and Cosmic Dust)"
+          "pass": true,
+          "status": "pass",
+          "note": "pairs closer than the sum of their radii; closest gap 15.68 u (Space Debris and Orbit Roamer)"
         },
         {
           "rate": 120,
           "seed": "audit",
           "claim": "ejection",
-          "value": 11,
+          "value": 4,
           "bound": {
             "measure": "a planet or giant ends unbound from the star and hole together (energy about their joint centre, with their joint mass), under both seeds"
           },
           "pass": true,
           "status": "pass",
           "note": "planets and giants unbound from the star and hole together (their joint centre and joint mass) at t = 3000; by the same test 16 were already unbound at t = 0; 0 are unbound from the star alone at the end"
+        },
+        {
+          "rate": 120,
+          "seed": "audit",
+          "claim": "ejection-bound",
+          "value": 4,
+          "bound": {
+            "supersedes": "ejection",
+            "measure": "a planet or giant that starts bound to the star (negative two-body energy about the star at t = 0) ends with positive two-body energy about the star and about the hole, each with that body's own mass, under both seeds"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "planets and giants bound to the star at t = 0 (16 of 16) that end unbound from the star and from the hole, each by its own two-body energy, at t = 3000"
         },
         {
           "rate": 120,
@@ -2475,13 +2514,13 @@
           "rate": 120,
           "seed": "audit",
           "claim": "disruption",
-          "value": 3,
+          "value": 4,
           "bound": {
             "measure": "a planet or giant is merged into or disrupted by the hole, or its orbit about the star changes semi-major axis by more than 50%, under both seeds"
           },
           "pass": true,
           "status": "pass",
-          "note": "3 lost nearer the hole than the star (merged into it), 0 bound-or-not about the star with a changed by more than 50% or unbound from the star (2 more lost elsewhere); hole mass at the end 30.934058 Msun"
+          "note": "4 lost nearer the hole than the star (merged into it), 0 bound-or-not about the star with a changed by more than 50% or unbound from the star (8 more lost elsewhere); hole mass at the end 30.935764 Msun"
         },
         {
           "rate": 30,
@@ -2527,7 +2566,7 @@
           "rate": 30,
           "seed": "audit-2",
           "claim": "asteroids",
-          "value": 80,
+          "value": 40,
           "bound": {
             "measure": "at least one asteroid at t = 0"
           },
@@ -2539,25 +2578,38 @@
           "rate": 30,
           "seed": "audit-2",
           "claim": "start-overlap",
-          "value": 3,
+          "value": 0,
           "bound": {
             "measure": "no two bodies start closer than the sum of their collision radii"
           },
-          "pass": false,
-          "status": "fail",
-          "note": "pairs closer than the sum of their radii; closest gap -1.209 u (Rock Hopper and Stellar Bit)"
+          "pass": true,
+          "status": "pass",
+          "note": "pairs closer than the sum of their radii; closest gap 20.81 u (Stellar Flake and Stellar Storm)"
         },
         {
           "rate": 30,
           "seed": "audit-2",
           "claim": "ejection",
-          "value": 8,
+          "value": 10,
           "bound": {
             "measure": "a planet or giant ends unbound from the star and hole together (energy about their joint centre, with their joint mass), under both seeds"
           },
           "pass": true,
           "status": "pass",
           "note": "planets and giants unbound from the star and hole together (their joint centre and joint mass) at t = 3000; by the same test 16 were already unbound at t = 0; 0 are unbound from the star alone at the end"
+        },
+        {
+          "rate": 30,
+          "seed": "audit-2",
+          "claim": "ejection-bound",
+          "value": 10,
+          "bound": {
+            "supersedes": "ejection",
+            "measure": "a planet or giant that starts bound to the star (negative two-body energy about the star at t = 0) ends with positive two-body energy about the star and about the hole, each with that body's own mass, under both seeds"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "planets and giants bound to the star at t = 0 (16 of 16) that end unbound from the star and from the hole, each by its own two-body energy, at t = 3000"
         },
         {
           "rate": 30,
@@ -2575,13 +2627,13 @@
           "rate": 30,
           "seed": "audit-2",
           "claim": "disruption",
-          "value": 2,
+          "value": 4,
           "bound": {
             "measure": "a planet or giant is merged into or disrupted by the hole, or its orbit about the star changes semi-major axis by more than 50%, under both seeds"
           },
           "pass": true,
           "status": "pass",
-          "note": "2 lost nearer the hole than the star (merged into it), 0 bound-or-not about the star with a changed by more than 50% or unbound from the star (6 more lost elsewhere); hole mass at the end 30.927132 Msun"
+          "note": "4 lost nearer the hole than the star (merged into it), 0 bound-or-not about the star with a changed by more than 50% or unbound from the star (2 more lost elsewhere); hole mass at the end 30.928535 Msun"
         },
         {
           "rate": 60,
@@ -2627,7 +2679,7 @@
           "rate": 60,
           "seed": "audit-2",
           "claim": "asteroids",
-          "value": 80,
+          "value": 40,
           "bound": {
             "measure": "at least one asteroid at t = 0"
           },
@@ -2639,25 +2691,38 @@
           "rate": 60,
           "seed": "audit-2",
           "claim": "start-overlap",
-          "value": 3,
+          "value": 0,
           "bound": {
             "measure": "no two bodies start closer than the sum of their collision radii"
           },
-          "pass": false,
-          "status": "fail",
-          "note": "pairs closer than the sum of their radii; closest gap -1.209 u (Rock Hopper and Stellar Bit)"
+          "pass": true,
+          "status": "pass",
+          "note": "pairs closer than the sum of their radii; closest gap 20.81 u (Stellar Flake and Stellar Storm)"
         },
         {
           "rate": 60,
           "seed": "audit-2",
           "claim": "ejection",
-          "value": 8,
+          "value": 10,
           "bound": {
             "measure": "a planet or giant ends unbound from the star and hole together (energy about their joint centre, with their joint mass), under both seeds"
           },
           "pass": true,
           "status": "pass",
           "note": "planets and giants unbound from the star and hole together (their joint centre and joint mass) at t = 3000; by the same test 16 were already unbound at t = 0; 0 are unbound from the star alone at the end"
+        },
+        {
+          "rate": 60,
+          "seed": "audit-2",
+          "claim": "ejection-bound",
+          "value": 10,
+          "bound": {
+            "supersedes": "ejection",
+            "measure": "a planet or giant that starts bound to the star (negative two-body energy about the star at t = 0) ends with positive two-body energy about the star and about the hole, each with that body's own mass, under both seeds"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "planets and giants bound to the star at t = 0 (16 of 16) that end unbound from the star and from the hole, each by its own two-body energy, at t = 3000"
         },
         {
           "rate": 60,
@@ -2675,13 +2740,13 @@
           "rate": 60,
           "seed": "audit-2",
           "claim": "disruption",
-          "value": 2,
+          "value": 4,
           "bound": {
             "measure": "a planet or giant is merged into or disrupted by the hole, or its orbit about the star changes semi-major axis by more than 50%, under both seeds"
           },
           "pass": true,
           "status": "pass",
-          "note": "2 lost nearer the hole than the star (merged into it), 0 bound-or-not about the star with a changed by more than 50% or unbound from the star (6 more lost elsewhere); hole mass at the end 30.933338 Msun"
+          "note": "4 lost nearer the hole than the star (merged into it), 0 bound-or-not about the star with a changed by more than 50% or unbound from the star (2 more lost elsewhere); hole mass at the end 30.934753 Msun"
         },
         {
           "rate": 120,
@@ -2727,7 +2792,7 @@
           "rate": 120,
           "seed": "audit-2",
           "claim": "asteroids",
-          "value": 80,
+          "value": 40,
           "bound": {
             "measure": "at least one asteroid at t = 0"
           },
@@ -2739,25 +2804,38 @@
           "rate": 120,
           "seed": "audit-2",
           "claim": "start-overlap",
-          "value": 3,
+          "value": 0,
           "bound": {
             "measure": "no two bodies start closer than the sum of their collision radii"
           },
-          "pass": false,
-          "status": "fail",
-          "note": "pairs closer than the sum of their radii; closest gap -1.209 u (Rock Hopper and Stellar Bit)"
+          "pass": true,
+          "status": "pass",
+          "note": "pairs closer than the sum of their radii; closest gap 20.81 u (Stellar Flake and Stellar Storm)"
         },
         {
           "rate": 120,
           "seed": "audit-2",
           "claim": "ejection",
-          "value": 8,
+          "value": 10,
           "bound": {
             "measure": "a planet or giant ends unbound from the star and hole together (energy about their joint centre, with their joint mass), under both seeds"
           },
           "pass": true,
           "status": "pass",
           "note": "planets and giants unbound from the star and hole together (their joint centre and joint mass) at t = 3000; by the same test 16 were already unbound at t = 0; 0 are unbound from the star alone at the end"
+        },
+        {
+          "rate": 120,
+          "seed": "audit-2",
+          "claim": "ejection-bound",
+          "value": 10,
+          "bound": {
+            "supersedes": "ejection",
+            "measure": "a planet or giant that starts bound to the star (negative two-body energy about the star at t = 0) ends with positive two-body energy about the star and about the hole, each with that body's own mass, under both seeds"
+          },
+          "pass": true,
+          "status": "pass",
+          "note": "planets and giants bound to the star at t = 0 (16 of 16) that end unbound from the star and from the hole, each by its own two-body energy, at t = 3000"
         },
         {
           "rate": 120,
@@ -2775,26 +2853,27 @@
           "rate": 120,
           "seed": "audit-2",
           "claim": "disruption",
-          "value": 2,
+          "value": 4,
           "bound": {
             "measure": "a planet or giant is merged into or disrupted by the hole, or its orbit about the star changes semi-major axis by more than 50%, under both seeds"
           },
           "pass": true,
           "status": "pass",
-          "note": "2 lost nearer the hole than the star (merged into it), 0 bound-or-not about the star with a changed by more than 50% or unbound from the star (6 more lost elsewhere); hole mass at the end 30.936318 Msun"
+          "note": "4 lost nearer the hole than the star (merged into it), 0 bound-or-not about the star with a changed by more than 50% or unbound from the star (2 more lost elsewhere); hole mass at the end 30.937738 Msun"
         }
       ],
       "verdictSuggested": {
         "verdict": "REFRAME or CORRECT",
         "failing": [
-          "start-overlap",
           "capture"
         ],
         "notRun": [],
         "leans": {
-          "start-overlap": "CORRECT",
           "capture": "CORRECT"
-        }
+        },
+        "superseded": [
+          "ejection"
+        ]
       }
     },
     "slingshot": {

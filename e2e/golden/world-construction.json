@@ -900,15 +900,15 @@
   },
   "rogue-encounter": {
     "error": null,
-    "count": 98,
+    "count": 58,
     "byType": {
       "BlackHole": 1,
       "StarObject": 1,
       "Planet": 12,
       "GasGiant": 4,
-      "Asteroid": 80
+      "Asteroid": 40
     },
-    "totalMass": 31026.9415694,
+    "totalMass": 31026.9415506,
     "momentumResidual": "about 1e0 of the momentum summed",
     "scenarioName": "rogue-encounter",
     "presetSentinel": "None",
@@ -917,12 +917,12 @@
       "x": 0,
       "y": 0
     },
-    "bodies": "c5991483ee74bf11",
-    "settings": "083274cf3ec80ca9",
+    "bodies": "58e31c176a3f6387",
+    "settings": "55e6ed4bfd1860e5",
     "head": [
       "bh_list|0|BlackHole|1|Stellar Grave|30000|22.1935289174|-800|200|20|-5||",
       "stars|0|StarObject|0|Stellar Dynamo|1000|10|0|0|0|0||",
-      "planets|0|Planet|2|Eden Glorious|0.004035964989|5.46344255337|5.33327726008|49.7147478488|-5.44597776749|0.584231252155||"
+      "planets|0|Planet|2|Eden Glorious|0.004035964989|5.46344255337|1.0764960056|-49.9884102203|5.47595597829|0.117924229066||"
     ]
   },
   "neutron-star-collision": {

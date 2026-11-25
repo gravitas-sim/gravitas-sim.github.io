@@ -8947,8 +8947,8 @@
       "family": "flybys and assists",
       "planning": "REVIEW",
       "owner": 463,
-      "disposition": "OPEN",
-      "reason": "",
+      "disposition": "REVISED",
+      "reason": "CORRECT (the start, this row and its geometry entry) and REFRAME (the events, both languages): 40 asteroids over 350 to 600 units, so nothing starts overlapping under either review seed; ejection measured from a bound start (4 and 10 flung out) by a claim committed before its run; 4 fall into the hole under each seed; none is captured, so the card no longer says so. Revision 1 is retained. D-R4-463-12.",
       "pr": null
     },
     {
