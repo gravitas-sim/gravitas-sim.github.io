@@ -24,7 +24,7 @@
     }
   },
   "sourceFiles": 310,
-  "sourceDigest": "a13d73ff0e6013859dbd8fb24010a55769a0cfb43e251d4e23a60dc8a1d15288",
+  "sourceDigest": "a476e102f6bf95b4fae25ba8da3129bcb0dde76f4070506fc3081107bacbfbfc",
   "sources": {
     "js/activities/activities.js": "af9b7e121b9a72c2a5cc18e07331d6ee841934d402b030294d25c442628881ef",
     "js/activities/activityBridge.js": "ddd8015bf88938d98d967942048bc34e30a0099344b1055bd45a0459ec0333fe",
@@ -43,7 +43,7 @@
     "js/data/activityTeaching.js": "7694fc798f8c4130e5aead5357e69bab04d6a5d386013d009430dba9a1c31008",
     "js/data/exoplanetAnswerKey.js": "40af66407b9736f06d5fd9edbd962c34701453edd4e97bae82a1f886f6b32bb0",
     "js/data/instructorContent.es.js": "471a388f9e2abfbe837cdad387388f52f0a547d2ae5f466e66fa5680866d5d3c",
-    "js/data/instructorContent.js": "33dc479b07a7552716c05bfcff1f3ff064ff212ae6ab7a76194ef714f62e6f4a",
+    "js/data/instructorContent.js": "e8e63232b6628c890fd3849b5ba87f08d808266ef978d4bf3e8e2041052e40d9",
     "js/data/instructorExpectations.es.js": "5ec751fabe0ed60f692799c260ab8f383ffae25379c4b426efdd4351e0ae00ee",
     "js/data/instructorExpectations.js": "e8d86b40b78b70ac95c422c307db1d35053b77bc5843ea0814c5aac240f3aa5a",
     "js/data/instructorFlow.es.js": "f1c087e5240114351245f6a7fa7ad9b3efd269ec6d415183fd945ac95534fd86",
@@ -337,5 +337,5 @@
     "tools/instructor-freshness.mjs": "96052b2f27080f0243fdd4d5f7608927bd67f0c50808b6eac3345a65c14d1e28",
     "tools/source-closure.mjs": "961828e4d0d40d8a6f8c029fe9b9435ecaf39a74b62640efc0b4145c35c7650a"
   },
-  "contentDigest": "3ac7851bda380f11d4c521170b0439c5e11de081e9e22aac3bcbe84d93dd4058"
+  "contentDigest": "49448edd318a5d09fdf06fc8990ea0e07c3b234b1dd12da07bc7d58a7e452d40"
 }
