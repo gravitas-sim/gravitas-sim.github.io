@@ -220,6 +220,19 @@ export const FORMATS = Object.freeze([
     schema: 'world-link-2.schema.json',
   },
   {
+    name: 'world share link (with a scenario revision)',
+    fields: 'v (link prefix 3), r',
+    version: 3,
+    const: ['js/shareState.js', 'LINK_VERSION_READ'],
+    owner:
+      'js/shareState.js decodePayload, resolveRevision, linkVersionOf (SCENARIO_REVISIONS.md)',
+    persisted: 'link, inside a stored capture (an experiment record)',
+    older:
+      'reads v1 and v2 as they are; written only for a scenario at revision 2 or more, which none is yet',
+    newer: 'refused, in words',
+    schema: 'world-link-3.schema.json',
+  },
+  {
     name: 'built-in scenario id',
     fields: 'a public id (SCENARIO_INFO key)',
     version: 1,
@@ -355,7 +368,7 @@ export const FORMATS = Object.freeze([
   // --- Lessons, assignments and student work ---
   {
     name: 'gravitas.investigation-pack',
-    fields: 'format, formatVersion',
+    fields: 'format, formatVersion (a step setup may state `revision` from 2)',
     version: 1,
     const: ['js/platform/investigation.js', 'BASE_VERSION'],
     owner: 'js/platform/investigation.js migrateInvestigationPack',
@@ -538,7 +551,8 @@ export const FORMATS = Object.freeze([
   },
   {
     name: 'gravitas.course-pack (builder form)',
-    fields: 'format, formatVersion',
+    fields:
+      'format, formatVersion (a scenario item may state `revision` from 2)',
     version: 2,
     const: ['js/course/pack.js', 'BASE_VERSION'],
     owner: 'js/course/pack.js migrateCoursePack',
@@ -605,7 +619,7 @@ export const FORMATS = Object.freeze([
   },
   {
     name: 'gravitas.scenario-pack',
-    fields: 'format, formatVersion',
+    fields: 'format, formatVersion (`scenarioRevision` from 2)',
     version: 1,
     const: ['js/platform/scenario.js', 'FORMAT_VERSION'],
     owner: 'js/platform/scenario.js migrateScenarioPack',
@@ -954,6 +968,10 @@ export const COMPAT = Object.freeze({
   'experiment store': { fixture: 'experiment-store', unknown: 'ignored' },
   'gravitas.assignment': { fixture: 'assignment-link', unknown: 'n/a' },
   'world share link': { fixture: 'share-link', unknown: 'n/a' },
+  'world share link (with a scenario revision)': {
+    fixture: 'share-link',
+    unknown: 'n/a',
+  },
   'investigation progress': { fixture: 'progress-store', unknown: 'ignored' },
   'gravitas.investigation.progress': {
     fixture: 'progress-backup',
@@ -1061,6 +1079,7 @@ An older build is a real reader: a browser still running 2.0.0's cached code, a 
 - Where a change makes an older build refuse or silently misread, it is a major-version boundary and lands on the 3.0 train (Prompt 176).
 - Where a payload does not need new fields, the writer writes the old version.
 - A record a new reader needs that an old reader would ignore is never carried as an unknown field, because silent misreading is unsafe: it is a capability-required refusal with a message.
+- A scenario that has been corrected is a revision of its id (SCENARIO_REVISIONS.md). A link to revision 2 or more is world share link version 3 with a required \`r\`, which an older build refuses in words; a capture of that world inside a stored record (an experiment's initial state) is written full, with every setting in \`d\`, so an older build rebuilds the same settings and bodies; and a scenario pack, an investigation pack's setup and a course pack's scenario item state the revision in a key an older build refuses. Nothing is written until a scenario is corrected, and the record of a world at revision 1 keeps its bytes.
 
 **The support period.** ${SUPPORT_PERIOD}
 

@@ -65,7 +65,7 @@ import {
   newAssignmentId,
 } from './course/api.js';
 import { PREVIEW_KEY, courseLink, itemLink, rootOf } from './course/links.js';
-import { courseManifest, newCourseItem } from './course/manifest.js';
+import { courseManifest, newCourseItem, setWorld } from './course/manifest.js';
 import { embedParams } from './embedOptions.js';
 import { EMBED_ASPECT, figureMarkup } from './embedMarkup.js';
 import { createHistory, createDrafts, semanticDiff } from './studio/model.js';
@@ -947,9 +947,7 @@ function kindFields(d, item, base) {
               item.scenario,
               v =>
                 commit(x => {
-                  const it = getAt(x, base);
-                  it.scenario = v;
-                  it.title = { en: SCENARIO_INFO[v]?.title || v };
+                  setWorld(getAt(x, base), v, SCENARIO_INFO[v]?.title);
                 })
             )
           ),

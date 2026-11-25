@@ -7,6 +7,8 @@
 // =============================================================================
 
 import { packLink } from './packLink.js';
+// The revision registry, which the page reaches by the panel it already loads.
+export { setupFor } from '../shareState.js';
 import { loadOriginal, remixBuiltin, remixInvestigation } from './remixApi.js';
 
 /**
