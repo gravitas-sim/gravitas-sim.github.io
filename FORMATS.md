@@ -2,7 +2,7 @@
 
 # Formats
 
-Every versioned format Gravitas reads or writes: 73 of them. 73 have a JSON Schema in `sdk/schemas`, and 18 read their previous version rather than only their own.
+Every versioned format Gravitas reads or writes: 74 of them. 74 have a JSON Schema in `sdk/schemas`, and 19 read their previous version rather than only their own.
 
 Roadmap II Prompt 61 puts each under one rule:
 - a JSON Schema;
@@ -36,6 +36,7 @@ The columns:
 | gravitas.grid | format, formatVersion | 1 | js/dataKinds/contract.js validateGrid | repository, extension archive | v1 only | a validation problem | [yes](sdk/schemas/grid-1.schema.json) |
 | gravitas.instrument | format, formatVersion | 1 | js/instruments/validate.js validatePack | repository, extension archive | v1 only | a validation problem | [yes](sdk/schemas/instrument-1.schema.json) |
 | world share link | v (link prefix 2) | 2 | js/shareState.js decodePayload | link | reads v1, whose scenario is an English name, by id | refused, in words | [yes](sdk/schemas/world-link-2.schema.json) |
+| world share link (with a scenario revision) | v (link prefix 3), r | 3 | js/shareState.js decodePayload, resolveRevision, linkVersionOf (SCENARIO_REVISIONS.md) | link, inside a stored capture (an experiment record) | reads v1 and v2 as they are; written only for a scenario at revision 2 or more, which none is yet | refused, in words | [yes](sdk/schemas/world-link-3.schema.json) |
 | built-in scenario id | a public id (SCENARIO_INFO key) | 1 | js/scenarios.js scenarioId, js/data/scenarioInfo.js scenarioId | link, lesson, course pack, investigation pack, experiment, notebook entry | reads the English name it was keyed by before ids | refused: a link in words, a pack by its validator | [yes](sdk/schemas/scenario-id-1.schema.json) |
 | experiment link block (xp) | v | 1 | js/experiments/shareExperiment.js readExperimentBlock | link | v1 only | reported, not checked | [yes](sdk/schemas/experiment-link-block-1.schema.json) |
 | link extras (x) | v | 1 | js/experiments/canonicalState.js readExtras | link | v1 only | reported, not checked | [yes](sdk/schemas/link-extras-1.schema.json) |
@@ -48,7 +49,7 @@ The columns:
 | experiment store | v, beside format and formatVersion | 3 | js/experiments/store.js migrate | localStorage | migrates v1 and v2; a record without a format is read by v | refused by reason code | [yes](sdk/schemas/experiment-store-3.schema.json) |
 | gravitas.mission-plan | format, formatVersion | 1 | js/mission/link.js readPlan | download, My work | v1 only | fields it does not know are dropped; a plan with a wrong field is refused, in words | [yes](sdk/schemas/mission-plan-1.schema.json) |
 | gravitas.ephemeris-pack | format, formatVersion | 1 | js/mission/ephemeris.js createEphemeris | repository | v1 only | refused | [yes](sdk/schemas/ephemeris-pack-1.schema.json) |
-| gravitas.investigation-pack | format, formatVersion | 1 | js/platform/investigation.js migrateInvestigationPack | download, localStorage, repository | v1 only | refused, in words: a /2 file is "newer" | [yes](sdk/schemas/investigation-pack-1.schema.json) |
+| gravitas.investigation-pack | format, formatVersion (a step setup may state `revision` from 2) | 1 | js/platform/investigation.js migrateInvestigationPack | download, localStorage, repository | v1 only | refused, in words: a /2 file is "newer" | [yes](sdk/schemas/investigation-pack-1.schema.json) |
 | gravitas.investigation-pack (with criterion kinds, depths or weights) | format, formatVersion | 2 | js/platform/investigation.js validateInvestigationPack, packVersion | download, localStorage, repository | reads v1 as it is; written only when /1 cannot say it | refused, in words | [yes](sdk/schemas/investigation-pack-2.schema.json) |
 | gravitas.question-bank | format, formatVersion | 1 | js/platform/questionBank.js validateQuestionBankWith | download | v1 only | a validation problem: a /2 file must be 1 | [yes](sdk/schemas/question-bank-1.schema.json) |
 | gravitas.question-bank (with criterion kinds, depths or weights) | format, formatVersion | 2 | js/platform/questionBank.js validateQuestionBankWith, bankVersion | download | reads v1 as it is; written only when /1 cannot say it | a validation problem | [yes](sdk/schemas/question-bank-2.schema.json) |
@@ -65,13 +66,13 @@ The columns:
 | gravitas.evidence.notebook | kind, version | 1 | js/notebook/notebook.js validateBackup | download | v1 only | refused, in words | [yes](sdk/schemas/evidence-notebook-1.schema.json) |
 | gravitas.ledger | LEDGER_FORMAT (a record, not a file) | 1 | js/submission/ledgerDigest.js checkEvidence | inside a submission token (ev), never alone | v1 only | checked as a mismatch, in words | [yes](sdk/schemas/ledger-1.schema.json) |
 | gravitas.course-pack (extension form) | format, formatVersion | 1 | js/platform/course.js validateCoursePack | repository, extension archive, IndexedDB | v1 only | a validation problem, which /2 gets too | [yes](sdk/schemas/course-pack-1.schema.json) |
-| gravitas.course-pack (builder form) | format, formatVersion | 2 | js/course/pack.js migrateCoursePack | download, localStorage, repository, extension archive | migrates v1 | refused, in words: a /3 file is "made by a newer version" | [yes](sdk/schemas/course-pack-2.schema.json) |
+| gravitas.course-pack (builder form) | format, formatVersion (a scenario item may state `revision` from 2) | 2 | js/course/pack.js migrateCoursePack | download, localStorage, repository, extension archive | migrates v1 | refused, in words: a /3 file is "made by a newer version" | [yes](sdk/schemas/course-pack-2.schema.json) |
 | gravitas.course-pack (builder form, with a profile, a term or outcomes) | format, formatVersion | 3 | js/course/pack.js validateCoursePack, packVersion | download, localStorage, repository, extension archive | migrates v1 and reads v2 as it is; written only when /2 cannot say it | refused, in words | [yes](sdk/schemas/course-pack-3.schema.json) |
 | course home link | link prefix c | 3 | js/course/links.js readCourseFragment | link | migrates c1 and reads c2 as it is; c3 only for a pack that needs /3 | refused by reason code | [yes](sdk/schemas/course-home-link-3.schema.json) |
 | investigation link | link prefix i | 2 | js/composer/packLink.js readPackFragment | link | reads v1 (i1) as it is; i2 only for a pack that needs /2 | refused by reason code | [yes](sdk/schemas/investigation-link-2.schema.json) |
 | gravitas.course-manifest | format, formatVersion | 1 | none: written, never read | download | v1 only | nothing reads it | [yes](sdk/schemas/course-manifest-1.schema.json) |
 | gravitas.capability-package | format, formatVersion | 1 | js/platform/manifest.js validateManifest | repository, IndexedDB | v1 only | refused, in words | [yes](sdk/schemas/capability-package-1.schema.json) |
-| gravitas.scenario-pack | format, formatVersion | 1 | js/platform/scenario.js migrateScenarioPack | download, localStorage, link | v1 only; reads orbital-system/1 | refused, in words | [yes](sdk/schemas/scenario-pack-1.schema.json) |
+| gravitas.scenario-pack | format, formatVersion (`scenarioRevision` from 2) | 1 | js/platform/scenario.js migrateScenarioPack | download, localStorage, link | v1 only; reads orbital-system/1 | refused, in words | [yes](sdk/schemas/scenario-pack-1.schema.json) |
 | gravitas.catalog | format, formatVersion | 1 | js/catalogPage.js load | repository | v1 only | refused | [yes](sdk/schemas/catalog-1.schema.json) |
 | gravitas.library | format, formatVersion | 1 | js/library/format.js checkLibrary | repository | v1 only | refused | [yes](sdk/schemas/library-1.schema.json) |
 | gravitas.catalog-curation | format, formatVersion | 1 | tools/catalog.mjs readCuration | repository | not checked | not checked | [yes](sdk/schemas/catalog-curation-1.schema.json) |
@@ -116,6 +117,7 @@ An older build is a real reader: a browser still running 2.0.0's cached code, a 
 - Where a change makes an older build refuse or silently misread, it is a major-version boundary and lands on the 3.0 train (Prompt 176).
 - Where a payload does not need new fields, the writer writes the old version.
 - A record a new reader needs that an old reader would ignore is never carried as an unknown field, because silent misreading is unsafe: it is a capability-required refusal with a message.
+- A scenario that has been corrected is a revision of its id (SCENARIO_REVISIONS.md). A link to revision 2 or more is world share link version 3 with a required `r`, which an older build refuses in words; a capture of that world inside a stored record (an experiment's initial state) is written full, with every setting in `d`, so an older build rebuilds the same settings and bodies; and a scenario pack, an investigation pack's setup and a course pack's scenario item state the revision in a key an older build refuses. Nothing is written until a scenario is corrected, and the record of a world at revision 1 keeps its bytes.
 
 **The support period.** Within a major version a reader is never withdrawn. When a later major version supersedes a format version, the old version is deprecated for the major version's first twelve months (read and written), then read-only for twelve more (read, never written; a new write is refused with an export path), then retired (refused, in words, with an export path). A period is counted from the release date of the major version that supersedes it, and a retirement is announced in CHANGELOG.md one release before it takes effect.
 
@@ -140,6 +142,7 @@ An older build is a real reader: a browser still running 2.0.0's cached code, a 
 | gravitas.grid | none yet | not yet exercised | policy (above) |
 | gravitas.instrument | none yet | not yet exercised | policy (above) |
 | world share link | `share-link` | n/a | policy (above) |
+| world share link (with a scenario revision) | `share-link` | n/a | policy (above) |
 | built-in scenario id | none yet | not yet exercised | policy (above) |
 | experiment link block (xp) | none yet | not yet exercised | policy (above) |
 | link extras (x) | none yet | not yet exercised | policy (above) |
@@ -236,7 +239,7 @@ A change an older build refuses or misreads is a major version, and this is the 
 | course home link | c | c1 (read, migrated), c2 (written), c3 (written, new) | c3 only for a pack that needs /3; every other course is c2 | a 2.0.0 course home refuses c3 by reason code (newerVersion) |
 | investigation link | i | i1 (written), i2 (written, new) | i2 only for a pack that needs /2; every other pack is i1 | a 2.0.0 build refuses i2 by reason code (newerVersion) |
 | assignment link | a | a1 (written), a2 (written) | unchanged: `x`, `u`, `m` and `mo` are written only when set and do not change the version | a 2.0.0 build opens it and does not show them (the corpus entry assignment-link-presentation) |
-| world share link | (none) | v1 (read), v2 (written) | unchanged by 3.0.0 | not affected |
+| world share link | (none) | v1 (read), v2 (written), v3 (written, new) | v3 only for a scenario at revision 2 or more (none is yet); every other link is v2 (or v1, from the build tools) with the bytes it always had | a 2.0.0 or 3.0 build refuses a v3 link: "This link was made by a newer version of Gravitas" |
 
 **For the release notes** (generated here from the table above; the notes quote it):
 - A course, a lesson pack, a question bank, a result envelope, a link or a workspace file that needs nothing new opens in 2.0.0 and in 3.0.0 alike.
@@ -247,7 +250,7 @@ A change an older build refuses or misreads is a major version, and this is the 
 
 ## The freeze (Prompt 290)
 
-Every format in the table has a JSON Schema, a `format` and a version, and a row here: 73 rows, 67 ids. The audit that froze the table found four formats the first inventory had missed (`gravitas.instructor-expectations`, `gravitas.instructor-flow`, `gravitas.library-search`, `gravitas.sun-frames`: files in the repository with a version and, for the first two, a reader of their previous version) and gave them rows and schemas; it added no format.
+Every format in the table has a JSON Schema, a `format` and a version, and a row here: 74 rows, 67 ids. The audit that froze the table found four formats the first inventory had missed (`gravitas.instructor-expectations`, `gravitas.instructor-flow`, `gravitas.library-search`, `gravitas.sun-frames`: files in the repository with a version and, for the first two, a reader of their previous version) and gave them rows and schemas; it added no format.
 
 - **No new format without a reason.** A format id the sources write under a `format` key, or as a `*_FORMAT` constant, that is not in the freeze fails `tests/formats.test.js`. A new format needs a row above, a schema, a version and a row in `DECISION_REGISTER.md`, named in `FREEZE.additions` in `tools/formats.mjs`, that says why it is a new format and not a field of an existing one. A field an older build cannot ignore is a new version of the format that has it (the 3.0.0 boundary, above), not a new format.
 - **No row without a schema.** `tests/formats.test.js` fails a row with no schema file, no version or a schema whose title is not its row, and a file in `sdk/schemas` that no row lists.

@@ -328,7 +328,7 @@ so would be blamed on the integrator.
 The definitions are deliberately the ones
 [`tools/scenario-stability.mjs`](tools/scenario-stability.mjs) already used
 offline: total kinetic plus full pairwise potential, and angular momentum about
-the instantaneous center of mass, over every massive body that is not culled.
+the instantaneous center of mass, over every live massive body.
 A readout that measured something slightly different from the validation harness
 would let one of them pass while the other failed and leave nobody able to say
 which was right.

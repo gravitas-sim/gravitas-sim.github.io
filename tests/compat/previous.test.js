@@ -48,6 +48,8 @@ const reads = {
   'setup-v0': d => readSetup(d).ok,
   'share-link-v1': async d =>
     (await decodePayload(await encodeTagged('', 1, d))).s === 'solar-system',
+  'share-link-v2': async d =>
+    (await decodePayload(await encodeTagged('', 2, d))).s === 'solar-system',
   'scenario-name': d => scenarioId(d) === 'solar-system',
   'store-v1': d => {
     const r = migrateStore(d);

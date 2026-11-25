@@ -28,8 +28,10 @@
 import {
   COMFORTABLE_URL_LENGTH,
   decodeTagged,
+  encodePayload,
   encodeTagged,
   LINK_VERSION,
+  withRevision,
 } from '../shareState.js';
 import {
   ASSIGNMENT_KIND,
@@ -80,13 +82,19 @@ export function assignmentPayload(item, locale) {
  * The world payload a scenario item makes: the scenario at its seed, as the
  * pack names it - by id, or in English in a pack older than ids, which the
  * link's reader resolves. Resolving it here would cost this page the table.
+ * The item is a declaration: it means the revision it states (`revision`), and
+ * revision 1 if it states none, so its link is written as that revision.
  */
-export const scenarioPayload = item => ({
-  v: LINK_VERSION,
-  s: item.scenario,
-  seed: formatSeed(parseSeed(item.seed)),
-  ...(item.paused ? { p: 1 } : {}),
-});
+export const scenarioPayload = item =>
+  withRevision(
+    {
+      v: LINK_VERSION,
+      s: item.scenario,
+      seed: formatSeed(parseSeed(item.seed)),
+      ...(item.paused ? { p: 1 } : {}),
+    },
+    item.revision
+  );
 
 /**
  * An item's link, in one language.
@@ -119,7 +127,7 @@ export async function itemLink(item, { root, locale = 'en', level }) {
     }
     case 'scenario':
       return {
-        href: `${root}#${await encodeTagged('', LINK_VERSION, scenarioPayload(item))}`,
+        href: `${root}#${await encodePayload(scenarioPayload(item))}`,
         kind: 'app',
       };
     case 'guide':

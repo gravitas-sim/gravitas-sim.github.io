@@ -16,7 +16,7 @@ import {
   getPhysicsSetting,
   state,
 } from './physics.js';
-import { dominantPrimary } from './orbital.js';
+import { primaryOf, PRIMARY_KINDS } from './orbital.js';
 import { currentTimeDays, transitAnalysis } from './lightCurve.js';
 import { currentRadialVelocity } from './radialVelocity.js';
 import { auToSim, simToAu } from './units.js';
@@ -106,9 +106,9 @@ function fillBodies() {
     const target = chosen?.alive ? chosen : bodies[bodies.length - 1];
     if (target) {
       e.body.value = String(target.id);
-      const primary = dominantPrimary(
+      const primary = primaryOf(
         target,
-        bodies.filter(b => b !== target)
+        bodies.filter(b => b !== target && PRIMARY_KINDS.has(b.kind))
       );
       if (primary) e.primary.value = String(primary.id);
     }

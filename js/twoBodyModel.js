@@ -10,6 +10,7 @@
 // =============================================================================
 
 import { isSourceKind, gravityRoles, canMoveNow } from './engine/sources.js';
+import { orbitalElements } from './orbital.js';
 
 // Bound once: free globals are 8-25x slower in Jest's vm context.
 const { Math } = globalThis;
@@ -103,4 +104,23 @@ export function twoBodyModel(body, primary, settings, distances) {
     softening,
     haloRatio,
   };
+}
+
+/**
+ * Two-body elements with the pair's own mu (twoBodyModel), whatever the
+ * domain: for a caller that measures, and says the domain itself.
+ * @param {Object} body - The orbiting body
+ * @param {Object} primary - Its primary
+ * @param {Object} settings - As twoBodyModel's
+ * @returns {Object|null} orbitalElements' result, or null when the primary
+ *   does not pull on the body
+ */
+export function pairElements(body, primary, settings) {
+  const m = twoBodyModel(body, primary, settings);
+  if (!m || m.pairClass === 'none') return null;
+  return orbitalElements(
+    body,
+    primary,
+    m.mu / (primary.mass + (body.mass || 0))
+  );
 }

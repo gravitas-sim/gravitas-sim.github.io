@@ -224,4 +224,6 @@ export const ES_STUDIO = {
     'Pon esto a 0: un escenario con sus propios cuerpos no los genera también.',
   'studio.error.scenario':
     'Un escenario incluido, por su identificador (como solar-system), y en ese caso ningún cuerpo propio.',
+  'studio.error.scenarioRevision':
+    'Una revisión de 2 o más, junto al escenario incluido del que es revisión.',
 };

@@ -71,8 +71,9 @@ for (const size of FRAMING_SIZES) {
 
 // Moving the camera must not rebuild a world, change its seed or move a body:
 // one step of each kind of scene, the bodies compared before and after a fit
-// taken in the same task (no frame runs between), and no body that was in the
-// engine's keep region before a fit is outside it after.
+// taken in the same task (no frame runs between). The engine no longer removes
+// a body for leaving the view (tests/cameraIndependence.test.js), so there is
+// no keep region left to compare.
 test.describe('framing leaves the world as it is', () => {
   const kinds = ['setup', 'engine-stage', 'model-stage', 'shelf', 'bind'];
   const list = sceneSteps(INVESTIGATIONS);
@@ -87,22 +88,6 @@ test.describe('framing leaves the world as it is', () => {
         const phys = await import('/js/physics.js');
         const frame = await import('/js/lessonFrame.js');
         const ui = await import('/js/ui.js');
-        const utils = await import('/js/utils.js');
-        const canvas = document.getElementById('simulationCanvas');
-        // The engine drops a body far off the screen (js/engine/step.js): the
-        // bodies it would drop at this camera, by id.
-        const culled = () =>
-          ls
-            .allBodies()
-            .filter(b =>
-              utils.isOffscreen(
-                b.pos,
-                ui.state,
-                canvas,
-                20 * Math.max(1, ui.state.zoom)
-              )
-            )
-            .map(b => b.id);
         const snap = () =>
           JSON.stringify([
             phys.getWorldGeneration(),
@@ -121,27 +106,21 @@ test.describe('framing leaves the world as it is', () => {
           ]);
         const before = snap();
         const camera = JSON.stringify([ui.state.zoom, ui.state.pan]);
-        const culledBefore = culled();
         frame.fitNow(frame.boundPoints().length ? frame.boundPoints() : []);
         frame.requestFit();
         frame.takeFit();
-        const culledAfter = culled();
         frame.fitNow([
           { x: 1e3, y: -2e3, radius: 5 },
           { x: 0, y: 0, radius: 5 },
         ]);
         return {
           same: snap() === before,
-          newlyCulled: culledAfter.filter(id => !culledBefore.includes(id)),
           moved: JSON.stringify([ui.state.zoom, ui.state.pan]) !== camera,
           bodies: ls.allBodies().length,
         };
       });
       expect(result.bodies).toBeGreaterThan(0);
       expect(result.same, 'bodies and world generation unchanged').toBe(true);
-      expect(result.newlyCulled, 'a fit leaves no body to be culled').toEqual(
-        []
-      );
       expect(result.moved, 'the camera did move').toBe(true);
     });
   }

@@ -266,7 +266,6 @@ export function investigationModelRows({ manifest, instructor }) {
  */
 export function irreversibleRows(operations) {
   const KIND_LABEL = {
-    cull: 'Deleted when far away',
     merge: 'Merged',
     collapse: 'Replaced',
     damping: 'Damped',

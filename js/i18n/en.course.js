@@ -267,6 +267,7 @@ export const EN_COURSE = {
     'This course file is from another version of the format.',
   'course.error.id': 'Lower-case words joined by hyphens.',
   'course.error.seed': 'A word such as orbit-1.',
+  'course.error.revision': 'A scenario revision: a whole number, 2 or more.',
   'course.error.profile':
     'The profile is “collection”, or the field is left out.',
   'course.error.collectionUnits': 'A collection has exactly one unit.',

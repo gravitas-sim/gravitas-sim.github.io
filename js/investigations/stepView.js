@@ -178,6 +178,13 @@ export function stepMarkup(step, c) {
     `<h3 class="inv-step-title">${markHeld(active?.steps, step, visited)}${escape(step.title)}</h3>`,
     `<div class="inv-step-body"><p>${prose(step.body)}</p></div>`,
   ];
+  // A lesson whose task depends on how big a body is carries the canvas's
+  // own size line beside the task, as the button that opens the Sizes
+  // statement: its words and its dialog, not a second statement.
+  if (active?.sizes)
+    parts.push(
+      `<p class="inv-sizes"><button type="button" data-open-sizes>${escape(t('canvas.sizeDisclosure'))}</button></p>`
+    );
 
   if (step.type === 'wedges') {
     const n = getAreaSweepWedges();
@@ -700,6 +707,12 @@ export function bindStepInputs(h) {
     document.getElementById('objectInspector')?.style.display === 'none'
   )
     import('../orbitGeometryOverlay.js').then(m => m.setOrbitGeometry(false));
+  const sizes = els.body.querySelector('[data-open-sizes]');
+  sizes?.addEventListener('click', () =>
+    import('../sizeStatement.js')
+      .then(m => m.openSizeStatement(sizes))
+      .catch(() => announce(t('sizes.offline')))
+  );
   els.body.querySelector('[data-change]')?.addEventListener('click', () => {
     delete h.responses()[id];
     h.save();
