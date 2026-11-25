@@ -18,14 +18,14 @@
       "transit": {
         "kb": 2677.5,
         "requests": 142,
-        "toolKb": 2920.8,
-        "toolRequests": 168
+        "toolKb": 2917.4,
+        "toolRequests": 166
       },
       "power-law": {
         "kb": 2637.2,
         "requests": 142,
-        "toolKb": 2710.7,
-        "toolRequests": 149
+        "toolKb": 2707.2,
+        "toolRequests": 147
       },
       "largest-lesson": {
         "kb": 2959.7,
