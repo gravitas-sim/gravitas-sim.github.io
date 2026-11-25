@@ -341,7 +341,7 @@ run directly, so debugging never requires a build step.
 ### Everything else
 
 ```bash
-npm test                  # <!--fact:jestTests-->23134<!--/fact--> tests across <!--fact:jestSuites-->711<!--/fact--> suites
+npm test                  # <!--fact:jestTests-->23156<!--/fact--> tests across <!--fact:jestSuites-->712<!--/fact--> suites
 npm run validate:physics  # the physics validation table
 npm run e2e               # browser smoke tests, against the sources
 npm run lint              # eslint
@@ -366,9 +366,9 @@ reports what the browser downloads at start-up separately from what is deferred:
 | What                   | Size                                                   | Files / chunks                                |
 | ---------------------- | ------------------------------------------------------ | --------------------------------------------- |
 | CSS                    | <!--fact:buildCss-->211<!--/fact--> KB                 | 1                                             |
-| JavaScript at start-up | <!--fact:buildStartupJs-->538<!--/fact--> KB           | <!--fact:buildStartupFiles-->55<!--/fact-->   |
+| JavaScript at start-up | <!--fact:buildStartupJs-->539<!--/fact--> KB           | <!--fact:buildStartupFiles-->55<!--/fact-->   |
 | JavaScript on demand   | <!--fact:buildDeferredJs-->9119<!--/fact--> KB         | <!--fact:buildDeferredChunks-->863<!--/fact--> |
-| **Initial download**   | **<!--fact:buildInitialDownload-->749<!--/fact--> KB** |                                               |
+| **Initial download**   | **<!--fact:buildInitialDownload-->750<!--/fact--> KB** |                                               |
 
 Those figures are the last build's, to the nearest kilobyte, and are written
 into the page by `npm run docs:sync` from `dist/build-summary.json` rather than

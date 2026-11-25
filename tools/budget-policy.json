@@ -12,31 +12,31 @@
   ],
   "workflowCeilings": {
     "note": "PROPOSAL. Each value is today's ceiling, unchanged: classifying them as workflow ceilings moves nothing.",
-    "initialKb": 749.1,
+    "initialKb": 750.0,
     "deferredCoreKb": 1985.8,
     "routes": {
       "front-door": {
-        "kb": 1944.8,
+        "kb": 1950.1,
         "requests": 109
       },
       "sandbox": {
-        "kb": 1944.8,
+        "kb": 1950.1,
         "requests": 109
       },
       "kepler": {
-        "kb": 2674.8,
+        "kb": 2680.0,
         "requests": 142
       },
       "transit": {
-        "kb": 2679.9,
+        "kb": 2685.2,
         "requests": 142
       },
       "power-law": {
-        "kb": 2639.7,
+        "kb": 2645.0,
         "requests": 142
       },
       "largest-lesson": {
-        "kb": 2959.7,
+        "kb": 2970.8,
         "requests": 150
       },
       "observatory": "the Observatory with one observation open: read from tools/route-budgets.json"

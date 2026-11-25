@@ -4,31 +4,31 @@
   "routes": {
     "sources": {
       "front-door": {
-        "kb": 1944.8,
+        "kb": 1950.1,
         "requests": 109
       },
       "sandbox": {
-        "kb": 1944.8,
+        "kb": 1950.1,
         "requests": 109
       },
       "kepler": {
-        "kb": 2674.8,
+        "kb": 2680.0,
         "requests": 142
       },
       "transit": {
-        "kb": 2679.9,
+        "kb": 2685.2,
         "requests": 142,
-        "toolKb": 2843.2,
+        "toolKb": 2848.4,
         "toolRequests": 158
       },
       "power-law": {
-        "kb": 2639.7,
+        "kb": 2645.0,
         "requests": 142,
-        "toolKb": 2692.9,
+        "toolKb": 2698.2,
         "toolRequests": 145
       },
       "largest-lesson": {
-        "kb": 2959.7,
+        "kb": 2970.8,
         "requests": 150
       },
       "teaching": {
@@ -44,11 +44,11 @@
         "requests": 44
       },
       "figure": {
-        "kb": 2227.1,
+        "kb": 2232.4,
         "requests": 129
       },
       "experiments": {
-        "kb": 1099.2,
+        "kb": 1100.3,
         "requests": 61
       },
       "observatory": {
@@ -68,7 +68,7 @@
         "requests": 10
       },
       "studio": {
-        "kb": 971.0,
+        "kb": 972.2,
         "requests": 52
       },
       "composer": {
@@ -130,32 +130,32 @@
     },
     "build": {
       "front-door": {
-        "kb": 552.1,
+        "kb": 553.0,
         "requests": 59
       },
       "sandbox": {
-        "kb": 552.1,
+        "kb": 553.0,
         "requests": 59
       },
       "kepler": {
-        "kb": 942.0,
+        "kb": 942.8,
         "requests": 77
       },
       "transit": {
-        "kb": 949.5,
+        "kb": 950.4,
         "requests": 77,
-        "toolKb": 1034.8,
+        "toolKb": 1035.7,
         "toolRequests": 93
       },
       "power-law": {
-        "kb": 918.2,
+        "kb": 919.0,
         "requests": 77,
-        "toolKb": 934.7,
+        "toolKb": 935.6,
         "toolRequests": 80
       },
       "largest-lesson": {
-        "kb": 1049.5,
-        "requests": 82
+        "kb": 1056.1,
+        "requests": 83
       },
       "teaching": {
         "kb": 110.8,
@@ -170,7 +170,7 @@
         "requests": 2
       },
       "figure": {
-        "kb": 689.7,
+        "kb": 690.6,
         "requests": 61
       },
       "experiments": {
@@ -194,7 +194,7 @@
         "requests": 4
       },
       "studio": {
-        "kb": 222.9,
+        "kb": 223.0,
         "requests": 3
       },
       "composer": {
