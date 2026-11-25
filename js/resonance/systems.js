@@ -448,9 +448,9 @@ export const JUPITER_TROJANS = {
       // it is scattered onto an eccentric orbit within seventy Jupiter years,
       // at 1.25 its eccentricity after the same run is 0.002.
       //
-      // Its Keplerian period ratio with Jupiter is 1.3975, 0.18% from 7:5; the
-      // instrument settles near 1.406, 0.3 to 0.5% from it, as close as the moons'
-      // own ratios. Its angle circulates: not a coincidence to tidy, the lesson.
+      // Keplerian period ratio with Jupiter 1.3975, 0.18% from 7:5; measured
+      // 1.406, as Jupiter's pull lifts it 0.6%, and as close as the moons' own.
+      // Its angle circulates: not a coincidence to tidy, the lesson.
       name: 'Wide orbit probe',
       offsetDeg: 60,
       axisMultiplier: 1.25,

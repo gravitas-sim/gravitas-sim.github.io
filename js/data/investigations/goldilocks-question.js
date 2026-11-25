@@ -41,7 +41,7 @@ const HZ_RINGS_WIDE = {
   settings: { habitable_zone_optimism: 1.7 },
 };
 
-// TRAPPIST-1 is 0.06 AU across, so it needs roughly thirty times the zoom the
+// TRAPPIST-1 reaches out to 0.06 AU, so it needs roughly thirty times the zoom the
 // Solar System does before anything is visible at all.
 const HZ_TRAPPIST = {
   scenario: 'TRAPPIST-1 System',
@@ -656,7 +656,7 @@ const GOLDILOCKS = {
       kind: 'short',
       body: `Mars is inside the habitable zone. Mars has no liquid water
              anywhere on its surface and has had none for something like three
-             billion years. Its atmosphere is about a hundredth the pressure of
+             billion years. Its atmosphere is less than a hundredth the pressure of
              Earth's, and its average surface temperature is around −60 °C.
              \n\nSo either the calculation is wrong, or the calculation is
              answering a narrower question than the name suggests.`,
@@ -1027,8 +1027,8 @@ const GOLDILOCKS = {
              planets on their real orbits and the habitable zone drawn at the
              same scale as everything else.
              \n\nThe view is zoomed in about thirty times further than the
-             Solar System steps, because the entire system is six hundredths of
-             an astronomical unit across. TRAPPIST-1b completes an orbit in a
+             Solar System steps, because the entire system reaches out to six
+             hundredths of an astronomical unit. TRAPPIST-1b completes an orbit in a
              day and a half; h takes nineteen days.
              \n\nOne caution is printed on the ring itself. TRAPPIST-1 at
              2,566 K is cooler than the temperature range the published fit
