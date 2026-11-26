@@ -488,21 +488,68 @@ export const messages = () =>
   }));
 
 /**
- * The depth a lesson opens at and the lesson to open, for the engine.
- * Precedence: the instructor's (assignment), the student's own choice, the
- * course level's. Deeper steps are laid in when read at, or ever read at,
- * anything deeper than core, so their answers are read.
+ * Which depth a lesson opens at, and why. The order is DEPTH.md's: an
+ * assignment (the instructor's), a link, the student's saved choice, the
+ * course level. A depth the lesson does not offer is passed over for the next
+ * source; an assignment that names none reads core. A link that differs from a
+ * saved choice is read, but `choice`, what the progress record keeps, stays
+ * the saved one: the link does not overwrite it until the student switches.
+ * @param {object} o
+ * @param {string[]} [o.offered] - The depths the lesson offers
+ * @param {?{d?: string}} [o.assignment] - The assignment being opened
+ * @param {?string} [o.link] - The depth the link names
+ * @param {?string} [o.saved] - The saved choice (`depth` of the record)
+ * @param {?string} [o.level] - The course level
+ * @returns {{depth: string, source: string, choice: ?string, kept: ?string}}
+ *   `source` is assignment, link, choice, level or core; `kept` the saved
+ *   choice a different link opened over, else null
+ */
+export function resolveDepth({ offered = [], assignment, link, saved, level }) {
+  const use = d => (offered.includes(d) ? d : null);
+  const choice = DEPTHS.includes(saved) ? saved : null;
+  if (assignment)
+    return {
+      depth: use(assignment.d) ?? 'core',
+      source: 'assignment',
+      choice: null,
+      kept: null,
+    };
+  const linked = use(link);
+  if (linked) {
+    const kept = use(choice) && choice !== linked ? choice : null;
+    return { depth: linked, source: 'link', choice: kept ?? linked, kept };
+  }
+  const own = use(choice);
+  const lv = use(LEVEL_DEPTH[level]);
+  return {
+    depth: own ?? (choice ? null : lv) ?? 'core',
+    source: own ? 'choice' : !choice && lv ? 'level' : 'core',
+    choice,
+    kept: null,
+  };
+}
+
+/**
+ * The depth a lesson opens at and the lesson to open, for the engine
+ * (resolveDepth holds the precedence). Deeper steps are laid in when read at,
+ * or ever read at, anything deeper than core, so their answers are read.
  * @param {object} lesson - The lesson from the registry
  * @param {object} mem - Saved progress (`depth`, `deepest`) and `level`
  * @param {?object} assignment - The assignment being opened, if any
  * @param {string} locale - The language the lesson is in
- * @returns {Promise<{inv: object, depth: string, depthChoice: ?string, deepest: string, depthName: string}>}
+ * @param {object} [ui] - `link` (the depth a link named), `note` (the element
+ *   that says where the depth came from) and `change(by)` (the engine's switch)
+ * @returns {Promise<{inv: object, depth: string, depthChoice: ?string, deepest: string, depthName: string, said: string}>}
  */
-export async function openDepth(lesson, mem, assignment, locale) {
-  const offered = lesson.depths || [];
-  const choice = DEPTHS.includes(mem?.depth) ? mem.depth : null;
-  const want = assignment ? assignment.d : (choice ?? LEVEL_DEPTH[mem?.level]);
-  const depth = offered.includes(want) ? want : 'core';
+export async function openDepth(lesson, mem, assignment, locale, ui = {}) {
+  const r = resolveDepth({
+    offered: lesson.depths || [],
+    assignment,
+    link: ui.link,
+    saved: mem?.depth,
+    level: mem?.level,
+  });
+  const { depth } = r;
   const deepest = [depth, mem?.deepest].reduce(
     (a, b) => (DEPTHS.indexOf(b) > DEPTHS.indexOf(a) ? b : a),
     'core'
@@ -511,16 +558,48 @@ export async function openDepth(lesson, mem, assignment, locale) {
     DEPTHS.indexOf(deepest) > 0 ? withDepth(lesson, locale) : lesson,
     messages(),
   ]);
+  // Said once, in the panel and to a screen reader, never on every render.
+  const said = noteDepth(ui.note, r, assignment, ui.change);
   return {
     inv,
     depth,
-    depthChoice: assignment ? null : choice,
+    depthChoice: assignment ? null : r.choice,
     deepest,
-    depthName:
-      depth === 'core' && !assignment
-        ? ''
-        : t('inv.depth.state', { depth: t(`inv.depth.${depth}`) }),
+    depthName: t(`inv.depth.${depth}`),
+    said,
   };
+}
+
+/**
+ * Where the depth a student is reading came from, when it is not their own:
+ * a link that opened a different one (with the one action that keeps theirs)
+ * or the instructor's. Writes into `el` (the note's paragraph and button).
+ * @returns {string} The sentence, for the announcement
+ */
+let noted = null;
+function noteDepth(el, r, assignment, change) {
+  noted = el;
+  const adj = d => t(`inv.depth.adj.${d}`);
+  const text = r.kept
+    ? t('inv.depth.link', { depth: adj(r.depth), saved: adj(r.kept) })
+    : assignment?.d
+      ? t('inv.depth.set', { depth: adj(r.depth) })
+      : '';
+  if (!el) return text;
+  const [p, keep] = el.querySelectorAll('p, button');
+  el.hidden = !text;
+  p.textContent = text;
+  keep.hidden = !r.kept;
+  if (r.kept) {
+    keep.textContent = t('inv.depth.keep');
+    keep.setAttribute(
+      'aria-label',
+      t('inv.depth.keepAll', { saved: adj(r.kept) })
+    );
+    keep.onclick = () =>
+      change(DEPTHS.indexOf(r.kept) - DEPTHS.indexOf(r.depth));
+  }
+  return text;
 }
 
 /**
@@ -543,6 +622,7 @@ export async function change({
 }) {
   const to = DEPTHS[DEPTHS.indexOf(depth) + by];
   if (!to || !active.depths.includes(to)) return null;
+  if (noted) noted.hidden = true;
   const here = active.steps[stepIndex]?.sid;
   const [lesson] = await Promise.all([
     by > 0 ? withDepth(active, locale) : active,
@@ -565,7 +645,7 @@ export async function change({
     depth: to,
     deepest: DEPTHS.indexOf(to) > DEPTHS.indexOf(deepest) ? to : deepest,
     at,
-    depthName: t('inv.depth.state', { depth: name }),
-    said: t('inv.depth.changed', { depth: name }),
+    depthName: name,
+    said: t('inv.depth.changed', { depth: t(`inv.depth.adj.${to}`) }),
   };
 }

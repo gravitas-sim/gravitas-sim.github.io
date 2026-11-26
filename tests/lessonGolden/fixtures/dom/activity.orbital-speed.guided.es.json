@@ -11,7 +11,7 @@
   "body": "<p class=\"inv-step-count\">Paso 1 de 7 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">Tres preguntas sobre una órbita</h3><div class=\"inv-step-body\"><p>¿Qué trayectoria sigue un planeta alrededor de su estrella, y qué fija lo rápido que se mueve y lo que dura su año? Lo responderás en la vista de la órbita en directo, prediciendo y midiendo.</p><p>Johannes Kepler lo respondió hace cuatrocientos años a partir de posiciones de Marte medidas sin telescopio. Por qué confió en ellas llega después de tu primera predicción.</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> Mientras una investigación está en marcha, pulsar selecciona un objeto sin abrir la ficha del inspector, y la colocación de objetos nuevos queda desactivada para que un clic accidental no altere el sistema que estás midiendo.</p>",
   "previousDisabled": true,
   "nextDisabled": false,
-  "depthState": ""
+  "depthState": "Versión básica"
  },
  {
   "role": "graded",
@@ -25,7 +25,7 @@
   "body": "<p class=\"inv-step-count\">Paso 3 de 7 <span class=\"inv-step-kind\">predicción</span></p><h3 class=\"inv-step-title\">¿Dónde se mueve más rápido?</h3><div class=\"inv-step-body\"><p>La distancia del planeta excéntrico a su estrella cambia durante toda la órbita: se acerca mucho y se aleja mucho. Piensa en lo que eso hace a su velocidad y comprométete con una respuesta antes de medir nada.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">El planeta excéntrico se mueve más rápido…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">A</span><span>en su máximo acercamiento a la estrella</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">B</span><span>en su punto más lejano de la estrella</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">C</span><span>a la misma velocidad en todas partes</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">D</span><span>a mitad de camino entre los dos</span></button></div>",
   "previousDisabled": false,
   "nextDisabled": false,
-  "depthState": ""
+  "depthState": "Versión básica"
  },
  {
   "role": "marked",
@@ -39,7 +39,7 @@
   "body": "<p class=\"inv-step-count\">Paso 3 de 7 <span class=\"inv-step-kind\">predicción</span></p><h3 class=\"inv-step-title\">¿Dónde se mueve más rápido?</h3><div class=\"inv-step-body\"><p>La distancia del planeta excéntrico a su estrella cambia durante toda la órbita: se acerca mucho y se aleja mucho. Piensa en lo que eso hace a su velocidad y comprométete con una respuesta antes de medir nada.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">El planeta excéntrico se mueve más rápido…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option is-chosen is-held\" data-option=\"0\" role=\"radio\" aria-checked=\"true\" disabled=\"\"><span class=\"inv-option-mark\">A</span><span>en su máximo acercamiento a la estrella</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">B</span><span>en su punto más lejano de la estrella</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">C</span><span>a la misma velocidad en todas partes</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">D</span><span>a mitad de camino entre los dos</span></button></div><p class=\"inv-held\">Tu respuesta queda registrada. No se corrige hasta que llegues a «Por qué cambia la velocidad», para que la decida el experimento y no la clave de respuestas.</p><button type=\"button\" class=\"ui-button subtle\" data-change=\"\">Cambiar respuesta</button>",
   "previousDisabled": false,
   "nextDisabled": false,
-  "depthState": ""
+  "depthState": "Versión básica"
  },
  {
   "role": "last",
@@ -53,6 +53,6 @@
   "body": "<p class=\"inv-step-count\">Paso 7 de 7 <span class=\"inv-step-kind\">exploración</span></p><h3 class=\"inv-step-title\">Áreas iguales, sea cual sea el corte</h3><div class=\"inv-step-body\"><p>La órbita en pantalla está cortada en rebanadas de igual tiempo, y cada rebanada lleva etiquetada su parte del área total. Cambia cuántas rebanadas hay y observa qué les ocurre a esos números.</p><p>Con 5&nbsp;rebanadas cada una es el 20&nbsp;%. Con 12, cada una es el 8,3&nbsp;%. El número es arbitrario; lo que no es arbitrario es que siempre son iguales. El planeta tarda exactamente el mismo tiempo en recorrer el tramo de órbita de cada rebanada, tanto si ese tramo es una carrera corta y rápida junto a la estrella como un arrastre largo y lento por el lado lejano.</p></div><div class=\"inv-wedge-control\"><label class=\"inv-ecc-row\" for=\"invWedgeCount\"><span>Slices</span><input type=\"range\" id=\"invWedgeCount\" data-wedges=\"\" min=\"3\" max=\"16\" step=\"1\" value=\"8\" style=\"--range-fill: 38.46153846153847%;\"><output data-wedges-out=\"\">8</output></label><p class=\"inv-wedge-readout\" data-wedges-readout=\"\">Cada porción es el <strong>12,5 %</strong> del área de la órbita, y el planeta tarda <strong>77,9&nbsp;d</strong> en recorrer cada una.</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> El tiempo de cuña de abajo es la respuesta real a «áreas iguales en tiempos iguales»: es el mismo número para todas las cuñas porque todas representan el mismo intervalo.</p>",
   "previousDisabled": false,
   "nextDisabled": false,
-  "depthState": ""
+  "depthState": "Versión básica"
  }
 ]
