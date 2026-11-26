@@ -1,14 +1,10 @@
 // =============================================================================
 // Listening to spacetime: discover a merger
 // -----------------------------------------------------------------------------
-// Thirty-two steps. The first twenty-two are built on one instrument and one
-// dataset: the gravitational-wave lab (js/gwWidgets.js, js/gwLab.js), which
-// computes a leading-order inspiral and says out loud where it stops, and the
-// published GW150914 figure data (js/data/gw/gw150914.js), reproduced and not
-// reprocessed. Steps 23-29 add a second instrument over a second dataset:
-// thirty-two seconds of GWOSC strain from each of five mergers
-// (js/gwEventWidgets.js, js/data/gw/gwoscEvents.js), from which Gravitas
-// measures something itself.
+// The first twenty-two steps use the gravitational-wave lab (js/gwWidgets.js,
+// js/gwLab.js: a leading-order inspiral that says where it stops) and the
+// published GW150914 figure data (js/data/gw/gw150914.js). Steps 23-30 add
+// GWOSC strain from five mergers (js/gwEventWidgets.js), measured here.
 //
 // The line this lesson has to hold
 // -----------------------------------------------------------------------------
@@ -25,35 +21,13 @@
 //                                   values that were not, under headings that
 //                                   say which is which
 //
-// Step 2 names the first three and step 23 the fourth, and no later step lets
-// them blur. Where the model
-// cannot answer a question the lesson stops asking it rather than extrapolating:
-// the merger, the ringdown, and everything a neutron star does after it touches
-// are absent here and said to be absent.
-//
-// What the student does rather than reads
-// -----------------------------------------------------------------------------
-// Seven predictions committed before the reveal, eight measurements, two
-// controlled comparisons with one variable each, a real-data alignment they
-// find themselves, a five-event comparison read off open strain, an open
-// sandbox challenge and a written conclusion. The
-// audio is offered at four points and required at none: every task can be
-// completed from the plots and the readout, which is checked by
-// e2e/gwLesson.spec.js running the whole lesson with the sound off.
+// Step 2 names the first three and step 24 the fourth. Where the model cannot
+// answer (the merger, the ringdown, a neutron star after contact) the lesson
+// stops asking rather than extrapolating. The audio is offered and never
+// required: e2e/gwLesson.spec.js runs the whole lesson with the sound off.
+// The canvas stands the binary the lab describes, driven by the plot's own
+// timeline: a schematic, labelled as one, that the integrator never touches.
 // =============================================================================
-
-/** The backdrop. The lab does not use it; step 2 explains what it is. */
-// The scene is the source now, and the source is the model's.
-//
-// It used to be the GW150914 scenario, running, behind the panel: two black
-// holes spiralling in because the sandbox multiplies their orbit down every
-// step, beside a waveform computed from entirely different numbers. Two
-// pictures of two different things, in a lesson whose subject is telling a
-// measurement from a model apart.
-//
-// The synthetic-model screens now stand the binary the lab is describing on
-// the canvas, driven by the same timeline the plot is drawn from. It is a
-// schematic reconstruction, it says so, and the integrator does not touch it.
 
 /**
  * The two compact objects the lab's parameters describe.
@@ -87,8 +61,7 @@ const LISTENING_TO_SPACETIME = {
   id: 'listening-to-spacetime',
   // Its own card, drawn from the lesson's own opening source by
   // tools/generate-lesson-cards.mjs. It used to borrow the GW150914
-  // scenario's capture, which was honest while the lesson ran that scenario
-  // behind the panel; it stages the model's own binary now and names no
+  // scenario's capture; it stages the model's own binary now and names no
   // scenario at all.
   thumbnail: 'images/investigations/listening-to-spacetime.webp',
   title: 'Listening to Spacetime',
@@ -101,17 +74,26 @@ const LISTENING_TO_SPACETIME = {
   mathematics: 'arithmetic',
   prerequisites: ['what-is-a-gravitational-wave'],
   tags: ['compact-objects', 'gravity', 'observing', 'waves'],
-  // The second of the pair. What Is a Gravitational Wave? comes first and
-  // answers the question this one assumes; neither requires the other to have
-  // been completed, and the catalog orders them.
+  // The second of the pair; the catalog orders them and neither requires the other.
   series: 'Gravitational waves',
-  // The inspector stays available: nothing in this lesson is measured off the
-  // sandbox, and a student who clicks a black hole to see what it is should be
-  // allowed to. Placement is locked until the open challenge at step 30.
+  // The inspector stays available (nothing here is measured off the sandbox);
+  // placement is locked until the open challenge at step 31.
   lock: { placement: true, inspector: false, areaSweep: false },
+  // A step revised under a new id: its second pair did not share the first
+  // pair's chirp mass. Saved answers stay readable as an earlier version.
+  retired: {
+    'the-one-mass-that-matters': {
+      to: 'compare-two-different-binaries',
+      release: '3.1',
+      was: {
+        en: 'Read the chirp mass of a 36 + 29 pair and of a 50 + 19.4 pair, and compare them.',
+        es: 'Leer la masa de chirrido de un par de 36 + 29 y de un par de 50 + 19,4, y compararlas.',
+      },
+    },
+  },
   objectives: [
     'Read a strain-against-time plot and a frequency-against-time plot of the same signal',
-    'Explain why the wave frequency is twice the orbital frequency',
+    'Explain how the wave frequency follows the orbital frequency, and why',
     'Say what a chirp is and what makes one rise',
     'Design and run a comparison in which exactly one thing changes',
     'Explain why amplitude alone does not tell you how far away a source is',
@@ -325,7 +307,7 @@ const LISTENING_TO_SPACETIME = {
       type: 'measure',
       title: 'How many waves per orbit?',
       body: `A relationship worth finding for yourself, because it explains a
-             factor of two that turns up everywhere in this subject.
+             number that turns up everywhere in this subject.
              \n\nPark the playhead near the start of the signal, where the orbit
              is changing slowly, and use the schematic source view. Follow one
              of the two bodies - say the smaller one - and count how many times
@@ -363,7 +345,11 @@ const LISTENING_TO_SPACETIME = {
             message: `You have ${r.toFixed(1)} peaks per orbit. Check the interval: the two counts have to cover exactly the same stretch of the playhead.`,
           };
         }
-        return null;
+        return {
+          level: 'ok',
+          message:
+            'Two peaks per orbit. Half a turn puts the two bodies at opposite ends of the same line, and the wave this model computes repeats with that line rather than with either body, so it repeats twice per orbit: the wave frequency is twice the orbital frequency.',
+        };
       },
       tool: lab({
         view: 'both',
@@ -373,7 +359,7 @@ const LISTENING_TO_SPACETIME = {
         hide: ['m1', 'm2', 'distance', 'inclination'],
         presets: false,
       }),
-      tip: 'Two, and the reason is a symmetry: turn the binary through half a turn and the two bodies have swapped places, which looks exactly like the arrangement you started with. The wave cannot tell the difference either, so it repeats twice per orbit.',
+      tip: 'Follow the smaller body: it is easier to tell when it is back where it started. Count peaks, not every crossing of the middle line.',
     },
     {
       sid: 'frequency-early-and-late',
@@ -649,21 +635,40 @@ const LISTENING_TO_SPACETIME = {
       tip: 'Both columns run the same way: lighter means longer and higher. A pair of neutron stars, at about a fiftieth of these masses, is in band for over two minutes and gets past a kilohertz.',
     },
     {
-      sid: 'the-one-mass-that-matters',
+      sid: 'compare-two-different-binaries',
       stage: BBH,
       type: 'measure',
-      title: 'Two different binaries, one signal',
+      prepared: true,
+      title: 'Two different binaries, compared',
       body: `Something strange, and it is the most useful fact in the subject.
-             \n\nSet the masses to <strong>36 and 29</strong> and press
-             <strong>Pin as A</strong>. Read the chirp mass from the top of the
-             readout.
-             \n\nNow set them to <strong>50 and 19.4</strong>. Those are very
-             different objects - one nearly three times the other - and the
-             total mass is not even the same. Read the chirp mass again, and
-             then look at the two traces on the strain plot.`,
+             \n\nSet the masses to <strong>36 and 29</strong>, press
+             <strong>Pin as A</strong>, and press <strong>Take reading</strong>
+             beside the first field: it records the chirp mass the readout
+             prints.
+             \n\nNow set them to <strong>50 and 21.6</strong>. Those are very
+             different objects - one more than twice the other - and the total
+             mass is not the same either. Take the chirp mass again into the
+             second field, then look at the two traces on the strain plot.`,
       fields: [
-        { id: 'mc_a', label: 'Chirp mass of 36 + 29', unit: 'M☉' },
-        { id: 'mc_b', label: 'Chirp mass of 50 + 19.4', unit: 'M☉' },
+        {
+          id: 'mc_a',
+          label: 'Chirp mass of 36 + 29',
+          unit: 'M☉',
+          source: { tool: 'chirpMass' },
+        },
+        {
+          id: 'mc_b',
+          label: 'Chirp mass of 50 + 21.6',
+          unit: 'M☉',
+          source: { tool: 'chirpMass' },
+          misconceptions: [
+            {
+              id: 'firstPairStillSet',
+              when: { setting: { m1: { max: 49.8 } } },
+              say: 'That reading was taken before the first mass was set to 50. Set the masses to 50 and 21.6, then take it again.',
+            },
+          ],
+        },
         {
           id: 'total_a',
           label: 'Total mass of 36 + 29',
@@ -673,9 +678,9 @@ const LISTENING_TO_SPACETIME = {
         },
         {
           id: 'total_b',
-          label: 'Total mass of 50 + 19.4',
+          label: 'Total mass of 50 + 21.6',
           unit: 'M☉',
-          compute: () => 69.4,
+          compute: () => 71.6,
           decimals: 1,
         },
       ],
@@ -683,17 +688,20 @@ const LISTENING_TO_SPACETIME = {
         if (!Number.isFinite(v.mc_a) || !Number.isFinite(v.mc_b)) {
           return {
             level: 'warn',
-            message:
-              'Read the chirp mass for both pairs from the top line of the readout.',
+            message: 'Take the chirp mass reading for both pairs.',
           };
         }
-        if (Math.abs(v.mc_a - v.mc_b) > 1.2) {
+        if (Math.abs(v.mc_a - v.mc_b) > 0.3) {
           return {
             level: 'warn',
-            message: `You have ${v.mc_a.toFixed(1)} and ${v.mc_b.toFixed(1)}. Those should come out close to each other — check the masses you entered.`,
+            message: `You have ${v.mc_a.toFixed(1)} and ${v.mc_b.toFixed(1)}. Check the masses you entered for each pair, and read the chirp mass again.`,
           };
         }
-        return null;
+        return {
+          level: 'ok',
+          message:
+            'About 28.1 for both, although neither the masses nor the totals match. The inspiral is governed by this one combination of the two masses, so two binaries that share a chirp mass produce almost the same signal. That is why the chirp mass is the first thing a detection reports, and the individual masses are much harder to pin down.',
+        };
       },
       tool: lab({
         view: 'signal',
@@ -704,7 +712,7 @@ const LISTENING_TO_SPACETIME = {
         hide: ['distance', 'inclination'],
         presets: false,
       }),
-      tip: 'The combination that governs the inspiral is not the total mass and not either mass on its own. It is the chirp mass, and two binaries that share one produce almost the same signal - which is why the chirp mass is the first thing a detection reports and the individual masses are much harder to pin down.',
+      tip: 'Compare the two traces on the strain plot as well as the two numbers.',
     },
 
     // -----------------------------------------------------------------------
@@ -1130,44 +1138,42 @@ const LISTENING_TO_SPACETIME = {
     },
 
     // -----------------------------------------------------------------------
-    // 23-29: five more mergers, from the open archive
+    // 23-30: a prediction, then five more mergers from the open archive
     // -----------------------------------------------------------------------
-    // A coda to the real-data pair above, and the one stretch of this lesson
-    // where Gravitas measures something from a recording rather than showing
-    // a figure somebody else made. Steps 21-22 are the discovery paper's own
-    // processed traces; these are thirty-two seconds of raw strain per event
-    // from GWOSC, whitened here by each detector's own noise and read here,
-    // one instant at a time (js/gwEventWidgets.js).
-    //
-    // The instrument keeps four kinds of number under four headings, and the
-    // argument is about the boundaries between them:
-    //
-    //   23  five recordings, looked at. The catalog is held and the model off.
-    //   24  one quantity, the same for all five: the loudest frequency a
-    //       twentieth of a second before each chirp ends. Measured.
-    //   25  a ranking by chirp mass, committed before any mass is on screen.
-    //       The event control lists the five in the order they were recorded
-    //       and not by mass, so the ranking is the student's to make.
-    //   26  the catalog, revealed, with the redshift that turns its
-    //       source-frame masses into what a detector sees.
-    //   27  GW170817: the highest signal-to-noise ratio of the five, and the
-    //       one recording in which nothing clears the noise. Why both are true
-    //       is the difference between a pixel and a matched filter.
-    //   28  the lab's model laid over all five: right for GW150914, below the
-    //       map for GW190521, ahead of the data for the light pairs. The
-    //       disagreement is in the recording, not the map - see
-    //       tests/gwoscEvents.test.js, which injects a leading-order chirp and
-    //       reads it back through the same procedure.
-    //   29  the question: what was measured from the strain, and what did
-    //       GWOSC supply?
-    //
-    // What is on the canvas behind these seven
-    // -----------------------------------------------------------------------
-    // The lab's model pair, staged deliberately and named as that on the
-    // first screen. None of the five events can stand on the canvas - the
-    // sandbox has no model of any of them - and a step with no stage would
-    // keep the same pair anyway, unlabelled, beside five recordings it has
-    // nothing to do with. 23 says what it is.
+    // The one stretch where Gravitas measures something from a recording:
+    // thirty-two seconds of GWOSC strain per event, whitened by each
+    // detector's own noise and read one instant at a time
+    // (js/gwEventWidgets.js), under four headings (observed, measured,
+    // catalog, model). The GW170817 prediction comes before the student meets
+    // the five, because the first two screens already show its empty map. The
+    // canvas keeps the lab's model pair, named as that on the first screen:
+    // the sandbox has no model of any of the five. tests/gwoscEvents.test.js
+    // reads an injected leading-order chirp back through the same procedure.
+    {
+      sid: 'the-loudest-on-the-map',
+      stage: BBH,
+      type: 'predict',
+      reveal: 'the-one-you-cannot-measure',
+      title: 'The loudest of five',
+      body: `The next screens show five more mergers, each as a map of one
+             detector's recording: frequency against time, bright wherever that
+             frequency at that instant is louder than the detector's own noise.
+             A chirp shows as a track that climbs and then stops.
+             \n\nOne of the five is GW170817, two neutron stars, and the
+             catalog gives it the highest signal-to-noise ratio of the five.
+             Think about what this lab showed you of a light pair: how long it
+             stays in band, and how strong its wave is at any one moment.`,
+      prompt: 'Will Gravitas find GW170817’s chirp as a track on its map?',
+      options: [
+        'Yes - its signal-to-noise ratio is the highest, so its track is the clearest',
+        'Yes, but faint - it is the farthest away of the five',
+        'No - its wave is weak at any one moment, and the map judges one moment at a time',
+        'No - neutron stars are too small to send out gravitational waves',
+      ],
+      answer: 2,
+      because:
+        'No: in its recording Gravitas finds nothing louder than the noise, and both numbers are true. The map asks whether one pixel - one frequency, one instant - is louder than noise could make it. A pair of neutron stars is light, so its chirp is weak at any one moment and very long: the lab’s model says it spends nearly a minute in the band, thousands of cycles. The catalog’s 33 comes from a matched filter that adds all of those cycles up against a template before asking whether the total is louder than noise. Gravitas does not run that search, and the readout says so. The last tenth of a second is no help either: a pair this light is past 300 Hz by then and still climbing off the top of the map when it merges.',
+    },
     {
       sid: 'five-recordings',
       stage: BBH,
@@ -1329,24 +1335,14 @@ const LISTENING_TO_SPACETIME = {
       sid: 'the-one-you-cannot-measure',
       stage: BBH,
       type: 'explore',
-      title: 'The loudest one, and the one Gravitas cannot measure',
+      title: 'The loudest one, on its map',
       body: `GW170817 is the pair of neutron stars whose collision was also
              seen as a burst of gamma rays, and then as a new source of light
-             in a galaxy about forty megaparsecs away. Its signal-to-noise
-             ratio in the catalog is 33, the highest of the five. And in its
-             recording, Gravitas finds nothing louder than the noise.
-             \n\nBoth are true. The difference is in how the two numbers were
-             made. The map asks whether one pixel - one frequency, one instant
-             - is louder than noise could make it. A pair of neutron stars is
-             light, so its chirp is weak at any one moment and very long: the
-             lab's model says it spends nearly a minute in the band, thousands
-             of cycles. The catalog's number comes from a matched filter that
-             adds all of those cycles up against a template before asking
-             whether the total is louder than noise. Gravitas does not run that
-             search, and the readout says so.
-             \n\nThe last tenth of a second, where the heavier pairs' chirps
-             end, is no help either: a pair this light is past 300 Hz by then
-             and still climbing off the top of the map when it merges.`,
+             in a galaxy about forty megaparsecs away.
+             \n\nSelect it and check your prediction against its map: read
+             the <strong>End of the chirp</strong> line, look at the last two
+             seconds, and compare its signal-to-noise ratio with the other
+             four.`,
       checklist: [
         'Select GW170817 and read the "End of the chirp" line',
         'Look closely at the last two seconds of its map, and decide whether you can see a track',
@@ -1458,8 +1454,10 @@ const LISTENING_TO_SPACETIME = {
              no label and asked what could have made it. You now know a great
              deal more than you did.
              \n\nHere is a new one to think about while you write: a signal
-             arrives that stays in a detector's band for ninety seconds and
-             climbs past a kilohertz before it disappears. From what you have
+             arrives that stays in a detector's band for more than two and a
+             half minutes and climbs past a kilohertz before it disappears. The
+             pair now on the canvas is the lab's model of it, drawn as neutron
+             stars because of their mass, not because the signal says so. From what you have
              measured, you can already say something about what kind of pair
              that was, and there are things you cannot say however carefully you
              look.
@@ -1469,16 +1467,17 @@ const LISTENING_TO_SPACETIME = {
       prompt:
         'Write a short account of what a chirp signal reveals about its source and what it leaves undetermined. Mention at least one thing you measured, and at least one thing this model cannot tell you. Say whether your prediction in step 1 still stands.',
       rubric:
-        'Look for three things. First, at least one measured relationship stated correctly - the wave frequency being twice the orbital frequency, the chirp mass rather than the individual masses governing the inspiral, strain going as one over distance, or lighter pairs staying in band longer. Second, a real limitation, correctly reasoned: the distance-inclination degeneracy (amplitude alone cannot separate a distant face-on source from a nearby edge-on one), the model stopping before the merger, or the chirp mass not determining the two masses separately. Third, an honest revisit of step 1 rather than a claim to have known all along. A student who says the ninety-second signal was a low-mass pair - neutron stars, or something like them - has used the investigation correctly; a student who says it was definitely neutron stars has over-claimed, since the signal constrains the chirp mass and not the composition, and that distinction is worth pointing out in feedback rather than penalizing heavily. Do NOT credit "louder means closer" stated without the inclination caveat, or any claim that hearing the sound identifies the source.',
+        'Look for three things. First, at least one measured relationship stated correctly - the wave frequency being twice the orbital frequency, the chirp mass rather than the individual masses governing the inspiral, strain going as one over distance, or lighter pairs staying in band longer. Second, a real limitation, correctly reasoned: the distance-inclination degeneracy (amplitude alone cannot separate a distant face-on source from a nearby edge-on one), the model stopping before the merger, or the chirp mass not determining the two masses separately. Third, an honest revisit of step 1 rather than a claim to have known all along. A student who says the long signal was a low-mass pair - neutron stars, or something like them - has used the investigation correctly; a student who says it was definitely neutron stars has over-claimed, since the signal constrains the chirp mass and not the composition, and that distinction is worth pointing out in feedback rather than penalizing heavily. Do NOT credit "louder means closer" stated without the inclination caveat, or any claim that hearing the sound identifies the source.',
       tool: lab({
         view: 'signal',
         preset: 'bns',
+        values: { m1: 1.4, m2: 1.4, distance: 40 },
         autoplay: false,
         noiseControls: false,
         capture: true,
         hide: ['m1', 'm2', 'distance', 'inclination'],
         presets: false,
-        note: 'The new signal, for the question opposite. Two objects of 1.4 solar masses each, which is where the ninety seconds and the kilohertz come from.',
+        note: 'The new signal, for the question opposite. Two objects of 1.4 solar masses each, which is where the minutes in band and the kilohertz come from.',
       }),
       tip: 'Nothing in a gravitational wave says what the objects were made of. It says how heavy they were, how they moved, and how far away they were - and the reason we believe GW170817 was a pair of neutron stars is that a gamma-ray burst went off in the same place two seconds later and a telescope found the galaxy.',
     },
@@ -1492,12 +1491,12 @@ const LISTENING_TO_SPACETIME = {
              same thing as a curve sweeping upward. The sweep is the chirp, and
              you read a source out of its shape rather than out of its height.
              \n\n<strong>The wave frequency is twice the orbital
-             frequency</strong>, because a binary's mass distribution repeats
-             twice per orbit and not once.
+             frequency</strong>, because the line through the pair points the
+             same way twice per orbit and not once.
              \n\n<strong>What the inspiral fixes is the chirp mass</strong> - one
              particular combination of the two masses, not the two masses
-             separately. A signal that stays in band for ninety seconds and
-             climbs past a kilohertz is a light pair. On that evidence alone it
+             separately. A signal that stays in band for minutes and climbs
+             past a kilohertz is a light pair. On that evidence alone it
              is not yet a pair of neutron stars, and the difference between
              those two sentences is most of what this investigation was for.
              \n\n<strong>Amplitude alone is not a distance.</strong> A far

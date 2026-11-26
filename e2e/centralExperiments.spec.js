@@ -56,6 +56,7 @@ import {
   toolAction,
   walkToSid,
   captures,
+  progressOf,
   row,
 } from './centralExperiment.js';
 
@@ -1005,15 +1006,71 @@ test.describe('the central experiment of each investigation', () => {
 
     await expectVerdictRevealed(page, plan, predict);
 
-    // The ring's change in length is what the lesson asks to be written down.
+    // The strain is taken from the readout by the reader's press, as printed,
+    // and kept with where it came from.
     const evidenceSid = 'measure-a-change-in-length';
     await walkToSid(page, plan, evidenceSid);
-    const evidence = {
-      toy: '0.02',
-      real: Math.abs(horizontal).toExponential(2),
-    };
-    await recordFields(page, id, evidenceSid, evidence);
+    await recordFields(page, id, evidenceSid, { toy: '0.0001' });
+    const real = page.locator(
+      `#investigationBody [data-field="${id}:${evidenceSid}:real"]`
+    );
+    await page.locator('#investigationBody [data-take="real"]').click();
+    await expect(real).not.toHaveValue('');
+    const taken = await real.inputValue();
+    expect(taken).toBe(
+      row(await readout(page), /^strain amplitude/i).text.trim()
+    );
+    expect(taken).toMatch(/×10⁻²¹$/);
+    const evidence = { toy: '0.0001', real: taken };
     await expectEvidenceRetained(page, id, evidenceSid, evidence);
+    const src = JSON.parse(
+      (await progressOf(page, id)).responses[`${id}:${evidenceSid}:real:src`]
+    );
+    expect(src.k).toBe('c');
+    expect(src.r).toBe('strainAmplitude');
+  });
+
+  test('what-is-a-gravitational-wave: the same source farther away halves the strain, and a reading at the wrong distance is told so', async ({
+    page,
+    app,
+  }) => {
+    test.slow();
+    const id = 'what-is-a-gravitational-wave';
+    const sid = 'the-same-source-farther-away';
+    await openInvestigation(page, app, id);
+    const plan = await lessonPlan(page, id);
+    await walkToSid(page, plan, sid);
+    const box = f =>
+      page.locator(`#investigationBody [data-field="${id}:${sid}:${f}"]`);
+    const take = async f => {
+      await page.locator(`#investigationBody [data-take="${f}"]`).click();
+      await expect(box(f)).not.toHaveValue('');
+    };
+    const values = {};
+    for (const [f, d] of [
+      ['a800', 800],
+      ['a1600', 1600],
+    ]) {
+      await setControl(page, 'distance', d);
+      await take(f);
+      values[f] = await box(f).inputValue();
+    }
+    // A reading taken at 1600 Mpc for the 400 Mpc box is the slip the step
+    // names; set the distance and the same press puts it right.
+    await take('a400');
+    await expect(page.locator('#investigationBody')).toContainText(
+      'That reading was taken at a larger distance than this field asks for.'
+    );
+    await setControl(page, 'distance', 400);
+    await take('a400');
+    values.a400 = await box('a400').inputValue();
+    const n = t => Number(t.replace(/\s*×10⁻²¹$/, ''));
+    expect(n(values.a400) / n(values.a800)).toBeCloseTo(2, 1);
+    expect(n(values.a800) / n(values.a1600)).toBeCloseTo(2, 1);
+    await expect(page.locator('#investigationBody')).toContainText(
+      'Halving each time the distance doubles.'
+    );
+    await expectEvidenceRetained(page, id, sid, values);
   });
 
   test('listening-to-spacetime: heavier pairs leave the band sooner @accepts:ce.listening-to-spacetime', async ({

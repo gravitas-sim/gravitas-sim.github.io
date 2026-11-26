@@ -21,10 +21,10 @@
     ["steps.measure-time-in-band.fields.3.unit","Hz"],
     ["steps.measure-time-in-band.fields.4.unit","s"],
     ["steps.measure-time-in-band.fields.5.unit","Hz"],
-    ["steps.the-one-mass-that-matters.fields.0.unit","M☉"],
-    ["steps.the-one-mass-that-matters.fields.1.unit","M☉"],
-    ["steps.the-one-mass-that-matters.fields.2.unit","M☉"],
-    ["steps.the-one-mass-that-matters.fields.3.unit","M☉"],
+    ["steps.compare-two-different-binaries.fields.0.unit","M☉"],
+    ["steps.compare-two-different-binaries.fields.1.unit","M☉"],
+    ["steps.compare-two-different-binaries.fields.2.unit","M☉"],
+    ["steps.compare-two-different-binaries.fields.3.unit","M☉"],
     ["steps.test-distance.fields.0.unit",""],
     ["steps.test-distance.fields.1.unit",""],
     ["steps.test-distance.fields.2.unit",""],
@@ -50,10 +50,10 @@
     ["steps.measure-time-in-band.fields.3.label","36 + 29 M☉: where it stops"],
     ["steps.measure-time-in-band.fields.4.label","60 + 48 M☉: whole inspiral from 20 Hz"],
     ["steps.measure-time-in-band.fields.5.label","60 + 48 M☉: where it stops"],
-    ["steps.the-one-mass-that-matters.fields.0.label","Chirp mass of 36 + 29"],
-    ["steps.the-one-mass-that-matters.fields.1.label","Chirp mass of 50 + 19.4"],
-    ["steps.the-one-mass-that-matters.fields.2.label","Total mass of 36 + 29"],
-    ["steps.the-one-mass-that-matters.fields.3.label","Total mass of 50 + 19.4"],
+    ["steps.compare-two-different-binaries.fields.0.label","Chirp mass of 36 + 29"],
+    ["steps.compare-two-different-binaries.fields.1.label","Chirp mass of 50 + 21.6"],
+    ["steps.compare-two-different-binaries.fields.2.label","Total mass of 36 + 29"],
+    ["steps.compare-two-different-binaries.fields.3.label","Total mass of 50 + 21.6"],
     ["steps.test-distance.fields.0.label","Strain amplitude at 400 Mpc"],
     ["steps.test-distance.fields.1.label","Strain amplitude at 800 Mpc"],
     ["steps.test-distance.fields.2.label","Strain amplitude at 1600 Mpc"],
@@ -80,10 +80,10 @@
     ["steps.measure-time-in-band.fields.3.label","36 + 29 M☉: dónde se detiene"],
     ["steps.measure-time-in-band.fields.4.label","60 + 48 M☉: espiral completa desde 20 Hz"],
     ["steps.measure-time-in-band.fields.5.label","60 + 48 M☉: dónde se detiene"],
-    ["steps.the-one-mass-that-matters.fields.0.label","Masa de chirrido de 36 + 29"],
-    ["steps.the-one-mass-that-matters.fields.1.label","Masa de chirrido de 50 + 19,4"],
-    ["steps.the-one-mass-that-matters.fields.2.label","Masa total de 36 + 29"],
-    ["steps.the-one-mass-that-matters.fields.3.label","Masa total de 50 + 19,4"],
+    ["steps.compare-two-different-binaries.fields.0.label","Masa de chirrido de 36 + 29"],
+    ["steps.compare-two-different-binaries.fields.1.label","Masa de chirrido de 50 + 21,6"],
+    ["steps.compare-two-different-binaries.fields.2.label","Masa total de 36 + 29"],
+    ["steps.compare-two-different-binaries.fields.3.label","Masa total de 50 + 21,6"],
     ["steps.test-distance.fields.0.label","Amplitud de la deformación a 400 Mpc"],
     ["steps.test-distance.fields.1.label","Amplitud de la deformación a 800 Mpc"],
     ["steps.test-distance.fields.2.label","Amplitud de la deformación a 1600 Mpc"],
@@ -111,11 +111,11 @@
     2
    ],
    [
-    "the-one-mass-that-matters.total_a",
+    "compare-two-different-binaries.total_a",
     1
    ],
    [
-    "the-one-mass-that-matters.total_b",
+    "compare-two-different-binaries.total_b",
     1
    ],
    [
@@ -132,7 +132,7 @@
  "steps": {
   "en": {
    "two-crests-per-orbit": {
-    "validate": {"calls":242,"distinct":57,"digest":"1aa0a00e20fff27f","samples":[{"level":"warn","message":"Count at least one whole orbit."},{"level":"warn","message":"You have 1.0 peaks per orbit. Check the interval: the two counts have to cover exactly the same stretch of the playhead."},{"level":"warn","message":"You have 0.0 peaks per orbit. Check the interval: the two counts have to cover exactly the same stretch of the playhead."},{"level":"warn","message":"You have 592.4 peaks per orbit. Check the interval: the two counts have to cover exactly the same stretch of the playhead."},{"level":"warn","message":"You have 174.8 peaks per orbit. Check the interval: the two counts have to cover exactly the same stretch of the playhead."},{"level":"warn","message":"You have 52.5 peaks per orbit. Check the interval: the two counts have to cover exactly the same stretch of the playhead."},{"level":"warn","message":"You have 14.1 peaks per orbit. Check the interval: the two counts have to cover exactly the same stretch of the playhead."},{"level":"warn","message":"You have 11915.6 peaks per orbit. Check the interval: the two counts have to cover exactly the same stretch of the playhead."},null,{"level":"warn","message":"You have 4683.5 peaks per orbit. Check the interval: the two counts have to cover exactly the same stretch of the playhead."},{"level":"warn","message":"You have 333296.4 peaks per orbit. Check the interval: the two counts have to cover exactly the same stretch of the playhead."},{"level":"warn","message":"You have 333331.3 peaks per orbit. Check the interval: the two counts have to cover exactly the same stretch of the playhead."},{"level":"warn","message":"You have 9929700.0 peaks per orbit. Check the interval: the two counts have to cover exactly the same stretch of the playhead."},{"level":"warn","message":"You have 9929666.4 peaks per orbit. Check the interval: the two counts have to cover exactly the same stretch of the playhead."},{"level":"warn","message":"You have 53380500.0 peaks per orbit. Check the interval: the two counts have to cover exactly the same stretch of the playhead."},{"level":"warn","message":"You have 25120166.7 peaks per orbit. Check the interval: the two counts have to cover exactly the same stretch of the playhead."}]}
+    "validate": {"calls":242,"distinct":57,"digest":"4237b9d6ba9ee8c5","samples":[{"level":"warn","message":"Count at least one whole orbit."},{"level":"warn","message":"You have 1.0 peaks per orbit. Check the interval: the two counts have to cover exactly the same stretch of the playhead."},{"level":"warn","message":"You have 0.0 peaks per orbit. Check the interval: the two counts have to cover exactly the same stretch of the playhead."},{"level":"warn","message":"You have 592.4 peaks per orbit. Check the interval: the two counts have to cover exactly the same stretch of the playhead."},{"level":"warn","message":"You have 174.8 peaks per orbit. Check the interval: the two counts have to cover exactly the same stretch of the playhead."},{"level":"warn","message":"You have 52.5 peaks per orbit. Check the interval: the two counts have to cover exactly the same stretch of the playhead."},{"level":"warn","message":"You have 14.1 peaks per orbit. Check the interval: the two counts have to cover exactly the same stretch of the playhead."},{"level":"warn","message":"You have 11915.6 peaks per orbit. Check the interval: the two counts have to cover exactly the same stretch of the playhead."},{"level":"ok","message":"Two peaks per orbit. Half a turn puts the two bodies at opposite ends of the same line, and the wave this model computes repeats with that line rather than with either body, so it repeats twice per orbit: the wave frequency is twice the orbital frequency."},{"level":"warn","message":"You have 4683.5 peaks per orbit. Check the interval: the two counts have to cover exactly the same stretch of the playhead."},{"level":"warn","message":"You have 333296.4 peaks per orbit. Check the interval: the two counts have to cover exactly the same stretch of the playhead."},{"level":"warn","message":"You have 333331.3 peaks per orbit. Check the interval: the two counts have to cover exactly the same stretch of the playhead."},{"level":"warn","message":"You have 9929700.0 peaks per orbit. Check the interval: the two counts have to cover exactly the same stretch of the playhead."},{"level":"warn","message":"You have 9929666.4 peaks per orbit. Check the interval: the two counts have to cover exactly the same stretch of the playhead."},{"level":"warn","message":"You have 53380500.0 peaks per orbit. Check the interval: the two counts have to cover exactly the same stretch of the playhead."},{"level":"warn","message":"You have 25120166.7 peaks per orbit. Check the interval: the two counts have to cover exactly the same stretch of the playhead."}]}
    },
    "frequency-early-and-late": {
     "validate": {"calls":242,"distinct":4,"digest":"c4a5353532c2d059","samples":[{"level":"warn","message":"Read the frequency at both ends."},{"level":"warn","message":"The later reading should be the higher one. Check which end of the plot each was taken at."},{"level":"warn","message":"The later reading should be closer to the merger, so its time before merger should be the smaller of the two."},null]}
@@ -143,8 +143,8 @@
    "measure-time-in-band": {
     "validate": {"calls":242,"distinct":3,"digest":"4010ded65e132f9a","samples":[{"level":"warn","message":"Fill in all six readings."},{"level":"warn","message":"The lighter pair should stay in band longest. Check that each time goes with its own pair of masses."},{"level":"warn","message":"The lighter pair should reach the highest frequency before the model stops. Check the pairing again."}]}
    },
-   "the-one-mass-that-matters": {
-    "validate": {"calls":242,"distinct":104,"digest":"650b021620d92146","samples":[{"level":"warn","message":"Read the chirp mass for both pairs from the top line of the readout."},null,{"level":"warn","message":"You have 6.1 and 676.5. Those should come out close to each other — check the masses you entered."},{"level":"warn","message":"You have 0.0 and 164.6. Those should come out close to each other — check the masses you entered."},{"level":"warn","message":"You have 0.0 and 2.1. Those should come out close to each other — check the masses you entered."},{"level":"warn","message":"You have 1.8 and 0.4. Those should come out close to each other — check the masses you entered."},{"level":"warn","message":"You have 578.1 and 697.0. Those should come out close to each other — check the masses you entered."},{"level":"warn","message":"You have 35.7 and 1.0. Those should come out close to each other — check the masses you entered."},{"level":"warn","message":"You have 14.1 and 2.5. Those should come out close to each other — check the masses you entered."},{"level":"warn","message":"You have 1.0 and 14.1. Those should come out close to each other — check the masses you entered."},{"level":"warn","message":"You have 2.4 and 35.7. Those should come out close to each other — check the masses you entered."},{"level":"warn","message":"You have 35.7 and 14.1. Those should come out close to each other — check the masses you entered."},{"level":"warn","message":"You have 40.0 and 15.7. Those should come out close to each other — check the masses you entered."}]}
+   "compare-two-different-binaries": {
+    "validate": {"calls":242,"distinct":126,"digest":"cf8babcc0f1e5c0a","samples":[{"level":"warn","message":"Take the chirp mass reading for both pairs."},{"level":"ok","message":"About 28.1 for both, although neither the masses nor the totals match. The inspiral is governed by this one combination of the two masses, so two binaries that share a chirp mass produce almost the same signal. That is why the chirp mass is the first thing a detection reports, and the individual masses are much harder to pin down."},{"level":"warn","message":"You have 1.9 and 25.9. Check the masses you entered for each pair, and read the chirp mass again."},{"level":"warn","message":"You have 7.9 and 22.4. Check the masses you entered for each pair, and read the chirp mass again."},{"level":"warn","message":"You have 0.2 and 2.3. Check the masses you entered for each pair, and read the chirp mass again."},{"level":"warn","message":"You have 2.4 and 5.3. Check the masses you entered for each pair, and read the chirp mass again."},{"level":"warn","message":"You have 2.2 and 4163.0. Check the masses you entered for each pair, and read the chirp mass again."},{"level":"warn","message":"You have 35.7 and 1.0. Check the masses you entered for each pair, and read the chirp mass again."},{"level":"warn","message":"You have 14.1 and 2.5. Check the masses you entered for each pair, and read the chirp mass again."},{"level":"warn","message":"You have 35.7 and 14.1. Check the masses you entered for each pair, and read the chirp mass again."},{"level":"warn","message":"You have 40.0 and 15.7. Check the masses you entered for each pair, and read the chirp mass again."}]}
    },
    "test-distance": {
     "validate": {"calls":242,"distinct":68,"digest":"3a85a4085186696c","samples":[{"level":"warn","message":"Read the amplitude at all three distances. The readout gives it on the line marked \"Strain amplitude\" - not \"Strain now\", which is the instantaneous signed value and passes through zero twice a cycle."},{"level":"warn","message":"Your ratio is 1.00. Doubling the distance should halve the strain, so this should come out near 2."},{"level":"warn","message":"Your ratio is 0.99. Doubling the distance should halve the strain, so this should come out near 2."},{"level":"error","message":"An amplitude cannot be zero or negative. That is the signature of having read \"Strain now\", which is the signed value at one instant: use the \"Strain amplitude\" line instead."},{"level":"warn","message":"Your ratio is 79.65. Doubling the distance should halve the strain, so this should come out near 2."},{"level":"warn","message":"Your ratio is 23.09. Doubling the distance should halve the strain, so this should come out near 2."},{"level":"warn","message":"Your ratio is 333.33. Doubling the distance should halve the strain, so this should come out near 2."},{"level":"warn","message":"Your ratio is 848.06. Doubling the distance should halve the strain, so this should come out near 2."},{"level":"warn","message":"Those two should be the same number. The frequency at which the model stops depends on the masses, not on how far away you are."},{"level":"warn","message":"Your ratio is 11915.57. Doubling the distance should halve the strain, so this should come out near 2."},{"level":"warn","message":"Your ratio is 333333.44. Doubling the distance should halve the strain, so this should come out near 2."},{"level":"warn","message":"Your ratio is 333333.33. Doubling the distance should halve the strain, so this should come out near 2."},{"level":"warn","message":"Your ratio is 9929666.43. Doubling the distance should halve the strain, so this should come out near 2."},{"level":"warn","message":"Your ratio is 9929633.33. Doubling the distance should halve the strain, so this should come out near 2."},{"level":"warn","message":"Your ratio is 25120166.67. Doubling the distance should halve the strain, so this should come out near 2."},{"level":"warn","message":"Your ratio is 25120238.10. Doubling the distance should halve the strain, so this should come out near 2."}]}

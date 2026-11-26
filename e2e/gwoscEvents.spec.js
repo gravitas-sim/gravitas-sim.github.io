@@ -29,8 +29,8 @@ import { test, expect } from './fixtures.js';
 
 const LESSON = 'listening-to-spacetime';
 /** The first of the seven GWOSC screens, and the catalog screen, one-based. */
-const FIRST = 23;
-const CATALOG = 26;
+const FIRST = 24;
+const CATALOG = 27;
 
 /** Open the lesson at a screen, through the author route. */
 async function openAt(page, app, step) {

@@ -259,8 +259,8 @@ export const MANIFEST = [
     level: 'Astronomía introductoria',
     thumbnail: 'images/investigations/listening-to-spacetime.webp',
     series: 'Ondas gravitacionales',
-    stepCount: 32,
-    gradedCount: 18,
+    stepCount: 33,
+    gradedCount: 19,
     objectiveCount: 9,
   },
   {

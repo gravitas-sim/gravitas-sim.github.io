@@ -4718,7 +4718,7 @@ export const INSTRUCTOR_CONTENT = {
       },
       {
         heading: 'The wave frequency is twice the orbital frequency',
-        body: 'Screen 6 has students count it rather than be told it. The reason is a symmetry: half a turn of the binary leaves an arrangement indistinguishable from the one it started in, so the wave repeats twice per orbit. This factor of two is the origin of most of the arithmetic confusion in the subject, and a class that has counted it does not lose it.',
+        body: 'Screen 6 has students count it rather than be told it. The reason is a symmetry: half a turn leaves the line through the pair pointing the same way, whichever body is at which end, and the leading-order wave follows that line, so it repeats twice per orbit. This factor of two is the origin of most of the arithmetic confusion in the subject, and a class that has counted it does not lose it.',
       },
       {
         heading: 'The chirp mass, not the masses',
@@ -4827,7 +4827,7 @@ export const INSTRUCTOR_CONTENT = {
         claim:
           'Gravitas found nothing in the GW170817 recording, so the detectors did not really see it.',
         response:
-          'Two different questions. The map asks whether one pixel - one frequency, one instant - is louder than the noise could make it, and for a light pair spread over nearly a minute of cycles no single pixel is. The catalog signal-to-noise ratio of 33 comes from a matched filter that adds every cycle together against a template before asking the same question of the total. Screen 27 is built around this contrast; the readout says Gravitas does not run that search. A student who concludes that the instrument on this screen is weaker than the search, rather than that the event is doubtful, has it right.',
+          'Two different questions. The map asks whether one pixel - one frequency, one instant - is louder than the noise could make it, and for a light pair spread over nearly a minute of cycles no single pixel is. The catalog signal-to-noise ratio of 33 comes from a matched filter that adds every cycle together against a template before asking the same question of the total. Screen 28 is built around this contrast, and screen 23 asks for a prediction about it first; the readout says Gravitas does not run that search. A student who concludes that the instrument on this screen is weaker than the search, rather than that the event is doubtful, has it right.',
       },
     ],
     teachingNotes: [

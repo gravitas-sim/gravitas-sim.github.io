@@ -56,7 +56,7 @@ export default {
     {
       stage: { gwSource: { name: 'La fuente' } },
       title: 'La gravedad ya está aquí',
-      body: 'Una sola masa, quieta, ya curva el espacio a su alrededor. Esa curvatura es la razón de que las cosas caigan, y está ahí mire alguien o no.\n\nLa palabra importante es <em>quieta</em>. Nada de esa curvatura cambia. No viaja. No llega. No hay ninguna onda, porque no hay nada ondulando.',
+      body: 'Una sola masa, quieta, ya curva el espacio a su alrededor. Esa curvatura es la razón de que las cosas caigan, y está ahí mire alguien o no.\n\nLa palabra importante es <em>quieta</em>. Nada de esa curvatura cambia. No viaja. No llega. No hay ninguna onda, porque no hay nada ondulando.\n\nEl panel de al lado sigue dibujando la binaria del laboratorio. En esta pantalla, la fuente es la del lienzo.',
       prompt:
         'Una sola masa que nunca se mueve. ¿Qué le llega a un observador lejano?',
       options: [
@@ -82,11 +82,11 @@ export default {
     {
       stage: { gwSource: { name: 'La fuente' } },
       title: 'Ahora haz que se mueva',
-      body: `La misma masa, y ahora está haciendo algo. Pon <strong>Qué está
-             emitiendo</strong> en <em>una esfera que pulsa</em> y pulsa
-             <strong>Reproducir</strong>. Todo el cuerpo se hincha y se
-             encoge, una y otra vez, manteniéndose exactamente esférico todo
-             el tiempo.
+      body: `La misma masa, y ahora está haciendo algo: en el lienzo es una
+             esfera que pulsa. Pulsa <strong>Reproducir / pausar</strong>. Todo
+             el cuerpo se hincha y se encoge, una y otra vez, manteniéndose
+             exactamente esférico todo el tiempo. El panel sigue dibujando la
+             binaria del laboratorio; en esta pantalla, mira el lienzo.
              \n\nEsto es muchísimo movimiento. Antes de mirar qué sale de
              ahí, comprométete con lo que esperas.`,
       prompt: 'Una estrella perfectamente esférica que pulsa. ¿Qué radia?',
@@ -98,7 +98,7 @@ export default {
       ],
       because:
         'Nada en absoluto, y esta es la pantalla que rompe la regla con la que llega casi todo el mundo. «Las masas en movimiento producen ondas gravitacionales» no es la regla. El campo fuera de <em>cualquier</em> cuerpo con simetría esférica depende de su masa total y de nada más: ni de su tamaño, ni de la rapidez con que ese tamaño cambia. Así que una esfera puede pulsar tan violentamente como quieras y el exterior no puede notarlo. Ese resultado es el teorema de Birkhoff, y en relatividad general es exacto, no una aproximación. Lo que tiene que cambiar no es la posición de la masa sino la <em>forma</em> de su distribución.',
-      tip: 'Observa el lienzo mientras pulsa. No sale nada, y eso es una afirmación sobre el modelo: dibuja una cresta por cada ciclo de un cuadrupolo cambiante, y aquí no tiene ninguna que dibujar.',
+      tip: 'Observa el lienzo mientras pulsa, y busca cualquier cosa que salga de él.',
     },
     {
       stage: { gwSource: { name: 'La fuente' } },
@@ -118,7 +118,7 @@ export default {
     },
     {
       title: '¿Qué tiene que cambiar?',
-      body: 'Tres fuentes imaginarias, todas masivas, todas perfectamente corrientes:\n\n<strong>A.</strong> Una bola pesada, quieta.\n\n<strong>B.</strong> Una bola pesada que se hincha y se encoge —más grande, más pequeña, más grande— manteniéndose una esfera perfecta todo el tiempo.\n\n<strong>C.</strong> Dos bolas pesadas girando una alrededor de la otra.\n\nUna de las tres emite ondas gravitacionales. Comprométete antes de seguir leyendo.',
+      body: 'Las tres pantallas anteriores pusieron tres fuentes en el lienzo. Aquí están de nuevo como objetos corrientes y no como posiciones de un control:\n\n<strong>A.</strong> Una bola pesada, quieta.\n\n<strong>B.</strong> Una bola pesada que se hincha y se encoge —más grande, más pequeña, más grande— manteniéndose una esfera perfecta todo el tiempo.\n\n<strong>C.</strong> Dos bolas pesadas girando una alrededor de la otra.\n\nUna de las tres emite ondas gravitacionales. Responde a partir de lo que viste, y di la regla para ti antes de comprometerte.',
       prompt: '¿Cuál produce una onda gravitacional que viaja?',
       options: [
         'A, porque tiene la masa más concentrada',
@@ -127,8 +127,8 @@ export default {
         'Las tres, porque las tres tienen masa',
       ],
       because:
-        'Solo C. B es la respuesta equivocada interesante y merece la pena detenerse en ella: la bola se mueve de verdad, cada parte de ella acelerando hacia dentro y hacia fuera, y aun así no emite nada. Una esfera perfecta se ve igual desde fuera por mucho que pulse, así que desde lejos nada de ella cambia y no hay nada que mandar. Así que «la masa en movimiento produce ondas» no es la regla. La regla es que la masa tiene que estar dispuesta de forma <em>desigual</em> y que esa disposición tiene que ir <em>cambiando</em>, que es exactamente lo que hacen dos objetos girando uno alrededor del otro.',
-      tip: 'Una estrella perfectamente redonda que gira tampoco emite nada, por la misma razón. Ponle un bulto en un lado y sí lo hace.',
+        'Solo C. B es la respuesta equivocada interesante y merece la pena detenerse en ella: la bola se mueve de verdad, cada parte de ella acelerando hacia dentro y hacia fuera, y aun así no emite nada. Una esfera perfecta se ve igual desde fuera por mucho que pulse, así que desde lejos nada de ella cambia y no hay nada que mandar. Así que «la masa en movimiento produce ondas» no es la regla. La regla es que la masa tiene que estar dispuesta de forma <em>desigual</em> y que esa disposición tiene que ir <em>cambiando</em>, que es exactamente lo que hacen dos objetos girando uno alrededor del otro. La misma regla cubre un caso que no has visto: una estrella perfectamente redonda que gira sobre su eje tampoco emite nada, y un bulto en un lado sí la haría emitir.',
+      tip: 'Para cada una, pregúntate qué podría notar cambiar un observador lejano.',
     },
     {
       title: 'Observa el par',
@@ -143,21 +143,29 @@ export default {
     },
     {
       title: 'El patrón se repite',
-      body: 'Pausa y recorre la órbita poco a poco con el cabezal.\n\nEmpieza con el par alineado de izquierda a derecha. Sigue hasta que la <em>disposición de la masa</em> se vea igual que al principio. No hasta que cada objeto vuelva a donde empezó: hasta que vuelva la forma.\n\nPara dos objetos iguales en un círculo, eso ocurre antes de lo que podrías esperar.',
+      body: 'Pausa y recorre la órbita poco a poco con el cabezal.\n\nEmpieza con el par alineado de izquierda a derecha. Sigue hasta que la <em>línea que une los dos objetos</em> apunte igual que al principio. No hasta que cada objeto vuelva a donde empezó: hasta que vuelva la línea.',
       prompt:
-        'Partiendo de lado a lado, ¿cuánta órbita hasta que la masa vuelve a estar dispuesta igual?',
+        'Partiendo de lado a lado, ¿cuánta órbita hasta que la línea que une a la pareja vuelve a apuntar igual?',
       options: [
         'Un cuarto de órbita',
-        'Media órbita: intercambiar los dos objetos deja la misma disposición',
+        'Media órbita',
         'Una órbita completa',
         'Dos órbitas completas',
       ],
       because:
-        'Media órbita. Intercambia dos objetos idénticos y no lo notas: el par alineado de izquierda a derecha al principio vuelve a estar alineado de izquierda a derecha a mitad de camino, con los dos objetos cambiados. Así que el patrón que la fuente le presenta al mundo exterior se repite dos veces por órbita, y la onda que emite también. Por eso la frecuencia de la onda para un par así es el <em>doble</em> de la frecuencia orbital, un hecho que «Cuenta el ritmo» te hace contar por ti mismo. Con masas desiguales la forma es asimétrica pero se repite igual, así que la frecuencia sigue siendo el doble.',
+        'Media órbita. A mitad de camino el par vuelve a estar alineado de izquierda a derecha, con los dos objetos en extremos opuestos. Dos objetos idénticos se verían exactamente igual que al principio. Estos dos no son idénticos (36 y 29 veces la masa del Sol), así que el más pesado está ahora al otro lado, y la disposición completa tarda una órbita entera en volver. La onda que calcula este modelo no sigue ese detalle: sigue cuán alargada está la masa y a lo largo de qué línea, y eso se repite cada media órbita sean cuales sean las dos masas. Así que la onda se repite dos veces por órbita, y su frecuencia es el <em>doble</em> de la frecuencia orbital: «Cuenta el ritmo» te lo hace contar en este par desigual. Los pares reales de masas muy distintas añaden tonos extra débiles que este modelo deja fuera.',
       tip: 'Usa el cabezal en pasos pequeños. La lectura da la fase orbital, así que puedes comprobar tu respuesta con un número en vez de a ojo.',
       hints: [
-        'Imagina la pareja como dos objetos idénticos. ¿Qué pasa con la imagen si los intercambias?',
-        'Cuenta cada cuánto se repite la disposición, no cada cuánto vuelve cada objeto.',
+        'Mira la línea que une los dos objetos, no a cada objeto por separado.',
+        'Cuenta cada cuánto apunta igual esa línea, no cada cuánto vuelve cada objeto.',
+      ],
+      misconceptions: [
+        {
+          say: 'Un cuarto de vuelta lleva al par de estar alineado de lado a lado a estar alineado de arriba abajo: una línea distinta, no la misma.',
+        },
+        {
+          say: 'Una órbita completa devuelve cada objeto a donde empezó. La línea que une a la pareja vuelve antes.',
+        },
       ],
     },
     {
@@ -193,6 +201,17 @@ export default {
       hints: [
         'La onda estira el espacio en una dirección. ¿Qué hace en ángulo recto a ella?',
         'El anillo se vuelve un óvalo, no un círculo más grande.',
+      ],
+      misconceptions: [
+        {
+          say: 'El anillo no es más grande en conjunto. Mira la separación de arriba abajo en el momento más ancho y compárala con el círculo del que partiste.',
+        },
+        {
+          say: 'Vuelve a mirar la separación de arriba abajo cuando el anillo está más ancho de lado a lado: también ha cambiado, en el mismo momento.',
+        },
+        {
+          say: 'Los marcadores no viajan con la onda. Lo que cambia es la distancia entre ellos.',
+        },
       ],
     },
     {
@@ -236,7 +255,7 @@ export default {
         },
         { label: 'Amplitud de deformación, de la lectura' },
       ],
-      body: 'Aquí está el único vocabulario que necesita esta investigación.\n\nCuando pasa una onda, una longitud <em>L</em> cambia en una cantidad pequeña. El número útil no es el cambio sino la <strong>fracción</strong>: cuánto cambió dividido entre cuánto medía. Esa fracción se llama <strong>deformación</strong> (strain).\n\nEmpieza con números que puedas sostener. Un brazo de 4 kilómetros que cambia 4 milímetros tiene una deformación de 0,004 entre 4000, o sea 0,000001: una parte en un millón.\n\nAhora la de verdad. Lee <strong>Amplitud de deformación</strong> en la lectura —la fracción más grande que alcanza esta onda— y anótala.',
+      body: 'Aquí está el único vocabulario que necesita esta investigación.\n\nCuando pasa una onda, una longitud <em>L</em> cambia en una cantidad pequeña. El número útil no es el cambio sino la <strong>fracción</strong>: cuánto cambió dividido entre cuánto medía. Esa fracción se llama <strong>deformación</strong> (strain).\n\nEmpieza con números que puedas sostener. Un brazo de 4 kilómetros que cambia 4 milímetros tiene una deformación de 0,004 entre 4000, o sea 0,000001: una parte en un millón.\n\nAhora la de verdad. <strong>Amplitud de la deformación</strong> en la lectura es la altura de la oscilación en el cabezal. Lleva el cabezal a donde la traza es más alta y pulsa <strong>Tomar la lectura</strong> junto al segundo campo.',
       tip: 'La deformación es una fracción, así que no tiene unidades: una deformación de 10⁻²¹ significa lo mismo tanto si la longitud es un metro como si es un año luz.',
     },
     {
@@ -300,6 +319,17 @@ export default {
         '¿Muestra el gráfico lo que ocurrió, o hasta dónde se puede confiar en un modelo?',
         'Piensa qué decidió dónde dejar de dibujar.',
       ],
+      misconceptions: [
+        {
+          say: 'Nada en la lectura dice que los objetos se detengan. Lee la línea que dice dónde termina la gráfica, y por qué.',
+        },
+        {
+          say: 'La binaria no deja de emitir ahí. Pregúntate qué decidió dónde termina el dibujo.',
+        },
+        {
+          say: 'En esta gráfica no hay ningún detector registrando: es un modelo, y la lectura dice por qué el modelo termina donde termina.',
+        },
+      ],
     },
     {
       title: 'Otros pares compactos',
@@ -315,11 +345,41 @@ export default {
     {
       title: 'La misma fuente, más lejos',
       fields: [
-        { label: 'Amplitud de deformación a 400 Mpc' },
-        { label: 'Amplitud de deformación a 800 Mpc' },
-        { label: 'Amplitud de deformación a 1600 Mpc' },
+        {
+          label: 'Amplitud de deformación a 400 Mpc',
+          misconceptions: [
+            {
+              say: 'Esa lectura se tomó a una distancia menor de la que pide este campo. Pon Distancia en el valor de la etiqueta y toma la lectura otra vez.',
+            },
+            {
+              say: 'Esa lectura se tomó a una distancia mayor de la que pide este campo. Pon Distancia en el valor de la etiqueta y toma la lectura otra vez.',
+            },
+          ],
+        },
+        {
+          label: 'Amplitud de deformación a 800 Mpc',
+          misconceptions: [
+            {
+              say: 'Esa lectura se tomó a una distancia menor de la que pide este campo. Pon Distancia en el valor de la etiqueta y toma la lectura otra vez.',
+            },
+            {
+              say: 'Esa lectura se tomó a una distancia mayor de la que pide este campo. Pon Distancia en el valor de la etiqueta y toma la lectura otra vez.',
+            },
+          ],
+        },
+        {
+          label: 'Amplitud de deformación a 1600 Mpc',
+          misconceptions: [
+            {
+              say: 'Esa lectura se tomó a una distancia menor de la que pide este campo. Pon Distancia en el valor de la etiqueta y toma la lectura otra vez.',
+            },
+            {
+              say: 'Esa lectura se tomó a una distancia mayor de la que pide este campo. Pon Distancia en el valor de la etiqueta y toma la lectura otra vez.',
+            },
+          ],
+        },
       ],
-      body: 'Volvemos a los agujeros negros, y un solo cambio controlado.\n\nEl control <strong>Distancia</strong> aleja la misma fuente. No cambia nada de los dos objetos: las mismas masas, la misma órbita, todo igual. Solo lo lejos que está.\n\nLa escala de la gráfica está fija en este paso, y el volumen también, para que lo que veas y oigas sea una comparación y no un ajuste. Anota la amplitud de deformación a tres distancias.',
+      body: 'Volvemos a los agujeros negros, y un solo cambio controlado.\n\nEl control <strong>Distancia</strong> aleja la misma fuente. No cambia nada de los dos objetos: las mismas masas, la misma órbita, todo igual. Solo lo lejos que está.\n\nLa escala de la gráfica está fija en este paso, y el volumen también, para que lo que veas y oigas sea una comparación y no un ajuste. Pon la distancia y pulsa <strong>Tomar la lectura</strong> junto a su campo, para tres distancias. Deja el cabezal donde está entre lecturas: la amplitud también cambia a lo largo de la señal.',
       tip: 'El modelo pone la fuente a una distancia dada y escala la amplitud como uno partido por esa distancia. No modela el estiramiento de la onda por la expansión del Universo, que importa para las fuentes más lejanas y aquí se deja fuera.',
     },
     {

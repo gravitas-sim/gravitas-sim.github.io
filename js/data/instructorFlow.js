@@ -1097,7 +1097,7 @@ export default {
       {
         from: 'watch-the-pair',
         to: 'follow-a-disturbance-outward',
-        text: 'The source and its rhythm — Screen 6 is the one to slow down on. Students reliably answer "a full orbit"; the half-orbit answer, and the reason for it - two identical objects swapped over look the same - is what makes the factor of two on screen 16 land rather than being a fact to memorize. Screen 7 introduces the ring overlay and says plainly that the speed is slowed and the rings are not matter.',
+        text: 'The source and its rhythm — Screen 6 is the one to slow down on. Students reliably answer "a full orbit"; the half-orbit answer, and the reason for it - after half a turn the line through the pair points the same way again, whichever object is at which end - is what makes the factor of two on screen 16 land rather than being a fact to memorize. Screen 7 introduces the ring overlay and says plainly that the speed is slowed and the rings are not matter.',
       },
       {
         from: 'freely-floating-markers',
@@ -1133,7 +1133,7 @@ export default {
       },
       {
         from: 'predict-heavier',
-        to: 'the-one-mass-that-matters',
+        to: 'compare-two-different-binaries',
         text: 'Mass. A prediction about time in band, the first controlled comparison, a three-way table, and the chirp-mass surprise. Screen 13 lands best if students have not been told the answer at screen 11.',
       },
       {
@@ -1157,9 +1157,9 @@ export default {
         text: 'The real data. Students find the seven-millisecond shift and the sign flip themselves before the readout confirms them, then see the residual. Do not shortcut the finding.',
       },
       {
-        from: 'five-recordings',
+        from: 'the-loudest-on-the-map',
         to: 'measured-or-supplied',
-        text: 'Five more mergers, read from open strain. The measurement screen and the ranking prediction are the core: students rank four pairs by chirp mass from a frequency they read themselves, before any catalog value is on the screen, and the catalog confirms it. Budget twenty minutes. Screen 27 is where the class learns why the highest signal-to-noise event is the one with nothing measurable on its map, and screen 29 asks the question the whole block is for: what was measured here, and what was supplied.',
+        text: 'A prediction about GW170817, then five more mergers, read from open strain. The measurement screen and the ranking prediction are the core: students rank four pairs by chirp mass from a frequency they read themselves, before any catalog value is on the screen, and the catalog confirms it. Budget twenty minutes. Screen 28 marks the GW170817 prediction made at screen 23 and is where the class learns why the highest signal-to-noise event is the one with nothing measurable on its map, and screen 30 asks the question the whole block is for: what was measured here, and what was supplied.',
       },
       {
         from: 'your-own-experiment',

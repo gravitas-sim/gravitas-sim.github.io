@@ -43003,10 +43003,10 @@
      ]
     },
     {
-     "sid": "the-one-mass-that-matters",
+     "sid": "compare-two-different-binaries",
      "index": 13,
      "type": "measure",
-     "title": "Two different binaries, one signal",
+     "title": "Two different binaries, compared",
      "declares": {
       "stage": {
        "objects": 2,
@@ -43752,8 +43752,74 @@
      "recovery": []
     },
     {
-     "sid": "five-recordings",
+     "sid": "the-loudest-on-the-map",
      "index": 23,
+     "type": "predict",
+     "title": "The loudest of five",
+     "declares": {
+      "stage": {
+       "objects": 2,
+       "kind": "binary",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": [
+       "bh",
+       "bh"
+      ]
+     },
+     "kinds": [
+      "scene-declared"
+     ],
+     "actions": [
+      "commit-a-prediction"
+     ],
+     "requires": [],
+     "reveal": "the-one-you-cannot-measure",
+     "asks": {
+      "choice": true,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "whole lesson",
+      "placement": "locked",
+      "areaSweep": "whole lesson"
+     },
+     "loop": {
+      "declared": "predict",
+      "actual": [
+       "predict",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [
+      "lesson locks: placement"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged"
+     ]
+    },
+    {
+     "sid": "five-recordings",
+     "index": 24,
      "type": "explore",
      "title": "Five more mergers, from the archive",
      "declares": {
@@ -43827,7 +43893,7 @@
     },
     {
      "sid": "the-same-moment",
-     "index": 24,
+     "index": 25,
      "type": "measure",
      "title": "The same moment before the end",
      "declares": {
@@ -43906,7 +43972,7 @@
     },
     {
      "sid": "rank-before-the-catalog",
-     "index": 25,
+     "index": 26,
      "type": "predict",
      "title": "Which was heaviest?",
      "declares": {
@@ -43982,7 +44048,7 @@
     },
     {
      "sid": "what-the-catalog-says",
-     "index": 26,
+     "index": 27,
      "type": "explore",
      "title": "What the catalog says",
      "declares": {
@@ -44056,9 +44122,9 @@
     },
     {
      "sid": "the-one-you-cannot-measure",
-     "index": 27,
+     "index": 28,
      "type": "explore",
-     "title": "The loudest one, and the one Gravitas cannot measure",
+     "title": "The loudest one, on its map",
      "declares": {
       "stage": {
        "objects": 2,
@@ -44130,7 +44196,7 @@
     },
     {
      "sid": "the-model-on-five",
-     "index": 28,
+     "index": 29,
      "type": "explore",
      "title": "The lab’s model, laid over the recordings",
      "declares": {
@@ -44204,7 +44270,7 @@
     },
     {
      "sid": "measured-or-supplied",
-     "index": 29,
+     "index": 30,
      "type": "question",
      "title": "What came from where",
      "declares": {
@@ -44279,7 +44345,7 @@
     },
     {
      "sid": "your-own-experiment",
-     "index": 30,
+     "index": 31,
      "type": "explore",
      "title": "Make it harder to see",
      "declares": {
@@ -44357,7 +44423,7 @@
     },
     {
      "sid": "what-the-signal-tells-you",
-     "index": 31,
+     "index": 32,
      "type": "question",
      "title": "What the signal tells you, and what it does not",
      "declares": {
@@ -44428,6 +44494,7 @@
       "instrument-capture"
      ],
      "reset": [
+      "stamps instrument values",
       "lesson locks: placement"
      ],
      "recovery": [
@@ -44436,7 +44503,7 @@
     },
     {
      "sid": "where-this-leaves-you",
-     "index": 32,
+     "index": 33,
      "type": "read",
      "title": "Where this leaves you",
      "declares": {
@@ -44558,16 +44625,16 @@
      "experiment": [
       "change-one-thing",
       "measure-time-in-band",
-      "the-one-mass-that-matters"
+      "compare-two-different-binaries"
      ],
      "measure": [
       "change-one-thing",
       "measure-time-in-band",
-      "the-one-mass-that-matters"
+      "compare-two-different-binaries"
      ],
      "evidence": [
       "measure-time-in-band",
-      "the-one-mass-that-matters"
+      "compare-two-different-binaries"
      ],
      "interpret": "change-one-thing",
      "measuredBeforeAnswering": true,
@@ -44588,9 +44655,7 @@
       "add-the-noise",
       "looks-like-is-not-enough",
       "what-they-actually-recorded",
-      "model-against-measurement",
-      "five-recordings",
-      "the-same-moment"
+      "model-against-measurement"
      ],
      "measure": [
       "test-distance",
@@ -44600,17 +44665,36 @@
       "add-the-noise",
       "looks-like-is-not-enough",
       "what-they-actually-recorded",
-      "model-against-measurement",
-      "five-recordings",
-      "the-same-moment"
+      "model-against-measurement"
      ],
      "evidence": [
       "test-distance",
       "edge-on",
-      "looks-like-is-not-enough",
-      "the-same-moment"
+      "looks-like-is-not-enough"
      ],
      "interpret": "test-distance",
+     "measuredBeforeAnswering": true,
+     "explained": false,
+     "answeredByTheExperiment": true,
+     "closed": true,
+     "complete": true
+    },
+    {
+     "predict": "the-loudest-on-the-map",
+     "predictCollects": true,
+     "heldUntil": "the-one-you-cannot-measure",
+     "experiment": [
+      "five-recordings",
+      "the-same-moment"
+     ],
+     "measure": [
+      "five-recordings",
+      "the-same-moment"
+     ],
+     "evidence": [
+      "the-same-moment"
+     ],
+     "interpret": "the-one-you-cannot-measure",
      "measuredBeforeAnswering": true,
      "explained": false,
      "answeredByTheExperiment": true,
@@ -44650,8 +44734,8 @@
     }
    ],
    "totals": {
-    "steps": 32,
-    "declared": 30,
+    "steps": 33,
+    "declared": 31,
     "student": 22,
     "engine": 0,
     "model": 31,
@@ -44659,7 +44743,7 @@
     "diagram": 9,
     "evidence": 11,
     "computation": 0,
-    "declaredButInert": 8,
+    "declaredButInert": 9,
     "prose": 0,
     "mismatched": 0,
     "rebuilds": 0
@@ -120732,8 +120816,8 @@
   }
  ],
  "totals": {
-  "steps": 1535,
-  "declared": 1392,
+  "steps": 1536,
+  "declared": 1393,
   "student": 166,
   "engine": 177,
   "model": 1002,
@@ -120741,7 +120825,7 @@
   "diagram": 873,
   "evidence": 398,
   "computation": 14,
-  "declaredButInert": 1226,
+  "declaredButInert": 1227,
   "prose": 79,
   "mismatched": 9,
   "rebuilds": 77,
@@ -120749,13 +120833,13 @@
    "scene": 4,
    "portrait": 7,
    "quiet": 96,
-   "unstated": 1428
+   "unstated": 1429
   },
   "lessons": 124,
-  "loops": 205,
-  "closedLoops": 205,
+  "loops": 206,
+  "closedLoops": 206,
   "explainedLoops": 2,
-  "heldLoops": 203,
-  "completeLoops": 203
+  "heldLoops": 204,
+  "completeLoops": 204
  }
 }

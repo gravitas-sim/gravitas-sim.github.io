@@ -1,6 +1,6 @@
 {
   "version": "November 2026",
-  "generated": "2026-11-25",
+  "generated": "2026-11-26",
   "documents": 1222,
   "inventory": {
     "documents": 1222,
@@ -24,7 +24,7 @@
     }
   },
   "sourceFiles": 310,
-  "sourceDigest": "495cd32e5f3dcad20df95b5ef633a8232984d44598a0c1016fbeac7c00f08a00",
+  "sourceDigest": "06ada1afc4818c7e5a3e0bd1572652ced0d200bed15e086f808078e1cd59cebe",
   "sources": {
     "js/activities/activities.js": "af9b7e121b9a72c2a5cc18e07331d6ee841934d402b030294d25c442628881ef",
     "js/activities/activityBridge.js": "ddd8015bf88938d98d967942048bc34e30a0099344b1055bd45a0459ec0333fe",
@@ -43,11 +43,11 @@
     "js/data/activityTeaching.js": "7694fc798f8c4130e5aead5357e69bab04d6a5d386013d009430dba9a1c31008",
     "js/data/exoplanetAnswerKey.js": "40af66407b9736f06d5fd9edbd962c34701453edd4e97bae82a1f886f6b32bb0",
     "js/data/instructorContent.es.js": "471a388f9e2abfbe837cdad387388f52f0a547d2ae5f466e66fa5680866d5d3c",
-    "js/data/instructorContent.js": "e8e63232b6628c890fd3849b5ba87f08d808266ef978d4bf3e8e2041052e40d9",
+    "js/data/instructorContent.js": "5482904471078dc60aad52c3b4b8afd1b6938417763364f564078cd1236ae550",
     "js/data/instructorExpectations.es.js": "5ec751fabe0ed60f692799c260ab8f383ffae25379c4b426efdd4351e0ae00ee",
-    "js/data/instructorExpectations.js": "e8d86b40b78b70ac95c422c307db1d35053b77bc5843ea0814c5aac240f3aa5a",
+    "js/data/instructorExpectations.js": "a507d60e1f96f70ed88177079882a90d8a3afd863118b2811610265975ebf3e4",
     "js/data/instructorFlow.es.js": "f1c087e5240114351245f6a7fa7ad9b3efd269ec6d415183fd945ac95534fd86",
-    "js/data/instructorFlow.js": "024b5f5c37960c04b21508ea908be2e0ab06d8ad5fd6d0d4b601cb14c0f2154e",
+    "js/data/instructorFlow.js": "ebadf36daddeecbcc349fd4b295179696edaa7a9a8426a14370ffa79b8284566",
     "js/data/instructorLabels.js": "e43910350dbc39fc464736852d20357a95adf5b633325ebfdfdeabbb6b029fc7",
     "js/data/investigations.js": "7f6a5cc9ff0e558cd409897558206a35bcf117ce83e0ce1f77fb5d8d3ea24b58",
     "js/data/investigations/a-lens-passing-by.js": "acf7fb524e06a6e1c07af26f8b676d366875cb26204a451120ee733651a02056",
@@ -171,7 +171,7 @@
     "js/data/investigations/es/lagrange-points.js": "5e3a5dc39d211d1ab296243eba2f6841198a255af334e97f2f4cf9b114ef85e5",
     "js/data/investigations/es/leavitts-law.js": "bd62310e5b576b7737f73de1d7e049c7a278a832de039c54c21bd4dd198bbf1b",
     "js/data/investigations/es/lines-and-motion.js": "c5d05deb1b4bee8a6797e45ea30d7fca59132d8279a7327eccd46748844a98b7",
-    "js/data/investigations/es/listening-to-spacetime.js": "1d70c1c29b8bd0b7daec57281fae986bab03fe26da574a7b6393f73d3b1a0d37",
+    "js/data/investigations/es/listening-to-spacetime.js": "65cab391e19001b7f3f4a5182278aab4772b4b4c612f28fe1a0a356f0a8f7791",
     "js/data/investigations/es/lives-of-stars.js": "2bdaad01a6b81590f5ceb77c8b862ea09ab01b0e36bd6758246a5daeac12c2e4",
     "js/data/investigations/es/measurement-sequence.js": "11bf1c67c995c2f99f9aaa48aa89e673773547be6be8077d30da4ce919ec906a",
     "js/data/investigations/es/missing-mass.js": "15e423bfa3fe140c8c6c54135445f5f29f8d6a64b6aeec120f8ab06d72b2248d",
@@ -205,7 +205,7 @@
     "js/data/investigations/es/weighing-stars.js": "d883cd5e314dc785bfe6ba2cf0f84f7bbfb50c502fc9b8c3df06c0495acce16c",
     "js/data/investigations/es/what-a-ccd-records.js": "90861281d1f30a1c4de3c0d9505555ce8feeefa501903be59884ddf75cc53896",
     "js/data/investigations/es/what-a-spectrum-is-made-of.js": "a14ca02d6354eaae34e285950ebeedd770667299ce594ab6d46bcc6efa102136",
-    "js/data/investigations/es/what-is-a-gravitational-wave.js": "a7fa5d446641f38b135592e9cc0930823d7e9e58c47c1ebdf11c0f22cce7fea2",
+    "js/data/investigations/es/what-is-a-gravitational-wave.js": "3ebef0b3b3a13a808ce323d527c61c224a307923c55b41dd07bc4d2bfe3ded42",
     "js/data/investigations/es/when-orbits-lock.js": "63c940c739acc2ac1c803e42716fbcc0f26b56a62215d3c5db24b52a3e1e9d02",
     "js/data/investigations/es/where-galaxies-live.js": "ef80b0ce9c1ebdfde07be007e48a5ba7e87470dc36dd433644c6481ccb490f8d",
     "js/data/investigations/es/which-kind-of-variable.js": "dbde70ce696047343800c127907d06366608224c8d56edbb23b559a1b50a028d",
@@ -227,7 +227,7 @@
     "js/data/investigations/lagrange-points.js": "5a597ed1b645fd36033eda2cc68b1a779dd7595b86a4d959ca77deca424e7281",
     "js/data/investigations/leavitts-law.js": "301201ec610aa8e5f2089482b68c77eb1082f37d71e9f0410b61f652f942ef17",
     "js/data/investigations/lines-and-motion.js": "b0b4d4fce8a53dca84c98787bee6758518bfdce9942a906bf931d26aa768b7b4",
-    "js/data/investigations/listening-to-spacetime.js": "3b8fb7c498c0137967413bd0fa6f3f916ecf9e94c11cc1158c496a3a91cef74c",
+    "js/data/investigations/listening-to-spacetime.js": "c2fcc1d7dbf58b0fd20b7c6cc21b255005d4536e0a5233bb7f96d732befd7726",
     "js/data/investigations/lives-of-stars.js": "7bee53f95fc09b873fae4d83b6515b22c2bac6a325cc74dcedbbca85f3aa8b6a",
     "js/data/investigations/measurement-sequence.js": "2b0fee420a6d2fb16a2eeb95065ed13270ca83fab1067531bdcc8b3ce2d03b6b",
     "js/data/investigations/measuring-the-moon.js": "d675e7c4e87a868370d2b5b5487d2598512b3350d8f678ded2740efcba6650b2",
@@ -279,7 +279,7 @@
     "js/data/investigations/weighing-stars.js": "921c1618f9a4760dc7fd74cc980300a1eaa397f27e870710a99a3ed6398fbbba",
     "js/data/investigations/what-a-ccd-records.js": "1d307031eb7234e0bfb1c26ee5a1a0b68c96734d2725e755b6888e329e9504e4",
     "js/data/investigations/what-a-spectrum-is-made-of.js": "44d31535b0251a22531b3ef15b268c7bb26b4c4cae0718b3265c60b891e7644b",
-    "js/data/investigations/what-is-a-gravitational-wave.js": "2a033bb96ca91827cb6884914e6eb6e520f8180fe2a53cfce6d812cfb22f9dd2",
+    "js/data/investigations/what-is-a-gravitational-wave.js": "601374bd9ec4363bb1749bcde4cbdd7e46cf3fe3a5f5a4d394b949948351a950",
     "js/data/investigations/when-orbits-lock.js": "6b2a9bf3e4b09059fbb6b0648b9c5bab193e754a9d6581c505841379f4b62da3",
     "js/data/investigations/where-galaxies-live.js": "fd37a8585002ad1eec0b2a7f5daed7639171f25859402bbbfeb7e3a627207d2c",
     "js/data/investigations/which-kind-of-variable.js": "769c86a0540e375186bde4d431aa3c8d2df9f2794c55d49ca0c2fee19d634fce",
@@ -337,5 +337,5 @@
     "tools/instructor-freshness.mjs": "96052b2f27080f0243fdd4d5f7608927bd67f0c50808b6eac3345a65c14d1e28",
     "tools/source-closure.mjs": "961828e4d0d40d8a6f8c029fe9b9435ecaf39a74b62640efc0b4145c35c7650a"
   },
-  "contentDigest": "7c2a95a22157a327f73feb14f50f0b545a97ba4407d9f2ac4f09fc36601cde47"
+  "contentDigest": "acaad2d576d108be696f3705efbc311c060240cd8015c11a0c40889b46749a68"
 }

@@ -1736,9 +1736,8 @@ const GW_LAB = {
       }
     }
 
-    // What the two objects are drawn as, and that the model did not decide it.
-    // The same equations give the same waveform whatever the components are
-    // made of: a point-mass inspiral has two masses in it and no material.
+    // What the two objects are drawn as, and that the model did not decide it:
+    // a point-mass inspiral has two masses in it and no material.
     // Drawing a neutron star is an illustration of an astrophysical inference,
     // and a lesson that walks a reader from a black-hole pair to a
     // neutron-star pair has to say which half changed.
@@ -1751,6 +1750,7 @@ const GW_LAB = {
     }
 
     rows.push({
+      id: 'chirpMass',
       label: t('gwW.row.chirpMass'),
       value: `${f.chirpMassSun.toFixed(2)} M☉`,
       emphasis: true,
@@ -1763,15 +1763,15 @@ const GW_LAB = {
       }),
       emphasis: true,
     });
-    // Two different quantities, and the lesson used to ask for one and point
-    // at the other. The amplitude is the height of the oscillation at this
-    // moment - always positive, and what "peak strain" means. The signed value
-    // below it is where the wave happens to be within that oscillation, which
-    // passes through zero twice a cycle and is the wrong thing to write down
-    // as a peak.
+    // Two quantities a lesson once confused: the amplitude (the height of the
+    // oscillation now, always positive; a field can take it, so its text is the
+    // whole printed number) and the signed value below it, which crosses zero.
+    const amplitude = strainText(tl.envelopeAtTime(tNow));
     rows.push({
+      id: 'strainAmplitude',
       label: t('gwW.row.strainAmplitude'),
-      value: strainText(tl.envelopeAtTime(tNow)),
+      value: amplitude,
+      text: amplitude,
       emphasis: true,
     });
     rows.push({

@@ -2818,7 +2818,7 @@ export const EN_DEFERRED = {
     'Yes. Two lumps going round each other change the SHAPE of the mass distribution — its quadrupole — and a changing quadrupole is what radiates. The rings are a propagation illustration; the strain is what the model computes.',
   'gwW.row.rings': 'The rings',
   'gwW.value.rings':
-    'One crest per cycle of the wave, which is twice per orbit. Where each ring is comes from the model’s own emission history, so pausing holds them and seeking back shows the earlier pattern. Their speed across the screen is a display choice, not the speed of light to scale.',
+    'One crest per cycle of the wave. Where each ring is comes from the model’s own emission history, so pausing holds them and seeking back shows the earlier pattern. Their speed across the screen is a display choice, not the speed of light to scale.',
   'gwW.control.cursor': 'Position in the signal',
   'gwW.preset.bbh': 'Two black holes',
   'gwW.preset.bbh.note':

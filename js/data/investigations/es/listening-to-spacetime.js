@@ -19,7 +19,7 @@ export default {
   level: 'Astronomía introductoria',
   objectives: [
     'Leer una gráfica de deformación frente al tiempo y otra de frecuencia frente al tiempo de la misma señal',
-    'Explicar por qué la frecuencia de la onda es el doble de la frecuencia orbital',
+    'Explicar cómo sigue la frecuencia de la onda a la frecuencia orbital, y por qué',
     'Decir qué es un chirrido y qué hace que suba',
     'Diseñar y ejecutar una comparación en la que cambie exactamente una cosa',
     'Explicar por qué la amplitud por sí sola no dice a qué distancia está una fuente',
@@ -94,13 +94,13 @@ export default {
     },
     {
       title: '¿Cuántas ondas por órbita?',
-      body: 'Una relación que merece la pena encontrar por uno mismo, porque explica un factor de dos que aparece por todas partes en este tema.\n\nDeja el cabezal cerca del comienzo de la señal, donde la órbita cambia despacio, y usa la vista esquemática de la fuente. Sigue a uno de los dos cuerpos (digamos el más pequeño) y cuenta cuántas vueltas da mientras cuentas crestas en la gráfica de deformación.\n\nLa forma más sencilla: pon el cabezal al principio del todo, fíjate dónde está el cuerpo pequeño y avanza el cabezal hasta que vuelva al mismo sitio. Eso es una órbita. Después cuenta los picos por los que pasó la gráfica de deformación en ese mismo intervalo.',
+      body: 'Una relación que merece la pena encontrar por uno mismo, porque explica un número que aparece por todas partes en este tema.\n\nDeja el cabezal cerca del comienzo de la señal, donde la órbita cambia despacio, y usa la vista esquemática de la fuente. Sigue a uno de los dos cuerpos (digamos el más pequeño) y cuenta cuántas vueltas da mientras cuentas crestas en la gráfica de deformación.\n\nLa forma más sencilla: pon el cabezal al principio del todo, fíjate dónde está el cuerpo pequeño y avanza el cabezal hasta que vuelva al mismo sitio. Eso es una órbita. Después cuenta los picos por los que pasó la gráfica de deformación en ese mismo intervalo.',
       fields: [
         { label: 'Órbitas que has seguido' },
         { label: 'Picos de onda en el mismo tiempo' },
         { label: 'Picos de onda por órbita' },
       ],
-      tip: 'Dos, y el motivo es una simetría: gira la binaria media vuelta y los dos cuerpos han intercambiado sus sitios, lo que se ve exactamente igual que la disposición de partida. La onda tampoco nota la diferencia, así que se repite dos veces por órbita.',
+      tip: 'Sigue al cuerpo más pequeño: es más fácil saber cuándo ha vuelto a donde empezó. Cuenta picos, no cada vez que la curva cruza la línea central.',
     },
     {
       title: 'La frecuencia, dos veces',
@@ -179,15 +179,22 @@ export default {
       tip: 'Las dos columnas van en el mismo sentido: más ligero significa más largo y más alto. Un par de estrellas de neutrones, con una cincuentava parte de estas masas, está en banda más de dos minutos y pasa del kilohercio.',
     },
     {
-      title: 'Dos binarias distintas, una señal',
-      body: 'Algo extraño, y es el hecho más útil de este tema.\n\nPon las masas en <strong>36 y 29</strong> y pulsa <strong>Fijar como A</strong>. Lee la masa de chirrido en lo alto de la lectura.\n\nAhora ponlas en <strong>50 y 19,4</strong>. Son objetos muy distintos (uno casi el triple del otro) y ni siquiera la masa total es la misma. Lee otra vez la masa de chirrido y después mira las dos trazas en la gráfica de deformación.',
+      title: 'Dos binarias distintas, comparadas',
+      body: 'Algo extraño, y es el hecho más útil de este tema.\n\nPon las masas en <strong>36 y 29</strong>, pulsa <strong>Fijar como A</strong> y pulsa <strong>Tomar la lectura</strong> junto al primer campo: guarda la masa de chirrido que imprime la lectura.\n\nAhora ponlas en <strong>50 y 21,6</strong>. Son objetos muy distintos (uno más del doble del otro) y la masa total tampoco es la misma. Toma otra vez la masa de chirrido en el segundo campo y después mira las dos trazas en la gráfica de deformación.',
       fields: [
         { label: 'Masa de chirrido de 36 + 29' },
-        { label: 'Masa de chirrido de 50 + 19,4' },
+        {
+          label: 'Masa de chirrido de 50 + 21,6',
+          misconceptions: [
+            {
+              say: 'Esa lectura se tomó antes de poner la primera masa en 50. Pon las masas en 50 y 21,6 y tómala otra vez.',
+            },
+          ],
+        },
         { label: 'Masa total de 36 + 29' },
-        { label: 'Masa total de 50 + 19,4' },
+        { label: 'Masa total de 50 + 21,6' },
       ],
-      tip: 'La combinación que gobierna la espiral no es la masa total ni ninguna de las masas por separado. Es la masa de chirrido, y dos binarias que comparten una producen casi la misma señal, y por eso la masa de chirrido es lo primero que informa una detección y las masas individuales son mucho más difíciles de acotar.',
+      tip: 'Compara las dos trazas de la gráfica de deformación además de los dos números.',
     },
     {
       title: 'El doble de lejos',
@@ -305,6 +312,20 @@ export default {
       tip: 'El decaimiento rápido del final es el timbre: un único agujero negro recién formado asentándose. Nada en el modelo propio de esta investigación lo produce, y nada en esta investigación fingió lo contrario.',
     },
     {
+      title: 'La más intensa de cinco',
+      body: 'Las pantallas siguientes muestran cinco fusiones más, cada una como un mapa de la grabación de un detector: frecuencia frente al tiempo, brillante allí donde esa frecuencia en ese instante es más intensa que el propio ruido del detector. Un chirrido aparece como una traza que sube y luego se detiene.\n\nUna de las cinco es GW170817, dos estrellas de neutrones, y el catálogo le da la relación señal-ruido más alta de las cinco. Piensa en lo que este laboratorio te mostró de un par ligero: cuánto tiempo permanece en banda y cuán intensa es su onda en cada momento.',
+      prompt:
+        '¿Encontrará Gravitas el chirrido de GW170817 como una traza en su mapa?',
+      options: [
+        'Sí: su relación señal-ruido es la más alta, así que su traza es la más clara',
+        'Sí, pero débil: es la más lejana de las cinco',
+        'No: su onda es débil en cada momento, y el mapa juzga un momento cada vez',
+        'No: las estrellas de neutrones son demasiado pequeñas para emitir ondas gravitacionales',
+      ],
+      because:
+        'No: en su grabación Gravitas no encuentra nada más intenso que el ruido, y los dos números son ciertos. El mapa pregunta si un píxel (una frecuencia, un instante) es más intenso de lo que el ruido podría hacerlo. Una pareja de estrellas de neutrones es ligera, así que su chirrido es débil en cada momento y muy largo: el modelo del laboratorio dice que pasa casi un minuto en la banda, miles de ciclos. El 33 del catálogo sale de un filtro adaptado que suma todos esos ciclos contra una plantilla antes de preguntar si el total es más intenso que el ruido. Gravitas no ejecuta esa búsqueda, y la lectura lo dice. La última décima de segundo tampoco ayuda: una pareja tan ligera ya pasa de 300 Hz entonces y sigue subiendo por encima del borde superior del mapa cuando se fusiona.',
+    },
+    {
       title: 'Cinco fusiones más, del archivo',
       body: 'Los pasos 21 y 22 eran un solo evento, tal como lo publicó el artículo del descubrimiento. Estos son cinco, tal como los registraron los detectores: treinta y dos segundos de deformación de cada uno, descargados del Gravitational Wave Open Science Center, y un detector dibujado por evento.\n\nEl mapa es esa grabación, blanqueada por Gravitas con el ruido que tenía el mismo detector en los mismos treinta y dos segundos, y desplegada en tiempo y frecuencia. Una mancha brillante es energía más intensa que el propio ruido de ese detector, a esa frecuencia, en ese instante. Un chirrido es una curva en el mapa que sube y luego se detiene.\n\nLa lectura mantiene separadas cuatro clases de número, bajo cuatro encabezados: lo que se <strong>observó</strong>, lo que Gravitas <strong>midió</strong> a partir de ello, lo que dice el <strong>catálogo GWOSC</strong> y lo que predice el <strong>modelo</strong>. Por ahora el catálogo está reservado y el modelo desactivado.\n\n<strong>La pareja del lienzo no es ninguno de estos cinco.</strong> Es la binaria modelo del laboratorio de antes, todavía donde estaba. Nada del panel la mueve.',
       checklist: [
@@ -354,8 +375,8 @@ export default {
       tip: 'El catálogo da masas en el sistema de la fuente: lo que pesaría la pareja si estuviera al lado. El corrimiento al rojo que las convierte también es un valor del catálogo, y el modelo de una pantalla posterior usa el producto de los dos.',
     },
     {
-      title: 'La más intensa, y la que Gravitas no puede medir',
-      body: 'GW170817 es la pareja de estrellas de neutrones cuya colisión también se vio como un estallido de rayos gamma, y luego como una fuente nueva de luz en una galaxia a unos cuarenta megapársecs. Su relación señal-ruido en el catálogo es 33, la más alta de las cinco. Y en su grabación, Gravitas no encuentra nada más intenso que el ruido.\n\nLas dos cosas son ciertas. La diferencia está en cómo se obtuvieron los dos números. El mapa pregunta si un píxel (una frecuencia, un instante) es más intenso de lo que el ruido podría hacerlo. Una pareja de estrellas de neutrones es ligera, así que su chirrido es débil en cada momento y muy largo: el modelo del laboratorio dice que pasa casi un minuto en la banda, miles de ciclos. El número del catálogo sale de un filtro adaptado que suma todos esos ciclos contra una plantilla antes de preguntar si el total es más intenso que el ruido. Gravitas no ejecuta esa búsqueda, y la lectura lo dice.\n\nLa última décima de segundo, donde terminan los chirridos de las parejas más pesadas, tampoco ayuda: una pareja tan ligera ya pasa de 300 Hz entonces y sigue subiendo por encima del borde superior del mapa cuando se fusiona.',
+      title: 'La más intensa, en su mapa',
+      body: 'GW170817 es la pareja de estrellas de neutrones cuya colisión también se vio como un estallido de rayos gamma, y luego como una fuente nueva de luz en una galaxia a unos cuarenta megapársecs.\n\nSelecciónala y compara tu predicción con su mapa: lee la línea <strong>Final del chirrido</strong>, mira los dos últimos segundos y compara su relación señal-ruido con la de los otros cuatro.',
       checklist: [
         'Selecciona GW170817 y lee la línea «Final del chirrido»',
         'Mira con atención los dos últimos segundos de su mapa y decide si ves una traza',
@@ -400,19 +421,19 @@ export default {
     },
     {
       title: 'Lo que la señal te dice, y lo que no',
-      body: 'De vuelta al principio. En el paso 1 se te mostró un patrón sin etiqueta y se te preguntó qué podría haberlo producido. Ahora sabes bastante más que entonces.\n\nAquí tienes uno nuevo en el que pensar mientras escribes: llega una señal que permanece noventa segundos en la banda de un detector y sube por encima de un kilohercio antes de desaparecer. Con lo que has medido ya puedes decir algo sobre qué clase de pareja era, y hay cosas que no puedes decir por mucho que mires.\n\nCuando hayas escrito tu respuesta, abre el cuaderno y expórtala con las lecturas que guardaste. Una afirmación viaja con su evidencia.',
+      body: 'De vuelta al principio. En el paso 1 se te mostró un patrón sin etiqueta y se te preguntó qué podría haberlo producido. Ahora sabes bastante más que entonces.\n\nAquí tienes uno nuevo en el que pensar mientras escribes: llega una señal que permanece más de dos minutos y medio en la banda de un detector y sube por encima de un kilohercio antes de desaparecer. La pareja que ahora está en el lienzo es el modelo del laboratorio para ella, dibujada como estrellas de neutrones por su masa, no porque la señal lo diga. Con lo que has medido ya puedes decir algo sobre qué clase de pareja era, y hay cosas que no puedes decir por mucho que mires.\n\nCuando hayas escrito tu respuesta, abre el cuaderno y expórtala con las lecturas que guardaste. Una afirmación viaja con su evidencia.',
       prompt:
         'Escribe un breve relato de lo que una señal de chirrido revela sobre su fuente y lo que deja indeterminado. Menciona al menos una cosa que hayas medido y al menos una que este modelo no pueda decirte. Di si tu predicción del paso 1 sigue en pie.',
       rubric:
-        'Busca tres cosas. Primera, al menos una relación medida enunciada correctamente: que la frecuencia de la onda es el doble de la orbital, que lo que gobierna la espiral es la masa de chirrido y no las masas individuales, que la deformación va como uno sobre la distancia, o que los pares más ligeros permanecen más tiempo en banda. Segunda, una limitación real y bien razonada: la degeneración distancia-inclinación (la amplitud sola no puede separar una fuente lejana vista de frente de una cercana vista de canto), que el modelo se detiene antes de la fusión, o que la masa de chirrido no determina las dos masas por separado. Tercera, una revisión honesta del paso 1 y no una afirmación de haberlo sabido siempre. Quien diga que la señal de noventa segundos era un par de poca masa (estrellas de neutrones, o algo parecido) ha usado bien la investigación; quien diga que eran sin duda estrellas de neutrones ha afirmado de más, porque la señal acota la masa de chirrido y no la composición, y esa distinción merece señalarse en la corrección más que penalizarse con dureza. NO des crédito a «más fuerte significa más cerca» sin la salvedad de la inclinación, ni a ninguna afirmación de que oír el sonido identifica la fuente.',
+        'Busca tres cosas. Primera, al menos una relación medida enunciada correctamente: que la frecuencia de la onda es el doble de la orbital, que lo que gobierna la espiral es la masa de chirrido y no las masas individuales, que la deformación va como uno sobre la distancia, o que los pares más ligeros permanecen más tiempo en banda. Segunda, una limitación real y bien razonada: la degeneración distancia-inclinación (la amplitud sola no puede separar una fuente lejana vista de frente de una cercana vista de canto), que el modelo se detiene antes de la fusión, o que la masa de chirrido no determina las dos masas por separado. Tercera, una revisión honesta del paso 1 y no una afirmación de haberlo sabido siempre. Quien diga que la señal larga era un par de poca masa (estrellas de neutrones, o algo parecido) ha usado bien la investigación; quien diga que eran sin duda estrellas de neutrones ha afirmado de más, porque la señal acota la masa de chirrido y no la composición, y esa distinción merece señalarse en la corrección más que penalizarse con dureza. NO des crédito a «más fuerte significa más cerca» sin la salvedad de la inclinación, ni a ninguna afirmación de que oír el sonido identifica la fuente.',
       tool: {
-        note: 'La señal nueva, para la pregunta de al lado. Dos objetos de 1,4 masas solares cada uno, de donde salen los noventa segundos y el kilohercio.',
+        note: 'La señal nueva, para la pregunta de al lado. Dos objetos de 1,4 masas solares cada uno, de donde salen los minutos en banda y el kilohercio.',
       },
       tip: 'Nada en una onda gravitacional dice de qué estaban hechos los objetos. Dice cuánto pesaban, cómo se movían y a qué distancia estaban; y la razón por la que creemos que GW170817 fue un par de estrellas de neutrones es que un estallido de rayos gamma se produjo en el mismo sitio dos segundos después y un telescopio encontró la galaxia.',
     },
     {
       title: 'Dónde te deja esto',
-      body: '<strong>Dos gráficas, una señal.</strong> La deformación frente al tiempo es una onda que se hace más alta y más rápida; la frecuencia frente al tiempo es lo mismo como una curva que barre hacia arriba. Ese barrido es el chirrido, y la fuente se lee en su forma, no en su altura.\n\n<strong>La frecuencia de la onda es el doble de la orbital</strong>, porque la distribución de masa de un binario se repite dos veces por órbita y no una.\n\n<strong>Lo que fija la espiral es la masa de chirrido</strong>: una combinación concreta de las dos masas, no las dos masas por separado. Una señal que permanece en banda noventa segundos y sube por encima del kilohercio es un par ligero. Con solo esa prueba todavía no es un par de estrellas de neutrones, y la diferencia entre esas dos frases es casi todo lo que esta investigación pretendía.\n\n<strong>La amplitud sola no es una distancia.</strong> Una fuente lejana vista de frente y otra más cercana vista de canto escriben la misma deformación. Separarlas exige más de un detector.\n\n<strong>Y un chirrido no es una detección.</strong> El modelo que ejecutaste se detiene antes de la fusión. El ruido que añadiste se coloreó para resultar convincente, no se midió en un instrumento. Una afirmación real es una señal coincidente en detectores separados con una tasa de falsa alarma asociada, y todo lo que hay en esta pantalla es un modelo de una cosa, etiquetado como tal.',
+      body: '<strong>Dos gráficas, una señal.</strong> La deformación frente al tiempo es una onda que se hace más alta y más rápida; la frecuencia frente al tiempo es lo mismo como una curva que barre hacia arriba. Ese barrido es el chirrido, y la fuente se lee en su forma, no en su altura.\n\n<strong>La frecuencia de la onda es el doble de la orbital</strong>, porque la línea que une a la pareja apunta en la misma dirección dos veces por órbita y no una.\n\n<strong>Lo que fija la espiral es la masa de chirrido</strong>: una combinación concreta de las dos masas, no las dos masas por separado. Una señal que permanece minutos en banda y sube por encima del kilohercio es un par ligero. Con solo esa prueba todavía no es un par de estrellas de neutrones, y la diferencia entre esas dos frases es casi todo lo que esta investigación pretendía.\n\n<strong>La amplitud sola no es una distancia.</strong> Una fuente lejana vista de frente y otra más cercana vista de canto escriben la misma deformación. Separarlas exige más de un detector.\n\n<strong>Y un chirrido no es una detección.</strong> El modelo que ejecutaste se detiene antes de la fusión. El ruido que añadiste se coloreó para resultar convincente, no se midió en un instrumento. Una afirmación real es una señal coincidente en detectores separados con una tasa de falsa alarma asociada, y todo lo que hay en esta pantalla es un modelo de una cosa, etiquetado como tal.',
       tip: 'La distinción que llevas toda la investigación haciendo —medida, modelo, ilustración— es la misma que hacen los observatorios en público. Un evento candidato se publica con su tasa de falsa alarma precisamente para que quien lo lea pueda hacerla también.',
     },
   ],
