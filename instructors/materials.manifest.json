@@ -1,6 +1,6 @@
 {
   "version": "November 2026",
-  "generated": "2026-11-25",
+  "generated": "2026-11-26",
   "documents": 1222,
   "inventory": {
     "documents": 1222,
@@ -24,7 +24,7 @@
     }
   },
   "sourceFiles": 310,
-  "sourceDigest": "495cd32e5f3dcad20df95b5ef633a8232984d44598a0c1016fbeac7c00f08a00",
+  "sourceDigest": "8a275a768d44ed58a7448dd93b12bf6d092300c871266db078e420a3645b1a8e",
   "sources": {
     "js/activities/activities.js": "af9b7e121b9a72c2a5cc18e07331d6ee841934d402b030294d25c442628881ef",
     "js/activities/activityBridge.js": "ddd8015bf88938d98d967942048bc34e30a0099344b1055bd45a0459ec0333fe",
@@ -45,9 +45,9 @@
     "js/data/instructorContent.es.js": "471a388f9e2abfbe837cdad387388f52f0a547d2ae5f466e66fa5680866d5d3c",
     "js/data/instructorContent.js": "e8e63232b6628c890fd3849b5ba87f08d808266ef978d4bf3e8e2041052e40d9",
     "js/data/instructorExpectations.es.js": "5ec751fabe0ed60f692799c260ab8f383ffae25379c4b426efdd4351e0ae00ee",
-    "js/data/instructorExpectations.js": "e8d86b40b78b70ac95c422c307db1d35053b77bc5843ea0814c5aac240f3aa5a",
+    "js/data/instructorExpectations.js": "97cfd014d8f1726fc4159a8942aa765c9a6b0ada746c6491e331c81703bed99d",
     "js/data/instructorFlow.es.js": "f1c087e5240114351245f6a7fa7ad9b3efd269ec6d415183fd945ac95534fd86",
-    "js/data/instructorFlow.js": "024b5f5c37960c04b21508ea908be2e0ab06d8ad5fd6d0d4b601cb14c0f2154e",
+    "js/data/instructorFlow.js": "918eb4b6184fecc2feca8a9e2b70b6d31068b6650eb7659e9f87679452e362e4",
     "js/data/instructorLabels.js": "e43910350dbc39fc464736852d20357a95adf5b633325ebfdfdeabbb6b029fc7",
     "js/data/investigations.js": "7f6a5cc9ff0e558cd409897558206a35bcf117ce83e0ce1f77fb5d8d3ea24b58",
     "js/data/investigations/a-lens-passing-by.js": "acf7fb524e06a6e1c07af26f8b676d366875cb26204a451120ee733651a02056",
@@ -58,7 +58,7 @@
     "js/data/investigations/binaries-sequence.js": "c55578a36fdd97af6cc11832cf9b4445dced5cb49abd77ac377d944d060b1e32",
     "js/data/investigations/binary-masses-sequence.js": "47670ac6193214d45ee1e1c8f70c14cf5f55bcdfe2cd6e9dd97c8de8735fd86a",
     "js/data/investigations/binary-star-planets.js": "c07fb4d15cdc27dcde32c4afce9cb149577d93c9c7e996e1c68c9d8cfddf20f8",
-    "js/data/investigations/black-holes.js": "2edcc87a8f89961762bcc94682abdde3d3d2cc59adc45e020bce7bd4b676d4c1",
+    "js/data/investigations/black-holes.js": "d1cf2b3a1dae21f792dd438084beb6cfeba40124958bd5aa2d0b8f760a4f2173",
     "js/data/investigations/butterfly-effect.js": "ea13191046a74c1bfca58170efcea8def1e0d16e8a86ff454ad60ad1828e6ffe",
     "js/data/investigations/catalog.js": "c24c233767ebd28a49066263de0c3db6eca72298a925e62ece364eec38dfc04f",
     "js/data/investigations/cluster-membership.js": "e54dc9191cb2b66f4b55ad3dfd268bceacbc7f7a09e38eb1d2320069fac69617",
@@ -154,7 +154,7 @@
     "js/data/investigations/es/atmosphere-sequence.js": "98d8ccd4105dc82d638b1a0fde2c19804a8aaefb79c8f216adeab9796c349e95",
     "js/data/investigations/es/bending-light.js": "f829d275b78b89ffcbf678ffd4b4f9980cbb531a5bc3ce80b9bbd6b5b31abb65",
     "js/data/investigations/es/binary-star-planets.js": "6d54d1d2ac98e6e41702b1b658c8c498e2353efe068de558279f50bfe24fb058",
-    "js/data/investigations/es/black-holes.js": "7c1a2560b46a8ca54988d403033872fc862d0e0d327071f8fbd253b86b31038e",
+    "js/data/investigations/es/black-holes.js": "420626edc9eb2cc72f8a2d7d84ad8711abca967e3379582d4d9fd09680013e99",
     "js/data/investigations/es/butterfly-effect.js": "2af00ba76a32d4adb47fdadd0dee437ebb7990689dd6b1365b6077bff8333bb9",
     "js/data/investigations/es/cluster-membership.js": "ce06fed830d6a0288e50766b8b475d396bd8308ec189d249b78a353c478de426",
     "js/data/investigations/es/color-and-temperature.js": "adf69c99005335493a3ab93da14b23780751b20fd65ab719c4664a2d25f1b88d",
@@ -337,5 +337,5 @@
     "tools/instructor-freshness.mjs": "96052b2f27080f0243fdd4d5f7608927bd67f0c50808b6eac3345a65c14d1e28",
     "tools/source-closure.mjs": "961828e4d0d40d8a6f8c029fe9b9435ecaf39a74b62640efc0b4145c35c7650a"
   },
-  "contentDigest": "7c2a95a22157a327f73feb14f50f0b545a97ba4407d9f2ac4f09fc36601cde47"
+  "contentDigest": "8d66fb8e58921a82e8b1ade79fbc6be926044ea70e843be0036208d7025fdd15"
 }
