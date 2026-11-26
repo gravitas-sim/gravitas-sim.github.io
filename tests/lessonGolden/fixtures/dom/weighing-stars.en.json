@@ -12,7 +12,7 @@
   "body": "<p class=\"inv-step-count\">Step 1 of 36 <span class=\"inv-step-kind\">read</span></p><h3 class=\"inv-step-title\">You cannot put a star on a scale</h3><div class=\"inv-step-body\"><p>How can anyone weigh a star they can never touch? You will choose a way it could be done, then try it in the live view and take the measurements yourself.</p><p>A bathroom scale works by pushing back: stand on it, and it measures how hard the Earth is pulling you down. There is no version of that for a star, and yet any astronomy textbook gives the masses of dozens of stars, to two decimal places.</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> Nothing here needs algebra. You will read two numbers off a screen and do one division.</p>",
   "previousDisabled": true,
   "nextDisabled": false,
-  "depthState": ""
+  "depthState": "Core version"
  },
  {
   "depth": "core",
@@ -27,7 +27,7 @@
   "body": "<p class=\"inv-step-count\">Step 2 of 36 <span class=\"inv-step-kind\">question</span></p><h3 class=\"inv-step-title\">How would you do it?</h3><div class=\"inv-step-body\"><p>Before going any further, think about what could possibly work. You have a telescope. You cannot travel there, you cannot touch it, and you cannot wait very long.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">How could an astronomer measure the mass of a star?</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">A</span><span>Measure how bright it looks</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">B</span><span>Measure how large it looks</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">C</span><span>Watch how its gravity moves something else</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">D</span><span>There is no way to measure a star’s mass</span></button></div>",
   "previousDisabled": false,
   "nextDisabled": false,
-  "depthState": ""
+  "depthState": "Core version"
  },
  {
   "depth": "core",
@@ -42,7 +42,7 @@
   "body": "<p class=\"inv-step-count\">Step 2 of 36 <span class=\"inv-step-kind\">question</span></p><h3 class=\"inv-step-title\">How would you do it?</h3><div class=\"inv-step-body\"><p>Before going any further, think about what could possibly work. You have a telescope. You cannot travel there, you cannot touch it, and you cannot wait very long.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">How could an astronomer measure the mass of a star?</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">A</span><span>Measure how bright it looks</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">B</span><span>Measure how large it looks</span></button><button type=\"button\" class=\"inv-option is-chosen is-correct\" data-option=\"2\" role=\"radio\" aria-checked=\"true\" disabled=\"\"><span class=\"inv-option-mark\">C</span><span>Watch how its gravity moves something else</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">D</span><span>There is no way to measure a star’s mass</span></button></div><p class=\"inv-because\">Gravity is the only one of these that depends on mass. Brightness and size are related to mass for ordinary stars, but only loosely, and only because somebody first measured masses another way. Watching how a star pulls something else is the direct measurement, and everything else is calibrated against it.</p><button type=\"button\" class=\"ui-button subtle\" data-change=\"\">Change answer</button>",
   "previousDisabled": false,
   "nextDisabled": false,
-  "depthState": ""
+  "depthState": "Core version"
  },
  {
   "depth": "core",
@@ -57,7 +57,7 @@
   "body": "<p class=\"inv-step-count\">Step 36 of 36 <span class=\"inv-step-kind\">read</span></p><h3 class=\"inv-step-title\">Why it matters</h3><div class=\"inv-step-body\"><p>Binary stars are the only direct way we have of weighing a star, and very nearly everything else we claim to know about stellar masses rests on them. When a textbook says that a star ten times the Sun's mass burns out in a few tens of millions of years, the masses behind that statement were calibrated on pairs of stars measured the way you measured this one.</p><p>About half the stars in the sky have a companion. Every one of them is quietly announcing its own mass to anyone who watches long enough.</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> Bessel found Sirius B by noticing a wobble, decades before anyone saw it. Measuring what you cannot see, by watching what it does to something you can, is one of the oldest tricks in the subject and still one of the best.</p>",
   "previousDisabled": false,
   "nextDisabled": false,
-  "depthState": ""
+  "depthState": "Core version"
  },
  {
   "depth": "quantitative",
@@ -72,7 +72,7 @@
   "body": "<p class=\"inv-step-count\">Step 1 of 38 <span class=\"inv-step-kind\">read</span></p><h3 class=\"inv-step-title\">You cannot put a star on a scale</h3><div class=\"inv-step-body\"><p>How can anyone weigh a star they can never touch? You will choose a way it could be done, then try it in the live view and take the measurements yourself.</p><p>A bathroom scale works by pushing back: stand on it, and it measures how hard the Earth is pulling you down. There is no version of that for a star, and yet any astronomy textbook gives the masses of dozens of stars, to two decimal places.</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> Nothing here needs algebra. You will read two numbers off a screen and do one division.</p>",
   "previousDisabled": true,
   "nextDisabled": false,
-  "depthState": "Depth: Quantitative"
+  "depthState": "Quantitative version"
  },
  {
   "depth": "quantitative",
@@ -87,7 +87,7 @@
   "body": "<p class=\"inv-step-count\">Step 2 of 38 <span class=\"inv-step-kind\">question</span></p><h3 class=\"inv-step-title\">How would you do it?</h3><div class=\"inv-step-body\"><p>Before going any further, think about what could possibly work. You have a telescope. You cannot travel there, you cannot touch it, and you cannot wait very long.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">How could an astronomer measure the mass of a star?</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">A</span><span>Measure how bright it looks</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">B</span><span>Measure how large it looks</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">C</span><span>Watch how its gravity moves something else</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">D</span><span>There is no way to measure a star’s mass</span></button></div>",
   "previousDisabled": false,
   "nextDisabled": false,
-  "depthState": "Depth: Quantitative"
+  "depthState": "Quantitative version"
  },
  {
   "depth": "quantitative",
@@ -102,7 +102,7 @@
   "body": "<p class=\"inv-step-count\">Step 2 of 38 <span class=\"inv-step-kind\">question</span></p><h3 class=\"inv-step-title\">How would you do it?</h3><div class=\"inv-step-body\"><p>Before going any further, think about what could possibly work. You have a telescope. You cannot travel there, you cannot touch it, and you cannot wait very long.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">How could an astronomer measure the mass of a star?</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">A</span><span>Measure how bright it looks</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">B</span><span>Measure how large it looks</span></button><button type=\"button\" class=\"inv-option is-chosen is-correct\" data-option=\"2\" role=\"radio\" aria-checked=\"true\" disabled=\"\"><span class=\"inv-option-mark\">C</span><span>Watch how its gravity moves something else</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">D</span><span>There is no way to measure a star’s mass</span></button></div><p class=\"inv-because\">Gravity is the only one of these that depends on mass. Brightness and size are related to mass for ordinary stars, but only loosely, and only because somebody first measured masses another way. Watching how a star pulls something else is the direct measurement, and everything else is calibrated against it.</p><button type=\"button\" class=\"ui-button subtle\" data-change=\"\">Change answer</button>",
   "previousDisabled": false,
   "nextDisabled": false,
-  "depthState": "Depth: Quantitative"
+  "depthState": "Quantitative version"
  },
  {
   "depth": "quantitative",
@@ -117,7 +117,7 @@
   "body": "<p class=\"inv-step-count\">Step 38 of 38 <span class=\"inv-step-kind\">read</span></p><h3 class=\"inv-step-title\">Why it matters</h3><div class=\"inv-step-body\"><p>Binary stars are the only direct way we have of weighing a star, and very nearly everything else we claim to know about stellar masses rests on them. When a textbook says that a star ten times the Sun's mass burns out in a few tens of millions of years, the masses behind that statement were calibrated on pairs of stars measured the way you measured this one.</p><p>About half the stars in the sky have a companion. Every one of them is quietly announcing its own mass to anyone who watches long enough.</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> Bessel found Sirius B by noticing a wobble, decades before anyone saw it. Measuring what you cannot see, by watching what it does to something you can, is one of the oldest tricks in the subject and still one of the best.</p>",
   "previousDisabled": false,
   "nextDisabled": false,
-  "depthState": "Depth: Quantitative"
+  "depthState": "Quantitative version"
  },
  {
   "depth": "advanced",
@@ -132,7 +132,7 @@
   "body": "<p class=\"inv-step-count\">Step 1 of 40 <span class=\"inv-step-kind\">read</span></p><h3 class=\"inv-step-title\">You cannot put a star on a scale</h3><div class=\"inv-step-body\"><p>How can anyone weigh a star they can never touch? You will choose a way it could be done, then try it in the live view and take the measurements yourself.</p><p>A bathroom scale works by pushing back: stand on it, and it measures how hard the Earth is pulling you down. There is no version of that for a star, and yet any astronomy textbook gives the masses of dozens of stars, to two decimal places.</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> Nothing here needs algebra. You will read two numbers off a screen and do one division.</p>",
   "previousDisabled": true,
   "nextDisabled": false,
-  "depthState": "Depth: Advanced"
+  "depthState": "Advanced version"
  },
  {
   "depth": "advanced",
@@ -147,7 +147,7 @@
   "body": "<p class=\"inv-step-count\">Step 2 of 40 <span class=\"inv-step-kind\">question</span></p><h3 class=\"inv-step-title\">How would you do it?</h3><div class=\"inv-step-body\"><p>Before going any further, think about what could possibly work. You have a telescope. You cannot travel there, you cannot touch it, and you cannot wait very long.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">How could an astronomer measure the mass of a star?</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">A</span><span>Measure how bright it looks</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">B</span><span>Measure how large it looks</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">C</span><span>Watch how its gravity moves something else</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">D</span><span>There is no way to measure a star’s mass</span></button></div>",
   "previousDisabled": false,
   "nextDisabled": false,
-  "depthState": "Depth: Advanced"
+  "depthState": "Advanced version"
  },
  {
   "depth": "advanced",
@@ -162,7 +162,7 @@
   "body": "<p class=\"inv-step-count\">Step 2 of 40 <span class=\"inv-step-kind\">question</span></p><h3 class=\"inv-step-title\">How would you do it?</h3><div class=\"inv-step-body\"><p>Before going any further, think about what could possibly work. You have a telescope. You cannot travel there, you cannot touch it, and you cannot wait very long.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">How could an astronomer measure the mass of a star?</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">A</span><span>Measure how bright it looks</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">B</span><span>Measure how large it looks</span></button><button type=\"button\" class=\"inv-option is-chosen is-correct\" data-option=\"2\" role=\"radio\" aria-checked=\"true\" disabled=\"\"><span class=\"inv-option-mark\">C</span><span>Watch how its gravity moves something else</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">D</span><span>There is no way to measure a star’s mass</span></button></div><p class=\"inv-because\">Gravity is the only one of these that depends on mass. Brightness and size are related to mass for ordinary stars, but only loosely, and only because somebody first measured masses another way. Watching how a star pulls something else is the direct measurement, and everything else is calibrated against it.</p><button type=\"button\" class=\"ui-button subtle\" data-change=\"\">Change answer</button>",
   "previousDisabled": false,
   "nextDisabled": false,
-  "depthState": "Depth: Advanced"
+  "depthState": "Advanced version"
  },
  {
   "depth": "advanced",
@@ -177,6 +177,6 @@
   "body": "<p class=\"inv-step-count\">Step 40 of 40 <span class=\"inv-step-kind\">read</span></p><h3 class=\"inv-step-title\">Why it matters</h3><div class=\"inv-step-body\"><p>Binary stars are the only direct way we have of weighing a star, and very nearly everything else we claim to know about stellar masses rests on them. When a textbook says that a star ten times the Sun's mass burns out in a few tens of millions of years, the masses behind that statement were calibrated on pairs of stars measured the way you measured this one.</p><p>About half the stars in the sky have a companion. Every one of them is quietly announcing its own mass to anyone who watches long enough.</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> Bessel found Sirius B by noticing a wobble, decades before anyone saw it. Measuring what you cannot see, by watching what it does to something you can, is one of the oldest tricks in the subject and still one of the best.</p>",
   "previousDisabled": false,
   "nextDisabled": false,
-  "depthState": "Depth: Advanced"
+  "depthState": "Advanced version"
  }
 ]

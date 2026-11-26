@@ -177,6 +177,13 @@ export function durationOf(value) {
 }
 
 /**
+ * Which versions (depths) a card offers, by name, only where it is not the
+ * usual three; the card reads three as core, quantitative and advanced.
+ */
+const versionsOf = list =>
+  list?.length > 1 && list.length !== 3 ? { versions: list } : {};
+
+/**
  * The record, with every field in one order, so a card, a filter and the
  * schema can rely on each being there.
  */
@@ -199,6 +206,7 @@ function entry(e) {
     courseLevel: e.courseLevel ?? null,
     steps: e.steps ?? null,
     ...(e.depths ? { depths: e.depths } : {}),
+    ...(e.versions ? { versions: e.versions } : {}),
     thumbnail: e.thumbnail ?? null,
     route: e.route,
     // A built-in course's units, for /my-work/'s per-unit progress.
@@ -344,7 +352,9 @@ export async function buildLibrary() {
         textbook: d?.textbook,
         courseLevel: d?.courseLevel,
         steps: m.stepCount,
-        ...(m.depths ? { depths: m.depths } : {}),
+        ...(m.depths
+          ? { depths: m.depths, ...versionsOf(lessons.get(m.id)?.depths) }
+          : {}),
         thumbnail: m.thumbnail,
         route: `/#investigation=${m.id}`,
       })
@@ -431,7 +441,9 @@ export async function buildLibrary() {
           courseLevel: c.courseLevel,
           subjects: g.tags,
           steps: g.steps.length,
-          ...(g.depths ? { depths: g.depths.length } : {}),
+          ...(g.depths
+            ? { depths: g.depths.length, ...versionsOf(g.depths) }
+            : {}),
           route: `${set.route}?guide=${g.id}`,
         })
       );

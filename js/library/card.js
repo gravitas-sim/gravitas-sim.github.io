@@ -19,12 +19,24 @@ const escape = s =>
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;');
 
+const DEPTHS = ['core', 'quantitative', 'advanced'];
+
 /** How long it takes, in words, or ''. */
 export function durationText(d, t) {
   if (!d) return '';
   return d.min === d.max
     ? t('lib.card.minutes', { n: d.max })
     : t('lib.card.range', { min: d.min, max: d.max });
+}
+
+/** The versions it comes in, by name ("Versions: core, quantitative, advanced"), or ''. */
+function versionsText(entry, t) {
+  const names = entry.versions ?? (entry.depths === 3 ? DEPTHS : []);
+  return names.length
+    ? t('lib.card.versions', {
+        list: names.map(d => t(`lib.version.${d}`)).join(', '),
+      })
+    : '';
 }
 
 /** The facts a reader chooses by: time, steps, depths, level, arithmetic. */
@@ -34,7 +46,7 @@ export function factsOf(entry, t) {
     entry.steps && entry.kind !== 'course'
       ? t('lib.card.steps', { n: entry.steps })
       : '',
-    entry.depths ? t('lib.card.depths', { n: entry.depths }) : '',
+    versionsText(entry, t),
     entry.level ? t(`lib.level.${entry.level}`) : '',
     entry.calculation ? t(`lib.calculation.${entry.calculation}`) : '',
   ].filter(Boolean);

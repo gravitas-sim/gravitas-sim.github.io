@@ -545,6 +545,14 @@
           "maximum": 3,
           "description": "How many depths the investigation can be read at (Prompt 72)."
         },
+        "versions": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "uniqueItems": true,
+          "items": { "enum": ["core", "quantitative", "advanced"] },
+          "description": "Which two depths, by name, when it is not the usual three (core, quantitative and advanced). Absent where depths is 3."
+        },
         "data": {
           "description": "What the entry is built on: measured observations (authentic) or the simulation (synthetic). Absent where it can use both.",
           "enum": [

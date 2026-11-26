@@ -176,8 +176,8 @@ reproducible pipeline.
 # Accessibility, offline use and low-end hardware
 
 The interface targets WCAG 2.2 Level AA. An automated axe-core sweep runs over
-60 surfaces in two languages, every one in all four
-themes — 480 runs — with no rule disabled,
+61 surfaces in two languages, every one in all four
+themes — 488 runs — with no rule disabled,
 and a second suite covers focus order, focus traps, Escape handling, focus
 restoration, heading order, landmarks, reflow, reduced motion and the canvas
 description. Automated checks are a floor rather than a ceiling, and the
