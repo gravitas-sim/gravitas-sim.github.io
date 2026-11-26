@@ -521,7 +521,7 @@ export default {
     'orbital-energy': [
       {
         from: 'how-hard-would-you-have',
-        to: 'where-is-the-line',
+        to: 'bracket-the-dividing-speed',
         text: 'The cannonball experiment. Students predict, fire at low and high speed, hunt for the dividing line, and identify what happens at it.',
       },
       {

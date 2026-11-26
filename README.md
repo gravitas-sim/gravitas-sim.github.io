@@ -28,7 +28,7 @@ the week they are teaching.
 
 **<!--fact:libraryInvestigations-->146<!--/fact--> guided
 investigations**: <!--fact:investigations-->124<!--/fact--> that run in the
-simulation, <!--fact:investigationSteps-->1535<!--/fact--> steps between them
+simulation, <!--fact:investigationSteps-->1536<!--/fact--> steps between them
 (the table below), and <!--fact:guidedInvestigations-->22<!--/fact--> in the
 Observatory, the 3-D lab and the mission lab (the Library lists all of them):
 
@@ -367,7 +367,7 @@ reports what the browser downloads at start-up separately from what is deferred:
 | ---------------------- | ------------------------------------------------------ | --------------------------------------------- |
 | CSS                    | <!--fact:buildCss-->211<!--/fact--> KB                 | 1                                             |
 | JavaScript at start-up | <!--fact:buildStartupJs-->539<!--/fact--> KB           | <!--fact:buildStartupFiles-->55<!--/fact-->   |
-| JavaScript on demand   | <!--fact:buildDeferredJs-->9131<!--/fact--> KB         | <!--fact:buildDeferredChunks-->863<!--/fact--> |
+| JavaScript on demand   | <!--fact:buildDeferredJs-->9136<!--/fact--> KB         | <!--fact:buildDeferredChunks-->863<!--/fact--> |
 | **Initial download**   | **<!--fact:buildInitialDownload-->750<!--/fact--> KB** |                                               |
 
 Those figures are the last build's, to the nearest kilobyte, and are written

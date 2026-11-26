@@ -65,11 +65,10 @@
       "loop": [
         "load-it-heavily",
         "find-the-dividing-line",
-        "write-down-the-dividing-speed",
-        "where-is-the-line"
+        "bracket-the-dividing-speed"
       ],
       "evidenceFrom": "model",
-      "decision": "unreviewed",
+      "decision": "Which launch speeds to fire and when the gap is small enough to stop: the student brackets the dividing speed between the last shot that came back and the first that left, with the escape speed withheld; a pair on one side of the line is refused with the side named, and the width of the gap is the uncertainty they report.",
       "leakFree": true
     },
     "weighing-stars": {
@@ -381,6 +380,7 @@
       "leakFree": true
     },
     "power-law-gravity": {
+      "canvas": ["quiet", "scene"],
       "centralExperimentId": "ce.power-law-gravity",
       "object": "panel:power-law-precession",
       "control": "power-law-precession/n",
@@ -393,7 +393,7 @@
         "record-the-precession"
       ],
       "evidenceFrom": "model",
-      "decision": "unreviewed",
+      "decision": "Which exponents to read and how to tell physics from numerics: the student reads the precession and the slope at exponents they choose from the presets, refines the timestep to separate the effect from the arithmetic, and derives the rate of the slope from two readings before predicting at an exponent they did not measure.",
       "leakFree": true
     },
     "color-and-temperature": {

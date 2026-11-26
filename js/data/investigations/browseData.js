@@ -106,7 +106,7 @@ export const BROWSE_META = {
   },
   'power-law-gravity': {
     tags: ['gravity', 'orbits'],
-    numericCount: 1,
+    numericCount: 2,
   },
   'color-and-temperature': {
     tags: ['observing', 'stars'],

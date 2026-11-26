@@ -207,7 +207,7 @@ describe('the detector grades the fields the opening readouts fill', () => {
     expect(r.verdict).toBe('unmapped');
     expect(r.reason).toMatch(/power, orbit/);
     // A field the table says is not an instrument reading cannot be filled either.
-    const written = judge('orbital-energy', 'write-down-the-dividing-speed');
+    const written = judge('orbital-energy', 'bracket-the-dividing-speed');
     expect(written.verdict).toBe('unmapped');
     expect(written.reason).toMatch(/back, gone/);
   });

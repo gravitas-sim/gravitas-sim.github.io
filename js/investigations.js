@@ -399,11 +399,8 @@ function probeContext() {
     /** Select a role's body, as though the reader had clicked it. */
     selectRole,
     /**
-     * Select a body by id, as though the reader had clicked it.
-     *
-     * What an instrument needs when the thing it was clicked on is a star on
-     * a card rather than a role in a step: the card carries body ids, so it
-     * can say which star without knowing what the step called it.
+     * Select a body by id, as though the reader had clicked it: for a star on
+     * a card, which carries body ids rather than the step's role names.
      */
     selectId: id => {
       const body = allBodies().find(b => b.id === id);
@@ -429,12 +426,9 @@ function probeContext() {
     /** Take it down. */
     clearEvolutionScene,
     /**
-     * Put the crests a source has emitted on the canvas.
-     *
-     * Handed the rings themselves, computed from the model's emission history
-     * by js/lesson/gwWavefronts.js, so the picture belongs to the playhead
-     * position rather than to a wall clock. Null takes the overlay down,
-     * which is what a source with no changing quadrupole gets.
+     * Put the crests a source has emitted on the canvas: the rings come from
+     * the emission history (js/lesson/gwWavefronts.js), so the picture follows
+     * the playhead. Null takes the overlay down.
      */
     showWavefronts: crests => {
       const o = state.gwWaveOverlay;
@@ -510,11 +504,9 @@ function probeContext() {
      */
     conservation: conservationDrift,
     /**
-     * Where a transiting body is against its star's disc, right now.
-     *
-     * The link between the dot on the canvas and the dip on the plot. Read from
-     * js/lightCurve.js, which is the module that decides it while computing the
-     * curve, so the label and the curve cannot disagree.
+     * Where a transiting body is against its star's disc, right now: the dot
+     * on the canvas against the dip on the plot, read from js/lightCurve.js so
+     * the label and the curve cannot disagree.
      */
     transitGeometry: body => transitGeometry(body || selected),
     /** An immutable record of what was on screen, for the notebook. */
@@ -637,13 +629,9 @@ function applyLocks() {
 }
 
 /**
- * Take down the life-stage illustration.
- *
- * Called on a step change as well as on close, because the overlay names a
- * body and a moment and both belong to one screen. A cloud left drawn around
- * a star the next step has restaged is the kind of leak that looks like a
- * rendering bug rather than a lesson bug.
- *
+ * Take down the life-stage illustration, on a step change as well as on close:
+ * the overlay names a body and a moment, and both belong to one screen, so a
+ * cloud left around a restaged star would look like a rendering bug.
  * @returns {void}
  */
 function clearEvolutionScene() {
@@ -687,12 +675,10 @@ function releaseLocks() {
 // --- Step helpers -------------------------------------------------------------
 
 /**
- * The response-key prefix for a step, by position.
- *
- * Keyed by the step's stable `sid` rather than its index, so an answer stays
- * attached to its question when a lesson is reordered. See
- * ./investigations/progressSchema.js for why neither position nor a structural
- * fingerprint was enough.
+ * The response-key prefix for a step: its stable `sid`, not its index, so an
+ * answer stays attached to its question when a lesson is reordered.
+ * See ./investigations/progressSchema.js for why position and fingerprint
+ * failed.
  */
 const stepId = index => stepKey(active.id, active.steps[index]?.sid);
 const shown = () => active.steps.filter(s => inDepth(s, depth));
@@ -813,11 +799,12 @@ function validateStep(step, id) {
 let figures = null;
 let canvasMod = null;
 const canvasNow = (i = stepIndex) => canvasMod?.canvasAt(active, i) ?? null;
+const canvasDue = at =>
+  !canvasMod &&
+  [active, ...active.steps].some((x, i) => x.canvas && i <= at + 1);
 
-/** Fetch the plot, ellipse, import and canvas code a lesson needs. */
-const loadSeams = async ({ steps, canvas }) => {
-  if (!canvasMod && (canvas || steps.some(s => s.canvas)))
-    canvasMod = await import('./lessonCanvas.js');
+/** Fetch the plot, ellipse and import code a lesson needs; the canvas code comes with the first step that declares one. */
+const loadSeams = async ({ steps }) => {
   if (
     !figures &&
     steps.some(
@@ -1015,13 +1002,9 @@ function syncEllipsePanel(step) {
 }
 
 /**
- * Show or hide the interactive instrument for the current step.
- *
- * A widget is a canvas, some sliders and a readout, all described in
- * transitWidgets.js. Rendering them from one place means a lesson adds an
- * instrument by naming it, and the panel, the persistence and the redraw on a
- * theme change all come for free.
- *
+ * Show or hide the interactive instrument for the current step: a canvas,
+ * sliders and a readout described in transitWidgets.js, so a lesson adds an
+ * instrument by naming it.
  * @param {Object} step - Step definition
  */
 function syncToolPanel(step) {
@@ -1264,9 +1247,8 @@ function clearToolInstrument() {
 /**
  * Let a widget be driven by pointing at its canvas, if it declares `pick`: the
  * hook gets a position in CSS pixels, writes into the values and goes through
- * paintTool like a slider. It also names the two controls the arrow keys step,
- * and the canvas becomes focusable (a diagram only a drag can drive is closed
- * to some students).
+ * paintTool like a slider. It names the two controls the arrow keys step, and
+ * the canvas becomes focusable.
  * @param {Object} widget - The widget being shown
  * @param {Object} spec - The step's tool spec
  * @param {Function} applied - The runner's own "a control moved" path
@@ -1447,13 +1429,9 @@ function paintTool({ quiet = false } = {}) {
 }
 
 /**
- * Open or close the live light curve for the current step.
- *
- * Turned on from the lesson rather than left for the student to find in the
- * Tools menu, because a step that says "watch the dip" is useless if the plot
- * it means is three clicks away. It is only turned off again if the lesson was
- * the thing that opened it.
- *
+ * Open or close the live light curve for the current step: the lesson turns it
+ * on, so "watch the dip" never means a trip to the Tools menu, and turns it off
+ * again only if the lesson opened it.
  * @param {Object} step - Step definition
  */
 function syncLightCurve(step) {
@@ -1710,11 +1688,8 @@ function renderProbe() {
   // A fit a stage asked for, taken as soon as there is something to measure.
   takeFit();
 
-  // A step can turn on the renderer's own "Explain this view" labels, which
-  // name the dark region, the disk and the jets on the black hole itself. The
-  // lesson uses the existing overlay rather than drawing its own: the labels
-  // have to point at what the renderer actually drew, and a second set drawn
-  // by the panel would drift from it the moment either changed.
+  // A step can turn on the renderer's own "Explain this view" labels: they
+  // must point at what the renderer drew, so the panel draws no second set.
   if (els.probe && active)
     SETTINGS.bh_explain_view = Boolean(step?.explainView);
 
@@ -1850,7 +1825,7 @@ function goToStep(index, { rebuild = false, open = false } = {}) {
   if (!active) return;
   slots.runs?.release();
   const at = Math.max(0, Math.min(active.steps.length - 1, index));
-  // A step that stages waits for the stage code; opening rejects on failure.
+  // A step that stages waits for the stage code, and the first step that declares a canvas for the canvas code; opening rejects on failure.
   // Opening a stage-less step from a record stands the stage walking there
   // would have left to take down (carriedStage), so the scene is the same.
   const declared =
@@ -1858,20 +1833,23 @@ function goToStep(index, { rebuild = false, open = false } = {}) {
     (rebuild && canvasNow(at)?.kind !== 'quiet'
       ? carriedStage(active.steps, at, s => inDepth(s, depth))
       : null);
-  if (declared && !stageLoaded(declared)) {
+  const due = canvasDue(at);
+  if (due || (declared && !stageLoaded(declared))) {
     const turn = openGeneration;
     els.panel.setAttribute('aria-busy', 'true');
     announce(t('inv.tool.loading'));
     if (open) els.body.textContent = t('inv.tool.loading');
-    return loadStage(declared)
-      .then(() => {
-        if (turn !== openGeneration || !active) return false;
-        goToStep(at, { rebuild });
-        return true;
-      })
+    const again = () => goToStep(at, { rebuild, open });
+    // Canvas code, then stage code: the first wait hands back the second's promise, so opening resolves once the scene is up.
+    return (
+      due
+        ? import('./lessonCanvas.js').then(m => (canvasMod = m))
+        : loadStage(declared)
+    )
+      .then(() => turn === openGeneration && active && again())
       .catch(err => {
         if (open) throw err;
-        loadFailed(() => goToStep(at, { rebuild }), err);
+        loadFailed(again, err);
         return false;
       })
       .finally(() => els.panel?.removeAttribute('aria-busy'));
@@ -2109,7 +2087,9 @@ export async function openInvestigation(id, opts = {}) {
   if (authoring?.step) {
     stepIndex = Math.min(Math.max(authoring.step - 1, 0), inv.steps.length - 1);
   }
-
+  // Canvas code due by the first step is fetched before the panel opens, so the layout does not shift under the reader.
+  if (canvasDue(stepIndex)) canvasMod = await import('./lessonCanvas.js');
+  if (generation !== openGeneration) return;
   lockedSettings = { interactive_add: SETTINGS.interactive_add };
   els.panel.hidden = false;
   els.panel.classList.add('is-open');

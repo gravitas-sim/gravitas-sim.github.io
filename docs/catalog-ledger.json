@@ -4132,22 +4132,77 @@
           "note": "The only lesson with a criteria table in the catalog"
         }
       ],
-      "questions": { "Q1": "", "Q2": "", "Q3": "", "Q4": "", "Q5": "" },
-      "leak": {
-        "L1": "HOLDS: no field cue or step placeholder holds a numeral at any depth, in either language, and the panel renders none that does (tests/fieldCue.test.js); the expected value is the field's `want`, which no page reads.",
-        "L2": "",
-        "L3": "",
-        "L4": "",
-        "L5": ""
+      "questions": {
+        "Q1": "The student finds the dividing speed by firing shots (one control, the launch speed) and brackets it between two they fired, which a paragraph could not show; the escape speeds of four bodies are read from the panel and set beside the prediction made first.",
+        "Q2": "The launch tool says what it is (a cannon 320 km up) and opens at 9 km/s, between the two shots the student already fired; the step says the speed slider is the one thing to change and what to give back.",
+        "Q3": "The prose, the \"Does it come back?\" line, the energy bars and the checked pair name the same shot; the 7.7 km/s circular speed and 10.92 km/s escape speed 320 km up were recomputed (sqrt(GM/r), sqrt(2GM/r) at 1.05 Earth radii = 7.72 and 10.916) and no longer appear in the text.",
+        "Q4": "Which speeds to fire, when the gap is small enough to stop, and which two shots to report; a pair on one side of the line is refused with the side named, and the width is the reported uncertainty, not a grade.",
+        "Q5": "Not applicable: the lesson has core steps only and no depth is added (recorded, not skipped)."
       },
-      "task_rule_items": [],
-      "editorial": "OPEN",
-      "redesign": "OPEN",
-      "reason": "Corrections I reworded steps for factual consistency (register D-R4-300-07); editorial pass still OPEN.",
-      "step_revisions": [],
+      "leak": {
+        "L1": "HOLDS: no field cue or step placeholder holds a numeral at any depth, in either language (tests/fieldCue.test.js); the expected value is the field's `want`, which no page reads.",
+        "L2": "HOLDS: the launch tool opens at 9 km/s on the bracket step (`start`), its presets are withheld on the four finding steps and its \"Escape speed from here\" row is withheld on them (`withhold`); it opens at no speed within 1 km/s of the line (tests/energyPowerLawLessons.test.js).",
+        "L3": "HOLDS: the cannon predictions precede the shots they predict; `somewhere-else-entirely` precedes every escape speed and the readings are taken while its answer is held.",
+        "L4": "HOLDS: no tip, body or checklist before the bracket holds a speed from the line (7.7, 10.9, 10.92, 11.2, 350 Earth radii), and the check says which side of the line a wrong pair is on, not where the line is.",
+        "L5": "HOLDS: the reveal text of the four-body prediction and its comparison sentence are held until the reveal step; the readings the student took are theirs."
+      },
+      "task_rule_items": [
+        "T1: the two speeds are typed from a decision the student made (which shots to fire); the four escape speeds are taken from the panel with provenance.",
+        "T2: the four-body prediction returns beside the four readings (K3).",
+        "T3: one thing changes in the bracket, the launch speed, with the start height held; saved runs (K6) do not apply to an instrument that is not a scene, so the pair the student reports is the record (7.9 fallback).",
+        "T4: the real-object transfer (check-it-yourself, will-it-be-back) is unchanged.",
+        "T5: authored feedback for the wrong side of the line on the bracket, a start further out than the surface on the readings, and the three wrong options of reading-the-sign and what-stays-put.",
+        "T6: the medium is the launch instrument and the live orbit scene where the lesson already used them."
+      ],
+      "editorial": "REVISED",
+      "redesign": "REVISED",
+      "reason": "The task changed (retired steps): the student brackets the escape speed from a neutral start, and the prediction of which body is hardest to leave returns beside the readings.",
+      "step_revisions": [
+        {
+          "sid": "fire-it",
+          "change": "REWORDED: the tip no longer gives a speed; the launch presets and the escape-speed row are withheld."
+        },
+        {
+          "sid": "fire-it-again",
+          "change": "REWORDED: the launch presets and the escape-speed row are withheld."
+        },
+        {
+          "sid": "find-the-dividing-line",
+          "change": "REWORDED: the window is the two shots already fired, not 9 to 12 km/s; the tip gives no distances; presets and the escape-speed row withheld."
+        },
+        {
+          "sid": "bracket-the-dividing-speed",
+          "from": "write-down-the-dividing-speed",
+          "change": "REVISED: the tool opens neutral at 9 km/s, the student brackets the speed, and a pair on one side of the line is refused with the side named."
+        },
+        {
+          "sid": "where-is-the-line",
+          "change": "RETIRED: no successor; it checked the number the student had just measured."
+        },
+        {
+          "sid": "watch-the-total",
+          "change": "REWORDED: the tip no longer says where the total crosses zero."
+        },
+        {
+          "sid": "reading-the-sign",
+          "change": "REWORDED: authored feedback for the three wrong options."
+        },
+        {
+          "sid": "what-stays-put",
+          "change": "REWORDED: authored feedback for the three wrong options."
+        },
+        {
+          "sid": "read-the-escape-speeds",
+          "change": "NEW: the four escape speeds taken from the panel, held beside the prediction."
+        },
+        {
+          "sid": "more-mass-harder-to-leave",
+          "change": "REWORDED: the prediction returns beside the student's four readings with one authored sentence."
+        }
+      ],
       "walk": "NOT RUN",
       "pr": null,
-      "hash": null
+      "hash": "e33e1510c95964bcdcb4d4916ae4682e74bcc39610908293ddb809f26a413425"
     },
     {
       "id": "investigation:phases-and-albedo",
@@ -4676,8 +4731,8 @@
       "source": ["js/data/investigations/power-law-gravity.js"],
       "shadows": ["js/data/investigations/es/power-law-gravity.js"],
       "instrument_files": ["js/powerLawWidgets.js"],
-      "depths": { "core": 21, "quantitative": 0, "advanced": 0 },
-      "spanish_steps": { "core": 21, "deeper": 0 },
+      "depths": { "core": 22, "quantitative": 0, "advanced": 0 },
+      "spanish_steps": { "core": 22, "deeper": 0 },
       "languages": ["en", "es"],
       "sequences": [{ "id": "gravity-and-orbits", "position": 2 }],
       "courses": [],
@@ -4686,22 +4741,56 @@
       "scene_class": "setup scenario",
       "limits": null,
       "open_items": [],
-      "questions": { "Q1": "", "Q2": "", "Q3": "", "Q4": "", "Q5": "" },
+      "questions": {
+        "Q1": "The precession, its independence of the timestep, the slope against the exponent and the conservation laws are found by running orbits at chosen exponents; the slope rule is derived from two readings.",
+        "Q2": "Each instrument says what it runs and which row to read; the canvas goes quiet at the first tool-led run because the instruments run their own contained orbits; the first screen keeps the Solar System.",
+        "Q3": "The prose, the instrument rows and the table name the same exponent and slope; the sentence on units now names the engine's own units (100 to the AU) and its percentages were recomputed (r^(2-n) at n = 2.01: 17.2 percent in kilometers, 4.5 in the engine's units, 0 in AU).",
+        "Q4": "Which exponent to read, whether to trust a precession by refining the timestep, and which rate a reader derives from two readings; the numeric steps refuse a wrong turn with authored feedback.",
+        "Q5": "Not applicable: core steps only, no depth added (recorded, not skipped)."
+      },
       "leak": {
         "L1": "HOLDS: no field cue or step placeholder holds a numeral at any depth, in either language, and the panel renders none that does (tests/fieldCue.test.js); the expected value is the field's `want`, which no page reads.",
-        "L2": "",
-        "L3": "",
-        "L4": "",
-        "L5": ""
+        "L2": "HOLDS: the slope instrument opens at n = 2 on the prediction step, not at the n = 2.9 it is asked about.",
+        "L3": "HOLDS: the exponent's effect on precession is predicted before it is measured; the slope rule is asked for before the prediction that uses it.",
+        "L4": "HOLDS: no checklist or reveal text states a precession (nine, forty-three, negative) before record-the-precession; the slope formula appears only in the reveal text of the n = 2.9 prediction.",
+        "L5": "HOLDS: the reveal texts are held until their steps."
       },
-      "task_rule_items": [],
-      "editorial": "OPEN",
-      "redesign": "OPEN",
-      "reason": "Corrections I reworded steps for factual consistency (register D-R4-300-10); editorial pass still OPEN.",
-      "step_revisions": [],
+      "task_rule_items": [
+        "T1: the four precessions and four slopes are read from the instrument and typed; the slope rate is derived from two readings.",
+        "T2: the existing predictions and verdicts are unchanged.",
+        "T3: one exponent changes at a time with the reference radius held, and the lesson says so.",
+        "T5: authored feedback for the rate and for the n = 2.9 prediction.",
+        "T6: the medium is the instrument; the canvas is the Solar System for the opening and quiet from the first tool-led run."
+      ],
+      "editorial": "REVISED",
+      "redesign": "REVIEWED CLEAR",
+      "reason": "STRONG: leak fixes and one task only. Pattern kept: predict, refine the timestep to separate physics from numerics, a verdict, and \"G shifts the line, n tilts it\".",
+      "step_revisions": [
+        {
+          "sid": "why-there-is-a-reference-distance",
+          "change": "REWORDED: the unit is named (the engine's own units, 100 to the AU) and the percentages state which unit they are in."
+        },
+        {
+          "sid": "predict-does-small-matter",
+          "change": "REWORDED: the reveal no longer states nine degrees."
+        },
+        {
+          "sid": "first-look-at-the-orbit",
+          "change": "REWORDED: the checklist asks for readings and states no result; the canvas is quiet from here."
+        },
+        {
+          "sid": "find-the-slope-rate",
+          "change": "NEW: two readings only, and the student gives the rate at which the slope rises with the exponent."
+        },
+        {
+          "sid": "predict-the-slope-at-2-9",
+          "from": "predict-the-slope",
+          "change": "REVISED: the rate is the student's, the formula appears only in the reveal text and the instrument opens at n = 2."
+        }
+      ],
       "walk": "NOT RUN",
       "pr": null,
-      "hash": null
+      "hash": "bb059df2a4d80246f895d639f9615b2ef9035a96e7667bb46f325ab13e59f70a"
     },
     {
       "id": "investigation:propose-an-observation",

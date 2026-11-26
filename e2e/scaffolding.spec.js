@@ -62,7 +62,7 @@ test.describe('a ladder of hints, one at a time', () => {
   });
 
   test('a choice question can carry hints too', async ({ page, app }) => {
-    await openStep(app, page, 'orbital-energy', 8);
+    await openStep(app, page, 'orbital-energy', 10);
     await page.locator('[data-hint]').click();
     await expect(page.locator('.inv-hint')).toHaveCount(1);
     await expect(status(page)).toContainText(/Hint shown/);
@@ -104,7 +104,7 @@ test.describe('feedback says which check to make, not the answer', () => {
     page,
     app,
   }) => {
-    await openStep(app, page, 'orbital-energy', 15);
+    await openStep(app, page, 'orbital-energy', 14);
     await page.locator('[data-option="0"]').click();
     await expect(page.locator('.inv-misconception')).toContainText(
       /no range limit/i

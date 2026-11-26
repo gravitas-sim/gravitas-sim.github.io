@@ -138,7 +138,7 @@ test.describe('prerequisites are advice', () => {
 
 test.describe('after a wrong answer on a shipped step', () => {
   const LESSON = 'power-law-gravity';
-  const SID = 'predict-the-slope';
+  const SID = 'predict-the-slope-at-2-9';
   const KEY = `gravitas_investigation_${LESSON}`;
 
   test('the instrument is explained on request and the wrong answers are kept in order', async ({

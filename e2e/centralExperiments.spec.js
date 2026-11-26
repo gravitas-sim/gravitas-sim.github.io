@@ -569,8 +569,12 @@ test.describe('the central experiment of each investigation', () => {
     await walkToSid(page, plan, exploreSid);
     const slow = await setControl(page, control, 9);
     const slowEnergy = reading(slow.after, /total energy/i);
-    const escape = reading(slow.after, /escape speed/i);
     expect(row(slow.after, /come back/i).text).toMatch(/comes back/i);
+    // The dividing speed is the student's to find: the instrument does not print it.
+    expect(
+      Object.keys(slow.after).some(k => /escape speed/i.test(k)),
+      'the escape speed is withheld on the step that asks for it'
+    ).toBe(false);
 
     const fast = await setControl(page, control, 12);
     expect(fast.after).not.toEqual(slow.after);
@@ -582,19 +586,75 @@ test.describe('the central experiment of each investigation', () => {
     // does not, and the dividing speed is where that changes.
     expect(slowEnergy).toBeLessThan(0);
     expect(fastEnergy).toBeGreaterThanOrEqual(0);
-    expect(escape).toBeGreaterThan(9);
-    expect(escape).toBeLessThan(12);
     expect(row(fast.after, /come back/i).text).not.toMatch(/comes back/i);
 
+    // The bracket, found the way a student does: halve the gap on the
+    // "Does it come back?" line until the two shots are a step apart.
+    let back = 9;
+    let gone = 12;
+    while (gone - back > 0.11) {
+      const mid = Math.round(((back + gone) / 2) * 10) / 10;
+      const { after } = await setControl(page, control, mid);
+      if (/comes back/i.test(row(after, /come back/i).text)) back = mid;
+      else gone = mid;
+    }
+    expect(back).toBeGreaterThan(10.5);
+    expect(gone).toBeLessThan(11.5);
+
+    // The bracket step opens neutral, not at the answer.
     await walkToSid(page, plan, measureSid);
-    const evidence = {
-      back: (escape - 0.1).toFixed(1),
-      gone: (escape + 0.1).toFixed(1),
+    await expect(
+      page.locator(`#investigationToolControls [data-tool="${control}"]`)
+    ).toHaveValue('9');
+    expect(
+      Object.keys(await readout(page)).some(k => /escape speed/i.test(k))
+    ).toBe(false);
+
+    const check = page.locator('#investigationBody .inv-check');
+    const pair = async (a, b) => {
+      await recordFields(page, id, measureSid, { back: a, gone: b });
     };
+    // A pair on one side of the line is refused, with the side named.
+    await pair(9, 10);
+    await expect(check).not.toHaveClass(/is-ok/);
+    await expect(check).toContainText('still come back');
+    await pair(11.5, 12);
+    await expect(check).not.toHaveClass(/is-ok/);
+    await expect(check).toContainText('leave for good');
+    // A wide bracket either side of the line is accepted: the gap is the uncertainty.
+    await pair(9, 13);
+    await expect(check).toHaveClass(/is-ok/);
+    await expect(check).toContainText('give or take 2.00');
+
+    const evidence = { back: back.toFixed(1), gone: gone.toFixed(1) };
     await recordFields(page, id, measureSid, evidence);
+    await expect(check).toHaveClass(/is-ok/);
     await expectEvidenceRetained(page, id, measureSid, evidence);
 
     await expectVerdictRevealed(page, plan, predict);
+
+    // The four-body prediction comes back beside the readings the student took.
+    const bodies = await walkToSid(page, plan, 'somewhere-else-entirely');
+    await commitPredictionHeld(page, bodies);
+    await walkToSid(page, plan, 'read-the-escape-speeds');
+    const rows = await readout(page);
+    const taken = {};
+    for (const [field, label] of [
+      ['v_moon', /moon/i],
+      ['v_earth', /earth/i],
+      ['v_jupiter', /jupiter/i],
+      ['v_sun', /sun/i],
+    ]) {
+      await page.locator(`#investigationBody [data-take="${field}"]`).click();
+      taken[field] = reading(rows, label);
+    }
+    expect(taken.v_moon).toBeLessThan(taken.v_earth);
+    expect(taken.v_earth).toBeLessThan(taken.v_jupiter);
+    expect(taken.v_jupiter).toBeLessThan(taken.v_sun);
+    await expectVerdictRevealed(page, plan, bodies);
+    const verdict = page.locator('#investigationBody .inv-verdict');
+    for (const v of Object.values(taken))
+      await expect(verdict).toContainText(String(v));
   });
 
   test('weighing-stars: the see-saw splits the total mass by the arm lengths @accepts:ce.weighing-stars', async ({

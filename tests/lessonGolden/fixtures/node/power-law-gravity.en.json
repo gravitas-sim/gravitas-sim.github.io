@@ -2,11 +2,11 @@
  "id": "power-law-gravity",
  "locale": "en",
  "title": "What If Gravity Were Not Inverse Square?",
- "steps": 21,
+ "steps": 22,
  "depths": [
   [
    "core",
-   21
+   22
   ]
  ],
  "grading": [
@@ -136,7 +136,69 @@
    ]
   },
   {
-   "sid": "predict-the-slope",
+   "sid": "find-the-slope-rate",
+   "type": "question",
+   "kind": "numeric",
+   "tolerance": 0.02,
+   "grades": [
+    [
+     "0.5",
+     true,
+     "correct",
+     0.5,
+     null,
+     false,
+     null
+    ],
+    [
+     "0.51",
+     true,
+     "correct",
+     0.51,
+     null,
+     false,
+     null
+    ],
+    [
+     "0.56",
+     false,
+     "incorrect",
+     0.56,
+     null,
+     false,
+     null
+    ],
+    [
+     "0.5",
+     true,
+     "correct",
+     0.5,
+     null,
+     false,
+     null
+    ],
+    [
+     "not a number",
+     false,
+     "unreadable",
+     null,
+     null,
+     false,
+     "notANumber"
+    ],
+    [
+     "",
+     false,
+     "unreadable",
+     null,
+     null,
+     false,
+     "blank"
+    ]
+   ]
+  },
+  {
+   "sid": "predict-the-slope-at-2-9",
    "type": "question",
    "kind": "numeric",
    "tolerance": 0.03,
@@ -312,8 +374,10 @@
     "power-law-gravity:predict-is-it-the-computer": 1,
     "power-law-gravity:the-refinement-verdict": 1,
     "power-law-gravity:predict-period-and-distance": 1,
-    "power-law-gravity:predict-the-slope": "1.95",
-    "power-law-gravity:predict-the-slope:locale": "en",
+    "power-law-gravity:find-the-slope-rate": "0.5",
+    "power-law-gravity:find-the-slope-rate:locale": "en",
+    "power-law-gravity:predict-the-slope-at-2-9": "1.95",
+    "power-law-gravity:predict-the-slope-at-2-9:locale": "en",
     "power-law-gravity:why-the-slope-and-not-something-else": 1,
     "power-law-gravity:predict-what-breaks": 1,
     "power-law-gravity:why-they-survive": 1,
@@ -325,7 +389,8 @@
     "power-law-gravity:predict-is-it-the-computer": 1,
     "power-law-gravity:the-refinement-verdict": 1,
     "power-law-gravity:predict-period-and-distance": 1,
-    "power-law-gravity:predict-the-slope": 1,
+    "power-law-gravity:find-the-slope-rate": 1,
+    "power-law-gravity:predict-the-slope-at-2-9": 1,
     "power-law-gravity:why-the-slope-and-not-something-else": 1,
     "power-law-gravity:predict-what-breaks": 1,
     "power-law-gravity:why-they-survive": 1,
@@ -343,7 +408,8 @@
     "the-refinement-verdict",
     "predict-period-and-distance",
     "measure-the-slope",
-    "predict-the-slope",
+    "find-the-slope-rate",
+    "predict-the-slope-at-2-9",
     "why-the-slope-and-not-something-else",
     "predict-what-breaks",
     "measure-conservation",
@@ -365,8 +431,10 @@
     "power-law-gravity:predict-is-it-the-computer": 1,
     "power-law-gravity:the-refinement-verdict": 1,
     "power-law-gravity:predict-period-and-distance": 1,
-    "power-law-gravity:predict-the-slope": "1.95",
-    "power-law-gravity:predict-the-slope:locale": "en",
+    "power-law-gravity:find-the-slope-rate": "0.5",
+    "power-law-gravity:find-the-slope-rate:locale": "en",
+    "power-law-gravity:predict-the-slope-at-2-9": "1.95",
+    "power-law-gravity:predict-the-slope-at-2-9:locale": "en",
     "power-law-gravity:why-the-slope-and-not-something-else": 1,
     "power-law-gravity:predict-what-breaks": 1,
     "power-law-gravity:why-they-survive": 1,
@@ -378,7 +446,8 @@
     "power-law-gravity:predict-is-it-the-computer": 1,
     "power-law-gravity:the-refinement-verdict": 1,
     "power-law-gravity:predict-period-and-distance": 1,
-    "power-law-gravity:predict-the-slope": 1,
+    "power-law-gravity:find-the-slope-rate": 1,
+    "power-law-gravity:predict-the-slope-at-2-9": 1,
     "power-law-gravity:why-the-slope-and-not-something-else": 1,
     "power-law-gravity:predict-what-breaks": 1,
     "power-law-gravity:why-they-survive": 1,
@@ -387,6 +456,7 @@
    "visited": [
     "and-energy",
     "closing-question",
+    "find-the-slope-rate",
     "first-look-at-the-orbit",
     "measure-conservation",
     "measure-the-slope",
@@ -394,7 +464,7 @@
     "predict-does-small-matter",
     "predict-is-it-the-computer",
     "predict-period-and-distance",
-    "predict-the-slope",
+    "predict-the-slope-at-2-9",
     "predict-what-breaks",
     "record-the-precession",
     "refine-the-timestep",
@@ -425,7 +495,7 @@
    "lesson": {
     "id": "power-law-gravity",
     "title": "What If Gravity Were Not Inverse Square?",
-    "stepCount": 21
+    "stepCount": 22
    },
    "student": null,
    "progress": {
@@ -443,7 +513,8 @@
      "the-refinement-verdict",
      "predict-period-and-distance",
      "measure-the-slope",
-     "predict-the-slope",
+     "find-the-slope-rate",
+     "predict-the-slope-at-2-9",
      "why-the-slope-and-not-something-else",
      "predict-what-breaks",
      "measure-conservation",
@@ -460,8 +531,10 @@
      "power-law-gravity:predict-is-it-the-computer": 1,
      "power-law-gravity:the-refinement-verdict": 1,
      "power-law-gravity:predict-period-and-distance": 1,
-     "power-law-gravity:predict-the-slope": "1.95",
-     "power-law-gravity:predict-the-slope:locale": "en",
+     "power-law-gravity:find-the-slope-rate": "0.5",
+     "power-law-gravity:find-the-slope-rate:locale": "en",
+     "power-law-gravity:predict-the-slope-at-2-9": "1.95",
+     "power-law-gravity:predict-the-slope-at-2-9:locale": "en",
      "power-law-gravity:why-the-slope-and-not-something-else": 1,
      "power-law-gravity:predict-what-breaks": 1,
      "power-law-gravity:why-they-survive": 1,
@@ -473,7 +546,8 @@
      "power-law-gravity:predict-is-it-the-computer": 1,
      "power-law-gravity:the-refinement-verdict": 1,
      "power-law-gravity:predict-period-and-distance": 1,
-     "power-law-gravity:predict-the-slope": 1,
+     "power-law-gravity:find-the-slope-rate": 1,
+     "power-law-gravity:predict-the-slope-at-2-9": 1,
      "power-law-gravity:why-the-slope-and-not-something-else": 1,
      "power-law-gravity:predict-what-breaks": 1,
      "power-law-gravity:why-they-survive": 1,
@@ -549,60 +623,66 @@
     },
     {
      "index": 11,
-     "sid": "predict-the-slope",
-     "fingerprint": "question|numeric|power-law-kepler|-|-|-|a=1.95;t=0.03",
+     "sid": "find-the-slope-rate",
+     "fingerprint": "question|numeric|-|-|-|-|a=0.5;t=0.02",
      "optionCount": null
     },
     {
      "index": 12,
+     "sid": "predict-the-slope-at-2-9",
+     "fingerprint": "question|numeric|power-law-kepler|-|-|-|a=1.95;t=0.03",
+     "optionCount": null
+    },
+    {
+     "index": 13,
      "sid": "why-the-slope-and-not-something-else",
      "fingerprint": "question|choice|-|-|-|4|a=1;c=1",
      "optionCount": 4
     },
     {
-     "index": 13,
+     "index": 14,
      "sid": "predict-what-breaks",
      "fingerprint": "predict|-|-|-|-|3|a=1;c=1",
      "optionCount": 3
     },
     {
-     "index": 14,
+     "index": 15,
      "sid": "measure-conservation",
      "fingerprint": "measure|-|power-law-conservation|-|mom_20+mom_25+ang_25|-|-",
      "optionCount": null
     },
     {
-     "index": 15,
+     "index": 16,
      "sid": "why-they-survive",
      "fingerprint": "question|choice|-|-|-|4|a=1;c=1",
      "optionCount": 4
     },
     {
-     "index": 16,
+     "index": 17,
      "sid": "and-energy",
      "fingerprint": "read|-|-|-|-|-|-",
      "optionCount": null
     },
     {
-     "index": 17,
+     "index": 18,
      "sid": "two-lists",
      "fingerprint": "read|-|-|-|-|-|-",
      "optionCount": null
     },
     {
-     "index": 18,
+     "index": 19,
      "sid": "near-three",
      "fingerprint": "read|-|-|-|-|-|-",
      "optionCount": null
     },
     {
-     "index": 19,
+     "index": 20,
      "sid": "closing-question",
      "fingerprint": "question|choice|-|-|-|4|a=1;c=1",
      "optionCount": 4
     },
     {
-     "index": 20,
+     "index": 21,
      "sid": "the-honest-caveat",
      "fingerprint": "read|-|-|-|-|-|-",
      "optionCount": null
@@ -619,8 +699,10 @@
     "power-law-gravity:predict-is-it-the-computer": 1,
     "power-law-gravity:the-refinement-verdict": 1,
     "power-law-gravity:predict-period-and-distance": 1,
-    "power-law-gravity:predict-the-slope": "1.95",
-    "power-law-gravity:predict-the-slope:locale": "en",
+    "power-law-gravity:find-the-slope-rate": "0.5",
+    "power-law-gravity:find-the-slope-rate:locale": "en",
+    "power-law-gravity:predict-the-slope-at-2-9": "1.95",
+    "power-law-gravity:predict-the-slope-at-2-9:locale": "en",
     "power-law-gravity:why-the-slope-and-not-something-else": 1,
     "power-law-gravity:predict-what-breaks": 1,
     "power-law-gravity:why-they-survive": 1,
@@ -632,7 +714,8 @@
     "power-law-gravity:predict-is-it-the-computer": 1,
     "power-law-gravity:the-refinement-verdict": 1,
     "power-law-gravity:predict-period-and-distance": 1,
-    "power-law-gravity:predict-the-slope": 1,
+    "power-law-gravity:find-the-slope-rate": 1,
+    "power-law-gravity:predict-the-slope-at-2-9": 1,
     "power-law-gravity:why-the-slope-and-not-something-else": 1,
     "power-law-gravity:predict-what-breaks": 1,
     "power-law-gravity:why-they-survive": 1,
@@ -641,6 +724,7 @@
    "visited": [
     "and-energy",
     "closing-question",
+    "find-the-slope-rate",
     "first-look-at-the-orbit",
     "measure-conservation",
     "measure-the-slope",
@@ -648,7 +732,7 @@
     "predict-does-small-matter",
     "predict-is-it-the-computer",
     "predict-period-and-distance",
-    "predict-the-slope",
+    "predict-the-slope-at-2-9",
     "predict-what-breaks",
     "record-the-precession",
     "refine-the-timestep",
@@ -661,7 +745,7 @@
     "why-there-is-a-reference-distance",
     "why-they-survive"
    ],
-   "stepIndex": 20,
+   "stepIndex": 21,
    "startedAt": "2026-01-02T03:04:05.000Z",
    "moved": [],
    "dropped": [],
@@ -741,7 +825,12 @@
      "locale": "en"
     },
     {
-     "sid": "predict-the-slope",
+     "sid": "find-the-slope-rate",
+     "value": "0.5",
+     "locale": "en"
+    },
+    {
+     "sid": "predict-the-slope-at-2-9",
      "value": "1.95",
      "locale": "en"
     },
@@ -805,7 +894,12 @@
      "locale": "en"
     },
     {
-     "sid": "predict-the-slope",
+     "sid": "find-the-slope-rate",
+     "value": "0.5",
+     "locale": "en"
+    },
+    {
+     "sid": "predict-the-slope-at-2-9",
      "value": "1.95",
      "locale": "en"
     },
@@ -893,7 +987,12 @@
      "locale": "en"
     },
     {
-     "sid": "predict-the-slope",
+     "sid": "find-the-slope-rate",
+     "value": "0.5",
+     "locale": "en"
+    },
+    {
+     "sid": "predict-the-slope-at-2-9",
      "value": "1.95",
      "locale": "en"
     },
@@ -958,7 +1057,12 @@
      "locale": "en"
     },
     {
-     "sid": "predict-the-slope",
+     "sid": "find-the-slope-rate",
+     "value": "0.5",
+     "locale": "en"
+    },
+    {
+     "sid": "predict-the-slope-at-2-9",
      "value": "1.95",
      "locale": "en"
     },

@@ -1,54 +1,34 @@
 // =============================================================================
 // What If Gravity Were Not Inverse Square?
 // -----------------------------------------------------------------------------
-// One exponent moves and everything else is held fixed, so that a student can
-// see which orbital results were consequences of the inverse square and which
-// were consequences of the force merely being central.
+// One exponent moves and everything else is held fixed, so a student sees which
+// orbital results came from the inverse square and which from the force merely
+// being central. Three are separable:
 //
-// The lesson exists because "gravity falls off as one over r squared" is
-// learned as a fact rather than as a claim with consequences, and the
-// consequences are where the physics is. Three of them are separable and this
-// lesson separates them:
-//
-//   the closed ellipse       Kepler's first law is not a property of central
-//                            forces. It is a property of THIS central force.
-//                            Change the exponent and the ellipse turns.
-//   the 3/2 power            P against a is a statement about the exponent,
-//                            and - unlike almost everything else - one that
-//                            changing G cannot fake.
-//   the conservation laws    These do NOT break. Momentum and angular momentum
-//                            survive any central pairwise law, and the lesson
-//                            is arranged so that a student notices them sitting
-//                            at 1e-15 while everything else moves.
+//   the closed ellipse       a property of THIS central force, not of central
+//                            forces: change the exponent and the ellipse turns.
+//   the 3/2 power            P against a states the exponent; changing G cannot
+//                            fake it.
+//   the conservation laws    These do NOT break: momentum and angular momentum
+//                            survive any central pairwise law, and sit at 1e-15
+//                            while everything else moves.
 //
 // Why there is a reference radius
 // -----------------------------------------------------------------------------
-// The obvious model is a = GM/r^n and it is wrong in a way that would quietly
-// wreck the lesson. The ratio to Newton is r^(2-n), which depends on the unit
-// distance is measured in, and most of its effect on an orbit is a change of
-// strength rather than of shape - reproducible by changing G and leaving the
-// inverse square alone. A student running that would conclude "gravity got
-// weaker", which is not the lesson and is not even true.
-//
-// So the law is pinned at a reference radius r0 = 1 AU, where it is Newtonian
-// for every n. The full reasoning, and the checks, are in js/powerLawGravity.js
+// a = GM/r^n alone is wrong: its ratio to Newton, r^(2-n), depends on the unit
+// distance is measured in and mostly changes strength, not shape, so a student
+// would conclude "gravity got weaker". The law is therefore pinned at a
+// reference radius r0 = 1 AU, Newtonian for every n; see js/powerLawGravity.js
 // and tests/powerLawGravity.test.js.
 //
-// What this is not
-// -----------------------------------------------------------------------------
-// Not a theory of gravity, not modified-gravity phenomenology, not MOND - which
-// is a different model on a different parameter and lives in js/mond.js - and
-// not relativity. Mercury's perihelion is mentioned once, as a historical
-// example of a real precession, and explicitly not as something this model
-// explains.
+// What this is not: a theory of gravity, MOND (js/mond.js) or relativity.
+// Mercury's perihelion is mentioned once, as a historical precession the model
+// does not explain.
 // =============================================================================
 
-// No role bindings. The instruments in this lesson are a contained model that
-// integrates its own two-body problem and reports numbers; nothing on the
-// canvas is driven by the exponent, and binding a role to a body the model does
-// not move would claim otherwise. The scenario is context - a familiar
-// inverse-square system to have in view while the question is asked - and the
-// lesson says so rather than implying the Solar System on screen is precessing.
+// No role bindings: the instruments integrate their own two-body problem, and
+// nothing on the canvas is driven by the exponent. The Solar System is context,
+// and the lesson says so.
 
 const POWER_LAW_GRAVITY = {
   id: 'power-law-gravity',
@@ -66,6 +46,16 @@ const POWER_LAW_GRAVITY = {
   // shared across the catalog rather than free text, so a filter can offer
   // the whole set without a second list to keep in step.
   tags: ['orbits', 'gravity'],
+  retired: {
+    'predict-the-slope': {
+      to: 'predict-the-slope-at-2-9',
+      release: '3.1',
+      was: {
+        en: 'Predict the slope at n = 2.9 from four readings and the rule slope = (n + 1) / 2, both given in the text.',
+        es: 'Predecir la pendiente en n = 2,9 a partir de cuatro lecturas y de la regla pendiente = (n + 1) / 2, ambas dadas en el texto.',
+      },
+    },
+  },
   objectives: [
     'State what the exponent in an inverse-square law is, and why changing it needs a reference distance to mean anything',
     'Measure apsidal precession from a simulated orbit and distinguish it from integration error by refining the timestep',
@@ -112,8 +102,10 @@ const POWER_LAW_GRAVITY = {
              change for that reason as much as for any other. Worse,
              <em>how much</em> it changed would depend on whether you had
              chosen to measure distance in kilometers, astronomical units or
-             simulation units (100 to the AU): at 1 AU, 17 percent weaker
-             in kilometers, 4.5 in simulation units, unchanged in AU. The universe does not care what units you write down.
+             the engine's own units (100 to the AU). At a distance of 1 AU the
+             pull would come out 17 percent weaker with distance in kilometers,
+             4.5 percent weaker in the engine's own units, and unchanged in AU.
+             The universe does not care what units you write down.
 
              \n\nSo the law used here is anchored. It is written so that at one
              chosen distance — the <strong>reference radius r₀</strong>, which
@@ -145,10 +137,10 @@ const POWER_LAW_GRAVITY = {
       answer: 1,
       because: `Noticeably, and quickly. The orbit stays bound and perfectly
                 well behaved — nothing is thrown anywhere — but the long axis of
-                the ellipse swings round by about nine degrees every time the
-                planet completes one in-and-out cycle, which is obvious within a
-                few trips. The size of the effect is not proportional to the
-                size of the change in n, and that is worth holding on to.`,
+                the ellipse swings round every time the planet completes one
+                in-and-out cycle, which is obvious within a few trips. The size
+                of the effect is not proportional to the size of the change in
+                n, and that is worth holding on to.`,
       tip: 'Commit before you run it. The point of predicting is the commitment, not the score.',
     },
 
@@ -177,15 +169,19 @@ const POWER_LAW_GRAVITY = {
         note: 'Every number here was measured by running the orbit, not looked up.',
       },
       checklist: [
-        'At n = 2 the precession reads zero — the ellipse closes',
-        'At n = 2.05 it is about nine degrees each time round',
-        'At n = 2.2 it is about forty-three degrees',
-        'At n = 1.8 it is negative: the axis turns the other way',
+        'Read the measured precession at n = 2, then at n = 2.05',
+        'Read it at n = 2.2, and say how it compares with n = 2.05',
+        'Read it at n = 1.8, the shallower law',
+        'Say which way the long axis turns at n = 1.8 compared with n = 2.2',
       ],
-      tip: 'A negative precession means the ellipse turns backwards, against the direction of the orbit.',
+      tip: 'The sign of the reading says which way the long axis turns.',
     },
     {
       sid: 'record-the-precession',
+      // The instruments run their own orbits, so the scene stays quiet here;
+      // declared here so the canvas code is fetched after the first instrument
+      // opens. The scene is back for the slope runs and the closing steps.
+      canvas: 'quiet',
       type: 'measure',
       title: 'Record what the axis does',
       body: `Read the <strong>measured precession</strong> off the instrument at
@@ -335,6 +331,7 @@ const POWER_LAW_GRAVITY = {
     // --- Act 4: the quantitative half --------------------------------------
     {
       sid: 'predict-period-and-distance',
+      canvas: 'scene',
       type: 'predict',
       reveal: 'measure-the-slope',
       title: 'Period against distance',
@@ -380,6 +377,7 @@ const POWER_LAW_GRAVITY = {
       tool: {
         id: 'power-law-kepler',
         values: { n: 2 },
+        withhold: ['expected'],
         title: 'Six circular orbits, timed',
         note: 'Read the row marked "Measured slope of log P against log r".',
       },
@@ -416,45 +414,67 @@ const POWER_LAW_GRAVITY = {
       tip: 'Your four points lie on a straight line. Work out what line before you go on.',
     },
     {
+      sid: 'find-the-slope-rate',
       hints: [
-        'Your readings show the slope changing by a fixed amount for each step in n.',
-        'Extend the pattern from one of your readings to the new n, at the rate your readings show.',
+        'Take the change in the slope between the two readings, and the change in n.',
+        'Divide the one by the other: how much does the slope move when n moves by 1?',
       ],
       feedback: {
         close:
-          'Close. The slope changes at half the rate of n: move from a reading you trust.',
-        off: 'Pick one of your readings and move from it to the new n, at half the rate that n changes.',
+          'Close. Use the change in slope between the two readings, divided by the change in n.',
+        off: 'Work from the two readings: how far the slope moved, divided by how far n moved.',
       },
-      sid: 'predict-the-slope',
       type: 'question',
-      title: 'Use the pattern',
+      title: 'The rule in your readings',
       kind: 'numeric',
-      body: `Look at your four readings. At n = 2 the slope is 1.5; at n = 2.2 it
-             is 1.6; at n = 2.5 it is 1.75; at n = 1.8 it is 1.4.
-
-             \n\nEvery step of 0.2 in n moves the slope by 0.1 — the slope is
-             changing at exactly half the rate of the exponent. Written down,
-             that relationship is <strong>slope = (n + 1) / 2</strong>, and you
-             can check it against all four of your readings.
-
-             \n\nNow use it on an exponent you have not measured. The instrument
-             will go up to n = 2.9.`,
+      body: `Look at just two of your readings: the slope at n = 2 was 1.5, and
+             the slope at n = 2.5 was 1.75.
+             \n\nThe slope depends on the exponent by a simple rule, and two
+             readings are enough to find it.`,
+      prompt: 'Change in the slope for each rise of 1 in n',
+      unit: '',
+      answer: 0.5,
+      tolerance: 0.02,
+      explain: `The slope rose by 0.25 while n rose by 0.5, so it rises by 0.5 for
+                each 1 in n: half as fast as the exponent does.`,
+    },
+    {
+      hints: [
+        'Start from the reading at n = 2, where the slope is 1.5, and use the rate you found for the rise in n.',
+        'The exponent goes from 2 to 2.9: how far is that, and how far does the slope move for it?',
+      ],
+      feedback: {
+        close:
+          'Close. Move from a reading you trust, at the rate you found for each rise in n.',
+        off: 'Pick one of your readings and move from it to the new n, at the rate you found.',
+      },
+      sid: 'predict-the-slope-at-2-9',
+      type: 'question',
+      title: 'Use the rule',
+      kind: 'numeric',
+      body: `Now use your rate on an exponent you have not measured. The
+             instrument goes up to n = 2.9.
+             \n\nWork the answer out first, then set the instrument to
+             n = 2.9 to see whether you were right.`,
       tool: {
         id: 'power-law-kepler',
         values: { n: 2.9 },
+        start: { n: 2 },
+        withhold: ['expected'],
         title: 'Check your prediction here, after you have made it',
-        note: 'Work the answer out from the pattern first. The instrument is how you find out whether you were right, not how you find the answer.',
+        note: 'The instrument is how you find out whether you were right, not how you find the answer.',
       },
       prompt: 'Predicted slope of log P against log r at n = 2.9',
       unit: '',
       answer: 1.95,
       tolerance: 0.03,
-      explain: `(2.9 + 1) / 2 = 1.95. Set the instrument to n = 2.9 and check:
-                it reads 1.95. This is what it means for a relationship to be a
-                law rather than a table — it answers for cases you did not
-                measure. And it runs the other way too, which is how it is
-                actually used: a slope you have measured from real orbits tells
-                you the exponent of the force that produced them.`,
+      explain: `The slope is (n + 1) / 2, so at n = 2.9 it is (2.9 + 1) / 2 = 1.95.
+                Set the instrument to n = 2.9 and check: it reads 1.95. This is
+                what it means for a relationship to be a law rather than a
+                table — it answers for cases you did not measure. And it runs
+                the other way too, which is how it is actually used: a slope you
+                have measured from real orbits tells you the exponent of the
+                force that produced them.`,
     },
     {
       sid: 'why-the-slope-and-not-something-else',
@@ -510,6 +530,7 @@ const POWER_LAW_GRAVITY = {
     },
     {
       sid: 'measure-conservation',
+      canvas: 'quiet',
       type: 'measure',
       title: 'Check the conservation laws',
       body: `Three stars of different masses, all free to move and all pulling on
@@ -562,6 +583,7 @@ const POWER_LAW_GRAVITY = {
     },
     {
       sid: 'and-energy',
+      canvas: 'scene',
       type: 'read',
       title: 'And energy, with one catch',
       body: `Energy is conserved too — but there is a genuine trap here, and it

@@ -9,7 +9,7 @@ on a 60 Hz screen, a 144 Hz screen and a throttled tab. A reading step
 that holds the clock (`holdsClock` in `js/timestep.js`) does not run and
 is not pinned. Closing the lesson lifts the pin.
 
-552 steps in 23 lessons run on an integrated scene; 435 are pinned and 117 hold the clock.
+546 steps in 23 lessons run on an integrated scene; 429 are pinned and 117 hold the clock.
 
 | Lesson | Step | Id | Type | Scene | Own scene | Pinned step |
 |---|---|---|---|---|---|---|
@@ -107,16 +107,16 @@ is not pinned. Closing the lesson lifts the pin.
 | orbital-energy | 4 | load-it-heavily | predict | Kepler's 2nd Law | inherited | 1/60 s |
 | orbital-energy | 5 | fire-it-again | explore | Kepler's 2nd Law | inherited | 1/60 s |
 | orbital-energy | 6 | find-the-dividing-line | explore | Kepler's 2nd Law | inherited | 1/60 s |
-| orbital-energy | 7 | write-down-the-dividing-speed | measure | Kepler's 2nd Law | inherited | 1/60 s |
-| orbital-energy | 8 | where-is-the-line | question | Kepler's 2nd Law | inherited | 1/60 s |
-| orbital-energy | 9 | what-is-actually-deciding-this | read | Kepler's 2nd Law | inherited | none (holds the clock) |
-| orbital-energy | 10 | watch-the-total | explore | Kepler's 2nd Law | inherited | 1/60 s |
-| orbital-energy | 11 | reading-the-sign | question | Kepler's 2nd Law | inherited | 1/60 s |
-| orbital-energy | 12 | around-a-real-orbit | explore | Kepler's 2nd Law | yes | 1/60 s |
-| orbital-energy | 13 | what-stays-put | question | Kepler's 2nd Law | inherited | 1/60 s |
-| orbital-energy | 14 | escape-speed | read | Kepler's 2nd Law | inherited | none (holds the clock) |
-| orbital-energy | 15 | a-common-misunderstanding | question | Kepler's 2nd Law | inherited | 1/60 s |
-| orbital-energy | 16 | somewhere-else-entirely | predict | Kepler's 2nd Law | inherited | 1/60 s |
+| orbital-energy | 7 | bracket-the-dividing-speed | measure | Kepler's 2nd Law | inherited | 1/60 s |
+| orbital-energy | 8 | what-is-actually-deciding-this | read | Kepler's 2nd Law | inherited | none (holds the clock) |
+| orbital-energy | 9 | watch-the-total | explore | Kepler's 2nd Law | inherited | 1/60 s |
+| orbital-energy | 10 | reading-the-sign | question | Kepler's 2nd Law | inherited | 1/60 s |
+| orbital-energy | 11 | around-a-real-orbit | explore | Kepler's 2nd Law | yes | 1/60 s |
+| orbital-energy | 12 | what-stays-put | question | Kepler's 2nd Law | inherited | 1/60 s |
+| orbital-energy | 13 | escape-speed | read | Kepler's 2nd Law | inherited | none (holds the clock) |
+| orbital-energy | 14 | a-common-misunderstanding | question | Kepler's 2nd Law | inherited | 1/60 s |
+| orbital-energy | 15 | somewhere-else-entirely | predict | Kepler's 2nd Law | inherited | 1/60 s |
+| orbital-energy | 16 | read-the-escape-speeds | measure | Kepler's 2nd Law | inherited | 1/60 s |
 | orbital-energy | 17 | more-mass-harder-to-leave | explore | Kepler's 2nd Law | inherited | 1/60 s |
 | orbital-energy | 18 | further-out-easier-to-leave | explore | Kepler's 2nd Law | inherited | 1/60 s |
 | orbital-energy | 19 | starting-further-out | question | Kepler's 2nd Law | inherited | 1/60 s |
@@ -528,23 +528,17 @@ is not pinned. Closing the lesson lifts the pin.
 | power-law-gravity | 2 | why-there-is-a-reference-distance | read | Solar System | inherited | none (holds the clock) |
 | power-law-gravity | 3 | predict-does-small-matter | predict | Solar System | inherited | 1/60 s |
 | power-law-gravity | 4 | first-look-at-the-orbit | explore | Solar System | inherited | 1/60 s |
-| power-law-gravity | 5 | record-the-precession | measure | Solar System | inherited | 1/60 s |
-| power-law-gravity | 6 | what-closes-an-orbit | question | Solar System | inherited | 1/60 s |
-| power-law-gravity | 7 | predict-is-it-the-computer | predict | Solar System | inherited | 1/60 s |
-| power-law-gravity | 8 | refine-the-timestep | measure | Solar System | inherited | 1/60 s |
-| power-law-gravity | 9 | the-refinement-verdict | question | Solar System | inherited | 1/60 s |
 | power-law-gravity | 10 | predict-period-and-distance | predict | Solar System | inherited | 1/60 s |
 | power-law-gravity | 11 | measure-the-slope | measure | Solar System | inherited | 1/60 s |
-| power-law-gravity | 12 | predict-the-slope | question | Solar System | inherited | 1/60 s |
-| power-law-gravity | 13 | why-the-slope-and-not-something-else | question | Solar System | inherited | 1/60 s |
-| power-law-gravity | 14 | predict-what-breaks | predict | Solar System | inherited | 1/60 s |
-| power-law-gravity | 15 | measure-conservation | measure | Solar System | inherited | 1/60 s |
-| power-law-gravity | 16 | why-they-survive | question | Solar System | inherited | 1/60 s |
-| power-law-gravity | 17 | and-energy | read | Solar System | inherited | none (holds the clock) |
-| power-law-gravity | 18 | two-lists | read | Solar System | inherited | none (holds the clock) |
-| power-law-gravity | 19 | near-three | read | Solar System | inherited | none (holds the clock) |
-| power-law-gravity | 20 | closing-question | question | Solar System | inherited | 1/60 s |
-| power-law-gravity | 21 | the-honest-caveat | read | Solar System | inherited | none (holds the clock) |
+| power-law-gravity | 12 | find-the-slope-rate | question | Solar System | inherited | 1/60 s |
+| power-law-gravity | 13 | predict-the-slope-at-2-9 | question | Solar System | inherited | 1/60 s |
+| power-law-gravity | 14 | why-the-slope-and-not-something-else | question | Solar System | inherited | 1/60 s |
+| power-law-gravity | 15 | predict-what-breaks | predict | Solar System | inherited | 1/60 s |
+| power-law-gravity | 18 | and-energy | read | Solar System | inherited | none (holds the clock) |
+| power-law-gravity | 19 | two-lists | read | Solar System | inherited | none (holds the clock) |
+| power-law-gravity | 20 | near-three | read | Solar System | inherited | none (holds the clock) |
+| power-law-gravity | 21 | closing-question | question | Solar System | inherited | 1/60 s |
+| power-law-gravity | 22 | the-honest-caveat | read | Solar System | inherited | none (holds the clock) |
 | why-rings | 5 | a-pass-inside-the-limit | read | Roche Pass | yes | 1/60 s |
 | why-rings | 7 | a-ring-with-a-resonance | read | Ring Gap | yes | none (holds the clock) |
 | the-scale-of-the-solar-system | 1 | a-picture-you-have-seen | read | Solar System | yes | none (holds the clock) |

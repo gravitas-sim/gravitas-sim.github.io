@@ -51,7 +51,7 @@ export default {
         'Sube la velocidad hasta que la bala dé la vuelta entera sin aterrizar',
         'Anota aproximadamente la velocidad a la que eso ocurre por primera vez',
       ],
-      tip: 'El cañón está a 320 km de altura, que es más o menos donde vuela la estación espacial y con seguridad por encima del aire. Desde allí, la velocidad mínima que da la vuelta completa sin tocar el suelo es de unos 7,6 km/s. Por eso los cohetes se inclinan y vuelan de lado en vez de subir en vertical: subir es la parte fácil, ir lo bastante rápido de lado es la difícil.',
+      tip: 'Usa el deslizador de velocidad y lee la línea "¿vuelve?" después de cada disparo. El cañón está a 320 km de altura, que es más o menos donde vuela la estación espacial y con seguridad por encima del aire. Por eso los cohetes se inclinan y vuelan de lado en vez de subir en vertical: subir es la parte fácil, ir lo bastante rápido de lado es la difícil.',
     },
     {
       title: 'Cárgalo a tope',
@@ -78,41 +78,30 @@ export default {
     },
     {
       title: 'Encuentra la línea divisoria',
-      body: 'En algún punto entre 9 y 12 km/s la respuesta pasa de <em>sí, vuelve</em> a <em>no, se ha ido</em>.\n\nMueve el deslizador con cuidado y encuentra dónde. Merece la pena ir despacio en el último tramo: justo por debajo de la línea, la bala sale a una distancia absurda y aun así da la vuelta.',
+      body: 'En algún punto entre el disparo de 6 km/s que volvió y el de 14 km/s que se marchó, la respuesta pasa de <em>sí, vuelve</em> a <em>no, se ha ido</em>.\n\nMueve el deslizador con cuidado y encuentra dónde. Merece la pena ir despacio en el último tramo: justo por debajo de la línea, la bala sale a una distancia absurda y aun así da la vuelta.',
       checklist: [
         'Encuentra la velocidad mínima a la que la respuesta cambia a "se marcha para siempre"',
         'Ponte justo por debajo de ella y lee hasta dónde llega antes de girar',
         'Ponte justo por encima y confirma que la trayectoria nunca se cierra',
         'Fíjate en que el cambio es súbito: hay una velocidad divisoria bien definida',
       ],
-      tip: 'A 10,9 km/s la bala llega más allá de 350 radios terrestres, más lejos que la Luna, y aun así regresa. A 10,92 no da la vuelta jamás. Las dos parecen idénticas durante el primer tramo del vuelo, que es exactamente por lo que los astrónomos quieren un número y no una imagen.',
+      tip: 'Lee la línea "¿vuelve?" y la línea "hasta dónde llega" después de cada disparo. Dos disparos a cada lado de la línea parecen idénticos durante el primer tramo del vuelo, que es exactamente por lo que los astrónomos quieren un número y no una imagen.',
     },
     {
-      title: 'Anota la velocidad que encontraste',
-      body: `Antes de seguir, anota los dos números con los que acabas de
-             trabajar: la velocidad más alta que aún volvía y la más baja que
-             ya no.
-             \n\nDeberían quedar cerca. Cuánto depende de con qué cuidado
-             moviste el deslizador, y esa diferencia es la incertidumbre de tu
-             medida.`,
+      title: 'Acota la velocidad divisoria',
+      body: `Acota la velocidad divisoria entre dos disparos que hagas tú: el más
+             rápido que aún vuelve y el más lento que ya no.
+             \n\nEl deslizador de velocidad es lo único que hay que cambiar. El
+             cañón se queda donde está. Cierra la diferencia por los dos lados y
+             para cuando creas que es lo bastante pequeña como para fiarte. Luego
+             da la última velocidad que volvió y la primera que se marchó.
+             \n\nLa diferencia entre tus dos velocidades es la incertidumbre de
+             tu medida.`,
       fields: [
         { label: 'Velocidad más alta que aún volvía' },
         { label: 'Velocidad más baja que se fue para siempre' },
       ],
       tip: 'Dos números y la diferencia entre ellos es una respuesta más honesta que un solo número. Nadie encuentra un umbral exacto; se encuentran las dos últimas velocidades a cada lado.',
-    },
-    {
-      title: '¿Dónde está la línea?',
-      body: 'Acabas de encontrarla a mano.',
-      prompt:
-        'La velocidad divisoria para una bala disparada desde la superficie de la Tierra se acerca más a…',
-      options: ['8 km/s', '12 km/s', '20 km/s', '40 km/s'],
-      because:
-        'Desde el cañón es 10,9 km/s, así que 12 es con diferencia la más próxima. Desde el suelo mismo es 11,2 km/s, y ese es el número que merece la pena llevar encima: unas 25.000 millas por hora, o unas treinta y tres veces la velocidad del sonido. Toda nave espacial que haya partido hacia otro planeta tuvo que recibir al menos esto. Fíjate en que ambas cifras difieren, y en que el cañón sobre su torre necesita algo menos. Esa es una pista a la que volverás.',
-      hints: [
-        'La velocidad de escape depende de lo fuerte que es la gravedad donde empiezas y de lo lejos que debes llegar.',
-        'Es rápida para lo cotidiano: compárala con un avión de pasajeros y con una bala de fusil.',
-      ],
     },
     {
       title: '¿Qué es lo que decide esto en realidad?',
@@ -129,7 +118,7 @@ export default {
         'Compara esa velocidad con la línea divisoria que encontraste antes',
         'Por encima de ella, observa que la barra del total ha pasado al otro lado',
       ],
-      tip: 'La velocidad a la que la energía total cruza el cero es exactamente la velocidad a la que la trayectoria deja de cerrarse. No es una coincidencia. Es el mismo hecho contado de dos maneras distintas.',
+      tip: 'Lee la fila "Energía total" junto a la barra, y observa la línea "¿vuelve?" al cruzar la línea de cero.',
     },
     {
       title: 'Leer el signo',
@@ -146,6 +135,17 @@ export default {
       hints: [
         'Piensa en en qué se convierte la energía de posición infinitamente lejos.',
         'Si el total es menor que eso, ¿puede el objeto llegar alguna vez?',
+      ],
+      misconceptions: [
+        {
+          say: 'Un objeto que acaba marchándose tiene un total de cero o más. Por debajo de cero es el lado de los atrapados.',
+        },
+        {
+          say: 'Un planeta en una órbita estable tiene un total menor que cero y nunca cae. El signo dice si puede escapar, no si va a chocar.',
+        },
+        {
+          say: 'Una velocidad por encima de la de escape da un total por encima de cero, el signo contrario.',
+        },
       ],
     },
     {
@@ -176,6 +176,17 @@ export default {
       hints: [
         'Observa la lectura de energía durante una órbita completa.',
         'Dos de las tres se intercambian energía. ¿Qué dejaría sin cambiar un intercambio?',
+      ],
+      misconceptions: [
+        {
+          say: 'La energía de movimiento subió y bajó con la velocidad, y la velocidad cambió en un factor grande.',
+        },
+        {
+          say: 'La energía de posición se movió con la distancia, y la distancia cambió aún más.',
+        },
+        {
+          say: 'Mira la línea blanca del total frente a las otras dos durante toda la vuelta, no solo las otras dos.',
+        },
       ],
     },
     {
@@ -218,10 +229,27 @@ export default {
         'El Sol, con diferencia: unos 618 km/s desde su superficie, más de cincuenta veces la de la Tierra. El Sol tiene un tercio de millón de veces la masa de la Tierra y, aunque su superficie está además mucho más lejos de su centro, la masa gana.',
     },
     {
+      title: 'Lee las cuatro velocidades de escape',
+      body: `El panel muestra la velocidad de escape real de cuatro cuerpos,
+             para una salida de pie sobre la superficie de cada uno. Pon la
+             distancia inicial en <strong>1</strong> radio del cuerpo y pulsa
+             <strong>Tomar la lectura</strong> junto a cada casilla.
+             \n\nTu predicción queda sin marcar hasta el paso siguiente.`,
+      fields: [
+        { label: 'Velocidad de escape desde la Luna' },
+        { label: 'Velocidad de escape desde la Tierra' },
+        { label: 'Velocidad de escape desde Júpiter' },
+        { label: 'Velocidad de escape desde el Sol' },
+      ],
+    },
+    {
       title: 'Más masa, más difícil marcharse',
-      body: 'Aquí tienes cuatro cuerpos reales con sus velocidades de escape reales, todas medidas de pie sobre la superficie.\n\nLa barra del Sol se sale del gráfico a propósito. Dibujada a la misma escala que las demás sería diez veces más larga que el panel, lo cual da una impresión bastante fiel de la situación.',
+      compare:
+        'La masa sube la velocidad de escape y el radio la baja, así que aquí gana la masa mayor: la del Sol es unas mil veces la de Júpiter, y su velocidad de escape unas diez veces mayor.',
+      body: `Aquí tienes otra vez los cuatro cuerpos reales, con las velocidades que
+             tomaste.
+             \n\nLa barra del Sol se sale del gráfico a propósito. Dibujada a la misma escala que las demás sería diez veces más larga que el panel, lo cual da una impresión bastante fiel de la situación.`,
       checklist: [
-        'Lee la velocidad de escape desde la Luna y desde la Tierra',
         'Compara la Tierra con Júpiter y anota aproximadamente el factor entre ellas',
         'Observa que el Sol se sale de la escala por completo',
         'Convéncete de que el orden coincide con el orden de sus masas',

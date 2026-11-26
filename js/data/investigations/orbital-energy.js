@@ -134,6 +134,24 @@ const ENERGY = {
   // The equal-area wedges belong to the lesson this scenario was built for,
   // not to this one.
   lock: { placement: true, inspector: true, areaSweep: false },
+  retired: {
+    'write-down-the-dividing-speed': {
+      to: 'bracket-the-dividing-speed',
+      release: '3.1',
+      was: {
+        en: 'Write down the highest speed that still came back and the lowest that left, from an instrument that opened at the dividing speed.',
+        es: 'Anotar la velocidad más alta que aún volvía y la más baja que se fue, con un instrumento que se abría en la velocidad divisoria.',
+      },
+    },
+    'where-is-the-line': {
+      to: null,
+      release: '3.1',
+      was: {
+        en: 'Choose the dividing speed for a shot from the Earth’s surface from four values, after finding it by hand.',
+        es: 'Elegir entre cuatro valores la velocidad divisoria de un disparo desde la superficie terrestre, tras encontrarla a mano.',
+      },
+    },
+  },
   objectives: [
     'Describe what happens to a launched object as its speed is raised past the escape point',
     'Explain in your own words why total energy below zero means an object is trapped',
@@ -199,14 +217,19 @@ const ENERGY = {
              \n\nPress <strong>Run</strong> to fire it again, and use the speed
              slider to try a few more. Do not worry about the bars at the bottom
              of the panel yet: you will come back to those.`,
-      tool: { id: 'launch', values: { v: 6 } },
+      tool: {
+        id: 'launch',
+        values: { v: 6 },
+        presets: false,
+        withhold: ['escape'],
+      },
       checklist: [
         'Watch the 6 km/s shot come back down',
         'Try 3 km/s and see how much shorter the flight is',
         'Raise the speed until the ball goes right round without landing',
         'Note roughly the speed at which that first happens',
       ],
-      tip: 'The cannon is 320 km up, which is roughly where the space station flies and safely above the air. From there, the lowest speed that gets all the way round without touching the ground is about 7.6 km/s. That is why rockets tip over and fly sideways rather than straight up: getting high is the easy part, going fast enough sideways is the hard part.',
+      tip: 'Use the speed slider, and read the "Does it come back?" line after each shot. The cannon is 320 km up, which is roughly where the space station flies and safely above the air. That is why rockets tip over and fly sideways rather than straight up: getting high is the easy part, going fast enough sideways is the hard part.',
     },
     {
       sid: 'load-it-heavily',
@@ -236,7 +259,12 @@ const ENERGY = {
              not a loop at all. The ball goes out and keeps going.
              \n\nNotice that the panel now says the path is <em>open</em>, and
              that the "furthest it gets" line has no answer to give.`,
-      tool: { id: 'launch', values: { v: 14 } },
+      tool: {
+        id: 'launch',
+        values: { v: 14 },
+        presets: false,
+        withhold: ['escape'],
+      },
       checklist: [
         'Watch the 14 km/s shot leave along an open path',
         'Try 16 km/s and confirm it leaves faster and straighter',
@@ -249,37 +277,50 @@ const ENERGY = {
       bind: ENERGY_BODIES,
       type: 'explore',
       title: 'Find the dividing line',
-      body: `Somewhere between 9 and 12 km/s the answer flips from
+      body: `Somewhere between the 6 km/s shot that came back and the
+             14 km/s shot that left, the answer flips from
              <em>yes, it comes back</em> to <em>no, it is gone</em>.
              \n\nMove the slider carefully and find where. It is worth going
              slowly through the last stretch: just below the line, the ball goes
              an absurd distance out and still turns round.`,
-      tool: { id: 'launch', values: { v: 9 } },
+      tool: {
+        id: 'launch',
+        values: { v: 9 },
+        presets: false,
+        withhold: ['escape'],
+      },
       checklist: [
         'Find the lowest speed at which the answer changes to "it leaves for good"',
         'Set the speed just under that and read how far out it gets before turning',
         'Set it just over and confirm the path never closes',
         'Notice that the change is sudden: there is a definite dividing speed',
       ],
-      tip: 'At 10.9 km/s the ball goes out past 350 Earth radii, further than the Moon, and still comes home. At 10.92 it never turns round at all. The two look identical for the first stretch of the flight, which is exactly why astronomers want a number rather than a picture.',
+      tip: 'Read the "Does it come back?" line and the "Furthest it gets" line after each shot. Two shots on either side of the line look identical for the first stretch of the flight, which is exactly why astronomers want a number rather than a picture.',
     },
     {
-      sid: 'write-down-the-dividing-speed',
+      sid: 'bracket-the-dividing-speed',
       bind: ENERGY_BODIES,
-      // The lesson's central experiment used to keep nothing at all: the
-      // reader found the dividing speed by hand and the number left with
-      // them. Recording it is what makes the multiple-choice step that
-      // follows a check on their own measurement rather than a quiz.
+      // The lesson's central experiment: the dividing speed as the last speed
+      // on each side of it. The instrument opens neutral (`start`), the
+      // finding is the student's, and the check never says where the line is
+      // until the pair is right.
       requires: ['find-the-dividing-line'],
       type: 'measure',
-      title: 'Write down the speed you found',
-      body: `Before you move on, record the two numbers you just worked with:
-             the highest speed you found that still came back, and the lowest
-             that did not.
-             \n\nThey should be close together. How close depends on how
-             carefully you moved the slider, and that gap is the uncertainty on
-             your measurement.`,
-      tool: { id: 'launch', values: { v: 10.9 } },
+      title: 'Bracket the dividing speed',
+      body: `Pin the dividing speed between two shots you fire yourself: the
+             fastest that still comes back, and the slowest that does not.
+             \n\nThe speed slider is the only thing to change. The cannon stays
+             where it is. Close the gap from both sides, and stop when you judge
+             it small enough to trust. Then give the last speed that came back
+             and the first speed that left.
+             \n\nThe gap between your two speeds is the uncertainty on your
+             measurement.`,
+      tool: {
+        id: 'launch',
+        start: { v: 9 },
+        presets: false,
+        withhold: ['escape'],
+      },
       fields: [
         {
           id: 'back',
@@ -303,42 +344,41 @@ const ENERGY = {
               'The speed that left has to be the larger of the two. Check which number went in which box.',
           };
         }
-        const mid = (v.back + v.gone) / 2;
-        if (Math.abs(mid - 10.9) > 0.6) {
+        // The dividing speed from this cannon: the escape speed at 1.05 Earth
+        // radii, sqrt(2GM/r) = 10.916 km/s (js/energyWidgets.js; the lesson
+        // test pins this to the instrument).
+        const line = 10.916;
+        if (v.gone <= line) {
           return {
             level: 'error',
             message:
-              'The dividing speed from this cannon is 10.9 km/s, and yours is more than 0.6 km/s away. Go back and step through the last stretch more slowly — just under the line the ball goes an absurd distance and still turns round.',
+              'Both of those shots still come back, so the line is higher than either. Fire faster than your larger speed and watch the "Does it come back?" line.',
+          };
+        }
+        if (v.back >= line) {
+          return {
+            level: 'error',
+            message:
+              'Both of those shots leave for good, so the line is lower than either. Fire slower than your smaller speed and watch the "Does it come back?" line.',
           };
         }
         const gap = v.gone - v.back;
+        const mid = ((v.back + v.gone) / 2).toFixed(2);
+        const half = (gap / 2).toFixed(2);
+        // The pair brackets the line. A bracket is a measurement whose
+        // uncertainty is its width, so a wide one is valid, and says so.
+        if (gap > 0.5 + 1e-9) {
+          return {
+            level: 'ok',
+            message: `Your dividing speed is ${mid} km/s, give or take ${half}. The line is inside your gap, but that is a wide uncertainty: fire speeds between the two and keep the last that comes back and the first that leaves to close it.`,
+          };
+        }
         return {
           level: 'ok',
-          message:
-            gap <= 0.1
-              ? `You have pinned it to ${gap.toFixed(2)} km/s. The accepted value from this height is 10.9 km/s.`
-              : `Your dividing speed is ${mid.toFixed(2)} km/s, give or take ${(gap / 2).toFixed(2)}. The accepted value from this height is 10.9 km/s — inside your gap, which is what a measurement with an honest uncertainty looks like.`,
+          message: `Your dividing speed is ${mid} km/s, give or take ${half}. From this height the escape speed is 10.9 km/s, and it sits inside your gap, which is what a measurement with an honest uncertainty looks like.`,
         };
       },
       tip: 'Two numbers and the gap between them is a more honest answer than one number on its own. Nobody finds a threshold exactly; they find the last speed on each side of it.',
-    },
-    {
-      sid: 'where-is-the-line',
-      bind: ENERGY_BODIES,
-      type: 'question',
-      title: 'Where is the line?',
-      kind: 'choice',
-      body: `You have just found it by hand.`,
-      prompt:
-        'The dividing speed for a cannonball fired from the Earth’s surface is closest to…',
-      options: ['8 km/s', '12 km/s', '20 km/s', '40 km/s'],
-      answer: 1,
-      because:
-        'From the cannon it is 10.9 km/s, so 12 is much the closest. From the ground itself it is 11.2 km/s, and that is the number worth carrying around: roughly 25,000 miles per hour, or about thirty-three times the speed of sound. Every spacecraft that has ever left for another planet had to be given at least this much. Notice that the two differ, and that the cannon on its tower needs slightly less. That is a clue you will come back to.',
-      hints: [
-        'Escape speed depends on how strong gravity is where you start and how far you must go.',
-        'It is fast by everyday standards: compare it with a jet airliner and with a rifle bullet.',
-      ],
     },
     {
       sid: 'what-is-actually-deciding-this',
@@ -378,7 +418,7 @@ const ENERGY = {
              and it is the one to watch.
              \n\nMove the speed slider slowly and watch the total bar move up
              through the line.`,
-      tool: { id: 'launch', values: { v: 6 } },
+      tool: { id: 'launch', values: { v: 6 }, presets: false },
       checklist: [
         'At 6 km/s, note that the total bar is below the zero line',
         'At 9 km/s it is still below, but shorter',
@@ -386,7 +426,7 @@ const ENERGY = {
         'Compare that speed with the dividing line you found earlier',
         'Above it, note that the total bar has flipped to the other side',
       ],
-      tip: 'The speed where the total energy crosses zero is exactly the speed where the path stops closing. That is not a coincidence. It is the same fact told two different ways.',
+      tip: 'Read the "Total energy" row beside the bar, and watch the "Does it come back?" line as you cross the zero line.',
     },
     {
       sid: 'reading-the-sign',
@@ -409,6 +449,23 @@ const ENERGY = {
       hints: [
         'Think about what the energy of position becomes infinitely far away.',
         'If the total is less than that, can the object ever get there?',
+      ],
+      misconceptions: [
+        {
+          id: 'belowZeroLeaves',
+          option: 1,
+          say: 'An object that eventually leaves has a total of zero or more. Below zero is the trapped side.',
+        },
+        {
+          id: 'belowZeroFalls',
+          option: 2,
+          say: 'A planet in a steady orbit has a total below zero and never falls in. The sign says whether it can get away, not whether it will hit.',
+        },
+        {
+          id: 'belowZeroFast',
+          option: 3,
+          say: 'A speed above the escape speed gives a total above zero, the opposite sign.',
+        },
       ],
     },
     {
@@ -467,6 +524,23 @@ const ENERGY = {
       hints: [
         'Watch the energy readout through one whole orbit.',
         'Two of the three trade energy back and forth. What would a trade leave unchanged?',
+      ],
+      misconceptions: [
+        {
+          id: 'motionStays',
+          option: 0,
+          say: 'The energy of motion rose and fell with the speed, and the speed changed by a large factor.',
+        },
+        {
+          id: 'positionStays',
+          option: 1,
+          say: 'The energy of position moved with the distance, and the distance changed even more.',
+        },
+        {
+          id: 'allChanged',
+          option: 3,
+          say: 'Look at the white total line against the other two over a whole lap, not only at the other two.',
+        },
       ],
     },
     {
@@ -546,18 +620,74 @@ const ENERGY = {
         'The Sun, by a long way: about 618 km/s from its surface, more than fifty times the Earth’s. The Sun is a third of a million times the Earth’s mass, and although its surface is also much further from its center, the mass wins.',
     },
     {
+      sid: 'read-the-escape-speeds',
+      bind: ENERGY_BODIES,
+      type: 'measure',
+      title: 'Read the four escape speeds',
+      body: `The panel shows the real escape speed of four bodies, for a start
+             standing on the surface of each. Set the start distance to
+             <strong>1</strong> body radius, and press <strong>Take
+             reading</strong> beside each box.
+             \n\nYour prediction stays unmarked until the next step.`,
+      tool: { id: 'escape-compare', values: { dist: 1 }, presets: false },
+      fields: [
+        {
+          id: 'v_moon',
+          label: 'Escape speed from the Moon',
+          unit: 'km/s',
+          source: { tool: 'moon' },
+        },
+        {
+          id: 'v_earth',
+          label: 'Escape speed from Earth',
+          unit: 'km/s',
+          source: { tool: 'earth' },
+        },
+        {
+          id: 'v_jupiter',
+          label: 'Escape speed from Jupiter',
+          unit: 'km/s',
+          source: { tool: 'jupiter' },
+        },
+        {
+          id: 'v_sun',
+          label: 'Escape speed from the Sun',
+          unit: 'km/s',
+          source: { tool: 'sun' },
+        },
+      ],
+      validate: v => {
+        if (!Number.isFinite(v.v_earth)) return null;
+        // Earth's escape speed from its surface, sqrt(2GM/R) = 11.19 km/s.
+        if (Math.abs(v.v_earth - 11.19) > 0.3) {
+          return {
+            level: 'warn',
+            message:
+              'These are for a start further out than the surface. Set the start distance back to 1 body radius and take each reading again.',
+          };
+        }
+        return null;
+      },
+    },
+    {
       sid: 'more-mass-harder-to-leave',
       bind: ENERGY_BODIES,
       type: 'explore',
+      evidence: [
+        { step: 'read-the-escape-speeds', field: 'v_moon' },
+        { step: 'read-the-escape-speeds', field: 'v_earth' },
+        { step: 'read-the-escape-speeds', field: 'v_jupiter' },
+        { step: 'read-the-escape-speeds', field: 'v_sun' },
+      ],
+      compare:
+        'Mass raises escape speed and radius lowers it, so the biggest mass wins here: the Sun’s is about a thousand times Jupiter’s, and its escape speed about ten times larger.',
       title: 'More mass, harder to leave',
-      body: `Here are four real bodies with their real escape speeds, all
-             measured standing on the surface.
+      body: `Here are the four real bodies again, with the speeds you took.
              \n\nThe Sun's bar runs off the end of the chart on purpose. Drawn to
              the same scale as the others it would be ten times longer than the
              panel, which is a fair impression of the situation.`,
       tool: { id: 'escape-compare', values: { dist: 1 } },
       checklist: [
-        'Read the escape speed from the Moon and from Earth',
         'Compare Earth with Jupiter and note roughly the factor between them',
         'Note that the Sun is off the scale entirely',
         'Convince yourself the order matches the order of their masses',

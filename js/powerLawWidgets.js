@@ -254,8 +254,11 @@ const KEPLER = {
   compute(v) {
     return measureAt(v.n);
   },
-  readout(v) {
-    return keplerRows(v.n);
+  readout(v, ctx, spec) {
+    const rows = keplerRows(v.n);
+    return spec?.withhold?.includes('expected')
+      ? rows.filter(r => r.id !== 'expected')
+      : rows;
   },
   draw(canvas, v) {
     const H = responsiveHeight(280, 240);
@@ -315,7 +318,7 @@ const KEPLER = {
       ctx,
       m.keplerSlope === null
         ? 'slope not measured'
-        : `slope ${m.keplerSlope.toFixed(3)}   (n+1)/2 = ${m.keplerExpected.toFixed(3)}`,
+        : `slope ${m.keplerSlope.toFixed(3)}`,
       L + 6,
       T + 4,
       '#9ad0ff'

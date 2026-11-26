@@ -4,18 +4,18 @@
     "goldilocks-question",
     "transit-photometry",
     "what-is-a-gravitational-wave",
+    "power-law-gravity",
     "lagrange-points",
     "measuring-the-moon",
     "missing-mass",
-    "weighing-stars",
+    "orbital-energy",
     "tides",
+    "weighing-stars",
     "black-holes",
+    "a-night-at-the-telescope",
     "butterfly-effect",
     "extending-an-experiment",
     "propose-an-observation",
-    "radial-velocity",
-    "a-night-at-the-telescope",
-    "power-law-gravity",
     "retrograde-motion",
     "the-saturated-star"
   ],
@@ -177,6 +177,13 @@
       "lock:{\"placement\":true,\"inspector\":false,\"areaSweep\":false}",
       "math:arithmetic"
     ],
+    "power-law-gravity": [
+      "key:measure.canvas",
+      "key:predict.canvas",
+      "key:question.explain",
+      "key:read.canvas",
+      "lock:null"
+    ],
     "lagrange-points": [
       "key:explore.requires",
       "key:explore.rubric",
@@ -195,42 +202,37 @@
       "key:explore.decides",
       "key:explore.depth"
     ],
-    "weighing-stars": [
-      "key:explore.showBarycenter",
-      "key:measure.showBarycenter",
-      "key:read.motion",
-      "key:read.showBarycenter"
+    "orbital-energy": [
+      "key:explore.compare",
+      "key:explore.evidence",
+      "key:question.rubricCriteria",
+      "key:read.motion"
     ],
     "tides": [
       "key:explore.canvas",
       "key:question.canvas",
       "key:read.allowInspector"
     ],
+    "weighing-stars": [
+      "key:explore.showBarycenter",
+      "key:measure.showBarycenter",
+      "key:read.showBarycenter"
+    ],
     "black-holes": [
       "key:question.checklist",
       "key:read.explainView"
     ],
-    "butterfly-effect": [
-      "key:predict.requires",
-      "lock:null"
-    ],
-    "extending-an-experiment": [
-      "key:measure.compute",
-      "key:read.canvas"
-    ],
-    "propose-an-observation": [
-      "key:measure.plan",
-      "key:question.rubricCriteria"
-    ],
-    "radial-velocity": [
-      "key:explore.compare",
-      "key:explore.evidence"
-    ],
     "a-night-at-the-telescope": [
       "key:question.reflect"
     ],
-    "power-law-gravity": [
-      "key:question.explain"
+    "butterfly-effect": [
+      "key:predict.requires"
+    ],
+    "extending-an-experiment": [
+      "key:measure.compute"
+    ],
+    "propose-an-observation": [
+      "key:measure.plan"
     ],
     "retrograde-motion": [
       "lock:{\"placement\":true,\"inspector\":false}"
@@ -308,14 +310,14 @@
   ],
   "totals": {
     "investigations": 124,
-    "steps": 2004,
+    "steps": 2005,
     "activityCuts": 6,
-    "lessonTokens": 182,
+    "lessonTokens": 184,
     "activityTokens": 29,
     "stepTypes": {
       "read": 379,
       "predict": 209,
-      "measure": 524,
+      "measure": 525,
       "ellipse": 1,
       "question": 749,
       "explore": 141,

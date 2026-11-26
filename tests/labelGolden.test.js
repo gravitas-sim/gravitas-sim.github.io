@@ -112,7 +112,7 @@ describe('the call-site coverage', () => {
   test('every toFixed and toPrecision call in the family ran', () => {
     expect(coverageOf(all)).toEqual(readJson(COVERAGE_FILE));
     expect(coverageOf(all).unreached).toEqual([]);
-    expect(coverageOf(all).calls).toBe(92);
+    expect(coverageOf(all).calls).toBe(91);
   });
 
   test('is counted the way the ratchet counts the family', () => {

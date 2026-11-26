@@ -57,7 +57,8 @@ describe('the allowlist only shrinks', () => {
     // 63 after Missing Mass moved its MOND steps to the deeper path (the check on
     // the-prediction-mond-makes now lives in tests/missingMassFits.test.js).
     // 62 with Tides, whose crossing question became a hunt with no numeric answer.
-    expect(literals).toHaveLength(62);
+    // 63 with the slope-rate step of What If Gravity Were Not Inverse Square?, model-checked.
+    expect(literals).toHaveLength(63);
     for (const l of literals) {
       const homes = [MODELS, SOURCED, UNCHECKED].filter(t => t[l.key]);
       expect({ key: l.key, homes: homes.length }).toEqual({
@@ -73,7 +74,7 @@ describe('the allowlist only shrinks', () => {
     expect(UNCHECKED_CEILING).toBe(34);
     expect(
       Object.keys(MODELS).length + Object.keys(SOURCED).length + UNCHECKED_COUNT
-    ).toBe(62);
+    ).toBe(63);
   });
 
   test('every entry names a real literal and gives a reason', () => {
@@ -239,7 +240,9 @@ describe('the instructor expectations record', () => {
     // half-range step of Radial Velocity), less one each for Why Mars Goes Backwards
     // (Prompt 346) and the Goldilocks Question's distance steps (three-distances-yours).
     // 559: one more for the Lagrange investigation's nudge test (nudge-l1-and-l4).
-    expect(total).toBe(559);
+    // 560: the slope-rate step of What If Gravity Were Not Inverse Square?, net of the
+    // dividing-speed step's rewording, over v4's 559.
+    expect(total).toBe(560);
     // 542 after How Many Earths? (Prompt 229): 3 more over 539.
     // 547 after the four exoplanet closeout investigations (Prompt 231): 5 more over 542.
   });

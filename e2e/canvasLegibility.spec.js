@@ -47,7 +47,7 @@ const PANELS = [
   { widget: 'dilution', lesson: 'transit-photometry', step: 24 },
   { widget: 'resolve', lesson: 'transit-photometry', step: 25 },
   { widget: 'launch', lesson: 'orbital-energy', step: 3 },
-  { widget: 'live-energy', lesson: 'orbital-energy', step: 12 },
+  { widget: 'live-energy', lesson: 'orbital-energy', step: 11 },
   { widget: 'escape-compare', lesson: 'orbital-energy', step: 17 },
   { widget: 'shapes', lesson: 'orbital-energy', step: 20 },
   { widget: 'binary', lesson: 'weighing-stars', step: 9 },

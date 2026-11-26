@@ -917,7 +917,7 @@
       ],
       "citations": [],
       "offline": "precache",
-      "bytes": 63105
+      "bytes": 64210
     },
     {
       "id": "gravitas.mission",
@@ -1004,7 +1004,7 @@
       ],
       "citations": [],
       "offline": "precache",
-      "bytes": 54509
+      "bytes": 54693
     },
     {
       "id": "gravitas.sdss-dr18-spectra",

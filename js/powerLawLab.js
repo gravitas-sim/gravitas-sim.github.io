@@ -273,7 +273,9 @@ export function keplerRows(n) {
       value: m.keplerSlope === null ? 'not measured' : m.keplerSlope.toFixed(4),
       emphasis: true,
     },
+    // Withheld (`withhold: ['expected']`) on the steps that ask for the slope.
     {
+      id: 'expected',
       label: 'Predicted slope (n+1)/2',
       value: m.keplerExpected.toFixed(4),
     },
