@@ -257,7 +257,7 @@ export const MODELS = {
     via: 'js/tidalPhysics.js: solar radius over the astronomical unit',
     value: () => AU_METERS / SOLAR_RADIUS_M,
   },
-  'black-holes/where-the-room-comes-from': {
+  'black-holes/count-the-zeros': {
     via: 'js/blackHolePhysics.js schwarzschildRadiusM: zeros gained by the volume of a 1000-fold mass',
     value: () =>
       Math.log10(

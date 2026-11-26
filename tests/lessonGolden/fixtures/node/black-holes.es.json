@@ -2,11 +2,11 @@
  "id": "black-holes",
  "locale": "es",
  "title": "Agujeros negros en números",
- "steps": 30,
+ "steps": 32,
  "depths": [
   [
    "core",
-   30
+   32
   ]
  ],
  "grading": [
@@ -254,7 +254,7 @@
    ]
   },
   {
-   "sid": "where-the-room-comes-from",
+   "sid": "count-the-zeros",
    "type": "question",
    "kind": "numeric",
    "tolerance": 0.5,
@@ -424,6 +424,33 @@
    ]
   },
   {
+   "sid": "predict-twenty-against-ten",
+   "type": "predict",
+   "kind": null,
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     true,
+     "correct"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
    "sid": "sorting-them-out",
    "type": "question",
    "kind": "choice",
@@ -531,12 +558,13 @@
     "black-holes:the-right-answer-for-the": 2,
     "black-holes:which-one-is-denser": 0,
     "black-holes:which-way-did-it-go": 1,
-    "black-holes:where-the-room-comes-from": "9",
-    "black-holes:where-the-room-comes-from:locale": "es",
+    "black-holes:count-the-zeros": "9",
+    "black-holes:count-the-zeros:locale": "es",
     "black-holes:which-one-is-hotter": 0,
     "black-holes:colder-not-hotter": 1,
     "black-holes:then-what-happens-to-it": 0,
     "black-holes:longer-and-then-much-longer": 2,
+    "black-holes:predict-twenty-against-ten": 2,
     "black-holes:sorting-them-out": 3,
     "black-holes:a-mystery-black-hole-size": 1,
     "black-holes:a-mystery-black-hole-temperature": 3,
@@ -552,11 +580,12 @@
     "black-holes:the-right-answer-for-the": 1,
     "black-holes:which-one-is-denser": 1,
     "black-holes:which-way-did-it-go": 1,
-    "black-holes:where-the-room-comes-from": 1,
+    "black-holes:count-the-zeros": 1,
     "black-holes:which-one-is-hotter": 1,
     "black-holes:colder-not-hotter": 1,
     "black-holes:then-what-happens-to-it": 1,
     "black-holes:longer-and-then-much-longer": 1,
+    "black-holes:predict-twenty-against-ten": 1,
     "black-holes:sorting-them-out": 1,
     "black-holes:a-mystery-black-hole-size": 1,
     "black-holes:a-mystery-black-hole-temperature": 1
@@ -567,7 +596,7 @@
     "the-event-horizon",
     "thirty-kilometers-is-not-very",
     "now-make-it-heavier",
-    "three-measurements",
+    "choose-three-masses",
     "what-did-doubling-do",
     "read-the-graph",
     "the-rule-you-just-found",
@@ -578,7 +607,7 @@
     "which-one-is-denser",
     "mass-divided-by-volume",
     "which-way-did-it-go",
-    "where-the-room-comes-from",
+    "count-the-zeros",
     "which-one-is-hotter",
     "what-hawking-radiation-is-and",
     "the-thermometer",
@@ -586,10 +615,12 @@
     "then-what-happens-to-it",
     "a-timeline-that-will-not",
     "longer-and-then-much-longer",
+    "predict-twenty-against-ten",
     "from-city-sized-to-solar",
     "sorting-them-out",
     "a-mystery-black-hole-size",
     "a-mystery-black-hole-temperature",
+    "read-twenty-against-ten",
     "say-what-scales-with-what",
     "it-has-a-name"
    ],
@@ -608,12 +639,13 @@
     "black-holes:the-right-answer-for-the": 2,
     "black-holes:which-one-is-denser": 0,
     "black-holes:which-way-did-it-go": 1,
-    "black-holes:where-the-room-comes-from": "9",
-    "black-holes:where-the-room-comes-from:locale": "es",
+    "black-holes:count-the-zeros": "9",
+    "black-holes:count-the-zeros:locale": "es",
     "black-holes:which-one-is-hotter": 0,
     "black-holes:colder-not-hotter": 1,
     "black-holes:then-what-happens-to-it": 0,
     "black-holes:longer-and-then-much-longer": 2,
+    "black-holes:predict-twenty-against-ten": 2,
     "black-holes:sorting-them-out": 3,
     "black-holes:a-mystery-black-hole-size": 1,
     "black-holes:a-mystery-black-hole-temperature": 3,
@@ -629,11 +661,12 @@
     "black-holes:the-right-answer-for-the": 1,
     "black-holes:which-one-is-denser": 1,
     "black-holes:which-way-did-it-go": 1,
-    "black-holes:where-the-room-comes-from": 1,
+    "black-holes:count-the-zeros": 1,
     "black-holes:which-one-is-hotter": 1,
     "black-holes:colder-not-hotter": 1,
     "black-holes:then-what-happens-to-it": 1,
     "black-holes:longer-and-then-much-longer": 1,
+    "black-holes:predict-twenty-against-ten": 1,
     "black-holes:sorting-them-out": 1,
     "black-holes:a-mystery-black-hole-size": 1,
     "black-holes:a-mystery-black-hole-temperature": 1
@@ -642,14 +675,18 @@
     "a-mystery-black-hole-size",
     "a-mystery-black-hole-temperature",
     "a-timeline-that-will-not",
+    "choose-three-masses",
     "colder-not-hotter",
+    "count-the-zeros",
     "from-city-sized-to-solar",
     "it-has-a-name",
     "longer-and-then-much-longer",
     "mass-divided-by-volume",
     "not-a-hole-and-not",
     "now-make-it-heavier",
+    "predict-twenty-against-ten",
     "read-the-graph",
+    "read-twenty-against-ten",
     "say-what-scales-with-what",
     "sorting-them-out",
     "squeeze-the-sun",
@@ -661,11 +698,9 @@
     "the-thermometer",
     "then-what-happens-to-it",
     "thirty-kilometers-is-not-very",
-    "three-measurements",
     "what-could-size-even-mean",
     "what-did-doubling-do",
     "what-hawking-radiation-is-and",
-    "where-the-room-comes-from",
     "which-one-is-denser",
     "which-one-is-hotter",
     "which-way-did-it-go"
@@ -688,7 +723,7 @@
    "lesson": {
     "id": "black-holes",
     "title": "Agujeros negros en números",
-    "stepCount": 30
+    "stepCount": 32
    },
    "student": null,
    "progress": {
@@ -700,7 +735,7 @@
      "the-event-horizon",
      "thirty-kilometers-is-not-very",
      "now-make-it-heavier",
-     "three-measurements",
+     "choose-three-masses",
      "what-did-doubling-do",
      "read-the-graph",
      "the-rule-you-just-found",
@@ -711,7 +746,7 @@
      "which-one-is-denser",
      "mass-divided-by-volume",
      "which-way-did-it-go",
-     "where-the-room-comes-from",
+     "count-the-zeros",
      "which-one-is-hotter",
      "what-hawking-radiation-is-and",
      "the-thermometer",
@@ -719,10 +754,12 @@
      "then-what-happens-to-it",
      "a-timeline-that-will-not",
      "longer-and-then-much-longer",
+     "predict-twenty-against-ten",
      "from-city-sized-to-solar",
      "sorting-them-out",
      "a-mystery-black-hole-size",
      "a-mystery-black-hole-temperature",
+     "read-twenty-against-ten",
      "say-what-scales-with-what",
      "it-has-a-name"
     ],
@@ -736,12 +773,13 @@
      "black-holes:the-right-answer-for-the": 2,
      "black-holes:which-one-is-denser": 0,
      "black-holes:which-way-did-it-go": 1,
-     "black-holes:where-the-room-comes-from": "9",
-     "black-holes:where-the-room-comes-from:locale": "es",
+     "black-holes:count-the-zeros": "9",
+     "black-holes:count-the-zeros:locale": "es",
      "black-holes:which-one-is-hotter": 0,
      "black-holes:colder-not-hotter": 1,
      "black-holes:then-what-happens-to-it": 0,
      "black-holes:longer-and-then-much-longer": 2,
+     "black-holes:predict-twenty-against-ten": 2,
      "black-holes:sorting-them-out": 3,
      "black-holes:a-mystery-black-hole-size": 1,
      "black-holes:a-mystery-black-hole-temperature": 3,
@@ -757,11 +795,12 @@
      "black-holes:the-right-answer-for-the": 1,
      "black-holes:which-one-is-denser": 1,
      "black-holes:which-way-did-it-go": 1,
-     "black-holes:where-the-room-comes-from": 1,
+     "black-holes:count-the-zeros": 1,
      "black-holes:which-one-is-hotter": 1,
      "black-holes:colder-not-hotter": 1,
      "black-holes:then-what-happens-to-it": 1,
      "black-holes:longer-and-then-much-longer": 1,
+     "black-holes:predict-twenty-against-ten": 1,
      "black-holes:sorting-them-out": 1,
      "black-holes:a-mystery-black-hole-size": 1,
      "black-holes:a-mystery-black-hole-temperature": 1
@@ -800,8 +839,8 @@
     },
     {
      "index": 5,
-     "sid": "three-measurements",
-     "fingerprint": "explore|-|bh-scaling|-|-|-|-",
+     "sid": "choose-three-masses",
+     "fingerprint": "measure|-|bh-scaling|-|m1+r1+m2+r2+m3+r3+span|-|-",
      "optionCount": null
     },
     {
@@ -866,7 +905,7 @@
     },
     {
      "index": 16,
-     "sid": "where-the-room-comes-from",
+     "sid": "count-the-zeros",
      "fingerprint": "question|numeric|bh-blocks|-|-|-|a=9;t=0.5;u=zeros",
      "optionCount": null
     },
@@ -914,36 +953,48 @@
     },
     {
      "index": 24,
+     "sid": "predict-twenty-against-ten",
+     "fingerprint": "predict|-|-|-|-|4|a=2;c=2",
+     "optionCount": 4
+    },
+    {
+     "index": 25,
      "sid": "from-city-sized-to-solar",
      "fingerprint": "read|-|bh-lineup|-|-|-|-",
      "optionCount": null
     },
     {
-     "index": 25,
+     "index": 26,
      "sid": "sorting-them-out",
      "fingerprint": "question|choice|bh-lineup|-|-|4|a=3;c=3",
      "optionCount": 4
     },
     {
-     "index": 26,
+     "index": 27,
      "sid": "a-mystery-black-hole-size",
      "fingerprint": "question|choice|bh-lineup|-|-|4|a=1;c=1",
      "optionCount": 4
     },
     {
-     "index": 27,
+     "index": 28,
      "sid": "a-mystery-black-hole-temperature",
      "fingerprint": "question|choice|bh-lineup|-|-|4|a=3;c=3",
      "optionCount": 4
     },
     {
-     "index": 28,
+     "index": 29,
+     "sid": "read-twenty-against-ten",
+     "fingerprint": "measure|-|bh-scaling|-|fr+fd+ft+fl|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 30,
      "sid": "say-what-scales-with-what",
      "fingerprint": "question|short|-|-|-|-|-",
      "optionCount": null
     },
     {
-     "index": 29,
+     "index": 31,
      "sid": "it-has-a-name",
      "fingerprint": "read|-|bh-lineup|-|-|-|-",
      "optionCount": null
@@ -964,12 +1015,13 @@
     "black-holes:the-right-answer-for-the": 2,
     "black-holes:which-one-is-denser": 0,
     "black-holes:which-way-did-it-go": 1,
-    "black-holes:where-the-room-comes-from": "9",
-    "black-holes:where-the-room-comes-from:locale": "es",
+    "black-holes:count-the-zeros": "9",
+    "black-holes:count-the-zeros:locale": "es",
     "black-holes:which-one-is-hotter": 0,
     "black-holes:colder-not-hotter": 1,
     "black-holes:then-what-happens-to-it": 0,
     "black-holes:longer-and-then-much-longer": 2,
+    "black-holes:predict-twenty-against-ten": 2,
     "black-holes:sorting-them-out": 3,
     "black-holes:a-mystery-black-hole-size": 1,
     "black-holes:a-mystery-black-hole-temperature": 3,
@@ -985,11 +1037,12 @@
     "black-holes:the-right-answer-for-the": 1,
     "black-holes:which-one-is-denser": 1,
     "black-holes:which-way-did-it-go": 1,
-    "black-holes:where-the-room-comes-from": 1,
+    "black-holes:count-the-zeros": 1,
     "black-holes:which-one-is-hotter": 1,
     "black-holes:colder-not-hotter": 1,
     "black-holes:then-what-happens-to-it": 1,
     "black-holes:longer-and-then-much-longer": 1,
+    "black-holes:predict-twenty-against-ten": 1,
     "black-holes:sorting-them-out": 1,
     "black-holes:a-mystery-black-hole-size": 1,
     "black-holes:a-mystery-black-hole-temperature": 1
@@ -998,14 +1051,18 @@
     "a-mystery-black-hole-size",
     "a-mystery-black-hole-temperature",
     "a-timeline-that-will-not",
+    "choose-three-masses",
     "colder-not-hotter",
+    "count-the-zeros",
     "from-city-sized-to-solar",
     "it-has-a-name",
     "longer-and-then-much-longer",
     "mass-divided-by-volume",
     "not-a-hole-and-not",
     "now-make-it-heavier",
+    "predict-twenty-against-ten",
     "read-the-graph",
+    "read-twenty-against-ten",
     "say-what-scales-with-what",
     "sorting-them-out",
     "squeeze-the-sun",
@@ -1017,16 +1074,14 @@
     "the-thermometer",
     "then-what-happens-to-it",
     "thirty-kilometers-is-not-very",
-    "three-measurements",
     "what-could-size-even-mean",
     "what-did-doubling-do",
     "what-hawking-radiation-is-and",
-    "where-the-room-comes-from",
     "which-one-is-denser",
     "which-one-is-hotter",
     "which-way-did-it-go"
    ],
-   "stepIndex": 29,
+   "stepIndex": 31,
    "startedAt": "2026-01-02T03:04:05.000Z",
    "moved": [],
    "dropped": [],
@@ -1126,7 +1181,7 @@
      "locale": "es"
     },
     {
-     "sid": "where-the-room-comes-from",
+     "sid": "count-the-zeros",
      "value": "9",
      "locale": "es"
     },
@@ -1147,6 +1202,11 @@
     },
     {
      "sid": "longer-and-then-much-longer",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "predict-twenty-against-ten",
      "value": 2,
      "locale": "es"
     },
@@ -1230,7 +1290,7 @@
      "locale": "es"
     },
     {
-     "sid": "where-the-room-comes-from",
+     "sid": "count-the-zeros",
      "value": "9",
      "locale": "es"
     },
@@ -1251,6 +1311,11 @@
     },
     {
      "sid": "longer-and-then-much-longer",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "predict-twenty-against-ten",
      "value": 2,
      "locale": "es"
     },
@@ -1358,7 +1423,7 @@
      "locale": "es"
     },
     {
-     "sid": "where-the-room-comes-from",
+     "sid": "count-the-zeros",
      "value": "9",
      "locale": "es"
     },
@@ -1379,6 +1444,11 @@
     },
     {
      "sid": "longer-and-then-much-longer",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "predict-twenty-against-ten",
      "value": 2,
      "locale": "es"
     },
@@ -1463,7 +1533,7 @@
      "locale": "es"
     },
     {
-     "sid": "where-the-room-comes-from",
+     "sid": "count-the-zeros",
      "value": "9",
      "locale": "es"
     },
@@ -1484,6 +1554,11 @@
     },
     {
      "sid": "longer-and-then-much-longer",
+     "value": 2,
+     "locale": "es"
+    },
+    {
+     "sid": "predict-twenty-against-ten",
      "value": 2,
      "locale": "es"
     },

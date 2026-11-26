@@ -61,7 +61,7 @@ const PANELS = [
   { widget: 'bh-blocks', lesson: 'black-holes', step: 17 },
   { widget: 'bh-thermo', lesson: 'black-holes', step: 20 },
   { widget: 'bh-lifetime', lesson: 'black-holes', step: 23 },
-  { widget: 'bh-lineup', lesson: 'black-holes', step: 25 },
+  { widget: 'bh-lineup', lesson: 'black-holes', step: 26 },
   { widget: 'reflex-motion', lesson: 'radial-velocity', step: 4 },
   { widget: 'rv-observer', lesson: 'radial-velocity', step: 10 },
   { widget: 'rv-mass', lesson: 'radial-velocity', step: 17 },

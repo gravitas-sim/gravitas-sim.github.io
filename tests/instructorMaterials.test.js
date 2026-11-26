@@ -111,7 +111,8 @@ describe('answer keys are derived, not written', () => {
     // A prediction is recorded but never marked wrong, and a key that presents
     // one as a graded question invites an instructor to grade it.
     const counts = questionCounts(getInvestigation('black-holes'));
-    expect(counts.predictions).toBe(5);
+    // Six since the held four-factor prediction (20 against 10 solar masses).
+    expect(counts.predictions).toBe(6);
     const key = answerKeyFor(getInvestigation('black-holes'));
     for (const e of gradedEntries(key)) {
       expect(['graded', 'prediction']).toContain(e.category);

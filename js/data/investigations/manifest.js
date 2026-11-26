@@ -81,8 +81,8 @@ export const MANIFEST = [
     duration: '35-45 min',
     level: 'Introductory astronomy',
     thumbnail: 'images/investigations/black-holes.webp',
-    stepCount: 30,
-    gradedCount: 18,
+    stepCount: 32,
+    gradedCount: 21,
     objectiveCount: 5,
   },
   {

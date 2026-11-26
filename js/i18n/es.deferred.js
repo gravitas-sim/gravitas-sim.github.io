@@ -4245,4 +4245,33 @@ export const ES_DEFERRED = {
     'Elige primero ambos umbrales de los menús: lo correcto depende de la pareja.',
   'lessonFn.youChoseTheSameCutoffTwice126':
     'Has elegido el mismo umbral dos veces. Elige dos umbrales distintos: un ensayo solo puede cambiar de clase entre dos definiciones de ligado.',
+  // -- Black Holes by the Numbers (js/data/investigations/black-holes.js) -----
+  'lessonFn.aMassHasToBeA51':
+    'Una masa tiene que ser un número positivo de masas solares.',
+  'lessonFn.twoOfYourTrialsHaveThe114':
+    'Dos de tus ensayos tienen la misma masa, así que son un punto en la gráfica, no dos. Elige tres masas distintas.',
+  'lessonFn.yourHeaviestMassIsLessThan139':
+    'Tu masa mayor es menos de cuatro veces la menor. Separa más las tres, para que la gráfica pueda distinguir una recta de una curva.',
+  'lessonFn.eachOfYourMassesIsDouble149':
+    'Cada una de tus masas es el doble de la anterior. Cambia una de ellas por una masa que no sea una duplicación, para que la regla se ponga a prueba con un cociente que no planeaste.',
+  'lessonFn.oneOfYourRadiiDoesNot124':
+    'Uno de tus radios no corresponde a la masa que tiene al lado. Vuelve a poner el deslizador en esa masa y toma otra vez la lectura de su radio.',
+  'lessonFn.threeDifferentMassesWellSpreadEach123':
+    'Tres masas distintas, bien repartidas, cada una con su propio radio. Pulsa Capturar estos ensayos para guardar la serie en tu cuaderno.',
+  'lessonFn.aFactorIsAPositiveNumber54':
+    'Un factor es un número positivo. Toma la lectura otra vez.',
+  'lessonFn.yourFourReadingsWereNotAll101':
+    'Tus cuatro lecturas no se tomaron todas con una misma masa. Deja el deslizador en 20 M☉ y toma las cuatro otra vez.',
+  'lessonFn.theseReadingsAreForAMass96':
+    'Estas lecturas son de una masa distinta de 20 M☉. Pon el deslizador en 20 M☉ y toma las cuatro otra vez.',
+  'lessonFn.fourReadingsForTwentySolarMasses100':
+    'Cuatro lecturas para veinte masas solares frente a diez. La pantalla siguiente las pone junto a tu predicción.',
+  'lessonFn.holeOnTheCanvas18': 'Agujero del lienzo',
+  'lessonFn.itsSchwarzschildRadius24': 'Su radio de Schwarzschild',
+  'lessonFn.horizonRadiusAgainst10M29': 'Radio del horizonte, frente a 10 M☉',
+  'lessonFn.averageDensityAgainst10M30': 'Densidad media, frente a 10 M☉',
+  'lessonFn.hawkingTemperatureAgainst10M34':
+    'Temperatura de Hawking, frente a 10 M☉',
+  'lessonFn.evaporationLifetimeAgainst10M35':
+    'Vida hasta la evaporación, frente a 10 M☉',
 };

@@ -152,6 +152,7 @@ async function loopFacts(page, id, predictSid) {
     predictTitle: step.title,
     answer: step.answer,
     options: step.options?.length ?? 0,
+    misconceptions: step.misconceptions?.length ?? 0,
     reveal: step.reveal ?? null,
     revealIndex: revealAt,
     revealTitle: lesson.steps[revealAt]?.title ?? null,
@@ -384,11 +385,13 @@ test.describe('what a screen reader is told when an answer is committed', () => 
       const facts = await loopFacts(
         page,
         'black-holes',
-        'what-could-size-even-mean'
+        'what-did-doubling-do'
       );
-      // A choice that waits for nothing: if it ever gains a `reveal`, this is
-      // no longer the case being tested.
+      // A choice that waits for nothing and has no authored misconception
+      // (one would be announced before the explanation): if it ever gains a
+      // `reveal` or a misconception, this is no longer the case being tested.
       expect(facts.reveal).toBeNull();
+      expect(facts.misconceptions).toBe(0);
       expect(typeof facts.answer).toBe('number');
 
       await walkTo(page, facts.predictTitle);

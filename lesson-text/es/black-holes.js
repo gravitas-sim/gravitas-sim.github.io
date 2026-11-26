@@ -40,6 +40,17 @@ export default {
         'la frontera dentro de la cual nada puede volver a salir',
         'nada, porque un agujero negro no tiene tamaño',
       ],
+      misconceptions: [
+        {
+          say: 'Lo que cayó dentro no está en el horizonte con un ancho que puedas medir. El tamaño es un lugar del espacio, no un pedazo de material.',
+        },
+        {
+          say: 'La gravedad no tiene borde: se debilita con la distancia pero nunca se acaba, así que no puede dar un tamaño.',
+        },
+        {
+          say: 'No tener superficie no es no tener tamaño. Sigue habiendo una distancia concreta a la que algo cambia.',
+        },
+      ],
       because:
         'Es la frontera. Ni una superficie, ni un objeto, ni un muro que pudieras tocar: un lugar del espacio donde la situación cambia. Fuera de ella, la luz todavía puede escapar. Dentro, nada puede. Esa frontera se llama horizonte de sucesos, y lo lejos que queda es lo que los astrónomos entienden por el tamaño de un agujero negro. La segunda respuesta es una buena conjetura y muy común, pero la gravedad no tiene borde; simplemente se debilita con la distancia, y lo hace alrededor de un agujero negro exactamente igual que alrededor de una estrella.',
     },
@@ -59,7 +70,6 @@ export default {
         title: 'Diez masas solares, frente a cosas que conoces',
         note: 'El agujero negro y las tres barras están dibujados a una sola escala. Aquí no hay nada exagerado.',
       },
-      tip: 'Para hacerse una idea en el otro sentido: para hacer un agujero negro del tamaño de la Tierra harían falta unas dos mil masas solares, y para hacer uno del tamaño del Sol, unas doscientas treinta mil.',
     },
     'now-make-it-heavier': {
       title: 'Ahora hazlo más pesado',
@@ -74,25 +84,35 @@ export default {
       because:
         'Se dobla. Si elegiste la última opción estás en buena compañía: más masa sí significa gravedad más fuerte, y es muy natural esperar que un agujero negro más pesado esté más apretado. No es lo que ocurre, y las siguientes pantallas tratan de ver cómo no ocurre.',
     },
-    'three-measurements': {
-      title: 'Tres medidas',
-      body: 'Este es el experimento. El deslizador fija la masa. El panel calcula el radio de Schwarzschild. Pulsar <strong>Registrar este ensayo</strong> mete ese par de números en la tabla de abajo y coloca un punto en la gráfica.\n\nSolo necesitas tres. Tómalas a 5, 10 y 20 masas solares: cada una es el doble de la anterior, lo que hará el patrón fácil de ver.',
+    'choose-three-masses': {
+      title: 'Tres masas elegidas por ti',
+      body: 'Este es el experimento, y las masas las eliges tú. El deslizador fija la masa del agujero negro, en el panel y en el lienzo. El panel calcula el radio de Schwarzschild, y <strong>Registrar este ensayo</strong> mete el par en la tabla de debajo de la gráfica y coloca un punto en ella.\n\nElige tres masas distintas. Repártelas, de modo que la mayor sea al menos cuatro veces la menor, y no hagas con ellas una cadena de duplicaciones: un patrón que has planeado es una prueba más débil que uno que no.\n\nPara cada masa, pon el deslizador, pulsa <strong>Registrar este ensayo</strong> y después pulsa <strong>Tomar la lectura</strong> junto a su masa y junto a su radio. Las lecturas salen del agujero negro del lienzo, que sigue al deslizador.',
       tool: {
         title: 'La masa frente al tamaño del horizonte',
-        note: 'Fija una masa, pulsa Registrar, repite. Borrar ensayos reinicia la tabla si quieres rehacerlo.',
+        note: 'Fija una masa, pulsa Registrar, toma las dos lecturas, repite. La masa es también la del agujero negro del lienzo.',
       },
       checklist: [
-        'Pon el deslizador en 5 M☉ y pulsa Registrar este ensayo',
-        'Ponlo en 10 M☉ y pulsa Registrar otra vez',
-        'Ponlo en 20 M☉ y pulsa Registrar una vez más',
-        'Lee los tres radios en la tabla de debajo de la gráfica',
-        'Mira dónde han caído los tres puntos',
+        'Elige una primera masa, pon el deslizador en ella y pulsa Registrar este ensayo',
+        'Toma las lecturas de masa y de radio de ese ensayo',
+        'Observa cómo cambia el agujero del lienzo, y sus orbitadores con él',
+        'Haz lo mismo con dos masas más, repartidas en al menos un factor de cuatro',
+        'Mira dónde han caído tus tres puntos',
+        'Pulsa Capturar estos ensayos para guardar la serie en tu cuaderno',
+      ],
+      fields: [
+        { label: 'Ensayo A: masa', unit: 'M☉' },
+        { label: 'Ensayo A: radio de Schwarzschild', unit: 'km' },
+        { label: 'Ensayo B: masa', unit: 'M☉' },
+        { label: 'Ensayo B: radio de Schwarzschild', unit: 'km' },
+        { label: 'Ensayo C: masa', unit: 'M☉' },
+        { label: 'Ensayo C: radio de Schwarzschild', unit: 'km' },
+        { label: 'Tu masa mayor dividida entre la menor', unit: '×' },
       ],
       tip: 'Si registras la misma masa dos veces, sustituye el valor antiguo en lugar de añadir un segundo punto, así que no puedes ensuciar la gráfica por error.',
     },
     'what-did-doubling-do': {
       title: '¿Qué hizo doblarla?',
-      body: 'Mira tus dos primeros ensayos. Pasaste de 5 masas solares a 10, que es el doble de masa. El radio pasó de unos 14,8 kilómetros a unos 29,5.',
+      body: 'Mira la tabla de debajo de tu gráfica. Busca dos ensayos en los que una masa sea el doble de la otra. Si ninguno de los tuyos lo es, pon el deslizador en el doble de una de tus masas y pulsa <strong>Registrar este ensayo</strong>.\n\nAhora divide el mayor de esos dos radios entre el menor. Ese cociente es lo que le hizo al horizonte doblar la masa.',
       prompt: 'Cuando la masa se dobló, el radio de Schwarzschild…',
       options: [
         'se quedó más o menos igual',
@@ -101,7 +121,7 @@ export default {
         'subió unas ocho veces',
       ],
       because:
-        'Se dobló. Y pasar de 10 a 20 lo dobló otra vez, de 29,5 a 59,1 kilómetros. El doble de masa, el doble de radio, siempre.',
+        'Se dobló. Tomes el par doblado que tomes de la tabla, el radio mayor es el doble del menor: el doble de masa, el doble de radio, siempre.',
       tool: {
         title: 'Tus tres ensayos',
         note: 'La tabla de debajo de la gráfica guarda los números que registraste. Si está vacía, retrocede un paso y toma las tres medidas.',
@@ -109,7 +129,7 @@ export default {
     },
     'read-the-graph': {
       title: 'Lee la gráfica',
-      body: 'Ahora mira la forma que hacen tus tres puntos. La línea de puntos está trazada a través de ellos, partiendo de cero.',
+      body: 'Ahora mira la forma que hacen tus puntos, en las masas que elegiste. La línea de puntos está trazada a través de ellos, partiendo de cero.',
       prompt:
         'La gráfica del radio de Schwarzschild frente a la masa muestra que el radio…',
       options: [
@@ -127,7 +147,7 @@ export default {
     },
     'the-rule-you-just-found': {
       title: 'La regla que acabas de encontrar',
-      body: 'Lo que has medido tiene una notación abreviada: <strong>R<sub>s</sub> ∝ M</strong>. El símbolo del medio se lee «es proporcional a», y significa exactamente lo que muestra tu gráfica: una recta que pasa por cero.\n\nEn palabras, y esta es la frase que merece recordarse: <strong>dobla la masa de un agujero negro y el radio de su horizonte de sucesos se dobla.</strong>\n\nSi quieres ver la versión completa, es R<sub>s</sub> = 2GM/c², donde G es la intensidad de la gravedad y c es la velocidad de la luz. No se te pedirá hacer nada con ella. Lo único que importa aquí es que M aparece una vez, sola, arriba: eso es lo que hace que la gráfica sea una recta.\n\nLa consecuencia útil: unos 3 kilómetros de radio por cada masa solar. Un agujero negro de 20 masas solares, 60 kilómetros. Mil masas solares, 3000 kilómetros. Es así de sencillo, hasta arriba del todo.',
+      body: 'Lo que has medido tiene una notación abreviada: <strong>R<sub>s</sub> ∝ M</strong>. El símbolo del medio se lee «es proporcional a», y significa exactamente lo que muestra tu gráfica: una recta que pasa por cero.\n\nEn palabras, y esta es la frase que merece recordarse: <strong>dobla la masa de un agujero negro y el radio de su horizonte de sucesos se dobla.</strong>\n\nSi quieres ver la versión completa, es R<sub>s</sub> = 2GM/c², donde G es la intensidad de la gravedad y c es la velocidad de la luz. No se te pedirá hacer nada con ella. Lo único que importa aquí es que M aparece una vez, sola, arriba: eso es lo que hace que la gráfica sea una recta.\n\nLa consecuencia útil: unos 3 kilómetros de radio por cada masa solar. Un agujero negro de 20 masas solares, 60 kilómetros. Mil masas solares, 3000 kilómetros. Es así de sencillo, hasta arriba del todo: un horizonte del tamaño de la Tierra requiere unas dos mil masas solares, y uno del tamaño del Sol, unas doscientas treinta mil.',
       tip: 'Schwarzschild encontró este radio en los primeros meses tras la publicación de la relatividad general por Einstein, y Einstein no creía que nada real pudiera ser jamás tan compacto. Los astrónomos tardaron otros cincuenta años en empezar a encontrarlos.',
     },
     'squeezing-and-getting-away': {
@@ -195,6 +215,17 @@ export default {
         'Es una frontera del espacio que marca dónde las señales ya no pueden salir',
         'Es el borde del pedazo de materia que formó el agujero negro',
       ],
+      misconceptions: [
+        {
+          say: 'En el horizonte no hay nada con lo que chocar. Algo que lo cruza no encuentra ningún muro; lo que cambia es adónde pueden llegar todavía las señales.',
+        },
+        {
+          say: 'Los dos orbitadores del lienzo responden a esto: a la misma distancia de la misma masa, la órbita es la misma tanto si en el centro hay una estrella como si hay un agujero.',
+        },
+        {
+          say: 'El horizonte no es el borde de ningún material. Lo fija solo la masa, en el radio de Schwarzschild, dondequiera que haya ido la materia.',
+        },
+      ],
       because:
         'Un límite, y nada más sólido que eso. Dos cosas que conviene dejar claras ya que estás aquí. No hay nada con lo que chocar: un astronauta que cruzara el horizonte de un agujero negro grande no notaría absolutamente nada en ese momento. Y la gravedad no se enciende ahí, que es para lo que están los dos sistemas del lienzo. Ocho masas solares son ocho masas solares, y a la misma distancia la órbita es la misma órbita, tanto si la masa es una estrella sobre la que podrías posarte como si es un agujero sobre el que no. Un agujero negro no es una clase más fuerte de gravedad; es la misma gravedad con la masa empaquetada lo bastante pequeña como para que puedas acercarte muchísimo a ella. Esa es toda la diferencia, y es la razón de que al orbitador de la izquierda no se lo esté tragando nada.',
     },
@@ -237,6 +268,17 @@ export default {
         'se mantuvo igual',
         'subió y luego volvió a bajar',
       ],
+      misconceptions: [
+        {
+          say: 'Más masa, pero no en el mismo sitio: el horizonte también creció, y el marcador de la escalera se movió en sentido contrario. Vuelve a mirar hacia dónde fue de 10 a 1 000 000.',
+        },
+        {
+          say: 'El marcador sí se movió, y mucho. Pulsa 10 M☉ y después 1 000 000 M☉ y mira adónde va.',
+        },
+        {
+          say: 'El marcador se movió en un solo sentido todo el tiempo. Arrastra el deslizador despacio de un extremo a otro y busca un giro: no lo hay.',
+        },
+      ],
       because:
         'Bajó, y bajó con fuerza. Un agujero negro de 10 masas solares sale aproximadamente a la densidad de un núcleo atómico. Uno de un millón de masas solares está diez potencias de diez por debajo de eso: todavía más denso que nada que pudieras sostener, pero el sentido del movimiento es inconfundible. Llévalo más lejos y se vuelve más extraño. Alrededor de 140 millones de masas solares la densidad media a esta escala cae por debajo de la del agua, y el agujero negro del centro de la galaxia M87, con seis mil quinientos millones de masas solares, sale menos denso que el aire de la habitación en la que estás sentado.',
       tool: {
@@ -244,23 +286,31 @@ export default {
         note: 'La fila inferior compara esto con dónde estaba el agujero negro de 10 masas solares.',
       },
     },
-    'where-the-room-comes-from': {
+    'count-the-zeros': {
       hints: [
-        'El volumen crece con el cubo del radio.',
-        'Si el radio gana algunos ceros, el volumen gana el triple.',
+        'Pon primero el deslizador del panel en ×1000, y después busca la barra del volumen.',
+        'Las longitudes de las barras cuentan ceros: lee hasta dónde llega la barra del volumen.',
       ],
       feedback: {
         close:
-          'Cerca. El volumen va como el cubo del radio, así que elevar al cubo multiplica los ceros.',
-        off: 'Piensa en el radio y el volumen: ¿cómo se convierte un número de ceros en el otro al elevar al cubo?',
+          'Cerca. Comprueba que el deslizador dice ×1000, y vuelve a leer la fila del volumen.',
+        off: 'Pon el deslizador en ×1000 y lee la barra del volumen, no la de la masa ni la de la densidad.',
       },
+      misconceptions: [
+        {
+          say: 'Tres ceros es lo que gana la masa con ×1000, y el radio con ella, o lo que gana el volumen con ×10. Pon el deslizador en ×1000 y lee la barra del volumen.',
+        },
+        {
+          say: 'Seis es lo que pierde la densidad con ×1000, o lo que gana el volumen con ×100. Comprueba que el deslizador dice ×1000, y lee la fila del volumen.',
+        },
+      ],
       title: 'De dónde sale el sitio',
-      body: 'Aquí está la razón, y se reduce a contar ceros.\n\nCuando la masa sube en cierto factor, el radio sube en el mismo factor: esa es la regla que mediste antes. Pero el volumen no es el radio. El volumen crece en las tres direcciones a la vez, así que una esfera con diez veces el radio tiene diez por diez por diez, mil veces, el sitio dentro.\n\nAsí que la masa gana unos cuantos ceros, y el volumen gana el triple. La densidad es masa dividida entre volumen, y pierde la diferencia.\n\nPon el deslizador del panel en <strong>×1000</strong> y lee las barras.',
+      body: 'La densidad bajó al subir la masa. El panel muestra por qué contando ceros: cada barra es tan larga como el número de ceros que su cantidad ganó, o perdió, al multiplicar la masa.\n\nPon el deslizador del panel en <strong>×1000</strong>, que le da a la masa 3 ceros más, y lee las barras.',
       prompt:
-        'Multiplicar la masa por 1000 añade 3 ceros. ¿Cuántos ceros gana el volumen?',
+        'Con la masa multiplicada por 1000, ¿cuántos ceros gana el volumen dentro del horizonte?',
       unit: 'ceros',
       because:
-        'Nueve, porque el volumen crece en tres direcciones a la vez: 3 + 3 + 3. La masa ganó 3 ceros y el volumen ganó 9, así que la densidad perdió la diferencia, 6 ceros. Cayó en un factor de un millón. Esa es toda la sorpresa, y no es nada más exótico que el hecho de que las esferas ganan espacio más deprisa de lo que ganan anchura.',
+        'Nueve. Cuando la masa sube en cierto factor, el radio sube en el mismo factor: esa es la regla que mediste. Pero el volumen no es el radio. Crece en las tres direcciones a la vez, así que una esfera con diez veces el radio tiene diez por diez por diez, mil veces, el sitio dentro: aquí, 3 + 3 + 3 ceros. La masa ganó 3 ceros y el volumen ganó 9, así que la densidad, masa entre volumen, perdió la diferencia, 6 ceros. Cayó en un factor de un millón. Esa es toda la sorpresa, y no es nada más exótico que el hecho de que las esferas ganan espacio más deprisa de lo que ganan anchura.',
       tool: {
         title: 'Contando los ceros',
         note: 'Las barras azules ganan ceros. La roja los pierde. La longitud de la barra es el número de ceros, no el número en sí.',
@@ -287,7 +337,7 @@ export default {
     },
     'the-thermometer': {
       title: 'El termómetro',
-      body: 'El panel es un termómetro, con temperaturas familiares marcadas en él. Tiene que ser un termómetro extraño, porque el rango que necesita cubrir es enorme: cada muesca pequeña hacia arriba es diez veces más caliente que la de debajo.\n\nLo más frío marcado es la temperatura más baja jamás producida en un laboratorio. La etiquetada «el fondo de microondas» es la temperatura del propio espacio vacío, 2,7 grados sobre el cero absoluto, sobrante del Big Bang.\n\nUsa los botones para ir subiendo por las masas.',
+      body: 'El panel es un termómetro, con temperaturas familiares marcadas en él. Tiene que ser un termómetro extraño, porque el rango que necesita cubrir es enorme: cada muesca pequeña hacia arriba es diez veces más caliente que la de debajo.\n\nLo más frío marcado es la temperatura más baja jamás producida en un laboratorio. La etiquetada «el fondo de microondas» es la temperatura del propio espacio vacío, 2,7 grados sobre el cero absoluto, sobrante del Big Bang.\n\nUsa los botones para ir subiendo por las masas. El agujero negro del lienzo principal no cambia en esta pantalla, y nada en él muestra una temperatura: el termómetro es un cálculo a partir de la fórmula de Hawking, no una lectura de la escena.',
       tool: {
         title: 'Temperatura de Hawking',
         note: 'Cada muesca pequeña es diez veces más caliente que la de debajo. La barra muestra dónde se sitúa este agujero negro.',
@@ -311,8 +361,19 @@ export default {
         'se mantiene igual',
         'aumenta al principio y luego disminuye',
       ],
+      misconceptions: [
+        {
+          say: 'Más grande suele significar más de todo, pero aquí no. Mira el nivel del termómetro al ir de 1 M☉ a Sagitario A*: baja.',
+        },
+        {
+          say: 'El nivel se movió muchas muescas, y cada muesca es un factor de diez. Vuelve a comparar 1 M☉ con Sagitario A*.',
+        },
+        {
+          say: 'El nivel se movió en un solo sentido del más ligero al más pesado. En esta escala no hay punto de giro.',
+        },
+      ],
       because:
-        'Disminuye, y la regla es tan simple como la del radio, solo que del revés: T ∝ 1/M. Dobla la masa y reduces la temperatura a la mitad. Los agujeros negros más grandes del universo son los objetos más fríos que hay en él. Un agujero negro de diez masas solares está a unas seis milmillonésimas de grado sobre el cero absoluto. Sagitario A*, en el centro de nuestra galaxia, está cuatrocientas mil veces más frío todavía. Ambos están mucho más fríos que el espacio vacío que los rodea, lo que significa que ambos absorben más energía del fondo de microondas de la que emiten, y están creciendo muy despacio en lugar de encoger.',
+        'Disminuye, y la regla es tan simple como la del radio, solo que del revés: T ∝ 1/M. Diez veces la masa, una décima parte de la temperatura. Los agujeros negros más grandes del universo son los objetos más fríos que hay en él. Un agujero negro de diez masas solares está a unas seis milmillonésimas de grado sobre el cero absoluto. Sagitario A*, en el centro de nuestra galaxia, está cuatrocientas mil veces más frío todavía. Ambos están mucho más fríos que el espacio vacío que los rodea, lo que significa que ambos absorben más energía del fondo de microondas de la que emiten, y están creciendo muy despacio en lugar de encoger.',
       tool: {
         title: 'Sagitario A*, con cuatro millones de masas solares',
         note: 'Muy por debajo de la temperatura más baja que haya alcanzado jamás ningún laboratorio.',
@@ -333,7 +394,7 @@ export default {
     },
     'a-timeline-that-will-not': {
       title: 'Una cronología que no cabe en una página',
-      body: 'Los números aquí se desmadran, así que el panel cuenta ceros en lugar de años. La edad del universo, 13 800 millones de años, es un 1 seguido de 10 ceros, así que su barra llega a 10. Un número con 70 ceros tiene una barra que llega a 70.\n\nEso es todo lo que significa una barra aquí: cuántos ceros. Y cada cero de más es otro factor de diez, así que una barra el doble de larga no es el doble de tiempo. Es inimaginablemente más.\n\nVe subiendo por las masas y observa la barra naranja.',
+      body: 'Los números aquí se desmadran, así que el panel cuenta ceros en lugar de años. La edad del universo, 13 800 millones de años, es un 1 seguido de 10 ceros, así que su barra llega a 10. Un número con 70 ceros tiene una barra que llega a 70.\n\nEso es todo lo que significa una barra aquí: cuántos ceros. Y cada cero de más es otro factor de diez, así que una barra el doble de larga no es el doble de tiempo. Es inimaginablemente más.\n\nVe subiendo por las masas y observa la barra naranja. Nada en el lienzo principal se está evaporando ni lleva la cuenta del tiempo para esto: las barras se calculan con la fórmula de Hawking.',
       tool: {
         title: 'Cuánto tarda en evaporarse',
         note: 'La longitud de la barra cuenta los ceros. Las dos barras grises están ahí como comparación y no se mueven nunca.',
@@ -357,11 +418,36 @@ export default {
         'no depende de la masa',
       ],
       because:
-        'Mucho más deprisa. La regla es vida ∝ M³: dobla la masa y la vida sube ocho veces. Triplícala y sube veintisiete veces. Por eso un factor de cuatro millones en masa se convierte en un factor de 10²⁰ en vida. Hay que decir dos cosas con claridad. Primera: nada de esto está ocurriendo todavía; todo agujero negro conocido está más frío que el espacio que lo rodea, así que todos están ganando masa ahora mismo, no perdiéndola, y la evaporación ni siquiera puede empezar hasta que el universo se haya enfriado muy por debajo de su temperatura actual. Segunda: estas vidas son más largas que la edad del universo por tanto que la comparación deja de significar nada.',
+        'Mucho más deprisa. La regla es vida ∝ M³: diez veces la masa, mil veces la vida. Por eso un factor de cuatro millones en masa se convierte en un factor de 10²⁰ en vida. Hay que decir dos cosas con claridad. Primera: nada de esto está ocurriendo todavía; todo agujero negro conocido está más frío que el espacio que lo rodea, así que todos están ganando masa ahora mismo, no perdiéndola, y la evaporación ni siquiera puede empezar hasta que el universo se haya enfriado muy por debajo de su temperatura actual. Segunda: estas vidas son más largas que la edad del universo por tanto que la comparación deja de significar nada.',
       tool: {
         title: 'Sagitario A*',
         note: 'Compara la longitud de la barra naranja con la edad del universo.',
       },
+    },
+    'predict-twenty-against-ten': {
+      title: 'Cuatro propiedades, una masa nueva',
+      body: 'Ya conoces cuatro propiedades de un agujero negro: el tamaño de su horizonte, su densidad media a esa escala, su temperatura de Hawking y cuánto tardaría en evaporarse. Cada una cambia con la masa según una regla propia.\n\nToma el agujero negro de diez masas solares con el que empezaste y hazlo de veinte. Antes de mirar ningún panel, decide qué le pasa a cada una de las cuatro. Un factor ×3 significaría tres veces mayor, y ×⅓ la tercera parte.\n\nComprobarás tu elección con lecturas cerca del final de la investigación.',
+      prompt:
+        'Al pasar de 10 a 20 masas solares, las cuatro propiedades cambian en…',
+      options: [
+        'radio ×2, densidad ×2, temperatura ×2, vida ×2',
+        'radio ×2, densidad ×½, temperatura ×½, vida ×8',
+        'radio ×2, densidad ×¼, temperatura ×½, vida ×8',
+        'radio ×2, densidad ×¼, temperatura ×2, vida ×½',
+      ],
+      misconceptions: [
+        {
+          say: 'Solo el radio crece al paso de la masa. La densidad, la temperatura y la vida siguen cada una su propia regla, y dos de ellas bajan.',
+        },
+        {
+          say: 'La densidad sí baja, pero más deprisa que uno entre la masa: el volumen dentro del horizonte crece como el cubo del radio.',
+        },
+        {
+          say: 'Un agujero negro más pesado está más frío, no más caliente, y uno más frío irradia más despacio, así que dura más.',
+        },
+      ],
+      because:
+        'Radio ×2, densidad ×¼, temperatura ×½, vida ×8. El radio sigue a la masa. El volumen dentro del horizonte sigue al cubo del radio, así que es ocho veces mayor, y el doble de masa en ocho veces el sitio es la cuarta parte de la densidad media. La temperatura sigue a uno entre la masa, y la vida al cubo de la masa.',
     },
     'from-city-sized-to-solar': {
       title: 'Del tamaño de una ciudad al de un sistema solar',
@@ -391,7 +477,7 @@ export default {
     },
     'a-mystery-black-hole-size': {
       title: 'Un agujero negro misterioso: tamaño y densidad',
-      body: 'Por último, una prueba de si las tendencias han calado. El agujero negro D es mucho más masivo que un agujero negro de masa estelar, y eso es lo único que necesitas saber de él.\n\nResponde a partir de las reglas que encontraste, no calculando nada.',
+      body: 'Por último, una prueba de si las tendencias han calado. El agujero negro D es mucho más masivo que un agujero negro de masa estelar, y eso es lo único que necesitas saber de él.\n\nResponde a partir de los cuatro factores que elegiste para veinte masas solares frente a diez. D es más pesado todavía, así que cada propiedad se mueve más lejos en el sentido que le dio tu factor. No calcules nada.',
       prompt:
         'Comparados con los de un agujero negro de masa estelar, el horizonte de sucesos de D y su densidad media son…',
       options: [
@@ -409,7 +495,7 @@ export default {
     },
     'a-mystery-black-hole-temperature': {
       title: 'Un agujero negro misterioso: temperatura y vida',
-      body: 'El mismo agujero negro, las otras dos propiedades.',
+      body: 'El mismo agujero negro, las otras dos propiedades. Usa igual tus factores de temperatura y de vida: ¿hacia dónde fue cada uno cuando la masa se dobló?',
       prompt:
         'Comparadas con las de un agujero negro de masa estelar, la temperatura de Hawking de D y su vida hasta la evaporación son…',
       options: [
@@ -425,18 +511,33 @@ export default {
         note: 'Responde a partir de las tendencias que encontraste, no de este panel.',
       },
     },
+    'read-twenty-against-ten': {
+      title: 'Veinte frente a diez, leído',
+      body: 'Es hora de comprobar tus cuatro factores. Pon el deslizador del panel en <strong>20 M☉</strong>. El agujero negro del lienzo lo sigue, y las lecturas junto a este paso comparan ese agujero negro con el de diez masas solares con el que empezaste, propiedad por propiedad.\n\nPulsa <strong>Tomar la lectura</strong> junto a cada una de las cuatro. Las lecturas se calculan con las mismas fórmulas que los paneles que usaste, no se miden en la escena: la simulación mueve los orbitadores, y no calcula nada más de esta lista.',
+      tool: {
+        title: 'La masa del agujero negro',
+        note: 'El deslizador fija el agujero negro del lienzo. Registrar un ensayo aquí lo añade a tu tabla.',
+      },
+      fields: [
+        { label: 'Radio del horizonte, 20 M☉ frente a 10 M☉', unit: '×' },
+        { label: 'Densidad media, 20 M☉ frente a 10 M☉', unit: '×' },
+        { label: 'Temperatura de Hawking, 20 M☉ frente a 10 M☉', unit: '×' },
+        { label: 'Vida hasta la evaporación, 20 M☉ frente a 10 M☉', unit: '×' },
+      ],
+    },
     'say-what-scales-with-what': {
+      compare:
+        'Cada lectura es el factor del modelo para esa propiedad. Donde tu elección y una lectura se separan, la regla que usaste para esa propiedad es la que hay que volver a mirar.',
       title: 'Cuatro cantidades, cuatro escalados distintos',
-      body: `Has medido, o le\u00eddo de un modelo, c\u00f3mo cambia cada una de cuatro
-             cantidades cuando sube la masa de un agujero negro.`,
+      body: 'Tu predicción para veinte masas solares frente a diez está en el recuadro, junto a los cuatro factores que leíste.',
       prompt:
-        'En dos o tres frases, di c\u00f3mo cambian el radio, la densidad media, la temperatura de Hawking y el tiempo de evaporaci\u00f3n cuando la masa se duplica, y explica por qu\u00e9 la densidad va en el sentido en que va.',
+        'En dos o tres frases, di cuál de tus cuatro factores falló, si alguno, y qué regla sigue la lectura en su lugar; después di cómo cambian el radio, la densidad media, la temperatura de Hawking y el tiempo de evaporación cuando la masa se duplica, y por qué la densidad va en el sentido en que va.',
       rubric:
-        'El radio es proporcional a la masa, as\u00ed que se duplica. La densidad es la masa entre el volumen dentro del horizonte, y el volumen va como r\u00b3 \u221d M\u00b3, as\u00ed que la densidad va como 1/M\u00b2 y baja a la cuarta parte: los agujeros negros grandes son menos densos, y uno supermasivo puede ser menos denso que el agua. La temperatura va como 1/M y se reduce a la mitad. El tiempo de evaporaci\u00f3n va como M\u00b3 y se hace ocho veces mayor.',
+        'El radio es proporcional a la masa, así que se duplica. La densidad es la masa entre el volumen dentro del horizonte, y el volumen va como r\u00b3 \u221d M\u00b3, así que la densidad va como 1/M\u00b2 y baja a la cuarta parte: los agujeros negros grandes son menos densos, y uno supermasivo puede ser menos denso que el agua. La temperatura va como 1/M y se reduce a la mitad. El tiempo de evaporación va como M\u00b3 y se hace ocho veces mayor.',
     },
     'it-has-a-name': {
       title: 'Tiene nombre',
-      body: 'El agujero negro D es <strong>Sagitario A*</strong>, y está a 26 000 años luz, en el centro de nuestra propia galaxia. Su masa, 4,3 millones de masas solares, se midió observando estrellas orbitándolo durante treinta años; ese trabajo ganó el Premio Nobel de Física en 2020. En 2022 el Telescopio del Horizonte de Sucesos publicó una imagen de él.\n\nTodo lo que predijiste sobre él es correcto. Su horizonte mide unos 12,7 millones de kilómetros de radio, una quinta parte del camino hasta Mercurio. Su densidad media a esa escala es de aproximadamente un millón de kilogramos por metro cúbico, unas doscientas mil millones de veces menor que la que sale para un agujero negro de diez masas solares. Su temperatura es de 1,4 × 10⁻¹⁴ grados sobre el cero absoluto. Tardará unos 10⁸⁷ años en evaporarse.\n\nAsí que hacer más masivo un agujero negro hace mucho más que hacerlo más grande.\n\n<strong>Más masa → un horizonte de sucesos mayor.</strong>\n\n<strong>Más masa → una densidad media menor a la escala del horizonte.</strong>\n\n<strong>Más masa → una temperatura de Hawking menor.</strong>\n\n<strong>Más masa → una vida muchísimo más larga.</strong>\n\nCambiaste una cosa, y respondieron cuatro propiedades completamente distintas. Eso es lo que significa decir que los agujeros negros siguen las mismas reglas en todo su rango, desde el resto de una sola estrella muerta hasta los gigantes de los centros de las galaxias.',
+      body: 'El agujero negro D es <strong>Sagitario A*</strong>, y está a 26 000 años luz, en el centro de nuestra propia galaxia. Su masa, 4,3 millones de masas solares, se midió observando estrellas orbitándolo durante treinta años; ese trabajo ganó el Premio Nobel de Física en 2020. En 2022 el Telescopio del Horizonte de Sucesos publicó una imagen de él.\n\nTodo lo que dicen de él las cuatro reglas se cumple. Su horizonte mide unos 12,7 millones de kilómetros de radio, una quinta parte del camino hasta Mercurio. Su densidad media a esa escala es de aproximadamente un millón de kilogramos por metro cúbico, unas doscientas mil millones de veces menor que la que sale para un agujero negro de diez masas solares. Su temperatura es de 1,4 × 10⁻¹⁴ grados sobre el cero absoluto. Tardará unos 10⁸⁷ años en evaporarse.\n\nAsí que hacer más masivo un agujero negro hace mucho más que hacerlo más grande.\n\n<strong>Más masa → un horizonte de sucesos mayor.</strong>\n\n<strong>Más masa → una densidad media menor a la escala del horizonte.</strong>\n\n<strong>Más masa → una temperatura de Hawking menor.</strong>\n\n<strong>Más masa → una vida muchísimo más larga.</strong>\n\nCambiaste una cosa, y respondieron cuatro propiedades completamente distintas. Eso es lo que significa decir que los agujeros negros siguen las mismas reglas en todo su rango, desde el resto de una sola estrella muerta hasta los gigantes de los centros de las galaxias.',
       tool: {
         title: 'Sagitario A*',
         note: 'El círculo de puntos es la órbita de Mercurio, dibujada a la misma escala que el horizonte.',

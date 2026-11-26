@@ -11,16 +11,16 @@ The hand-written, human-reviewed acceptance map is
 [`lesson-acceptance.json`](lesson-acceptance.json); `npm run
 audit:scene:check` fails if it disagrees with what is generated here.
 
-Across 124 investigations and 1535 steps: 1392 steps
-declare a scene, 166 let a reader change one, 177 read the
-running integration, 1002 show a prescribed model result, 159 draw
-on a stored dataset, 873 put a self-contained panel beside the text,
-398 keep something, and 79 are prose.
-Of 205 prediction loops, 205 are returned to,
-203 produce a measurement before they are answered, and
+Across 124 investigations and 1537 steps: 1394 steps
+declare a scene, 166 let a reader change one, 178 read the
+running integration, 1003 show a prescribed model result, 159 draw
+on a stored dataset, 870 put a self-contained panel beside the text,
+399 keep something, and 79 are prose.
+Of 206 prediction loops, 206 are returned to,
+204 produce a measurement before they are answered, and
 2 end in an explanation in the reader's own words.
 203 hold their marking until the experiment settles them.
-The canvas behind a step is stated as scene on 4, portrait on 7, quiet on 96; 1428 state none.
+The canvas behind a step is stated as scene on 4, portrait on 7, quiet on 96; 1430 state none.
 
 ## Kepler's Laws (`keplers-laws`)
 
@@ -94,17 +94,17 @@ The canvas behind a step is stated as scene on 4, portrait on 7, quiet on 96; 14
 
 ## Black Holes by the Numbers (`black-holes`)
 
-- **Steps:** 30. Scene declared on 30; a reader can change something on 0; 30 declare a scene nobody on that step can touch.
-- **Where the numbers come from:** 4 live engine, 19 prescribed model, 0 stored dataset, 19 self-contained panel.
-- **What students do:** read, choose-an-option, open-a-body-inspector, move-an-instrument-control, read-the-labeled-appearance, commit-a-prediction, press-an-instrument-button, tick-a-checklist, press-an-instrument-preset, answer-in-words.
+- **Steps:** 32. Scene declared on 32; a reader can change something on 0; 32 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 5 live engine, 20 prescribed model, 0 stored dataset, 16 self-contained panel.
+- **What students do:** read, choose-an-option, open-a-body-inspector, move-an-instrument-control, read-the-labeled-appearance, commit-a-prediction, record-values, press-an-instrument-button, tick-a-checklist, press-an-instrument-preset, answer-in-words.
 - **Objects the steps declare:** none.
 - **Instruments:** bh-horizon, bh-scaling, bh-escape, bh-density, bh-blocks, bh-thermo, bh-lifetime, bh-lineup.
 - **Stored data:** none.
-- **Evidence kept:** instrument-capture.
-- **Prediction loops:** now-make-it-heavier → three-measurements, what-did-doubling-do, read-the-graph → three-measurements; squeezing-and-getting-away → squeeze-the-sun, the-last-squeeze, the-right-answer-for-the → squeeze-the-sun; which-one-is-denser → mass-divided-by-volume, which-way-did-it-go, where-the-room-comes-from → mass-divided-by-volume; which-one-is-hotter → the-thermometer, colder-not-hotter → the-thermometer; then-what-happens-to-it → a-timeline-that-will-not, longer-and-then-much-longer, from-city-sized-to-solar, sorting-them-out, a-mystery-black-hole-size, a-mystery-black-hole-temperature, it-has-a-name → a-timeline-that-will-not.
-- **Recovery:** wrong body: the object list names what the step staged; null result: the probe names what is missing; null result: guarded, but the fallback is not spelled out.
+- **Evidence kept:** notebook-fields, instrument-capture.
+- **Prediction loops:** now-make-it-heavier → choose-three-masses, what-did-doubling-do, read-the-graph → choose-three-masses; squeezing-and-getting-away → squeeze-the-sun, the-last-squeeze, the-right-answer-for-the → squeeze-the-sun; which-one-is-denser → mass-divided-by-volume, which-way-did-it-go, count-the-zeros → mass-divided-by-volume; which-one-is-hotter → the-thermometer, colder-not-hotter → the-thermometer; then-what-happens-to-it → a-timeline-that-will-not, longer-and-then-much-longer → a-timeline-that-will-not; predict-twenty-against-ten → from-city-sized-to-solar, sorting-them-out, a-mystery-black-hole-size, a-mystery-black-hole-temperature, read-twenty-against-ten, it-has-a-name → sorting-them-out.
+- **Recovery:** wrong body: the object list names what the step staged; null result: the probe names what is missing; ambiguous result: the check says in words how close is close enough; null result: guarded, but the fallback is not spelled out.
 - **Scene rebuilds:** none.
-- **Accepted central experiment** (reviewed 2026-09-11): object `panel:bh-scaling`, control bh-scaling/mass, measures Schwarzschild radius against mass, captured at three masses, evidence `instrument-capture`, covered by `e2e/centralExperiments.spec.js`.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:bh-scaling`, control bh-scaling/mass, measures Schwarzschild radius against mass, read and captured at three masses the student chooses, evidence `instrument-capture`, covered by `e2e/centralExperiments.spec.js`.
 
 ## Finding Planets by Their Tug (`radial-velocity`)
 

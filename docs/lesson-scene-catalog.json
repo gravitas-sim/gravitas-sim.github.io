@@ -226,7 +226,7 @@
    "datasets": []
   },
   "bh-scaling": {
-   "live": false,
+   "live": true,
    "controls": [
     "mass"
    ],
@@ -13341,7 +13341,7 @@
       "commit-a-prediction"
      ],
      "requires": [],
-     "reveal": "three-measurements",
+     "reveal": "choose-three-masses",
      "asks": {
       "choice": true,
       "numeric": false,
@@ -13382,10 +13382,10 @@
      ]
     },
     {
-     "sid": "three-measurements",
+     "sid": "choose-three-masses",
      "index": 6,
-     "type": "explore",
-     "title": "Three measurements",
+     "type": "measure",
+     "title": "Three masses of your own",
      "declares": {
       "stage": {
        "objects": 5,
@@ -13401,10 +13401,10 @@
       "scene-declared",
       "engine-measurement",
       "model-result",
-      "panel-diagram",
       "captured-evidence"
      ],
      "actions": [
+      "record-values",
       "open-a-body-inspector",
       "move-an-instrument-control",
       "press-an-instrument-button",
@@ -13417,7 +13417,7 @@
       "numeric": false,
       "short": false,
       "rubric": false,
-      "validated": false
+      "validated": true
      },
      "worldRunning": "inherited",
      "affordances": {
@@ -13426,10 +13426,11 @@
       "areaSweep": "whole lesson"
      },
      "loop": {
-      "declared": "experiment",
+      "declared": "measure",
       "actual": [
        "experiment",
-       "measure"
+       "measure",
+       "interpret"
       ],
       "handTranscribed": false,
       "mismatch": null
@@ -13449,15 +13450,16 @@
       "capture": true
      },
      "evidence": [
+      "notebook-fields",
       "instrument-capture"
      ],
      "reset": [
-      "stamps instrument values",
       "lesson locks: placement"
      ],
      "recovery": [
       "wrong body: the object list names what the step staged",
-      "null result: the probe names what is missing"
+      "null result: the probe names what is missing",
+      "ambiguous result: the check says in words how close is close enough"
      ]
     },
     {
@@ -13478,8 +13480,7 @@
      },
      "kinds": [
       "scene-declared",
-      "model-result",
-      "panel-diagram"
+      "model-result"
      ],
      "actions": [
       "choose-an-option",
@@ -13549,8 +13550,7 @@
      },
      "kinds": [
       "scene-declared",
-      "model-result",
-      "panel-diagram"
+      "model-result"
      ],
      "actions": [
       "choose-an-option",
@@ -14147,7 +14147,7 @@
      ]
     },
     {
-     "sid": "where-the-room-comes-from",
+     "sid": "count-the-zeros",
      "index": 17,
      "type": "question",
      "title": "Where the room comes from",
@@ -14171,7 +14171,7 @@
       "move-an-instrument-control"
      ],
      "requires": [
-      "three-measurements"
+      "choose-three-masses"
      ],
      "reveal": null,
      "asks": {
@@ -14693,8 +14693,71 @@
      ]
     },
     {
-     "sid": "from-city-sized-to-solar",
+     "sid": "predict-twenty-against-ten",
      "index": 25,
+     "type": "predict",
+     "title": "Four properties, one new mass",
+     "declares": {
+      "stage": {
+       "objects": 5,
+       "kind": "black-hole",
+       "scale": "display",
+       "fits": false,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [
+      "scene-declared"
+     ],
+     "actions": [
+      "commit-a-prediction"
+     ],
+     "requires": [],
+     "reveal": "say-what-scales-with-what",
+     "asks": {
+      "choice": true,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": false
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "whole lesson",
+      "placement": "locked",
+      "areaSweep": "whole lesson"
+     },
+     "loop": {
+      "declared": "predict",
+      "actual": [
+       "predict",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": null,
+     "evidence": [],
+     "reset": [
+      "lesson locks: placement"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged"
+     ]
+    },
+    {
+     "sid": "from-city-sized-to-solar",
+     "index": 26,
      "type": "read",
      "title": "From city-sized to solar-system-sized",
      "declares": {
@@ -14763,7 +14826,7 @@
     },
     {
      "sid": "sorting-them-out",
-     "index": 26,
+     "index": 27,
      "type": "question",
      "title": "Sorting them out",
      "declares": {
@@ -14834,7 +14897,7 @@
     },
     {
      "sid": "a-mystery-black-hole-size",
-     "index": 27,
+     "index": 28,
      "type": "question",
      "title": "A mystery black hole: size and density",
      "declares": {
@@ -14858,8 +14921,9 @@
       "move-an-instrument-control"
      ],
      "requires": [
-      "three-measurements",
-      "mass-divided-by-volume"
+      "choose-three-masses",
+      "mass-divided-by-volume",
+      "predict-twenty-against-ten"
      ],
      "reveal": null,
      "asks": {
@@ -14908,7 +14972,7 @@
     },
     {
      "sid": "a-mystery-black-hole-temperature",
-     "index": 28,
+     "index": 29,
      "type": "question",
      "title": "A mystery black hole: temperature and lifetime",
      "declares": {
@@ -14931,7 +14995,9 @@
       "choose-an-option",
       "move-an-instrument-control"
      ],
-     "requires": [],
+     "requires": [
+      "predict-twenty-against-ten"
+     ],
      "reveal": null,
      "asks": {
       "choice": true,
@@ -14978,8 +15044,87 @@
      ]
     },
     {
+     "sid": "read-twenty-against-ten",
+     "index": 30,
+     "type": "measure",
+     "title": "Twenty against ten, read off",
+     "declares": {
+      "stage": {
+       "objects": 5,
+       "kind": "black-hole",
+       "scale": "display",
+       "fits": false,
+       "anonymous": false
+      },
+      "bound": [],
+      "roles": []
+     },
+     "kinds": [
+      "scene-declared",
+      "engine-measurement",
+      "model-result",
+      "captured-evidence"
+     ],
+     "actions": [
+      "record-values",
+      "open-a-body-inspector",
+      "move-an-instrument-control",
+      "press-an-instrument-button"
+     ],
+     "requires": [],
+     "reveal": null,
+     "asks": {
+      "choice": false,
+      "numeric": false,
+      "short": false,
+      "rubric": false,
+      "validated": true
+     },
+     "worldRunning": "inherited",
+     "affordances": {
+      "inspector": "whole lesson",
+      "placement": "locked",
+      "areaSweep": "whole lesson"
+     },
+     "loop": {
+      "declared": "measure",
+      "actual": [
+       "experiment",
+       "measure",
+       "interpret"
+      ],
+      "handTranscribed": false,
+      "mismatch": null
+     },
+     "scene": {
+      "nameMatches": [],
+      "readsSelection": false,
+      "importsFromSelection": false,
+      "engineReads": [
+       "role"
+      ],
+      "mutates": [],
+      "eventWatch": null
+     },
+     "instrument": {
+      "id": "bh-scaling",
+      "capture": false
+     },
+     "evidence": [
+      "notebook-fields"
+     ],
+     "reset": [
+      "lesson locks: placement"
+     ],
+     "recovery": [
+      "wrong body: the object list names what the step staged",
+      "null result: the probe names what is missing",
+      "ambiguous result: the check says in words how close is close enough"
+     ]
+    },
+    {
      "sid": "say-what-scales-with-what",
-     "index": 29,
+     "index": 31,
      "type": "question",
      "title": "Four quantities, four different scalings",
      "declares": {
@@ -15000,7 +15145,8 @@
       "answer-in-words"
      ],
      "requires": [
-      "three-measurements"
+      "choose-three-masses",
+      "read-twenty-against-ten"
      ],
      "reveal": null,
      "asks": {
@@ -15043,7 +15189,7 @@
     },
     {
      "sid": "it-has-a-name",
-     "index": 30,
+     "index": 32,
      "type": "read",
      "title": "It has a name",
      "declares": {
@@ -15115,21 +15261,21 @@
     {
      "predict": "now-make-it-heavier",
      "predictCollects": true,
-     "heldUntil": "three-measurements",
+     "heldUntil": "choose-three-masses",
      "experiment": [
-      "three-measurements",
+      "choose-three-masses",
       "what-did-doubling-do",
       "read-the-graph"
      ],
      "measure": [
-      "three-measurements",
+      "choose-three-masses",
       "what-did-doubling-do",
       "read-the-graph"
      ],
      "evidence": [
-      "three-measurements"
+      "choose-three-masses"
      ],
-     "interpret": "three-measurements",
+     "interpret": "choose-three-masses",
      "measuredBeforeAnswering": true,
      "explained": false,
      "answeredByTheExperiment": true,
@@ -15165,12 +15311,12 @@
      "experiment": [
       "mass-divided-by-volume",
       "which-way-did-it-go",
-      "where-the-room-comes-from"
+      "count-the-zeros"
      ],
      "measure": [
       "mass-divided-by-volume",
       "which-way-did-it-go",
-      "where-the-room-comes-from"
+      "count-the-zeros"
      ],
      "evidence": [],
      "interpret": "mass-divided-by-volume",
@@ -15206,21 +15352,11 @@
      "heldUntil": "a-timeline-that-will-not",
      "experiment": [
       "a-timeline-that-will-not",
-      "longer-and-then-much-longer",
-      "from-city-sized-to-solar",
-      "sorting-them-out",
-      "a-mystery-black-hole-size",
-      "a-mystery-black-hole-temperature",
-      "it-has-a-name"
+      "longer-and-then-much-longer"
      ],
      "measure": [
       "a-timeline-that-will-not",
-      "longer-and-then-much-longer",
-      "from-city-sized-to-solar",
-      "sorting-them-out",
-      "a-mystery-black-hole-size",
-      "a-mystery-black-hole-temperature",
-      "it-has-a-name"
+      "longer-and-then-much-longer"
      ],
      "evidence": [],
      "interpret": "a-timeline-that-will-not",
@@ -15229,19 +15365,49 @@
      "answeredByTheExperiment": true,
      "closed": true,
      "complete": true
+    },
+    {
+     "predict": "predict-twenty-against-ten",
+     "predictCollects": true,
+     "heldUntil": "say-what-scales-with-what",
+     "experiment": [
+      "from-city-sized-to-solar",
+      "sorting-them-out",
+      "a-mystery-black-hole-size",
+      "a-mystery-black-hole-temperature",
+      "read-twenty-against-ten",
+      "it-has-a-name"
+     ],
+     "measure": [
+      "from-city-sized-to-solar",
+      "sorting-them-out",
+      "a-mystery-black-hole-size",
+      "a-mystery-black-hole-temperature",
+      "read-twenty-against-ten",
+      "it-has-a-name"
+     ],
+     "evidence": [
+      "read-twenty-against-ten"
+     ],
+     "interpret": "sorting-them-out",
+     "measuredBeforeAnswering": true,
+     "explained": false,
+     "answeredByTheExperiment": false,
+     "closed": true,
+     "complete": true
     }
    ],
    "totals": {
-    "steps": 30,
-    "declared": 30,
+    "steps": 32,
+    "declared": 32,
     "student": 0,
-    "engine": 4,
-    "model": 19,
+    "engine": 5,
+    "model": 20,
     "data": 0,
-    "diagram": 19,
-    "evidence": 1,
+    "diagram": 16,
+    "evidence": 2,
     "computation": 0,
-    "declaredButInert": 30,
+    "declaredButInert": 32,
     "prose": 0,
     "mismatched": 0,
     "rebuilds": 0
@@ -120732,16 +120898,16 @@
   }
  ],
  "totals": {
-  "steps": 1535,
-  "declared": 1392,
+  "steps": 1537,
+  "declared": 1394,
   "student": 166,
-  "engine": 177,
-  "model": 1002,
+  "engine": 178,
+  "model": 1003,
   "data": 159,
-  "diagram": 873,
-  "evidence": 398,
+  "diagram": 870,
+  "evidence": 399,
   "computation": 14,
-  "declaredButInert": 1226,
+  "declaredButInert": 1228,
   "prose": 79,
   "mismatched": 9,
   "rebuilds": 77,
@@ -120749,13 +120915,13 @@
    "scene": 4,
    "portrait": 7,
    "quiet": 96,
-   "unstated": 1428
+   "unstated": 1430
   },
   "lessons": 124,
-  "loops": 205,
-  "closedLoops": 205,
+  "loops": 206,
+  "closedLoops": 206,
   "explainedLoops": 2,
   "heldLoops": 203,
-  "completeLoops": 203
+  "completeLoops": 204
  }
 }

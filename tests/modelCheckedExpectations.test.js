@@ -239,7 +239,8 @@ describe('the instructor expectations record', () => {
     // half-range step of Radial Velocity), less one each for Why Mars Goes Backwards
     // (Prompt 346) and the Goldilocks Question's distance steps (three-distances-yours).
     // 559: one more for the Lagrange investigation's nudge test (nudge-l1-and-l4).
-    expect(total).toBe(559);
+    // 560: Black Holes by the Numbers adds the four-factor readings step; its scaling step replaces three-measurements one for one.
+    expect(total).toBe(560);
     // 542 after How Many Earths? (Prompt 229): 3 more over 539.
     // 547 after the four exoplanet closeout investigations (Prompt 231): 5 more over 542.
   });

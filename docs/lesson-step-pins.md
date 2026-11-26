@@ -9,7 +9,7 @@ on a 60 Hz screen, a 144 Hz screen and a throttled tab. A reading step
 that holds the clock (`holdsClock` in `js/timestep.js`) does not run and
 is not pinned. Closing the lesson lifts the pin.
 
-552 steps in 23 lessons run on an integrated scene; 435 are pinned and 117 hold the clock.
+554 steps in 23 lessons run on an integrated scene; 437 are pinned and 117 hold the clock.
 
 | Lesson | Step | Id | Type | Scene | Own scene | Pinned step |
 |---|---|---|---|---|---|---|
@@ -165,7 +165,7 @@ is not pinned. Closing the lesson lifts the pin.
 | black-holes | 3 | the-event-horizon | read | stage: hole | yes | 1/60 s |
 | black-holes | 4 | thirty-kilometers-is-not-very | read | stage: hole | yes | 1/60 s |
 | black-holes | 5 | now-make-it-heavier | predict | stage: hole | yes | 1/60 s |
-| black-holes | 6 | three-measurements | explore | stage: hole | yes | 1/60 s |
+| black-holes | 6 | choose-three-masses | measure | stage: hole | yes | 1/60 s |
 | black-holes | 7 | what-did-doubling-do | question | stage: hole | yes | 1/60 s |
 | black-holes | 8 | read-the-graph | question | stage: hole | yes | 1/60 s |
 | black-holes | 9 | the-rule-you-just-found | read | stage: hole | yes | none (holds the clock) |
@@ -176,7 +176,7 @@ is not pinned. Closing the lesson lifts the pin.
 | black-holes | 14 | which-one-is-denser | predict | stage: hole | yes | 1/60 s |
 | black-holes | 15 | mass-divided-by-volume | explore | stage: hole | yes | 1/60 s |
 | black-holes | 16 | which-way-did-it-go | question | stage: hole | yes | 1/60 s |
-| black-holes | 17 | where-the-room-comes-from | question | stage: hole | yes | 1/60 s |
+| black-holes | 17 | count-the-zeros | question | stage: hole | yes | 1/60 s |
 | black-holes | 18 | which-one-is-hotter | predict | stage: hole | yes | 1/60 s |
 | black-holes | 19 | what-hawking-radiation-is-and | read | stage: hole | yes | none (holds the clock) |
 | black-holes | 20 | the-thermometer | explore | stage: hole | yes | 1/60 s |
@@ -184,12 +184,14 @@ is not pinned. Closing the lesson lifts the pin.
 | black-holes | 22 | then-what-happens-to-it | predict | stage: hole | yes | 1/60 s |
 | black-holes | 23 | a-timeline-that-will-not | explore | stage: hole | yes | 1/60 s |
 | black-holes | 24 | longer-and-then-much-longer | question | stage: hole | yes | 1/60 s |
-| black-holes | 25 | from-city-sized-to-solar | read | stage: hole | yes | 1/60 s |
-| black-holes | 26 | sorting-them-out | question | stage: hole | yes | 1/60 s |
-| black-holes | 27 | a-mystery-black-hole-size | question | stage: hole | yes | 1/60 s |
-| black-holes | 28 | a-mystery-black-hole-temperature | question | stage: hole | yes | 1/60 s |
-| black-holes | 29 | say-what-scales-with-what | question | stage: hole | yes | 1/60 s |
-| black-holes | 30 | it-has-a-name | read | stage: hole | yes | 1/60 s |
+| black-holes | 25 | predict-twenty-against-ten | predict | stage: hole | yes | 1/60 s |
+| black-holes | 26 | from-city-sized-to-solar | read | stage: hole | yes | 1/60 s |
+| black-holes | 27 | sorting-them-out | question | stage: hole | yes | 1/60 s |
+| black-holes | 28 | a-mystery-black-hole-size | question | stage: hole | yes | 1/60 s |
+| black-holes | 29 | a-mystery-black-hole-temperature | question | stage: hole | yes | 1/60 s |
+| black-holes | 30 | read-twenty-against-ten | measure | stage: hole | yes | 1/60 s |
+| black-holes | 31 | say-what-scales-with-what | question | stage: hole | yes | 1/60 s |
+| black-holes | 32 | it-has-a-name | read | stage: hole | yes | 1/60 s |
 | radial-velocity | 1 | the-planet-you-already-measured | read | Exoplanet Characterization Lab | yes | none (holds the clock) |
 | radial-velocity | 2 | how-does-an-invisible-planet | question | Exoplanet Characterization Lab | inherited | 1/60 s |
 | radial-velocity | 3 | which-one-moves | predict | Exoplanet Characterization Lab | yes | 1/60 s |

@@ -3,25 +3,51 @@
  "static": {
   "en": {
    "units": [
-    ["steps.where-the-room-comes-from.unit","zeros"]
+    ["steps.choose-three-masses.fields.0.unit","M☉"],
+    ["steps.choose-three-masses.fields.1.unit","km"],
+    ["steps.choose-three-masses.fields.2.unit","M☉"],
+    ["steps.choose-three-masses.fields.3.unit","km"],
+    ["steps.choose-three-masses.fields.4.unit","M☉"],
+    ["steps.choose-three-masses.fields.5.unit","km"],
+    ["steps.choose-three-masses.fields.6.unit","×"],
+    ["steps.count-the-zeros.unit","zeros"],
+    ["steps.read-twenty-against-ten.fields.0.unit","×"],
+    ["steps.read-twenty-against-ten.fields.1.unit","×"],
+    ["steps.read-twenty-against-ten.fields.2.unit","×"],
+    ["steps.read-twenty-against-ten.fields.3.unit","×"]
    ],
-   "numbered": []
+   "numbered": [
+    ["steps.read-twenty-against-ten.fields.0.label","Horizon radius, 20 M☉ against 10 M☉"],
+    ["steps.read-twenty-against-ten.fields.1.label","Average density, 20 M☉ against 10 M☉"],
+    ["steps.read-twenty-against-ten.fields.2.label","Hawking temperature, 20 M☉ against 10 M☉"],
+    ["steps.read-twenty-against-ten.fields.3.label","Evaporation lifetime, 20 M☉ against 10 M☉"]
+   ]
   },
   "es": {
    "units": [],
-   "numbered": []
+   "numbered": [
+    ["steps.read-twenty-against-ten.fields.0.label","Radio del horizonte, 20 M☉ frente a 10 M☉"],
+    ["steps.read-twenty-against-ten.fields.1.label","Densidad media, 20 M☉ frente a 10 M☉"],
+    ["steps.read-twenty-against-ten.fields.2.label","Temperatura de Hawking, 20 M☉ frente a 10 M☉"],
+    ["steps.read-twenty-against-ten.fields.3.label","Vida hasta la evaporación, 20 M☉ frente a 10 M☉"]
+   ]
   }
  },
  "numeric": {
   "answers": [
    {
-    "sid": "where-the-room-comes-from",
+    "sid": "count-the-zeros",
     "answer": "9",
     "tolerance": "0.5",
     "unit": "zeros"
    }
   ],
-  "decimals": []
+  "decimals": [
+   [
+    "choose-three-masses.span",
+    1
+   ]
+  ]
  },
  "precision": [],
  "steps": {
@@ -32,11 +58,16 @@
    "thirty-kilometers-is-not-very": {
     "probe": [[{"label":"The hole","value":"not on the canvas"}],[{"label":"Drawn on the canvas","value":"0 world units — a display choice, not a length"},{"label":"Actually, across the horizon","value":"NaN km"},{"label":"The Sun, for comparison","value":"1,392,000 km across"}]]
    },
-   "three-measurements": {
-    "probe": [[{"label":"The hole","value":"not on the canvas"}],[{"label":"Hole on the canvas","value":"NaN M☉"},{"label":"Its Schwarzschild radius","value":"NaN km"}]]
+   "choose-three-masses": {
+    "probe": [[{"id":"mass","label":"Hole on the canvas","value":"-"},{"id":"rs","label":"Its Schwarzschild radius","value":"-"}],[{"id":"mass","label":"Hole on the canvas","value":"NaN M☉"},{"id":"rs","label":"Its Schwarzschild radius","value":"NaN km"}]],
+    "validate": {"calls":250,"distinct":6,"digest":"4de82fb3c3cd7b8a","samples":[null,{"level":"error","message":"Two of your trials have the same mass, so they are one point on the graph, not two. Choose three different masses."},{"level":"error","message":"A mass has to be a positive number of solar masses."},{"level":"error","message":"One of your radii does not belong to the mass beside it. Set the slider back to that mass and take its radius reading again."},{"level":"error","message":"Each of your masses is double the one before. Change one of them to a mass that is not a doubling, so the rule is tested on a ratio you did not plan."},{"level":"error","message":"Your heaviest mass is less than four times your lightest. Spread the three out further, so the graph can tell a straight line from a curve."}]}
    },
    "the-right-answer-for-the": {
     "probe": [[{"label":"What differs between the two","value":"only what is at the center"}],[{"label":"Orbiting the black hole","value":"period 3.47 yr"},{"label":"Orbiting the star","value":"period 6.06 yr"},{"label":"What differs between the two","value":"only what is at the center"}]]
+   },
+   "read-twenty-against-ten": {
+    "probe": [[{"label":"Hole on the canvas","value":"-"},{"id":"fr","label":"Horizon radius, against 10 M☉","value":"-"},{"id":"fd","label":"Average density, against 10 M☉","value":"-"},{"id":"ft","label":"Hawking temperature, against 10 M☉","value":"-"},{"id":"fl","label":"Evaporation lifetime, against 10 M☉","value":"-"}],[{"label":"Hole on the canvas","value":"NaN M☉"},{"id":"fr","label":"Horizon radius, against 10 M☉","value":"× NaN"},{"id":"fd","label":"Average density, against 10 M☉","value":"× Infinity"},{"id":"ft","label":"Hawking temperature, against 10 M☉","value":"× NaN"},{"id":"fl","label":"Evaporation lifetime, against 10 M☉","value":"× NaN"}]],
+    "validate": {"calls":242,"distinct":4,"digest":"27f7b5a496d466ae","samples":[null,{"level":"error","message":"These readings are for a mass other than 20 M☉. Set the slider to 20 M☉ and take all four again."},{"level":"error","message":"A factor is a positive number. Take the reading again."},{"level":"error","message":"Your four readings were not all taken at one mass. Leave the slider at 20 M☉ and take all four again."}]}
    }
   },
   "es": "same"
