@@ -31,7 +31,7 @@ export default {
   steps: [
     {
       title: 'Un planeta que no puedes ver',
-      body: '¿Cómo puedes encontrar un planeta que no puedes ver, y medir lo grande que es? Verás cómo una estrella se atenúa cuando su planeta pasa por delante, predecirás lo profunda que será la caída y después leerás la profundidad en la curva de luz y la convertirás en un tamaño.\n\nEn pantalla está <strong>HD 209458</strong>, una pariente del Sol algo más caliente y más masiva, a unos 160 años luz en Pegaso, con un planeta en una órbita de tres días y medio. La estrella y el planeta están dibujados a sus tamaños relativos reales, y por eso la vista está tan ampliada.',
+      body: '¿Cómo puedes encontrar un planeta que no puedes ver, y medir lo grande que es? Verás cómo una estrella se atenúa cuando su planeta pasa por delante, predecirás lo profunda que será la caída y después leerás la profundidad en la curva de luz y la convertirás en un tamaño.\n\nEn pantalla está <strong>HD 209458</strong>, una pariente del Sol algo más caliente y más masiva, a unos 160 años luz en Pegaso, con un planeta en una órbita de tres días y medio. La vista está muy ampliada para mostrar la pareja. Los tamaños en pantalla no están a escala: el planeta se dibuja más pequeño frente a su estrella de lo que es en realidad, como todos los planetas, mientras que la curva de luz trabaja con los tamaños reales (detalles en Tamaños).',
       tip: 'Todo en esta investigación es medible a partir de lo que hay en pantalla. Pulsar selecciona un objeto sin abrir la ficha del inspector, y la colocación de objetos nuevos está desactivada para que un clic accidental no altere el sistema que estás midiendo.',
     },
     {

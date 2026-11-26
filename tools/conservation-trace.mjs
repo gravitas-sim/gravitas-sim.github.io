@@ -20,6 +20,9 @@ import { buildWorld } from '../js/world/build.js';
 import { DEFAULT_SETTINGS, setScenarioName } from '../js/appState.js';
 import { withSeed } from '../js/rng.js';
 
+/** A reading without its model-energy fields. */
+const withoutModel = ({ model: _model, ...rest }) => rest;
+
 const noop = () => {};
 
 const round = v => String(Number.isFinite(v) ? Number(v.toPrecision(12)) : v);
@@ -63,8 +66,11 @@ const sample = (frame, bodies) => {
   return {
     frame,
     simTime: round(physics.getSimulationTime()),
-    totals: canon(physics.conservedQuantities()),
-    drift: canon(physics.conservationDrift(true)),
+    // The model energy (D-R4-461-02) is left out: this trace pins the numbers
+    // the engine gave before the move, and tests/conservationModel.test.js
+    // judges the new sum on its own fixtures.
+    totals: canon(withoutModel(physics.conservedQuantities())),
+    drift: canon(withoutModel(physics.conservationDrift(true))),
     spin: round(physics.getAbsorbedSpinAngularMomentum()),
     discarded: canon(physics.getDiscardedAbsorptionMomentum()),
     bodies: bodies.length,

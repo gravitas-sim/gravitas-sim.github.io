@@ -128,7 +128,7 @@ export const accelerationBreakdown = body => {
  * Record the acceleration each body is about to be stepped with.
  *
  * Written onto the body rather than into a side table so it cannot go stale
- * against a body that has been culled, and mutated in place rather than
+ * against a body that has been removed, and mutated in place rather than
  * replaced so a scenario with three thousand fragments does not allocate three
  * thousand objects every frame.
  *
@@ -192,7 +192,28 @@ export const activeMondA0 = () => {
  * @returns {Object} Acceleration vector with ax, ay properties
  */
 // Optimized gravitational acceleration with distance caching
-export const gravitational_acceleration = (target_pos, sources) => {
+export const gravitational_acceleration = (target_pos, sources) =>
+  sumSourceAcceleration(target_pos, sources, false, undefined);
+
+/**
+ * The same sum as gravitational_acceleration, as if the sources with a given id
+ * had been filtered out of the list first, without building that list. The
+ * remaining sources are visited in the same order, so the result is bit for bit
+ * what gravitational_acceleration returns for `sources.filter(s => s.id !==
+ * excludeId)`; a source whose id is undefined is excluded by an undefined id,
+ * exactly as the filter excluded it.
+ * @param {Object} target_pos - Target position with x, y properties
+ * @param {Array} sources - Array of gravitational source objects
+ * @param {*} excludeId - Sources with this id are skipped
+ * @returns {Object} Acceleration vector with ax, ay properties
+ */
+export const gravitational_acceleration_excluding = (
+  target_pos,
+  sources,
+  excludeId
+) => sumSourceAcceleration(target_pos, sources, true, excludeId);
+
+const sumSourceAcceleration = (target_pos, sources, skipOne, excludeId) => {
   let ax = 0.0,
     ay = 0.0;
   const G_val = physicsSettings.gravitational_constant;
@@ -200,6 +221,7 @@ export const gravitational_acceleration = (target_pos, sources) => {
 
   for (let i = 0; i < sources.length; i++) {
     const s = sources[i];
+    if (skipOne && s.id === excludeId) continue;
     const dx = s.pos.x - target_pos.x;
     const dy = s.pos.y - target_pos.y;
     let r_sq = dx * dx + dy * dy;
@@ -430,11 +452,15 @@ export const computeAccelerations = (
     } else {
       // Direct sum: the N^2 solver, and the first-frame fallback when the
       // Barnes-Hut worker has not answered yet.
-      let effective_sources = cachedMajorSources;
-      if (mutual) {
-        effective_sources = cachedMajorSources.filter(s => s.id !== obj.id);
-      }
-      const { ax, ay } = gravitational_acceleration(obj.pos, effective_sources);
+      // With mutual gravity a body does not pull on itself: skip its own entry
+      // while summing rather than building a filtered copy per body.
+      const { ax, ay } = mutual
+        ? gravitational_acceleration_excluding(
+            obj.pos,
+            cachedMajorSources,
+            obj.id
+          )
+        : gravitational_acceleration(obj.pos, cachedMajorSources);
       axOut[i] += ax;
       ayOut[i] += ay;
     }
@@ -610,7 +636,7 @@ const stepRK4 = (objs, count, dt, halo) => {
 
   for (let i = 0; i < count; i++) {
     // A body that is not alive was held at its starting position through every
-    // stage and is about to be culled; moving it now would be integrating a
+    // stage and is about to be removed; moving it now would be integrating a
     // corpse, which is what the default scheme's own early return avoids.
     if (!objs[i].alive) continue;
     writeState(

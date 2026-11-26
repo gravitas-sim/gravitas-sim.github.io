@@ -234,7 +234,7 @@ export const MANIFEST = [
     level: 'Astronomía introductoria',
     thumbnail: 'images/scenarios/lagrange-point-lab.webp',
     stepCount: 20,
-    gradedCount: 9,
+    gradedCount: 8,
     objectiveCount: 6,
   },
   {

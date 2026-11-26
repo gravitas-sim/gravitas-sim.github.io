@@ -126,8 +126,9 @@ These are set for the physics, not for appearance:
 - a softening length of a tenth of the closest periapsis, capped at the usual
   5 units.
 
-Every body is marked `persistent`, so the distance cull cannot delete the
-outer bodies of a wide system.
+Every body is marked `persistent`, and a saved system keeps the mark. It
+once kept the distance cull from deleting the outer bodies of a wide system;
+no body is removed for leaving the view any more (D-R4-496-01).
 
 ## Behaving like any other world
 
@@ -241,8 +242,9 @@ Angular momentum held to a few parts in 10¹³ in all five.
 
 - **Two dimensions only:** no inclination, no nodes, no Kozai–Lidov cycles.
 - **No asteroids or comets.**
-  - An asteroid is culled five canvas widths out, whether or not it is
-    marked persistent.
+  - An asteroid used to be culled five canvas widths out whatever its
+    mark; that cull is gone (D-R4-496-01), and offering asteroids here is
+    left for later.
   - A comet pulls on nothing, so it can be no one's primary.
 - **Black holes only in systems of black holes.**
 - **Contact radii are model radii**, inflated to be visible. A realistic moon

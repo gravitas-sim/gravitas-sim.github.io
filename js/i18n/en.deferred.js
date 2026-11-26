@@ -276,7 +276,7 @@ export const EN_DEFERRED = {
   'binaryRun.outcome.ejected':
     'The planet was ejected after {periods} binary periods. It ended up unbound from both stars and more than ten binary separations out, so it is leaving rather than on a wide orbit.',
   'binaryRun.outcome.collided':
-    'The planet hit a star after {periods} binary periods. The stars here are drawn about ten times life size and the collision distance is the drawn size, so read this as "it passed within about 0.06 AU of a star" rather than as a measured impact.',
+    'The planet hit a star after {periods} binary periods. The stars here are about ten times life size in the model and drawn at that size, and a collision is the planet coming within the star’s model radius plus its own, so read this as "it passed within about 0.06 AU of a star" rather than as a measured impact.',
   'binaryRun.outcome.unreliable':
     'This run cannot be believed. Energy changed by {drift}%, past the {limit}% screen, which means the step stopped resolving something the outcome depends on — almost always a close approach. What happened to the planet after that is about the arithmetic. Repeat it at half the step.',
   'binaryRun.outcome.vanished':

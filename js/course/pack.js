@@ -207,7 +207,8 @@ const ITEM_FIELDS = {
     'pin',
     'depth',
   ],
-  scenario: ['scenario', 'seed', 'paused', 'title'],
+  // `revision`: the scenario's revision, written only from 2 (SCENARIO_REVISIONS.md).
+  scenario: ['scenario', 'seed', 'paused', 'revision', 'title'],
   dataset: ['dataset', 'title'],
   reading: ['title', 'cite', 'license', 'access'],
   // An investigation pack, carried in the item as its link (Prompt 78 (c)).
@@ -814,6 +815,13 @@ function checkKind(item, at, ctx) {
           `${at}.paused`,
           'boolean',
           'true or false'
+        );
+      if (item.revision !== undefined)
+        need(
+          Number.isInteger(item.revision) && item.revision >= 2,
+          `${at}.revision`,
+          'revision',
+          'a scenario revision, 2 or more'
         );
       text(item.title, `${at}.title`, false, 120);
       return;

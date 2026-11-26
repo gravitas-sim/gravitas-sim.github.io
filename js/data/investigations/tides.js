@@ -68,15 +68,14 @@ const tideRows = (
     { label: 'Near side, compared with the center', value: pct(r - R) },
     { label: 'Far side, compared with the center', value: pct(r + R) },
     {
-      label: 'Measured across the body as drawn',
-      value: `${on.name} is drawn ${((100 * R) / r).toFixed(1)}% of the way to ${by.name}`,
+      label: 'Measured across the model radius',
+      value: `${on.name}: ${((100 * R) / r).toFixed(1)}% of the way to ${by.name}`,
     },
   ];
-  // The two percentages above are honest arithmetic on what is on screen, and
-  // they are not the real numbers: this scenario draws the Earth far larger
-  // than scale so that it is visible at all, and the difference in pull across
-  // a body scales with its size. Quoting only the on-screen figure would teach
-  // a tide about sixty times too strong, so the true one is printed beside it.
+  // The two percentages above are arithmetic on the model radius, far larger
+  // than the Earth's so that it is visible at all, and the pull's difference
+  // across a body scales with its size: quoting them alone would teach a tide
+  // about sixty times too strong, so the true one is printed beside it.
   if (trueRatio) {
     rows.push({
       label: 'The same subtraction at true scale',
@@ -130,6 +129,7 @@ const WAS = (to, en, es) => ({ to, release: '3.1', was: { en, es } });
 const TIDES = {
   id: 'tides',
   thumbnail: 'images/scenarios/earth-moon-system.webp',
+  sizes: true,
   title: 'Tides',
   subtitle:
     'Stretch a world, move a moon, and discover why gravity can tear objects apart',

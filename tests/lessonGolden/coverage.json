@@ -4,13 +4,13 @@
     "goldilocks-question",
     "transit-photometry",
     "what-is-a-gravitational-wave",
+    "lagrange-points",
     "measuring-the-moon",
     "missing-mass",
-    "tides",
     "weighing-stars",
-    "butterfly-effect",
-    "binary-star-planets",
+    "tides",
     "black-holes",
+    "butterfly-effect",
     "extending-an-experiment",
     "propose-an-observation",
     "radial-velocity",
@@ -177,6 +177,12 @@
       "lock:{\"placement\":true,\"inspector\":false,\"areaSweep\":false}",
       "math:arithmetic"
     ],
+    "lagrange-points": [
+      "key:explore.requires",
+      "key:explore.rubric",
+      "key:predict.misconceptions",
+      "lock:{\"placement\":true}"
+    ],
     "measuring-the-moon": [
       "key:predict.hints",
       "key:question.maxUncertainty",
@@ -189,30 +195,24 @@
       "key:explore.decides",
       "key:explore.depth"
     ],
-    "tides": [
-      "key:explore.canvas",
-      "key:predict.misconceptions",
-      "key:question.canvas",
-      "key:read.allowInspector"
-    ],
     "weighing-stars": [
       "key:explore.showBarycenter",
       "key:measure.showBarycenter",
       "key:read.motion",
       "key:read.showBarycenter"
     ],
-    "butterfly-effect": [
-      "key:explore.rubric",
-      "key:predict.requires",
-      "lock:null"
-    ],
-    "binary-star-planets": [
-      "key:explore.requires",
-      "lock:{\"placement\":true}"
+    "tides": [
+      "key:explore.canvas",
+      "key:question.canvas",
+      "key:read.allowInspector"
     ],
     "black-holes": [
       "key:question.checklist",
       "key:read.explainView"
+    ],
+    "butterfly-effect": [
+      "key:predict.requires",
+      "lock:null"
     ],
     "extending-an-experiment": [
       "key:measure.compute",
@@ -314,11 +314,11 @@
     "activityTokens": 29,
     "stepTypes": {
       "read": 379,
-      "predict": 211,
+      "predict": 210,
       "measure": 524,
       "ellipse": 1,
       "question": 749,
-      "explore": 140,
+      "explore": 141,
       "wedges": 1
     }
   }

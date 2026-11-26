@@ -823,7 +823,7 @@ export default {
       {
         from: 'break-it',
         to: 'the-orbit-that-crosses-and',
-        text: 'The paired control and the awkward case. Europa moved one percent out and the argument circulates in forty-seven Io orbits. Then Callisto’s 7:3, which stays inconclusive for the whole run, and the question of what that establishes.',
+        text: 'The paired control and the awkward case. Europa moved one percent out and the argument circulates in forty to fifty Io orbits. Then Callisto’s 7:3, which stays inconclusive for the whole run, and the question of what that establishes.',
       },
       {
         from: 'measure-pluto-s-resonance',
@@ -1069,18 +1069,18 @@ export default {
       },
       {
         from: 'open-the-neck',
-        to: 'accessible-not-reachable',
-        text: 'Open the L1 neck with a burn, and predict what an open neck licenses. Everyone opens it differently, which is deliberate and is why the next two screens exist.',
+        to: 'one-region-two-directions',
+        text: 'Open the L1 neck with a burn, and predict what two directions from the same start will do with it. Everyone opens it differently, which is deliberate and is why the next screen exists.',
       },
       {
-        from: 'predict-same-region-same-path',
+        from: 'watch-it-not-cross',
         to: 'watch-it-not-cross',
         text: 'The controlled version, and the heart of the second act: one tracer, one place, one speed, two directions, so the accessible region is identical by construction and the trajectory is the only thing left that can differ. About a minute of running. Budget time here and resist resolving the ambiguity beyond what the runs show - "did not cross in two periods" is the whole finding.',
       },
       {
         from: 'stability-is-different',
         to: 'trojans',
-        text: 'Stability as a third question, the surprise that L4 and L5 are stable at maxima, and the Trojans. This is the part students remember.',
+        text: 'Stability as a third question, a prediction, then the nudge test: a tracer at rest beside L1 and beside L4, nudged by an amount each student chooses and watched for as long as they choose. L1 loses its tracer however small the nudge; L4 holds one of 0.005 separations or less, at forty to fifty times the nudge, because this system is near Routh\u2019s limit. Then the Trojans. Budget a few minutes for the nudge test and for the argument about nudge size.',
       },
       {
         from: 'break-it',
