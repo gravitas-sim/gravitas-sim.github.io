@@ -337,9 +337,314 @@ describe('the prediction, the reveal and the leaks', () => {
       expect(LESSON.steps.some(x => x.sid === r.to)).toBe(true);
     }
     expect(Object.keys(LESSON.retired).sort()).toEqual([
+      'reading-the-fraction',
       'three-distances',
       'write-the-three-down',
     ]);
+  });
+});
+
+// =============================================================================
+// The second half: the eccentric year and the real system
+// =============================================================================
+
+/** The fraction of a year a planet on this orbit is between two distances, by the mean anomaly and Kepler's equation (not the module under test). */
+const timeBetween = (a, e, lo, hi, n = 20000) => {
+  let inside = 0;
+  for (let i = 0; i < n; i++) {
+    const M = (2 * Math.PI * (i + 0.5)) / n;
+    let E = M;
+    for (let k = 0; k < 60; k++)
+      E -= (E - e * Math.sin(E) - M) / (1 - e * Math.cos(E));
+    const r = a * (1 - e * Math.cos(E));
+    if (r >= lo && r <= hi) inside++;
+  }
+  return inside / n;
+};
+/** The Sun's conservative zone from the published fit typed above (Sun 5780 K). */
+const SUN_ZONE = [
+  Math.sqrt(1 / fit('runaway', 5780)),
+  Math.sqrt(1 / fit('maximum', 5780)),
+];
+
+/** What the orbit panel prints for the fraction, as the Take reading button writes it. */
+const orbitFraction = ecc => {
+  const w = getWidget('hz-orbit');
+  const row = w
+    .readout({ ecc, semi: 1.2 }, null, { showZone: true })
+    .find(r => r.id === 'fraction');
+  return { text: row.value, n: Number(String(row.value).match(/[\d.]+/)[0]) };
+};
+
+describe('the eccentric year: the fraction the panel prints, done independently', () => {
+  test('the printed fraction of the year inside the zone is the time between the two edges, to a whole percent, across the slider', () => {
+    for (const e of [0, 0.1, 0.2, 0.3, 0.4, 0.45, 0.5, 0.6]) {
+      const exact = 100 * timeBetween(1.2, e, SUN_ZONE[0], SUN_ZONE[1]);
+      // The panel rounds to a whole percent; the edges here are the 5780 K fit, the panel's the 5772 K one.
+      expect(Math.abs(orbitFraction(e).n - exact)).toBeLessThanOrEqual(1.6);
+    }
+  });
+
+  test('a circular orbit at 1.2 AU never leaves the zone and the orbit the lesson stages spends about half its year inside', () => {
+    expect(orbitFraction(0).text).toBe('100%');
+    const n = orbitFraction(0.45).n;
+    expect(n).toBeGreaterThan(50);
+    expect(n).toBeLessThan(60);
+  });
+
+  test('the orbit panel names its fraction row so the reading button can take it', () => {
+    const w = getWidget('hz-orbit');
+    const rows = w.readout({ ecc: 0.3, semi: 1.2 }, null, { showZone: true });
+    expect(rows.filter(r => r.id === 'fraction')).toHaveLength(1);
+    expect(
+      w
+        .readout({ ecc: 0.3, semi: 1.2 }, null, {})
+        .some(r => r.id === 'fraction')
+    ).toBe(false);
+  });
+});
+
+describe('two runs at one average distance', () => {
+  const s = () => step('two-runs-one-orbit');
+  /** The provenance the reading button records: where the controls were. */
+  const took = (a, b, semi = 1.2) => ({
+    f1: { s: { ecc: a, semi } },
+    f2: { s: { ecc: b, semi } },
+  });
+  const run = (a, b, over = {}, got) =>
+    s().validate(
+      {
+        e1: a,
+        f1: orbitFraction(a).n,
+        e2: b,
+        f2: orbitFraction(b).n,
+        ...over,
+      },
+      null,
+      got ?? took(a, b)
+    );
+
+  test('a circular run and any eccentric run that leaves the zone are accepted, in either order', () => {
+    for (const e of [0.25, 0.3, 0.45, 0.5, 0.6]) {
+      expect(run(0, e).level).toBe('ok');
+      expect(run(e, 0).level).toBe('ok');
+    }
+  });
+
+  test('the message that accepts them states no fraction and no verdict', () => {
+    expect(run(0, 0.45).message).not.toMatch(/\d/);
+  });
+
+  test('two circular runs, two eccentric runs, an eccentric run that never leaves, and a missing run are each told so in words', () => {
+    expect(run(0, 0).message).toMatch(/eccentric/);
+    expect(run(0.3, 0.45).message).toMatch(/circular/);
+    // 0.1 is eccentric and never leaves the zone at 1.2 AU
+    expect(run(0, 0.1).level).toBe('warn');
+    expect(run(0, 0.1).message).toMatch(/leaves the zone/);
+    expect(s().validate({ e1: 0, f1: 100 }, null, {})).toBeNull();
+  });
+
+  test('a typed eccentricity that is not where the control was, and readings at two semi-major axes, are refused in words', () => {
+    expect(run(0, 0.45, {}, took(0, 0.3)).message).toMatch(/Run 2/);
+    expect(run(0, 0.45, {}, took(0, 0.45, 1.2)).level).toBe('ok');
+    const axes = {
+      f1: { s: { ecc: 0, semi: 1.2 } },
+      f2: { s: { ecc: 0.45, semi: 1.5 } },
+    };
+    expect(run(0, 0.45, {}, axes).message).toMatch(/semi-major/);
+  });
+
+  test('readings taken away from 1.2 AU are refused and name the axis, even when the two agree', () => {
+    for (const semi of [0.6, 1.1, 1.3, 1.8]) {
+      const r = run(0, 0.45, {}, took(0, 0.45, semi));
+      expect(r.level).toBe('warn');
+      expect(r.message).toMatch(/1\.2 AU/);
+      expect(r.message).toMatch(new RegExp(`${semi} AU`));
+    }
+    // within 0.05 AU of the average distance is accepted
+    expect(run(0, 0.45, {}, took(0, 0.45, 1.23)).level).toBe('ok');
+    expect(step('two-runs-one-orbit').tool.values.semi).toBe(1.2);
+  });
+
+  test('a fraction that was typed, or typed over, is not accepted in place of the panel’s reading', () => {
+    // typed from nothing, with the eccentricities and fractions of a plausible pair
+    const typedOnly = s().validate(
+      { e1: 0, f1: 90, e2: 0.3, f2: 50 },
+      null,
+      {}
+    );
+    expect(typedOnly.level).toBe('warn');
+    expect(typedOnly.message).toMatch(/Run 1.*typed/);
+    // one reading captured, the other typed over after capture
+    const over = run(
+      0,
+      0.45,
+      {},
+      {
+        f1: { s: { ecc: 0, semi: 1.2 } },
+        f2: { k: 't', r: 56 },
+      }
+    );
+    expect(over.level).toBe('warn');
+    expect(over.message).toMatch(/Run 2.*typed/);
+  });
+
+  test('the step says the fractions are the orbit panel’s and that the canvas planet does not follow the slider', () => {
+    expect(s().body).toMatch(/orbit panel/);
+    expect(s().body).toMatch(/does not follow the\s+slider/);
+  });
+
+  test('impossible numbers are errors', () => {
+    expect(run(0, 0.45, { f2: 140 }).level).toBe('error');
+    expect(run(0, 0.45, { e2: 0.9 }).level).toBe('error');
+  });
+
+  test('the fraction fields are taken from the panel by their row id and the eccentricities are typed', () => {
+    const f = Object.fromEntries(s().fields.map(x => [x.id, x]));
+    expect(f.f1.source).toEqual({ tool: 'fraction' });
+    expect(f.f2.source).toEqual({ tool: 'fraction' });
+    expect(f.e1.source).toBeUndefined();
+    expect(s().tool.showZone).toBe(true);
+    expect(s().tool.values.semi).toBe(1.2);
+    // the panel opens on neither run
+    expect(s().tool.values.ecc).not.toBe(0);
+    expect(f.e1.want ?? f.f1.want).toBeUndefined();
+  });
+});
+
+describe('what the fraction says: a held prediction, the reader’s own runs, and a slip that names the wrong turn', () => {
+  const order = LESSON.steps.map(x => x.sid);
+  const p = () => step('predict-the-fraction');
+  const q = () => step('fraction-of-your-run');
+
+  test('the prediction comes before the zone is drawn and is settled after the two runs, with both runs beside it', () => {
+    expect(p()).toMatchObject({
+      type: 'predict',
+      reveal: 'fraction-of-your-run',
+    });
+    expect(order.indexOf('predict-the-fraction')).toBeLessThan(
+      order.indexOf('crossing-the-edges')
+    );
+    expect(order.indexOf('two-runs-one-orbit')).toBeLessThan(
+      order.indexOf('fraction-of-your-run')
+    );
+    expect(q().evidence).toEqual([
+      { step: 'two-runs-one-orbit', field: 'e1' },
+      { step: 'two-runs-one-orbit', field: 'f1' },
+      { step: 'two-runs-one-orbit', field: 'e2' },
+      { step: 'two-runs-one-orbit', field: 'f2' },
+    ]);
+    expect(typeof q().compare).toBe('string');
+  });
+
+  test('the orbit the prediction describes is the one the step stages, and its answer is about half', () => {
+    const stage = step('crossing-the-edges').stage.system.planets[0];
+    expect(stage).toMatchObject({ aAU: 1.2, ecc: 0.45 });
+    expect(p().body).toMatch(/1\.2 AU/);
+    expect(p().body).toMatch(/0\.45/);
+    expect(p().options[p().answer]).toMatch(/about half/);
+    const exact = 100 * timeBetween(1.2, 0.45, SUN_ZONE[0], SUN_ZONE[1]);
+    expect(exact).toBeGreaterThan(45);
+    expect(exact).toBeLessThan(65);
+    expect(100 * timeBetween(1.2, 0.45, SUN_ZONE[0], SUN_ZONE[1])).toBeLessThan(
+      75
+    );
+  });
+
+  test('no number of the fraction is written before the reader’s own reading', () => {
+    for (const sid of [
+      'predict-the-fraction',
+      'crossing-the-edges',
+      'two-runs-one-orbit',
+      'fraction-of-your-run',
+    ]) {
+      const x = step(sid);
+      // A prediction's options are the candidates, so they may be fractions.
+      const before = [
+        x.body,
+        x.tip,
+        ...(x.type === 'predict' ? [] : [x.prompt, ...(x.options || [])]),
+        ...(x.checklist || []),
+      ].join(' ');
+      expect(before).not.toMatch(
+        /56\s?%|three quarters|a little over half|about three/
+      );
+    }
+    expect(step('fraction-of-your-run').options[0]).not.toMatch(/\d/);
+    expect(step('fraction-of-your-run').prompt).not.toMatch(/\d/);
+  });
+
+  test('the slip is authored where the because already names the wrong turn: inside means habitable', () => {
+    expect(q().misconceptions).toHaveLength(1);
+    expect(q().misconceptions[0]).toMatchObject({
+      id: 'inside-means-habitable',
+      option: 0,
+    });
+    expect(q().misconceptions[0].option).not.toBe(q().answer);
+    expect(q().because).toMatch(/inside the zone means habitable/);
+    expect(
+      ES.steps[order.indexOf('fraction-of-your-run')].misconceptions
+    ).toHaveLength(1);
+  });
+
+  test('the retired reading step points at its successor and says what it asked, in both languages', () => {
+    const r = LESSON.retired['reading-the-fraction'];
+    expect(r.to).toBe('fraction-of-your-run');
+    expect(r.release).toBe('3.1');
+    expect(r.was.en.length).toBeGreaterThan(20);
+    expect(r.was.es.length).toBeGreaterThan(20);
+  });
+});
+
+describe('the real system: the zone is an estimate there, and no reading is hinted', () => {
+  test('the readings step opens on the other definition and its five fields carry no expected value', () => {
+    const t = step('take-the-readings-yourself');
+    expect(t.tool.values.model).toBe(1);
+    for (const f of t.fields) expect(f.want).toBeUndefined();
+    const text = `${t.body} ${t.tip}`;
+    expect(text).not.toMatch(/0\.0254|0\.0499|0\.65|0\.37|0\.25/);
+    expect(text).toMatch(/estimate/);
+  });
+
+  test('the five readings are still graded: the panel’s own numbers pass, a swapped planet or the wrong definition does not', () => {
+    const t = step('take-the-readings-yourself');
+    const ok = { e: 0.65, f: 0.37, g: 0.25, inner: 0.0254, outer: 0.0499 };
+    expect(t.validate(ok).level).toBe('ok');
+    expect(t.validate({ ...ok, e: 0.37 }).level).toBe('warn');
+    expect(t.validate({ ...ok, inner: 0.02, outer: 0.06 }).message).toMatch(
+      /zone definition/
+    );
+  });
+
+  test('every step that shows a zone for TRAPPIST-1 says the calculator takes 2600 to 7200 K and what to do outside it', () => {
+    const body = sid => step(sid).body;
+    expect(body('all-seven-planets')).toMatch(/2600 to 7200 K/);
+    expect(body('all-seven-planets')).toMatch(/estimate/);
+    expect(body('all-seven-planets')).toMatch(/does not cover it/);
+    expect(body('watch-it-run')).toMatch(/2,566 K|2566 K/);
+    expect(body('watch-it-run')).toMatch(/lower limit/);
+    expect(laid('a-star-the-fit-refuses').because).toMatch(
+      /nearest calibrated temperature/
+    );
+  });
+
+  test('the prediction before the zone gives the luminosity and not the conversion', () => {
+    const b = step('a-real-system-forty-light').body;
+    expect(b).toMatch(/0\.000553/);
+    expect(b).not.toMatch(/eighteen|forty times|0\.0[2-9]/);
+    expect(step('a-real-system-forty-light').reveal).toBe('all-seven-planets');
+    expect(
+      LESSON.steps.map(x => x.sid).indexOf('a-real-system-forty-light')
+    ).toBeLessThan(LESSON.steps.map(x => x.sid).indexOf('all-seven-planets'));
+  });
+
+  test('the model-star statement of the advanced steps is kept with its consequence for Earth at 1 AU', () => {
+    const e = laid('earth-in-the-model-zone');
+    expect(e.because).toMatch(/1\.11 Earths/);
+    expect(e.because).toMatch(/model star/);
+    expect(laid('why-no-climate-history').body).toMatch(
+      /Nothing here says when Earth leaves the zone/
+    );
   });
 });
 
@@ -404,13 +709,13 @@ describe('the lesson as a whole, in both languages', () => {
     });
   });
 
-  test('the core lesson is 36 steps and 47 with the deeper steps, two of them new', () => {
-    expect(LESSON.steps).toHaveLength(36);
-    expect(LAID.steps).toHaveLength(47);
+  test('the core lesson is 38 steps and 49 with the deeper steps', () => {
+    expect(LESSON.steps).toHaveLength(38);
+    expect(LAID.steps).toHaveLength(49);
   });
 });
 
-describe('saved work under the two steps this lesson retired', () => {
+describe('saved work under the three steps this lesson retired', () => {
   const OLD = {
     'goldilocks-question:three-distances': 'noted',
     'goldilocks-question:write-the-three-down:d1': '0.5',
@@ -419,6 +724,7 @@ describe('saved work under the two steps this lesson retired', () => {
     'goldilocks-question:write-the-three-down:s2': '1',
     'goldilocks-question:move-it-twice-as-far': 2,
     'goldilocks-question:what-the-graph-says': 1,
+    'goldilocks-question:reading-the-fraction': 2,
   };
   const SAVED = {
     schema: 2,
@@ -439,6 +745,7 @@ describe('saved work under the two steps this lesson retired', () => {
       new Set([
         'write-the-three-down>three-distances-yours',
         'three-distances>three-distances-yours',
+        'reading-the-fraction>fraction-of-your-run',
       ])
     );
     for (const r of rows) {
@@ -447,6 +754,9 @@ describe('saved work under the two steps this lesson retired', () => {
     }
     expect(
       read.responses['goldilocks-question:write-the-three-down:s1']
+    ).toBeUndefined();
+    expect(
+      read.responses['goldilocks-question:reading-the-fraction']
     ).toBeUndefined();
   });
 

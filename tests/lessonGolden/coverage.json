@@ -135,6 +135,7 @@
       "key:explore.stage",
       "key:explore.tip",
       "key:explore.tool",
+      "key:measure.stage",
       "key:measure.tool",
       "key:predict.after",
       "key:predict.decides",
@@ -168,7 +169,6 @@
     ],
     "what-is-a-gravitational-wave": [
       "audience:beginner",
-      "key:measure.stage",
       "key:predict.stage",
       "key:predict.tip",
       "key:predict.tool",
@@ -308,14 +308,14 @@
   ],
   "totals": {
     "investigations": 124,
-    "steps": 2004,
+    "steps": 2006,
     "activityCuts": 6,
     "lessonTokens": 182,
     "activityTokens": 29,
     "stepTypes": {
       "read": 379,
-      "predict": 209,
-      "measure": 524,
+      "predict": 210,
+      "measure": 525,
       "ellipse": 1,
       "question": 749,
       "explore": 141,

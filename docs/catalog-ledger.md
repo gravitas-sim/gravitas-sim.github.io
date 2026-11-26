@@ -18,7 +18,7 @@ Rows by kind: activity 6, course 6, experiment 4, investigation 146, sequence 11
 
 Baseline (measured at f9277ff8): 146 investigations (124 lessons, 10 Observatory, 9 3-D, 3 mission), 6 activity entries, 4 bench labs, 7 courses (6 rows and 1 out of scope), 11 sequences, 69 scenarios (61 sandbox, 8 3-D lab), 16 datasets.
 
-Editorial: OPEN 156, REVISED 17. Redesign: OPEN 157, REVIEWED CLEAR 5, REVISED 11. Scenario dispositions: OPEN 67, REVISED 2.
+Editorial: OPEN 155, REVISED 18. Redesign: OPEN 156, REVIEWED CLEAR 5, REVISED 12. Scenario dispositions: OPEN 67, REVISED 2.
 
 Scene class of the lessons: portrait or backdrop 94, setup scenario 26, engine-integrated stage 2, model-owned stage 2.
 
@@ -61,7 +61,7 @@ Scene class of the lessons: portrait or backdrop 94, setup scenario 26, engine-i
 | `investigation:flares`                               | lesson      |   384 | FOCUSED  | portrait or backdrop    | OPEN      | OPEN           | NOT RUN      | kernel legs failing and labelled (+1) |          1 |
 | `investigation:from-photons-to-a-number`             | lesson      |   408 | REDESIGN | portrait or backdrop    | OPEN      | OPEN           | NOT RUN      | -                                     |          0 |
 | `investigation:from-star-to-remnant`                 | lesson      |   380 | FOCUSED  | portrait or backdrop    | OPEN      | OPEN           | NOT RUN      | -                                     |          0 |
-| `investigation:goldilocks-question`                  | lesson      |   356 | FOCUSED  | setup scenario          | OPEN      | OPEN           | NOT RUN      | -                                     |          1 |
+| `investigation:goldilocks-question`                  | lesson      |   356 | FOCUSED  | setup scenario          | REVISED   | REVISED        | NOT RUN      | -                                     |          1 |
 | `investigation:gravity-assist`                       | lesson      |   351 | STRONG   | setup scenario          | OPEN      | OPEN           | NOT RUN      | -                                     |          1 |
 | `investigation:hohmann-transfer`                     | lesson      |   351 | FOCUSED  | setup scenario          | OPEN      | OPEN           | NOT RUN      | -                                     |          1 |
 | `investigation:how-far-and-how-sure`                 | lesson      |   399 | STRONG   | portrait or backdrop    | OPEN      | OPEN           | NOT RUN      | -                                     |          0 |

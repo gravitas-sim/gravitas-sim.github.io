@@ -3484,7 +3484,7 @@ export const INSTRUCTOR_CONTENT = {
       dim star’s habitable zone is tucked in close, meet the two published definitions of that zone and
       what separates them, watch an eccentric planet swing in and out of it, and read the real
       TRAPPIST-1 system against the model. The last five screens are the reason the investigation
-      exists: having spent forty minutes making the habitable zone feel powerful, the investigation turns
+      exists: having spent most of the hour making the habitable zone feel powerful, the investigation turns
       round and asks what being inside it actually establishes. The answer is "very little about the
       planet", and a student who leaves with that is better equipped to read an exoplanet headline than
       one who leaves able to recite the definition.`,

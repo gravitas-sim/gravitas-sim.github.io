@@ -44,6 +44,14 @@
         "control": "distance"
       }
     },
+    "goldilocks-question/two-runs-one-orbit": {
+      "e1": {
+        "control": "ecc"
+      },
+      "e2": {
+        "control": "ecc"
+      }
+    },
     "tides/choose-four-distances": {
       "d1": {
         "control": "dist"

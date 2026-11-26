@@ -618,25 +618,23 @@ describe('the Goldilocks investigation', () => {
       .sort();
     expect(asked).toEqual(inside.sort());
 
-    // Every expected value is the value the panel actually shows, to the precision the
-    // student will read it at.
-    for (const f of step.fields) {
-      if (/^[b-h]$/.test(f.id)) {
-        const p = TRAPPIST1_PLANETS.find(x => x.name === f.id);
-        expect(Number(f.want)).toBeCloseTo(
-          relativeInsolation(TRAPPIST.luminositySolar, p.a),
-          2
-        );
-      }
-    }
-    expect(Number(step.fields.find(f => f.id === 'inner').want)).toBeCloseTo(
-      bounds.innerAU,
-      4
+    // The fields carry no expected value (a reading is the student's to take),
+    // so the check is the step's own validate against the panel's numbers, to
+    // the precision the student will read them at.
+    for (const f of step.fields) expect(f.want).toBeUndefined();
+    const printed = Object.fromEntries(
+      TRAPPIST1_PLANETS.filter(p => inside.includes(p.name)).map(p => [
+        p.name,
+        Number(relativeInsolation(TRAPPIST.luminositySolar, p.a).toFixed(2)),
+      ])
     );
-    expect(Number(step.fields.find(f => f.id === 'outer').want)).toBeCloseTo(
-      bounds.outerAU,
-      4
-    );
+    expect(
+      step.validate({
+        ...printed,
+        inner: Number(bounds.innerAU.toFixed(4)),
+        outer: Number(bounds.outerAU.toFixed(4)),
+      }).level
+    ).toBe('ok');
 
     // And the validate function accepts exactly those readings.
     const ok = step.validate({

@@ -106,13 +106,13 @@ export const MANIFEST = [
     title: 'La cuestión de Ricitos de Oro',
     subtitle:
       'Mueve un planeta, cambia su estrella y decide qué significa de verdad «habitable»',
-    duration: '40-50 min',
+    duration: '60-70 min',
     level: 'Astronomía introductoria',
     thumbnail: 'images/scenarios/habitable-zone-lab.webp',
     series: 'Detección de exoplanetas',
     depths: 3,
-    stepCount: 36,
-    gradedCount: 19,
+    stepCount: 38,
+    gradedCount: 21,
     objectiveCount: 7,
   },
   {

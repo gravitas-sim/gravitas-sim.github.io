@@ -9,7 +9,7 @@ on a 60 Hz screen, a 144 Hz screen and a throttled tab. A reading step
 that holds the clock (`holdsClock` in `js/timestep.js`) does not run and
 is not pinned. Closing the lesson lifts the pin.
 
-552 steps in 23 lessons run on an integrated scene; 435 are pinned and 117 hold the clock.
+554 steps in 23 lessons run on an integrated scene; 437 are pinned and 117 hold the clock.
 
 | Lesson | Step | Id | Type | Scene | Own scene | Pinned step |
 |---|---|---|---|---|---|---|
@@ -254,17 +254,19 @@ is not pinned. Closing the lesson lifts the pin.
 | goldilocks-question | 23 | a-year-on-a-circular | read | Habitable Zone Lab | inherited | 1/60 s |
 | goldilocks-question | 24 | now-stretch-the-orbit | predict | Habitable Zone Lab | inherited | 1/60 s |
 | goldilocks-question | 25 | run-an-eccentric-year | explore | Habitable Zone Lab | inherited | 1/60 s |
-| goldilocks-question | 26 | crossing-the-edges | explore | stage: system | yes | 1/60 s |
-| goldilocks-question | 27 | reading-the-fraction | question | stage: system | yes | 1/60 s |
-| goldilocks-question | 28 | a-real-system-forty-light | predict | TRAPPIST-1 System | yes | 1/60 s |
-| goldilocks-question | 29 | all-seven-planets | explore | TRAPPIST-1 System | yes | 1/60 s |
-| goldilocks-question | 30 | watch-it-run | explore | TRAPPIST-1 System | yes | 1/60 s |
-| goldilocks-question | 31 | take-the-readings-yourself | measure | TRAPPIST-1 System | inherited | 1/60 s |
-| goldilocks-question | 32 | the-question-the-name-invites | question | TRAPPIST-1 System | inherited | 1/60 s |
-| goldilocks-question | 33 | three-planets-that-all-look | explore | TRAPPIST-1 System | inherited | 1/60 s |
-| goldilocks-question | 34 | which-one-would-you-observe | question | TRAPPIST-1 System | inherited | 1/60 s |
-| goldilocks-question | 35 | one-more-and-then-you | question | TRAPPIST-1 System | inherited | 1/60 s |
-| goldilocks-question | 36 | what-you-worked-out | read | TRAPPIST-1 System | inherited | none (holds the clock) |
+| goldilocks-question | 26 | predict-the-fraction | predict | Habitable Zone Lab | inherited | 1/60 s |
+| goldilocks-question | 27 | crossing-the-edges | explore | stage: system | yes | 1/60 s |
+| goldilocks-question | 28 | two-runs-one-orbit | measure | stage: system | yes | 1/60 s |
+| goldilocks-question | 29 | fraction-of-your-run | question | stage: system | yes | 1/60 s |
+| goldilocks-question | 30 | a-real-system-forty-light | predict | TRAPPIST-1 System | yes | 1/60 s |
+| goldilocks-question | 31 | all-seven-planets | explore | TRAPPIST-1 System | yes | 1/60 s |
+| goldilocks-question | 32 | watch-it-run | explore | TRAPPIST-1 System | yes | 1/60 s |
+| goldilocks-question | 33 | take-the-readings-yourself | measure | TRAPPIST-1 System | inherited | 1/60 s |
+| goldilocks-question | 34 | the-question-the-name-invites | question | TRAPPIST-1 System | inherited | 1/60 s |
+| goldilocks-question | 35 | three-planets-that-all-look | explore | TRAPPIST-1 System | inherited | 1/60 s |
+| goldilocks-question | 36 | which-one-would-you-observe | question | TRAPPIST-1 System | inherited | 1/60 s |
+| goldilocks-question | 37 | one-more-and-then-you | question | TRAPPIST-1 System | inherited | 1/60 s |
+| goldilocks-question | 38 | what-you-worked-out | read | TRAPPIST-1 System | inherited | none (holds the clock) |
 | missing-mass | 1 | two-ways-to-weigh-a | read | Solar System | yes | none (holds the clock) |
 | missing-mass | 2 | put-the-mass-somewhere | explore | Solar System | inherited | 1/60 s |
 | missing-mass | 3 | which-arrangement-gives-a-flat | question | Solar System | inherited | 1/60 s |

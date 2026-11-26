@@ -282,7 +282,7 @@
           <lomr:general>
             <lomr:identifier><lomr:catalog>GUID</lomr:catalog><lomr:entry>r-goldilocks-question</lomr:entry></lomr:identifier>
             <lomr:title><lomr:string language="en">The Goldilocks Question</lomr:string></lomr:title>
-            <lomr:description><lomr:string language="en">Investigation, 40–50 min. Optional, advanced.</lomr:string></lomr:description>
+            <lomr:description><lomr:string language="en">Investigation, 60–70 min. Optional, advanced.</lomr:string></lomr:description>
           </lomr:general>
           <lomr:educational>
             <lomr:intendedEndUserRole><lomr:source>IMSGLC_CC_Rolesv1p2</lomr:source><lomr:value>Learner</lomr:value></lomr:intendedEndUserRole>
