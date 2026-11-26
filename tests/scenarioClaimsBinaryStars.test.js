@@ -128,7 +128,7 @@ describe('Binary Stars: the corrected world', () => {
       'cinco planetas',
       'dos gigantes gaseosos',
       '20 asteroides',
-      'solo atraen los soles',
+      'Solo atraen los soles',
       '2,4 veces',
       'Holman y Wiegert, 1999',
     ])

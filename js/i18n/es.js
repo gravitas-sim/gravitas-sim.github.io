@@ -1061,7 +1061,7 @@ export const ES = {
     'El agujero negro supermasivo central de la Vía Láctea (4000 M☉, reducido para la simulación) con estrellas S de movimiento rápido, objetos compactos y restos en órbitas extremas. Permite presenciar las increíbles fuerzas gravitatorias y los efectos relativistas cerca del agujero negro supermasivo de nuestra galaxia.',
   'scenario.binary-star-system.title': 'Estrellas binarias',
   'scenario.binary-star-system.summary':
-    'Dos soles de 1,2 y 0,8 masas solares que se orbitan a 1,2 UA, con cinco planetas, dos gigantes gaseosos y 20 asteroides en órbita alrededor del par. Aquí solo atraen los soles. Los planetas empiezan más allá de 2,4 veces la separación de las estrellas, lo más cerca que un planeta puede orbitar un par así y quedarse (Holman y Wiegert, 1999). Alfa Centauri A y B son un par así, unas 20 veces más separado.',
+    'Dos soles de 1,2 y 0,8 masas solares a 1,2 UA, con cinco planetas, dos gigantes gaseosos y 20 asteroides alrededor. Solo atraen los soles. Los planetas empiezan a más de 2,4 veces su separación, la distancia estable mínima (Holman y Wiegert, 1999). Alfa Centauri A y B son un par unas 20 veces más abierto.',
   'scenario.slingshot.title': 'Asistencia gravitatoria',
   'scenario.slingshot.summary':
     'Un agujero negro masivo (60 M☉) acompañado de una compañera menor (3 M☉) produce espectaculares asistencias gravitatorias a los planetas y gigantes gaseosos cercanos. Los objetos ganan una velocidad enorme en los encuentros próximos, igual que las sondas espaciales en sus maniobras de asistencia.',
