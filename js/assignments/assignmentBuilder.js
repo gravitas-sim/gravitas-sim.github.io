@@ -629,7 +629,7 @@ function printInstructions() {
       code { word-break: break-all; font-size: 10px; }
     </style></head><body>
     <h1>${esc(built.t || t('assign.title'))}</h1>
-    <p class="sub">${esc(lesson.title)} — ${esc(t('assign.print.steps', { n: built.s.length }))}${built.d ? ` — ${esc(t('inv.depth.state', { depth: t(`inv.depth.${built.d}`) }))}` : ''}</p>
+    <p class="sub">${esc(lesson.title)} — ${esc(t('assign.print.steps', { n: built.s.length }))}${built.d ? ` — ${esc(t(`inv.depth.${built.d}`))}` : ''}</p>
     ${built.n ? `<p>${esc(built.n)}</p>` : ''}
     ${built.u ? `<p><strong>${esc(t('adapt.due.shown', { due: built.u }))}</strong></p>` : ''}
     <ol>${rows}</ol>

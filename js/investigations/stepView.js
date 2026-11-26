@@ -1412,3 +1412,22 @@ export function wireExplainer(button, keyOf, opts) {
     opts
   );
 }
+
+/**
+ * The lesson's declared time ("35-45 min") scaled to what is on offer: an
+ * assignment is part of the lesson, and a deeper level is more of it. Whole
+ * minutes, and the declared text untouched when nothing is scaled.
+ * @param {object} lesson - Its `duration`, e.g. '35-45 min', and its steps
+ * @param {number} count - Steps on offer now
+ * @param {number} full - Steps the time is for, 0 for the core ones
+ * @returns {string} The range to show
+ */
+export function plannedTime({ duration, steps }, count, full) {
+  const base = full || steps.filter(s => (s.depth ?? 'core') === 'core').length;
+  const m = /^(\d+)\s*-\s*(\d+)(.*)$/.exec(duration || '');
+  const f = base ? count / base : 1;
+  if (!m || !(f > 0) || Math.abs(f - 1) < 0.03) return duration || '';
+  const lo = Math.max(1, Math.round(m[1] * f));
+  const hi = Math.max(lo, Math.round(m[2] * f));
+  return `${lo === hi ? lo : `${lo}-${hi}`}${m[3]}`;
+}

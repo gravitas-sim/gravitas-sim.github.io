@@ -13,7 +13,8 @@
 // question it was not an answer to.
 // =============================================================================
 
-import { test, expect, loadInvestigation } from './workflow.js';
+import { test, expect, loadInvestigation, storeProgress } from './workflow.js';
+import { openMore } from './fixtures.js';
 import { decodeTagged } from '../js/shareState.js';
 import {
   ASSIGNMENT_SCHEMA,
@@ -22,6 +23,7 @@ import {
 import { assignmentLink } from '../js/assignments/assignmentLink.js';
 import { stepFingerprint } from '../js/investigations/progressBackup.js';
 import { lessonProvider } from '../js/assignments/provider.js';
+import { withAllDepths } from '../js/investigations/depthAll.js';
 
 const LESSON = 'keplers-laws';
 
@@ -646,5 +648,48 @@ test.describe('an assignment and the package its lesson comes from', () => {
       timeout: 30_000,
     });
     await expect(toast).toContainText('a new major version');
+  });
+});
+
+test.describe('an activity set to a version', () => {
+  test('says the instructor set it, offers no way to keep another, and a different saved choice does not matter', async ({
+    page,
+    app,
+  }) => {
+    await app.boot();
+    const lesson = withAllDepths(await loadInvestigation(LESSON));
+    const first = lesson.steps.find(s => !s.depth || s.depth === 'core');
+    // A student who had chosen the core version of this investigation.
+    await storeProgress(page, LESSON, {
+      depth: 'core',
+      deepest: 'core',
+      stepSid: first.sid,
+      visited: [first.sid],
+    });
+    const built = buildAssignment({
+      lesson,
+      chosen: [first.sid],
+      title: 'Set at quantitative',
+      fingerprint: stepFingerprint,
+      depth: 'quantitative',
+    });
+    const link = await assignmentLink(built, new URL('/', page.url()).href);
+    await page.goto(link.url);
+    await page.reload();
+    await expect(page.locator('#investigationPanel')).toBeVisible({
+      timeout: 30_000,
+    });
+    await expect(page.locator('#investigationWhere')).toContainText(
+      'Quantitative version'
+    );
+    const note = page.locator('#investigationDepthNote');
+    await expect(note).toContainText(
+      'Your instructor set this activity to the quantitative version.'
+    );
+    await expect(note.getByRole('button')).toBeHidden();
+    // No Go deeper or Fewer steps for an activity: the instructor set it.
+    await openMore(page);
+    await expect(page.locator('#investigationDeeper')).toBeHidden();
+    await expect(page.locator('#investigationShallower')).toBeHidden();
   });
 });
