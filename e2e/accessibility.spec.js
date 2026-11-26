@@ -31,6 +31,7 @@
 // =============================================================================
 
 import { test, expect } from './fixtures.js';
+import { loadInvestigation, storeProgress } from './workflow.js';
 import AxeBuilder from '@axe-core/playwright';
 import { readFileSync } from 'node:fs';
 import { Buffer } from 'node:buffer';
@@ -188,6 +189,27 @@ const SURFACES = [
     name: 'active investigation',
     open: async ({ app }) => app.boot({ url: '/#investigation=keplers-laws' }),
     expect: '#investigationPanel',
+  },
+  {
+    // The note a link leaves when it opens another version than the one the
+    // student chose: a sentence and a button under the where line.
+    name: 'lesson opened at another version',
+    open: async ({ page, app }) => {
+      await app.boot();
+      const lesson = await loadInvestigation('keplers-laws');
+      const first = lesson.steps[0].sid;
+      await storeProgress(page, 'keplers-laws', {
+        depth: 'core',
+        deepest: 'core',
+        stepSid: first,
+        visited: [first],
+      });
+      await app.boot({ url: '/#investigation=keplers-laws/advanced' });
+      await page.waitForSelector('#investigationDepthNote:not([hidden])', {
+        timeout: 20_000,
+      });
+    },
+    expect: '#investigationDepthNote',
   },
   {
     // A measurement screen, which is a different surface from the first screen
