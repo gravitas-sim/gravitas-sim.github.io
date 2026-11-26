@@ -8925,8 +8925,8 @@
       "family": "binaries, circumbinary, three-body",
       "planning": "REVIEW",
       "owner": 463,
-      "disposition": "OPEN",
-      "reason": "",
+      "disposition": "REVISED",
+      "reason": "CORRECT (world and card, both languages): the planets started 1.25 to 2.25 binary separations from the pair, inside Holman and Wiegert's critical distance (2.43 for these masses), and one was lost under a second seed. Revision 2 starts them at 2.75 separations and beyond and lets only the stars pull; no body is lost at 30, 60 and 120 frames a second under either seed. Revision 1 is retained for links made before. D-R4-463-04.",
       "pr": null
     },
     {

@@ -5,8 +5,8 @@ a scenario. When a scenario is corrected, the correction can change the preset
 row, the declared geometry or the generator, and a corrected generator changes
 the draws, so no setting recorded in a link can keep an old world. This file is
 the one rule for which revision of a scenario a payload means, to this build and
-to an older one. Nothing is corrected by it: the registry ships empty, and the
-rule is proven on a fixture the tests register.
+to an older one. The rule is proven on a fixture the tests register; the
+registered corrections are listed under "Registered corrections" below.
 
 Tests: `tests/scenarioRevisions.test.js` (the rule, on a fixture, and the
 byte-identity of every shipped link), `tests/scenarioRevisionsFiles.test.js`
@@ -33,7 +33,10 @@ id:
 - `revision` is the current one (2 or more). Every earlier revision is listed,
   as `retained` or as `migrated` with a one-sentence reason in both languages.
 - A `retained` revision keeps its preset row (`rows[revision]` in the entry,
-  otherwise the table's row, which `applyPreset` takes as its fourth argument),
+  otherwise the table's row, which `applyPreset` takes as its fourth argument)
+  and, where the correction moved its declaration, that declaration
+  (`geometry[revision]`, read by `geometryFor` and handed to the build as
+  `ctx.geometryFor`, since `js/world/build.js` may not import the codec),
   its `ENGINE_GEOMETRY` entry and its builder step. The build is handed the
   revision (`ctx.revision`, absent meaning the latest), and each corrected site in
   `js/world/build.js` gates on it. The world builds the row, geometry and
@@ -43,7 +46,8 @@ id:
   old revision would need a branch inside a generator other scenarios share, or a
   second copy of a generator longer than 40 lines. The 40 is a proposal; the
   register row of the first correction that registers an id gives the count
-  it measured. Nothing is registered here, so no count is measured here.
+  it measured: `binary-star-system` (D-R4-463-04) copied no generator lines,
+  so it is retained.
 - A migrated revision opens the corrected world under a notice, in words: "This
   link was made for an earlier version of this scenario. It now opens the
   corrected one: <reason>." The notice is announced and stays until dismissed.
@@ -214,3 +218,9 @@ World share link (with a scenario revision), version 3: fields `v` (link prefix
 `sdk/schemas/world-link-3.schema.json`. `tools/formats.mjs` is the source and
 `node tools/formats.mjs --write` writes FORMATS.md; the row lands in the commit
 that adds the constant it names.
+
+## Registered corrections
+
+| Id | Revision | Earlier | What changed | Register |
+|---|---|---|---|---|
+| `binary-star-system` | 2 | 1 retained (`rows[1]`, `geometry[1]`) | Planets, giants and asteroids start past Holman and Wiegert's critical distance (2.43 separations); only the stars pull; zoom 1.5 to 0.55 | D-R4-463-04 |

@@ -34,6 +34,7 @@ import { SCENARIO_PRESETS, SCENARIO_GEOMETRY } from '../js/scenarios.js';
 import { ENGINE_GEOMETRY } from '../js/world/build.js';
 import { GEOMETRY_RULES, validateGeometry } from '../js/scenarioPack.js';
 import { digest } from './scenarioDigest.js';
+import { SCENARIO_REVISIONS } from '../js/shareState.js';
 import {
   SLICE4_COUNTS,
   SLICE4_EDGE_IDS,
@@ -44,6 +45,9 @@ import {
 
 const read = name => JSON.parse(readFileSync(`tests/fixtures/${name}`, 'utf8'));
 const GOLDEN = read('scenarioGeometrySlice4Golden.json');
+// The fixtures are the hand-built code's worlds, which a corrected scenario
+// keeps as its retained revision 1 (SCENARIO_REVISIONS.md): built at 1 here.
+const asBuilt = key => (SCENARIO_REVISIONS[key] ? 1 : undefined);
 const EDGE = read('scenarioGeometrySlice4EdgeGolden.json');
 const SUN = physics.SOLAR_MASS_UNIT;
 
@@ -72,7 +76,9 @@ describe('slice 4: the nine declared scenarios build the world the code built', 
     '%s: every field of every body, the settings, the camera and the generator',
     id => {
       const [key, seed] = id.split('@');
-      expect(worldKey(digest(key, Number(seed)))).toEqual(GOLDEN[id]);
+      expect(worldKey(digest(key, Number(seed), null, asBuilt(key)))).toEqual(
+        GOLDEN[id]
+      );
     }
   );
 
@@ -122,8 +128,14 @@ describe('slice 4: the nine declared scenarios build the world the code built', 
       gw150914: [3, 21],
     };
     for (const [key, [plain, three]] of Object.entries(DRAWS)) {
-      expect([key, count(() => digest(key, 1))]).toEqual([key, plain]);
-      expect([key, count(() => digest(key, 1, plus3))]).toEqual([key, three]);
+      expect([key, count(() => digest(key, 1, null, asBuilt(key)))]).toEqual([
+        key,
+        plain,
+      ]);
+      expect([key, count(() => digest(key, 1, plus3, asBuilt(key)))]).toEqual([
+        key,
+        three,
+      ]);
     }
     // The generator's next number after the build is part of every row above
     // (`tail`); name it for the one place a count could hide a reordering.
@@ -144,7 +156,8 @@ describe('slice 4: the nine declared scenarios build the world the code built', 
 
   test.each(SLICE4_EDGE_IDS)('%s is the world the code made', id => {
     const at = id.indexOf('@');
-    const d = digest(id.slice(0, at), 1, JSON.parse(id.slice(at + 1)));
+    const key = id.slice(0, at);
+    const d = digest(key, 1, JSON.parse(id.slice(at + 1)), asBuilt(key));
     expect(worldKey(d)).toEqual(EDGE[id]);
   });
 });
@@ -321,34 +334,47 @@ describe('slice 4: the worlds against their closed forms', () => {
     expect(w.stars.length + w.planets.length + w.bh_list.length).toBe(0);
   });
 
-  test('Binary Star System: the pair about a stationary center, planets on a ladder', () => {
-    const w = world('binary-star-system');
-    expect(w.stars).toHaveLength(2);
-    const [a, b] = w.stars;
-    expect(a.mass).toBeCloseTo(1.2 * SUN, 9);
-    expect(b.mass).toBeCloseTo(0.8 * SUN, 9);
-    // 120 units apart, the lighter one the farther from the center.
-    expect(b.pos.x - a.pos.x).toBeCloseTo(120, 9);
-    expect(a.pos.x).toBeCloseTo(-120 * 0.4, 9);
-    expect(b.pos.x).toBeCloseTo(120 * 0.6, 9);
-    // Recentered: the system as a whole does not move.
-    const all = [...w.stars, ...w.planets, ...w.gas_giants, ...w.asteroids];
-    const p = all.reduce(
-      (s, x) => [s[0] + x.mass * x.vel.x, s[1] + x.mass * x.vel.y],
-      [0, 0]
-    );
-    expect(Math.hypot(...p) / all.reduce((s, x) => s + x.mass, 0)).toBeLessThan(
-      1e-9
-    );
-    w.planets.forEach((x, i) => expect(radius(x)).toBeCloseTo(150 + i * 30, 9));
-    w.gas_giants.forEach((x, i) =>
-      expect(radius(x)).toBeCloseTo(300 + i * 50, 9)
-    );
-    for (const x of w.asteroids) {
-      expect(radius(x)).toBeGreaterThanOrEqual(400);
-      expect(radius(x)).toBeLessThanOrEqual(500);
+  // Both revisions: the current declaration, and revision 1's, which a link
+  // made before the correction still builds (SCENARIO_REVISIONS.md).
+  test.each([
+    ['current', undefined, ENGINE_GEOMETRY['binary-star-system']],
+    ['revision 1', 1, SCENARIO_REVISIONS['binary-star-system'].geometry[1]],
+  ])(
+    'Binary Star System (%s): the pair about a stationary center, planets on a ladder',
+    (_, rev, decl) => {
+      const P = decl.steps.find(s => s.rule.name === 'orbital-population').rule
+        .params;
+      digest('binary-star-system', 1, null, rev);
+      const w = physics;
+      expect(w.stars).toHaveLength(2);
+      const [a, b] = w.stars;
+      expect(a.mass).toBeCloseTo(1.2 * SUN, 9);
+      expect(b.mass).toBeCloseTo(0.8 * SUN, 9);
+      // 120 units apart, the lighter one the farther from the center.
+      expect(b.pos.x - a.pos.x).toBeCloseTo(120, 9);
+      expect(a.pos.x).toBeCloseTo(-120 * 0.4, 9);
+      expect(b.pos.x).toBeCloseTo(120 * 0.6, 9);
+      // Recentered: the system as a whole does not move.
+      const all = [...w.stars, ...w.planets, ...w.gas_giants, ...w.asteroids];
+      const p = all.reduce(
+        (s, x) => [s[0] + x.mass * x.vel.x, s[1] + x.mass * x.vel.y],
+        [0, 0]
+      );
+      expect(
+        Math.hypot(...p) / all.reduce((s, x) => s + x.mass, 0)
+      ).toBeLessThan(1e-9);
+      w.planets.forEach((x, i) =>
+        expect(radius(x)).toBeCloseTo(P.planetInner + i * P.planetStep, 9)
+      );
+      w.gas_giants.forEach((x, i) =>
+        expect(radius(x)).toBeCloseTo(P.giantInner + i * P.giantStep, 9)
+      );
+      for (const x of w.asteroids) {
+        expect(radius(x)).toBeGreaterThanOrEqual(P.asteroidInner);
+        expect(radius(x)).toBeLessThanOrEqual(P.asteroidInner + P.asteroidSpan);
+      }
     }
-  });
+  );
 
   test('Rogue Encounter: circular orbits about the star, and a hole that is not recentered', () => {
     const w = world('rogue-encounter');

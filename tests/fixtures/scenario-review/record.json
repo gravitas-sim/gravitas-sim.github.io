@@ -475,7 +475,7 @@
           },
           "pass": true,
           "status": "pass",
-          "note": "of 5 planets (0 of 2 giants) stayed within 10 AU of the stars' barycentre and present for 3400 t; the 5 is the card's count"
+          "note": "of 5 planets (2 of 2 giants) stayed within 10 AU of the stars' barycentre and present for 3400 t; the 5 is the card's count"
         },
         {
           "rate": 120,
@@ -594,13 +594,13 @@
           "rate": 60,
           "seed": "audit-2",
           "claim": "planets-kept",
-          "value": 4,
+          "value": 5,
           "bound": {
             "radiusAU": 10,
             "measure": "each planet and giant that stays within 10 AU of the barycentre over the whole run is kept; the claim holds when all five planets are kept"
           },
-          "pass": false,
-          "status": "fail",
+          "pass": true,
+          "status": "pass",
           "note": "of 5 planets (2 of 2 giants) stayed within 10 AU of the stars' barycentre and present for 3400 t; the 5 is the card's count"
         },
         {
@@ -657,13 +657,13 @@
           "rate": 120,
           "seed": "audit-2",
           "claim": "planets-kept",
-          "value": 4,
+          "value": 5,
           "bound": {
             "radiusAU": 10,
             "measure": "each planet and giant that stays within 10 AU of the barycentre over the whole run is kept; the claim holds when all five planets are kept"
           },
-          "pass": false,
-          "status": "fail",
+          "pass": true,
+          "status": "pass",
           "note": "of 5 planets (2 of 2 giants) stayed within 10 AU of the stars' barycentre and present for 3400 t; the 5 is the card's count"
         },
         {
@@ -682,12 +682,10 @@
       "verdictSuggested": {
         "verdict": "REFRAME or CORRECT",
         "failing": [
-          "planets-kept",
           "alpha-centauri"
         ],
         "notRun": [],
         "leans": {
-          "planets-kept": "CORRECT",
           "alpha-centauri": "REFRAME"
         }
       }

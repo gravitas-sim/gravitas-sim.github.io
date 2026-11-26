@@ -142,7 +142,7 @@ describe('the registry and the wire form', () => {
     expect(currentRevision(ID)).toBe(1);
     expect(currentRevision('None')).toBe(1);
     expect(rowFor(ID, 1)).toBeUndefined();
-    expect(Object.keys(SCENARIO_REVISIONS)).toEqual([]);
+    expect(Object.keys(SCENARIO_REVISIONS)).not.toContain(ID);
   });
 
   test('the version written is 3 with r from revision 2, and what it was before for every other id', async () => {
@@ -702,7 +702,17 @@ describe('all 61 shipped ids and scenario None, from every producer, are byte-id
     };
   };
 
-  test('the registry is empty and the producers write what they wrote', async () => {
+  // The corrected ids are set aside for this test: with them out of the
+  // registry every producer writes exactly what the base wrote, and the test
+  // after this one checks what a corrected id writes instead.
+  const shipped = {};
+  beforeEach(() => {
+    Object.assign(shipped, SCENARIO_REVISIONS);
+    for (const k of Object.keys(shipped)) delete SCENARIO_REVISIONS[k];
+  });
+  afterEach(() => Object.assign(SCENARIO_REVISIONS, shipped));
+
+  test('the registry set aside, the producers write what they wrote', async () => {
     expect(Object.keys(SCENARIO_REVISIONS)).toEqual([]);
     for (const id of ids) {
       const seed = rng.parseSeed('orbit-1');
@@ -806,4 +816,21 @@ describe('all 61 shipped ids and scenario None, from every producer, are byte-id
         .sort()
     );
   }, 120_000);
+
+  test('a corrected id writes version 3 with its revision; every other id, the base', async () => {
+    Object.assign(SCENARIO_REVISIONS, shipped);
+    const corrected = new Set(Object.keys(shipped));
+    expect(corrected.size).toBeGreaterThan(0);
+    for (const id of ids) {
+      const payload = payloadFromSetup({ scenario: id, seed: 'kepler-3' });
+      const frag = await encodePayload(payload);
+      if (corrected.has(id)) {
+        expect([id, prefixOf(frag)]).toEqual([id, '3']);
+        expect(await decodePayload(frag)).toMatchObject({
+          v: 3,
+          r: shipped[id].revision,
+        });
+      } else expect([id, prefixOf(frag)]).toEqual([id, GOLD.lessonSetup[id].v]);
+    }
+  });
 });

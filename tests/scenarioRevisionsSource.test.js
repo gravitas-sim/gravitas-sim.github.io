@@ -103,8 +103,28 @@ describe('the producer table', () => {
 });
 
 describe('what ships', () => {
-  test('the registry ships empty, so no shipped scenario has a second revision', () => {
-    expect(Object.keys(SCENARIO_REVISIONS)).toEqual([]);
+  // Each correction adds its id here (DECISION_REGISTER D-R4-463-04 for the first).
+  test('the registry ships the corrected ids, each listing every earlier revision', () => {
+    expect(Object.keys(SCENARIO_REVISIONS)).toEqual(['binary-star-system']);
+    for (const [id, entry] of Object.entries(SCENARIO_REVISIONS)) {
+      expect(SCENARIO_IDS).toContain(id);
+      expect(entry.revision).toBeGreaterThanOrEqual(2);
+      for (let r = 1; r < entry.revision; r++) {
+        const how = entry.earlier[r];
+        expect([id, r, how === 'retained' || !!how?.migrated?.es]).toEqual([
+          id,
+          r,
+          true,
+        ]);
+        // A retained revision keeps what the correction changed.
+        if (how === 'retained')
+          expect([id, r, !!(entry.rows?.[r] || entry.geometry?.[r])]).toEqual([
+            id,
+            r,
+            true,
+          ]);
+      }
+    }
     expect(SCENARIO_IDS.length).toBe(61);
   });
 
