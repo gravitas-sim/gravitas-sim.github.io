@@ -24,7 +24,7 @@
     }
   },
   "sourceFiles": 310,
-  "sourceDigest": "00573e2e0a85ea1511c65813d6eeb12d37ca2368e7e564171af0edbefaba695a",
+  "sourceDigest": "495cd32e5f3dcad20df95b5ef633a8232984d44598a0c1016fbeac7c00f08a00",
   "sources": {
     "js/activities/activities.js": "af9b7e121b9a72c2a5cc18e07331d6ee841934d402b030294d25c442628881ef",
     "js/activities/activityBridge.js": "ddd8015bf88938d98d967942048bc34e30a0099344b1055bd45a0459ec0333fe",
@@ -45,9 +45,9 @@
     "js/data/instructorContent.es.js": "471a388f9e2abfbe837cdad387388f52f0a547d2ae5f466e66fa5680866d5d3c",
     "js/data/instructorContent.js": "e8e63232b6628c890fd3849b5ba87f08d808266ef978d4bf3e8e2041052e40d9",
     "js/data/instructorExpectations.es.js": "5ec751fabe0ed60f692799c260ab8f383ffae25379c4b426efdd4351e0ae00ee",
-    "js/data/instructorExpectations.js": "c73cdfbdbf723a7923482d74390d0526dc9c51e0cdb419dfe42c9e5be1a39f00",
+    "js/data/instructorExpectations.js": "e8d86b40b78b70ac95c422c307db1d35053b77bc5843ea0814c5aac240f3aa5a",
     "js/data/instructorFlow.es.js": "f1c087e5240114351245f6a7fa7ad9b3efd269ec6d415183fd945ac95534fd86",
-    "js/data/instructorFlow.js": "c2d7c1a71cdca79e4afef6b31216f74c91b360a1d8e9c46a67ab58988815db70",
+    "js/data/instructorFlow.js": "024b5f5c37960c04b21508ea908be2e0ab06d8ad5fd6d0d4b601cb14c0f2154e",
     "js/data/instructorLabels.js": "e43910350dbc39fc464736852d20357a95adf5b633325ebfdfdeabbb6b029fc7",
     "js/data/investigations.js": "7f6a5cc9ff0e558cd409897558206a35bcf117ce83e0ce1f77fb5d8d3ea24b58",
     "js/data/investigations/a-lens-passing-by.js": "acf7fb524e06a6e1c07af26f8b676d366875cb26204a451120ee733651a02056",
@@ -175,10 +175,10 @@
     "js/data/investigations/es/lives-of-stars.js": "2bdaad01a6b81590f5ceb77c8b862ea09ab01b0e36bd6758246a5daeac12c2e4",
     "js/data/investigations/es/measurement-sequence.js": "11bf1c67c995c2f99f9aaa48aa89e673773547be6be8077d30da4ce919ec906a",
     "js/data/investigations/es/missing-mass.js": "15e423bfa3fe140c8c6c54135445f5f29f8d6a64b6aeec120f8ab06d72b2248d",
-    "js/data/investigations/es/orbital-energy.js": "e1b2b09bfa43ca9affb75502a9d40274ee7d178f790056aba3aecf45a7c9f5c5",
+    "js/data/investigations/es/orbital-energy.js": "b2ced2c541d3639e5f93da475af95576530677ad0b3a018737f78183f29a46d1",
     "js/data/investigations/es/phases-and-eclipses.js": "ccf2965de6234f98e6627a8515c7c69584bcaac56362df5c2c70c464b005465a",
     "js/data/investigations/es/plan-a-night.js": "d560bde3e5b69df1750c3352cb6bf7a24605360ae05b289729f969bb6536fcb5",
-    "js/data/investigations/es/power-law-gravity.js": "a3d9abc27924581e4c2a3812e6de2a19e5a71db76b2e827a11f91cb6bd273fc0",
+    "js/data/investigations/es/power-law-gravity.js": "19e92e4fab4733322e6f530e1f209f6c217a48befeaee9447c9c449a8f8cdeec",
     "js/data/investigations/es/radial-velocity.js": "a492c432e7d1fe3a4c40ec1e42a893927433784cde00e246744ddb956130a0db",
     "js/data/investigations/es/refitting-a-transit.js": "00ffdf7526dbbefcd1b1d0b51b0b1e2f31f16bb7ff4098b7f2767abee24e4f04",
     "js/data/investigations/es/retrograde-motion.js": "d0927550bd05deeca5aaa7af50bd56149912a15be6e672eecf72bd8d72853342",
@@ -234,13 +234,13 @@
     "js/data/investigations/missing-mass.js": "bf2284bf4f7449bf2215713cd567b98f0043be7c95e1a9fd195e7e668f571e0d",
     "js/data/investigations/observing-sequence.js": "cf580253a16217aaabeae2c3bb96c56b0b90fa72703cc8028f5538f9d702cc82",
     "js/data/investigations/occurrence-sequence.js": "e61d6be26574f7f32120eb8e3c9e376480a545d1f8555b857060642c89256387",
-    "js/data/investigations/orbital-energy.js": "75385bc25eb8cb93fbd3fca9561da9f8890ac73382c2f514faabc498c7113c70",
+    "js/data/investigations/orbital-energy.js": "f8dd4ebb7e2444d63dffb73df1b60c5fc9dfbeedcece8d3f5613368f718b273c",
     "js/data/investigations/phases-and-eclipses.js": "80696f8ad21b26df2bbb508da4c8e95ea03dd88e839cb8abca4907b961d51d2b",
     "js/data/investigations/photometric-calibration-sequence.js": "5d41f7404360b798ae64cec372a0d7b2b2cee8ef6e166ed14b54be1bfe960219",
     "js/data/investigations/plan-a-night.js": "aad44979cf3537bb327573adccac95bf8612aa788ccbdcbcf5108124daa86bac",
     "js/data/investigations/planets-guides.js": "87b4dd4d101e5d5604e3a04a1abfca17e12b3687f473dd8e1fc0dabf8082120a",
     "js/data/investigations/planets-sequence.js": "e5be47aa837ae8aeb08e3113d3dda94cc0e7b6822f1a37946d13bf63e1a8cbc3",
-    "js/data/investigations/power-law-gravity.js": "0241b8aad06dcc34b466b80c8764ee54495897a10ed40d4f622fd0fbb989e2e1",
+    "js/data/investigations/power-law-gravity.js": "4d630c680d47a0c52acd253b751ea69e09a8e93ee75ec1191581c5ef3211ba02",
     "js/data/investigations/radial-velocity.js": "8b7e65d273265060bd542f37277c27a6d64e4e921530672c4c55585747e4a1af",
     "js/data/investigations/refitting-a-transit.js": "232cef3db5c38d2eb2abc9dd1a49b53b9ed8a3c33aa23522e4b30cc3d23ed6d9",
     "js/data/investigations/remnants-sequence.js": "93577ad783d05ee1cf8822d595e6b7ad07d265fb9745a487dfb7bc04884a3421",
@@ -337,5 +337,5 @@
     "tools/instructor-freshness.mjs": "96052b2f27080f0243fdd4d5f7608927bd67f0c50808b6eac3345a65c14d1e28",
     "tools/source-closure.mjs": "961828e4d0d40d8a6f8c029fe9b9435ecaf39a74b62640efc0b4145c35c7650a"
   },
-  "contentDigest": "25f205a6e620d702a96534ad47b096e2789944a645deeef2a7f1e69eae670949"
+  "contentDigest": "7c2a95a22157a327f73feb14f50f0b545a97ba4407d9f2ac4f09fc36601cde47"
 }

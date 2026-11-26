@@ -12,7 +12,7 @@
   "body": "<p class=\"inv-step-count\">Paso 1 de 30 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">Un planeta que no puedes ver</h3><div class=\"inv-step-body\"><p>¿Cómo puedes encontrar un planeta que no puedes ver, y medir lo grande que es? Verás cómo una estrella se atenúa cuando su planeta pasa por delante, predecirás lo profunda que será la caída y después leerás la profundidad en la curva de luz y la convertirás en un tamaño.</p><p>En pantalla está <strong>HD 209458</strong>, una pariente del Sol algo más caliente y más masiva, a unos 160&nbsp;años luz en Pegaso, con un planeta en una órbita de tres días y medio. La vista está muy ampliada para mostrar la pareja. Los tamaños en pantalla no están a escala: el planeta se dibuja más pequeño frente a su estrella de lo que es en realidad, como todos los planetas, mientras que la curva de luz trabaja con los tamaños reales (detalles en Tamaños).</p></div><p class=\"inv-sizes\"><button type=\"button\" data-open-sizes=\"\">Tamaños de los cuerpos no a escala: detalles en Tamaños</button></p><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> Todo en esta investigación es medible a partir de lo que hay en pantalla. Pulsar selecciona un objeto sin abrir la ficha del inspector, y la colocación de objetos nuevos está desactivada para que un clic accidental no altere el sistema que estás midiendo.</p>",
   "previousDisabled": true,
   "nextDisabled": false,
-  "depthState": ""
+  "depthState": "Versión básica"
  },
  {
   "depth": "core",
@@ -27,7 +27,7 @@
   "body": "<p class=\"inv-step-count\">Paso 7 de 30 <span class=\"inv-step-kind\">pregunta</span></p><h3 class=\"inv-step-title\">De una profundidad a un tamaño</h3><div class=\"inv-step-body\"><p>Supón que un sondeo informa de una caída limpia y repetitiva del 1&nbsp;%: <em>δ</em>&nbsp;= 0,0100.</p></div><p class=\"inv-sizes\"><button type=\"button\" data-open-sizes=\"\">Tamaños de los cuerpos no a escala: detalles en Tamaños</button></p><p class=\"inv-prompt\">¿Cuánto vale R<sub>p</sub> / R<sub>★</sub> para una caída del 1&nbsp;%?</p><div class=\"inv-numeric\"><input type=\"text\" inputmode=\"decimal\" class=\"inv-answer-num\" data-numeric=\"transit-photometry:from-a-depth-to-a\" value=\"\" placeholder=\"Tu valor\"><button type=\"button\" class=\"ui-button\" data-check-numeric=\"transit-photometry:from-a-depth-to-a\">Comprobar</button></div><div class=\"inv-hints\"><div class=\"inv-hint-row\"><button type=\"button\" class=\"ui-button subtle inv-hint-btn\" data-hint=\"h1\"> Me vendría bien una pista </button></div></div>",
   "previousDisabled": false,
   "nextDisabled": false,
-  "depthState": ""
+  "depthState": "Versión básica"
  },
  {
   "depth": "core",
@@ -42,7 +42,7 @@
   "body": "<p class=\"inv-step-count\">Paso 7 de 30 <span class=\"inv-step-kind\">pregunta</span></p><h3 class=\"inv-step-title\">De una profundidad a un tamaño</h3><div class=\"inv-step-body\"><p>Supón que un sondeo informa de una caída limpia y repetitiva del 1&nbsp;%: <em>δ</em>&nbsp;= 0,0100.</p></div><p class=\"inv-sizes\"><button type=\"button\" data-open-sizes=\"\">Tamaños de los cuerpos no a escala: detalles en Tamaños</button></p><p class=\"inv-prompt\">¿Cuánto vale R<sub>p</sub> / R<sub>★</sub> para una caída del 1&nbsp;%?</p><div class=\"inv-numeric\"><input type=\"text\" inputmode=\"decimal\" class=\"inv-answer-num\" data-numeric=\"transit-photometry:from-a-depth-to-a\" value=\"0,1\" placeholder=\"Tu valor\"><button type=\"button\" class=\"ui-button\" data-check-numeric=\"transit-photometry:from-a-depth-to-a\">Comprobar</button></div><p class=\"inv-feedback is-right\">Eso coincide. La raíz cuadrada de 0,01&nbsp;es 0,1: el planeta es una décima parte del radio de la estrella. Alrededor de una estrella parecida al Sol eso es aproximadamente del tamaño de Júpiter, y es exactamente por lo que todos los planetas en tránsito encontrados antes de 2005&nbsp;aproximadamente eran júpiteres calientes. Eran los únicos que alguien podía ver. Para comprobar un resultado así, elévalo al cuadrado y verifica que recuperas la profundidad.</p><div class=\"inv-hints\"><div class=\"inv-hint-row\"><button type=\"button\" class=\"ui-button subtle inv-hint-btn\" data-hint=\"h1\"> Me vendría bien una pista </button></div></div>",
   "previousDisabled": false,
   "nextDisabled": false,
-  "depthState": ""
+  "depthState": "Versión básica"
  },
  {
   "depth": "core",
@@ -57,7 +57,7 @@
   "body": "<p class=\"inv-step-count\">Paso 30 de 30 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">Lo que hiciste, y a dónde va después</h3><div class=\"inv-step-body\"><p>Cada radio que encontraste es un cociente respecto a la estrella, mejorado tres veces, y cada corrección se apoyó en algo más que la caída: cómo se oscurece el borde de la estrella, cómo está inclinada la órbita respecto a nosotros, qué más brilla en la misma abertura. El radio de un planeta es tan bueno como todo eso.</p><p>TESS, JWST y PLATO están midiendo tránsitos ahora, y detrás de cada uno de sus planetas está el seguimiento de los tres últimos pasos: alguien tiene que mirar la estrella anfitriona con un telescopio lo bastante grande para averiguar qué más hay allí.</p></div><p class=\"inv-sizes\"><button type=\"button\" data-open-sizes=\"\">Tamaños de los cuerpos no a escala: detalles en Tamaños</button></p><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> Una nota sobre los números: los resultados de sondeo citados aquí vienen del Robo-AO Kepler Survey y del SOAR TESS Survey, que se propusieron ambos fotografiar todas las anfitrionas de candidatos a planeta a su alcance. El censo de Robo-AO cubre 3857&nbsp;anfitrionas de Kepler; el programa SOAR ha observado cerca de 3000&nbsp;objetivos de TESS y encuentra una corrección mediana del radio de la anfitriona primaria de alrededor de 1,07, que sube a 1,33&nbsp;para la décima parte peor.</p>",
   "previousDisabled": false,
   "nextDisabled": false,
-  "depthState": ""
+  "depthState": "Versión básica"
  },
  {
   "depth": "quantitative",
@@ -72,7 +72,7 @@
   "body": "<p class=\"inv-step-count\">Paso 1 de 33 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">Un planeta que no puedes ver</h3><div class=\"inv-step-body\"><p>¿Cómo puedes encontrar un planeta que no puedes ver, y medir lo grande que es? Verás cómo una estrella se atenúa cuando su planeta pasa por delante, predecirás lo profunda que será la caída y después leerás la profundidad en la curva de luz y la convertirás en un tamaño.</p><p>En pantalla está <strong>HD 209458</strong>, una pariente del Sol algo más caliente y más masiva, a unos 160&nbsp;años luz en Pegaso, con un planeta en una órbita de tres días y medio. La vista está muy ampliada para mostrar la pareja. Los tamaños en pantalla no están a escala: el planeta se dibuja más pequeño frente a su estrella de lo que es en realidad, como todos los planetas, mientras que la curva de luz trabaja con los tamaños reales (detalles en Tamaños).</p></div><p class=\"inv-sizes\"><button type=\"button\" data-open-sizes=\"\">Tamaños de los cuerpos no a escala: detalles en Tamaños</button></p><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> Todo en esta investigación es medible a partir de lo que hay en pantalla. Pulsar selecciona un objeto sin abrir la ficha del inspector, y la colocación de objetos nuevos está desactivada para que un clic accidental no altere el sistema que estás midiendo.</p>",
   "previousDisabled": true,
   "nextDisabled": false,
-  "depthState": "Profundidad: Cuantitativo"
+  "depthState": "Versión cuantitativa"
  },
  {
   "depth": "quantitative",
@@ -87,7 +87,7 @@
   "body": "<p class=\"inv-step-count\">Paso 7 de 33 <span class=\"inv-step-kind\">pregunta</span></p><h3 class=\"inv-step-title\">De una profundidad a un tamaño</h3><div class=\"inv-step-body\"><p>Supón que un sondeo informa de una caída limpia y repetitiva del 1&nbsp;%: <em>δ</em>&nbsp;= 0,0100.</p></div><p class=\"inv-sizes\"><button type=\"button\" data-open-sizes=\"\">Tamaños de los cuerpos no a escala: detalles en Tamaños</button></p><p class=\"inv-prompt\">¿Cuánto vale R<sub>p</sub> / R<sub>★</sub> para una caída del 1&nbsp;%?</p><div class=\"inv-numeric\"><input type=\"text\" inputmode=\"decimal\" class=\"inv-answer-num\" data-numeric=\"transit-photometry:from-a-depth-to-a\" value=\"\" placeholder=\"Tu valor\"><button type=\"button\" class=\"ui-button\" data-check-numeric=\"transit-photometry:from-a-depth-to-a\">Comprobar</button></div><div class=\"inv-hints\"><div class=\"inv-hint-row\"><button type=\"button\" class=\"ui-button subtle inv-hint-btn\" data-hint=\"h1\"> Me vendría bien una pista </button></div></div>",
   "previousDisabled": false,
   "nextDisabled": false,
-  "depthState": "Profundidad: Cuantitativo"
+  "depthState": "Versión cuantitativa"
  },
  {
   "depth": "quantitative",
@@ -102,7 +102,7 @@
   "body": "<p class=\"inv-step-count\">Paso 7 de 33 <span class=\"inv-step-kind\">pregunta</span></p><h3 class=\"inv-step-title\">De una profundidad a un tamaño</h3><div class=\"inv-step-body\"><p>Supón que un sondeo informa de una caída limpia y repetitiva del 1&nbsp;%: <em>δ</em>&nbsp;= 0,0100.</p></div><p class=\"inv-sizes\"><button type=\"button\" data-open-sizes=\"\">Tamaños de los cuerpos no a escala: detalles en Tamaños</button></p><p class=\"inv-prompt\">¿Cuánto vale R<sub>p</sub> / R<sub>★</sub> para una caída del 1&nbsp;%?</p><div class=\"inv-numeric\"><input type=\"text\" inputmode=\"decimal\" class=\"inv-answer-num\" data-numeric=\"transit-photometry:from-a-depth-to-a\" value=\"0,1\" placeholder=\"Tu valor\"><button type=\"button\" class=\"ui-button\" data-check-numeric=\"transit-photometry:from-a-depth-to-a\">Comprobar</button></div><p class=\"inv-feedback is-right\">Eso coincide. La raíz cuadrada de 0,01&nbsp;es 0,1: el planeta es una décima parte del radio de la estrella. Alrededor de una estrella parecida al Sol eso es aproximadamente del tamaño de Júpiter, y es exactamente por lo que todos los planetas en tránsito encontrados antes de 2005&nbsp;aproximadamente eran júpiteres calientes. Eran los únicos que alguien podía ver. Para comprobar un resultado así, elévalo al cuadrado y verifica que recuperas la profundidad.</p><div class=\"inv-hints\"><div class=\"inv-hint-row\"><button type=\"button\" class=\"ui-button subtle inv-hint-btn\" data-hint=\"h1\"> Me vendría bien una pista </button></div></div>",
   "previousDisabled": false,
   "nextDisabled": false,
-  "depthState": "Profundidad: Cuantitativo"
+  "depthState": "Versión cuantitativa"
  },
  {
   "depth": "quantitative",
@@ -117,7 +117,7 @@
   "body": "<p class=\"inv-step-count\">Paso 33 de 33 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">Lo que hiciste, y a dónde va después</h3><div class=\"inv-step-body\"><p>Cada radio que encontraste es un cociente respecto a la estrella, mejorado tres veces, y cada corrección se apoyó en algo más que la caída: cómo se oscurece el borde de la estrella, cómo está inclinada la órbita respecto a nosotros, qué más brilla en la misma abertura. El radio de un planeta es tan bueno como todo eso.</p><p>TESS, JWST y PLATO están midiendo tránsitos ahora, y detrás de cada uno de sus planetas está el seguimiento de los tres últimos pasos: alguien tiene que mirar la estrella anfitriona con un telescopio lo bastante grande para averiguar qué más hay allí.</p></div><p class=\"inv-sizes\"><button type=\"button\" data-open-sizes=\"\">Tamaños de los cuerpos no a escala: detalles en Tamaños</button></p><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> Una nota sobre los números: los resultados de sondeo citados aquí vienen del Robo-AO Kepler Survey y del SOAR TESS Survey, que se propusieron ambos fotografiar todas las anfitrionas de candidatos a planeta a su alcance. El censo de Robo-AO cubre 3857&nbsp;anfitrionas de Kepler; el programa SOAR ha observado cerca de 3000&nbsp;objetivos de TESS y encuentra una corrección mediana del radio de la anfitriona primaria de alrededor de 1,07, que sube a 1,33&nbsp;para la décima parte peor.</p>",
   "previousDisabled": false,
   "nextDisabled": false,
-  "depthState": "Profundidad: Cuantitativo"
+  "depthState": "Versión cuantitativa"
  },
  {
   "depth": "advanced",
@@ -132,7 +132,7 @@
   "body": "<p class=\"inv-step-count\">Paso 1 de 36 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">Un planeta que no puedes ver</h3><div class=\"inv-step-body\"><p>¿Cómo puedes encontrar un planeta que no puedes ver, y medir lo grande que es? Verás cómo una estrella se atenúa cuando su planeta pasa por delante, predecirás lo profunda que será la caída y después leerás la profundidad en la curva de luz y la convertirás en un tamaño.</p><p>En pantalla está <strong>HD 209458</strong>, una pariente del Sol algo más caliente y más masiva, a unos 160&nbsp;años luz en Pegaso, con un planeta en una órbita de tres días y medio. La vista está muy ampliada para mostrar la pareja. Los tamaños en pantalla no están a escala: el planeta se dibuja más pequeño frente a su estrella de lo que es en realidad, como todos los planetas, mientras que la curva de luz trabaja con los tamaños reales (detalles en Tamaños).</p></div><p class=\"inv-sizes\"><button type=\"button\" data-open-sizes=\"\">Tamaños de los cuerpos no a escala: detalles en Tamaños</button></p><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> Todo en esta investigación es medible a partir de lo que hay en pantalla. Pulsar selecciona un objeto sin abrir la ficha del inspector, y la colocación de objetos nuevos está desactivada para que un clic accidental no altere el sistema que estás midiendo.</p>",
   "previousDisabled": true,
   "nextDisabled": false,
-  "depthState": "Profundidad: Avanzado"
+  "depthState": "Versión avanzada"
  },
  {
   "depth": "advanced",
@@ -147,7 +147,7 @@
   "body": "<p class=\"inv-step-count\">Paso 7 de 36 <span class=\"inv-step-kind\">pregunta</span></p><h3 class=\"inv-step-title\">De una profundidad a un tamaño</h3><div class=\"inv-step-body\"><p>Supón que un sondeo informa de una caída limpia y repetitiva del 1&nbsp;%: <em>δ</em>&nbsp;= 0,0100.</p></div><p class=\"inv-sizes\"><button type=\"button\" data-open-sizes=\"\">Tamaños de los cuerpos no a escala: detalles en Tamaños</button></p><p class=\"inv-prompt\">¿Cuánto vale R<sub>p</sub> / R<sub>★</sub> para una caída del 1&nbsp;%?</p><div class=\"inv-numeric\"><input type=\"text\" inputmode=\"decimal\" class=\"inv-answer-num\" data-numeric=\"transit-photometry:from-a-depth-to-a\" value=\"\" placeholder=\"Tu valor\"><button type=\"button\" class=\"ui-button\" data-check-numeric=\"transit-photometry:from-a-depth-to-a\">Comprobar</button></div><div class=\"inv-hints\"><div class=\"inv-hint-row\"><button type=\"button\" class=\"ui-button subtle inv-hint-btn\" data-hint=\"h1\"> Me vendría bien una pista </button></div></div>",
   "previousDisabled": false,
   "nextDisabled": false,
-  "depthState": "Profundidad: Avanzado"
+  "depthState": "Versión avanzada"
  },
  {
   "depth": "advanced",
@@ -162,7 +162,7 @@
   "body": "<p class=\"inv-step-count\">Paso 7 de 36 <span class=\"inv-step-kind\">pregunta</span></p><h3 class=\"inv-step-title\">De una profundidad a un tamaño</h3><div class=\"inv-step-body\"><p>Supón que un sondeo informa de una caída limpia y repetitiva del 1&nbsp;%: <em>δ</em>&nbsp;= 0,0100.</p></div><p class=\"inv-sizes\"><button type=\"button\" data-open-sizes=\"\">Tamaños de los cuerpos no a escala: detalles en Tamaños</button></p><p class=\"inv-prompt\">¿Cuánto vale R<sub>p</sub> / R<sub>★</sub> para una caída del 1&nbsp;%?</p><div class=\"inv-numeric\"><input type=\"text\" inputmode=\"decimal\" class=\"inv-answer-num\" data-numeric=\"transit-photometry:from-a-depth-to-a\" value=\"0,1\" placeholder=\"Tu valor\"><button type=\"button\" class=\"ui-button\" data-check-numeric=\"transit-photometry:from-a-depth-to-a\">Comprobar</button></div><p class=\"inv-feedback is-right\">Eso coincide. La raíz cuadrada de 0,01&nbsp;es 0,1: el planeta es una décima parte del radio de la estrella. Alrededor de una estrella parecida al Sol eso es aproximadamente del tamaño de Júpiter, y es exactamente por lo que todos los planetas en tránsito encontrados antes de 2005&nbsp;aproximadamente eran júpiteres calientes. Eran los únicos que alguien podía ver. Para comprobar un resultado así, elévalo al cuadrado y verifica que recuperas la profundidad.</p><div class=\"inv-hints\"><div class=\"inv-hint-row\"><button type=\"button\" class=\"ui-button subtle inv-hint-btn\" data-hint=\"h1\"> Me vendría bien una pista </button></div></div>",
   "previousDisabled": false,
   "nextDisabled": false,
-  "depthState": "Profundidad: Avanzado"
+  "depthState": "Versión avanzada"
  },
  {
   "depth": "advanced",
@@ -177,6 +177,6 @@
   "body": "<p class=\"inv-step-count\">Paso 36 de 36 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">Lo que hiciste, y a dónde va después</h3><div class=\"inv-step-body\"><p>Cada radio que encontraste es un cociente respecto a la estrella, mejorado tres veces, y cada corrección se apoyó en algo más que la caída: cómo se oscurece el borde de la estrella, cómo está inclinada la órbita respecto a nosotros, qué más brilla en la misma abertura. El radio de un planeta es tan bueno como todo eso.</p><p>TESS, JWST y PLATO están midiendo tránsitos ahora, y detrás de cada uno de sus planetas está el seguimiento de los tres últimos pasos: alguien tiene que mirar la estrella anfitriona con un telescopio lo bastante grande para averiguar qué más hay allí.</p></div><p class=\"inv-sizes\"><button type=\"button\" data-open-sizes=\"\">Tamaños de los cuerpos no a escala: detalles en Tamaños</button></p><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> Una nota sobre los números: los resultados de sondeo citados aquí vienen del Robo-AO Kepler Survey y del SOAR TESS Survey, que se propusieron ambos fotografiar todas las anfitrionas de candidatos a planeta a su alcance. El censo de Robo-AO cubre 3857&nbsp;anfitrionas de Kepler; el programa SOAR ha observado cerca de 3000&nbsp;objetivos de TESS y encuentra una corrección mediana del radio de la anfitriona primaria de alrededor de 1,07, que sube a 1,33&nbsp;para la décima parte peor.</p>",
   "previousDisabled": false,
   "nextDisabled": false,
-  "depthState": "Profundidad: Avanzado"
+  "depthState": "Versión avanzada"
  }
 ]
