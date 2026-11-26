@@ -11,7 +11,7 @@
   "body": "<p class=\"inv-step-count\">Step 1 of 7 <span class=\"inv-step-kind\">read</span></p><h3 class=\"inv-step-title\">Three questions about an orbit</h3><div class=\"inv-step-body\"><p>What path does a planet follow around its star, and what sets how fast it moves and how long its year is? You will answer it in the live orbit view: predict first, then measure distances, speeds and years in orbits you choose.</p><p>Johannes Kepler answered it four hundred years ago from positions of Mars measured without a telescope. Why he trusted them comes after your first prediction.</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> While an investigation is running, clicking selects an object without opening the inspector card, and placing new objects is switched off so a stray click cannot alter the system you are measuring.</p>",
   "previousDisabled": true,
   "nextDisabled": false,
-  "depthState": ""
+  "depthState": "Core version"
  },
  {
   "role": "graded",
@@ -25,7 +25,7 @@
   "body": "<p class=\"inv-step-count\">Step 3 of 7 <span class=\"inv-step-kind\">predict</span></p><h3 class=\"inv-step-title\">Where does it move fastest?</h3><div class=\"inv-step-body\"><p>The eccentric planet's distance from its star changes all the way round its orbit: it swings in close and out far. Think about what that does to its speed, then commit to an answer before you measure anything.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">The eccentric planet moves fastest…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">A</span><span>at its closest approach to the star</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">B</span><span>at its furthest point from the star</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">C</span><span>at the same speed everywhere</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">D</span><span>halfway between the two</span></button></div>",
   "previousDisabled": false,
   "nextDisabled": false,
-  "depthState": ""
+  "depthState": "Core version"
  },
  {
   "role": "marked",
@@ -39,7 +39,7 @@
   "body": "<p class=\"inv-step-count\">Step 3 of 7 <span class=\"inv-step-kind\">predict</span></p><h3 class=\"inv-step-title\">Where does it move fastest?</h3><div class=\"inv-step-body\"><p>The eccentric planet's distance from its star changes all the way round its orbit: it swings in close and out far. Think about what that does to its speed, then commit to an answer before you measure anything.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">The eccentric planet moves fastest…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option is-chosen is-held\" data-option=\"0\" role=\"radio\" aria-checked=\"true\" disabled=\"\"><span class=\"inv-option-mark\">A</span><span>at its closest approach to the star</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">B</span><span>at its furthest point from the star</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">C</span><span>at the same speed everywhere</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">D</span><span>halfway between the two</span></button></div><p class=\"inv-held\">Your answer is recorded. It stays unmarked until you reach “Why the speed changes”, so the experiment settles it rather than the answer key.</p><button type=\"button\" class=\"ui-button subtle\" data-change=\"\">Change answer</button>",
   "previousDisabled": false,
   "nextDisabled": false,
-  "depthState": ""
+  "depthState": "Core version"
  },
  {
   "role": "last",
@@ -53,6 +53,6 @@
   "body": "<p class=\"inv-step-count\">Step 7 of 7 <span class=\"inv-step-kind\">explore</span></p><h3 class=\"inv-step-title\">Equal areas, however you slice it</h3><div class=\"inv-step-body\"><p>The orbit on screen is cut into equal-time slices, and every slice is labeled with its share of the total area. Change how many slices there are and watch what happens to those numbers.</p><p>With 5&nbsp;slices each is 20%. With 12&nbsp;each is 8.3%. The count is arbitrary; what is not arbitrary is that they are always equal. The planet takes exactly the same time to travel along each slice's stretch of orbit, whether that stretch is a short fast dash past the star or a long slow crawl across the far side.</p></div><div class=\"inv-wedge-control\"><label class=\"inv-ecc-row\" for=\"invWedgeCount\"><span>Slices</span><input type=\"range\" id=\"invWedgeCount\" data-wedges=\"\" min=\"3\" max=\"16\" step=\"1\" value=\"8\" style=\"--range-fill: 38.46153846153847%;\"><output data-wedges-out=\"\">8</output></label><p class=\"inv-wedge-readout\" data-wedges-readout=\"\">Each slice is <strong>12.5%</strong> of the orbit's area, and the planet spends <strong>77.9&nbsp;d</strong> traversing every one of them.</p></div><p class=\"inv-tip\"><span aria-hidden=\"true\">💡</span> The wedge time below is the real answer to \"equal areas in equal times\": it is the same number for every wedge because they all represent the same interval.</p>",
   "previousDisabled": false,
   "nextDisabled": false,
-  "depthState": ""
+  "depthState": "Core version"
  }
 ]

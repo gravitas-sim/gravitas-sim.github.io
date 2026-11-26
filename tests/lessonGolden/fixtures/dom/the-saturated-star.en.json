@@ -12,7 +12,7 @@
   "body": "<p class=\"inv-step-count\">Step 1 of 9 <span class=\"inv-step-kind\">read</span></p><h3 class=\"inv-step-title\">The brightest star in the frame</h3><div class=\"inv-step-body\"><p>A CCD records light by collecting electrons in each pixel, and a pixel can hold only so many: the <strong>full well</strong>, 50,000&nbsp;electrons here. The frame below shows one very bright star, <strong>S</strong>, among fainter ones. The photometry tool measures each star and, when it cannot trust a number, it <em>refuses</em> and says why: the stars drawn in orange are the ones it refused.</p><p>The frame is <strong>synthetic</strong>: made by a model, with the star brightnesses and the electrons they put on the frame known exactly. Nobody observed it.</p></div>",
   "previousDisabled": true,
   "nextDisabled": false,
-  "depthState": ""
+  "depthState": "Core version"
  },
  {
   "depth": "core",
@@ -27,7 +27,7 @@
   "body": "<p class=\"inv-step-count\">Step 2 of 9 <span class=\"inv-step-kind\">predict</span></p><h3 class=\"inv-step-title\">What would the number have been?</h3><div class=\"inv-step-body\"><p>The tool refuses S. Suppose it had not: it adds up the light in a circle around the star, as it does for every other star. The row for S says what it would have read, as a share of the electrons the model put in.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">Added up anyway, the flux of S would be…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">A</span><span>close to the true flux, because a bright star is easy to measure</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">B</span><span>far too low, because the brightest pixels cannot hold more than the full well</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">C</span><span>too high, because the extra light spills into the circle</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">D</span><span>impossible to say without more observations</span></button></div><div class=\"inv-hints\"><div class=\"inv-hint-row\"><button type=\"button\" class=\"ui-button subtle inv-hint-btn\" data-hint=\"h1\"> I could use a hint </button></div></div>",
   "previousDisabled": false,
   "nextDisabled": false,
-  "depthState": ""
+  "depthState": "Core version"
  },
  {
   "depth": "core",
@@ -42,7 +42,7 @@
   "body": "<p class=\"inv-step-count\">Step 2 of 9 <span class=\"inv-step-kind\">predict</span></p><h3 class=\"inv-step-title\">What would the number have been?</h3><div class=\"inv-step-body\"><p>The tool refuses S. Suppose it had not: it adds up the light in a circle around the star, as it does for every other star. The row for S says what it would have read, as a share of the electrons the model put in.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">Added up anyway, the flux of S would be…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">A</span><span>close to the true flux, because a bright star is easy to measure</span></button><button type=\"button\" class=\"inv-option is-chosen is-held\" data-option=\"1\" role=\"radio\" aria-checked=\"true\" disabled=\"\"><span class=\"inv-option-mark\">B</span><span>far too low, because the brightest pixels cannot hold more than the full well</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">C</span><span>too high, because the extra light spills into the circle</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">D</span><span>impossible to say without more observations</span></button></div><p class=\"inv-held\">Your answer is recorded. It stays unmarked until you reach “What the clipped star reads”, so the experiment settles it rather than the answer key.</p><button type=\"button\" class=\"ui-button subtle\" data-change=\"\">Change answer</button><div class=\"inv-hints\"><div class=\"inv-hint-row\"><button type=\"button\" class=\"ui-button subtle inv-hint-btn\" data-hint=\"h1\"> I could use a hint </button></div></div>",
   "previousDisabled": false,
   "nextDisabled": false,
-  "depthState": ""
+  "depthState": "Core version"
  },
  {
   "depth": "core",
@@ -57,7 +57,7 @@
   "body": "<p class=\"inv-step-count\">Step 9 of 9 <span class=\"inv-step-kind\">read</span></p><h3 class=\"inv-step-title\">What an observer does</h3><div class=\"inv-step-body\"><p>What you saw comes to one point: <strong>a quality flag is a refusal, and the refusal is the safe answer</strong>. A saturated star is avoided with a shorter exposure or a defocused star, and measured where it does not saturate. A star a cosmic ray crosses is recovered by combining several exposures with rejection. And a flagged pixel is never corrected by hand: it is replaced by a better image. The frames are synthetic and the effects are stated models, not a measured detector.</p></div>",
   "previousDisabled": false,
   "nextDisabled": false,
-  "depthState": ""
+  "depthState": "Core version"
  },
  {
   "depth": "quantitative",
@@ -72,7 +72,7 @@
   "body": "<p class=\"inv-step-count\">Step 1 of 14 <span class=\"inv-step-kind\">read</span></p><h3 class=\"inv-step-title\">The brightest star in the frame</h3><div class=\"inv-step-body\"><p>A CCD records light by collecting electrons in each pixel, and a pixel can hold only so many: the <strong>full well</strong>, 50,000&nbsp;electrons here. The frame below shows one very bright star, <strong>S</strong>, among fainter ones. The photometry tool measures each star and, when it cannot trust a number, it <em>refuses</em> and says why: the stars drawn in orange are the ones it refused.</p><p>The frame is <strong>synthetic</strong>: made by a model, with the star brightnesses and the electrons they put on the frame known exactly. Nobody observed it.</p></div>",
   "previousDisabled": true,
   "nextDisabled": false,
-  "depthState": "Depth: Quantitative"
+  "depthState": "Quantitative version"
  },
  {
   "depth": "quantitative",
@@ -87,7 +87,7 @@
   "body": "<p class=\"inv-step-count\">Step 2 of 14 <span class=\"inv-step-kind\">predict</span></p><h3 class=\"inv-step-title\">What would the number have been?</h3><div class=\"inv-step-body\"><p>The tool refuses S. Suppose it had not: it adds up the light in a circle around the star, as it does for every other star. The row for S says what it would have read, as a share of the electrons the model put in.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">Added up anyway, the flux of S would be…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">A</span><span>close to the true flux, because a bright star is easy to measure</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">B</span><span>far too low, because the brightest pixels cannot hold more than the full well</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">C</span><span>too high, because the extra light spills into the circle</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">D</span><span>impossible to say without more observations</span></button></div><div class=\"inv-hints\"><div class=\"inv-hint-row\"><button type=\"button\" class=\"ui-button subtle inv-hint-btn\" data-hint=\"h1\"> I could use a hint </button></div></div>",
   "previousDisabled": false,
   "nextDisabled": false,
-  "depthState": "Depth: Quantitative"
+  "depthState": "Quantitative version"
  },
  {
   "depth": "quantitative",
@@ -102,7 +102,7 @@
   "body": "<p class=\"inv-step-count\">Step 2 of 14 <span class=\"inv-step-kind\">predict</span></p><h3 class=\"inv-step-title\">What would the number have been?</h3><div class=\"inv-step-body\"><p>The tool refuses S. Suppose it had not: it adds up the light in a circle around the star, as it does for every other star. The row for S says what it would have read, as a share of the electrons the model put in.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">Added up anyway, the flux of S would be…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">A</span><span>close to the true flux, because a bright star is easy to measure</span></button><button type=\"button\" class=\"inv-option is-chosen is-held\" data-option=\"1\" role=\"radio\" aria-checked=\"true\" disabled=\"\"><span class=\"inv-option-mark\">B</span><span>far too low, because the brightest pixels cannot hold more than the full well</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">C</span><span>too high, because the extra light spills into the circle</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">D</span><span>impossible to say without more observations</span></button></div><p class=\"inv-held\">Your answer is recorded. It stays unmarked until you reach “What the clipped star reads”, so the experiment settles it rather than the answer key.</p><button type=\"button\" class=\"ui-button subtle\" data-change=\"\">Change answer</button><div class=\"inv-hints\"><div class=\"inv-hint-row\"><button type=\"button\" class=\"ui-button subtle inv-hint-btn\" data-hint=\"h1\"> I could use a hint </button></div></div>",
   "previousDisabled": false,
   "nextDisabled": false,
-  "depthState": "Depth: Quantitative"
+  "depthState": "Quantitative version"
  },
  {
   "depth": "quantitative",
@@ -117,7 +117,7 @@
   "body": "<p class=\"inv-step-count\">Step 14 of 14 <span class=\"inv-step-kind\">read</span></p><h3 class=\"inv-step-title\">What an observer does</h3><div class=\"inv-step-body\"><p>What you saw comes to one point: <strong>a quality flag is a refusal, and the refusal is the safe answer</strong>. A saturated star is avoided with a shorter exposure or a defocused star, and measured where it does not saturate. A star a cosmic ray crosses is recovered by combining several exposures with rejection. And a flagged pixel is never corrected by hand: it is replaced by a better image. The frames are synthetic and the effects are stated models, not a measured detector.</p></div>",
   "previousDisabled": false,
   "nextDisabled": false,
-  "depthState": "Depth: Quantitative"
+  "depthState": "Quantitative version"
  },
  {
   "depth": "advanced",
@@ -132,7 +132,7 @@
   "body": "<p class=\"inv-step-count\">Step 1 of 19 <span class=\"inv-step-kind\">read</span></p><h3 class=\"inv-step-title\">The brightest star in the frame</h3><div class=\"inv-step-body\"><p>A CCD records light by collecting electrons in each pixel, and a pixel can hold only so many: the <strong>full well</strong>, 50,000&nbsp;electrons here. The frame below shows one very bright star, <strong>S</strong>, among fainter ones. The photometry tool measures each star and, when it cannot trust a number, it <em>refuses</em> and says why: the stars drawn in orange are the ones it refused.</p><p>The frame is <strong>synthetic</strong>: made by a model, with the star brightnesses and the electrons they put on the frame known exactly. Nobody observed it.</p></div>",
   "previousDisabled": true,
   "nextDisabled": false,
-  "depthState": "Depth: Advanced"
+  "depthState": "Advanced version"
  },
  {
   "depth": "advanced",
@@ -147,7 +147,7 @@
   "body": "<p class=\"inv-step-count\">Step 2 of 19 <span class=\"inv-step-kind\">predict</span></p><h3 class=\"inv-step-title\">What would the number have been?</h3><div class=\"inv-step-body\"><p>The tool refuses S. Suppose it had not: it adds up the light in a circle around the star, as it does for every other star. The row for S says what it would have read, as a share of the electrons the model put in.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">Added up anyway, the flux of S would be…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">A</span><span>close to the true flux, because a bright star is easy to measure</span></button><button type=\"button\" class=\"inv-option\" data-option=\"1\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">B</span><span>far too low, because the brightest pixels cannot hold more than the full well</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">C</span><span>too high, because the extra light spills into the circle</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\"><span class=\"inv-option-mark\">D</span><span>impossible to say without more observations</span></button></div><div class=\"inv-hints\"><div class=\"inv-hint-row\"><button type=\"button\" class=\"ui-button subtle inv-hint-btn\" data-hint=\"h1\"> I could use a hint </button></div></div>",
   "previousDisabled": false,
   "nextDisabled": false,
-  "depthState": "Depth: Advanced"
+  "depthState": "Advanced version"
  },
  {
   "depth": "advanced",
@@ -162,7 +162,7 @@
   "body": "<p class=\"inv-step-count\">Step 2 of 19 <span class=\"inv-step-kind\">predict</span></p><h3 class=\"inv-step-title\">What would the number have been?</h3><div class=\"inv-step-body\"><p>The tool refuses S. Suppose it had not: it adds up the light in a circle around the star, as it does for every other star. The row for S says what it would have read, as a share of the electrons the model put in.</p></div><p class=\"inv-prompt\" id=\"invChoicePrompt\">Added up anyway, the flux of S would be…</p><div class=\"inv-options\" role=\"radiogroup\" aria-labelledby=\"invChoicePrompt\"><button type=\"button\" class=\"inv-option\" data-option=\"0\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">A</span><span>close to the true flux, because a bright star is easy to measure</span></button><button type=\"button\" class=\"inv-option is-chosen is-held\" data-option=\"1\" role=\"radio\" aria-checked=\"true\" disabled=\"\"><span class=\"inv-option-mark\">B</span><span>far too low, because the brightest pixels cannot hold more than the full well</span></button><button type=\"button\" class=\"inv-option\" data-option=\"2\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">C</span><span>too high, because the extra light spills into the circle</span></button><button type=\"button\" class=\"inv-option\" data-option=\"3\" role=\"radio\" aria-checked=\"false\" disabled=\"\"><span class=\"inv-option-mark\">D</span><span>impossible to say without more observations</span></button></div><p class=\"inv-held\">Your answer is recorded. It stays unmarked until you reach “What the clipped star reads”, so the experiment settles it rather than the answer key.</p><button type=\"button\" class=\"ui-button subtle\" data-change=\"\">Change answer</button><div class=\"inv-hints\"><div class=\"inv-hint-row\"><button type=\"button\" class=\"ui-button subtle inv-hint-btn\" data-hint=\"h1\"> I could use a hint </button></div></div>",
   "previousDisabled": false,
   "nextDisabled": false,
-  "depthState": "Depth: Advanced"
+  "depthState": "Advanced version"
  },
  {
   "depth": "advanced",
@@ -177,6 +177,6 @@
   "body": "<p class=\"inv-step-count\">Step 19 of 19 <span class=\"inv-step-kind\">read</span></p><h3 class=\"inv-step-title\">What an observer does</h3><div class=\"inv-step-body\"><p>What you saw comes to one point: <strong>a quality flag is a refusal, and the refusal is the safe answer</strong>. A saturated star is avoided with a shorter exposure or a defocused star, and measured where it does not saturate. A star a cosmic ray crosses is recovered by combining several exposures with rejection. And a flagged pixel is never corrected by hand: it is replaced by a better image. The frames are synthetic and the effects are stated models, not a measured detector.</p></div>",
   "previousDisabled": false,
   "nextDisabled": false,
-  "depthState": "Depth: Advanced"
+  "depthState": "Advanced version"
  }
 ]

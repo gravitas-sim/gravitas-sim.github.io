@@ -139,7 +139,7 @@ const BUDGETS = [
   {
     id: 'deferred',
     label: 'Deferred JavaScript (lazy chunks, gzipped)',
-    limit: 3288.7,
+    limit: 3284.0,
     reason:
       'Jumped from 1369 KB to 2105 KB when three.js and Chart.js stopped being ' +
       'CDN requests and became bundled chunks. That is the point of the change ' +
@@ -775,7 +775,8 @@ const BUDGETS = [
       '\n\nThe nudge test, its strings in both languages (in their own catalogs, loaded with the panel) and the three-body readout that follows the tracer (register D-R4-350-05): 3,356,481 bytes gzipped on Node 22, raised by the measured overrun under the standing approval of 2026-10-10.' +
       '\n\nThe nudge test, after merging v4 017a153af (D-R4-350-06): restacked on the 3279.8 KB v4 reached with the scenario revisions: a Node 22.23.4 build of the merged branch measured 3,361,720 bytes gzipped (3282.93 KB); CI run 45540056951 on the rebuilt instructor bundle measured 3,361,818 bytes (3283.03 KB), so 3283.1 KB rounded up, and grant ei becomes 3.3 KB. Under the standing approval of 2026-10-10 and the engine and production class exemption (maintainer decision, 2026-11-21).' +
       '\n\nThe seven corrections to the orbit locking and habitable zone lessons (D-R4-ORBITFIX-01): raised from 3283.1 to 3283.2 KB, the measurement by CI of the branch (head 8430ec23a): 3,361,953 bytes gzipped (3283.157 KB), rounded up to 0.1 KB. Under the standing approval of 2026-10-10.' +
-      '\n\nThe black holes lesson (D-R4-352-07): raised from 3283.2 to 3288.7 KB, the measurement by CI of the branch (head c39c93495): 3,367,605 bytes gzipped (3288.677 KB), rounded up to 0.1 KB. Under the standing approval of 2026-10-10.',
+      '\n\nThe version names and link notice (D-R4-364-22): raised from 3283.2 to 3284.0 KB, the measurement by CI of the branch (run 45665309088, head 22fce2d85): 3,362,782 bytes gzipped (3283.967 KB), rounded up to 0.1 KB. Under the standing approval of 2026-10-10.' +
+      '\n\nThe black holes lesson (D-R4-352-07): the lesson adds 5.5 KB of deferred JavaScript, the measurement by CI of the branch on its earlier base (head c39c93495): 3,367,605 bytes gzipped (3288.677 KB) against 3283.2 KB, rounded up to 0.1 KB. The limit above is not yet raised for it on this tree: the exact figure is set from the CI measurement of the merged head (D-R4-352-09). Under the standing approval of 2026-10-10.',
   },
 ];
 
