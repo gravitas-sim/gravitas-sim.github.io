@@ -572,7 +572,7 @@ export const EN = {
   'inspector.stat.rings': 'Ring system',
   'inspector.rings.visible': 'Visible',
   'inspector.tip.radius':
-    'The model radius the simulation runs on: collisions, merging, Roche limits and the transit geometry use it. For a generated body it follows from the mass, so it is not always measured. It is not the size drawn: each kind of body is enlarged by a different factor. Read radii here, never off the drawing.',
+    'The model radius the simulation runs on: collisions and merging use it, and so do the timing and shape of a transit, though its depth comes from the real radii. A black hole’s model radius also sets how close a body can pass before it starts to be torn apart; the simulation computes no Roche limit. For a generated body it follows from the mass, so it is not always measured. It is not the size drawn: each kind of body is enlarged by a different factor. Read radii here, never off the drawing.',
   'inspector.tip.rings':
     'This body is drawn with a ring system. Rings are illustrative: about a quarter of generated gas giants are given them for visual variety, and a scenario may set them on or off deliberately. They have no mass, no gravity and no effect on collisions, transit depth or any measurement.',
   'inspector.stat.radius': 'Radius',
@@ -955,7 +955,7 @@ export const EN = {
     'The first object ever seen passing through the Solar System from somewhere else, on its measured orbit: perihelion inside Mercury, eccentricity 1.20, and 87.7 km/s at closest approach. Earth is shown for scale. Select the visitor and look at the sign of its total energy: it is positive, which is the whole story. It is not bound to the Sun, it was never going to stay, and it will not be back.',
   'scenario.transit-lab.title': 'Transit Lab: HD 209458 b',
   'scenario.transit-lab.summary':
-    'The first exoplanet ever caught crossing its star, found in 1999 after radial velocities said where to look. A hot Jupiter on a 3.5-day orbit, drawn here at true relative scale: the star is 1.155 solar radii, the planet 1.38 Jupiter radii, and the silhouette on screen is the same 12% radius ratio the light curve reports. Open the Light Curve panel and watch the 1.8% dip repeat.',
+    'The first exoplanet ever caught crossing its star, found in 1999 after radial velocities said where to look. A hot Jupiter on a 3.5-day orbit, built at its real relative size: the star is 1.155 solar radii and the planet 1.38 Jupiter radii, a 12% radius ratio that sets the depth and length of the dip. The planet is drawn smaller. Open the Light Curve panel and watch the 1.8% dip repeat.',
   'scenario.spiral-galaxy.title': 'Spiral Galaxy: what we expected',
   'scenario.spiral-galaxy.summary':
     'A galactic bulge with ninety stars orbiting it, each launched at exactly the speed the visible mass says it should have. This is the prediction, not the observation: with the mass concentrated in the middle, orbital speed falls away as the inverse square root of radius, the same way it does across the Solar System. Open the Rotation Curve panel and read the slope. Then load Milky Way Rotation and read it again.',
@@ -984,7 +984,7 @@ export const EN = {
   'scenario.gravity-assist-lab.title':
     'Gravity Assist Lab: one planet, one spacecraft, nothing else',
   'scenario.gravity-assist-lab.summary':
-    'A rogue planet of five Jupiter masses drifting through empty space, and an Earth-mass spacecraft crossing its path. No star, which is the point: with nothing else in the universe the planet moves in a straight line and its frame is exactly inertial, so the strangest fact about a gravity assist can be stated exactly rather than approximately. The spacecraft leaves at the same speed relative to the planet that it arrived with, and at a completely different speed relative to everything else.',
+    'A rogue planet of five Jupiter masses drifting through empty space, and a spacecraft of a millionth of its mass crossing its path. No star, which is the point: with nothing else in the universe the planet moves in a straight line and its frame is exactly inertial, so the strangest fact about a gravity assist can be stated exactly. The spacecraft leaves at the same speed relative to the planet that it arrived with, and at a completely different speed relative to everything else.',
   'scenario.gravity-assist-heliocentric.title':
     'Gravity Assist: the same flyby, with a Sun to steal from',
   'scenario.gravity-assist-heliocentric.summary':
@@ -1106,7 +1106,7 @@ export const EN = {
     'Four black holes at the corners of a square, pulling stars from a shared central cluster.',
   'scenario.slingshot-gauntlet.title': 'Slingshot Gauntlet',
   'scenario.slingshot-gauntlet.summary':
-    'A fast-moving star fired through a black hole obstacle course. Watch gravitational slingshots.',
+    'A fast star fired past five fixed black holes: each bends its path, none speeds it up.',
   'scenario.black-hole-billiards.title': 'Black Hole Billiards',
   'scenario.black-hole-billiards.summary':
     'A few small black holes orbiting a supermassive one, perturbing each other and creating chaotic motion.',
@@ -1217,13 +1217,13 @@ export const EN = {
   'inv.browser.activities':
     'Short on time? Classroom activities are prepared teaching formats — a five-minute demonstration, a twenty-minute activity, a full lab — cut from these same investigations.',
   'inv.browser.activities.link': 'See the classroom activities',
-  'canvas.sizeDisclosure': 'Bodies enlarged, not to scale: details under Sizes',
+  'canvas.sizeDisclosure': 'Body sizes not to scale: details under Sizes',
   'canvas.reducedPopulation':
     'Reduced population on this device: {n} of {total} bodies',
   'canvas.crowdTrails':
     'Trails: the selected body and the {n} heaviest of {total} bodies',
   'canvas.sizeDisclosure.detail':
-    'Distances are drawn to one scale, the one the scale bar shows. Body sizes are not to one scale: each kind of body is enlarged by its own factor, so neither a size nor the ratio of two sizes can be read off the canvas. The Sizes button in the readout says by how much, and the inspector gives each radius.',
+    'Distances are drawn to one scale, the one the scale bar shows. Body sizes are not to one scale: each kind of body is drawn by its own factor, usually larger than real and in some scenes smaller, so neither a size nor the ratio of two sizes can be read off the canvas. The Sizes button in the readout says by how much, and the inspector gives each radius.',
   'capture.screenshotFailed': 'The screenshot could not be saved',
   'chart.notReady': 'The chart is not ready yet',
   'chart.exportFailed': 'Could not export the chart',

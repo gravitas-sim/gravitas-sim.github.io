@@ -594,6 +594,14 @@ export class PhysicsObject {
   draw(ctx) {
     paintBody(this, ctx, this.kind);
   }
+
+  // Whole tidal fragments due; the remainder carries to the next step, so the count is step-free (D-R4-460-03).
+  tidalFragments(share) {
+    this.tidalCarry = (this.tidalCarry || 0) + share;
+    const n = Math.floor(this.tidalCarry);
+    this.tidalCarry -= n;
+    return n;
+  }
 }
 
 /**
@@ -666,7 +674,7 @@ export class Planet extends PhysicsObject {
       );
 
       this.mass -= this.mass * fraction * 0.05 * dt;
-      let debris_count = Math.floor(fraction * 20 * dt);
+      let debris_count = this.tidalFragments(fraction * 20 * dt);
 
       // Expressed against the class's own mass unit rather than as a bare 0.1,
       // which is what this number always meant: 0.1 was the asteroid's whole
@@ -806,7 +814,7 @@ export class GasGiant extends PhysicsObject {
       );
 
       this.mass -= this.mass * fraction * 0.08 * dt;
-      let debris_count = Math.floor(fraction * 35 * dt);
+      let debris_count = this.tidalFragments(fraction * 35 * dt);
 
       // A hundredth of a Jupiter, which is what the bare 0.5 always meant:
       // JUPITER_MASS_UNIT was a literal 50 when this line was written, so 0.5
@@ -1153,7 +1161,7 @@ export class StarObject extends PhysicsObject {
         (tidal_threshold - min_dist) / tidal_threshold
       );
       this.mass -= this.mass * fraction * 0.1 * dt;
-      let debris_count = Math.floor(fraction * 50 * dt);
+      let debris_count = this.tidalFragments(fraction * 50 * dt);
       // A thousandth of a solar mass - about one Jupiter - which is the same
       // number the bare 1.0 was, written against the unit it means. Below this
       // there is no star left to strip.
@@ -1431,7 +1439,7 @@ export class Comet extends PhysicsObject {
       );
 
       this.mass -= this.mass * fraction * 0.1 * dt;
-      let debris_count = Math.floor(fraction * 25 * dt);
+      let debris_count = this.tidalFragments(fraction * 25 * dt);
 
       // A tenth of a Halley mass, which is what the old bare 0.01 was: a tenth
       // of the hardcoded 0.1 units a comet used to weigh. See the note on the

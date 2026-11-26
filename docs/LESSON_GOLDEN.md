@@ -84,13 +84,13 @@ The browser half takes about seven minutes on the private port.
 | 2 | `goldilocks-question` | 23: `depth-step:advanced/measure`, `depth-step:advanced/read`, `depth-step:quantitative/predict`, `depth-step:quantitative/read`, `key:explore.pauseAt`, `key:explore.setup`, … |
 | 3 | `transit-photometry` | 15: `check:numeric/number+tolerance`, `key:explore.lightCurve`, `key:explore.observerAngle`, `key:measure.checklist`, `key:measure.compare`, `key:measure.evidence`, … |
 | 4 | `what-is-a-gravitational-wave` | 8: `audience:beginner`, `key:predict.stage`, `key:predict.tip`, `key:predict.tool`, `key:read.checklist`, `key:read.stage`, … |
-| 5 | `measuring-the-moon` | 4: `key:predict.hints`, `key:question.maxUncertainty`, `key:question.minUncertainty`, `key:question.valueWithin` |
-| 6 | `missing-mass` | 4: `depth-step:advanced/explore`, `key:explore.after`, `key:explore.decides`, `key:explore.depth` |
-| 7 | `tides` | 4: `key:explore.canvas`, `key:predict.misconceptions`, `key:question.canvas`, `key:read.allowInspector` |
+| 5 | `lagrange-points` | 4: `key:explore.requires`, `key:explore.rubric`, `key:predict.misconceptions`, `lock:{"placement":true}` |
+| 6 | `measuring-the-moon` | 4: `key:predict.hints`, `key:question.maxUncertainty`, `key:question.minUncertainty`, `key:question.valueWithin` |
+| 7 | `missing-mass` | 4: `depth-step:advanced/explore`, `key:explore.after`, `key:explore.decides`, `key:explore.depth` |
 | 8 | `weighing-stars` | 4: `key:explore.showBarycenter`, `key:measure.showBarycenter`, `key:read.motion`, `key:read.showBarycenter` |
-| 9 | `butterfly-effect` | 3: `key:explore.rubric`, `key:predict.requires`, `lock:null` |
-| 10 | `binary-star-planets` | 2: `key:explore.requires`, `lock:{"placement":true}` |
-| 11 | `black-holes` | 2: `key:question.checklist`, `key:read.explainView` |
+| 9 | `tides` | 3: `key:explore.canvas`, `key:question.canvas`, `key:read.allowInspector` |
+| 10 | `black-holes` | 2: `key:question.checklist`, `key:read.explainView` |
+| 11 | `butterfly-effect` | 2: `key:predict.requires`, `lock:null` |
 | 12 | `extending-an-experiment` | 2: `key:measure.compute`, `key:read.canvas` |
 | 13 | `propose-an-observation` | 2: `key:measure.plan`, `key:question.rubricCriteria` |
 | 14 | `radial-velocity` | 2: `key:explore.compare`, `key:explore.evidence` |

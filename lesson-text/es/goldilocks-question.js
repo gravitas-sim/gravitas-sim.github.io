@@ -231,7 +231,7 @@ export default {
     },
     'the-mars-problem': {
       title: 'El problema de Marte',
-      body: 'Marte está dentro de la zona habitable. Marte no tiene agua líquida en ningún lugar de su superficie y no la ha tenido desde hace algo así como tres mil millones de años. Su atmósfera tiene alrededor de una centésima de la presión de la de la Tierra, y su temperatura superficial media ronda los −60 °C.\n\nAsí que o el cálculo está mal, o el cálculo responde a una pregunta más estrecha de lo que sugiere el nombre.',
+      body: 'Marte está dentro de la zona habitable. Marte no tiene agua líquida en ningún lugar de su superficie y no la ha tenido desde hace algo así como tres mil millones de años. Su atmósfera tiene menos de una centésima de la presión de la Tierra, y su temperatura superficial media ronda los −60 °C.\n\nAsí que o el cálculo está mal, o el cálculo responde a una pregunta más estrecha de lo que sugiere el nombre.',
       prompt:
         'En dos o tres frases: ¿por qué que un Marte seco y helado esté dentro de la zona habitable no es prueba de que la zona se calculara mal?',
       tip: 'Vuelve a la definición cuidadosa de tres pantallas atrás, la que empieza «el rango de distancias orbitales». ¿Qué palabras de ella son sobre la estrella, y cuáles son supuestos sobre el planeta?',
@@ -456,7 +456,7 @@ export default {
     },
     'watch-it-run': {
       title: 'Míralo correr',
-      body: 'El diagrama era un diagrama. Esto es la simulación, con los siete planetas en sus órbitas reales y la zona habitable dibujada a la misma escala que todo lo demás.\n\nLa vista está unas treinta veces más ampliada que en los pasos del Sistema Solar, porque todo el sistema mide seis centésimas de unidad astronómica de lado a lado. TRAPPIST-1b completa una órbita en día y medio; h tarda diecinueve días.\n\nHay una advertencia impresa en el propio anillo. TRAPPIST-1, a 2566 K, es más fría que el rango de temperaturas que cubre el ajuste publicado, así que el modelo se evalúa en su propio límite inferior en lugar de extrapolarse más allá de sus datos. Esa es una decisión de modelado, y la etiqueta lo dice en lugar de dar el número como si fuera una medida.',
+      body: 'El diagrama era un diagrama. Esto es la simulación, con los siete planetas en sus órbitas reales y la zona habitable dibujada a la misma escala que todo lo demás.\n\nLa vista está unas treinta veces más ampliada que en los pasos del Sistema Solar, porque todo el sistema se extiende hasta seis centésimas de unidad astronómica. TRAPPIST-1b completa una órbita en día y medio; h tarda diecinueve días.\n\nHay una advertencia impresa en el propio anillo. TRAPPIST-1, a 2566 K, es más fría que el rango de temperaturas que cubre el ajuste publicado, así que el modelo se evalúa en su propio límite inferior en lugar de extrapolarse más allá de sus datos. Esa es una decisión de modelado, y la etiqueta lo dice en lugar de dar el número como si fuera una medida.',
       checklist: [
         'Encuentra el anillo verde y mira qué parte del sistema abarca.',
         'Observa cómo los planetas interiores corren y los exteriores se arrastran. b da unas doce vueltas por cada vuelta de h.',

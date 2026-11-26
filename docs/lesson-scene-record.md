@@ -12,14 +12,14 @@ The hand-written, human-reviewed acceptance map is
 audit:scene:check` fails if it disagrees with what is generated here.
 
 Across 124 investigations and 1537 steps: 1394 steps
-declare a scene, 166 let a reader change one, 178 read the
+declare a scene, 167 let a reader change one, 178 read the
 running integration, 1003 show a prescribed model result, 159 draw
 on a stored dataset, 874 put a self-contained panel beside the text,
 399 keep something, and 79 are prose.
-Of 207 prediction loops, 207 are returned to,
-206 produce a measurement before they are answered, and
+Of 206 prediction loops, 206 are returned to,
+204 produce a measurement before they are answered, and
 2 end in an explanation in the reader's own words.
-205 hold their marking until the experiment settles them.
+204 hold their marking until the experiment settles them.
 The canvas behind a step is stated as scene on 4, portrait on 7, quiet on 96; 1430 state none.
 
 ## Kepler's Laws (`keplers-laws`)
@@ -263,16 +263,16 @@ The canvas behind a step is stated as scene on 4, portrait on 7, quiet on 96; 14
 
 ## Where Can It Get To? (`lagrange-points`)
 
-- **Steps:** 20. Scene declared on 20; a reader can change something on 3; 17 declare a scene nobody on that step can touch.
+- **Steps:** 20. Scene declared on 20; a reader can change something on 4; 16 declare a scene nobody on that step can touch.
 - **Where the numbers come from:** 3 live engine, 0 prescribed model, 0 stored dataset, 0 self-contained panel.
 - **What students do:** read, commit-a-prediction, record-values, run-the-simulation, choose-an-option, open-a-body-inspector, tick-a-checklist, answer-in-words.
 - **Objects the steps declare:** primary, secondary, tracer.
 - **Instruments:** none.
 - **Stored data:** none.
 - **Evidence kept:** notebook-fields.
-- **Prediction loops:** predict-forbidden → read-the-constant, open-the-neck → read-the-constant; accessible-not-reachable → nothing measured → watch-it-not-cross; predict-same-region-same-path → watch-it-not-cross → watch-it-not-cross; predict-stability → break-it → break-it.
+- **Prediction loops:** predict-forbidden → read-the-constant, open-the-neck → read-the-constant; one-region-two-directions → watch-it-not-cross → watch-it-not-cross; predict-stability → break-it → nudge-l1-and-l4 (answered without a number).
 - **Recovery:** wrong body: the step binds the object by name, so there is none; reset: rebuilds the scenario on arrival; missed moment: nothing stops the run here, so a reading that changes with time has to be caught by hand; ambiguous result: nothing marks these, they are a record; null result: the probe names what is missing.
-- **Scene rebuilds:** 3 step(s) on arrival (two-stars-and-a-speck, predict-same-region-same-path, watch-it-not-cross).
+- **Scene rebuilds:** 3 step(s) on arrival (two-stars-and-a-speck, one-region-two-directions, watch-it-not-cross).
 - **Accepted central experiment** (reviewed 2026-09-11): object `tracer`, control the sandbox: place a tracer and run it in the rotating frame, measures the Jacobi constant, and whether the neck is open, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 
 ## What Is a Gravitational Wave? (`what-is-a-gravitational-wave`)

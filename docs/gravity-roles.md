@@ -78,7 +78,7 @@ which reads the built world of all 61 presets.
 | core | keplers-laws | kepler-s-third-law | Solar System | solar-system | false | true | Static | 1 |
 | core | keplers-laws | what-newton-added | TRAPPIST-1 System | trappist-1-system | false | true | Static | 1 |
 | core | lagrange-points | two-stars-and-a-speck | Lagrange Point Lab | lagrange-point-lab | true | false | Static | 2 |
-| core | lagrange-points | predict-same-region-same-path | Lagrange Point Lab | lagrange-point-lab | true | false | Static | 2 |
+| core | lagrange-points | one-region-two-directions | Lagrange Point Lab | lagrange-point-lab | true | false | Static | 2 |
 | core | lagrange-points | watch-it-not-cross | Lagrange Point Lab | lagrange-point-lab | true | false | Static | 2 |
 | core | missing-mass | two-ways-to-weigh-a | Solar System | solar-system | false | true | Static | 1 |
 | core | missing-mass | now-a-galaxy | Spiral Galaxy | spiral-galaxy | true | false | Static | 1 |

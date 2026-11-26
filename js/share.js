@@ -135,12 +135,13 @@ export async function applySharedLinkFromUrl() {
  * reload still opens the figure its author made.
  *
  * @param {Object} payload - From decodePayload
+ * @param {string} [origin] - Where the payload came from; a link by default
  * @returns {{scenario: string, bodies: number}} What was built
  */
-export function applySharePayload(payload) {
+export function applySharePayload(payload, origin) {
   applyingLink = true;
   try {
-    return applyShareState(payload);
+    return applyShareState(payload, origin);
   } finally {
     applyingLink = false;
   }

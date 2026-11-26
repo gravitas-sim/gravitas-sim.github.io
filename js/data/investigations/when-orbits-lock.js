@@ -523,7 +523,7 @@ const WHEN_ORBITS_LOCK = {
                 never goes all the way round. Where that value sits, how wide the
                 swing is and how long it takes are yours to read off the
                 instrument a few steps on. The instrument will refuse to confirm
-                it for the first four and a half minutes, and the reason it refuses is
+                it until about ten minutes (its first change comes at about four), and the reason it refuses is
                 the next thing worth understanding.`,
     },
     {
@@ -730,7 +730,7 @@ const WHEN_ORBITS_LOCK = {
       ],
       answer: 2,
       because: `It circulates, and quickly: a complete circuit about every
-                forty-seven Io orbits. The resonance holds Europa's semi-major
+                forty to fifty Io orbits. The resonance holds Europa's semi-major
                 axis to about one part in a thousand; one part in a hundred is
                 ten times outside it, and outside it there is nothing.`,
     },
@@ -1290,7 +1290,7 @@ const WHEN_ORBITS_LOCK = {
 
                 \n\nAt L3 a small displacement grows exponentially, with an
                 e-folding time of about three Jupiter years, so one degree
-                becomes a hundred and eighty in roughly twenty-five — which is
+                becomes a hundred and eighty in roughly twenty — which is
                 what you watched. It does not escape the system: it settles into
                 a <em>horseshoe</em>, a much wider co-orbital orbit that carries
                 it right past both triangular points and back. Still a 1:1
@@ -1340,7 +1340,7 @@ const WHEN_ORBITS_LOCK = {
       tip: HELD,
       body: `The fourth body in this scene is on an ordinary circular orbit a
              quarter again as wide as Jupiter's. Its period ratio with Jupiter
-             comes out near 1.406.
+             comes out near 1.406 (the Keplerian value is 1.3975; Jupiter's pull lifts the measured one by about 0.6%).
 
              \n\nThe instrument has found the nearest small ratio to that and
              built the corresponding argument. Look at what it found, and at how
@@ -1415,11 +1415,11 @@ const WHEN_ORBITS_LOCK = {
       options: [
         'That the pair is in a 2:1 resonance, on the strength of a ratio twelve times closer than chance and a confined angle',
         'That the pair is not in resonance, since the angle drifted',
-        'That the angle is confined to within 30° over forty conjunction cycles, which bounds any circulation at about 480 cycles — and that a longer integration is needed to distinguish libration from slow circulation',
+        'That the angle is confined to a total span of 30° over forty conjunction cycles, which bounds any circulation at about 480 cycles — and that a longer integration is needed to distinguish libration from slow circulation',
         'That nothing can be said until the ratio is measured more precisely',
       ],
       answer: 2,
-      because: `The third, and the arithmetic in it is the point. Thirty degrees
+      because: `The third, and the arithmetic in it is the point. A total span of thirty degrees
                 over forty cycles is 0.75° per cycle, so a full 360° would take
                 about 480 cycles — twelve times longer than the integration. That
                 is a real, quotable result, and it is not a resonance.

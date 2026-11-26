@@ -664,7 +664,7 @@ export const ES = {
   'inspector.stat.rings': 'Sistema de anillos',
   'inspector.rings.visible': 'Visible',
   'inspector.tip.radius':
-    'El radio del modelo, con el que funciona la simulación: lo usan las colisiones, las fusiones, los límites de Roche y la geometría del tránsito. En un cuerpo generado se deduce de la masa, así que no siempre es medido. No es el tamaño dibujado: cada tipo de cuerpo se amplía con un factor distinto. Lee los radios aquí, nunca del dibujo.',
+    'El radio del modelo, con el que funciona la simulación: lo usan las colisiones y las fusiones, y también la duración y la forma de un tránsito, aunque su profundidad sale de los radios reales. El radio del modelo de un agujero negro fija además lo cerca que puede pasar un cuerpo antes de empezar a desgarrarse; la simulación no calcula ningún límite de Roche. En un cuerpo generado se deduce de la masa, así que no siempre es medido. No es el tamaño dibujado: cada tipo de cuerpo se amplía con un factor distinto. Lee los radios aquí, nunca del dibujo.',
   'inspector.tip.rings':
     'Este cuerpo se dibuja con un sistema de anillos. Los anillos son ilustrativos: aproximadamente una cuarta parte de los gigantes gaseosos generados los reciben por variedad visual, y un escenario puede activarlos o desactivarlos deliberadamente. No tienen masa ni gravedad, y no afectan a las colisiones, a la profundidad del tránsito ni a ninguna medición.',
   'inspector.stat.radius': 'Radio',
@@ -977,7 +977,7 @@ export const ES = {
     'El primer objeto que se vio atravesar el sistema solar procedente de otro lugar, en su órbita medida: perihelio dentro de la de Mercurio, excentricidad 1,20 y 87,7 km/s en la máxima aproximación. La Tierra aparece como referencia de escala. Al seleccionar al visitante, lo que importa es el signo de su energía total: es positiva, y ahí está toda la historia. No está ligado al Sol, nunca iba a quedarse y no volverá.',
   'scenario.transit-lab.title': 'Laboratorio de tránsitos: HD 209458 b',
   'scenario.transit-lab.summary':
-    'El primer exoplaneta que se sorprendió cruzando por delante de su estrella, hallado en 1999 después de que las velocidades radiales indicaran dónde mirar. Un júpiter caliente en una órbita de 3,5 días, dibujado aquí a escala relativa real: la estrella mide 1,155 radios solares, el planeta 1,38 radios de Júpiter, y la silueta en pantalla mantiene la misma razón de radios del 12 % que indica la curva de luz. Al abrir el panel de curva de luz se ve repetirse la caída del 1,8 %.',
+    'El primer exoplaneta sorprendido cruzando por delante de su estrella, hallado en 1999 gracias a las velocidades radiales. Un júpiter caliente en una órbita de 3,5 días, construido con su tamaño relativo real: la estrella mide 1,155 radios solares y el planeta 1,38 radios de Júpiter, una razón del 12 % que fija la profundidad y la duración de la caída; el planeta se dibuja menor. Al abrir el panel de curva de luz se ve repetirse la caída del 1,8 %.',
   'scenario.spiral-galaxy.title': 'Galaxia espiral: lo que esperábamos',
   'scenario.spiral-galaxy.summary':
     'Un bulbo galáctico con noventa estrellas orbitándolo, cada una lanzada exactamente a la velocidad que le corresponde según la masa visible. Esto es la predicción, no la observación: con la masa concentrada en el centro, la velocidad orbital decae como la inversa de la raíz cuadrada del radio, igual que ocurre en el sistema solar. Al abrir el panel de curva de rotación se puede leer la pendiente. Después conviene cargar Rotación de la Vía Láctea y volver a leerla.',
@@ -1006,7 +1006,7 @@ export const ES = {
   'scenario.gravity-assist-lab.title':
     'Laboratorio de asistencia gravitatoria: un planeta, una nave y nada más',
   'scenario.gravity-assist-lab.summary':
-    'Un planeta errante de cinco masas de Júpiter a la deriva por el espacio vacío, y una nave de una masa terrestre que cruza su camino. Sin estrella, y eso es lo importante: sin nada más el planeta se mueve en línea recta y su sistema de referencia es exactamente inercial, así que el hecho más raro de una asistencia gravitatoria puede enunciarse de forma exacta. La nave se marcha a la misma velocidad respecto del planeta con la que llegó, y a otra completamente distinta respecto de todo lo demás.',
+    'Un planeta errante de cinco masas de Júpiter a la deriva por el espacio vacío, y una nave de una millonésima de su masa que cruza su camino. Sin estrella, y eso es lo importante: sin nada más el planeta se mueve en línea recta y su sistema de referencia es exactamente inercial, así que el hecho más raro de una asistencia gravitatoria puede enunciarse de forma exacta. La nave se marcha a la misma velocidad respecto del planeta con la que llegó, y a otra muy distinta respecto de todo lo demás.',
   'scenario.gravity-assist-heliocentric.title':
     'Asistencia gravitatoria: el mismo sobrevuelo, con un Sol al que robarle',
   'scenario.gravity-assist-heliocentric.summary':
@@ -1133,7 +1133,7 @@ export const ES = {
     'Cuatro agujeros negros en los vértices de un cuadrado, tirando de las estrellas de un cúmulo central compartido.',
   'scenario.slingshot-gauntlet.title': 'Circuito de asistencias gravitatorias',
   'scenario.slingshot-gauntlet.summary':
-    'Una estrella veloz disparada a través de una carrera de obstáculos de agujeros negros. Para observar asistencias gravitatorias.',
+    'Una estrella veloz disparada entre cinco agujeros negros fijos: cada uno curva su trayectoria, ninguno la acelera.',
   'scenario.black-hole-billiards.title': 'Billar de agujeros negros',
   'scenario.black-hole-billiards.summary':
     'Unos cuantos agujeros negros pequeños orbitando uno supermasivo, perturbándose entre sí y generando un movimiento caótico.',
@@ -1202,13 +1202,13 @@ export const ES = {
     '¿Con poco tiempo? Las actividades de clase son formatos de enseñanza preparados —una demostración de cinco minutos, una actividad de veinte, una práctica completa— recortados de estas mismas investigaciones.',
   'inv.browser.activities.link': 'Ver las actividades de clase',
   'canvas.sizeDisclosure':
-    'Cuerpos ampliados, no a escala: detalles en Tamaños',
+    'Tamaños de los cuerpos no a escala: detalles en Tamaños',
   'canvas.reducedPopulation':
     'Población reducida en este dispositivo: {n} de {total} cuerpos',
   'canvas.crowdTrails':
     'Estelas: el cuerpo seleccionado y los {n} más masivos de {total} cuerpos',
   'canvas.sizeDisclosure.detail':
-    'Las distancias se dibujan a una sola escala, la que muestra la barra de escala. Los tamaños de los cuerpos no siguen una misma escala: cada tipo de cuerpo se amplía con su propio factor, así que ni un tamaño ni la proporción entre dos tamaños se pueden leer en el lienzo. El botón Tamaños de la lectura dice cuánto, y el inspector da cada radio.',
+    'Las distancias se dibujan a una sola escala, la que muestra la barra de escala. Los tamaños de los cuerpos no siguen una misma escala: cada tipo de cuerpo se dibuja con su propio factor, casi siempre mayor que el real y en algunas escenas menor, así que ni un tamaño ni la proporción entre dos tamaños se pueden leer en el lienzo. El botón Tamaños de la lectura dice cuánto, y el inspector da cada radio.',
   'capture.screenshotFailed': 'No se pudo guardar la captura',
   'chart.notReady': 'El gráfico aún no está listo',
   'chart.exportFailed': 'No se pudo exportar el gráfico',

@@ -1,0 +1,178 @@
+{
+  "note": "Every producer of an encoded world link, and every capture of a loaded world, under js/ and tools/ (SCENARIO_REVISIONS.md). tests/scenarioRevisionsSource.test.js counts the calls below in the sources and fails on a call that is not a row (or a row whose calls are gone). `calls` is the count of each pattern in that file, comments excluded. `origin` is what the producer encodes: setup (this build's own), capture (a world already loaded), declaration (a file or pack from outside the build, which states its revision), link (decoded text re-encoded), none (scenario None, which has no revision). `rule` is its version rule. The table, not any list elsewhere, is the authority.",
+  "patterns": [
+    "encodePayload",
+    "encodeTaggedWorld",
+    "buildPayload",
+    "captureShareState",
+    "payloadFromSetup",
+    "compileScenarioPack",
+    "rawWorldWriter",
+    "rawWorldLink"
+  ],
+  "rows": [
+    {
+      "site": "The codec",
+      "file": "js/shareState.js",
+      "calls": {
+        "encodeTaggedWorld": 1
+      },
+      "origin": "any",
+      "rule": "encodePayload writes linkVersionOf(payload): 3 with r, else prefix 2"
+    },
+    {
+      "site": "The world: the one capture",
+      "file": "js/world.js",
+      "calls": {
+        "buildPayload": 1
+      },
+      "origin": "capture",
+      "rule": "stamps the world's revision (version 3 with r from 2); every setting in d for a stored record at 2 or more"
+    },
+    {
+      "site": "The share dialog",
+      "file": "js/share.js",
+      "calls": {
+        "captureShareState": 1,
+        "encodePayload": 1
+      },
+      "origin": "capture",
+      "rule": "the world's revision: 3 with r from 2, else prefix 2"
+    },
+    {
+      "site": "The lesson's help link, the lesson's step setup and the lesson's entry capture",
+      "file": "js/investigations.js",
+      "calls": {
+        "encodePayload": 1,
+        "captureShareState": 1,
+        "payloadFromSetup": 2
+      },
+      "origin": "setup, declaration (a compiled setup that states revision) and capture (memory only)",
+      "rule": "payloadFromSetup stamps the current revision, or the stated one for a declaration; the capture stamps the world's"
+    },
+    {
+      "site": "The report's links",
+      "file": "js/investigations/finish.js",
+      "calls": {
+        "encodePayload": 1,
+        "payloadFromSetup": 1
+      },
+      "origin": "setup",
+      "rule": "as the lesson's help link"
+    },
+    {
+      "site": "The lesson's runs: the memo before a run, a step's setup for a run",
+      "file": "js/lesson/runs.js",
+      "calls": {
+        "captureShareState": 1,
+        "payloadFromSetup": 1
+      },
+      "origin": "capture (memory only) and setup",
+      "rule": "as above; never written"
+    },
+    {
+      "site": "The course's scenario item",
+      "file": "js/course/links.js",
+      "calls": {
+        "encodePayload": 1
+      },
+      "origin": "declaration: the item's revision, 1 if it states none",
+      "rule": "3 with r when the item states 2 or more, else prefix 2"
+    },
+    {
+      "site": "The Library's scenario cards",
+      "file": "tools/build-library.mjs",
+      "calls": {
+        "rawWorldWriter": 1,
+        "rawWorldLink": 1
+      },
+      "origin": "setup (the current revision); no browser, no live world",
+      "rule": "rawWorldLink: prefix 3 with r from 2, else prefix 1 as written today"
+    },
+    {
+      "site": "The teaching pages' embeds",
+      "file": "tools/build-adoption-pages.mjs",
+      "calls": {
+        "rawWorldLink": 1
+      },
+      "origin": "setup",
+      "rule": "through rawWorldLink (the Library's writer): prefix 3 with r from 2, else prefix 1 as written today"
+    },
+    {
+      "site": "The teaching demos",
+      "file": "tools/build-teaching-demos.mjs",
+      "calls": {
+        "encodePayload": 1,
+        "buildPayload": 1
+      },
+      "origin": "setup (a world made now)",
+      "rule": "buildPayload defaults to the current revision: 3 with r from 2, else prefix 2"
+    },
+    {
+      "site": "The figure builder: a pasted link decoded and encoded again, and a scenario chosen on the page",
+      "file": "js/figureBuilder.js",
+      "calls": {
+        "encodePayload": 1,
+        "buildPayload": 1
+      },
+      "origin": "link (keeps the revision it carried) and setup (the current revision)",
+      "rule": "the carried or current revision: 3 with r from 2, else prefix 2"
+    },
+    {
+      "site": "The Scenario Studio's pack link",
+      "file": "js/studioPage.js",
+      "calls": {
+        "encodePayload": 1,
+        "compileScenarioPack": 1
+      },
+      "origin": "declaration: the pack's scenarioRevision, 1 if it states none",
+      "rule": "3 with r when the pack states 2 or more, else prefix 2"
+    },
+    {
+      "site": "The Orbital System Builder",
+      "file": "js/systemBuilder.js",
+      "calls": {
+        "encodePayload": 1,
+        "compileScenarioPack": 1
+      },
+      "origin": "none: scenario None, no revision",
+      "rule": "prefix 2, bytes unchanged"
+    },
+    {
+      "site": "The pack world (the SDK's and the Studio's test of a pack)",
+      "file": "js/scenarioPackWorld.js",
+      "calls": {
+        "compileScenarioPack": 1
+      },
+      "origin": "declaration; builds a world, writes no link",
+      "rule": "read, not written"
+    },
+    {
+      "site": "The experiment bench: a run's setup, the experiment's initial state, the saved world",
+      "file": "js/experiments/bench.js",
+      "calls": {
+        "captureShareState": 5
+      },
+      "origin": "capture, stored in an experiment record (form (i)) or kept in memory",
+      "rule": "the world's revision; at 2 or more the capture is full and d holds every setting"
+    },
+    {
+      "site": "The maneuver planner's undo",
+      "file": "js/maneuverPlanner.js",
+      "calls": {
+        "captureShareState": 1
+      },
+      "origin": "capture, memory only",
+      "rule": "the world's revision"
+    },
+    {
+      "site": "The timeline's held moment",
+      "file": "js/timeline.js",
+      "calls": {
+        "captureShareState": 1
+      },
+      "origin": "capture, memory only",
+      "rule": "the world's revision"
+    }
+  ]
+}
